@@ -11,6 +11,10 @@ They are **independent projects** (own `pubspec.yaml`, own build). Shared code i
 not packaged — keep the two `lib/src/core/` trees in step when you change one. The
 architecture is identical; each README documents its differences.
 
+**Status:** phone-OTP auth + a placeholder home screen only. Everything else (discovery,
+consultations, wallet, livestream, …) is greenfield — see
+[backend/docs/remaining-work.md](../backend/docs/remaining-work.md) for the full checklist.
+
 ## Architecture (both apps)
 
 - **State** — `flutter_bloc`. One app-level `AuthBloc` (session), feature Cubits/Blocs
