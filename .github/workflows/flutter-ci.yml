@@ -1,0 +1,34 @@
+name: Flutter CI
+
+on:
+  push:
+    paths: ['customer/**', 'astrologer/**', '.github/workflows/flutter-ci.yml']
+  pull_request:
+    paths: ['customer/**', 'astrologer/**', '.github/workflows/flutter-ci.yml']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - customer/customr
+          - astrologer/astro
+    defaults:
+      run:
+        working-directory: ${{ matrix.app }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.41.0
+          cache: true
+
+      - run: flutter pub get
+      - run: dart run build_runner build
+      - run: dart format --output=none --set-exit-if-changed .
+      - run: flutter analyze
+      - run: flutter test
