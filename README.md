@@ -57,13 +57,16 @@ app pre-fills it (dev-mode banner). Details: [backend/docs/mobile.md](../backend
 
 ## Per-app commands
 
+Each app has a `Makefile` (run from Git Bash — `make help` for the full list):
+
 ```bash
-flutter pub get
-dart run build_runner build            # or: watch
-flutter analyze
-flutter test
-flutter run   --flavor dev     -t lib/main_dev.dart
-flutter build apk --flavor prod -t lib/main_prod.dart
+cd customer/customr        # or astrologer/astro
+make setup                 # pub get + build_runner
+make run                   # FLAVOR=dev by default; also FLAVOR / API_BASE_URL / DEVICE
+make check                 # format-check + analyze + test
+make ci                    # what the workflow runs
+make apk-release            make appbundle
+make backend-seed           make backend-run    # convenience wrappers over ../../../backend
 ```
 
-CI (`.github/workflows/flutter-ci.yml`) runs `analyze` + `test` for both apps on every push.
+CI (`.github/workflows/flutter-ci.yml`) runs `make ci` for both apps on every push.

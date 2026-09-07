@@ -44,18 +44,20 @@ lib/
 
 ## Running
 
-Flavors are required (`dev` / `staging` / `prod`), each paired with a `main_*.dart`:
+A `Makefile` wraps the common commands (run it from Git Bash — `make help` lists all).
+Flavors are required (`dev` / `staging` / `prod`), each paired with a `main_*.dart`.
 
 ```bash
-flutter pub get
-dart run build_runner build            # generate *.freezed.dart / *.g.dart
+make setup                 # pub get + build_runner (once, and after dep changes)
+make run                   # flavor dev -> local backend (emulator reaches host at 10.0.2.2)
+make run FLAVOR=staging
+make run API_BASE_URL=http://192.168.1.5:8000/api/v1   # a device on your LAN
+make run DEVICE=emulator-5554
+make apk-release           # release APK for the current FLAVOR
+make appbundle             # prod AAB for Play
 
-# local backend (Django on :8000, emulator reaches host at 10.0.2.2)
+# raw equivalents, if you prefer:
 flutter run --flavor dev -t lib/main_dev.dart
-
-# point at another host / a device on your LAN:
-flutter run --flavor dev -t lib/main_dev.dart \
-  --dart-define=API_BASE_URL=http://192.168.1.5:8000/api/v1
 ```
 
 ## Dev login (no SMS)
@@ -77,6 +79,6 @@ digits — `952128` — and the app pre-fills it and shows a "Dev mode" banner. 
 ## Tests
 
 ```bash
-flutter analyze
-flutter test
+make check     # format-check + analyze + test
+make test ARGS='--name login'
 ```

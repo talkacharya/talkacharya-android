@@ -16,13 +16,13 @@ layout and stack notes. Differences:
 
 ## Running
 
+Uses the same `Makefile` targets as the customer app (`make help`):
+
 ```bash
-flutter pub get
-dart run build_runner build
-flutter run --flavor dev -t lib/main_dev.dart
-# or against a LAN host:
-flutter run --flavor dev -t lib/main_dev.dart \
-  --dart-define=API_BASE_URL=http://192.168.1.5:8000/api/v1
+make setup
+make run                                              # flavor dev
+make run API_BASE_URL=http://192.168.1.5:8000/api/v1   # a LAN host
+make check                                             # format-check + analyze + test
 ```
 
 ## Dev login (no SMS)
