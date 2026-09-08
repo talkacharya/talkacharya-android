@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io' show Platform;
 
 import '../../../core/storage/token_storage.dart';
@@ -30,10 +31,28 @@ class AuthRepository {
       device: _devicePayload(),
     );
     await _persist(session);
+    await _cacheUser(session.user);
     return session.user;
   }
 
-  Future<AuthUser> currentUser() => _api.me();
+  /// Fetch `/me` and refresh the offline cache.
+  Future<AuthUser> currentUser() async {
+    final user = await _api.me();
+    await _cacheUser(user);
+    return user;
+  }
+
+  /// The last user we saw, from secure storage — used to open the app instantly
+  /// and to stay logged in while offline.
+  Future<AuthUser?> cachedUser() async {
+    final raw = await _tokens.readUserJson();
+    if (raw == null || raw.isEmpty) return null;
+    try {
+      return AuthUser.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+    } catch (_) {
+      return null;
+    }
+  }
 
   Future<void> logout() async {
     final refresh = await _tokens.readRefresh();
@@ -45,6 +64,9 @@ class AuthRepository {
 
   Future<void> _persist(AuthSession s) =>
       _tokens.save(access: s.access, refresh: s.refresh);
+
+  Future<void> _cacheUser(AuthUser user) =>
+      _tokens.saveUserJson(jsonEncode(user.toJson()));
 
   Map<String, dynamic> _devicePayload() => {
     'platform': Platform.isIOS ? 'ios' : 'android',

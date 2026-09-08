@@ -19,8 +19,16 @@ class DioClientFactory {
     connectTimeout: _config.connectTimeout,
     receiveTimeout: _config.receiveTimeout,
     contentType: Headers.jsonContentType,
-    headers: {'Accept': 'application/json'},
-    validateStatus: (s) => s != null && s < 500,
+    headers: {
+      'Accept': 'application/json',
+      // Identifies this app to the shared backend. The OTP flow refuses a login
+      // when the phone's account belongs to the other app (`auth.wrong_app`).
+      'X-Client-App': 'customer',
+    },
+    // 401 must surface as a DioException so AuthInterceptor.onError can refresh +
+    // replay. Every other 4xx stays a normal Response — repositories read the body
+    // and map it to a typed error themselves.
+    validateStatus: (s) => s != null && s < 500 && s != 401,
   );
 
   Dio _buildBareClient() => Dio(_baseOptions);

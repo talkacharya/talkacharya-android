@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../../../core/network/api_exception.dart';
 import '../../../data/auth_repository.dart';
 import '../../../data/models/auth_user.dart';
 
@@ -25,11 +26,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(const AuthState.unauthenticated());
       return;
     }
+
+    // Open instantly with the cached user; verify against /me in the background.
+    final cached = await _repo.cachedUser();
+    if (cached != null) emit(AuthState.authenticated(cached));
+
     try {
       final user = await _repo.currentUser();
       emit(AuthState.authenticated(user));
+    } on ApiException catch (e) {
+      if (e.isNetwork) {
+        // Offline / server unreachable — keep the session. Screens refetch when
+        // connectivity returns; a genuine auth failure would be a 401, handled by
+        // the interceptor (which fires AuthSessionExpired on refresh failure).
+        if (cached == null) emit(const AuthState.unauthenticated());
+        return;
+      }
+      await _repo.logout();
+      emit(const AuthState.unauthenticated());
     } catch (_) {
-      // token invalid / offline with no cache -> treat as logged out
       await _repo.logout();
       emit(const AuthState.unauthenticated());
     }
