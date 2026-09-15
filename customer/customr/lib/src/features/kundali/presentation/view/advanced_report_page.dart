@@ -1,10 +1,12 @@
+import 'package:astro_kundali/astro_kundali.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/theme/astro_palette.dart';
+import '../../../../core/theme/brand_colors.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../data/kundali_repository.dart';
-import 'package:astro_kundali/astro_kundali.dart';
 import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
 
@@ -50,325 +52,209 @@ class _AdvancedReportPageState extends State<AdvancedReportPage> {
     _ => l.kAdvReport,
   };
 
+  String _subtitle(AppLocalizations l) => switch (widget.report) {
+    'ashtakavarga' => l.kAdvAshtakavargaSub,
+    'shadbala' => l.kAdvShadbalaSub,
+    'kp' => l.kAdvKpSub,
+    'jaimini' => l.kAdvJaiminiSub,
+    _ => '',
+  };
+
+  (IconData, AstroHue) get _look => switch (widget.report) {
+    'ashtakavarga' => (Icons.grid_4x4_rounded, AstroPalette.career),
+    'shadbala' => (Icons.bar_chart_rounded, AstroPalette.health),
+    'jaimini' => (Icons.hub_rounded, AstroPalette.love),
+    _ => (Icons.tune_rounded, AstroPalette.air),
+  };
+
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    return Scaffold(
-      appBar: AppBar(title: Text(_title(l))),
-      body: FutureBuilder<Object>(
-        future: _future,
-        builder: (context, snap) {
-          if (snap.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snap.hasError || !snap.hasData) {
-            return ErrorView(
-              message: l.kAdvLoadError,
-              onRetry: () => setState(() => _future = _fetch()),
-            );
-          }
-          final data = snap.data!;
-          return switch (widget.report) {
-            'ashtakavarga' => _AshtakavargaView(data: data as Ashtakavarga),
-            'shadbala' => _ShadbalaView(data: data as Shadbala),
-            'kp' => _RawReport(
-              map: data as Map<String, dynamic>,
-              intro: l.kAdvKpIntro,
-              sections: const [
-                'cuspal_sublords',
-                'ruling_planets',
-                'house_significators',
-              ],
-            ),
-            'jaimini' => _RawReport(
-              map: data as Map<String, dynamic>,
-              intro: l.kAdvJaiminiIntro,
-              sections: const [
-                'chara_karakas',
-                'arudha_padas',
-                'karakamsa',
-                'chara_dasha',
-              ],
-            ),
-            _ => const SizedBox.shrink(),
-          };
-        },
+    final (icon, hue) = _look;
+    return FutureBuilder<Object>(
+      future: _future,
+      builder: (context, snap) {
+        final done = snap.connectionState == ConnectionState.done;
+        final data = done && !snap.hasError ? snap.data : null;
+        return KundaliScaffold(
+          title: _title(l),
+          eyebrow: l.kAdvTitle,
+          headline: _title(l),
+          subheadline: _subtitle(l),
+          hue: hue,
+          heroTrailing: KHeroGlyph(hue: hue, icon: icon, size: 72),
+          heroChips: switch (data) {
+            final Ashtakavarga av when av.sarvaTotal > 0 => [
+              KHeroChip(
+                icon: Icons.functions_rounded,
+                label: l.kAdvSarvaTotal(av.sarvaTotal),
+              ),
+            ],
+            final Shadbala sb when sb.strongest.isNotEmpty => [
+              KHeroChip(
+                icon: Icons.arrow_upward_rounded,
+                label: l.kAdvStrongest(KTerms.planetName(l, sb.strongest)),
+                color: AstroPalette.health.start,
+              ),
+            ],
+            _ => const <Widget>[],
+          },
+          onRefresh: () async {
+            setState(() => _future = _fetch());
+            await _future.catchError((Object _) => Object());
+          },
+          animate: data != null,
+          children: !done
+              ? const [
+                  KBodySkeleton(blocks: [60, 320, 140]),
+                ]
+              : data == null
+              ? [
+                  ErrorView(
+                    message: l.kAdvLoadError,
+                    onRetry: () => setState(() => _future = _fetch()),
+                  ),
+                ]
+              : switch (widget.report) {
+                  'ashtakavarga' => _ashtakavarga(
+                    context,
+                    data as Ashtakavarga,
+                  ),
+                  'shadbala' => _shadbala(context, data as Shadbala),
+                  'kp' => _raw(
+                    context,
+                    data as Map<String, dynamic>,
+                    intro: l.kAdvKpIntro,
+                    hue: hue,
+                    sections: const [
+                      'cuspal_sublords',
+                      'ruling_planets',
+                      'house_significators',
+                    ],
+                  ),
+                  'jaimini' => _raw(
+                    context,
+                    data as Map<String, dynamic>,
+                    intro: l.kAdvJaiminiIntro,
+                    hue: hue,
+                    sections: const [
+                      'chara_karakas',
+                      'arudha_padas',
+                      'karakamsa',
+                      'chara_dasha',
+                    ],
+                  ),
+                  _ => const <Widget>[],
+                },
+        );
+      },
+    );
+  }
+
+  Widget _intro(BuildContext context, String text) => Text(
+    text,
+    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+      color: context.brand.inkMuted,
+      height: 1.45,
+    ),
+  );
+
+  List<Widget> _ashtakavarga(BuildContext context, Ashtakavarga data) {
+    final l = context.l10n;
+    return [
+      _intro(context, l.kAdvAvIntro),
+      KSection(
+        title: l.kAdvAvHousesTitle,
+        hue: AstroPalette.career,
+        padTop: 18,
+        child: KSurface(child: _SarvaBars(byHouse: data.sarvaByHouse)),
       ),
-    );
+      KSection(
+        title: l.kAdvBhinnaTotals,
+        hue: AstroPalette.air,
+        child: Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final p in planetOrder)
+              if (data.bhinnaTotals[p] != null)
+                _BinduTile(planet: p, value: data.bhinnaTotals[p]!),
+          ],
+        ),
+      ),
+      const KAskCta(),
+    ];
   }
-}
 
-class _AshtakavargaView extends StatelessWidget {
-  const _AshtakavargaView({required this.data});
-  final Ashtakavarga data;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+  List<Widget> _shadbala(BuildContext context, Shadbala data) {
     final l = context.l10n;
-    final byHouse = data.sarvaByHouse;
-    final vals = byHouse.values.toList()..sort();
-    final maxV = vals.isEmpty ? 1 : vals.last;
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
-      children: [
-        Text(
-          l.kAdvAvIntro,
-          style: Theme.of(
-            context,
-          ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
-        ),
+    return [
+      _intro(context, l.kAdvShadbalaIntro),
+      if (data.strongest.isNotEmpty || data.weakest.isNotEmpty) ...[
         const SizedBox(height: 14),
-        KCard(
-          child: Column(
-            children: [
-              for (var h = 1; h <= 12; h++)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 62,
-                        child: Text(
-                          l.kAdvHouseN(h),
-                          style: const TextStyle(fontSize: 12.5),
-                        ),
-                      ),
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(99),
-                          child: LinearProgressIndicator(
-                            value: maxV == 0 ? 0 : (byHouse['$h'] ?? 0) / maxV,
-                            minHeight: 8,
-                            backgroundColor: scheme.surfaceContainerHighest,
-                            valueColor: AlwaysStoppedAnimation(
-                              (byHouse['$h'] ?? 0) >= 28
-                                  ? const Color(0xFF2E9E4F)
-                                  : (byHouse['$h'] ?? 0) < 25
-                                  ? const Color(0xFFC77A1F)
-                                  : scheme.primary,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 30,
-                        child: Text(
-                          '${byHouse['$h'] ?? 0}',
-                          textAlign: TextAlign.end,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12.5,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 14),
-        KLabel(l.kAdvBhinnaTotals),
-        const SizedBox(height: 8),
-        KCard(
-          child: Wrap(
-            spacing: 14,
-            runSpacing: 8,
-            children: [
-              for (final p in planetOrder)
-                if (data.bhinnaTotals[p] != null)
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: planetColor(p),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        '${KTerms.planetName(l, p)} ${data.bhinnaTotals[p]}',
-                        style: const TextStyle(fontSize: 12.5),
-                      ),
-                    ],
-                  ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ShadbalaView extends StatelessWidget {
-  const _ShadbalaView({required this.data});
-  final Shadbala data;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final l = context.l10n;
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
-      children: [
-        Text(
-          l.kAdvShadbalaIntro,
-          style: Theme.of(
-            context,
-          ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
-        ),
-        const SizedBox(height: 14),
-        KCard(
-          child: Column(
-            children: [
-              for (final p in data.planets)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 22,
-                            height: 22,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: planetColor(p.name),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              KundaliStrings.of(context).planetToken(p.name),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 9,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              KTerms.planetName(l, p.name),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            '${p.totalRupa.toStringAsFixed(1)} / ${p.requiredRupa.toStringAsFixed(1)}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: scheme.onSurfaceVariant,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Icon(
-                            p.isStrong
-                                ? Icons.check_circle_rounded
-                                : Icons.remove_circle_outline_rounded,
-                            size: 16,
-                            color: p.isStrong
-                                ? const Color(0xFF2E9E4F)
-                                : const Color(0xFFC77A1F),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(99),
-                        child: LinearProgressIndicator(
-                          value: (p.ratio / 1.6).clamp(0.0, 1.0),
-                          minHeight: 7,
-                          backgroundColor: scheme.surfaceContainerHighest,
-                          valueColor: AlwaysStoppedAnimation(
-                            p.isStrong
-                                ? const Color(0xFF2E9E4F)
-                                : const Color(0xFFC77A1F),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 10),
         Row(
           children: [
-            Expanded(
-              child: MetaChip(
-                l.kAdvStrongest(KTerms.planetName(l, data.strongest)),
+            if (data.strongest.isNotEmpty)
+              Expanded(
+                child: _Extreme(
+                  planet: data.strongest,
+                  label: l.kAdvStrongest(KTerms.planetName(l, data.strongest)),
+                  hue: AstroPalette.health,
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: MetaChip(
-                l.kAdvWeakest(KTerms.planetName(l, data.weakest)),
+            if (data.strongest.isNotEmpty && data.weakest.isNotEmpty)
+              const SizedBox(width: 10),
+            if (data.weakest.isNotEmpty)
+              Expanded(
+                child: _Extreme(
+                  planet: data.weakest,
+                  label: l.kAdvWeakest(KTerms.planetName(l, data.weakest)),
+                  hue: AstroPalette.money,
+                ),
               ),
-            ),
           ],
         ),
       ],
-    );
+      KSection(
+        title: l.kAdvShadbala,
+        hue: AstroPalette.health,
+        child: KSurface(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+          child: Column(
+            children: [for (final p in data.planets) _StrengthRow(p: p)],
+          ),
+        ),
+      ),
+      const KAskCta(),
+    ];
   }
-}
 
-class _RawReport extends StatelessWidget {
-  const _RawReport({
-    required this.map,
-    required this.intro,
-    required this.sections,
-  });
-  final Map<String, dynamic> map;
-  final String intro;
-  final List<String> sections;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+  List<Widget> _raw(
+    BuildContext context,
+    Map<String, dynamic> map, {
+    required String intro,
+    required AstroHue hue,
+    required List<String> sections,
+  }) {
     final l = context.l10n;
     final present = sections.where((s) => map[s] != null).toList();
     final keys = present.isEmpty
         ? map.keys.where((k) => k != 'engine').toList()
         : present;
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
-      children: [
-        Text(
-          intro,
-          style: Theme.of(
-            context,
-          ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
-        ),
-        const SizedBox(height: 14),
-        for (final key in keys) ...[
-          KLabel(_sectionTitle(l, key)),
-          const SizedBox(height: 8),
-          KCard(child: _renderValue(context, l, map[key])),
-          const SizedBox(height: 12),
-        ],
-        KCard(
-          tint: true,
-          child: Column(
-            children: [
-              Text(
-                l.kAdvReadWithAstrologer,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 13),
-              ),
-              const SizedBox(height: 6),
-              AskAstrologerBar(label: l.kundaliTalkToAstrologer, onTap: () {}),
-            ],
+    return [
+      _intro(context, intro),
+      for (var i = 0; i < keys.length; i++)
+        KSection(
+          title: _sectionTitle(l, keys[i]),
+          hue: i.isEven ? hue : AstroPalette.career,
+          padTop: i == 0 ? 18 : 22,
+          child: KSurface(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            child: _RawValue(value: map[keys[i]]),
           ),
         ),
-      ],
-    );
+      KAskCta(title: l.kAdvReadWithAstrologer),
+    ];
   }
 
   static String _sectionTitle(AppLocalizations l, String key) => switch (key) {
@@ -381,56 +267,296 @@ class _RawReport extends StatelessWidget {
     'chara_dasha' => l.kAdvSecCharaDasha,
     _ => key.replaceAll('_', ' '),
   };
+}
 
-  Widget _renderValue(BuildContext context, AppLocalizations l, Object? value) {
-    final scheme = Theme.of(context).colorScheme;
-    if (value is Map) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+/// Sarvashtakavarga points per house as gradient bars: ≥28 strong, <25 weak.
+class _SarvaBars extends StatelessWidget {
+  const _SarvaBars({required this.byHouse});
+  final Map<String, int> byHouse;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    final vals = byHouse.values.toList()..sort();
+    final maxV = vals.isEmpty ? 1 : vals.last;
+    return Column(
+      children: [
+        for (var h = 1; h <= 12; h++)
+          Builder(
+            builder: (context) {
+              final v = byHouse['$h'] ?? 0;
+              final hue = v >= 28
+                  ? AstroPalette.health
+                  : v < 25
+                  ? AstroPalette.money
+                  : AstroPalette.career;
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 72,
+                      child: Text(
+                        l.kAdvHouseN(h),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: context.brand.inkMuted,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(99),
+                        child: Stack(
+                          children: [
+                            Container(height: 10, color: hue.tint(0.13)),
+                            FractionallySizedBox(
+                              widthFactor: maxV == 0
+                                  ? 0
+                                  : (v / maxV).clamp(0.0, 1.0),
+                              child: Container(
+                                height: 10,
+                                decoration: BoxDecoration(
+                                  gradient: hue.linear(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 34,
+                      child: Text(
+                        '$v',
+                        textAlign: TextAlign.end,
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          color: hue.end,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+      ],
+    );
+  }
+}
+
+class _BinduTile extends StatelessWidget {
+  const _BinduTile({required this.planet, required this.value});
+  final String planet;
+  final int value;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    return SizedBox(
+      width: 104,
+      child: KSurface(
+        radius: 16,
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          children: [
+            PlanetBadge(planet, size: 28),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '$value',
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  Text(
+                    KTerms.planetName(l, planet),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: context.brand.inkMuted,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Extreme extends StatelessWidget {
+  const _Extreme({
+    required this.planet,
+    required this.label,
+    required this.hue,
+  });
+  final String planet;
+  final String label;
+  final AstroHue hue;
+
+  @override
+  Widget build(BuildContext context) => KHueCard(
+    hue: hue,
+    padding: const EdgeInsets.all(12),
+    child: Row(
+      children: [
+        PlanetBadge(planet, size: 34),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            label,
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              fontWeight: FontWeight.w700,
+              height: 1.3,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class _StrengthRow extends StatelessWidget {
+  const _StrengthRow({required this.p});
+  final PlanetStrength p;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    final hue = p.isStrong ? AstroPalette.health : AstroPalette.money;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
         children: [
-          for (final e in value.entries)
+          PlanetBadge(p.name, size: 34),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        KTerms.planetName(l, p.name),
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      '${p.totalRupa.toStringAsFixed(1)} / ${p.requiredRupa.toStringAsFixed(1)}',
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: context.brand.inkMuted,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Icon(
+                      p.isStrong
+                          ? Icons.check_circle_rounded
+                          : Icons.remove_circle_outline_rounded,
+                      size: 16,
+                      color: hue.end,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(99),
+                  child: Stack(
+                    children: [
+                      Container(height: 7, color: hue.tint(0.13)),
+                      FractionallySizedBox(
+                        widthFactor: (p.ratio / 1.6).clamp(0.0, 1.0),
+                        child: Container(
+                          height: 7,
+                          decoration: BoxDecoration(gradient: hue.linear()),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A raw KP / Jaimini value: maps become label ↔ value rows, lists join.
+class _RawValue extends StatelessWidget {
+  const _RawValue({required this.value});
+  final Object? value;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    final v = value;
+    if (v is Map) {
+      final entries = v.entries.toList();
+      return Column(
+        children: [
+          for (var i = 0; i < entries.length; i++) ...[
+            if (i > 0) Divider(height: 1, color: context.brand.hairline),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
                     width: 110,
                     child: Text(
-                      '${e.key}'.replaceAll('_', ' '),
-                      style: TextStyle(
-                        fontSize: 12.5,
-                        color: scheme.onSurfaceVariant,
+                      KTerms.displayName(
+                        l,
+                        '${entries[i].key}'.replaceAll('_', ' '),
+                      ),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: context.brand.inkMuted,
                       ),
                     ),
                   ),
                   Expanded(
                     child: Text(
-                      _flat(l, e.value),
-                      style: const TextStyle(
-                        fontSize: 12.5,
-                        fontWeight: FontWeight.w600,
+                      _flat(l, entries[i].value),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        height: 1.4,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
+          ],
         ],
       );
     }
-    if (value is List) {
-      return Text(
-        value.map((v) => _flat(l, v)).join(', '),
-        style: const TextStyle(fontSize: 12.5),
-      );
-    }
-    return Text(_flat(l, value), style: const TextStyle(fontSize: 12.5));
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Text(
+        _flat(l, v),
+        style: theme.textTheme.bodyMedium?.copyWith(height: 1.45),
+      ),
+    );
   }
 
   /// Flattens a raw technical value; planet / sign / nakshatra names inside it
   /// are shown in the app language.
-  String _flat(AppLocalizations l, Object? v) {
+  static String _flat(AppLocalizations l, Object? v) {
     if (v is Map) {
       return v.entries.map((e) => '${e.key}: ${_flat(l, e.value)}').join(', ');
     }

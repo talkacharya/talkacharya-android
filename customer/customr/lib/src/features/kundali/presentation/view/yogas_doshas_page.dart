@@ -4,13 +4,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/router/routes.dart';
+import '../../../../core/theme/astro_palette.dart';
 import '../../../../core/theme/brand_colors.dart';
+import '../../../../shared/widgets/hue_widgets.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
+import '../widgets/k_chart.dart';
 import '../widgets/kundali_ui.dart';
 import 'kundali_routes.dart';
 
+/// Doshas (afflictions, each with severity, reasons and what reduces it) and
+/// yogas (beneficial combinations) — two faces switched from the hero.
 class YogasDoshasPage extends StatefulWidget {
   const YogasDoshasPage({required this.profileId, super.key});
   final String profileId;
@@ -20,6 +24,8 @@ class YogasDoshasPage extends StatefulWidget {
 }
 
 class _YogasDoshasPageState extends State<YogasDoshasPage> {
+  int _tab = 0; // 0 doshas · 1 yogas
+
   @override
   void initState() {
     super.initState();
@@ -32,111 +38,216 @@ class _YogasDoshasPageState extends State<YogasDoshasPage> {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(l.kundaliYogasDoshasTitle),
-          bottom: TabBar(
-            tabs: [
-              Tab(text: l.kundaliTabDoshas),
-              Tab(text: l.kundaliTabYogas),
+    return BlocBuilder<KundaliCubit, KundaliState>(
+      builder: (context, state) {
+        final cubit = context.read<KundaliCubit>();
+        final doshas = state.doshas.value;
+        final yogas = state.yogas.value;
+        final hue = _tab == 0 ? AstroPalette.fire : AstroPalette.money;
+        final presentCount = doshas?.present.length ?? 0;
+
+        final List<Widget> body;
+        if (_tab == 0) {
+          body = doshas == null
+              ? [
+                  SliceBuilder<DoshaReport>(
+                    slice: state.doshas,
+                    onRetry: () => cubit.loadDoshas(force: true),
+                    skeleton: const KBodySkeleton(blocks: [120, 160, 70]),
+                    builder: (_, _) => const SizedBox.shrink(),
+                  ),
+                ]
+              : _doshaBody(context, doshas);
+        } else {
+          body = yogas == null
+              ? [
+                  SliceBuilder<List<Yoga>>(
+                    slice: state.yogas,
+                    onRetry: () => cubit.loadYogas(force: true),
+                    skeleton: const KBodySkeleton(blocks: [110, 110, 110]),
+                    builder: (_, _) => const SizedBox.shrink(),
+                  ),
+                ]
+              : _yogaBody(context, yogas);
+        }
+
+        return KundaliScaffold(
+          key: ValueKey('yd-$_tab'),
+          title: l.kundaliYogasDoshasTitle,
+          eyebrow: l.kOvTitle,
+          headline: l.kundaliYogasDoshasTitle,
+          subheadline: _tab == 0 ? l.kYdDoshaHeroSub : l.kYdYogaHeroSub,
+          hue: hue,
+          heroTrailing: KHeroGlyph(
+            hue: hue,
+            icon: _tab == 0
+                ? Icons.shield_moon_rounded
+                : Icons.auto_awesome_rounded,
+            size: 72,
+          ),
+          heroChips: [
+            if (doshas != null)
+              KHeroChip(
+                icon: presentCount == 0
+                    ? Icons.verified_rounded
+                    : Icons.local_fire_department_rounded,
+                label: l.kYdDoshaCount(presentCount),
+                color: presentCount == 0
+                    ? AstroPalette.health.start
+                    : AstroPalette.fire.start,
+              ),
+            if (yogas != null)
+              KHeroChip(
+                icon: Icons.auto_awesome_rounded,
+                label: l.kYdYogaCount(yogas.length),
+                color: AstroPalette.money.start,
+              ),
+          ],
+          heroBottom: Align(
+            alignment: Alignment.centerLeft,
+            child: KDarkSegment(
+              labels: [l.kundaliTabDoshas, l.kundaliTabYogas],
+              selected: _tab,
+              onSelect: (i) => setState(() => _tab = i),
+            ),
+          ),
+          onRefresh: () async {
+            await Future.wait([
+              cubit.loadDoshas(force: true),
+              cubit.loadYogas(force: true),
+            ]);
+          },
+          children: body,
+        );
+      },
+    );
+  }
+
+  List<Widget> _doshaBody(BuildContext context, DoshaReport report) {
+    final l = context.l10n;
+    final present = report.present;
+    return [
+      Text(
+        l.doshaIntro,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: context.brand.inkMuted,
+          height: 1.45,
+        ),
+      ),
+      const SizedBox(height: 14),
+      if (present.isEmpty)
+        KHueCard(
+          hue: AstroPalette.health,
+          child: Row(
+            children: [
+              const HueIcon(
+                hue: AstroPalette.health,
+                icon: Icons.verified_rounded,
+                size: 40,
+                iconSize: 22,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  l.doshaAllClear,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(height: 1.45),
+                ),
+              ),
             ],
           ),
+        )
+      else
+        for (final d in present) _DoshaCard(dosha: d),
+      if (report.clear.isNotEmpty)
+        KSection(
+          title: l.doshaClearSectionTitle,
+          hue: AstroPalette.health,
+          child: KSurface(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+            child: Column(
+              children: [
+                for (var i = 0; i < report.clear.length; i++) ...[
+                  if (i > 0) Divider(height: 1, color: context.brand.hairline),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.check_circle_rounded,
+                          size: 18,
+                          color: AstroPalette.health.end,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            doshaName(l, report.clear[i]),
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ),
+                        KToneChip(l.kYdClear, tone: KTone.good),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
-        body: const TabBarView(children: [_DoshasTab(), _YogasTab()]),
+      KFootnote(
+        report.disclaimer.isNotEmpty ? report.disclaimer : l.doshaDisclaimer,
       ),
-    );
+      const SizedBox(height: 16),
+      KNavRow(
+        icon: Icons.spa_rounded,
+        hue: AstroPalette.health,
+        title: l.doshaSeeRemedies,
+        subtitle: l.kYdRemediesSub,
+        onTap: () => context.push(KundaliRoutes.remedies(widget.profileId)),
+      ),
+      KAskCta(title: l.doshaAskCta),
+    ];
   }
-}
 
-// ─────────────────────────────────────────────────────────── doshas
-
-class _DoshasTab extends StatelessWidget {
-  const _DoshasTab();
-
-  @override
-  Widget build(BuildContext context) {
+  List<Widget> _yogaBody(BuildContext context, List<Yoga> yogas) {
     final l = context.l10n;
-    return BlocBuilder<KundaliCubit, KundaliState>(
-      buildWhen: (a, b) => a.doshas != b.doshas,
-      builder: (context, state) => SliceBuilder<DoshaReport>(
-        slice: state.doshas,
-        onRetry: () => context.read<KundaliCubit>().loadDoshas(force: true),
-        builder: (context, report) {
-          final present = report.present;
-          return ListView(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
+    return [
+      Text(
+        l.yogaIntro,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: context.brand.inkMuted,
+          height: 1.45,
+        ),
+      ),
+      const SizedBox(height: 14),
+      if (yogas.isEmpty)
+        KSurface(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                l.doshaIntro,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  height: 1.45,
-                ),
+                l.yogaNoneTitle,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
               ),
-              const SizedBox(height: 14),
-              if (present.isEmpty)
-                KCard(
-                  tint: true,
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.check_circle_rounded,
-                        color: context.brand.online,
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          l.doshaAllClear,
-                          style: const TextStyle(fontSize: 13, height: 1.4),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              else
-                for (final d in present) ...[
-                  _DoshaCard(dosha: d),
-                  const SizedBox(height: 10),
-                ],
-              const SizedBox(height: 6),
-              _ClearList(doshas: report.clear),
-              const SizedBox(height: 16),
+              const SizedBox(height: 4),
               Text(
-                report.disclaimer.isNotEmpty
-                    ? report.disclaimer
-                    : l.doshaDisclaimer,
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  height: 1.4,
-                ),
-              ),
-              const SizedBox(height: 16),
-              OutlinedButton.icon(
-                onPressed: () =>
-                    context.push(KundaliRoutes.remedies(_profileIdOf(context))),
-                icon: const Icon(Icons.spa_outlined, size: 18),
-                label: Text(l.doshaSeeRemedies),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(48),
-                ),
-              ),
-              const SizedBox(height: 10),
-              AskAstrologerBar(
-                label: l.doshaAskCta,
-                onTap: () => context.go(Routes.astrologers),
+                l.yogaNoneBody,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(height: 1.45),
               ),
             ],
-          );
-        },
-      ),
-    );
+          ),
+        )
+      else
+        for (final (i, y) in yogas.indexed) _YogaCard(yoga: y, index: i),
+      KAskCta(title: l.kundaliTalkToAstrologer, body: l.kundaliHowItPlaysOut),
+    ];
   }
 }
-
-String _profileIdOf(BuildContext context) =>
-    context.read<KundaliCubit>().profileId;
 
 class _DoshaCard extends StatelessWidget {
   const _DoshaCard({required this.dosha});
@@ -148,338 +259,264 @@ class _DoshaCard extends StatelessWidget {
     final theme = Theme.of(context);
     final sev = dosha.displaySeverity;
     final cancelled = dosha.present && (dosha.isCancelled || sev == 0);
+    final hue = cancelled
+        ? AstroPalette.air
+        : switch (sev) {
+            >= 3 => AstroPalette.fire,
+            2 => AstroPalette.money,
+            _ => AstroPalette.earth,
+          };
+    final label = cancelled
+        ? l.doshaCancelled
+        : switch (sev) {
+            >= 3 => l.doshaSeverityStrong,
+            2 => l.doshaSeverityModerate,
+            _ => l.doshaSeverityMild,
+          };
 
-    return KCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Text(
-                  doshaName(l, dosha),
-                  style: theme.textTheme.titleMedium?.copyWith(fontSize: 15),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: KHueCard(
+        hue: hue,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                HueIcon(
+                  hue: hue,
+                  icon: cancelled
+                      ? Icons.shield_rounded
+                      : Icons.local_fire_department_rounded,
+                  size: 40,
+                  iconSize: 21,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    doshaName(l, dosha),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                KToneChip(label, hue: hue),
+              ],
+            ),
+            if (!cancelled && sev > 0) ...[
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  for (var i = 0; i < 3; i++) ...[
+                    Expanded(
+                      child: Container(
+                        height: 6,
+                        decoration: BoxDecoration(
+                          gradient: i < sev ? hue.linear() : null,
+                          color: i < sev ? null : context.brand.hairline,
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                      ),
+                    ),
+                    if (i < 2) const SizedBox(width: 5),
+                  ],
+                ],
+              ),
+            ],
+            const SizedBox(height: 10),
+            Text(
+              doshaMeaning(l, dosha.key),
+              style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
+            ),
+            if (dosha.planets.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 4,
+                children: [
+                  for (final p in dosha.planets) PlanetBadge(p, size: 24),
+                ],
+              ),
+            ],
+            if (dosha.key == 'kaal_sarpa' &&
+                dosha.kaalSarpaType.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              KToneChip(
+                '${dosha.kaalSarpaType}${dosha.partial ? " · ${l.kYdPartial}" : ""}',
+                hue: AstroPalette.career,
+              ),
+            ],
+            if (dosha.reasons.isNotEmpty)
+              _Bullets(
+                title: l.doshaWhy,
+                icon: Icons.adjust_rounded,
+                hue: hue,
+                lines: [for (final r in dosha.reasons) r.text],
+              ),
+            if (dosha.activeCancellations.isNotEmpty) ...[
+              _Bullets(
+                title: l.doshaWhatReduces,
+                icon: Icons.shield_moon_rounded,
+                hue: AstroPalette.health,
+                lines: [for (final c in dosha.activeCancellations) c.text],
+              ),
+              const SizedBox(height: 6),
+              Text(
+                l.doshaReducedNote(dosha.activeCancellations.length),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: AstroPalette.health.end,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
-              _StatusChip(cancelled: cancelled, severity: sev),
             ],
-          ),
-          if (!cancelled && sev > 0) ...[
-            const SizedBox(height: 8),
-            _SeverityMeter(level: sev),
           ],
-          const SizedBox(height: 8),
-          Text(
-            doshaMeaning(l, dosha.key),
-            style: const TextStyle(fontSize: 13, height: 1.45),
-          ),
-          if (dosha.key == 'kaal_sarpa' && dosha.kaalSarpaType.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            MetaChip(
-              '${dosha.kaalSarpaType}${dosha.partial ? " · ${l.kYdPartial}" : ""}',
-            ),
-          ],
-          if (dosha.reasons.isNotEmpty) ...[
-            const SizedBox(height: 12),
-            _BulletBlock(
-              title: l.doshaWhy,
-              icon: Icons.adjust_rounded,
-              lines: [for (final r in dosha.reasons) r.text],
-            ),
-          ],
-          if (dosha.activeCancellations.isNotEmpty) ...[
-            const SizedBox(height: 10),
-            _BulletBlock(
-              title: l.doshaWhatReduces,
-              icon: Icons.shield_moon_outlined,
-              accent: context.brand.online,
-              lines: [for (final c in dosha.activeCancellations) c.text],
-            ),
-            const SizedBox(height: 6),
-            Text(
-              l.doshaReducedNote(dosha.activeCancellations.length),
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: context.brand.online,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _StatusChip extends StatelessWidget {
-  const _StatusChip({required this.cancelled, required this.severity});
-  final bool cancelled;
-  final int severity;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = context.l10n;
-    final (label, bg, fg) = cancelled
-        ? (l.doshaCancelled, const Color(0xFFE9E9EC), const Color(0xFF5B5B62))
-        : switch (severity) {
-            >= 3 => (
-              l.doshaSeverityStrong,
-              const Color(0xFFF8DCD6),
-              const Color(0xFFB23A28),
-            ),
-            2 => (
-              l.doshaSeverityModerate,
-              const Color(0xFFFBEBD8),
-              const Color(0xFFB0691F),
-            ),
-            _ => (
-              l.doshaSeverityMild,
-              const Color(0xFFF3EEDD),
-              const Color(0xFF8A7A32),
-            ),
-          };
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 11.5,
-          fontWeight: FontWeight.w800,
-          color: fg,
         ),
       ),
     );
   }
 }
 
-class _SeverityMeter extends StatelessWidget {
-  const _SeverityMeter({required this.level});
-  final int level;
-
-  @override
-  Widget build(BuildContext context) {
-    final on = switch (level) {
-      >= 3 => const Color(0xFFB23A28),
-      2 => const Color(0xFFB0691F),
-      _ => const Color(0xFFC7A94A),
-    };
-    return Row(
-      children: [
-        for (var i = 0; i < 3; i++) ...[
-          Expanded(
-            child: Container(
-              height: 5,
-              decoration: BoxDecoration(
-                color: i < level ? on : context.brand.hairline,
-                borderRadius: BorderRadius.circular(3),
-              ),
-            ),
-          ),
-          if (i < 2) const SizedBox(width: 5),
-        ],
-      ],
-    );
-  }
-}
-
-class _BulletBlock extends StatelessWidget {
-  const _BulletBlock({
+class _Bullets extends StatelessWidget {
+  const _Bullets({
     required this.title,
     required this.icon,
+    required this.hue,
     required this.lines,
-    this.accent,
   });
+
   final String title;
   final IconData icon;
+  final AstroHue hue;
   final List<String> lines;
-  final Color? accent;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final c = accent ?? theme.colorScheme.onSurfaceVariant;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(icon, size: 14, color: c),
-            const SizedBox(width: 6),
-            Text(
-              title.toUpperCase(),
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: c,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.5,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 5),
-        for (final line in lines)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 3),
-            child: Text(
-              '·  $line',
-              style: const TextStyle(fontSize: 12.5, height: 1.4),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _ClearList extends StatelessWidget {
-  const _ClearList({required this.doshas});
-  final List<Dosha> doshas;
-
-  @override
-  Widget build(BuildContext context) {
-    if (doshas.isEmpty) return const SizedBox.shrink();
-    final l = context.l10n;
-    return Card(
-      child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          tilePadding: const EdgeInsets.symmetric(horizontal: 16),
-          title: Text(
-            l.doshaClearSectionTitle,
-            style: Theme.of(
-              context,
-            ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700),
-          ),
-          childrenPadding: const EdgeInsets.only(bottom: 8),
-          children: [
-            for (final d in doshas)
-              ListTile(
-                dense: true,
-                visualDensity: VisualDensity.compact,
-                leading: Icon(
-                  Icons.check_circle_outline_rounded,
-                  size: 18,
-                  color: context.brand.online,
-                ),
-                title: Text(
-                  doshaName(l, d),
-                  style: const TextStyle(fontSize: 13),
-                ),
-              ),
-          ],
-        ),
+    return Container(
+      margin: const EdgeInsets.only(top: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface.withValues(alpha: 0.7),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: hue.tint(0.25)),
       ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────────────────── yogas
-
-class _YogasTab extends StatelessWidget {
-  const _YogasTab();
-
-  @override
-  Widget build(BuildContext context) {
-    final l = context.l10n;
-    return BlocBuilder<KundaliCubit, KundaliState>(
-      buildWhen: (a, b) => a.yogas != b.yogas,
-      builder: (context, state) => SliceBuilder<List<Yoga>>(
-        slice: state.yogas,
-        onRetry: () => context.read<KundaliCubit>().loadYogas(),
-        builder: (context, yogas) => ListView(
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
-          children: [
-            Text(
-              l.yogaIntro,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                height: 1.45,
-              ),
-            ),
-            const SizedBox(height: 14),
-            if (yogas.isEmpty)
-              KCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l.yogaNoneTitle,
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      l.yogaNoneBody,
-                      style: const TextStyle(fontSize: 13, height: 1.4),
-                    ),
-                  ],
-                ),
-              )
-            else
-              for (final y in yogas) ...[
-                _YogaCard(yoga: y),
-                const SizedBox(height: 10),
-              ],
-            const SizedBox(height: 8),
-            KCard(
-              tint: true,
-              child: Column(
-                children: [
-                  Text(
-                    l.kundaliHowItPlaysOut,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 13),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 15, color: hue.end),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  title.toUpperCase(),
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: hue.end,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.6,
                   ),
-                  const SizedBox(height: 8),
-                  AskAstrologerBar(
-                    label: l.kundaliTalkToAstrologer,
-                    onTap: () => context.go(Routes.astrologers),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          for (final line in lines)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 7, right: 8),
+                    child: Container(
+                      width: 5,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: hue.end,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      line,
+                      style: theme.textTheme.bodySmall?.copyWith(height: 1.45),
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }
 }
 
 class _YogaCard extends StatelessWidget {
-  const _YogaCard({required this.yoga});
+  const _YogaCard({required this.yoga, required this.index});
   final Yoga yoga;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l = context.l10n;
     final meaning = yogaMeaning(l, yoga.key);
-    return KCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            yogaName(l, yoga.key, yoga.name),
-            style: theme.textTheme.titleMedium?.copyWith(fontSize: 15),
-          ),
-          if (yoga.planets.isNotEmpty) ...[
-            const SizedBox(height: 4),
-            Text(
-              yoga.planets.map((p) => KTerms.displayName(l, p)).join(' · '),
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+    final hue = AstroPalette.at(index);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: KHueCard(
+        hue: hue,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                HueIcon(
+                  hue: hue,
+                  icon: Icons.auto_awesome_rounded,
+                  size: 38,
+                  iconSize: 20,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    yogaName(l, yoga.key, yoga.name),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            if (meaning.isNotEmpty || yoga.description.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Text(
+                meaning.isNotEmpty ? meaning : yoga.description,
+                style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
               ),
-            ),
+            ],
+            if (yoga.planets.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  for (final p in yoga.planets) ...[
+                    PlanetBadge(p, size: 24),
+                    Text(
+                      KTerms.displayName(l, p),
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: hue.end,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ],
           ],
-          if (meaning.isNotEmpty || yoga.description.isNotEmpty) ...[
-            const SizedBox(height: 6),
-            Text(
-              meaning.isNotEmpty ? meaning : yoga.description,
-              style: const TextStyle(fontSize: 13, height: 1.4),
-            ),
-          ],
-        ],
+        ),
       ),
     );
   }

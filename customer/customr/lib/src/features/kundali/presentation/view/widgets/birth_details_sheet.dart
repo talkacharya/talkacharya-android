@@ -2,9 +2,12 @@ import 'package:astro_kundali/astro_kundali.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/l10n/l10n.dart';
+import '../../../../../core/theme/astro_palette.dart';
 import '../../../../../core/theme/brand_colors.dart';
+import '../../../../../shared/widgets/hue_widgets.dart';
 import '../../../../birthprofiles/data/models/birth_profile.dart';
 import '../../kundali_terms.dart';
+import '../../widgets/kundali_ui.dart';
 
 /// The full "birth details" surface — the janma panchang running at birth plus
 /// the avakahada chakra (varna, vashya, yoni, gana, nadi, tara, …). Opened from
@@ -44,8 +47,26 @@ class _BirthDetailsSheet extends StatelessWidget {
         controller: controller,
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 28),
         children: [
-          Text(l.birthDetailsTitle, style: theme.textTheme.titleLarge),
-          const SizedBox(height: 2),
+          Row(
+            children: [
+              HueIcon(
+                hue: kSignHue(kundali.moonSign),
+                icon: Icons.cake_rounded,
+                size: 48,
+                iconSize: 24,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  l.birthDetailsTitle,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
           if (profile != null)
             Text(
               [
@@ -66,9 +87,31 @@ class _BirthDetailsSheet extends StatelessWidget {
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              if (kundali.moonSign.isNotEmpty)
+                Expanded(
+                  child: _Highlight(
+                    hue: kSignHue(kundali.moonSign),
+                    label: l.birthDetailsMoonSign,
+                    value: KTerms.signName(l, kundali.moonSign),
+                  ),
+                ),
+              if (kundali.moonSign.isNotEmpty && p.nakshatra.isNotEmpty)
+                const SizedBox(width: 10),
+              if (p.nakshatra.isNotEmpty)
+                Expanded(
+                  child: _Highlight(
+                    hue: AstroPalette.career,
+                    label: l.birthDetailsNakshatra,
+                    value: KTerms.nakshatraName(l, p.nakshatra),
+                  ),
+                ),
+            ],
+          ),
 
-          _Section(l.birthDetailsPanchangTitle),
+          _Section(l.birthDetailsPanchangTitle, hue: AstroPalette.money),
           _Grid([
             if (p.vaara.isNotEmpty) (l.birthDetailsWeekday, _vaara(l, p.vaara)),
             if (p.tithi.isNotEmpty)
@@ -116,8 +159,7 @@ class _BirthDetailsSheet extends StatelessWidget {
           ]),
 
           if (!c.isEmpty) ...[
-            const SizedBox(height: 20),
-            _Section(l.birthDetailsChakraTitle),
+            _Section(l.birthDetailsChakraTitle, hue: AstroPalette.love),
             _Grid([
               if (c.nakshatraLord.isNotEmpty)
                 (
@@ -149,14 +191,7 @@ class _BirthDetailsSheet extends StatelessWidget {
             ]),
           ],
 
-          const SizedBox(height: 16),
-          Text(
-            l.birthDetailsDisclaimer,
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-              height: 1.3,
-            ),
-          ),
+          KFootnote(l.birthDetailsDisclaimer),
         ],
       ),
     );
@@ -190,18 +225,81 @@ class _BirthDetailsSheet extends StatelessWidget {
 }
 
 class _Section extends StatelessWidget {
-  const _Section(this.title);
+  const _Section(this.title, {required this.hue});
   final String title;
+  final AstroHue hue;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Text(
-        title,
-        style: Theme.of(
-          context,
-        ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+      padding: const EdgeInsets.only(top: 22, bottom: 10),
+      child: Row(
+        children: [
+          Container(
+            width: 4,
+            height: 18,
+            decoration: BoxDecoration(
+              gradient: hue.linear(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              title,
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A headline fact tile at the top of the sheet.
+class _Highlight extends StatelessWidget {
+  const _Highlight({
+    required this.hue,
+    required this.label,
+    required this.value,
+  });
+  final AstroHue hue;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return KHueCard(
+      hue: hue,
+      radius: 16,
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: context.brand.inkMuted,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -5,10 +5,14 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
+import '../../../../core/theme/astro_palette.dart';
 import '../../../../core/theme/brand_colors.dart';
+import '../../../../shared/widgets/hue_widgets.dart';
 import '../cubit/kundali_cubit.dart';
 import '../widgets/kundali_ui.dart';
 
+/// Remedies matched to this chart, grouped by kind (mantra, daan, lifestyle…).
+/// Gemstone / rudraksha style items stay gated behind an astrologer check.
 class RemediesPage extends StatefulWidget {
   const RemediesPage({required this.profileId, super.key});
   final String profileId;
@@ -27,191 +31,233 @@ class _RemediesPageState extends State<RemediesPage> {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    return Scaffold(
-      appBar: AppBar(title: Text(l.remediesTitle)),
-      body: BlocBuilder<KundaliCubit, KundaliState>(
-        buildWhen: (a, b) => a.remedies != b.remedies,
-        builder: (context, state) => SliceBuilder<RemedyReport>(
-          slice: state.remedies,
-          onRetry: () => context.read<KundaliCubit>().loadRemedies(force: true),
-          builder: (context, report) {
-            if (report.isEmpty) {
-              return ListView(
-                padding: const EdgeInsets.all(16),
-                children: [
-                  KCard(
-                    child: Text(
-                      l.remediesNone,
-                      style: const TextStyle(fontSize: 13, height: 1.5),
+    const hue = AstroPalette.health;
+    return BlocBuilder<KundaliCubit, KundaliState>(
+      buildWhen: (a, b) => a.remedies != b.remedies,
+      builder: (context, state) {
+        final cubit = context.read<KundaliCubit>();
+        final report = state.remedies.value;
+        final total =
+            report?.groups.fold<int>(0, (n, g) => n + g.items.length) ?? 0;
+        return KundaliScaffold(
+          title: l.remediesTitle,
+          eyebrow: l.kOvTitle,
+          headline: l.remediesTitle,
+          subheadline: l.kRmHeroSub,
+          hue: hue,
+          heroTrailing: const KHeroGlyph(
+            hue: hue,
+            icon: Icons.spa_rounded,
+            size: 72,
+          ),
+          heroChips: report == null || report.isEmpty
+              ? const []
+              : [
+                  KHeroChip(
+                    icon: Icons.checklist_rounded,
+                    label: l.kRmCount(total),
+                    color: AstroPalette.health.start,
+                  ),
+                  if (report.hasGated)
+                    KHeroChip(
+                      icon: Icons.verified_user_rounded,
+                      label: l.kRmGatedChip,
+                      color: AstroPalette.money.start,
                     ),
-                  ),
                 ],
-              );
-            }
-            return ListView(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
-              children: [
-                Text(
-                  l.remediesIntro,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    height: 1.45,
+          onRefresh: () => cubit.loadRemedies(force: true),
+          animate: report != null,
+          children: report == null
+              ? [
+                  SliceBuilder<RemedyReport>(
+                    slice: state.remedies,
+                    onRetry: () => cubit.loadRemedies(force: true),
+                    skeleton: const KBodySkeleton(blocks: [60, 160, 160, 160]),
+                    builder: (_, _) => const SizedBox.shrink(),
                   ),
-                ),
-                const SizedBox(height: 14),
-                for (final group in report.groups) ...[
-                  _GroupSection(group: group),
-                  const SizedBox(height: 14),
-                ],
-                if (report.hasGated && report.gatedNote.isNotEmpty) ...[
-                  KCard(
-                    tint: true,
+                ]
+              : report.isEmpty
+              ? [
+                  KHueCard(
+                    hue: hue,
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.verified_user_outlined,
-                          size: 18,
-                          color: context.brand.onTint,
+                        const HueIcon(
+                          hue: hue,
+                          icon: Icons.check_rounded,
+                          size: 40,
+                          iconSize: 20,
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            report.gatedNote,
-                            style: const TextStyle(fontSize: 12.5, height: 1.4),
+                            l.remediesNone,
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyMedium?.copyWith(height: 1.5),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 12),
-                ],
-                Text(
-                  report.disclaimer.isNotEmpty
-                      ? report.disclaimer
-                      : l.remediesDisclaimer,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    height: 1.4,
+                  KAskCta(title: l.remediesAskCta),
+                ]
+              : [
+                  Text(
+                    l.remediesIntro,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: context.brand.inkMuted,
+                      height: 1.45,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                AskAstrologerBar(
-                  label: l.remediesAskCta,
-                  onTap: () => context.go(Routes.astrologers),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class _GroupSection extends StatelessWidget {
-  const _GroupSection({required this.group});
-  final RemedyGroup group;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = context.l10n;
-    final theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(
-              RemedyCategoryInfo.icon(group.category),
-              size: 17,
-              color: theme.colorScheme.primary,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              remedyCategoryLabel(l, group.category),
-              style: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        for (final remedy in group.items) ...[
-          _RemedyCard(remedy: remedy),
-          const SizedBox(height: 8),
-        ],
-      ],
+                  for (final group in report.groups)
+                    KSection(
+                      title: remedyCategoryLabel(l, group.category),
+                      hue: remedyCategoryHue(group.category),
+                      trailing: KPill(
+                        '${group.items.length}',
+                        hue: remedyCategoryHue(group.category),
+                      ),
+                      child: Column(
+                        children: [
+                          for (final remedy in group.items)
+                            _RemedyCard(
+                              remedy: remedy,
+                              category: group.category,
+                            ),
+                        ],
+                      ),
+                    ),
+                  if (report.hasGated && report.gatedNote.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    KHueCard(
+                      hue: AstroPalette.money,
+                      child: Row(
+                        children: [
+                          const HueIcon(
+                            hue: AstroPalette.money,
+                            icon: Icons.verified_user_rounded,
+                            size: 38,
+                            iconSize: 19,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              report.gatedNote,
+                              style: Theme.of(
+                                context,
+                              ).textTheme.bodySmall?.copyWith(height: 1.45),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                  KFootnote(
+                    report.disclaimer.isNotEmpty
+                        ? report.disclaimer
+                        : l.remediesDisclaimer,
+                  ),
+                  KAskCta(title: l.remediesAskCta),
+                ],
+        );
+      },
     );
   }
 }
 
 class _RemedyCard extends StatelessWidget {
-  const _RemedyCard({required this.remedy});
+  const _RemedyCard({required this.remedy, required this.category});
   final Remedy remedy;
+  final String category;
 
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
     final theme = Theme.of(context);
-    return KCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            remedy.title,
-            style: theme.textTheme.titleMedium?.copyWith(fontSize: 14.5),
-          ),
-          const SizedBox(height: 6),
-          Text(remedy.body, style: const TextStyle(fontSize: 13, height: 1.5)),
-          if (remedy.caution.isNotEmpty) ...[
-            const SizedBox(height: 8),
+    final hue = remedyCategoryHue(category);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: KSurface(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(
-                  Icons.info_outline_rounded,
-                  size: 14,
-                  color: Color(0xFFB0691F),
+                KIconBox(
+                  icon: RemedyCategoryInfo.icon(category),
+                  hue: hue,
+                  size: 34,
                 ),
-                const SizedBox(width: 6),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    remedy.caution,
-                    style: const TextStyle(
-                      fontSize: 11.5,
-                      height: 1.4,
-                      color: Color(0xFFB0691F),
+                    remedy.title,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
+                if (remedy.gated)
+                  const Icon(
+                    Icons.lock_outline_rounded,
+                    size: 16,
+                    color: Color(0xFFB0691F),
+                  ),
               ],
             ),
-          ],
-          if (remedy.gated) ...[
-            const SizedBox(height: 10),
-            OutlinedButton.icon(
-              onPressed: () => context.go(Routes.astrologers),
-              icon: const Icon(Icons.event_available_outlined, size: 16),
-              label: Text(l.remediesConfirmCta),
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size.fromHeight(40),
-              ),
-            ),
-          ],
-          if (remedy.source.isNotEmpty && remedy.source != 'traditional') ...[
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             Text(
-              l.remediesSource(remedy.source),
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
+              remedy.body,
+              style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
             ),
+            if (remedy.caution.isNotEmpty)
+              KNoteBox(
+                title: l.kRmCaution,
+                icon: Icons.info_outline_rounded,
+                hue: AstroPalette.money,
+                child: Text(
+                  remedy.caution,
+                  style: theme.textTheme.bodySmall?.copyWith(height: 1.4),
+                ),
+              ),
+            if (remedy.gated) ...[
+              const SizedBox(height: 10),
+              OutlinedButton.icon(
+                onPressed: () => context.go(Routes.astrologers),
+                icon: const Icon(Icons.event_available_outlined, size: 16),
+                label: Text(l.remediesConfirmCta),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(42),
+                ),
+              ),
+            ],
+            if (remedy.source.isNotEmpty && remedy.source != 'traditional') ...[
+              const SizedBox(height: 8),
+              Text(
+                l.remediesSource(remedy.source),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: context.brand.inkMuted,
+                ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
 }
+
+AstroHue remedyCategoryHue(String category) => switch (category) {
+  'mantra' || 'stotra' => AstroPalette.air,
+  'puja' => AstroPalette.fire,
+  'vrat' => AstroPalette.career,
+  'daan' => AstroPalette.love,
+  'lifestyle' => AstroPalette.health,
+  'yantra' => AstroPalette.water,
+  'gemstone' || 'rudraksha' => AstroPalette.money,
+  _ => AstroPalette.earth,
+};
 
 String remedyCategoryLabel(AppLocalizations l, String category) =>
     switch (category) {

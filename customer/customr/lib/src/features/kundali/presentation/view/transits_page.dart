@@ -1,16 +1,21 @@
 import 'package:astro_kundali/astro_kundali.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/theme/astro_palette.dart';
 import '../../../../core/theme/brand_colors.dart';
+import '../../../../shared/widgets/hue_widgets.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
+import '../widgets/sade_sati_card.dart';
 import 'kundali_routes.dart';
 
+/// Gochar: where the planets are today relative to your chart, Sade Sati /
+/// panoti status, Jupiter's support, close contacts, and the ashtakavarga
+/// scores for each transit.
 class TransitsPage extends StatefulWidget {
   const TransitsPage({required this.profileId, super.key});
   final String profileId;
@@ -31,41 +36,350 @@ class _TransitsPageState extends State<TransitsPage> {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    return Scaffold(
-      appBar: AppBar(title: Text(l.kTrTitle)),
-      body: BlocBuilder<KundaliCubit, KundaliState>(
-        builder: (context, state) => SliceBuilder<Transits>(
-          slice: state.transits,
-          onRetry: () => context.read<KundaliCubit>().loadTransits(force: true),
-          builder: (context, t) => ListView(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
+    return BlocBuilder<KundaliCubit, KundaliState>(
+      builder: (context, state) {
+        final cubit = context.read<KundaliCubit>();
+        final t = state.transits.value;
+        final hue = t?.sadeSatiActive ?? false
+            ? AstroPalette.money
+            : AstroPalette.air;
+
+        return KundaliScaffold(
+          title: l.kTrTitle,
+          eyebrow: l.kSsSkyNow,
+          headline: l.kTrTitle,
+          subheadline: t == null || t.natalMoonSign.isEmpty
+              ? null
+              : l.kTrHeroSub(KTerms.signName(l, t.natalMoonSign)),
+          hue: hue,
+          heroTrailing: KHeroGlyph(
+            hue: hue,
+            icon: Icons.public_rounded,
+            size: 72,
+          ),
+          heroChips: t == null
+              ? const []
+              : [
+                  if (t.sadeSatiActive)
+                    KHeroChip(
+                      icon: Icons.brightness_3_rounded,
+                      label: l.kTrSadeSati,
+                      color: AstroPalette.money.start,
+                    ),
+                  KHeroChip(
+                    icon: t.jupiterFavourable
+                        ? Icons.thumb_up_alt_rounded
+                        : Icons.remove_circle_outline_rounded,
+                    label: l.kTrJupiterChip(
+                      KTerms.nthHouse(l, t.jupiterHouseFromMoon),
+                    ),
+                    color: t.jupiterFavourable
+                        ? AstroPalette.health.start
+                        : null,
+                  ),
+                ],
+          onRefresh: () async {
+            await Future.wait([
+              cubit.loadTransits(force: true),
+              cubit.loadAvTransit(force: true),
+            ]);
+          },
+          animate: t != null,
+          children: t == null
+              ? [
+                  SliceBuilder<Transits>(
+                    slice: state.transits,
+                    onRetry: () => cubit.loadTransits(force: true),
+                    skeleton: const KBodySkeleton(blocks: [170, 260, 90]),
+                    builder: (_, _) => const SizedBox.shrink(),
+                  ),
+                ]
+              : [
+                  if (t.sadeSatiActive)
+                    _SadeSatiPanel(t: t)
+                  else if (t.smallPanotiActive)
+                    SadeSatiCard(transits: t),
+                  if (t.sadeSatiActive || t.smallPanotiActive)
+                    const SizedBox(height: 12),
+                  KNavRow(
+                    icon: Icons.event_note_rounded,
+                    hue: AstroPalette.money,
+                    title: l.kTrSadeSatiCalendar,
+                    subtitle: l.kTrSadeSatiCalendarSub,
+                    onTap: () =>
+                        context.push(KundaliRoutes.sadeSati(widget.profileId)),
+                  ),
+                  KSection(
+                    title: l.kTrSkyNow,
+                    hue: AstroPalette.air,
+                    child: _CurrentSky(t: t),
+                  ),
+                  const SizedBox(height: 12),
+                  _JupiterCard(t: t),
+                  if (t.positions.any((p) => p.overNatal.isNotEmpty)) ...[
+                    const SizedBox(height: 12),
+                    _NotableCard(t: t),
+                  ],
+                  const _AvTransitSection(),
+                  const KAskCta(),
+                ],
+        );
+      },
+    );
+  }
+}
+
+class _SadeSatiPanel extends StatelessWidget {
+  const _SadeSatiPanel({required this.t});
+  final Transits t;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    const phases = ['rising', 'peak', 'setting'];
+    final idx = phases.indexOf(t.sadeSatiPhase);
+    final tips = [l.kTrTip1, l.kTrTip2, l.kTrTip3, l.kTrTip4];
+    const hue = AstroPalette.money;
+    return KHueCard(
+      hue: hue,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              if (t.sadeSatiActive)
-                _SadeSatiPanel(t: t)
-              else if (t.smallPanotiActive)
-                _PanotiPanel(t: t),
-              if (t.sadeSatiActive || t.smallPanotiActive)
-                const SizedBox(height: 14),
-              OutlinedButton.icon(
-                onPressed: () =>
-                    context.push(KundaliRoutes.sadeSati(widget.profileId)),
-                icon: const Icon(Icons.event_note_rounded, size: 18),
-                label: Text(l.kTrSadeSatiCalendar),
+              const PlanetBadge('Saturn', size: 42),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  l.kTrSadeSati,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
-              const SizedBox(height: 14),
-              KLabel(l.kTrSkyNow),
-              const SizedBox(height: 8),
-              _CurrentSky(t: t),
-              const SizedBox(height: 14),
-              _JupiterCard(t: t),
-              const SizedBox(height: 12),
-              if (t.positions.any((p) => p.overNatal.isNotEmpty))
-                _NotableCard(t: t),
-              const SizedBox(height: 12),
-              const _AvTransitSection(),
+              KToneChip(l.kTrPhaseOf(idx + 1), hue: hue),
             ],
           ),
-        ),
+          const SizedBox(height: 14),
+          SaturnPhaseStepper(
+            labels: [l.kSsRising, l.kSsPeak, l.kSsSetting],
+            hints: [
+              l.kTrPhaseHintRising,
+              l.kTrPhaseHintPeak,
+              l.kTrPhaseHintSetting,
+            ],
+            active: idx,
+          ),
+          const SizedBox(height: 14),
+          Text(
+            KTerms.sadeSati(l, t.sadeSatiPhase),
+            style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface.withValues(alpha: 0.7),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l.kTrHowToWork,
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: hue.end,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                for (final tip in tips)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.check_rounded,
+                          size: 16,
+                          color: AstroPalette.health.end,
+                        ),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            tip,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              height: 1.4,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CurrentSky extends StatelessWidget {
+  const _CurrentSky({required this.t});
+  final Transits t;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    final brand = context.brand;
+    final ordered = [
+      for (final name in planetOrder)
+        ...t.positions.where((p) => p.name == name),
+    ];
+    return KSurface(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+      child: Column(
+        children: [
+          for (var i = 0; i < ordered.length; i++) ...[
+            if (i > 0) Divider(height: 1, color: brand.hairline),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                children: [
+                  PlanetBadge(ordered[i].name, size: 36),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l.kTrPlanetInSign(
+                            KTerms.planetName(l, ordered[i].name),
+                            KTerms.signName(l, ordered[i].sign),
+                          ),
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        if (ordered[i].houseFromLagna > 0)
+                          Text(
+                            l.kTransitHouseLine(
+                              KTerms.nthHouse(l, ordered[i].houseFromLagna),
+                              KTerms.house(
+                                l,
+                                ordered[i].houseFromLagna,
+                              ).toLowerCase(),
+                            ),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: brand.inkMuted,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  if (ordered[i].name == 'Saturn' && t.sadeSatiActive)
+                    KToneChip(l.kTrSadeSati, hue: AstroPalette.money),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _JupiterCard extends StatelessWidget {
+  const _JupiterCard({required this.t});
+  final Transits t;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final hue = t.jupiterFavourable ? AstroPalette.health : AstroPalette.air;
+    return KHueCard(
+      hue: hue,
+      child: Row(
+        children: [
+          const PlanetBadge('Jupiter', size: 40),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              t.jupiterFavourable ? l.kTrJupiterGood : l.kTrJupiterNeutral,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(height: 1.45),
+            ),
+          ),
+          const SizedBox(width: 8),
+          HueIcon(
+            hue: hue,
+            icon: t.jupiterFavourable
+                ? Icons.check_rounded
+                : Icons.remove_rounded,
+            size: 28,
+            iconSize: 16,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NotableCard extends StatelessWidget {
+  const _NotableCard({required this.t});
+  final Transits t;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    final hits = t.positions.where((p) => p.overNatal.isNotEmpty).toList();
+    return KSurface(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const KIconBox(
+                icon: Icons.join_inner_rounded,
+                hue: AstroPalette.love,
+                size: 32,
+              ),
+              const SizedBox(width: 10),
+              Text(
+                l.kTrCloseContacts,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          for (final p in hits)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  PlanetBadge(p.name, size: 24),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      l.kTrCloseContactLine(
+                        KTerms.planetName(l, p.name),
+                        KTerms.displayNames(l, p.overNatal),
+                      ),
+                      style: theme.textTheme.bodySmall?.copyWith(height: 1.45),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -83,60 +397,66 @@ class _AvTransitSection extends StatelessWidget {
         final r = state.avTransit.value;
         if (r == null) return const SizedBox.shrink();
         final theme = Theme.of(context);
-        return KCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l.avTransitHeading,
-                style: theme.textTheme.titleMedium?.copyWith(fontSize: 14),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                l.avTransitIntro,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                  height: 1.35,
-                ),
-              ),
-              const SizedBox(height: 10),
-              for (final row in r.transits.where((x) => x.planet != 'Moon'))
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 7),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _BinduBadge(bindus: row.bindus, tone: row.tone),
-                      const SizedBox(width: 9),
-                      Expanded(
-                        child: Text(
-                          row.summary,
-                          style: const TextStyle(fontSize: 12, height: 1.4),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              if (r.upcomingIngresses.isNotEmpty) ...[
-                const SizedBox(height: 4),
-                Text(
-                  l.avTransitUpcoming,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                for (final u in r.upcomingIngresses)
+        final rows = r.transits.where((x) => x.planet != 'Moon').toList();
+        return KSection(
+          title: l.avTransitHeading,
+          subtitle: l.avTransitIntro,
+          hue: AstroPalette.career,
+          child: KSurface(
+            padding: const EdgeInsets.fromLTRB(14, 8, 14, 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (final row in rows)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 3),
-                    child: Text(
-                      '·  ${u.summary}',
-                      style: const TextStyle(fontSize: 12, height: 1.4),
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _BinduScore(bindus: row.bindus, tone: row.tone),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            row.summary,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              height: 1.45,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                if (r.upcomingIngresses.isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    l.avTransitUpcoming,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  for (final u in r.upcomingIngresses)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          PlanetBadge(u.planet, size: 22),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              u.summary,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                height: 1.45,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
               ],
-            ],
+            ),
           ),
         );
       },
@@ -144,331 +464,51 @@ class _AvTransitSection extends StatelessWidget {
   }
 }
 
-class _BinduBadge extends StatelessWidget {
-  const _BinduBadge({required this.bindus, required this.tone});
+/// 0–8 ashtakavarga bindus as a tone-coloured score with an 8-dot meter.
+class _BinduScore extends StatelessWidget {
+  const _BinduScore({required this.bindus, required this.tone});
   final int bindus;
   final String tone;
 
   @override
   Widget build(BuildContext context) {
-    final (bg, fg) = switch (tone) {
-      'supportive' => (const Color(0xFFDDF0E4), const Color(0xFF2C6B45)),
-      'challenging' => (const Color(0xFFFBEBD8), const Color(0xFFB0691F)),
-      _ => (const Color(0xFFE4E8F5), const Color(0xFF3F4E86)),
+    final hue = switch (tone) {
+      'supportive' => AstroPalette.health,
+      'challenging' => AstroPalette.fire,
+      _ => AstroPalette.air,
     };
     return Container(
-      width: 34,
-      height: 26,
-      alignment: Alignment.center,
+      width: 46,
+      padding: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(8),
+        color: hue.tint(0.13),
+        borderRadius: BorderRadius.circular(10),
       ),
-      child: Text(
-        '$bindus',
-        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: fg),
-      ),
-    );
-  }
-}
-
-class _SadeSatiPanel extends StatelessWidget {
-  const _SadeSatiPanel({required this.t});
-  final Transits t;
-
-  @override
-  Widget build(BuildContext context) {
-    final brand = context.brand;
-    final l = context.l10n;
-    const phases = ['rising', 'peak', 'setting'];
-    final idx = phases.indexOf(t.sadeSatiPhase);
-    final phaseLabels = [l.kSsRising, l.kSsPeak, l.kSsSetting];
-    final phaseHints = [
-      l.kTrPhaseHintRising,
-      l.kTrPhaseHintPeak,
-      l.kTrPhaseHintSetting,
-    ];
-    final tips = [l.kTrTip1, l.kTrTip2, l.kTrTip3, l.kTrTip4];
-    return KCard(
-      tint: true,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            '$bindus',
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.w800,
+              color: hue.end,
+            ),
+          ),
+          const SizedBox(height: 3),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.brightness_3_rounded, size: 18, color: brand.onTint),
-              const SizedBox(width: 8),
-              Text(
-                l.kTrSadeSati,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleMedium?.copyWith(color: brand.onTint),
-              ),
-              const Spacer(),
-              Text(
-                l.kTrPhaseOf(idx + 1),
-                style: TextStyle(
-                  color: brand.onTint,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12,
+              for (var i = 0; i < 8; i++)
+                Container(
+                  width: 3,
+                  height: 3,
+                  margin: const EdgeInsets.symmetric(horizontal: 0.6),
+                  decoration: BoxDecoration(
+                    color: i < bindus ? hue.end : hue.tint(0.3),
+                    shape: BoxShape.circle,
+                  ),
                 ),
-              ),
             ],
           ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              for (var i = 0; i < 3; i++) ...[
-                if (i != 0) const SizedBox(width: 6),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 9),
-                    decoration: BoxDecoration(
-                      color: i == idx
-                          ? brand.onTint.withValues(alpha: 0.16)
-                          : Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: brand.hairline),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          phaseLabels[i],
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 11.5,
-                            color: i == idx
-                                ? brand.onTint
-                                : Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                        Text(
-                          phaseHints[i],
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(
-                                fontSize: 10,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            KTerms.sadeSati(l, t.sadeSatiPhase),
-            style: const TextStyle(fontSize: 13.5, height: 1.45),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            l.kTrHowToWork,
-            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12.5),
-          ),
-          const SizedBox(height: 6),
-          for (final tip in tips)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Text(
-                '·  $tip',
-                style: const TextStyle(fontSize: 12.5, height: 1.35),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PanotiPanel extends StatelessWidget {
-  const _PanotiPanel({required this.t});
-  final Transits t;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = context.l10n;
-    return KCard(
-      tint: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l.kSsPanotiTitle(t.smallPanotiType),
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: 6),
-          Text(
-            l.kTrPanotiBody,
-            style: const TextStyle(fontSize: 13.5, height: 1.45),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _CurrentSky extends StatelessWidget {
-  const _CurrentSky({required this.t});
-  final Transits t;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final brand = context.brand;
-    final l = context.l10n;
-    final ordered = [
-      for (final name in planetOrder)
-        ...t.positions.where((p) => p.name == name),
-    ];
-    return KCard(
-      padding: const EdgeInsets.symmetric(horizontal: 14),
-      child: Column(
-        children: [
-          for (var i = 0; i < ordered.length; i++)
-            Container(
-              decoration: BoxDecoration(
-                border: i == ordered.length - 1
-                    ? null
-                    : Border(bottom: BorderSide(color: scheme.outlineVariant)),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 11),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 26,
-                    height: 26,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: planetColor(ordered[i].name),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      KundaliStrings.of(context).planetToken(ordered[i].name),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 10,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 11),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l.kTrPlanetInSign(
-                            KTerms.planetName(l, ordered[i].name),
-                            KTerms.signName(l, ordered[i].sign),
-                          ),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13.5,
-                          ),
-                        ),
-                        Text(
-                          l.kTransitHouseLine(
-                            KTerms.nthHouse(l, ordered[i].houseFromLagna),
-                            KTerms.house(
-                              l,
-                              ordered[i].houseFromLagna,
-                            ).toLowerCase(),
-                          ),
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(color: scheme.onSurfaceVariant),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (ordered[i].name == 'Saturn' && t.sadeSatiActive)
-                    Container(
-                      width: 8,
-                      height: 8,
-                      margin: const EdgeInsets.only(top: 4),
-                      decoration: BoxDecoration(
-                        color: brand.onTint,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _JupiterCard extends StatelessWidget {
-  const _JupiterCard({required this.t});
-  final Transits t;
-
-  @override
-  Widget build(BuildContext context) {
-    final brand = context.brand;
-    final l = context.l10n;
-    return KCard(
-      child: Row(
-        children: [
-          Icon(
-            t.jupiterFavourable
-                ? Icons.check_circle_rounded
-                : Icons.remove_circle_outline_rounded,
-            color: t.jupiterFavourable ? brand.online : brand.onTint,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              t.jupiterFavourable ? l.kTrJupiterGood : l.kTrJupiterNeutral,
-              style: const TextStyle(fontSize: 13, height: 1.4),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _NotableCard extends StatelessWidget {
-  const _NotableCard({required this.t});
-  final Transits t;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = context.l10n;
-    final hits = t.positions.where((p) => p.overNatal.isNotEmpty).toList();
-    return KCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l.kTrCloseContacts,
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 12.5,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-          const SizedBox(height: 6),
-          for (final p in hits)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Text(
-                l.kTrCloseContactLine(
-                  KTerms.planetName(l, p.name),
-                  KTerms.displayNames(l, p.overNatal),
-                ),
-                style: const TextStyle(fontSize: 12.5, height: 1.4),
-              ),
-            ),
         ],
       ),
     );

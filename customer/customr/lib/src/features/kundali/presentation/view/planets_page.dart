@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/theme/astro_palette.dart';
+import '../../../../core/theme/brand_colors.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
 
+/// The nine grahas: where each sits, how strong it is there, and what that
+/// means — the Moon opens by default.
 class PlanetsPage extends StatefulWidget {
   const PlanetsPage({required this.profileId, super.key});
   final String profileId;
@@ -16,8 +20,6 @@ class PlanetsPage extends StatefulWidget {
 }
 
 class _PlanetsPageState extends State<PlanetsPage> {
-  final _expanded = <String>{'Moon'};
-
   @override
   void initState() {
     super.initState();
@@ -26,45 +28,120 @@ class _PlanetsPageState extends State<PlanetsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.kFcPlanets)),
-      body: BlocBuilder<KundaliCubit, KundaliState>(
-        builder: (context, state) => SliceBuilder<Kundali>(
-          slice: state.overview,
-          onRetry: () => context.read<KundaliCubit>().loadOverview(force: true),
-          builder: (context, k) {
-            final byName = {for (final p in k.planets) p.name: p};
-            final ordered = [
-              for (final name in planetOrder)
-                if (byName[name] != null) byName[name]!,
-            ];
-            return ListView(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
-              children: [
-                Text(
-                  context.l10n.kPlanetsIntro,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+    final l = context.l10n;
+    return BlocBuilder<KundaliCubit, KundaliState>(
+      builder: (context, state) {
+        final cubit = context.read<KundaliCubit>();
+        final k = state.overview.value;
+        final byName = <String, NatalPlanet>{
+          for (final p in k?.planets ?? const <NatalPlanet>[]) p.name: p,
+        };
+        final ordered = [
+          for (final name in planetOrder)
+            if (byName[name] != null) byName[name]!,
+        ];
+        final retro = ordered.where((p) => p.retrograde).length;
+        final strong = ordered
+            .where(
+              (p) =>
+                  const {'exalted', 'moolatrikona', 'own'}.contains(p.dignity),
+            )
+            .length;
+
+        return KundaliScaffold(
+          title: l.kFcPlanets,
+          eyebrow: l.kOvTitle,
+          headline: l.kFcPlanets,
+          subheadline: l.kPlanetsHeroSub,
+          hue: kSignHue(k?.lagnaSign ?? ''),
+          heroTrailing: const _OrbitGlyph(),
+          heroChips: k == null
+              ? const []
+              : [
+                  KHeroChip(
+                    icon: Icons.workspace_premium_rounded,
+                    label: l.kPlanetsStrongCount(strong),
+                    color: AstroPalette.health.start,
                   ),
-                ),
-                const SizedBox(height: 12),
-                for (final p in ordered) ...[
-                  _PlanetCard(
-                    planet: p,
-                    house: k.houseForSign(p.sign) ?? p.house,
-                    expanded: _expanded.contains(p.name),
-                    onToggle: () => setState(() {
-                      _expanded.contains(p.name)
-                          ? _expanded.remove(p.name)
-                          : _expanded.add(p.name);
-                    }),
+                  KHeroChip(
+                    icon: Icons.replay_rounded,
+                    label: l.kPlanetsRetroCount(retro),
+                    color: AstroPalette.air.start,
                   ),
-                  const SizedBox(height: 10),
                 ],
-              ],
-            );
-          },
-        ),
+          onRefresh: () => cubit.loadOverview(force: true),
+          children: k == null
+              ? [
+                  SliceBuilder<Kundali>(
+                    slice: state.overview,
+                    onRetry: () => cubit.loadOverview(force: true),
+                    skeleton: const KBodySkeleton(blocks: [84, 84, 84, 84]),
+                    builder: (_, _) => const SizedBox.shrink(),
+                  ),
+                ]
+              : [
+                  Text(
+                    l.kPlanetsIntro,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: context.brand.inkMuted,
+                      height: 1.45,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  for (final p in ordered)
+                    _PlanetCard(
+                      planet: p,
+                      house: k.houseForSign(p.sign) ?? p.house,
+                      initiallyOpen: p.name == 'Moon',
+                    ),
+                  const KAskCta(),
+                ],
+        );
+      },
+    );
+  }
+}
+
+class _OrbitGlyph extends StatelessWidget {
+  const _OrbitGlyph();
+
+  @override
+  Widget build(BuildContext context) {
+    const planets = ['Sun', 'Moon', 'Jupiter', 'Venus', 'Saturn'];
+    return SizedBox(
+      width: 86,
+      height: 86,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
+            ),
+          ),
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
+            ),
+          ),
+          const PlanetBadge('Sun', size: 26),
+          for (var i = 1; i < planets.length; i++)
+            Align(
+              alignment: [
+                const Alignment(0.95, -0.35),
+                const Alignment(-0.9, 0.5),
+                const Alignment(0.2, 0.98),
+                const Alignment(-0.35, -0.95),
+              ][i - 1],
+              child: PlanetBadge(planets[i], size: 18),
+            ),
+        ],
       ),
     );
   }
@@ -74,197 +151,124 @@ class _PlanetCard extends StatelessWidget {
   const _PlanetCard({
     required this.planet,
     required this.house,
-    required this.expanded,
-    required this.onToggle,
+    required this.initiallyOpen,
   });
 
   final NatalPlanet planet;
   final int house;
-  final bool expanded;
-  final VoidCallback onToggle;
+  final bool initiallyOpen;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
     final l = context.l10n;
-    final name = KTerms.planetName(l, planet.name);
-    return KCard(
-      padding: EdgeInsets.zero,
-      child: InkWell(
-        onTap: onToggle,
-        borderRadius: BorderRadius.circular(18),
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 38,
-                    height: 38,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: planetColor(planet.name),
-                      borderRadius: BorderRadius.circular(11),
-                    ),
-                    child: Text(
-                      name.length >= 2 ? name.substring(0, 2) : name,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 13,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 15,
-                              ),
-                            ),
-                            const SizedBox(width: 6),
-                            Flexible(
-                              child: Text(
-                                '· ${KTerms.planet(context.l10n, planet.name).split(',').first}',
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: scheme.onSurfaceVariant,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          l.kPlanetRowMeta(
-                                KTerms.signName(l, planet.sign),
-                                KTerms.nthHouse(l, house),
-                                planet.degree.toStringAsFixed(0),
-                              ) +
-                              (planet.nakshatra.isNotEmpty
-                                  ? ' · ${KTerms.nakshatraName(l, planet.nakshatra)}'
-                                  : ''),
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: scheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  _DignityBadge(dignity: planet.dignity),
-                  if (planet.retrograde) ...[
-                    const SizedBox(width: 4),
-                    const _Pill('℞'),
-                  ],
-                  const SizedBox(width: 4),
-                  Icon(
-                    expanded
-                        ? Icons.expand_less_rounded
-                        : Icons.expand_more_rounded,
-                    color: scheme.onSurfaceVariant,
-                    size: 20,
-                  ),
-                ],
-              ),
-              if (expanded) ...[
-                const SizedBox(height: 12),
+    final brand = context.brand;
+    final hue = kPlanetHue(planet.name);
+    final gloss = KTerms.planet(l, planet.name).split(',').first;
+    final dignityShort = KTerms.dignityShort(l, planet.dignity);
+    final tone = switch (planet.dignity) {
+      'exalted' || 'moolatrikona' || 'own' => KTone.good,
+      'debilitated' => KTone.bad,
+      'enemy_sign' || 'great_enemy_sign' => KTone.caution,
+      _ => KTone.neutral,
+    };
+
+    return KExpandable(
+      initiallyOpen: initiallyOpen,
+      header: Row(
+        children: [
+          PlanetBadge(planet.name, size: 46),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Text(
-                  KTerms.dignity(context.l10n, planet.dignity),
-                  style: TextStyle(
+                  KTerms.planetName(l, planet.name),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Text(
+                  gloss,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: hue.end,
                     fontWeight: FontWeight.w600,
-                    fontSize: 12.5,
-                    color: scheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  l.kPlanetRowMeta(
+                    KTerms.signName(l, planet.sign),
+                    KTerms.nthHouse(l, house),
+                    planet.degree.toStringAsFixed(0),
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: brand.inkMuted,
                   ),
                 ),
                 const SizedBox(height: 6),
-                Text(
-                  KTerms.planetInSignHouse(
-                    context.l10n,
-                    planet.name,
-                    planet.sign,
-                    house,
-                  ),
-                  style: const TextStyle(fontSize: 13.5, height: 1.45),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 4,
+                  children: [
+                    if (dignityShort.isNotEmpty)
+                      KToneChip(dignityShort, tone: tone),
+                    if (planet.retrograde)
+                      KToneChip(
+                        '℞ ${l.kPlanetRetrograde}',
+                        tone: KTone.neutral,
+                      ),
+                    if (planet.combust)
+                      KToneChip(l.kPlanetCombust, tone: KTone.caution),
+                    if (planet.nakshatra.isNotEmpty)
+                      KToneChip(
+                        KTerms.nakshatraName(l, planet.nakshatra),
+                        hue: AstroPalette.career,
+                      ),
+                  ],
                 ),
-                if (planet.combust) ...[
-                  const SizedBox(height: 6),
-                  Text(
-                    context.l10n.kCombustNote,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: scheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
               ],
-            ],
+            ),
           ),
+        ],
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: hue.tint(0.08),
+          borderRadius: BorderRadius.circular(14),
         ),
-      ),
-    );
-  }
-}
-
-class _DignityBadge extends StatelessWidget {
-  const _DignityBadge({required this.dignity});
-  final String dignity;
-
-  @override
-  Widget build(BuildContext context) {
-    final (fg, bg) = switch (dignity) {
-      'exalted' ||
-      'moolatrikona' ||
-      'own' => (const Color(0xFF1E7A3C), const Color(0xFFE4F3E8)),
-      'debilitated' => (const Color(0xFFB5302A), const Color(0xFFFBE3E1)),
-      'enemy_sign' ||
-      'great_enemy_sign' => (const Color(0xFFB0691F), const Color(0xFFFBEEDD)),
-      _ => (Colors.transparent, Colors.transparent),
-    };
-    final label = KTerms.dignityShort(context.l10n, dignity);
-    if (label.isEmpty) return const SizedBox.shrink();
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 10.5,
-          fontWeight: FontWeight.w700,
-          color: fg,
-        ),
-      ),
-    );
-  }
-}
-
-class _Pill extends StatelessWidget {
-  const _Pill(this.text);
-  final String text;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(
-        color: const Color(0xFFEDE7F7),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 10.5,
-          fontWeight: FontWeight.w700,
-          color: Color(0xFF5B34B0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              KTerms.dignity(l, planet.dignity),
+              style: theme.textTheme.labelLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+                color: hue.end,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              KTerms.planetInSignHouse(l, planet.name, planet.sign, house),
+              style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
+            ),
+            if (planet.combust) ...[
+              const SizedBox(height: 8),
+              Text(
+                l.kCombustNote,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: brand.inkMuted,
+                  height: 1.4,
+                ),
+              ),
+            ],
+          ],
         ),
       ),
     );

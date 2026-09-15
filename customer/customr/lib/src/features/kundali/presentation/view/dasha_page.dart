@@ -1,14 +1,18 @@
+import 'package:astro_kundali/astro_kundali.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:astro_kundali/astro_kundali.dart';
-
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/theme/astro_palette.dart';
+import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/async_value.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
+import '../widgets/k_chart.dart';
 import '../widgets/kundali_ui.dart';
 
+/// Planetary periods: what's running now and the whole life timeline, in the
+/// Vimshottari, Yogini or Ashtottari system.
 class DashaPage extends StatefulWidget {
   const DashaPage({required this.profileId, super.key});
   final String profileId;
@@ -18,6 +22,7 @@ class DashaPage extends StatefulWidget {
 }
 
 class _DashaPageState extends State<DashaPage> {
+  static const _systems = ['vimshottari', 'yogini', 'ashtottari'];
   String _system = 'vimshottari';
 
   @override
@@ -32,241 +37,287 @@ class _DashaPageState extends State<DashaPage> {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    return Scaffold(
-      appBar: AppBar(title: Text(l.kOvExDasha)),
-      body: BlocBuilder<KundaliCubit, KundaliState>(
-        builder: (context, state) {
-          final timeline = _system == 'vimshottari'
-              ? state.dasha
-              : state.allDashas.when<AsyncValue<DashaTimeline>>(
-                  idle: () => const AsyncValue.loading(),
-                  loading: () => const AsyncValue.loading(),
-                  error: (m) => AsyncValue.error(m),
-                  data: (m) => AsyncValue.data(m[_system]!),
-                );
-          final narrative = _system == 'vimshottari'
-              ? state.dashaNarrative.value
-              : null;
-          return SliceBuilder<DashaTimeline>(
-            slice: timeline,
-            onRetry: () => context.read<KundaliCubit>()
-              ..loadDasha()
-              ..loadAllDashas()
-              ..loadDashaNarrative(),
-            builder: (context, d) => ListView(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
-              children: [
-                Text(
-                  _system == 'vimshottari'
-                      ? l.kDashaIntroVimshottari
-                      : _system == 'yogini'
-                      ? l.kDashaIntroYogini
-                      : l.kDashaIntroAshtottari,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+    return BlocBuilder<KundaliCubit, KundaliState>(
+      builder: (context, state) {
+        final cubit = context.read<KundaliCubit>();
+        final timeline = _system == 'vimshottari'
+            ? state.dasha
+            : state.allDashas.when<AsyncValue<DashaTimeline>>(
+                idle: () => const AsyncValue.loading(),
+                loading: () => const AsyncValue.loading(),
+                error: (m) => AsyncValue.error(m),
+                data: (m) => m[_system] == null
+                    ? const AsyncValue.error('missing')
+                    : AsyncValue.data(m[_system]!),
+              );
+        final d = timeline.value;
+        final narrative = _system == 'vimshottari'
+            ? state.dashaNarrative.value
+            : null;
+        final maha = d?.currentMaha ?? '';
+        final hue = maha.isEmpty ? AstroPalette.career : kPlanetHue(maha);
+        final labels = [
+          l.kDashaVimshottari,
+          l.kDashaYogini,
+          l.kDashaAshtottari,
+        ];
+
+        return KundaliScaffold(
+          title: l.kOvExDasha,
+          eyebrow: '${l.kOvExDasha} · ${labels[_systems.indexOf(_system)]}',
+          headline: maha.isEmpty
+              ? l.kOvExDasha
+              : l.kOvMahadasha(KTerms.displayName(l, maha)),
+          subheadline: d == null || d.currentAntar.isEmpty
+              ? null
+              : [
+                  KTerms.displayName(l, d.currentAntar),
+                  if (d.currentPratyantar.isNotEmpty)
+                    KTerms.displayName(l, d.currentPratyantar),
+                ].join(' › '),
+          hue: hue,
+          heroTrailing: maha.isEmpty
+              ? null
+              : KHeroGlyph(
+                  hue: hue,
+                  text: KundaliStrings.of(context).planetToken(maha),
+                  size: 72,
                 ),
-                const SizedBox(height: 12),
-                _systemToggle(),
-                const SizedBox(height: 14),
-                if (d.currentMaha.isNotEmpty)
-                  _nowRunning(context, d, narrative),
-                const SizedBox(height: 12),
-                _timeline(context, d, narrative),
-                if (narrative != null && narrative.disclaimer.isNotEmpty) ...[
-                  const SizedBox(height: 10),
+          heroBottom: Align(
+            alignment: Alignment.centerLeft,
+            child: KDarkSegment(
+              labels: labels,
+              selected: _systems.indexOf(_system),
+              onSelect: (i) => setState(() => _system = _systems[i]),
+            ),
+          ),
+          onRefresh: () async {
+            await Future.wait([
+              cubit.loadDasha(force: true),
+              cubit.loadAllDashas(force: true),
+              cubit.loadDashaNarrative(force: true),
+            ]);
+          },
+          animate: d != null,
+          children: d == null
+              ? [
+                  SliceBuilder<DashaTimeline>(
+                    slice: timeline,
+                    onRetry: () => cubit
+                      ..loadDasha(force: true)
+                      ..loadAllDashas(force: true),
+                    skeleton: const KBodySkeleton(blocks: [170, 70, 70, 70]),
+                    builder: (_, _) => const SizedBox.shrink(),
+                  ),
+                ]
+              : [
                   Text(
-                    narrative.disclaimer,
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      height: 1.4,
+                    switch (_system) {
+                      'vimshottari' => l.kDashaIntroVimshottari,
+                      'yogini' => l.kDashaIntroYogini,
+                      _ => l.kDashaIntroAshtottari,
+                    },
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: context.brand.inkMuted,
+                      height: 1.45,
                     ),
                   ),
-                ],
-                if (d.balanceLord.isNotEmpty) ...[
-                  const SizedBox(height: 12),
-                  Center(
-                    child: Text(
-                      l.kDashaBalance(
-                        KTerms.displayName(l, d.balanceLord),
-                        d.balanceYears.toStringAsFixed(1),
-                      ),
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
+                  if (d.currentMaha.isNotEmpty) ...[
+                    const SizedBox(height: 14),
+                    _NowRunning(timeline: d, narrative: narrative),
+                  ],
+                  KSection(
+                    title: l.kDashaTimelineTitle,
+                    subtitle: d.balanceLord.isEmpty
+                        ? null
+                        : l.kDashaBalance(
+                            KTerms.displayName(l, d.balanceLord),
+                            d.balanceYears.toStringAsFixed(1),
+                          ),
+                    hue: hue,
+                    child: _Timeline(timeline: d, narrative: narrative),
                   ),
+                  if (narrative != null && narrative.disclaimer.isNotEmpty)
+                    KFootnote(narrative.disclaimer),
+                  const KAskCta(),
                 ],
-              ],
-            ),
-          );
-        },
-      ),
+        );
+      },
     );
   }
+}
 
-  Widget _systemToggle() {
-    final scheme = Theme.of(context).colorScheme;
+class _NowRunning extends StatelessWidget {
+  const _NowRunning({required this.timeline, required this.narrative});
+  final DashaTimeline timeline;
+  final DashaNarrative? narrative;
+
+  @override
+  Widget build(BuildContext context) {
     final l = context.l10n;
-    const systems = ['vimshottari', 'yogini', 'ashtottari'];
-    final labels = [l.kDashaVimshottari, l.kDashaYogini, l.kDashaAshtottari];
-    return Container(
-      padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerHighest.withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(11),
-      ),
-      child: Row(
-        children: [
-          for (var i = 0; i < systems.length; i++)
-            Expanded(
-              child: GestureDetector(
-                onTap: () => setState(() => _system = systems[i]),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  decoration: BoxDecoration(
-                    color: _system == systems[i]
-                        ? scheme.surface
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    labels[i],
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 12.5,
-                      color: _system == systems[i]
-                          ? scheme.onSurface
-                          : scheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _nowRunning(
-    BuildContext context,
-    DashaTimeline d,
-    DashaNarrative? narrative,
-  ) {
+    final theme = Theme.of(context);
+    final d = timeline;
     final span = d.currentSpan;
-    final progress = span?.progress(DateTime.now()) ?? 0;
-    final l = context.l10n;
-    return KCard(
-      tint: true,
+    final progress = (span?.progress(DateTime.now()) ?? 0).clamp(0.0, 1.0);
+    final hue = kPlanetHue(d.currentMaha);
+    final antarSummary = narrative
+        ?.antarFor(d.currentMaha, d.currentAntar)
+        ?.summary;
+    return KHueCard(
+      hue: hue,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          KLabel(l.kDashaNowRunning),
-          const SizedBox(height: 5),
           Wrap(
+            alignment: WrapAlignment.spaceBetween,
             crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 8,
+            runSpacing: 6,
             children: [
-              Text(
-                KTerms.displayName(l, d.currentMaha),
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              if (d.currentAntar.isNotEmpty)
+              KToneChip(l.kDashaNowRunning, hue: hue),
+              if (span != null)
                 Text(
-                  '  ›  ${KTerms.displayName(l, d.currentAntar)}',
-                  style: const TextStyle(fontWeight: FontWeight.w700),
-                ),
-              if (d.currentPratyantar.isNotEmpty)
-                Text(
-                  '  ›  ${KTerms.displayName(l, d.currentPratyantar)}',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  '${span.start.year} → ${span.end.year}',
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: hue.end,
                   ),
                 ),
             ],
           ),
           const SizedBox(height: 12),
+          Row(
+            children: [
+              for (final (i, lord) in [
+                d.currentMaha,
+                d.currentAntar,
+                d.currentPratyantar,
+              ].where((e) => e.isNotEmpty).indexed) ...[
+                if (i > 0)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Icon(
+                      Icons.chevron_right_rounded,
+                      size: 18,
+                      color: context.brand.inkMuted,
+                    ),
+                  ),
+                Flexible(
+                  child: Column(
+                    children: [
+                      PlanetBadge(lord, size: i == 0 ? 44 : 34),
+                      const SizedBox(height: 4),
+                      Text(
+                        KTerms.displayName(l, lord),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          fontWeight: i == 0
+                              ? FontWeight.w800
+                              : FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 14),
           ClipRRect(
             borderRadius: BorderRadius.circular(99),
-            child: LinearProgressIndicator(value: progress, minHeight: 6),
-          ),
-          if (span != null) ...[
-            const SizedBox(height: 5),
-            Text(
-              '${span.start.year} → ${span.end.year}',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+            child: Stack(
+              children: [
+                Container(height: 8, color: hue.tint(0.15)),
+                FractionallySizedBox(
+                  widthFactor: progress,
+                  child: Container(
+                    height: 8,
+                    decoration: BoxDecoration(gradient: hue.linear()),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            l.kDashaProgressPct('${(progress * 100).round()}'),
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: context.brand.inkMuted,
+            ),
+          ),
           const SizedBox(height: 10),
           Text(
             narrative?.mahaFor(d.currentMaha)?.summary ??
-                KTerms.dashaTone(context.l10n, d.currentMaha),
-            style: const TextStyle(fontSize: 13, height: 1.45),
+                KTerms.dashaTone(l, d.currentMaha),
+            style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
           ),
-          if (narrative != null &&
-              d.currentAntar.isNotEmpty &&
-              (narrative.antarFor(d.currentMaha, d.currentAntar)?.summary ?? '')
-                  .isNotEmpty) ...[
+          if ((antarSummary ?? '').isNotEmpty) ...[
             const SizedBox(height: 8),
             Text(
-              narrative.antarFor(d.currentMaha, d.currentAntar)!.summary,
-              style: TextStyle(
-                fontSize: 12.5,
-                height: 1.4,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              antarSummary!,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: context.brand.inkMuted,
+                height: 1.45,
               ),
             ),
           ],
-        ],
-      ),
-    );
-  }
-
-  Widget _timeline(
-    BuildContext context,
-    DashaTimeline d,
-    DashaNarrative? narrative,
-  ) {
-    final now = DateTime.now();
-    return KCard(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-      child: Column(
-        children: [
-          for (var i = 0; i < d.periods.length; i++)
-            _MahaRow(
-              span: d.periods[i],
-              note: narrative?.mahaFor(d.periods[i].lord),
-              isCurrent: d.periods[i].contains(now),
-              isPast: d.periods[i].end.isBefore(now),
-              last: i == d.periods.length - 1,
-            ),
         ],
       ),
     );
   }
 }
 
-class _MahaRow extends StatefulWidget {
-  const _MahaRow({
+class _Timeline extends StatelessWidget {
+  const _Timeline({required this.timeline, required this.narrative});
+  final DashaTimeline timeline;
+  final DashaNarrative? narrative;
+
+  @override
+  Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final periods = timeline.periods;
+    return Column(
+      children: [
+        for (var i = 0; i < periods.length; i++)
+          _MahaNode(
+            key: ValueKey('${periods[i].lord}-${periods[i].start}'),
+            span: periods[i],
+            note: narrative?.mahaFor(periods[i].lord),
+            isCurrent: periods[i].contains(now),
+            isPast: periods[i].end.isBefore(now),
+            first: i == 0,
+            last: i == periods.length - 1,
+          ),
+      ],
+    );
+  }
+}
+
+/// One mahadasha on the vertical rail; expands to its note + antardashas.
+class _MahaNode extends StatefulWidget {
+  const _MahaNode({
     required this.span,
+    super.key,
     required this.note,
     required this.isCurrent,
     required this.isPast,
+    required this.first,
     required this.last,
   });
+
   final DashaSpan span;
   final DashaPeriodNote? note;
   final bool isCurrent;
   final bool isPast;
+  final bool first;
   final bool last;
 
   @override
-  State<_MahaRow> createState() => _MahaRowState();
+  State<_MahaNode> createState() => _MahaNodeState();
 }
 
-class _MahaRowState extends State<_MahaRow> {
+class _MahaNodeState extends State<_MahaNode> {
   late bool _open = widget.isCurrent;
 
   DashaPeriodNote? _antarNote(String lord) {
@@ -278,136 +329,149 @@ class _MahaRowState extends State<_MahaRow> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
     final l = context.l10n;
+    final theme = Theme.of(context);
+    final brand = context.brand;
+    final hue = kPlanetHue(widget.span.lord);
+    final years = widget.span.end.difference(widget.span.start).inDays ~/ 365;
+    final expandable =
+        widget.span.children.isNotEmpty ||
+        (widget.note?.summary ?? '').isNotEmpty;
     final now = DateTime.now();
-    return Container(
-      decoration: BoxDecoration(
-        border: widget.last
-            ? null
-            : Border(bottom: BorderSide(color: scheme.outlineVariant)),
-      ),
-      child: Column(
-        children: [
-          InkWell(
-            onTap: widget.span.children.isEmpty
-                ? null
-                : () => setState(() => _open = !_open),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Opacity(
-                opacity: widget.isPast && !_open ? 0.5 : 1,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 5,
-                      height: 34,
-                      margin: const EdgeInsets.only(right: 12, top: 1),
-                      decoration: BoxDecoration(
-                        color: planetColor(widget.span.lord),
-                        borderRadius: BorderRadius.circular(99),
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                l.kOvMahadasha(
-                                  KTerms.displayName(l, widget.span.lord),
-                                ),
-                                style: TextStyle(
-                                  fontWeight: widget.isCurrent
-                                      ? FontWeight.w700
-                                      : FontWeight.w600,
-                                  fontSize: widget.isCurrent ? 15 : 14,
-                                ),
-                              ),
-                              if (widget.isCurrent) ...[
-                                const SizedBox(width: 8),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 6,
-                                    vertical: 1,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: scheme.primary,
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: Text(
-                                    l.kDashaNow,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ],
-                          ),
-                          Text(
-                            '${widget.span.start.year} – ${widget.span.end.year}  ·  '
-                            '${l.kDashaYears(widget.span.end.difference(widget.span.start).inDays ~/ 365)}',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: scheme.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (widget.span.children.isNotEmpty)
-                      Icon(
-                        _open
-                            ? Icons.expand_less_rounded
-                            : Icons.expand_more_rounded,
-                        size: 20,
-                        color: scheme.onSurfaceVariant,
-                      ),
-                  ],
+
+    // The rail is painted behind the row so the card can grow (expand /
+    // animate) freely — no intrinsic-height pass.
+    const dotCenter = 22.0;
+    return Stack(
+      children: [
+        Positioned(
+          left: 13,
+          top: widget.first ? dotCenter : 0,
+          bottom: widget.last ? null : 0,
+          height: widget.last ? dotCenter : null,
+          child: Container(width: 2, color: brand.hairline),
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 28,
+              height: dotCenter * 2,
+              child: Center(
+                child: Container(
+                  width: widget.isCurrent ? 18 : 12,
+                  height: widget.isCurrent ? 18 : 12,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: widget.isPast ? null : hue.linear(),
+                    color: widget.isPast ? brand.hairline : null,
+                    border: widget.isCurrent
+                        ? Border.all(color: hue.tint(0.4), width: 4)
+                        : null,
+                  ),
                 ),
               ),
             ),
-          ),
-          if (_open) ...[
-            if ((widget.note?.summary ?? '').isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(left: 17, right: 4, bottom: 8),
-                child: Text(
-                  widget.note!.summary,
-                  style: const TextStyle(fontSize: 12.5, height: 1.45),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Opacity(
+                  opacity: widget.isPast && !_open ? 0.55 : 1,
+                  child: KSurface(
+                    radius: 16,
+                    padding: const EdgeInsets.all(12),
+                    color: widget.isCurrent
+                        ? Color.alphaBlend(
+                            hue.tint(0.08),
+                            theme.colorScheme.surface,
+                          )
+                        : null,
+                    borderColor: widget.isCurrent ? hue.tint(0.4) : null,
+                    onTap: expandable
+                        ? () => setState(() => _open = !_open)
+                        : null,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            PlanetBadge(widget.span.lord, size: 32),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    l.kOvMahadasha(
+                                      KTerms.displayName(l, widget.span.lord),
+                                    ),
+                                    style: theme.textTheme.titleSmall?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${widget.span.start.year} – ${widget.span.end.year} · ${l.kDashaYears(years)}',
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: brand.inkMuted,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            if (widget.isCurrent)
+                              KToneChip(l.kDashaNow, hue: hue),
+                            if (expandable)
+                              AnimatedRotation(
+                                turns: _open ? 0.5 : 0,
+                                duration: const Duration(milliseconds: 200),
+                                child: Icon(
+                                  Icons.expand_more_rounded,
+                                  color: brand.inkMuted,
+                                ),
+                              ),
+                          ],
+                        ),
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 220),
+                          alignment: Alignment.topCenter,
+                          child: !_open
+                              ? const SizedBox(width: double.infinity)
+                              : Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    if ((widget.note?.summary ?? '').isNotEmpty)
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 10),
+                                        child: Text(
+                                          widget.note!.summary,
+                                          style: theme.textTheme.bodyMedium
+                                              ?.copyWith(height: 1.45),
+                                        ),
+                                      ),
+                                    if (widget.span.children.isNotEmpty) ...[
+                                      const SizedBox(height: 10),
+                                      for (final antar in widget.span.children)
+                                        _AntarRow(
+                                          maha: widget.span.lord,
+                                          antar: antar,
+                                          note: _antarNote(antar.lord),
+                                          isCurrent: antar.contains(now),
+                                        ),
+                                    ],
+                                  ],
+                                ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            if (widget.span.children.isNotEmpty)
-              Container(
-                margin: const EdgeInsets.only(left: 17, bottom: 12),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 2,
-                ),
-                decoration: BoxDecoration(
-                  color: scheme.surfaceContainerHighest.withValues(alpha: 0.4),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  children: [
-                    for (final antar in widget.span.children)
-                      _AntarRow(
-                        maha: widget.span.lord,
-                        antar: antar,
-                        note: _antarNote(antar.lord),
-                        isCurrent: antar.contains(now),
-                      ),
-                  ],
-                ),
-              ),
+            ),
           ],
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -434,35 +498,41 @@ class _AntarRowState extends State<_AntarRow> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
+    final l = context.l10n;
+    final hue = kPlanetHue(widget.antar.lord);
     final summary = widget.note?.summary ?? '';
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          InkWell(
-            onTap: summary.isEmpty
-                ? null
-                : () => setState(() => _open = !_open),
-            child: Row(
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: summary.isEmpty ? null : () => setState(() => _open = !_open),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        decoration: BoxDecoration(
+          color: widget.isCurrent ? hue.tint(0.12) : context.brand.sectionBg,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
+                PlanetBadge(widget.antar.lord, size: 22),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    '${KTerms.displayName(context.l10n, widget.maha)} \u203a '
-                    '${KTerms.displayName(context.l10n, widget.antar.lord)}',
-                    style: TextStyle(
-                      fontSize: 12.5,
+                    '${KTerms.displayName(l, widget.maha)} › '
+                    '${KTerms.displayName(l, widget.antar.lord)}',
+                    style: theme.textTheme.labelLarge?.copyWith(
                       fontWeight: widget.isCurrent
-                          ? FontWeight.w700
-                          : FontWeight.w400,
+                          ? FontWeight.w800
+                          : FontWeight.w500,
                     ),
                   ),
                 ),
                 Text(
-                  '${widget.antar.start.year} \u2013 ${widget.antar.end.year}',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
+                  '${widget.antar.start.year} – ${widget.antar.end.year}',
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: context.brand.inkMuted,
                   ),
                 ),
                 if (summary.isNotEmpty)
@@ -471,24 +541,20 @@ class _AntarRowState extends State<_AntarRow> {
                         ? Icons.expand_less_rounded
                         : Icons.expand_more_rounded,
                     size: 16,
-                    color: scheme.onSurfaceVariant,
+                    color: context.brand.inkMuted,
                   ),
               ],
             ),
-          ),
-          if (_open && summary.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: 4, bottom: 2),
-              child: Text(
-                summary,
-                style: TextStyle(
-                  fontSize: 11.5,
-                  height: 1.4,
-                  color: scheme.onSurfaceVariant,
+            if (_open && summary.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text(
+                  summary,
+                  style: theme.textTheme.bodySmall?.copyWith(height: 1.4),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

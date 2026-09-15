@@ -83,7 +83,9 @@ void main() {
       when(
         () => repo.numerology('p1'),
       ).thenAnswer((_) async => const NumerologyReport());
-      when(() => repo.vargaChart('p1', 'd9')).thenAnswer((_) async => _vc('d9'));
+      when(
+        () => repo.vargaChart('p1', 'd9'),
+      ).thenAnswer((_) async => _vc('d9'));
       return KundaliCubit(repo: repo, profileId: 'p1');
     },
     act: (c) async {

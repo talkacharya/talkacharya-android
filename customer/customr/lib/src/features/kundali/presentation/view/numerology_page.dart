@@ -1,10 +1,9 @@
 import 'package:astro_kundali/astro_kundali.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/router/routes.dart';
+import '../../../../core/theme/astro_palette.dart';
 import '../../../../core/theme/brand_colors.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
@@ -31,210 +30,290 @@ class _NumerologyPageState extends State<NumerologyPage> {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    return Scaffold(
-      appBar: AppBar(title: Text(l.numerologyTitle)),
-      body: BlocBuilder<KundaliCubit, KundaliState>(
-        buildWhen: (a, b) => a.numerology != b.numerology,
-        builder: (context, state) => SliceBuilder<NumerologyReport>(
-          slice: state.numerology,
-          onRetry: () => context.read<KundaliCubit>().loadNumerology(),
-          builder: (context, report) {
-            final theme = Theme.of(context);
-            return ListView(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
-              children: [
-                Text(
-                  l.numerologyIntro,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                    height: 1.45,
-                  ),
-                ),
-                const SizedBox(height: 14),
-                for (final n in report.numbers) ...[
-                  _NumberCard(number: n),
-                  const SizedBox(height: 10),
+    return BlocBuilder<KundaliCubit, KundaliState>(
+      buildWhen: (a, b) => a.numerology != b.numerology,
+      builder: (context, state) {
+        final cubit = context.read<KundaliCubit>();
+        final report = state.numerology.value;
+        final moolank = report?.numbers
+            .where((n) => n.kind == 'moolank')
+            .firstOrNull;
+        final hue = moolank == null ? AstroPalette.career : _numberHue(moolank);
+
+        return KundaliScaffold(
+          title: l.numerologyTitle,
+          eyebrow: l.kOvTitle,
+          headline: l.numerologyTitle,
+          subheadline: l.kNumHeroSub,
+          hue: hue,
+          heroTrailing: KHeroGlyph(
+            hue: hue,
+            text: report == null || report.moolank == 0
+                ? null
+                : '${report.moolank}',
+            icon: report == null || report.moolank == 0
+                ? Icons.tag_rounded
+                : null,
+            size: 72,
+          ),
+          heroChips: report == null
+              ? const []
+              : [
+                  if (report.moolank > 0)
+                    KHeroChip(label: '${l.numMoolank} ${report.moolank}'),
+                  if (report.bhagyank > 0)
+                    KHeroChip(label: '${l.numBhagyank} ${report.bhagyank}'),
                 ],
-                if (report.combination.isNotEmpty) ...[
-                  KCard(
-                    child: Text(
-                      report.combination,
-                      style: const TextStyle(fontSize: 13, height: 1.5),
+          onRefresh: () => cubit.loadNumerology(force: true),
+          animate: report != null,
+          children: report == null
+              ? [
+                  SliceBuilder<NumerologyReport>(
+                    slice: state.numerology,
+                    onRetry: () => cubit.loadNumerology(force: true),
+                    skeleton: const KBodySkeleton(blocks: [90, 180, 180, 260]),
+                    builder: (_, _) => const SizedBox.shrink(),
+                  ),
+                ]
+              : [
+                  Text(
+                    l.numerologyIntro,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: context.brand.inkMuted,
+                      height: 1.45,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                ],
-                _LoShuCard(grid: report.loShu),
-                const SizedBox(height: 12),
-                Text(
-                  report.disclaimer,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                    height: 1.4,
+                  if (report.numbers.isNotEmpty) ...[
+                    const SizedBox(height: 14),
+                    _NumberStrip(numbers: report.numbers),
+                  ],
+                  if (report.combination.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    ReadingCard(body: report.combination, hue: hue),
+                  ],
+                  KSection(
+                    title: l.kNumYourNumbers,
+                    hue: hue,
+                    child: Column(
+                      children: [
+                        for (final n in report.numbers)
+                          _NumberCard(
+                            number: n,
+                            initiallyOpen: n.kind == 'moolank',
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                AskAstrologerBar(
-                  label: l.numAskCta,
-                  onTap: () => context.go(Routes.astrologers),
-                ),
-                const SizedBox(height: 36),
-              ],
-            );
-          },
-        ),
-      ),
+                  KSection(
+                    title: l.numLoShuTitle,
+                    hue: AstroPalette.earth,
+                    child: _LoShuCard(grid: report.loShu),
+                  ),
+                  if (report.disclaimer.isNotEmpty)
+                    KFootnote(report.disclaimer),
+                  KAskCta(title: l.numAskCta),
+                ],
+        );
+      },
     );
   }
 }
 
-class _NumberCard extends StatelessWidget {
-  const _NumberCard({required this.number});
-  final NumerologyNumber number;
+AstroHue _numberHue(NumerologyNumber n) =>
+    n.planet.isEmpty ? AstroPalette.career : kPlanetHue(n.planet);
 
-  String _kindLabel(AppLocalizations l) => switch (number.kind) {
-    'moolank' => l.numMoolank,
-    'bhagyank' => l.numBhagyank,
-    'naamank' => l.numNaamank,
-    _ => number.kind,
-  };
+String _kindLabel(AppLocalizations l, String kind) => switch (kind) {
+  'moolank' => l.numMoolank,
+  'bhagyank' => l.numBhagyank,
+  'naamank' => l.numNaamank,
+  _ => kind,
+};
+
+/// The core numbers side by side as gradient medallions.
+class _NumberStrip extends StatelessWidget {
+  const _NumberStrip({required this.numbers});
+  final List<NumerologyNumber> numbers;
 
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
     final theme = Theme.of(context);
-    return KCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  '${number.value}',
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: theme.colorScheme.onPrimaryContainer,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _kindLabel(l),
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontSize: 14,
-                      ),
-                    ),
-                    if (number.planet.isNotEmpty)
-                      Text(
-                        l.numRuledBy(KTerms.planetName(l, number.planet)),
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          if (number.summary.isNotEmpty) ...[
-            const SizedBox(height: 10),
-            Text(
-              number.summary,
-              style: const TextStyle(fontSize: 13, height: 1.5),
-            ),
-          ],
-          const SizedBox(height: 10),
-          Wrap(
-            spacing: 6,
-            runSpacing: 6,
-            children: [
-              if (number.friendly.isNotEmpty)
-                _MiniChip(
-                  label: '${l.numFriendly}: ${number.friendly.join(", ")}',
-                  tone: _ChipTone.good,
-                ),
-              if (number.unfriendly.isNotEmpty)
-                _MiniChip(
-                  label: '${l.numUnfriendly}: ${number.unfriendly.join(", ")}',
-                  tone: _ChipTone.warn,
-                ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          _kv(context, l.numFavDays, number.days.join(', ')),
-          _kv(context, l.numFavColours, number.colours.join(', ')),
-          _kv(context, l.numDirection, number.direction),
-          _kv(context, l.numDeity, number.deity),
-          if (number.gemstone.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFBEBD8),
-                borderRadius: BorderRadius.circular(10),
-              ),
+    return Row(
+      children: [
+        for (var i = 0; i < numbers.length; i++) ...[
+          if (i > 0) const SizedBox(width: 10),
+          Expanded(
+            child: KHueCard(
+              hue: _numberHue(numbers[i]),
+              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '${l.numGemstone}: ${number.gemstone}',
-                    style: const TextStyle(
-                      fontSize: 12.5,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF8A5316),
+                  Container(
+                    width: 48,
+                    height: 48,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      gradient: _numberHue(numbers[i]).linear(),
+                      shape: BoxShape.circle,
                     ),
-                  ),
-                  if (number.gemstoneNote.isNotEmpty) ...[
-                    const SizedBox(height: 3),
-                    Text(
-                      number.gemstoneNote,
-                      style: const TextStyle(
-                        fontSize: 11.5,
-                        height: 1.35,
-                        color: Color(0xFF8A5316),
+                    child: Text(
+                      '${numbers[i].value}',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
-                  ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    _kindLabel(l, numbers[i].kind),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  if (numbers[i].planet.isNotEmpty)
+                    Text(
+                      KTerms.planetName(l, numbers[i].planet),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: context.brand.inkMuted,
+                      ),
+                    ),
                 ],
               ),
             ),
-          ],
+          ),
         ],
-      ),
+      ],
     );
   }
+}
 
-  Widget _kv(BuildContext context, String k, String v) {
-    if (v.trim().isEmpty) return const SizedBox.shrink();
+class _NumberCard extends StatelessWidget {
+  const _NumberCard({required this.number, this.initiallyOpen = false});
+  final NumerologyNumber number;
+  final bool initiallyOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
     final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 3),
-      child: RichText(
-        text: TextSpan(
-          style: theme.textTheme.bodySmall?.copyWith(
-            fontSize: 12.5,
-            height: 1.4,
-          ),
-          children: [
-            TextSpan(
-              text: '$k  ',
-              style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+    final hue = _numberHue(number);
+    return KExpandable(
+      initiallyOpen: initiallyOpen,
+      header: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              gradient: hue.linear(),
+              borderRadius: BorderRadius.circular(14),
             ),
-            TextSpan(text: v),
+            child: Text(
+              '${number.value}',
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _kindLabel(l, number.kind),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                if (number.planet.isNotEmpty)
+                  Text(
+                    l.numRuledBy(KTerms.planetName(l, number.planet)),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: context.brand.inkMuted,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (number.summary.isNotEmpty)
+            Text(
+              number.summary,
+              style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
+            ),
+          if (number.friendly.isNotEmpty || number.unfriendly.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                if (number.friendly.isNotEmpty)
+                  KToneChip(
+                    '${l.numFriendly}: ${number.friendly.join(", ")}',
+                    tone: KTone.good,
+                  ),
+                if (number.unfriendly.isNotEmpty)
+                  KToneChip(
+                    '${l.numUnfriendly}: ${number.unfriendly.join(", ")}',
+                    tone: KTone.caution,
+                  ),
+              ],
+            ),
           ],
-        ),
+          const SizedBox(height: 4),
+          if (number.days.isNotEmpty)
+            KInfoRow(
+              icon: Icons.calendar_today_rounded,
+              hue: AstroPalette.career,
+              label: l.numFavDays,
+              value: number.days.join(', '),
+            ),
+          if (number.colours.isNotEmpty)
+            KInfoRow(
+              icon: Icons.palette_rounded,
+              hue: AstroPalette.love,
+              label: l.numFavColours,
+              value: number.colours.join(', '),
+            ),
+          if (number.direction.trim().isNotEmpty)
+            KInfoRow(
+              icon: Icons.explore_rounded,
+              hue: AstroPalette.air,
+              label: l.numDirection,
+              value: number.direction,
+            ),
+          if (number.deity.trim().isNotEmpty)
+            KInfoRow(
+              icon: Icons.temple_hindu_rounded,
+              hue: AstroPalette.money,
+              label: l.numDeity,
+              value: number.deity,
+            ),
+          if (number.gemstone.isNotEmpty)
+            KNoteBox(
+              title: '${l.numGemstone}: ${number.gemstone}',
+              icon: Icons.lock_outline_rounded,
+              hue: AstroPalette.money,
+              child: number.gemstoneNote.isEmpty
+                  ? null
+                  : Text(
+                      number.gemstoneNote,
+                      style: theme.textTheme.bodySmall?.copyWith(height: 1.4),
+                    ),
+            ),
+        ],
       ),
     );
   }
@@ -248,75 +327,79 @@ class _LoShuCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = context.l10n;
     final theme = Theme.of(context);
-    return KCard(
+    final arrows = grid.lines.where((x) => x.status != 'partial').toList();
+    return KSurface(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            l.numLoShuTitle,
-            style: theme.textTheme.titleMedium?.copyWith(fontSize: 15),
-          ),
-          const SizedBox(height: 12),
           Center(
-            child: GridView.count(
-              crossAxisCount: 3,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 6,
-              crossAxisSpacing: 6,
-              children: [
-                for (final n in grid.layout)
-                  _LoShuCell(n: n, count: grid.countOf(n)),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-          if (grid.missing.isNotEmpty)
-            Text(
-              l.numLoShuMissing(grid.missing.join(', ')),
-              style: const TextStyle(fontSize: 12.5, height: 1.4),
-            ),
-          if (grid.repeated.isNotEmpty)
-            Text(
-              l.numLoShuRepeated(grid.repeated.join(', ')),
-              style: const TextStyle(fontSize: 12.5, height: 1.4),
-            ),
-          const SizedBox(height: 10),
-          for (final line in grid.lines.where(
-            (x) => x.status != 'partial',
-          )) ...[
-            Padding(
-              padding: const EdgeInsets.only(bottom: 6),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _MiniChip(
-                    label: line.status == 'strength'
-                        ? l.numArrowStrength
-                        : l.numArrowAbsence,
-                    tone: line.status == 'strength'
-                        ? _ChipTone.good
-                        : _ChipTone.warn,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      line.gloss,
-                      style: const TextStyle(fontSize: 12, height: 1.4),
-                    ),
-                  ),
-                ],
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 260),
+              child: KCosmicPanel(
+                hue: AstroPalette.earth,
+                padding: const EdgeInsets.all(10),
+                child: GridView.count(
+                  crossAxisCount: 3,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  physics: const NeverScrollableScrollPhysics(),
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  children: [
+                    for (final n in grid.layout)
+                      _LoShuCell(n: n, count: grid.countOf(n)),
+                  ],
+                ),
               ),
             ),
+          ),
+          if (grid.missing.isNotEmpty || grid.repeated.isNotEmpty) ...[
+            const SizedBox(height: 14),
+            if (grid.missing.isNotEmpty)
+              _NumberRow(
+                label: l.kNumMissing,
+                numbers: grid.missing,
+                hue: AstroPalette.money,
+              ),
+            if (grid.repeated.isNotEmpty)
+              _NumberRow(
+                label: l.kNumRepeated,
+                numbers: grid.repeated,
+                hue: AstroPalette.health,
+              ),
+          ],
+          if (arrows.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            for (final line in arrows)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    KToneChip(
+                      line.status == 'strength'
+                          ? l.numArrowStrength
+                          : l.numArrowAbsence,
+                      tone: line.status == 'strength'
+                          ? KTone.good
+                          : KTone.caution,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      line.gloss,
+                      style: theme.textTheme.bodySmall?.copyWith(height: 1.45),
+                    ),
+                  ],
+                ),
+              ),
           ],
           if (grid.summary.isNotEmpty) ...[
-            const SizedBox(height: 4),
+            const SizedBox(height: 12),
             Text(
               grid.summary,
-              style: TextStyle(
-                fontSize: 12.5,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: context.brand.inkMuted,
                 height: 1.45,
-                color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
           ],
@@ -324,6 +407,42 @@ class _LoShuCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class _NumberRow extends StatelessWidget {
+  const _NumberRow({
+    required this.label,
+    required this.numbers,
+    required this.hue,
+  });
+  final String label;
+  final List<int> numbers;
+  final AstroHue hue;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Row(
+      children: [
+        Expanded(
+          child: Text(
+            label,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: context.brand.inkMuted),
+          ),
+        ),
+        Flexible(
+          child: Wrap(
+            alignment: WrapAlignment.end,
+            spacing: 6,
+            runSpacing: 6,
+            children: [for (final n in numbers) KPill('$n', hue: hue)],
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class _LoShuCell extends StatelessWidget {
@@ -333,58 +452,35 @@ class _LoShuCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final brand = context.brand;
     final present = count > 0;
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: present
-            ? theme.colorScheme.primaryContainer.withValues(alpha: 0.5)
-            : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: context.brand.hairline),
+        gradient: present ? AstroPalette.money.linear() : null,
+        color: present ? null : Colors.white.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: present
+              ? Colors.white.withValues(alpha: 0.3)
+              : Colors.white.withValues(alpha: 0.12),
+        ),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Text(
             present ? '$n' * count : '$n',
             style: TextStyle(
-              fontSize: present ? 17 : 14,
+              fontSize: present ? 20 : 16,
               fontWeight: present ? FontWeight.w800 : FontWeight.w400,
               color: present
-                  ? theme.colorScheme.onSurface
-                  : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                  ? Colors.white
+                  : brand.onCosmicMuted.withValues(alpha: 0.5),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-enum _ChipTone { good, warn }
-
-class _MiniChip extends StatelessWidget {
-  const _MiniChip({required this.label, required this.tone});
-  final String label;
-  final _ChipTone tone;
-
-  @override
-  Widget build(BuildContext context) {
-    final (bg, fg) = switch (tone) {
-      _ChipTone.good => (const Color(0xFFDDF0E4), const Color(0xFF2C6B45)),
-      _ChipTone.warn => (const Color(0xFFFBEBD8), const Color(0xFFB0691F)),
-    };
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: fg),
+        ),
       ),
     );
   }

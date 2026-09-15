@@ -1,15 +1,17 @@
+import 'package:astro_kundali/astro_kundali.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:astro_kundali/astro_kundali.dart';
-
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/theme/astro_palette.dart';
 import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/skeleton.dart';
+import '../../../../shared/widgets/hue_widgets.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
 
+/// The twelve houses (bhavas): each one's sign, lord, occupants and aspects,
+/// and whether benefic or malefic influence dominates.
 class BhavaPage extends StatefulWidget {
   const BhavaPage({required this.profileId, super.key});
   final String profileId;
@@ -27,131 +29,191 @@ class _BhavaPageState extends State<BhavaPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.kBhavaTitle)),
-      body: BlocBuilder<KundaliCubit, KundaliState>(
-        builder: (context, state) => SliceBuilder<List<BhavaHouse>>(
-          slice: state.bhava,
-          onRetry: () => context.read<KundaliCubit>().loadBhava(),
-          skeleton: const _BhavaSkeleton(),
-          builder: (context, houses) {
-            if (houses.isEmpty) {
-              return const _BhavaEmpty();
-            }
-            final ordered = [...houses]
-              ..sort((a, b) => a.house.compareTo(b.house));
-            return ListView(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
-              children: [
-                Text(
-                  context.l10n.kBhavaIntro,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+    final l = context.l10n;
+    return BlocBuilder<KundaliCubit, KundaliState>(
+      builder: (context, state) {
+        final cubit = context.read<KundaliCubit>();
+        final houses = state.bhava.value;
+        final ordered = [...?houses]
+          ..sort((a, b) => a.house.compareTo(b.house));
+        final supported = ordered.where((h) => h.influenceTally > 0).length;
+        final strained = ordered.where((h) => h.influenceTally < 0).length;
+        final lagna = ordered.isEmpty ? '' : ordered.first.sign;
+
+        return KundaliScaffold(
+          title: l.kBhavaTitle,
+          eyebrow: l.kOvTitle,
+          headline: l.kBhavaTitle,
+          subheadline: l.kBhavaHeroSub,
+          hue: kSignHue(lagna),
+          heroTrailing: KHeroGlyph(
+            hue: kSignHue(lagna),
+            icon: Icons.grid_view_rounded,
+            size: 72,
+          ),
+          heroChips: ordered.isEmpty
+              ? const []
+              : [
+                  KHeroChip(
+                    icon: Icons.trending_up_rounded,
+                    label: l.kBhavaSupportedCount(supported),
+                    color: AstroPalette.health.start,
                   ),
-                ),
-                const SizedBox(height: 12),
-                for (final h in ordered) ...[
-                  _BhavaCard(h: h),
-                  const SizedBox(height: 10),
+                  KHeroChip(
+                    icon: Icons.trending_down_rounded,
+                    label: l.kBhavaStrainedCount(strained),
+                    color: AstroPalette.fire.start,
+                  ),
                 ],
-              ],
-            );
-          },
-        ),
-      ),
+          onRefresh: () => cubit.loadBhava(force: true),
+          animate: houses != null,
+          children: houses == null
+              ? [
+                  SliceBuilder<List<BhavaHouse>>(
+                    slice: state.bhava,
+                    onRetry: () => cubit.loadBhava(force: true),
+                    skeleton: const KBodySkeleton(blocks: [90, 90, 90, 90, 90]),
+                    builder: (_, _) => const SizedBox.shrink(),
+                  ),
+                ]
+              : ordered.isEmpty
+              ? [const _BhavaEmpty()]
+              : [
+                  Text(
+                    l.kBhavaIntro,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: context.brand.inkMuted,
+                      height: 1.45,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  for (final h in ordered)
+                    _BhavaCard(h: h, initiallyOpen: h.house == 1),
+                  const KAskCta(),
+                ],
+        );
+      },
     );
   }
 }
 
 class _BhavaCard extends StatelessWidget {
-  const _BhavaCard({required this.h});
+  const _BhavaCard({required this.h, required this.initiallyOpen});
   final BhavaHouse h;
+  final bool initiallyOpen;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-    final brand = context.brand;
     final l = context.l10n;
+    final brand = context.brand;
+    final hue = kSignHue(h.sign);
     final tally = h.influenceTally;
-    return KCard(
-      child: Column(
+
+    return KExpandable(
+      initiallyOpen: initiallyOpen,
+      header: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              gradient: hue.linear(),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Text(
+              '${h.house}',
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _headline(l, h),
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Text(
+                  _subhead(l, h),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: brand.inkMuted,
+                  ),
+                ),
+                if (h.occupants.isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  Wrap(
+                    spacing: 4,
+                    children: [
+                      for (final p in h.occupants) PlanetBadge(p, size: 22),
+                    ],
+                  ),
+                ],
+              ],
+            ),
+          ),
+          if (tally != 0)
+            Tooltip(
+              message: tally > 0 ? l.kBhavaMoreBenefic : l.kBhavaMoreMalefic,
+              child: HueIcon(
+                hue: tally > 0 ? AstroPalette.health : AstroPalette.fire,
+                icon: tally > 0
+                    ? Icons.trending_up_rounded
+                    : Icons.trending_down_rounded,
+                size: 30,
+                iconSize: 16,
+              ),
+            ),
+        ],
+      ),
+      body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 15,
-                backgroundColor: scheme.primaryContainer,
-                child: Text(
-                  '${h.house}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 12,
-                    color: scheme.onPrimaryContainer,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _headline(context.l10n, h),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                      ),
-                    ),
-                    Text(
-                      _subhead(context.l10n, h),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (tally != 0)
-                Tooltip(
-                  message: tally > 0
-                      ? l.kBhavaMoreBenefic
-                      : l.kBhavaMoreMalefic,
-                  child: Icon(
-                    tally > 0
-                        ? Icons.trending_up_rounded
-                        : Icons.trending_down_rounded,
-                    size: 18,
-                    color: tally > 0 ? brand.online : brand.live,
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            _reading(context.l10n, h),
-            style: const TextStyle(fontSize: 13, height: 1.45),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: hue.tint(0.08),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Text(
+              _reading(l, h),
+              style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
+            ),
           ),
           if (_hasMeta(h)) ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             Wrap(
               spacing: 6,
               runSpacing: 6,
               children: [
                 if (h.occupants.isNotEmpty)
-                  MetaChip(l.kBhavaOccupiedBy(_join(l, h.occupants))),
+                  KToneChip(
+                    l.kBhavaOccupiedBy(_join(l, h.occupants)),
+                    hue: AstroPalette.career,
+                  ),
                 if (h.aspectedBy.isNotEmpty)
-                  MetaChip(l.kBhavaAspectedBy(_join(l, h.aspectedBy))),
+                  KToneChip(
+                    l.kBhavaAspectedBy(_join(l, h.aspectedBy)),
+                    hue: AstroPalette.air,
+                  ),
                 if (h.beneficCount > 0)
-                  MetaChip(
+                  KToneChip(
                     l.kBhavaBeneficCount(h.beneficCount),
-                    color: brand.online,
+                    tone: KTone.good,
                   ),
                 if (h.maleficCount > 0)
-                  MetaChip(
+                  KToneChip(
                     l.kBhavaMaleficCount(h.maleficCount),
-                    color: brand.live,
+                    tone: KTone.bad,
                   ),
               ],
             ),
@@ -218,102 +280,39 @@ class _BhavaCard extends StatelessWidget {
   }
 }
 
-/// Shimmer placeholder shown while the 12 houses load.
-class _BhavaSkeleton extends StatelessWidget {
-  const _BhavaSkeleton();
-
-  @override
-  Widget build(BuildContext context) {
-    return AppShimmer(
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
-        children: [
-          const SkeletonBox(width: 240, height: 12),
-          const SizedBox(height: 6),
-          const SkeletonBox(width: 180, height: 12),
-          const SizedBox(height: 16),
-          for (var i = 0; i < 5; i++) ...[
-            const _BhavaCardSkeleton(),
-            const SizedBox(height: 10),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _BhavaCardSkeleton extends StatelessWidget {
-  const _BhavaCardSkeleton();
-
-  @override
-  Widget build(BuildContext context) {
-    return const KCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              SkeletonBox(width: 30, height: 30, radius: 15),
-              SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SkeletonBox(width: 140, height: 13),
-                    SizedBox(height: 6),
-                    SkeletonBox(width: 200, height: 11),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 12),
-          SkeletonBox(height: 11),
-          SizedBox(height: 6),
-          SkeletonBox(height: 11),
-          SizedBox(height: 6),
-          SkeletonBox(width: 220, height: 11),
-        ],
-      ),
-    );
-  }
-}
-
 class _BhavaEmpty extends StatelessWidget {
   const _BhavaEmpty();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.grid_view_rounded,
-              size: 44,
-              color: theme.colorScheme.onSurfaceVariant,
+    return KSurface(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        children: [
+          const HueIcon(
+            hue: AstroPalette.air,
+            icon: Icons.schedule_rounded,
+            size: 52,
+            iconSize: 26,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            context.l10n.kBhavaNeedsTime,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
             ),
-            const SizedBox(height: 12),
-            Text(
-              context.l10n.kBhavaNeedsTime,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            context.l10n.kBhavaNeedsTimeBody,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: context.brand.inkMuted,
             ),
-            const SizedBox(height: 6),
-            Text(
-              context.l10n.kBhavaNeedsTimeBody,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

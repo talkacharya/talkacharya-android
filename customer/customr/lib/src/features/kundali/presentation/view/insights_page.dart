@@ -1,11 +1,11 @@
 import 'package:astro_kundali/astro_kundali.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/router/routes.dart';
+import '../../../../core/theme/astro_palette.dart';
 import '../../../../core/theme/brand_colors.dart';
+import '../../../../shared/widgets/hue_widgets.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
@@ -32,210 +32,235 @@ class _InsightsPageState extends State<InsightsPage> {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    return Scaffold(
-      appBar: AppBar(title: Text(l.insightsTitle)),
-      body: BlocBuilder<KundaliCubit, KundaliState>(
-        buildWhen: (a, b) => a.insights != b.insights,
-        builder: (context, state) => SliceBuilder<OverviewReport>(
-          slice: state.insights,
-          onRetry: () => context.read<KundaliCubit>().loadInsights(force: true),
-          builder: (context, report) {
-            final ordered = [
-              for (final area in KundaliInsights.areaOrder)
-                ?report.byArea(area),
-            ];
-            return ListView(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
-              children: [
-                Text(
-                  l.insightsIntro,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    height: 1.45,
+    const hue = AstroPalette.love;
+    return BlocBuilder<KundaliCubit, KundaliState>(
+      buildWhen: (a, b) => a.insights != b.insights,
+      builder: (context, state) {
+        final cubit = context.read<KundaliCubit>();
+        final report = state.insights.value;
+        final ordered = report == null
+            ? const <OverviewSection>[]
+            : [
+                for (final area in KundaliInsights.areaOrder)
+                  ?report.byArea(area),
+              ];
+        final supportive = ordered.where((s) => s.tone == 'supportive').length;
+        final challenging = ordered
+            .where((s) => s.tone == 'challenging')
+            .length;
+
+        return KundaliScaffold(
+          title: l.insightsTitle,
+          eyebrow: l.kOvTitle,
+          headline: l.insightsTitle,
+          subheadline: l.kInHeroSub,
+          hue: hue,
+          heroTrailing: const KHeroGlyph(
+            hue: hue,
+            icon: Icons.psychology_rounded,
+            size: 72,
+          ),
+          heroChips: ordered.isEmpty
+              ? const []
+              : [
+                  KHeroChip(
+                    icon: Icons.trending_up_rounded,
+                    label: l.kInSupportiveCount(supportive),
+                    color: AstroPalette.health.start,
                   ),
-                ),
-                const SizedBox(height: 14),
-                for (final s in ordered) ...[
-                  _SectionCard(section: s),
-                  const SizedBox(height: 10),
+                  KHeroChip(
+                    icon: Icons.trending_down_rounded,
+                    label: l.kInChallengingCount(challenging),
+                    color: AstroPalette.money.start,
+                  ),
                 ],
-                const SizedBox(height: 6),
-                Text(
-                  report.disclaimer.isNotEmpty
-                      ? report.disclaimer
-                      : l.insightsDisclaimer,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    height: 1.4,
+          onRefresh: () => cubit.loadInsights(force: true),
+          animate: report != null,
+          children: report == null
+              ? [
+                  SliceBuilder<OverviewReport>(
+                    slice: state.insights,
+                    onRetry: () => cubit.loadInsights(force: true),
+                    skeleton: const KBodySkeleton(blocks: [90, 110, 110, 110]),
+                    builder: (_, _) => const SizedBox.shrink(),
                   ),
-                ),
-                const SizedBox(height: 16),
-                AskAstrologerBar(
-                  label: l.insightsAskCta,
-                  onTap: () => context.go(Routes.astrologers),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
+                ]
+              : [
+                  Text(
+                    l.insightsIntro,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: context.brand.inkMuted,
+                      height: 1.45,
+                    ),
+                  ),
+                  if (ordered.isNotEmpty)
+                    KSection(
+                      title: l.kInGlanceTitle,
+                      hue: hue,
+                      padTop: 18,
+                      child: Wrap(
+                        spacing: 6,
+                        runSpacing: 6,
+                        children: [
+                          for (final s in ordered)
+                            KToneChip(
+                              insightsAreaTitle(l, s.area),
+                              tone: _tone(s.tone),
+                              hue: s.tone == 'mixed' ? AstroPalette.air : null,
+                            ),
+                        ],
+                      ),
+                    ),
+                  KSection(
+                    title: l.kInAreasTitle,
+                    hue: AstroPalette.career,
+                    child: Column(
+                      children: [
+                        for (var i = 0; i < ordered.length; i++)
+                          _SectionCard(section: ordered[i], open: i == 0),
+                      ],
+                    ),
+                  ),
+                  KFootnote(
+                    report.disclaimer.isNotEmpty
+                        ? report.disclaimer
+                        : l.insightsDisclaimer,
+                  ),
+                  KAskCta(title: l.insightsAskCta),
+                ],
+        );
+      },
     );
   }
 }
 
+KTone _tone(String tone) => switch (tone) {
+  'supportive' => KTone.good,
+  'challenging' => KTone.caution,
+  _ => KTone.neutral,
+};
+
+AstroHue _areaHue(String area) => switch (area) {
+  'personality' || 'career' => AstroPalette.career,
+  'appearance' || 'marriage' => AstroPalette.love,
+  'mind_emotions' => AstroPalette.air,
+  'wealth' || 'fortune' => AstroPalette.money,
+  'education' => AstroPalette.water,
+  'family' => AstroPalette.earth,
+  'health' => AstroPalette.health,
+  _ => AstroPalette.fire,
+};
+
 class _SectionCard extends StatelessWidget {
-  const _SectionCard({required this.section});
+  const _SectionCard({required this.section, this.open = false});
   final OverviewSection section;
+  final bool open;
 
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
     final theme = Theme.of(context);
+    final hue = _areaHue(section.area);
     final factors = section.readingFactors
         .map((f) => _factorLine(l, f))
         .where((t) => t.isNotEmpty)
         .toList();
+    final toneLabel = switch (section.tone) {
+      'supportive' => l.insightsToneSupportive,
+      'challenging' => l.insightsToneChallenging,
+      'mixed' => l.insightsToneMixed,
+      _ => l.insightsToneBalanced,
+    };
 
-    return KCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return KExpandable(
+      initiallyOpen: open,
+      header: Row(
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(
-                KundaliInsights.icon(section.area),
-                size: 19,
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  insightsAreaTitle(l, section.area),
-                  style: theme.textTheme.titleMedium?.copyWith(fontSize: 15),
-                ),
-              ),
-              _ToneChip(tone: section.tone, strength: section.strength),
-            ],
+          HueIcon(
+            hue: hue,
+            icon: KundaliInsights.icon(section.area),
+            size: 42,
+            iconSize: 21,
           ),
-          if (!section.isMixed) ...[
-            const SizedBox(height: 10),
-            _StrengthMeter(level: section.strength),
-          ],
-          if (section.summary.isNotEmpty) ...[
-            const SizedBox(height: 10),
-            Text(
-              section.summary,
-              style: const TextStyle(fontSize: 13, height: 1.5),
-            ),
-          ],
-          if (factors.isNotEmpty) ...[
-            const SizedBox(height: 6),
-            Theme(
-              data: theme.copyWith(dividerColor: Colors.transparent),
-              child: ExpansionTile(
-                tilePadding: EdgeInsets.zero,
-                childrenPadding: const EdgeInsets.only(bottom: 4),
-                expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                title: Text(
-                  l.insightsWhatItReadsFrom,
-                  style: theme.textTheme.labelMedium?.copyWith(
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  insightsAreaTitle(l, section.area),
+                  style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
-                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
-                children: [
-                  for (final line in factors)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 3),
-                      child: Text(
-                        '·  $line',
-                        style: const TextStyle(fontSize: 12.5, height: 1.4),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Flexible(
+                      child: KToneChip(
+                        toneLabel,
+                        tone: _tone(section.tone),
+                        hue: section.tone == 'mixed' ? AstroPalette.air : null,
                       ),
                     ),
-                ],
-              ),
+                    if (!section.isMixed) ...[
+                      const SizedBox(width: 10),
+                      _StrengthMeter(level: section.strength),
+                    ],
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
+        ],
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (section.summary.isNotEmpty)
+            Text(
+              section.summary,
+              style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
+            ),
+          if (factors.isNotEmpty)
+            KNoteBox(
+              title: l.insightsWhatItReadsFrom,
+              icon: Icons.manage_search_rounded,
+              hue: hue,
+              lines: factors,
+            ),
         ],
       ),
     );
   }
 }
 
-class _ToneChip extends StatelessWidget {
-  const _ToneChip({required this.tone, required this.strength});
-  final String tone;
-  final int strength;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = context.l10n;
-    final (label, bg, fg) = switch (tone) {
-      'supportive' => (
-        l.insightsToneSupportive,
-        const Color(0xFFDDF0E4),
-        const Color(0xFF2C6B45),
-      ),
-      'challenging' => (
-        l.insightsToneChallenging,
-        const Color(0xFFFBEBD8),
-        const Color(0xFFB0691F),
-      ),
-      'mixed' => (
-        l.insightsToneMixed,
-        const Color(0xFFE4E8F5),
-        const Color(0xFF3F4E86),
-      ),
-      _ => (
-        l.insightsToneBalanced,
-        const Color(0xFFECECEF),
-        const Color(0xFF5B5B62),
-      ),
-    };
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 11.5,
-          fontWeight: FontWeight.w800,
-          color: fg,
-        ),
-      ),
-    );
-  }
-}
-
+/// 3-step strength bar; green when strong, amber when strained.
 class _StrengthMeter extends StatelessWidget {
   const _StrengthMeter({required this.level});
   final int level;
 
   @override
   Widget build(BuildContext context) {
-    final on = switch (level) {
-      >= 3 => const Color(0xFF2C6B45),
-      2 => const Color(0xFFC7A94A),
-      _ => const Color(0xFFB0691F),
+    final hue = switch (level) {
+      >= 3 => AstroPalette.health,
+      2 => AstroPalette.money,
+      _ => AstroPalette.fire,
     };
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        for (var i = 0; i < 3; i++) ...[
-          Expanded(
-            child: Container(
-              height: 5,
-              decoration: BoxDecoration(
-                color: i < level ? on : context.brand.hairline,
-                borderRadius: BorderRadius.circular(3),
-              ),
+        for (var i = 0; i < 3; i++)
+          Container(
+            width: 14,
+            height: 6,
+            margin: const EdgeInsets.only(right: 3),
+            decoration: BoxDecoration(
+              gradient: i < level ? hue.linear() : null,
+              color: i < level ? null : context.brand.hairline,
+              borderRadius: BorderRadius.circular(3),
             ),
           ),
-          if (i < 2) const SizedBox(width: 5),
-        ],
       ],
     );
   }

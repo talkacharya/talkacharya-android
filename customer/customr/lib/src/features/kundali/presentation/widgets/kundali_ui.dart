@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/theme/astro_palette.dart';
 import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/async_value.dart';
 import '../../../../shared/widgets/error_view.dart';
+import '../../../../shared/widgets/hue_widgets.dart';
+import 'k_kit.dart';
 
-/// A plain themed card with padding (the app's [CardTheme] gives the border +
-/// radius; this just adds inset).
+export 'k_kit.dart';
+
+/// Surface card used across the kundali screens: surface fill, hairline, soft
+/// radius (see [KSurface]). [tint] gives the warm "reading" wash instead.
 class KCard extends StatelessWidget {
   const KCard({
     required this.child,
@@ -21,11 +26,17 @@ class KCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final card = Card(
-      color: tint ? context.brand.tint : null,
-      child: Padding(padding: padding, child: child),
+    final brand = context.brand;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: KSurface(
+        padding: padding,
+        radius: 18,
+        color: tint ? brand.tint : null,
+        borderColor: tint ? brand.glowAccent.withValues(alpha: 0.25) : null,
+        child: child,
+      ),
     );
-    return card;
   }
 }
 
@@ -39,9 +50,9 @@ class KLabel extends StatelessWidget {
     return Text(
       text.toUpperCase(),
       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-        color: Theme.of(context).colorScheme.onSurfaceVariant,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0.7,
+        color: context.brand.inkMuted,
+        fontWeight: FontWeight.w800,
+        letterSpacing: 1.0,
       ),
     );
   }
@@ -49,29 +60,55 @@ class KLabel extends StatelessWidget {
 
 /// The warm "what this means for you" card.
 class ReadingCard extends StatelessWidget {
-  const ReadingCard({required this.body, this.title, super.key});
+  const ReadingCard({
+    required this.body,
+    this.title,
+    this.hue = AstroPalette.money,
+    super.key,
+  });
   final String? title;
   final String body;
+  final AstroHue hue;
 
   @override
   Widget build(BuildContext context) {
-    final brand = context.brand;
-    return KCard(
-      tint: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title ?? context.l10n.kReadingCardTitle,
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 12.5,
-              color: brand.onTint,
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: KHueCard(
+        hue: hue,
+        radius: 18,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            HueIcon(
+              hue: hue,
+              icon: Icons.auto_awesome_rounded,
+              size: 32,
+              iconSize: 17,
             ),
-          ),
-          const SizedBox(height: 5),
-          Text(body, style: const TextStyle(fontSize: 13.5, height: 1.45)),
-        ],
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title ?? context.l10n.kReadingCardTitle,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      fontWeight: FontWeight.w800,
+                      color: hue.end,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    body,
+                    style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -84,28 +121,29 @@ class MetaChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final brand = context.brand;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: scheme.surfaceContainerHighest.withValues(alpha: 0.6),
+        color: brand.sectionBg,
         borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: brand.hairline),
       ),
       child: Text(
         label,
         style: TextStyle(
           fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: color ?? scheme.onSurface,
+          fontWeight: FontWeight.w700,
+          color: color ?? brand.ink,
         ),
       ),
     );
   }
 }
 
-/// Renders an [AsyncValue] slice — a [skeleton] (or spinner) while first
-/// loading, a friendly [ErrorView] on failure with no cached value, otherwise
-/// the data (kept visible while a refresh runs).
+/// Renders an [AsyncValue] slice — a [skeleton] (default: shimmer blocks)
+/// while first loading, a friendly [ErrorView] on failure with no cached value,
+/// otherwise the data (kept visible while a refresh runs).
 class SliceBuilder<T> extends StatelessWidget {
   const SliceBuilder({
     required this.slice,
@@ -119,19 +157,16 @@ class SliceBuilder<T> extends StatelessWidget {
   final VoidCallback onRetry;
   final Widget Function(BuildContext, T) builder;
 
-  /// Shown while the slice loads for the first time. Falls back to a centred
-  /// spinner when not supplied.
+  /// Shown while the slice loads for the first time.
   final Widget? skeleton;
 
   @override
   Widget build(BuildContext context) {
     Widget loading() =>
         skeleton ??
-        const Center(
-          child: Padding(
-            padding: EdgeInsets.all(48),
-            child: CircularProgressIndicator(),
-          ),
+        const Padding(
+          padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+          child: KBodySkeleton(),
         );
     return slice.when(
       idle: loading,
@@ -146,18 +181,9 @@ class SliceBuilder<T> extends StatelessWidget {
 class AskAstrologerBar extends StatelessWidget {
   const AskAstrologerBar({this.label, this.onTap, super.key});
   final String? label;
+
   final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return FilledButton.icon(
-      onPressed: onTap,
-      icon: const Icon(Icons.chat_bubble_outline_rounded, size: 18),
-      label: Text(
-        label ?? context.l10n.kOvAskAstrologer,
-        textAlign: TextAlign.center,
-      ),
-      style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(50)),
-    );
-  }
+  Widget build(BuildContext context) => KAskCta(title: label, onTap: onTap);
 }

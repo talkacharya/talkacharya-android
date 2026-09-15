@@ -163,3 +163,26 @@ class _OrbitPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
+
+/// Twinkling-free, deterministic star dots for cosmic surfaces.
+class StarfieldPainter extends CustomPainter {
+  const StarfieldPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rnd = math.Random(7);
+    final paint = Paint()..color = Colors.white;
+    for (var i = 0; i < 70; i++) {
+      final dx = rnd.nextDouble() * size.width;
+      final dy = rnd.nextDouble() * size.height;
+      final r = rnd.nextDouble() * 1.3 + 0.2;
+      paint.color = Colors.white.withValues(
+        alpha: 0.15 + rnd.nextDouble() * 0.55,
+      );
+      canvas.drawCircle(Offset(dx, dy), r, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}

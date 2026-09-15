@@ -4,16 +4,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/theme/astro_palette.dart';
+import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/async_value.dart';
 import '../../../../shared/widgets/language_quick_button.dart';
 import '../cubit/kundali_cubit.dart';
+import '../widgets/k_chart.dart';
 import '../widgets/kundali_ui.dart';
 import 'house_detail_sheet.dart';
 import 'kundali_routes.dart';
 
-/// The birth-chart screen. A horizontal carousel of the charts customers ask
-/// about most — swipe or tap a chip to glance between them, all pre-fetched so
-/// there's no reload. "All charts" opens the full D1–D60 picker.
+/// The birth-chart screen. Swipe (or tap a chip in the hero) between the charts
+/// people ask about most — all pre-fetched, so there's no reload. "All charts"
+/// opens the full D1–D60 menu.
 class FullChartPage extends StatefulWidget {
   const FullChartPage({required this.profileId, this.initialHouse, super.key});
   final String profileId;
@@ -70,15 +73,16 @@ class _FullChartPageState extends State<FullChartPage> {
   }
 
   void _goTo(int i) {
+    setState(() => _page = i);
     _pc.animateToPage(
       i,
-      duration: const Duration(milliseconds: 260),
-      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
     );
   }
 
   void _openPicker(List<ChartTypeInfo> menu) {
-    showChartPicker(
+    showKChartPicker(
       context,
       menu: menu,
       selected: FullChartPage.essentials[_page],
@@ -91,185 +95,264 @@ class _FullChartPageState extends State<FullChartPage> {
 
   @override
   Widget build(BuildContext context) {
-    final wheelH = MediaQuery.sizeOf(context).width - 20;
     final l = context.l10n;
     final s = KundaliStrings.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l.kFcTitle),
-        actions: const [LanguageQuickButton()],
-      ),
-      body: BlocBuilder<KundaliCubit, KundaliState>(
-        builder: (context, state) {
-          final menu = state.chartTypes.value ?? const <ChartTypeInfo>[];
-          final currentType = FullChartPage.essentials[_page];
-          final currentSlice =
-              state.charts[currentType] ?? const AsyncValue<VargaChart>.idle();
+    return BlocBuilder<KundaliCubit, KundaliState>(
+      builder: (context, state) {
+        final menu = state.chartTypes.value ?? const <ChartTypeInfo>[];
+        final type = FullChartPage.essentials[_page];
+        final slice = state.charts[type] ?? const AsyncValue<VargaChart>.idle();
+        final vc = slice.value;
+        final lagna = state.overview.value?.lagnaSign ?? vc?.ascendantSign;
+        final hue = kSignHue(lagna ?? '');
+        final title = vc == null
+            ? s.chartShortLabel(type)
+            : s.chartName(
+                type,
+                vc.name.isEmpty ? s.chartShortLabel(type) : vc.name,
+              );
+        final signifies = vc == null
+            ? null
+            : s.chartSignifies(type, vc.signifies);
 
-          return ListView(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
-            children: [
-              _ChipRail(
-                types: FullChartPage.essentials,
-                selected: _page,
-                onTap: _goTo,
-              ),
-              const SizedBox(height: 12),
-              ChartStyleToggle(
-                style: _style,
-                onChanged: (s) => setState(() => _style = s),
-              ),
-              const SizedBox(height: 14),
-              SizedBox(
-                height: wheelH,
-                child: PageView.builder(
-                  controller: _pc,
-                  itemCount: FullChartPage.essentials.length,
-                  onPageChanged: (i) => setState(() => _page = i),
-                  itemBuilder: (context, i) {
-                    final t = FullChartPage.essentials[i];
-                    final slice =
-                        state.charts[t] ?? const AsyncValue<VargaChart>.idle();
-                    return ChartWheel(
-                      chart: slice.value,
-                      error: slice.status == AsyncStatus.error
-                          ? slice.error
-                          : null,
-                      style: _style,
-                      onRetry: () => context.read<KundaliCubit>().loadChart(
-                        t,
-                        force: true,
-                      ),
-                      onHouseTap: t == 'd1'
-                          ? (h) {
-                              final k = state.overview.value;
-                              if (k != null) {
-                                showHouseDetailSheet(
-                                  context,
-                                  kundali: k,
-                                  house: h,
-                                );
-                              }
-                            }
-                          : null,
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 10),
-              _Dots(count: FullChartPage.essentials.length, active: _page),
-              const SizedBox(height: 14),
-              if (currentSlice.value != null) ...[
-                ChartDetails(
-                  vc: currentSlice.value!,
-                  fallbackTitle: s.chartShortLabel(currentType),
-                ),
-                const SizedBox(height: 14),
-                KLabel(
-                  currentSlice.value!.isTransit
-                      ? l.kFcTransitingGrahas
-                      : l.kFcPlanets,
-                ),
-                const SizedBox(height: 8),
-                PlanetTable(vc: currentSlice.value!),
-              ] else if (currentSlice.isError)
-                ChartBanner(
-                  icon: Icons.error_outline_rounded,
-                  text: currentSlice.error ?? l.kFcLoadError,
-                ),
-              if (currentType == 'd1') ...[
-                const SizedBox(height: 12),
-                OutlinedButton.icon(
-                  onPressed: () => context.push(
-                    KundaliRoutes.chartDetail(widget.profileId, 'd1'),
-                  ),
-                  icon: const Icon(Icons.view_list_rounded, size: 18),
-                  label: Text(l.kFcAllHouses),
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(46),
-                  ),
-                ),
-              ],
-              const SizedBox(height: 12),
-              FilledButton.tonalIcon(
-                onPressed: menu.isEmpty ? null : () => _openPicker(menu),
-                icon: const Icon(Icons.grid_view_rounded, size: 18),
-                label: Text(l.kFcAllCharts),
-                style: FilledButton.styleFrom(
-                  minimumSize: const Size.fromHeight(48),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const ChartLegend(),
-              const SizedBox(height: 36),
+        return KundaliScaffold(
+          title: l.kFcTitle,
+          eyebrow: l.kFcTitle,
+          headline: title,
+          subheadline: (signifies ?? '').isEmpty ? null : signifies,
+          hue: hue,
+          animate: false,
+          actions: [
+            const LanguageQuickButton(),
+            IconButton(
+              tooltip: l.kFcAllChartsTooltip,
+              icon: const Icon(Icons.grid_view_rounded),
+              onPressed: menu.isEmpty ? null : () => _openPicker(menu),
+            ),
+          ],
+          heroBottom: KDarkChipRail(
+            labels: [
+              for (final t in FullChartPage.essentials) s.chartShortLabel(t),
             ],
-          );
-        },
-      ),
+            selected: _page,
+            onSelect: _goTo,
+          ),
+          children: [
+            _Carousel(
+              controller: _pc,
+              state: state,
+              style: _style,
+              hue: hue,
+              onPage: (i) => setState(() => _page = i),
+              onStyle: (st) => setState(() => _style = st),
+              page: _page,
+            ),
+            const SizedBox(height: 12),
+            if (vc != null) ...[
+              KChartFacts(vc: vc, fallbackTitle: s.chartShortLabel(type)),
+              KSection(
+                title: vc.isTransit ? l.kFcTransitingGrahas : l.kFcPlanets,
+                hue: AstroPalette.money,
+                child: KPlanetList(vc: vc),
+              ),
+            ],
+            KSection(
+              title: l.kFcExploreMore,
+              hue: AstroPalette.career,
+              child: Column(
+                children: [
+                  if (state.overview.value != null)
+                    KNavRow(
+                      icon: Icons.grid_view_rounded,
+                      hue: kSignHue(state.overview.value!.lagnaSign),
+                      title: l.kFcAllHouses,
+                      subtitle: l.kFcAllHousesSub,
+                      onTap: () => context.push(
+                        KundaliRoutes.chartDetail(widget.profileId, 'd1'),
+                      ),
+                    ),
+                  const SizedBox(height: 8),
+                  KNavRow(
+                    icon: Icons.layers_rounded,
+                    hue: AstroPalette.air,
+                    title: l.kFcAllCharts,
+                    subtitle: l.kFcAllChartsSub,
+                    onTap: menu.isEmpty ? () {} : () => _openPicker(menu),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            const KChartLegend(),
+          ],
+        );
+      },
     );
   }
 }
 
-class _ChipRail extends StatelessWidget {
-  const _ChipRail({
-    required this.types,
-    required this.selected,
-    required this.onTap,
+class _Carousel extends StatelessWidget {
+  const _Carousel({
+    required this.controller,
+    required this.state,
+    required this.style,
+    required this.hue,
+    required this.page,
+    required this.onPage,
+    required this.onStyle,
   });
 
-  final List<String> types;
-  final int selected;
-  final ValueChanged<int> onTap;
+  final PageController controller;
+  final KundaliState state;
+  final ChartStyle style;
+  final AstroHue hue;
+  final int page;
+  final ValueChanged<int> onPage;
+  final ValueChanged<ChartStyle> onStyle;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return SizedBox(
-      height: 36,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: types.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 8),
-        itemBuilder: (context, i) {
-          final on = i == selected;
-          return ChoiceChip(
-            label: Text(KundaliStrings.of(context).chartShortLabel(types[i])),
-            selected: on,
-            showCheckmark: false,
-            labelStyle: TextStyle(
-              fontSize: 12.5,
-              fontWeight: FontWeight.w700,
-              color: on ? scheme.onPrimary : scheme.onSurfaceVariant,
+    final l = context.l10n;
+    final brand = context.brand;
+    final width = MediaQuery.sizeOf(context).width - 32;
+    return KCosmicPanel(
+      hue: hue,
+      padding: const EdgeInsets.fromLTRB(0, 14, 0, 12),
+      child: Column(
+        children: [
+          SizedBox(
+            height: width - 28,
+            child: PageView.builder(
+              controller: controller,
+              itemCount: FullChartPage.essentials.length,
+              onPageChanged: onPage,
+              itemBuilder: (context, i) {
+                final t = FullChartPage.essentials[i];
+                final slice =
+                    state.charts[t] ?? const AsyncValue<VargaChart>.idle();
+                final vc = slice.value;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: _chart(context, t, slice, vc),
+                );
+              },
             ),
-            selectedColor: scheme.primary,
-            onSelected: (_) => onTap(i),
-          );
-        },
+          ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 8,
+              runSpacing: 6,
+              children: [
+                KDarkSegment(
+                  labels: [l.kChNorthIndian, l.kChSouthIndian],
+                  selected: style == ChartStyle.north ? 0 : 1,
+                  onSelect: (i) =>
+                      onStyle(i == 0 ? ChartStyle.north : ChartStyle.south),
+                ),
+                _Dots(
+                  count: FullChartPage.essentials.length,
+                  active: page,
+                  color: brand.glowAccent,
+                ),
+              ],
+            ),
+          ),
+          if (FullChartPage.essentials[page] == 'd1') ...[
+            const SizedBox(height: 8),
+            Text(
+              l.kOvTapHouseHint,
+              textAlign: TextAlign.center,
+              style: Theme.of(
+                context,
+              ).textTheme.labelSmall?.copyWith(color: brand.onCosmicMuted),
+            ),
+          ],
+        ],
       ),
     );
+  }
+
+  Widget _chart(
+    BuildContext context,
+    String type,
+    AsyncValue<VargaChart> slice,
+    VargaChart? vc,
+  ) {
+    final brand = context.brand;
+    if (vc != null && vc.houses.isNotEmpty) {
+      return Center(
+        child: NatalChart(
+          houses: vc.houses,
+          style: style,
+          retrograde: {
+            for (final p in vc.planets)
+              if (p.retrograde) p.name,
+          },
+          fillColor: Colors.white.withValues(alpha: 0.03),
+          lineColor: Colors.white.withValues(alpha: 0.26),
+          numberColor: Colors.white.withValues(alpha: 0.5),
+          textColor: Colors.white,
+          onHouseTap: type == 'd1'
+              ? (h) {
+                  final k = state.overview.value;
+                  if (k != null) {
+                    showHouseDetailSheet(context, kundali: k, house: h);
+                  }
+                }
+              : null,
+        ),
+      );
+    }
+    if (slice.isError) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.cloud_off_rounded, color: brand.onCosmicMuted, size: 32),
+            const SizedBox(height: 8),
+            Text(
+              context.l10n.kFcLoadError,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: brand.onCosmicMuted),
+            ),
+            TextButton(
+              onPressed: () =>
+                  context.read<KundaliCubit>().loadChart(type, force: true),
+              style: TextButton.styleFrom(foregroundColor: brand.glowAccent),
+              child: Text(context.l10n.commonRetry),
+            ),
+          ],
+        ),
+      );
+    }
+    return Center(child: CircularProgressIndicator(color: brand.onCosmicMuted));
   }
 }
 
 class _Dots extends StatelessWidget {
-  const _Dots({required this.count, required this.active});
+  const _Dots({required this.count, required this.active, required this.color});
   final int count;
   final int active;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         for (var i = 0; i < count; i++)
           AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            margin: const EdgeInsets.symmetric(horizontal: 3),
-            width: i == active ? 18 : 6,
+            margin: const EdgeInsets.symmetric(horizontal: 2.5),
+            width: i == active ? 16 : 6,
             height: 6,
             decoration: BoxDecoration(
-              color: i == active ? scheme.primary : scheme.outlineVariant,
+              color: i == active ? color : Colors.white.withValues(alpha: 0.25),
               borderRadius: BorderRadius.circular(3),
             ),
           ),

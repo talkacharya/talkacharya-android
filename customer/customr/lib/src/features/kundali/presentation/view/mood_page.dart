@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/router/routes.dart';
+import '../../../../core/theme/astro_palette.dart';
 import '../../../../core/theme/brand_colors.dart';
+import '../../../../shared/widgets/hue_widgets.dart';
 import '../../../../shared/widgets/language_quick_button.dart';
 import '../../data/models/daily_mood.dart';
 import '../cubit/kundali_cubit.dart';
@@ -35,243 +35,213 @@ class _MoodPageState extends State<MoodPage> {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l.moodTitle),
-        actions: const [LanguageQuickButton()],
-      ),
-      body: BlocBuilder<KundaliCubit, KundaliState>(
-        buildWhen: (a, b) => a.mood != b.mood,
-        builder: (context, state) => SliceBuilder<DailyMood>(
-          slice: state.mood,
-          onRetry: () => context.read<KundaliCubit>().loadMood(force: true),
-          builder: (context, m) => RefreshIndicator(
-            onRefresh: () => context.read<KundaliCubit>().loadMood(force: true),
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
-              children: [
-                _MoodHero(mood: m),
-                const SizedBox(height: 14),
-                _Section(
-                  icon: Icons.nightlight_round,
-                  title: l.moodWhyTitle,
-                  body: m.why,
-                ),
-                const SizedBox(height: 10),
-                _Section(
-                  icon: Icons.lightbulb_outline_rounded,
-                  title: l.moodTipTitle,
-                  body: m.tip,
-                ),
-                const SizedBox(height: 14),
-                _LockedCard(mood: m),
-                if (m.nextChangeAt != null) ...[
-                  const SizedBox(height: 14),
-                  Text(
-                    l.moodNextChange(
-                      DateFormat(
-                        'EEE, h:mm a',
-                        Localizations.localeOf(context).toLanguageTag(),
-                      ).format(m.nextChangeAt!.toLocal()),
+    return BlocBuilder<KundaliCubit, KundaliState>(
+      buildWhen: (a, b) => a.mood != b.mood,
+      builder: (context, state) {
+        final cubit = context.read<KundaliCubit>();
+        final m = state.mood.value;
+        final hue = _moodHue(m?.tone ?? '');
+        return KundaliScaffold(
+          title: l.moodTitle,
+          eyebrow: l.moodTitle,
+          headline: m?.headline ?? l.moodTitle,
+          subheadline: m?.moonHouseLabel,
+          hue: hue,
+          actions: const [LanguageQuickButton()],
+          heroTrailing: m == null
+              ? KHeroGlyph(hue: hue, icon: Icons.nightlight_round, size: 72)
+              : KHeroGlyph(hue: hue, text: m.emoji, size: 72),
+          heroChips: m == null
+              ? const []
+              : [
+                  if (m.moonSignLabel.isNotEmpty)
+                    KHeroChip(
+                      icon: Icons.nightlight_round,
+                      label: m.moonSignLabel,
                     ),
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
                 ],
-                const SizedBox(height: 14),
-                Text(
-                  m.disclaimer,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    height: 1.4,
+          heroBottom: m == null ? null : _MoodMeter(level: m.level),
+          onRefresh: () => cubit.loadMood(force: true),
+          animate: m != null,
+          children: m == null
+              ? [
+                  SliceBuilder<DailyMood>(
+                    slice: state.mood,
+                    onRetry: () => cubit.loadMood(force: true),
+                    skeleton: const KBodySkeleton(blocks: [120, 120, 180]),
+                    builder: (_, _) => const SizedBox.shrink(),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+                ]
+              : [
+                  _Note(
+                    icon: Icons.nightlight_round,
+                    hue: AstroPalette.air,
+                    title: l.moodWhyTitle,
+                    body: m.why,
+                  ),
+                  const SizedBox(height: 12),
+                  _Note(
+                    icon: Icons.lightbulb_rounded,
+                    hue: AstroPalette.money,
+                    title: l.moodTipTitle,
+                    body: m.tip,
+                  ),
+                  if (m.locked.isNotEmpty)
+                    KSection(
+                      title: l.moodLockedTitle,
+                      subtitle: l.moodLockedSub,
+                      hue: AstroPalette.love,
+                      child: _LockedList(items: m.locked),
+                    ),
+                  if (m.nextChangeAt != null) ...[
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.update_rounded,
+                          size: 16,
+                          color: context.brand.inkMuted,
+                        ),
+                        const SizedBox(width: 6),
+                        Flexible(
+                          child: Text(
+                            l.moodNextChange(
+                              DateFormat(
+                                'EEE, h:mm a',
+                                Localizations.localeOf(context).toLanguageTag(),
+                              ).format(m.nextChangeAt!.toLocal()),
+                            ),
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: context.brand.inkMuted),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                  KAskCta(title: l.moodTalkCta),
+                  if (m.disclaimer.isNotEmpty) KFootnote(m.disclaimer),
+                ],
+        );
+      },
     );
   }
 }
 
-class _MoodHero extends StatelessWidget {
-  const _MoodHero({required this.mood});
-  final DailyMood mood;
+AstroHue _moodHue(String tone) => switch (tone) {
+  'bright' => AstroPalette.money,
+  'steady' => AstroPalette.health,
+  'tender' => AstroPalette.air,
+  _ => AstroPalette.career,
+};
+
+/// 1 (heavy) … 5 (uplifted) as gold segments on the hero.
+class _MoodMeter extends StatelessWidget {
+  const _MoodMeter({required this.level});
+  final int level;
 
   @override
   Widget build(BuildContext context) {
     final brand = context.brand;
-    final l = context.l10n;
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 18),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(22),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [brand.cosmicStart, brand.cosmicEnd],
+    return Row(
+      children: [
+        Text(
+          context.l10n.moodMeter,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: brand.onCosmicMuted,
+            fontWeight: FontWeight.w700,
+          ),
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(mood.emoji, style: const TextStyle(fontSize: 34)),
-              const Spacer(),
-              _Pill(text: '🌙 ${mood.moonSignLabel}'),
-            ],
-          ),
-          const SizedBox(height: 14),
-          Text(
-            mood.headline,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: brand.onCosmic,
-              fontWeight: FontWeight.w700,
-              height: 1.25,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            mood.moonHouseLabel,
-            style: TextStyle(color: brand.onCosmicMuted, fontSize: 13),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Text(
-                l.moodMeter,
-                style: TextStyle(
-                  color: brand.onCosmicMuted,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
+        const SizedBox(width: 10),
+        for (var i = 1; i <= 5; i++)
+          Expanded(
+            child: Container(
+              height: 8,
+              margin: const EdgeInsets.only(right: 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                color: i <= level
+                    ? brand.gold
+                    : brand.onCosmic.withValues(alpha: 0.18),
               ),
-              const SizedBox(width: 10),
-              for (var i = 1; i <= 5; i++)
-                Container(
-                  width: 22,
-                  height: 8,
-                  margin: const EdgeInsets.only(right: 4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    color: i <= mood.level
-                        ? brand.gold
-                        : brand.onCosmic.withValues(alpha: 0.18),
-                  ),
-                ),
-            ],
+            ),
           ),
-        ],
-      ),
+      ],
     );
   }
 }
 
-class _Pill extends StatelessWidget {
-  const _Pill({required this.text});
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final brand = context.brand;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: brand.onCosmic.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: brand.onCosmic,
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
-}
-
-class _Section extends StatelessWidget {
-  const _Section({required this.icon, required this.title, required this.body});
+class _Note extends StatelessWidget {
+  const _Note({
+    required this.icon,
+    required this.hue,
+    required this.title,
+    required this.body,
+  });
   final IconData icon;
+  final AstroHue hue;
   final String title;
   final String body;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return KCard(
+    return KHueCard(
+      hue: hue,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(icon, size: 18, color: theme.colorScheme.primary),
-              const SizedBox(width: 8),
+              HueIcon(hue: hue, icon: icon, size: 34, iconSize: 18),
+              const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          Text(body, style: const TextStyle(fontSize: 14, height: 1.5)),
+          const SizedBox(height: 10),
+          Text(body, style: theme.textTheme.bodyLarge?.copyWith(height: 1.5)),
         ],
       ),
     );
   }
 }
 
-class _LockedCard extends StatelessWidget {
-  const _LockedCard({required this.mood});
-  final DailyMood mood;
+class _LockedList extends StatelessWidget {
+  const _LockedList({required this.items});
+  final List<String> items;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final brand = context.brand;
-    final l = context.l10n;
-    return KCard(
-      tint: true,
+    return KSurface(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            l.moodLockedTitle,
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 15,
-              color: brand.onTint,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            l.moodLockedSub,
-            style: TextStyle(fontSize: 12.5, color: brand.onTint, height: 1.4),
-          ),
-          const SizedBox(height: 12),
-          for (final item in mood.locked)
+          for (var i = 0; i < items.length; i++) ...[
+            if (i > 0) Divider(height: 1, color: brand.hairline),
             Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.symmetric(vertical: 12),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.lock_outline_rounded,
-                    size: 16,
-                    color: brand.onTint,
+                  const KIconBox(
+                    icon: Icons.lock_rounded,
+                    hue: AstroPalette.love,
+                    size: 30,
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      item,
-                      style: const TextStyle(
-                        fontSize: 13.5,
+                      items[i],
+                      style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -279,11 +249,7 @@ class _LockedCard extends StatelessWidget {
                 ],
               ),
             ),
-          const SizedBox(height: 6),
-          AskAstrologerBar(
-            label: l.moodTalkCta,
-            onTap: () => context.go(Routes.astrologers),
-          ),
+          ],
         ],
       ),
     );
