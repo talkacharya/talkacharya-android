@@ -24,6 +24,7 @@ class AstrologerQuery extends Equatable {
     this.maxPrice,
     this.search,
     this.sort,
+    this.following = false,
   });
 
   final String? skill;
@@ -37,6 +38,9 @@ class AstrologerQuery extends Equatable {
   /// recommended | rating | experience | consultations | newest
   final String? sort;
 
+  /// Only astrologers the signed-in user follows.
+  final bool following;
+
   static const _unset = Object();
 
   AstrologerQuery copyWith({
@@ -48,6 +52,7 @@ class AstrologerQuery extends Equatable {
     Object? maxPrice = _unset,
     Object? search = _unset,
     Object? sort = _unset,
+    bool? following,
   }) {
     T pick<T>(Object? v, T current) => identical(v, _unset) ? current : v as T;
     return AstrologerQuery(
@@ -59,6 +64,7 @@ class AstrologerQuery extends Equatable {
       maxPrice: pick(maxPrice, this.maxPrice),
       search: pick(search, this.search),
       sort: pick(sort, this.sort),
+      following: following ?? this.following,
     );
   }
 
@@ -72,6 +78,7 @@ class AstrologerQuery extends Equatable {
     maxPrice,
     search,
     sort,
+    following,
   ];
 
   Map<String, dynamic> toParams() => {
@@ -83,6 +90,7 @@ class AstrologerQuery extends Equatable {
     'max_price': ?maxPrice,
     'q': ?search,
     'sort': ?sort,
+    if (following) 'following': '1',
   };
 }
 

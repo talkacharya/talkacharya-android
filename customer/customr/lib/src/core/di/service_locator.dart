@@ -18,9 +18,15 @@ import '../../features/consultations/data/consultation_api.dart';
 import '../../features/consultations/data/consultation_repository.dart';
 import '../../features/consultations/presentation/cubit/chats_list_cubit.dart';
 import '../../features/gifting/data/gifting_api.dart';
+import '../../features/follows/data/follows_api.dart';
+import '../../features/follows/data/follows_repository.dart';
+import '../../features/follows/presentation/cubit/follow_cubit.dart';
 import '../../features/gifting/data/gifting_repository.dart';
 import '../../features/panchang/data/panchang_api.dart';
 import '../../features/panchang/data/panchang_repository.dart';
+import '../../features/store/data/store_api.dart';
+import '../../features/store/data/store_repository.dart';
+import '../../features/store/presentation/cubit/cart_cubit.dart';
 import '../../features/support/data/support_api.dart';
 import '../../features/support/data/support_repository.dart';
 import '../../features/kundali/data/kundali_api.dart';
@@ -135,6 +141,10 @@ Future<void> configureDependencies(AppConfig config) async {
     ..registerLazySingleton<AstrologersRepository>(
       () => AstrologersRepository(getIt()),
     )
+    ..registerLazySingleton<FollowsApi>(() => FollowsApi(dio))
+    ..registerLazySingleton<FollowsRepository>(() => FollowsRepository(getIt()))
+    // app-wide: every follow control reads the same edges
+    ..registerLazySingleton<FollowCubit>(() => FollowCubit(getIt()))
     ..registerFactory<DiscoveryCubit>(() => DiscoveryCubit(getIt()))
     ..registerLazySingleton<ArticlesApi>(() => ArticlesApi(dio))
     ..registerLazySingleton<ArticlesRepository>(
@@ -224,5 +234,13 @@ Future<void> configureDependencies(AppConfig config) async {
     ..registerLazySingleton<SupportApi>(() => SupportApi(dio))
     ..registerLazySingleton<SupportRepository>(
       () => SupportRepository(api: getIt(), consultations: getIt()),
+    );
+
+  // --- store (remedies shop, poojas, consult before buying) ----------------
+  getIt
+    ..registerLazySingleton<StoreApi>(() => StoreApi(dio))
+    ..registerLazySingleton<StoreRepository>(() => StoreRepository(getIt()))
+    ..registerLazySingleton<CartCubit>(
+      () => CartCubit(getIt(), auth: getIt<AuthBloc>().stream),
     );
 }

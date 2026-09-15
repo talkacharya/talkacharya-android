@@ -83,11 +83,44 @@ class Routes {
       '/consultations/$consultationId/report';
   static const editProfile = '/profile/edit';
   static const notificationPrefs = '/profile/notifications';
+  static const following = '/profile/following';
   static const deleteAccount = '/profile/delete-account';
   static const birthProfiles = '/profile/birth-profiles';
   static const birthProfileNew = '/profile/birth-profiles/new';
   static String birthProfileEdit(String id) =>
       '/profile/birth-profiles/$id/edit';
+
+  // --- store (remedies shop, poojas, consult before buying) — full-screen -----
+  static const store = '/store';
+  static const storeProducts = '/store/products';
+  static String storeProductsWith(Map<String, String> query) => query.isEmpty
+      ? storeProducts
+      : Uri(path: storeProducts, queryParameters: query).toString();
+  static String storeProduct(String slug, {String? recommendationId}) =>
+      recommendationId == null
+      ? '/store/products/$slug'
+      : Uri(
+          path: '/store/products/$slug',
+          queryParameters: {'rec': recommendationId},
+        ).toString();
+  static String storeProductConsult(String slug) =>
+      '/store/products/$slug/consult';
+  static String storeCollection(String slug) => '/store/collections/$slug';
+  static const storeCart = '/store/cart';
+  static const storeCheckout = '/store/checkout';
+  static const storeAddresses = '/store/addresses';
+  static const storeAddressNew = '/store/addresses/new';
+  static const storeOrders = '/store/orders';
+  static const storePoojaBookings = '/store/orders?tab=poojas';
+
+  /// [placed] shows the "order placed" celebration on arrival from checkout.
+  static String storeOrder(String id, {bool placed = false}) =>
+      placed ? '/store/orders/$id?placed=1' : '/store/orders/$id';
+  static String storeAddressEdit(String id) => '/store/addresses/$id/edit';
+  static String storeReturn(String orderId, String lineId) =>
+      '/store/orders/$orderId/lines/$lineId/return';
+  static const storeConsults = '/store/consults';
+  static String storeConsult(String id) => '/store/consults/$id';
 
   /// Order of the branches — index maps to the bottom-nav destinations.
   static const branchRoots = [home, astrologers, live, profile];

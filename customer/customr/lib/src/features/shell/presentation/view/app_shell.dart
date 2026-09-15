@@ -70,6 +70,16 @@ class _AppShellState extends State<AppShell> {
           actionLabel: 'Recharge',
           onAction: () => context.push(Routes.wallet),
         );
+      case StoreConsultVerdict(:final consultId):
+        context.read<NotificationsCubit>().bump();
+        final l = context.l10n;
+        _toast(
+          l.storeVerdictToast,
+          actionLabel: l.storeView,
+          onAction: () => context.push(Routes.storeConsult(consultId)),
+        );
+      case StoreOrderUpdated():
+        context.read<NotificationsCubit>().bump();
       case WalletUpdated():
       case ReconnectHint():
         break;

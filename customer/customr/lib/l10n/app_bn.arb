@@ -65,6 +65,7 @@
   "homeCallNow": "এখনই কল করুন",
   "homeFromPerMin": "{price}/মিনিট থেকে",
   "homeOnlineCount": "{count} জন অনলাইনে",
+  "homeOnlineNow": "এখন অনলাইনে",
   "homeTalkToAstrologer": "জ্যোতিষীর সাথে কথা বলুন",
   "homeLiveNow": "এখন লাইভ",
   "homeWhatsOnYourMind": "আপনার মনে কি চলছে?",
@@ -124,6 +125,34 @@
   "astroNoneFoundHint": "একটি ফিল্টার সরিয়ে বা অন্য কিছু লিখে চেষ্টা করুন",
   "astroThatsEveryone": "আপাতত এই পর্যন্তই",
   "astroRateOnRequest": "অনুরোধে রেট",
+  "astroCouldntLoad": "জ্যোতিষীদের লোড করা যায়নি",
+  "astroSortBy": "অনুসারে সাজান",
+  "astroLoadMoreFailed": "আরও লোড করা সম্ভব হয়নি",
+  "astroDefaultSkill": "বৈদিক জ্যোতিষশাস্ত্র",
+  "astroYears": "{count} বছর",
+  "astroSessions": "{count} সেশন",
+  "astroChat": "চ্যাট",
+  "astroCall": "কল করুন",
+  "astroVideo": "ভিডিও",
+  "astroProfileTitle": "জ্যোতিষী",
+  "astroExpertiseTitle": "দক্ষতা",
+  "astroAboutTitle": "সম্পর্কে",
+  "astroRatesTitle": "পরামর্শের হার",
+  "astroReviewsCount": "{count, plural, =0{No reviews yet} one{1 review} other{{count} reviews}}",
+  "astroStatRating": "রেটিং",
+  "astroStatExperience": "অভিজ্ঞতা",
+  "astroStatSessions": "অধিবেশন",
+  "astroStatRepeatClients": "পুনরাবৃত্ত গ্রাহক",
+  "astroSpeaks": "{languages} বলতে পারে",
+  "astroRepliesIn": "উত্তর আসতে ~ {time} লাগবে।",
+  "astroOnlineNow": "এখন অনলাইনে",
+  "astroOfflineTitle": "বর্তমানে অফলাইন",
+  "astroNotifyWhenOnline": "অনলাইনে থাকলে আমাকে জানান",
+  "astroReadMore": "আরও পড়ুন",
+  "astroReadLess": "কম দেখান",
+  "astroCouldntLoadOne": "এই জ্যোতিষীকে লোড করা যায়নি।",
+  "astroCallsComingSoon": "ভয়েস ও ভিডিও কল শীঘ্রই আসছে",
+  "astroTrustLine": "পরিচয়পত্র যাচাইকৃত · ব্যক্তিগত ও গোপনীয় · মিনিট অনুযায়ী মূল্য পরিশোধ করুন",
   "walletTitle": "ওয়ালেট",
   "walletAvailableBalance": "উপলব্ধ ব্যালেন্স",
   "walletOnHold": "{amount} হোল্ড করা আছে",
@@ -195,7 +224,11 @@
   "profileGroupLegal": "আইনি",
   "profileNotifications": "নোটিফিকেশন",
   "profileNotificationPrefs": "নোটিফিকেশন পছন্দসমূহ",
+  "profileHapticFeedback": "স্পর্শজনিত প্রতিক্রিয়া",
+  "profileHapticFeedbackDesc": "বোতাম এবং ইন্টারঅ্যাকশনগুলিতে কম্পন",
   "profileWalletAndTransactions": "ওয়ালেট এবং লেনদেন",
+  "profileOrders": "আদেশ",
+  "profileOrdersUnread": "{count} নতুন",
   "profileReferAndEarn": "রেফার করুন এবং আয় করুন",
   "profileLanguage": "ভাষা",
   "profileCurrency": "কারেন্সি",
@@ -221,6 +254,15 @@
   "editChangePhoto": "ছবি পরিবর্তন করুন",
   "editProfileSaved": "প্রোফাইল আপডেট করা হয়েছে",
   "editProfileSaveError": "আপনার পরিবর্তনগুলো সংরক্ষণ করা যায়নি",
+  "editGenderUndisclosed": "না বলতে পছন্দ করেন",
+  "editNameInvalid": "আপনার নাম লিখুন (কমপক্ষে 2 অক্ষর)",
+  "editEmailInvalid": "একটি বৈধ ইমেল ঠিকানা লিখুন",
+  "editPhone": "মোবাইল নম্বর",
+  "editPhoneLocked": "আপনার লগইন নম্বর পরিবর্তন করা যাবে না",
+  "editSectionPersonal": "ব্যক্তিগত বিবরণ",
+  "editSectionContact": "যোগাযোগ",
+  "editDobPlaceholder": "আপনার জন্ম তারিখ যোগ করুন",
+  "editPhotoUpdated": "ফটো আপডেট করা হয়েছে",
   "editCountry": "দেশ",
   "chooseLanguage": "ভাষা চয়ন করুন",
   "chooseCurrency": "কারেন্সি চয়ন করুন",
@@ -248,82 +290,6 @@
   "referJoinedOn": "যোগ দিয়েছেন {date}",
   "referFirstCallDone": "প্রথম কল সম্পন্ন",
   "referShareText": "TalkAcharya-তে আমার কোড {code} ব্যবহার করুন এবং আপনার প্রথম জ্যোতিষ পরামর্শে {amount} ছাড় পান। {link}",
-  "errNetwork": "সার্ভারে পৌঁছানো যায়নি। আপনার সংযোগ পরীক্ষা করুন।",
-  "errTimeout": "সার্ভার প্রতিক্রিয়া জানাতে অনেক সময় নিচ্ছে।",
-  "errSession": "আপনার সেশনের মেয়াদ শেষ হয়ে গেছে। অনুগ্রহ করে আবার সাইন ইন করুন।",
-  "errWalletInsufficient": "এটির জন্য আপনার ওয়ালেট ব্যালেন্স খুব কম।",
-  "errRateLimited": "অনেকবার চেষ্টা করা হয়েছে। অনুগ্রহ করে কিছুক্ষণ অপেক্ষা করে আবার চেষ্টা করুন।",
-  "errOtpInvalid": "কোডটি ভুল বা এর মেয়াদ শেষ হয়ে গেছে।",
-  "errOtpMaxAttempts": "অনেকবার ভুল চেষ্টা করা হয়েছে। একটি নতুন কোড অনুরোধ করুন।",
-  "errPromoNotRedeemable": "এই কুপন কোডটি ব্যবহার করা যাবে না।",
-  "errRechargeInvalidAmount": "অনুমোদিত সীমার মধ্যে একটি পরিমাণ লিখুন।",
-  "errAuthWrongApp": "এই নম্বরটি অন্য TalkAcharya অ্যাপের জন্য নিবন্ধিত।",
-  "errGeneric": "কিছু ভুল হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
-  "homeOnlineNow": "এখন অনলাইনে",
-  "astroCouldntLoad": "জ্যোতিষীদের লোড করা যায়নি",
-  "astroSortBy": "অনুসারে সাজান",
-  "astroLoadMoreFailed": "আরও লোড করা সম্ভব হয়নি",
-  "astroDefaultSkill": "বৈদিক জ্যোতিষশাস্ত্র",
-  "astroYears": "{count} বছর",
-  "@astroYears": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "astroSessions": "{count} সেশন",
-  "@astroSessions": {
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "astroChat": "চ্যাট",
-  "astroCall": "কল করুন",
-  "astroVideo": "ভিডিও",
-  "astroProfileTitle": "জ্যোতিষী",
-  "astroAboutTitle": "সম্পর্কে",
-  "astroRatesTitle": "পরামর্শের হার",
-  "astroReviewsCount": "{count, plural, =0{No reviews yet} one{1 review} other{{count} reviews}}",
-  "@astroReviewsCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "astroStatRating": "রেটিং",
-  "astroStatExperience": "অভিজ্ঞতা",
-  "astroStatSessions": "অধিবেশন",
-  "astroStatRepeatClients": "পুনরাবৃত্ত গ্রাহক",
-  "astroSpeaks": "{languages} বলতে পারে",
-  "@astroSpeaks": {
-    "placeholders": {
-      "languages": {
-        "type": "String"
-      }
-    }
-  },
-  "astroRepliesIn": "উত্তর আসতে ~ {time} লাগবে।",
-  "@astroRepliesIn": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
-  "astroOnlineNow": "এখন অনলাইনে",
-  "astroOfflineTitle": "বর্তমানে অফলাইন",
-  "astroNotifyWhenOnline": "অনলাইনে থাকলে আমাকে জানান",
-  "astroReadMore": "আরও পড়ুন",
-  "astroReadLess": "কম দেখান",
-  "astroCouldntLoadOne": "এই জ্যোতিষীকে লোড করা যায়নি।",
-  "astroCallsComingSoon": "ভয়েস ও ভিডিও কল শীঘ্রই আসছে",
-  "astroTrustLine": "পরিচয়পত্র যাচাইকৃত · ব্যক্তিগত ও গোপনীয় · মিনিট অনুযায়ী মূল্য পরিশোধ করুন",
-  "profileHapticFeedback": "স্পর্শজনিত প্রতিক্রিয়া",
-  "profileHapticFeedbackDesc": "বোতাম এবং ইন্টারঅ্যাকশনগুলিতে কম্পন",
   "kundaliYogasDoshasTitle": "যোগ ও দোষ",
   "kundaliTabDoshas": "দোষ",
   "kundaliTabYogas": "যোগ",
@@ -339,13 +305,6 @@
   "doshaWhy": "কেন এটি চিহ্নিত করা হয়েছে",
   "doshaWhatReduces": "কী এটিকে হ্রাস করে",
   "doshaReducedNote": "{count, plural, one{One classical factor} other{{count} classical factors}} in your chart ease this.",
-  "@doshaReducedNote": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "doshaClearSectionTitle": "পরিষ্কার — আপনার চার্টে নেই",
   "doshaAllClear": "আপনার জন্মছকে কোনো সাধারণ দোষই উপস্থিত নেই।",
   "doshaAskCta": "একজন জ্যোতিষীকে জিজ্ঞাসা করুন এর অর্থ আপনার জন্য কী।",
@@ -380,53 +339,18 @@
   "predSeePacks": "প্যাকগুলি দেখুন",
   "predSubscribed": "সাবস্ক্রাইব করা হয়েছে",
   "predCredits": "{count, plural, =1{1 credit} other{{count} credits}}",
-  "@predCredits": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "predBuyTitle": "ভবিষ্যদ্বাণীর কৃতিত্ব",
   "predBuyBody": "এক ক্রেডিট = একটি লিখিত পূর্বাভাস। একটি প্যাক কিনুন এবং যখনই আপনার রিডিং প্রয়োজন হবে, তা প্রস্তুত থাকবে।",
   "predBuyWalletNote": "আপনার ওয়ালেট ব্যালেন্স থেকে পরিশোধ করা হয়েছে।",
   "predPackName": "{count, plural, =1{1 credit} other{Pack of {count}}}",
-  "@predPackName": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "predPackPer": "প্রতি ক্রেডিটে {price}",
-  "@predPackPer": {
-    "placeholders": {
-      "price": {
-        "type": "String"
-      }
-    }
-  },
   "predBuySuccess": "যোগ করা হয়েছে। এখন আপনার {count} টি ক্রেডিট আছে।",
-  "@predBuySuccess": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "predForProfile": "কোন জন্ম প্রোফাইলের জন্য",
   "predAddProfile": "জন্ম প্রোফাইল যোগ করুন",
   "predPickProfile": "প্রথমে একটি জন্ম প্রোফাইল বেছে নিন।",
   "predArea": "জীবনের ক্ষেত্র",
   "predPeriod": "সময়কাল",
   "predCostsOne": "আপনার {count} ক্রেডিটের মধ্যে ১টি ব্যবহার করে।",
-  "@predCostsOne": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "predNoCreditYet": "আপনার একটি ক্রেডিট লাগবে — আমরা এরপর প্যাকগুলো দেখাবো।",
   "predRequestCta": "পূর্বাভাস অনুরোধ করুন",
   "predRequestDisclaimer": "জ্যোতিষী আপনার জন্মছক, দশা এবং গোচরের উপর ভিত্তি করে ভবিষ্যদ্বাণী করেন। জ্যোতিষশাস্ত্র হলো আত্মচিন্তা ও পরিকল্পনার জন্য একটি পথনির্দেশনা, কোনো নিশ্চয়তা নয়।",
@@ -445,31 +369,10 @@
   "predStatusUnavailable": "উপলব্ধ নয়",
   "predStatusRefunded": "ফেরত দেওয়া হয়েছে",
   "predDeliveredOn": "{date} -এ বিতরণ করা হয়েছে",
-  "@predDeliveredOn": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
   "predEta": "{date} এর মধ্যে প্রত্যাশিত।",
-  "@predEta": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
   "predWritingTitle": "একজন জ্যোতিষী এটি লিখছেন।",
   "predWritingBody": "প্রস্তুত হওয়া মাত্রই আমরা আপনাকে একটি বিজ্ঞপ্তি পাঠিয়ে দেব।",
   "predWritingEta": "{date} মধ্যে পাওয়ার আশা করা হচ্ছে। প্রস্তুত হয়ে গেলে আমরা আপনাকে জানিয়ে দেব।",
-  "@predWritingEta": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
   "predRefundedTitle": "ক্রেডিট ফেরত দেওয়া হয়েছে",
   "predRefundedBody": "আমরা সময়মতো এটি সরবরাহ করতে পারিনি, তাই আপনার ক্রেডিট আপনার অ্যাকাউন্টে ফেরত দেওয়া হয়েছে।",
   "predDisclaimer": "আপনার জন্মছক, দশা এবং বর্তমান গোচরের উপর ভিত্তি করে একজন জ্যোতিষী এটি আপনার জন্য লিখেছেন। জ্যোতিষশাস্ত্র হলো আত্ম-প্রতিফলন এবং পরিকল্পনার জন্য একটি পথনির্দেশনা — সিদ্ধান্ত এবং তার ফলাফল আপনারই থাকবে।",
@@ -481,13 +384,6 @@
   "remediesAskCta": "আপনার প্রতিকার সম্পর্কে একজন জ্যোতিষীর সাথে কথা বলুন।",
   "remediesConfirmCta": "প্রথমে একজন জ্যোতিষীর সাথে নিশ্চিত হয়ে নিন।",
   "remediesSource": "উৎস: {source}",
-  "@remediesSource": {
-    "placeholders": {
-      "source": {
-        "type": "String"
-      }
-    }
-  },
   "doshaSeeRemedies": "আপনার চার্টের প্রতিকারগুলো দেখুন",
   "remedyCatMantra": "মন্ত্র ও জপ",
   "remedyCatStotra": "স্তোত্র ও আবৃত্তি",
@@ -504,13 +400,6 @@
   "prashnaAbout": "প্রশ্নটি কী বিষয়ে?",
   "prashnaHint": "যেমন, আমি কি এই চাকরির প্রস্তাবটি পাব?",
   "prashnaAskCta": "জিজ্ঞাসা করুন ( {price} )",
-  "@prashnaAskCta": {
-    "placeholders": {
-      "price": {
-        "type": "String"
-      }
-    }
-  },
   "prashnaDisclaimer": "আপনার জিজ্ঞাসার মুহূর্তের একটি কেপি হোরালি রিডিং। এটি একটি প্রচলিত পদ্ধতির নির্দেশক — কোনো প্রতিশ্রুতি নয়, এবং এটি পূর্ণাঙ্গ পরামর্শের বিকল্পও নয়।",
   "prashnaNeedQuestion": "প্রথমে একটি বিষয় বেছে নিন এবং আপনার প্রশ্নটি টাইপ করুন।",
   "prashnaLowBalance": "আপনার ওয়ালেট ব্যালেন্স খুব কম। অনুরোধ করতে টাকা যোগ করুন।",
@@ -520,13 +409,6 @@
   "prashnaAskAstrologer": "একজন জ্যোতিষীর সাথে বিষয়টি নিয়ে আলোচনা করুন",
   "prashnaHowRead": "এটি কীভাবে পড়া হয়েছিল",
   "prashnaConfidence": "{level, plural, =0{unclear} =1{weak} =2{moderate} other{clear}} indication",
-  "@prashnaConfidence": {
-    "placeholders": {
-      "level": {
-        "type": "int"
-      }
-    }
-  },
   "prashnaVerdictYes": "হ্যাঁ-এর দিকে ঝুঁকছি",
   "prashnaVerdictNo": "ঝুঁকে না",
   "prashnaVerdictMixed": "মিশ্র সংকেত",
@@ -643,6 +525,15 @@
   "kSignCapricorn": "শৃঙ্খলাপরায়ণ, উচ্চাকাঙ্ক্ষী, দীর্ঘমেয়াদী পরিকল্পনা করে",
   "kSignAquarius": "স্বাধীন, ব্যবস্থা-মনস্ক, অপ্রচলিত",
   "kSignPisces": "কল্পনাপ্রবণ, সহানুভূতিশীল, সীমাহীন",
+  "kPlanetNameSun": "সূর্য",
+  "kPlanetNameMoon": "চাঁদ",
+  "kPlanetNameMars": "মঙ্গল",
+  "kPlanetNameMercury": "বুধ",
+  "kPlanetNameJupiter": "বৃহস্পতি",
+  "kPlanetNameVenus": "শুক্র",
+  "kPlanetNameSaturn": "শনি",
+  "kPlanetNameRahu": "রাহু",
+  "kPlanetNameKetu": "কেতু",
   "kPlanetSun": "আত্মা, আত্মবিশ্বাস, পিতা, কর্তৃত্ব",
   "kPlanetMoon": "মন, আবেগ, মা, আরাম",
   "kPlanetMars": "চালিকাশক্তি, সাহস, রাগ, ভাইবোন",
@@ -714,23 +605,7 @@
   "kSadeSatiSetting": "সূচনা পর্ব — শনি আপনার চন্দ্র থেকে দ্বিতীয় রাশিতে অবস্থান করছে। মনের ভার কমে যায়। অর্থ ও পরিবার স্থিতিশীল হয়; বিগত বছরগুলোর শিক্ষা ফল দিতে শুরু করে।",
   "kSadeSatiGeneric": "শনি আপনার চন্দ্রের চারপাশের রাশিগুলোতে পরিভ্রমণ করছে।",
   "kPlanetInSignHouse": "আপনার {sign} থাকা {planet} আপনাকে {signTrait} প্রদান করে। {house} -এ এটি {houseTheme} -কে স্পর্শ করে।",
-  "@kPlanetInSignHouse": {
-    "placeholders": {
-      "planet": {},
-      "sign": {},
-      "signTrait": {},
-      "house": {},
-      "houseTheme": {}
-    }
-  },
   "kPlanetInSign": "Your {planet} in {sign} makes you {signTrait}.",
-  "@kPlanetInSign": {
-    "placeholders": {
-      "planet": {},
-      "sign": {},
-      "signTrait": {}
-    }
-  },
   "kHouseSans1": "তনু ভাব",
   "kHouseSans2": "ধন ভাব",
   "kHouseSans3": "সহজ ভাব",
@@ -744,147 +619,27 @@
   "kHouseSans11": "লাভ ভাব",
   "kHouseSans12": "ব্যবহার ভাব",
   "kHouseTitleWithSign": "{sign} · {theme}",
-  "@kHouseTitleWithSign": {
-    "placeholders": {
-      "sign": {},
-      "theme": {}
-    }
-  },
   "kHouseSheetTitle": "{ordinal} ঘর · {sign}",
-  "@kHouseSheetTitle": {
-    "placeholders": {
-      "ordinal": {},
-      "sign": {}
-    }
-  },
   "kHouseSheetSubtitle": "{sanskrit} — {theme}",
-  "@kHouseSheetSubtitle": {
-    "placeholders": {
-      "sanskrit": {},
-      "theme": {}
-    }
-  },
   "kHouseChipLord": "গৃহকর্তা · {lord}",
-  "@kHouseChipLord": {
-    "placeholders": {
-      "lord": {}
-    }
-  },
   "kHouseChipLordIn": "{nthHouse} গৃহে প্রভু",
-  "@kHouseChipLordIn": {
-    "placeholders": {
-      "nthHouse": {}
-    }
-  },
   "kHouseNoPlanets": "এই ঘরে কোনো গ্রহ অবস্থান করে না। এর কাহিনী প্রধানত এর অধিপতি দ্বারা বর্ণিত হয়, {lord} {lordWhere} ।",
-  "@kHouseNoPlanets": {
-    "placeholders": {
-      "lord": {},
-      "lordWhere": {}
-    }
-  },
   "kHouseLordWhere": "এখন {nthHouse} এ",
-  "@kHouseLordWhere": {
-    "placeholders": {
-      "nthHouse": {}
-    }
-  },
   "kHousePlanetsHeader": "এই ঘরে গ্রহগুলি",
   "kHouseAskCta": "আপনার {ordinal} ভাব সম্পর্কে একজন জ্যোতিষীকে জিজ্ঞাসা করুন।",
-  "@kHouseAskCta": {
-    "placeholders": {
-      "ordinal": {}
-    }
-  },
   "kHouseReadingLord": "আপনার {ordinal} ঘরের অধিপতি {lord} {nthHouse} এ বসে আছেন, তাই {theme} {lordTheme} এর সাথে সংযুক্ত।",
-  "@kHouseReadingLord": {
-    "placeholders": {
-      "ordinal": {},
-      "lord": {},
-      "nthHouse": {},
-      "theme": {},
-      "lordTheme": {}
-    }
-  },
   "kHouseReadingOccupant": "এখানে {planet} তার থিমগুলো — {planetTheme} — {theme} এর মধ্যে নিয়ে আসে।",
-  "@kHouseReadingOccupant": {
-    "placeholders": {
-      "planet": {},
-      "planetTheme": {},
-      "theme": {}
-    }
-  },
   "kHouseReadingEmpty": "এই ভাবটি এর অধিপতি এবং যে গ্রহগুলি একে দৃষ্টি দেয়, তাদের মাধ্যমে পড়া হয়। একজন জ্যোতিষী আপনাকে এটি বুঝিয়ে দিতে পারেন।",
   "kBhavaSubheadKaraka": "কারাকা {karaka}",
-  "@kBhavaSubheadKaraka": {
-    "placeholders": {
-      "karaka": {}
-    }
-  },
   "kBhavaSubheadLord": "প্রভু {lord} , {nthHouse}",
-  "@kBhavaSubheadLord": {
-    "placeholders": {
-      "lord": {},
-      "nthHouse": {}
-    }
-  },
   "kBhavaSubheadLordOnly": "প্রভু {lord}",
-  "@kBhavaSubheadLordOnly": {
-    "placeholders": {
-      "lord": {}
-    }
-  },
   "kBhavaReadingGoverns": "এই ভবনটি {theme} পরিচালনা করে।",
-  "@kBhavaReadingGoverns": {
-    "placeholders": {
-      "theme": {}
-    }
-  },
   "kBhavaReadingLord": "এর অধিপতি {lord} {nthHouse} এ আছেন, তাই {theme} {lordTheme} এর সাথে সংযুক্ত। {dignity} {occupants}",
-  "@kBhavaReadingLord": {
-    "placeholders": {
-      "lord": {},
-      "nthHouse": {},
-      "theme": {},
-      "lordTheme": {},
-      "dignity": {},
-      "occupants": {}
-    }
-  },
   "kBhavaReadingDignity": " প্রভু হলেন {dignity} ।",
-  "@kBhavaReadingDignity": {
-    "placeholders": {
-      "dignity": {}
-    }
-  },
   "kBhavaReadingOccupants": " {planets} এখানে বসে {themes} যোগ করছে।",
-  "@kBhavaReadingOccupants": {
-    "placeholders": {
-      "planets": {},
-      "themes": {}
-    }
-  },
   "kTransitHouseLine": "আপনার {nthHouse} · {theme}",
-  "@kTransitHouseLine": {
-    "placeholders": {
-      "nthHouse": {},
-      "theme": {}
-    }
-  },
   "kPlanetRowMeta": "{sign} · {nthHouse} · {degree} °",
-  "@kPlanetRowMeta": {
-    "placeholders": {
-      "sign": {},
-      "nthHouse": {},
-      "degree": {}
-    }
-  },
   "kLagnaLordIn": "{nthHouse} -এ",
-  "@kLagnaLordIn": {
-    "placeholders": {
-      "nthHouse": {}
-    }
-  },
   "kDignityShortExalted": "মহিমান্বিত",
   "kDignityShortMoolatrikona": "মূলাত্রিকোণ",
   "kDignityShortOwn": "নিজের",
@@ -907,128 +662,24 @@
   "ovRoleMother": "মাদার সিগনিফিকেটর",
   "ovRoleGeneric": "সংকেতকারী",
   "ovfPada": "পদ {pada}",
-  "@ovfPada": {
-    "placeholders": {
-      "pada": {
-        "type": "int"
-      }
-    }
-  },
   "ovfLagnaSign": "উদীয়মান রাশি {sign}",
-  "@ovfLagnaSign": {
-    "placeholders": {
-      "sign": {}
-    }
-  },
   "ovfLagnaLord": "লগ্নপতি {planet} {nthHouse} {dignity}",
-  "@ovfLagnaLord": {
-    "placeholders": {
-      "planet": {},
-      "nthHouse": {},
-      "dignity": {}
-    }
-  },
   "ovfHouseLord": "{ordinal} -ভাব অধিপতি {planet} {nthHouse}",
-  "@ovfHouseLord": {
-    "placeholders": {
-      "ordinal": {},
-      "planet": {},
-      "nthHouse": {}
-    }
-  },
   "ovfHouseStrength": "{ordinal} ঘর — {strength}",
-  "@ovfHouseStrength": {
-    "placeholders": {
-      "ordinal": {},
-      "strength": {}
-    }
-  },
   "ovfMoonSign": "{sign} তে চাঁদ",
-  "@ovfMoonSign": {
-    "placeholders": {
-      "sign": {}
-    }
-  },
   "ovfMoonHouse": "{nthHouse} চাঁদ",
-  "@ovfMoonHouse": {
-    "placeholders": {
-      "nthHouse": {}
-    }
-  },
   "ovfMoonNakshatra": "চন্দ্র নক্ষত্র {nakshatra}",
-  "@ovfMoonNakshatra": {
-    "placeholders": {
-      "nakshatra": {}
-    }
-  },
   "ovfMoonDignity": "চাঁদ {dignity}",
-  "@ovfMoonDignity": {
-    "placeholders": {
-      "dignity": {}
-    }
-  },
   "ovfSunSign": "{sign} রাশিতে সূর্য",
-  "@ovfSunSign": {
-    "placeholders": {
-      "sign": {}
-    }
-  },
   "ovfSeventhSign": "{sign} তে ৭ম ভাব",
-  "@ovfSeventhSign": {
-    "placeholders": {
-      "sign": {}
-    }
-  },
   "ovfPlanetInHouse": "{planet} in the {nthHouse}",
-  "@ovfPlanetInHouse": {
-    "placeholders": {
-      "planet": {},
-      "nthHouse": {}
-    }
-  },
   "ovfPlanetWithMoon": "চাঁদের সাথে {planet}",
-  "@ovfPlanetWithMoon": {
-    "placeholders": {
-      "planet": {}
-    }
-  },
   "ovfAppearanceIn": "প্রথম ঘরে {planet}",
-  "@ovfAppearanceIn": {
-    "placeholders": {
-      "planet": {}
-    }
-  },
   "ovfAppearanceAspect": "প্রথম ভাবের উপর {planet} র দৃষ্টি",
-  "@ovfAppearanceAspect": {
-    "placeholders": {
-      "planet": {}
-    }
-  },
   "ovfMaleficOnLagna": "লগ্নের উপর {planet} চাপ দিচ্ছে",
-  "@ovfMaleficOnLagna": {
-    "placeholders": {
-      "planet": {}
-    }
-  },
   "ovfKaraka": "{role} : {planet}",
-  "@ovfKaraka": {
-    "placeholders": {
-      "role": {},
-      "planet": {}
-    }
-  },
   "ovfYoga": "যোগ — {name}",
-  "@ovfYoga": {
-    "placeholders": {
-      "name": {}
-    }
-  },
   "ovfDosha": "দোষ — {name}",
-  "@ovfDosha": {
-    "placeholders": {
-      "name": {}
-    }
-  },
   "doshaMangalName": "মঙ্গল দোষ",
   "doshaMangalMeaning": "সংবেদনশীল ঘরে মঙ্গল — ঐতিহ্যগতভাবে বিবাহের আগে এর গুরুত্ব বিচার করা হয়। প্রায়শই ভারসাম্যপূর্ণ হয় যখন উভয় সঙ্গী মাঙ্গলিক হন অথবা বৃহস্পতি মঙ্গলকে প্রভাবিত করে।",
   "doshaKaalSarpaName": "কাল সর্প দোষ",
@@ -1066,27 +717,7 @@
   "birthDetailsSunset": "সূর্যাস্ত",
   "birthDetailsIshtaKala": "ইষ্টা কলা",
   "birthDetailsPada": "পাদা {count}",
-  "@birthDetailsPada": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "birthDetailsGhatiPala": "{ghati} ঘাটি {pala} পাল {vipala} বিপলা",
-  "@birthDetailsGhatiPala": {
-    "placeholders": {
-      "ghati": {
-        "type": "int"
-      },
-      "pala": {
-        "type": "int"
-      },
-      "vipala": {
-        "type": "int"
-      }
-    }
-  },
   "birthDetailsNakshatraLord": "নক্ষত্রের অধিপতি",
   "birthDetailsRashiLord": "রাশি প্রভু",
   "birthDetailsVarna": "বর্ণ",
@@ -1118,13 +749,6 @@
   "roomAppBarTitle": "পরামর্শ",
   "roomOpenError": "আমরা এই পরামর্শটি খুলতে পারিনি।",
   "roomWaitingTitle": "{name} এর গ্রহণের জন্য অপেক্ষা করা হচ্ছে।",
-  "@roomWaitingTitle": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "roomWaitingBody": "সাধারণত এক মিনিটেরও কম সময় লাগে। তারা যোগ দেওয়ার সাথে সাথেই আমরা চ্যাটটি খুলে দেব।",
   "roomCancelRequest": "অনুরোধ বাতিল করুন",
   "roomEndConfirmTitle": "এই পরামর্শ শেষ করবেন?",
@@ -1136,45 +760,14 @@
   "roomEndedTitle": "পরামর্শ শেষ হয়েছে",
   "roomBalanceOutTitle": "আপনার ব্যালেন্স শেষ হয়ে গেছে",
   "roomBalanceOutBody": "আপনার ওয়ালেট ব্যালেন্স শেষ হয়ে যাওয়ায় চ্যাটটি শেষ হয়ে গেছে। {name} এর সাথে চালিয়ে যেতে রিচার্জ করুন এবং আবার শুরু করুন।",
-  "@roomBalanceOutBody": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "roomRechargeWallet": "রিচার্জ ওয়ালেট",
   "roomStartAgain": "{name} দিয়ে আবার শুরু করুন।",
-  "@roomStartAgain": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "roomRowAstrologer": "জ্যোতিষী",
   "roomRowDuration": "সময়কাল",
   "roomRowAmount": "পরিমাণ",
   "roomRowRate": "রেট",
   "roomMinutes": "{minutes} মিনিট",
-  "@roomMinutes": {
-    "placeholders": {
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
   "roomRatePerMinute": "{currency} {amount} /মিনিট",
-  "@roomRatePerMinute": {
-    "placeholders": {
-      "currency": {
-        "type": "String"
-      },
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
   "roomRateQuestion": "আপনার পরামর্শ কেমন ছিল?",
   "roomSubmitRating": "রেটিং জমা দিন",
   "roomRatingThanks": "মতামতের জন্য ধন্যবাদ!",
@@ -1186,27 +779,7 @@
   "roomStatusClosed": "পরামর্শ বন্ধ।",
   "roomBalanceRunningOut": "ব্যালেন্স ফুরিয়ে আসছে",
   "roomMinLeftRecharge": "~ {minutes} মিনিট বাকি · কথা বলতে থাকলে রিচার্জ করুন",
-  "@roomMinLeftRecharge": {
-    "placeholders": {
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
   "roomSpentMinLeft": "{currency} {amount} ব্যয়িত · ~ {minutes} মিনিট বাকি",
-  "@roomSpentMinLeft": {
-    "placeholders": {
-      "currency": {
-        "type": "String"
-      },
-      "amount": {
-        "type": "String"
-      },
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
   "roomAddMoney": "টাকা যোগ করুন",
   "roomClientBalanceLow": "ক্লায়েন্টের ব্যালেন্স কম — শীঘ্রই শেষ করুন।",
   "navChats": "চ্যাট",
@@ -1220,13 +793,6 @@
   "chatsStatusWaiting": "জ্যোতিষীর অনুমোদনের অপেক্ষায়।",
   "chatsStatusLive": "এখন লাইভ · খুলতে ট্যাপ করুন",
   "chatsStatusEnded": "{minutes} মিনিটের পরামর্শ",
-  "@chatsStatusEnded": {
-    "placeholders": {
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
   "chatsStatusCancelled": "বাতিল করা হয়েছে",
   "chatsStatusRejected": "গ্রহণযোগ্য নয়",
   "chatsStatusExpired": "অনুরোধের মেয়াদ শেষ হয়ে গেছে",
@@ -1237,13 +803,6 @@
   "numBhagyank": "ভাগ্যঙ্ক · নিয়তি সংখ্যা",
   "numNaamank": "নামাঙ্ক · নাম নম্বর",
   "numRuledBy": "{planet} দ্বারা শাসিত",
-  "@numRuledBy": {
-    "placeholders": {
-      "planet": {
-        "type": "String"
-      }
-    }
-  },
   "numFriendly": "বন্ধুত্বপূর্ণ",
   "numNeutral": "নিরপেক্ষ",
   "numUnfriendly": "সংঘর্ষ",
@@ -1254,33 +813,12 @@
   "numGemstone": "ঐতিহ্যবাহী রত্নপাথর",
   "numLoShuTitle": "লো শু জন্ম গ্রিড",
   "numLoShuMissing": "আপনার গ্রিডে নেই: {nums}",
-  "@numLoShuMissing": {
-    "placeholders": {
-      "nums": {
-        "type": "String"
-      }
-    }
-  },
   "numLoShuRepeated": "জোর দেওয়া হয়েছে: {nums}",
-  "@numLoShuRepeated": {
-    "placeholders": {
-      "nums": {
-        "type": "String"
-      }
-    }
-  },
   "numArrowStrength": "সম্পূর্ণ লাইন",
   "numArrowAbsence": "অনুপস্থিত লাইন",
   "numAskCta": "এই বিষয়ে একজন জ্যোতিষীর সাথে কথা বলুন।",
   "sadeSatiTitle": "সাদে সাতি ও ধাইয়া ক্যালেন্ডার",
   "sadeSatiIntro": "আপনার চন্দ্র রাশি থেকে গণনা করা, আপনার জীবনের উপর শনির কালানুক্রমিক প্রভাব {sign} সাড়ে সাতি হলো চন্দ্র থেকে দ্বাদশ, প্রথম ও দ্বিতীয় ঘরে শনির অবস্থান (প্রায় সাড়ে ৭ বছর); ধাইয়া হলো চতুর্থ বা অষ্টম ঘরে অবস্থান (প্রায় আড়াই বছর)।",
-  "@sadeSatiIntro": {
-    "placeholders": {
-      "sign": {
-        "type": "String"
-      }
-    }
-  },
   "sadeSatiRunningNow": "এখন চলছে",
   "sadeSatiPast": "অতীত",
   "sadeSatiUpcoming": "আসন্ন",
@@ -1291,38 +829,74 @@
   "sadeSatiPhaseAshtama": "অষ্টমা · অষ্টম ঘরে শনি",
   "sadeSatiDhaiyaHeading": "ধাইয়া (ছোট পানোটি) সময়কাল",
   "sadeSatiRange": "{start} → {end}",
-  "@sadeSatiRange": {
-    "placeholders": {
-      "start": {
-        "type": "String"
-      },
-      "end": {
-        "type": "String"
-      }
-    }
-  },
   "avTransitHeading": "আজকের গ্রহগুলির অষ্টক বর্গ শক্তি",
   "avTransitIntro": "আপনার জন্মবিন্দু স্কোর অনুযায়ী, প্রতিটি গ্রহের গোচর কতটা অবাধে ফল দেয়। ৮-এর মধ্যে ৫ বা তার বেশি হলে সহায়ক, ৪ হলে মিশ্র এবং এর চেয়ে কম হলে দুর্বল।",
   "avTransitBindus": "{bindus} /৮ বিন্দু",
-  "@avTransitBindus": {
-    "placeholders": {
-      "bindus": {
-        "type": "int"
-      }
-    }
-  },
   "avTransitUpcoming": "আসছে",
   "avTransitInHouse": "{planet} in your {house} house",
-  "@avTransitInHouse": {
-    "placeholders": {
-      "planet": {
-        "type": "String"
-      },
-      "house": {
-        "type": "String"
-      }
-    }
-  },
+  "muhurtaTitle": "আজকের টাইমিং",
+  "muhurtaIntro": "আজকের জন্য চোঘদিয়া এবং হোরা, আপনার জন্ম শহরের জন্য কাজ করেছেন এবং আপনার চার্টের সহায়ক গ্রহগুলিতে ব্যক্তিগতকৃত করেছেন। জিনিসগুলি শুরু করার জন্য আরও ভাল এবং দুর্বল উইন্ডোগুলির জন্য একটি নির্দেশিকা - একটি নিয়ম নয়।",
+  "muhurtaSunTimes": "{sunrise} সূর্যোদয় · {sunset} সূর্যাস্ত · {weekday} ( {lord} )",
+  "muhurtaBestWindows": "আজ আপনার জন্য সেরা উইন্ডোজ",
+  "muhurtaNoBest": "আজ কোন স্ট্যান্ড-আউট উইন্ডো নেই — নীচে থেকে একটি ভাল চোঘদিয়া বেছে নিন।",
+  "muhurtaDayChoghadiya": "দিন চোৰাদিয়া",
+  "muhurtaNightChoghadiya": "রাত চোঘদিয়া",
+  "muhurtaHora": "গ্রহের হোরা",
+  "muhurtaNow": "এখন",
+  "muhurtaChoGood": "ভাল",
+  "muhurtaChoBad": "এড়িয়ে চলুন",
+  "muhurtaChoNeutral": "নিরপেক্ষ",
+  "muhurtaHoraFavourable": "আপনার জন্য ভাল",
+  "muhurtaHoraCaution": "হালকা রাখুন",
+  "upayaTitle": "রত্নপাথর ও উপয়া",
+  "upayaIntro": "আপনার আরোহণের জন্য শাস্ত্রীয় প্রতিকারের সারণী ( {sign} ) — অনুকূল রং, দিন, দেবতা, মন্ত্র এবং দাতব্য আপনি অবাধে গ্রহণ করতে পারেন, এছাড়াও প্রতিটি গ্রহের জন্য ঐতিহ্যবাহী রত্নপাথর এবং রুদ্রাক্ষ।",
+  "upayaLagnaFavourable": "আপনার আরোহণের জন্য অনুকূল",
+  "upayaColours": "রং",
+  "upayaDirection": "দিকনির্দেশনা",
+  "upayaDay": "দিন",
+  "upayaDeity": "দেবতা",
+  "upayaStrengthen": "সমর্থন",
+  "upayaPacify": "শান্ত করা",
+  "upayaMixed": "মিশ্র",
+  "upayaNeutral": "নিরপেক্ষ",
+  "upayaFreeMeasures": "বিনামূল্যে ব্যবস্থা",
+  "upayaMantra": "মন্ত্র",
+  "upayaCharity": "দাতব্য (দান)",
+  "upayaGemstone": "রত্নপাথর",
+  "upayaRudraksha": "রুদ্রাক্ষ",
+  "upayaGatedCta": "আগে একজন জ্যোতিষীর সাথে কনফার্ম করুন",
+  "upayaPriority": "অগ্রাধিকার",
+  "lalKitabTitle": "লাল কিতাব - ঋণ এবং প্রতিকার",
+  "lalKitabIntro": "লাল কিতাব আপনার চার্ট থেকে কিছু উত্তরাধিকারসূত্রে প্রাপ্ত ঋণ (রিন) পড়ে এবং প্রতিটি সহজ, বিনামূল্যে পারিবারিক কাজ (টোটকে) দিয়ে পরিষ্কার করে। রত্নপাথর নেই, খরচ নেই।",
+  "lalKitabActiveDebts": "সক্রিয় ঋণ",
+  "lalKitabNoDebts": "কোন দৃঢ়ভাবে সক্রিয় রিন - দৈনন্দিন দায়িত্ব পালন করুন এবং কিছুই তৈরি হয় না।",
+  "lalKitabWhyFlagged": "কেন এটা পতাকাঙ্কিত",
+  "lalKitabRemedy": "প্রতিকার (টোটকা)",
+  "lalKitabWeakPlanets": "দুর্বল গ্রহ বসানো",
+  "lalKitabAllRemedies": "আপনার প্রতিকার",
+  "lalKitabPakkaGhar": "{planet} এর বাড়ির বাড়ি হল {house}",
+  "varshphalTitle": "বর্ষফল—এই বছরের চার্ট",
+  "varshphalIntro": "আপনার {age} -বছরের জন্য তাজিকা বার্ষিক চার্ট, সূর্য তার জন্ম অবস্থানে ফিরে আসার মুহুর্তের জন্য কাস্ট। থিমগুলির সাথে কাজ করতে হবে — নির্দিষ্ট ইভেন্ট নয়৷",
+  "varshphalWindow": "{start} → {end}",
+  "varshphalLagna": "বর্ষা লগ্ন",
+  "varshphalMuntha": "মুনথা",
+  "varshphalYearLord": "বছরের অধিপতি (বর্ষেশ্বর)",
+  "varshphalTajika": "তাজিকা দিক",
+  "varshphalMunthaLine": "{house} ঘরে মুনথা — {theme}",
+  "varshphalChart": "বার্ষিক চার্ট গ্রহ",
+  "prefsTransitAlerts": "ট্রানজিট সতর্কতা",
+  "prefsTransitAlertsDesc": "যখন একটি ধীর গ্রহ (বৃহস্পতি, শনি) আপনার চার্টে একটি নতুন বাড়িতে সাইন পরিবর্তন করতে চলেছে তখন একটি সতর্কতা।",
+  "errNetwork": "সার্ভারে পৌঁছানো যায়নি। আপনার সংযোগ পরীক্ষা করুন।",
+  "errTimeout": "সার্ভার প্রতিক্রিয়া জানাতে অনেক সময় নিচ্ছে।",
+  "errSession": "আপনার সেশনের মেয়াদ শেষ হয়ে গেছে। অনুগ্রহ করে আবার সাইন ইন করুন।",
+  "errWalletInsufficient": "এটির জন্য আপনার ওয়ালেট ব্যালেন্স খুব কম।",
+  "errRateLimited": "অনেকবার চেষ্টা করা হয়েছে। অনুগ্রহ করে কিছুক্ষণ অপেক্ষা করে আবার চেষ্টা করুন।",
+  "errOtpInvalid": "কোডটি ভুল বা এর মেয়াদ শেষ হয়ে গেছে।",
+  "errOtpMaxAttempts": "অনেকবার ভুল চেষ্টা করা হয়েছে। একটি নতুন কোড অনুরোধ করুন।",
+  "errPromoNotRedeemable": "এই কুপন কোডটি ব্যবহার করা যাবে না।",
+  "errRechargeInvalidAmount": "অনুমোদিত সীমার মধ্যে একটি পরিমাণ লিখুন।",
+  "errAuthWrongApp": "এই নম্বরটি অন্য TalkAcharya অ্যাপের জন্য নিবন্ধিত।",
+  "errGeneric": "কিছু ভুল হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
   "homePanchangTitle": "আজকের পঞ্চাঙ্গ",
   "homeLiveNowTitle": "এখন সরাসরি সম্প্রচারিত হচ্ছে",
   "homeFreeToolsTitle": "বিনামূল্যে সরঞ্জাম",
@@ -1338,15 +912,813 @@
   "homeChooseLanguageTitle": "ভাষা নির্বাচন করুন",
   "homeLanguageTooltip": "ভাষা",
   "homeLanguageSwitchError": "পরিবর্তন করা যায়নি: {error}",
-  "@homeLanguageSwitchError": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "homeComingSoonSnackbar": "শীঘ্রই আসছে!",
   "homeTalkAgainTitle": "আবার কথা বলুন",
   "homeRechargeWalletTitle": "আপনার ওয়ালেট রিচার্জ করুন",
-  "homeTalkToAstrologerTitle": "একজন জ্যোতিষীর সাথে কথা বলুন"
+  "homeTalkToAstrologerTitle": "একজন জ্যোতিষীর সাথে কথা বলুন",
+  "kSignNameAries": "মেষ রাশি",
+  "kSignNameTaurus": "বৃষ",
+  "kSignNameGemini": "মিথুন",
+  "kSignNameCancer": "ক্যান্সার",
+  "kSignNameLeo": "লিও",
+  "kSignNameVirgo": "কুমারী",
+  "kSignNameLibra": "তুলা রাশি",
+  "kSignNameScorpio": "বৃশ্চিক",
+  "kSignNameSagittarius": "ধনু",
+  "kSignNameCapricorn": "মকর রাশি",
+  "kSignNameAquarius": "কুম্ভ",
+  "kSignNamePisces": "মীন",
+  "kNakNameAshwini": "অশ্বিনী",
+  "kNakNameBharani": "ভরণী",
+  "kNakNameKrittika": "কৃত্তিকা",
+  "kNakNameRohini": "রোহিণী",
+  "kNakNameMrigashira": "মৃগাশিরা",
+  "kNakNameArdra": "আরদ্রা",
+  "kNakNamePunarvasu": "পুনর্বাসু",
+  "kNakNamePushya": "পুষ্যা",
+  "kNakNameAshlesha": "আশলেশা",
+  "kNakNameMagha": "মাঘা",
+  "kNakNamePurvaPhalguni": "পূর্বা ফাল্গুনী",
+  "kNakNameUttaraPhalguni": "উত্তরা ফাল্গুনী",
+  "kNakNameHasta": "হস্ত",
+  "kNakNameChitra": "চিত্রা",
+  "kNakNameSwati": "স্বাতী",
+  "kNakNameVishakha": "বিশাখা",
+  "kNakNameAnuradha": "অনুরাধা",
+  "kNakNameJyeshtha": "জ্যেষ্ঠ",
+  "kNakNameMula": "মুলা",
+  "kNakNamePurvaAshadha": "পুর্ব আষাঢ়",
+  "kNakNameUttaraAshadha": "উত্তরা আষাঢ়",
+  "kNakNameShravana": "শ্রাবণ",
+  "kNakNameDhanishta": "ধনিষ্ট",
+  "kNakNameShatabhisha": "শতভীষা",
+  "kNakNamePurvaBhadrapada": "পূর্বা ভাদ্রপদ",
+  "kNakNameUttaraBhadrapada": "উত্তরা ভাদ্রপদ",
+  "kNakNameRevati": "রেবতী",
+  "kChartNameD1": "রাশি",
+  "kChartSigD1": "শারীরিক শরীর, সামগ্রিক জীবন, সবকিছু",
+  "kChartNameD2": "হোরা",
+  "kChartSigD2": "সম্পদ, আর্থিক সমৃদ্ধি",
+  "kChartNameD3": "ড্রেক্কানা",
+  "kChartSigD3": "ভাইবোন, সাহস, উদ্যোগ",
+  "kChartNameD4": "চতুর্থাংশ",
+  "kChartSigD4": "ভাগ্য, সম্পত্তি, স্থায়ী সম্পদ, বাড়ি",
+  "kChartNameD5": "পঞ্চমশা",
+  "kChartSigD5": "খ্যাতি, কর্তৃত্ব, আধ্যাত্মিক যোগ্যতা (পুণ্য)",
+  "kChartNameD6": "ষষ্ঠমশা",
+  "kChartSigD6": "স্বাস্থ্য, রোগ, ঋণ, শত্রু",
+  "kChartNameD7": "সপ্তমশা",
+  "kChartSigD7": "শিশু, বংশধর, সৃজনশীলতা",
+  "kChartNameD8": "অষ্টমশা",
+  "kChartSigD8": "আকস্মিক ঘটনা, দীর্ঘায়ু সমস্যা, বাধা",
+  "kChartNameD9": "নবমশা",
+  "kChartSigD9": "পত্নী, ধর্ম, অভ্যন্তরীণ স্ব - প্রাথমিক সমর্থন চার্ট",
+  "kChartNameD10": "দশমশা",
+  "kChartSigD10": "কর্মজীবন, পেশা, মর্যাদা, অর্জন",
+  "kChartNameD11": "রুদ্রমশা",
+  "kChartSigD11": "মৃত্যু, ধ্বংস, প্রতিকূলতা থেকে লাভ (লাভা)",
+  "kChartNameD12": "দ্বাদশমশা",
+  "kChartSigD12": "পিতা-মাতা, বংশ, উত্তরাধিকারসূত্রে প্রাপ্ত কর্ম",
+  "kChartNameD16": "শোদশমশা",
+  "kChartSigD16": "যানবাহন, আরাম, বিলাসিতা, সুখ",
+  "kChartNameD20": "বিমশামশা",
+  "kChartSigD20": "আধ্যাত্মিক অনুশীলন, উপাসনা, ভক্তি",
+  "kChartNameD24": "চতুর্ভিমাংশ",
+  "kChartSigD24": "শিক্ষা, শিক্ষা, জ্ঞান",
+  "kChartNameD27": "সপ্তভীমাংশ",
+  "kChartSigD27": "শক্তি এবং দুর্বলতা, সহনশীলতা",
+  "kChartNameD30": "ত্রিমশামশা",
+  "kChartSigD30": "দুর্ভাগ্য, মন্দ, নৈতিক চরিত্র",
+  "kChartNameD40": "চাটভারীমশামশা",
+  "kChartSigD40": "মাতৃ উত্তরাধিকার, শুভ/অশুভ প্রভাব",
+  "kChartNameD45": "অক্ষবেদমশা",
+  "kChartSigD45": "পৈতৃক উত্তরাধিকার, সামগ্রিক চরিত্র এবং আচরণ",
+  "kChartNameD60": "ষষ্ঠীমশা",
+  "kChartSigD60": "অতীত জীবনের কর্ম, সর্বোত্তম স্তর — সামগ্রিকভাবে",
+  "kChartNameMoon": "চাঁদের তালিকা (চন্দ্র)",
+  "kChartSigMoon": "মন এবং আবেগ - চাঁদ থেকে পড়া রাশি চার্ট",
+  "kChartNameChalit": "ভাব চলিত",
+  "kChartSigChalit": "প্রকৃত ভব কুপস (শ্রীপতি) দ্বারা ঘরের ফলাফল, সম্পূর্ণ চিহ্ন নয়",
+  "kChartNameTransit": "ট্রানজিট (গোচর)",
+  "kChartSigTransit": "গর্ভগৃহের উপর বর্তমান গ্রহ",
+  "kChartShortMoon": "চাঁদ",
+  "kChartShortChalit": "চলিত",
+  "kChartShortTransit": "ট্রানজিট",
+  "kChAscendant": "আরোহী",
+  "kChLagnaVargottama": "লগ্ন ভার্গোত্তমা",
+  "kChAsOf": "{when} হিসাবে",
+  "kChUnverified": "দৃকপঞ্চং-এর বিরুদ্ধে এই বিভাগটি এখনও যাচাই করা হয়নি — প্লেসমেন্টগুলিকে পরীক্ষামূলক হিসাবে বিবেচনা করুন।",
+  "kChChalitShiftedOne": "{planets} পুরো-সাইন হাউসের চেয়ে ভিন্ন ভবতে বসে।",
+  "kChChalitShiftedMany": "{planets} পুরো-সাইন হাউসের চেয়ে আলাদা ভাবে বসে।",
+  "kChColPlanet": "গ্রহ",
+  "kChColSign": "সাইন করুন",
+  "kChColDegree": "ডিইজি",
+  "kChColHouse": "হাউস",
+  "kChColBhava": "ভব",
+  "kChColFromMoon": "চাঁদ",
+  "kChLegend": "কিংবদন্তি",
+  "kChLegendNote": "℞ বিপরীতমুখী ⬦ ভার্গোত্তমা ← স্থানান্তরিত ভব (চলিত)\nউত্তর: ঘর সংখ্যা = রাশি (1 মেষ … 12 মীন), 1ম ঘর শীর্ষ-কেন্দ্র।",
+  "kChNorthIndian": "উত্তর ভারতীয়",
+  "kChSouthIndian": "দক্ষিণ ভারতীয়",
+  "kChPickerCharts": "চার্ট",
+  "kChPickerDivisional": "বিভাগীয় তালিকা (ভার্গ)",
+  "kOvTitle": "কুন্ডলী",
+  "kOvTitleNamed": "{name} এর কুন্ডলি",
+  "kOvDownloadPdf": "PDF ডাউনলোড করুন",
+  "kOvShare": "শেয়ার করুন",
+  "kOvMoonSignLabel": "চাঁদের চিহ্ন · রাশি",
+  "kOvLagnaChip": "লগনা · {sign}",
+  "kOvNakshatraChip": "নক্ষত্র · {name}",
+  "kOvTimeApprox": "জন্ম সময় আনুমানিক",
+  "kOvEdit": "সম্পাদনা করুন",
+  "kOvLagnaChart": "লগ্ন চার্ট",
+  "kOvD1Rasi": "ডি 1 রাসি",
+  "kOvOpenFullChart": "সম্পূর্ণ চার্ট খুলুন",
+  "kOvDashaUnavailable": "Dasha এই মুহূর্তে অনুপলব্ধ.",
+  "kOvDashaRunning": "আপনি বর্তমানে চলমান",
+  "kOvMahadasha": "{planet} মহাদশা",
+  "kOvSubPeriods": "{antar} সাব-পিরিয়ড · {pratyantar} প্রত্যন্তর",
+  "kOvDashaProgress": "{start} → {end} · {percent} % এর মাধ্যমে",
+  "kOvSeeTimeline": "সম্পূর্ণ টাইমলাইন দেখুন",
+  "kOvAtAGlance": "এক নজরে",
+  "kOvMangalDosha": "মঙ্গল দোষ",
+  "kOvManglik": "মাঙ্গলিক",
+  "kOvNotManglik": "মাঙ্গলিক নয়",
+  "kOvMangalFrom": "{refs} থেকে",
+  "kOvMarsClear": "মঙ্গল পরিষ্কার",
+  "kOvMangalCancelled": "বর্তমান, কিন্তু আপনার চার্টে বাতিল করা হয়েছে",
+  "kOvMangalLevelFrom": "{level} · {refs} থেকে",
+  "kOvRefLagna": "লগনা",
+  "kOvYogas": "যোগাস",
+  "kOvYogasFound": "{count} পাওয়া গেছে",
+  "kOvNakshatra": "নক্ষত্র",
+  "kOvLagnaLord": "লগ্ন প্রভু",
+  "kOvExInsights": "ব্যক্তিত্ব এবং জীবন ওভারভিউ",
+  "kOvExInsightsSub": "আপনার চার্টের একটি বিনামূল্যে পড়া — প্রকৃতি, কাজ, বিবাহ এবং আরও অনেক কিছু",
+  "kOvExForecast": "লিখিত পূর্বাভাস",
+  "kOvExForecastSub": "একটি জ্যোতিষী দ্বারা লিখিত জীবনের একটি ক্ষেত্রের জন্য একটি অর্থ প্রদানের পূর্বাভাস",
+  "kOvExPlanets": "গ্রহ এবং অবস্থান",
+  "kOvExPlanetsSub": "প্রতিটি গ্রহ কোথায় বসে এবং এটি কী করে",
+  "kOvExDasha": "দশা পিরিয়ড",
+  "kOvExDashaSub": "তোমার জীবনের সময়রেখা — বিমশোত্তরি",
+  "kOvExVarshphal": "বর্ষফল (বার্ষিক চার্ট)",
+  "kOvExVarshphalSub": "এই সৌর-প্রত্যাবর্তন বছর — মুনথা, বছরের প্রভু এবং তাজিকা দিক",
+  "kOvExYogas": "যোগ এবং দোষ",
+  "kOvExYogasSub": "আপনার চার্টে বিশেষ সমন্বয়",
+  "kOvExRemedies": "প্রতিকার",
+  "kOvExRemediesSub": "আপনার চার্টের জন্য ঐতিহ্যবাহী মন্ত্র, দান এবং অনুশীলন",
+  "kOvExUpaya": "রত্নপাথর ও উপয়া",
+  "kOvExUpayaSub": "প্রতি-গ্রহ রত্নপাথর, রঙ, দিন এবং মন্ত্র — রত্ন পাথর গেটেড",
+  "kOvExLalKitab": "লাল কিতাব",
+  "kOvExLalKitabSub": "উত্তরাধিকারসূত্রে প্রাপ্ত ঋণ (রিন) এবং তাদের সহজ, বিনামূল্যের টোটকা প্রতিকার",
+  "kOvExTransits": "ট্রানজিট এবং সাদে সতী",
+  "kOvExTransitsSub": "আকাশ এখন কি করছে",
+  "kOvExSadeSati": "সাদে সতী ও ধাইয়া ক্যালেন্ডার",
+  "kOvExSadeSatiSub": "আপনার জীবনের প্রতিটি শনি উইন্ডো, তারিখ সহ",
+  "kOvExMuhurta": "আজকের টাইমিং",
+  "kOvExMuhurtaSub": "চোঘদিয়া এবং হোরা, আপনার সেরা উইন্ডোগুলি চিহ্নিত করে৷",
+  "kOvExHouses": "ঘর (ভাব)",
+  "kOvExHousesSub": "12টি বাড়ির প্রতিটির জন্য একটি পাঠ",
+  "kOvExNumerology": "সংখ্যাতত্ত্ব এবং লো শু গ্রিড",
+  "kOvExNumerologySub": "জন্ম তারিখ থেকে আপনার সংখ্যা — দিন, রং, জন্ম গ্রিড",
+  "kOvExAdvanced": "উন্নত প্রতিবেদন",
+  "kOvExAdvancedSub": "অষ্টকবর্গ, শব্দবালা, কেপি, জৈমিনী",
+  "kOvAskAstrologer": "আপনার কুন্ডলি সম্পর্কে একজন জ্যোতিষীকে জিজ্ঞাসা করুন",
+  "kReadingCardTitle": "এর মানে কি",
+  "kSsTitle": "সাদে সতী · {phase} পর্ব",
+  "kSsPhaseRising": "রাইজিং (3 এর মধ্যে 1)",
+  "kSsPhasePeak": "পিক (৩টির মধ্যে ২)",
+  "kSsPhaseSetting": "সেটিং (৩টির মধ্যে ৩)",
+  "kSsRising": "উঠছে",
+  "kSsPeak": "পিক",
+  "kSsSetting": "সেটিং",
+  "kSsNotCurse": "সাদে সতী কঠোর পরিশ্রম এবং পরিপক্কতার সময়কাল - অভিশাপ নয়। অবিচলিত, সৎ প্রচেষ্টা পুরস্কৃত হয়।",
+  "kSsWhatForMe": "এই আমার জন্য মানে কি",
+  "kSsPanotiTitle": "ছোট পানোতি — {type}",
+  "kSsPanotiBody": "একটি ছোট শনির পর্যায় (প্রায় 2½ বছর) যা স্বাস্থ্য, প্রচেষ্টা এবং দৈনন্দিন বাধাগুলির সাথে ধৈর্যের জন্য জিজ্ঞাসা করে।",
+  "kSsSeeTransits": "ট্রানজিট দেখুন",
+  "kSsSkyNow": "এই মুহূর্তে আকাশে",
+  "kSsJupiterGood": "বৃহস্পতি আপনার জন্য অনুকূলভাবে স্থানান্তর করছে — বৃদ্ধি, শিক্ষা এবং অর্থের জন্য একটি সহায়ক উইন্ডো।",
+  "kSsJupiterNeutral": "কোন Sade Sati বা প্রধান শনি পর্যায় সক্রিয় নেই। বৃহস্পতির ট্রানজিট এখন আপনার জন্য নিরপেক্ষ।",
+  "kSsSeeAllTransits": "সমস্ত ট্রানজিট দেখুন",
+  "kFcTitle": "জন্ম তালিকা",
+  "kFcTransitingGrahas": "ট্রানজিটিং গ্রহ",
+  "kFcPlanets": "গ্রহ",
+  "kFcAllHouses": "সব 12 ঘর এবং পড়া",
+  "kFcAllCharts": "সমস্ত চার্ট — D1 থেকে D60",
+  "kFcAllChartsTooltip": "সমস্ত চার্ট",
+  "kFcLoadError": "এই চার্ট লোড করা যায়নি",
+  "kFcTwelveHouses": "12টি ঘর",
+  "kFcNoPlanets": "গ্রহ নেই",
+  "kBdTithi": "{key, select, other{{raw}}}",
+  "kBdPaksha": "{key, select, other{{raw}}}",
+  "kBdYoga": "{key, select, other{{raw}}}",
+  "kBdKarana": "{key, select, other{{raw}}}",
+  "kBdVarna": "{key, select, other{{raw}}}",
+  "kBdVashya": "{key, select, other{{raw}}}",
+  "kBdYoni": "{key, select, other{{raw}}}",
+  "kBdGana": "{key, select, other{{raw}}}",
+  "kBdNadi": "{key, select, other{{raw}}}",
+  "kBdTara": "{key, select, other{{raw}}}",
+  "kBdYunja": "{key, select, other{{raw}}}",
+  "horoTitle": "রাশিফল",
+  "horoReadFull": "সম্পূর্ণ রাশিফল ​​পড়ুন",
+  "horoSpanYesterday": "গতকাল",
+  "horoSpanToday": "আজ",
+  "horoSpanTomorrow": "কাল",
+  "horoSpanWeek": "এই সপ্তাহে",
+  "horoSpanMonth": "এই মাসে",
+  "horoAreaLove": "প্রেম",
+  "horoAreaCareer": "কর্মজীবন",
+  "horoAreaMoney": "টাকা",
+  "horoAreaHealth": "স্বাস্থ্য",
+  "horoOverall": "সামগ্রিকভাবে",
+  "horoOutOfFive": "5 এর মধ্যে",
+  "horoToneSupportive": "সহায়ক",
+  "horoToneBalanced": "সুষম",
+  "horoToneChallenging": "যত্ন প্রয়োজন",
+  "horoLuckyColour": "ভাগ্যবান রঙ",
+  "horoLuckyNumber": "ভাগ্যবান সংখ্যা",
+  "horoLuckyPlanet": "শক্তিশালী গ্রহ",
+  "horoBestDays": "আপনার সেরা দিন",
+  "horoTipTitle": "প্রতিকার ও টিপ",
+  "horoTipFor": "{planet} এর প্রতিকার",
+  "horoWhyTitle": "তারকারা কেন এ কথা বলেন",
+  "horoWhyBody": "বৈদিক রাশিফল ​​পড়া হয় যেখানে প্রতিটি গ্রহ স্থানান্তর করছে, আপনার চন্দ্র রাশি থেকে গণনা করা হয়। তীরগুলি দেখায় যে কোনও স্থান আপনাকে সমর্থন করে বা যত্নের জন্য জিজ্ঞাসা করে।",
+  "horoMoonLine": "{sign} · {nakshatra} · বাড়ি {house} এ চাঁদ৷",
+  "horoHouseN": "বাড়ি {n}",
+  "horoAboutSign": "প্রায় {sign}",
+  "horoElement": "উপাদান",
+  "horoRuler": "শাসক গ্রহ",
+  "horoQuality": "প্রকৃতি",
+  "horoElementFire": "আগুন",
+  "horoElementEarth": "পৃথিবী",
+  "horoElementAir": "বায়ু",
+  "horoElementWater": "জল",
+  "horoQualityMovable": "চলমান",
+  "horoQualityFixed": "স্থির",
+  "horoQualityDual": "দ্বৈত",
+  "horoChangeSign": "চিহ্ন পরিবর্তন করুন",
+  "horoChooseSign": "আপনার চিহ্ন চয়ন করুন",
+  "horoWhichSignTitle": "আমি কোন সাইন বাছাই করা উচিত?",
+  "horoWhichSignBody": "বৈদিক রাশিফলগুলি আপনার চন্দ্র রাশি (রাশি) থেকে পড়া হয় - আপনার জন্মের সময় চন্দ্র যে চিহ্নে ছিল। এটি প্রায়ই আপনার পশ্চিম সূর্য চিহ্ন থেকে ভিন্ন হয়। আপনার কুন্ডলী আপনার চন্দ্র চিহ্ন দেখায়; সবচেয়ে সঠিক পড়ার জন্য এখানে বাছাই করুন.",
+  "horoOpenKundali": "কুন্ডলীতে আমার চন্দ্র রাশি দেখুন",
+  "horoCtaTitle": "শুধু আপনার জন্য একটি পড়া চান?",
+  "horoCtaBody": "এই পূর্বাভাস {sign} এর নিচে জন্মগ্রহণকারী প্রত্যেকের জন্য। একজন জ্যোতিষী আপনার ব্যক্তিগত চার্ট পড়তে পারেন।",
+  "horoCtaButton": "একজন জ্যোতিষীর সাথে কথা বলুন",
+  "horoShare": "শেয়ার করুন",
+  "horoEditorialBadge": "আমাদের জ্যোতিষীরা লিখেছেন",
+  "horoError": "আমরা রাশিফল ​​লোড করতে পারিনি",
+  "horoSourceNote": "আপনার চন্দ্র চিহ্ন থেকে লাইভ গ্রহের ট্রানজিটের উপর ভিত্তি করে। নির্দেশনার জন্য, নিশ্চিততা নয়।",
+  "matchTitle": "কুন্ডলী মিলন",
+  "matchHeroTitle": "দুটি কুন্ডলী মেলান",
+  "matchHeroBody": "গুনা মিলন, মাঙ্গলিক এবং দোষ সেকেন্ডে চেক করুন।",
+  "matchBoy": "ছেলে",
+  "matchGirl": "মেয়ে",
+  "matchSwap": "অদলবদল",
+  "matchChoosePerson": "ব্যক্তি নির্বাচন করুন",
+  "matchTapToSelect": "নির্বাচন করতে আলতো চাপুন",
+  "matchRunCta": "সামঞ্জস্য পরীক্ষা করুন",
+  "matchPickBothHint": "আপনার ম্যাচের স্কোর দেখতে দুজনকেই বেছে নিন।",
+  "matchPickBoyTitle": "ছেলের জন্মের বিবরণ বেছে নিন",
+  "matchPickGirlTitle": "মেয়ের জন্মের বিশদ নির্বাচন করুন",
+  "matchAddPerson": "একটি নতুন ব্যক্তি যোগ করুন",
+  "matchAddPersonHint": "জন্ম তারিখ, সময় এবং স্থান",
+  "matchNoProfiles": "এখনও কোন সংরক্ষিত জন্ম বিবরণ. শুরু করতে একজন ব্যক্তি যোগ করুন।",
+  "matchHowTitle": "এটা কিভাবে কাজ করে",
+  "matchStep1Title": "দুইজনকে বেছে নিন",
+  "matchStep1Body": "সংরক্ষিত জন্মের বিবরণ ব্যবহার করুন বা নতুন যোগ করুন — সময় এবং স্থান এটিকে সঠিক করে তোলে।",
+  "matchStep2Title": "আমরা উভয় চাঁদের চার্ট তুলনা করি",
+  "matchStep2Body": "আটটি কুট - স্বভাব থেকে স্বাস্থ্য - ঐতিহ্যগত অষ্টকূট পদ্ধতিতে স্কোর করা হয়।",
+  "matchStep3Title": "আপনার স্কোর এবং dosha চেক পান",
+  "matchStep3Body": "36 এর মধ্যে একটি স্কোর, মাঙ্গলিক সামঞ্জস্য এবং প্রতিটি অংশের অর্থ কী।",
+  "matchHistoryTitle": "আপনার মিল",
+  "matchHistoryEmpty": "আপনার মিলগুলি এখানে প্রদর্শিত হবে যাতে আপনি যে কোনো সময় সেগুলিকে পুনরায় দেখতে পারেন৷",
+  "matchRetry": "আবার চেষ্টা করুন",
+  "matchPairNames": "{boy} এবং {girl}",
+  "matchResultTitle": "ম্যাচের ফলাফল",
+  "matchOutOf36": "36 এর মধ্যে",
+  "matchShareScore": "গুনা মিলান: {score} /36 · {verdict}",
+  "matchVerdictExcellent": "চমৎকার ম্যাচ",
+  "matchVerdictGood": "ভালো মিল",
+  "matchVerdictAverage": "গড় ম্যাচ",
+  "matchVerdictLow": "একটি ঘনিষ্ঠ চেহারা প্রয়োজন",
+  "matchVerdictExcellentBody": "বেশিরভাগ কুট সারিবদ্ধ - ঐতিহ্যগতভাবে একটি সুরেলা, সহায়ক বিবাহের চিহ্ন।",
+  "matchVerdictGoodBody": "18 বা ততোধিক গুন বিবাহের জন্য উপযুক্ত বলে বিবেচিত হয়। নীচের কম স্কোরিং kootas চেক করুন.",
+  "matchVerdictAverageBody": "18 গুণের নিচে, জ্যোতিষীরা সাধারণত সিদ্ধান্ত নেওয়ার আগে একটি সম্পূর্ণ চার্ট পর্যালোচনার পরামর্শ দেন।",
+  "matchVerdictLowBody": "একা এই স্কোর নিয়ে সিদ্ধান্ত নেবেন না — একটি সম্পূর্ণ কুন্ডলি পর্যালোচনা প্রায়ই ছবি পরিবর্তন করে।",
+  "matchManglikShort": "মাঙ্গলিক",
+  "matchManglikTitle": "মাঙ্গলিক (মঙ্গল দোষ) চেক",
+  "matchManglikNone": "আপনারা কেউই মাঙ্গলিক নন—মঙ্গল দোষের চিন্তা নেই।",
+  "matchManglikBoth": "তোমরা দুজনেই মাঙ্গলিক — ঐতিহ্যগতভাবে দোষ বাতিল হয়ে যায়।",
+  "matchManglikCancelled": "মঙ্গল দোষ উপস্থিত আছে কিন্তু চার্টের অন্যান্য স্থাপনা দ্বারা বাতিল করা হয়েছে।",
+  "matchManglikMismatch": "তোমাদের মধ্যে একজনই মাঙ্গলিক। প্রতিকার এবং একটি সম্পূর্ণ চার্ট পর্যালোচনা সম্পর্কে একজন জ্যোতিষীর সাথে কথা বলুন।",
+  "matchIsManglik": "মাঙ্গলিক",
+  "matchNotManglik": "মাঙ্গলিক নয়",
+  "matchManglikCancelledShort": "মাঙ্গলিক (বাতিল)",
+  "matchCheckClear": "{name} : পরিষ্কার",
+  "matchCheckPresent": "{name} : বর্তমান",
+  "matchDoshaNadi": "নদী দোষ",
+  "matchDoshaBhakoot": "ভকূট দোষ",
+  "matchDoshaGana": "গণ দোষ",
+  "matchDoshaTag": "দোশা",
+  "matchBreakdownTitle": "গুনা ভাঙ্গন",
+  "matchBreakdownSub": "এটির অর্থ কী তা দেখতে যে কোনও কুটাতে ট্যাপ করুন।",
+  "matchKootaVarna": "বর্ণ",
+  "matchKootaVashya": "বশ্যা",
+  "matchKootaTara": "তারা",
+  "matchKootaYoni": "ইয়োনি",
+  "matchKootaMaitri": "গ্রহ মৈত্রী",
+  "matchKootaGana": "গণ",
+  "matchKootaBhakoot": "ভাকূট",
+  "matchKootaNadi": "নদী",
+  "matchKootaVarnaMeaning": "মূল্যবোধ ও অহংকার",
+  "matchKootaVashyaMeaning": "পারস্পরিক আকর্ষণ",
+  "matchKootaTaraMeaning": "ভাগ্য ও মঙ্গল",
+  "matchKootaYoniMeaning": "শারীরিক সামঞ্জস্য",
+  "matchKootaMaitriMeaning": "মানসিক তরঙ্গদৈর্ঘ্য",
+  "matchKootaGanaMeaning": "মেজাজ",
+  "matchKootaBhakootMeaning": "প্রেম, পরিবার এবং আর্থিক",
+  "matchKootaNadiMeaning": "স্বাস্থ্য এবং শিশু",
+  "matchKootaVarnaDetail": "উভয় চন্দ্র চিহ্নের আধ্যাত্মিক মেজাজের তুলনা করে — আপনার মূল্যবোধ এবং কর্তব্যবোধ কতটা স্বাভাবিকভাবেই আপ হয়। মূল্য 1 পয়েন্ট।",
+  "matchKootaVashyaDetail": "অংশীদারদের মধ্যে স্বাভাবিক টান এবং প্রভাব দেখায় — কে নেতৃত্ব দেয়, কে মানিয়ে নেয় এবং আপনি কত সহজে সম্মত হন। মূল্য 2 পয়েন্ট.",
+  "matchKootaTaraDetail": "ভাগ্য, স্বাস্থ্য এবং বন্ধনের দীর্ঘায়ু বিচার করতে আপনার মধ্যে নক্ষত্র গণনা করে। মূল্য 3 পয়েন্ট।",
+  "matchKootaYoniDetail": "প্রতিটি নক্ষত্রের একটি পশু প্রকৃতি আছে; এই কুটা ঘনিষ্ঠতা এবং শারীরিক সামঞ্জস্যের জন্য তাদের তুলনা করে। মূল্য 4 পয়েন্ট.",
+  "matchKootaMaitriDetail": "আপনার চন্দ্র রাশির অধিপতিদের সাথে তুলনা করুন - তাদের মধ্যে বন্ধুত্ব মানে আপনি একইভাবে চিন্তা করেন এবং সহজেই সমস্যাগুলি সমাধান করেন। মূল্য 5 পয়েন্ট।",
+  "matchKootaGanaDetail": "নক্ষত্রকে দেব, মনুষ্য এবং রাক্ষস স্বভাবের মধ্যে গোষ্ঠীভুক্ত করে। একটি অমিল মানে ঘন ঘন ঘর্ষণ হতে পারে। মূল্য 6 পয়েন্ট।",
+  "matchKootaBhakootDetail": "আপনার চাঁদের চিহ্নগুলির মধ্যে দূরত্ব দেখে, যা ঐতিহ্যগতভাবে প্রেম, পারিবারিক বৃদ্ধি এবং ভাগ করা অর্থকে প্রভাবিত করে। মূল্য 7 পয়েন্ট.",
+  "matchKootaNadiDetail": "সবচেয়ে ওজনের কুটা। একই নদী (0 পয়েন্ট) ঐতিহ্যগতভাবে স্বাস্থ্য এবং বংশধরদের উদ্বেগের সাথে যুক্ত এবং সুপরিচিত ব্যতিক্রম রয়েছে। মূল্য 8 পয়েন্ট.",
+  "matchChartsTitle": "জন্ম তালিকার বিশদ বিবরণ",
+  "matchRowRasi": "চাঁদের চিহ্ন",
+  "matchRowNakshatra": "নক্ষত্র",
+  "matchRowGana": "গণ",
+  "matchRowYoni": "ইয়োনি",
+  "matchAskTitle": "একজন জ্যোতিষীর সাথে কথা বলুন",
+  "matchAskBody": "দোষের প্রায়ই বাতিল এবং প্রতিকার আছে। উভয় চার্ট একটি সম্পূর্ণ পড়া পান.",
+  "matchDisclaimer": "গুনা মিলান একটি ঐতিহ্যগত গাইড, গ্যারান্টি নয়। সম্পূর্ণ চার্ট এবং আপনার নিজের রায় বিবেচনা করুন.",
+  "matchRelSelf": "আমি নিজেই",
+  "matchRelPartner": "অংশীদার",
+  "matchRelChild": "শিশু",
+  "matchRelParent": "অভিভাবক",
+  "matchRelSibling": "ভাইবোন",
+  "matchRelFriend": "বন্ধু",
+  "kAdvTitle": "উন্নত প্রতিবেদন",
+  "kAdvIntro": "প্রযুক্তিগত স্তরগুলি জ্যোতিষীরা গভীরতা এবং সময়ের জন্য ব্যবহার করে। আগ্রহের জন্য এগুলি স্কিম করুন বা পরামর্শের সময় একটি খুলুন।",
+  "kAdvAshtakavarga": "অষ্টকবর্গা",
+  "kAdvAshtakavargaSub": "প্রতিটি চিহ্নের বিন্দু-শক্তি। উচ্চতর = আকাশ সেখানে ট্রানজিট সমর্থন করে।",
+  "kAdvShadbala": "শাদবালা",
+  "kAdvShadbalaSub": "প্রতিটি গ্রহের ছয়গুণ শক্তি, যা প্রয়োজন তার বিপরীতে পরিমাপ করা হয়।",
+  "kAdvKp": "কেপি সিস্টেম",
+  "kAdvKpSub": "কৃষ্ণমূর্তি পদধতি — cuspal উপ-প্রভু এবং সময়ের জন্য শাসক গ্রহ।",
+  "kAdvJaimini": "জৈমিনী",
+  "kAdvJaiminiSub": "চারা কারাকস, অরুধা লগ্ন এবং জৈমিনি একটি চার্ট পড়ার উপায়।",
+  "kAdvDownloadPdf": "সম্পূর্ণ পিডিএফ রিপোর্ট ডাউনলোড করুন",
+  "kAdvFooter": "এগুলো প্রযুক্তিগত। সহজ কথায় পড়ার জন্য, একজন জ্যোতিষীর সাথে কথা বলুন।",
+  "kAdvReport": "রিপোর্ট",
+  "kAdvLoadError": "এই রিপোর্ট লোড করা যায়নি.",
+  "kAdvKpIntro": "কেপি রাশিচক্রকে 249টি উপ-অংশে বিভক্ত করেছে। একটি বাড়ির উপ-প্রভু সিদ্ধান্ত নেয় যে জীবনের সেই ক্ষেত্রটি সরবরাহ করে কিনা; শাসক গ্রহগুলি অন-দ্য-স্পট টাইমিংয়ের জন্য ব্যবহৃত হয়।",
+  "kAdvJaiminiIntro": "জৈমিনি চর কারাকাস (ডিগ্রী অনুসারে গ্রহগুলি, প্রতিটি একটি জীবন ক্ষেত্র নির্দেশ করে) এবং অরুধা পদগুলির মাধ্যমে চার্টটি পড়েন — কীভাবে জিনিসগুলি বিশ্বের কাছে উপস্থিত হয়।",
+  "kAdvAvIntro": "সর্বাষ্টকবর্গা প্রতিটি গৃহে প্রতিটি গ্রহের অবদান যোগ করে — মোট সর্বদা 337টি। একটি ঘর 28+ স্কোর করে গ্রহগুলিকে এর মধ্য দিয়ে স্থানান্তরিত করতে সহায়তা করে; 25 এর নিচে একটি দুর্বল প্যাচ।",
+  "kAdvHouseN": "বাড়ি {n}",
+  "kAdvBhinnaTotals": "গ্রহ প্রতি মোট (ভিন্নাষ্টকবর্গা)",
+  "kAdvShadbalaIntro": "শাদবালা প্রতিটি গ্রহের শক্তিকে ন্যূনতম প্রয়োজনের বিপরীতে রূপসে স্কোর করে। 1.0 এর উপরে অনুপাত মানে গ্রহটি তার ফলাফল নির্ভরযোগ্যভাবে সরবরাহ করতে পারে।",
+  "kAdvStrongest": "সবচেয়ে শক্তিশালী: {planet}",
+  "kAdvWeakest": "সবচেয়ে দুর্বল: {planet}",
+  "kAdvReadWithAstrologer": "এই প্রতিবেদনটি একজন জ্যোতিষীর কাছে পড়ার জন্য।",
+  "kAdvSecCuspalSublords": "কুসপাল সাব-লর্ডস",
+  "kAdvSecRulingPlanets": "শাসক গ্রহ",
+  "kAdvSecHouseSignificators": "হাউস সিগনিকেটর",
+  "kAdvSecCharaKarakas": "চরা করকস",
+  "kAdvSecArudhaPadas": "অরুধা পদস",
+  "kAdvSecKarakamsa": "কারাকামসা",
+  "kAdvSecCharaDasha": "চরা দশা",
+  "kBhavaTitle": "বাড়ি · ভাব",
+  "kBhavaIntro": "12টি ঘরের প্রতিটি, এর প্রাকৃতিক তাৎপর্য এবং কীভাবে এর প্রভু এবং বাসিন্দারা এটিকে আকৃতি দেয়।",
+  "kBhavaMoreBenefic": "ক্ষতিকর প্রভাবের চেয়ে বেশি উপকারী",
+  "kBhavaMoreMalefic": "উপকারী প্রভাবের চেয়ে বেশি ক্ষতিকর",
+  "kBhavaOccupiedBy": "{planets} দ্বারা দখল করা হয়েছে৷",
+  "kBhavaAspectedBy": "{planets} দ্বারা দৃষ্টিভঙ্গি",
+  "kBhavaBeneficCount": "{count} উপকারী",
+  "kBhavaMaleficCount": "{count} ক্ষতিকর",
+  "kBhavaNeedsTime": "ঘর বিশ্লেষণ একটি জন্ম সময় প্রয়োজন",
+  "kBhavaNeedsTimeBody": "প্রতিটি বাড়ির আকৃতি কেমন তা দেখতে এই প্রোফাইলে জন্মের সঠিক সময় যোগ করুন।",
+  "kDashaIntroVimshottari": "ভিমশোত্তরি হল গ্রহের সময়কালের একটি 120 বছরের চক্র, যেখানে চাঁদ আপনার জন্মের সময় বসেছিল।",
+  "kDashaIntroYogini": "যোগিনী হল চাঁদের নক্ষত্র থেকে আট যোগিনীর একটি 36 বছরের চক্র।",
+  "kDashaIntroAshtottari": "অষ্টোত্তরী হল Ardra থেকে গণনা করা একটি 108 বছরের চক্র।",
+  "kDashaBalance": "জন্মের সময় {lord} দশার ব্যালেন্স: {years} বছর",
+  "kDashaVimshottari": "বিমশোত্তরী",
+  "kDashaYogini": "যোগিনী",
+  "kDashaAshtottari": "অষ্টোত্তরী",
+  "kDashaNowRunning": "এখন চলছে",
+  "kDashaNow": "এখন",
+  "kDashaYears": "{count} বছর",
+  "kPlanetsIntro": "প্রতিটি গ্রহ কোথায় বসে, এটি কতটা শক্তিশালী এবং এটি কী নিয়ে আসে। আরও পড়তে আলতো চাপুন। পজিশনগুলো সাইডরিয়াল (লাহিড়ী)।",
+  "kTrTitle": "ট্রানজিট",
+  "kTrSadeSatiCalendar": "সম্পূর্ণ সাদে সতী ক্যালেন্ডার দেখুন (তারিখ সহ)",
+  "kTrSkyNow": "এই মুহূর্তে আকাশ — আপনার চার্টের বিপরীতে",
+  "kTrSadeSati": "সাদে সতী",
+  "kTrPhaseOf": "৩টির ​​মধ্যে {n} ফেজ",
+  "kTrPhaseHintRising": "শনি দ্বাদশে",
+  "kTrPhaseHintPeak": "চাঁদের উপরে",
+  "kTrPhaseHintSetting": "শনি ২য়",
+  "kTrHowToWork": "এটা দিয়ে কিভাবে কাজ করবেন",
+  "kTrTip1": "যা কাজ করছে না তা কাটুন - শনি এটি সম্পর্কে সততাকে পুরস্কৃত করে",
+  "kTrTip2": "রুটিন তৈরি করুন এবং আপনি যা শুরু করেন তা শেষ করুন",
+  "kTrTip3": "আপনার ঘুম, হাঁটু, দাঁত এবং বয়স্ক আত্মীয়দের যত্ন নিন",
+  "kTrTip4": "এটি একটি পুনর্নির্মাণ, শাস্তি নয়। এটি শেষ হওয়ার পরে ফলাফল দেখায়।",
+  "kTrPanotiBody": "একটি ছোট (~2½ বছর) শনি পর্ব। স্বাস্থ্য, দৈনন্দিন প্রচেষ্টা এবং বাধাগুলির সাথে ঘর্ষণ আশা করুন - ধৈর্য এবং রুটিনের সাথে এটি পূরণ করুন।",
+  "kTrPlanetInSign": "{sign}-এ {planet}",
+  "kTrJupiterGood": "বৃহস্পতির ট্রানজিট অনুকূল - এই মুহূর্তে বৃদ্ধি, শিক্ষা, অর্থ এবং পরিবারের জন্য সহায়ক।",
+  "kTrJupiterNeutral": "বৃহস্পতির ট্রানজিট এই মুহূর্তে আপনার জন্য নিরপেক্ষ।",
+  "kTrCloseContacts": "এখন পরিচিতি বন্ধ করুন",
+  "kTrCloseContactLine": "{planet} ট্রানজিট করা আপনার জন্মগত {natal} এর 3° এর মধ্যে — জীবনের সেই ক্ষেত্রটি এই সপ্তাহে সক্রিয়।",
+  "kMuChoghadiya": "{key, select, other{{raw}}}",
+  "kUpOr": "অথবা {name}",
+  "kUpFinger": "{finger} আঙুল",
+  "kYdPartial": "আংশিক",
+  "moodTitle": "আজকের মেজাজ",
+  "moodMeter": "মুড মিটার",
+  "moodWhyTitle": "আজ কেন এমন লাগছে",
+  "moodTipTitle": "আজকের জন্য একটি ছোট জিনিস",
+  "moodLockedTitle": "আপনার জ্যোতিষী আপনাকে বলতে পারেন",
+  "moodLockedSub": "সম্পূর্ণ ছবির জন্য আপনার পুরো চার্ট প্রয়োজন, শুধু চাঁদ নয়।",
+  "moodTalkCta": "এখন একজন জ্যোতিষীর সাথে কথা বলুন",
+  "moodNextChange": "{when}-এ আপনার মেজাজ পরিবর্তন হবে",
+  "kOvExMood": "আজকের মেজাজ",
+  "kOvExMoodSub": "আজ চাঁদ কীভাবে আপনার মনকে রূপ দিচ্ছে",
+  "prefsMoodAlerts": "দৈনিক মেজাজ সতর্কতা",
+  "prefsMoodAlertsDesc": "সপ্তাহে প্রায় তিন সকালে, যখন চাঁদ আপনার চার্টে সাইন পরিবর্তন করে।",
+  "callCalling": "কল করা হচ্ছে...",
+  "callRinging": "রিং হচ্ছে...",
+  "callConnecting": "সংযোগ করা হচ্ছে...",
+  "callReconnecting": "পুনরায় সংযোগ করা হচ্ছে...",
+  "callEnded": "কল শেষ",
+  "callPoorConnection": "দুর্বল সংযোগ",
+  "callMute": "নিঃশব্দ",
+  "callSpeaker": "স্পিকার",
+  "callEnd": "শেষ",
+  "callEncrypted": "এনক্রিপ্ট করা কল",
+  "callMicTitle": "মাইক্রোফোন প্রয়োজন",
+  "callMicBody": "মাইক্রোফোন অ্যাক্সেস করার অনুমতি দিন যাতে জ্যোতিষী আপনাকে শুনতে পারে।",
+  "callMicBlockedBody": "TalkAcharya-এর জন্য মাইক্রোফোন অ্যাক্সেস বন্ধ করা হয়েছে। সেটিংসে এটি চালু করুন।",
+  "callOpenSettings": "সেটিংস খুলুন",
+  "callTryAgain": "আবার চেষ্টা করুন",
+  "callFailedTitle": "কল শুরু করা যায়নি",
+  "callEndConfirmTitle": "এই কল শেষ?",
+  "callEndConfirmBody": "কল শেষ হওয়ার সাথে সাথে বিলিং বন্ধ হয়ে যায়।",
+  "callEndConfirmYes": "কল শেষ করুন",
+  "callEndConfirmNo": "কথা বলতে থাকুন",
+  "callWaitingAccept": "{name} গ্রহণ করার জন্য অপেক্ষা করা হচ্ছে...",
+  "callBookTitle": "{name} কল করুন",
+  "callBookBilling": "ভয়েস কল · একবার সংযুক্ত হলে প্রতি মিনিটে বিল করা হয়",
+  "callBookCta": "কল শুরু করুন · {price} /মিনিট",
+  "callUnavailable": "এই জ্যোতিষী এখন কল নিচ্ছেন না।",
+  "giftAction": "একটি উপহার পাঠান",
+  "giftSheetTitle": "{name} এ একটি উপহার পাঠান৷",
+  "giftSheetSubtitle": "কৃতজ্ঞতার একটি ছোট চিহ্ন - তারা তাৎক্ষণিকভাবে এটি দেখতে পায়।",
+  "giftQuantity": "পরিমাণ",
+  "giftAddNote": "একটি নোট যোগ করুন",
+  "giftNoteHint": "একটি ছোট বার্তা লিখুন (ঐচ্ছিক)",
+  "giftChoose": "একটি উপহার চয়ন করুন",
+  "giftSendCta": "{gift} · {price} পাঠান",
+  "giftWalletBalance": "ব্যালেন্স {amount}",
+  "giftAddMoney": "টাকা যোগ করুন",
+  "giftLowBalanceTitle": "পর্যাপ্ত ভারসাম্য নেই",
+  "giftLowBalanceBody": "এই উপহারটি পাঠাতে আপনার ওয়ালেটে টাকা যোগ করুন।",
+  "giftSentTitle": "{name} এ {gift} পাঠানো হয়েছে",
+  "giftSentBody": "তারা এখুনি দেখবে। আপনার দয়ার জন্য আপনাকে ধন্যবাদ!",
+  "giftSendAnother": "আরেকটা পাঠাও",
+  "giftLoadError": "উপহার লোড করা যায়নি",
+  "giftThankYouTitle": "একটি উপহার সঙ্গে ধন্যবাদ বলুন",
+  "giftThankYouBody": "অধিবেশন পছন্দ করেন? {name} কে কৃতজ্ঞতার একটি ছোট টোকেন পাঠান৷",
+  "giftThankYouSentTitle": "আপনার উপহারের জন্য আপনাকে ধন্যবাদ",
+  "helpTitle": "সাহায্য এবং সমর্থন",
+  "helpHeroTitle": "আমরা কিভাবে সাহায্য করতে পারি?",
+  "helpHeroBody": "একটি সেশনের সাথে একটি সমস্যা রিপোর্ট করুন, আপনার প্রতিবেদনগুলি ট্র্যাক করুন বা আমাদের টিমের সাথে যোগাযোগ করুন৷",
+  "helpReportSection": "একটি সেশনের সাথে একটি সমস্যা রিপোর্ট করুন",
+  "helpReportEmpty": "আপনার সম্পূর্ণ সেশন এখানে প্রদর্শিত হবে.",
+  "helpReportAction": "রিপোর্ট",
+  "helpYourReports": "আপনার রিপোর্ট",
+  "helpContactSection": "আমাদের সাথে যোগাযোগ করুন",
+  "helpWhatsapp": "হোয়াটসঅ্যাপে চ্যাট করুন",
+  "helpEmailUs": "আমাদের ইমেইল করুন",
+  "helpCentre": "সাহায্য কেন্দ্র",
+  "helpFaqSection": "প্রায়শই জিজ্ঞাসিত প্রশ্ন",
+  "helpLoadError": "আপনার সেশনগুলি লোড করা যায়নি৷",
+  "helpFaqChargesQ": "আমি কিভাবে একটি পরামর্শ জন্য চার্জ করা হয়?",
+  "helpFaqChargesA": "আপনি প্রতি মিনিটে অর্থ প্রদান করেন, শুধুমাত্র সেশনটি লাইভ থাকাকালীন। জ্যোতিষী যোগদান করার পরে বিলিং শুরু হয় এবং আপনি যে কেউ এটি শেষ করার মুহুর্ত বন্ধ করে দেন।",
+  "helpFaqNoResponseQ": "জ্যোতিষী সাড়া না দিলে কি হবে?",
+  "helpFaqNoResponseA": "আপনার অনুরোধ গৃহীত না হলে, আপনাকে চার্জ করা হবে না — সেশনের জন্য রাখা যেকোন পরিমাণ আপনার ওয়ালেটে ফেরত যায়।",
+  "helpFaqRefundQ": "আমি কি ফেরত পেতে পারি?",
+  "helpFaqRefundA": "যদি কিছু ভুল হয়ে থাকে - ভুল চার্জ, একটি প্রযুক্তিগত সমস্যা বা একটি অসহায় সেশন - সেই সেশন থেকে রিপোর্ট করুন। আমাদের দল প্রতিটি রিপোর্ট পর্যালোচনা করে এবং আপনার ওয়ালেটে ফেরত দেয় যখন এটি নিশ্চিত হয়।",
+  "helpFaqBalanceQ": "একটি অধিবেশন চলাকালীন আমার ব্যালেন্স ফুরিয়ে গেছে। এখন কি?",
+  "helpFaqBalanceA": "আপনার ব্যালেন্স শেষ হয়ে গেলে সেশন স্বয়ংক্রিয়ভাবে শেষ হয়ে যায়। আপনার ওয়ালেট রিচার্জ করুন এবং সেশন সারাংশ থেকে একই জ্যোতিষীর সাথে আবার শুরু করুন।",
+  "helpFaqPrivacyQ": "আমার কথোপকথন কি ব্যক্তিগত?",
+  "helpFaqPrivacyA": "আপনার পরামর্শ আপনার এবং আপনার জ্যোতিষী মধ্যে হয়. আমাদের সহায়তা দল শুধুমাত্র একটি প্রতিবেদনের সমাধান করতে বা প্ল্যাটফর্মটিকে সুরক্ষিত রাখতে একটি সেশন দেখে।",
+  "helpFaqLanguageQ": "আমি কিভাবে অ্যাপের ভাষা পরিবর্তন করব?",
+  "helpFaqLanguageA": "প্রোফাইল → ল্যাঙ্গুয়েজ এ যান এবং আপনি যে ভাষাতে সবচেয়ে বেশি স্বাচ্ছন্দ্য বোধ করেন সেটি বেছে নিন।",
+  "reportTitle": "একটি সমস্যা রিপোর্ট করুন",
+  "reportSessionWith": "{name} এর সাথে সেশন",
+  "reportWhatHappened": "কি ভুল হয়েছে?",
+  "reportTypeBilling": "ভুল অভিযোগ",
+  "reportTypeBillingHint": "আমার যা হওয়া উচিত ছিল তার চেয়ে বেশি চার্জ করা হয়েছে",
+  "reportTypeQuality": "অসহায় সেশন",
+  "reportTypeQualityHint": "নির্দেশিকা কি প্রতিশ্রুতি ছিল না",
+  "reportTypeConduct": "অনুপযুক্ত আচরণ",
+  "reportTypeConductHint": "জ্যোতিষী ছিল অভদ্র বা অপেশাদার",
+  "reportTypeNoShow": "জ্যোতিষী সাড়া দেননি",
+  "reportTypeNoShowHint": "তারা গ্রহণ করেছে কিন্তু সত্যিই যোগদান করেনি",
+  "reportTypeTechnical": "প্রযুক্তিগত সমস্যা",
+  "reportTypeTechnicalHint": "চ্যাট বা কল ব্যর্থ রাখা",
+  "reportDescribe": "আমাদের আরো বলুন",
+  "reportDescribeHint": "কী ঘটেছে তা শেয়ার করুন — যত বেশি বিশদ, তত দ্রুত আমরা সাহায্য করতে পারি।",
+  "reportMinChars": "অন্তত {count} অক্ষর",
+  "reportPrivacyNote": "আপনার রিপোর্ট দেখার জন্য, আমাদের সহায়তা দল এই অধিবেশন পর্যালোচনা করবে।",
+  "reportSubmit": "রিপোর্ট জমা দিন",
+  "reportSubmittedTitle": "প্রতিবেদন জমা দেওয়া হয়েছে",
+  "reportSubmittedBody": "আমরা এটি দেখব এবং আপডেট হওয়ার সাথে সাথে আপনাকে অবহিত করব৷",
+  "reportAlreadyTitle": "আপনি ইতিমধ্যে এই অধিবেশন রিপোর্ট করেছেন",
+  "reportAlreadyBody": "আমাদের দল এটা খতিয়ে দেখছে। একটি আপডেট হলে আপনাকে জানানো হবে।",
+  "reportViewStatus": "প্রতিবেদনের অবস্থা দেখুন",
+  "disputeTitle": "রিপোর্ট বিবরণ",
+  "disputeStatusOpen": "গৃহীত",
+  "disputeStatusInvestigating": "পর্যালোচনা অধীনে",
+  "disputeStatusResolved": "সমাধান করা হয়েছে",
+  "disputeStatusRejected": "বন্ধ",
+  "disputeHeadlineOpen": "আমরা আপনার রিপোর্ট পেয়েছি",
+  "disputeHeadlineInvestigating": "আমাদের দল আপনার রিপোর্ট পর্যালোচনা করছে",
+  "disputeHeadlineResolved": "আপনার রিপোর্ট সমাধান করা হয়েছে",
+  "disputeHeadlineRejected": "আমরা আপনার প্রতিবেদন পর্যালোচনা করেছি",
+  "disputeOpenBody": "একটি আপডেট পাওয়া মাত্রই আমরা আপনাকে অবহিত করব৷",
+  "disputeReportedOn": "{date} এ রিপোর্ট করা হয়েছে",
+  "disputeRefundedTitle": "{amount} আপনার ওয়ালেটে ফেরত দেওয়া হয়েছে",
+  "disputeOpenWallet": "ওয়ালেট",
+  "disputeOutcome": "ফলাফল",
+  "disputeOutcomeNoRefund": "এই সেশনের জন্য কোনো ফেরত জারি করা হয়নি।",
+  "disputeTimeline": "অগ্রগতি",
+  "disputeStepRaised": "প্রতিবেদন জমা দেওয়া হয়েছে",
+  "disputeStepReviewing": "পর্যালোচনা অধীনে",
+  "disputeStepResolved": "সমাধান করা হয়েছে",
+  "disputeStepRejected": "বন্ধ",
+  "disputeYourReport": "আপনার রিপোর্ট",
+  "roomReportProblem": "একটি সমস্যা রিপোর্ট করুন",
+  "articlesTitle": "পড়ুন এবং শিখুন",
+  "articlesRailSubtitle": "গাইড, প্রতিকার এবং উত্সব",
+  "articlesAll": "সব",
+  "articlesEmptyTitle": "এখানে এখনো পড়ার কিছু নেই",
+  "articlesEmptyBody": "নতুন নিবন্ধগুলি তাদের পথে রয়েছে — শীঘ্রই আবার দেখুন।",
+  "articleCatAstrology": "জ্যোতিষশাস্ত্র",
+  "articleCatHoroscope": "রাশিফল",
+  "articleCatFestivals": "উৎসব",
+  "articleCatRemedies": "প্রতিকার",
+  "articleCatGuides": "গাইড",
+  "articleCatNews": "খবর",
+  "articleMinRead": "{minutes} মিনিট পড়া",
+  "articleShare": "শেয়ার করুন",
+  "articleMoreToRead": "আরো পড়তে",
+  "articleAskTitle": "আপনার নিজের চার্টের জন্য নির্দেশিকা চান?",
+  "articleAskBody": "কয়েক মিনিটের মধ্যে একজন যাচাইকৃত জ্যোতিষীর সাথে কথা বলুন।",
+  "articleAskCta": "এখন জিজ্ঞাসা করুন",
+  "panchangTitle": "পঞ্চং",
+  "panchangToday": "আজ",
+  "panchangPickDate": "একটি তারিখ চয়ন করুন",
+  "panchangMoonIn": "{sign} এ চাঁদ",
+  "panchangTill": "{time} পর্যন্ত",
+  "panchangRightNow": "এখনই",
+  "panchangNowChoghadiya": "{name} চোঘদিয়া {time} পর্যন্ত",
+  "panchangRahuNow": "রাহু কাল {time} পর্যন্ত চালু আছে — নতুন শুরুতে অপেক্ষা করুন।",
+  "panchangLimbs": "আজকের পঞ্চাং",
+  "panchangAuspicious": "শুভ সময়",
+  "panchangInauspicious": "নতুন কাজ শুরু করা থেকে বিরত থাকুন",
+  "panchangBrahma": "ব্রাহ্ম মুহুর্ত",
+  "panchangAbhijit": "অভিজিৎ মুহুর্তা",
+  "panchangNoAbhijit": "বুধবার অভিজিৎ মুহুর্তা পালন করা হয় না।",
+  "panchangRahuKaal": "রাহু কাল",
+  "panchangYamaganda": "ইয়ামাগান্ডা",
+  "panchangGulika": "গুলিকা কাল",
+  "panchangChoghadiya": "চোগাদিয়া",
+  "panchangDay": "দিন",
+  "panchangNight": "রাত্রি",
+  "panchangNotes": "আমাদের জ্যোতিষীদের কাছ থেকে নোট",
+  "panchangPersonalTitle": "আপনার চার্টের জন্য সময়",
+  "panchangPersonalBody": "আপনার কুন্ডলি থেকে কাজ করা ঘন্টাগুলি দেখুন যা আপনার জন্য সবচেয়ে উপযুক্ত।",
+  "panchangFooter": "স্থানীয় সূর্যোদয় থেকে {place} · {timezone} · গণনা করা হয়েছে",
+  "panchangChoosePlaceTitle": "আপনার শহর চয়ন করুন",
+  "panchangChoosePlaceBody": "পঞ্চং সময় নির্ভর করে আপনি কোথায় আছেন - আপনি যে শহরটির জন্য চান সেটি বেছে নিন।",
+  "panchangChoosePlaceCta": "শহর বেছে নিন",
+  "panchangUsePlace": "{place} ব্যবহার করুন",
+  "panchangCity": "শহর",
+  "panchangCityHint": "একটি শহর বা শহর অনুসন্ধান করুন",
+  "kPdfTitle": "কুন্ডলি রিপোর্ট (পিডিএফ)",
+  "kPdfFull": "সম্পূর্ণ প্রতিবেদন",
+  "kPdfFullSub": "চার্ট, গ্রহ, অবকাহদ, দশা সময়রেখা, যোগ এবং দোষ",
+  "kPdfBasic": "এক পৃষ্ঠার সারাংশ",
+  "kPdfBasicSub": "গ্রহ অবস্থান সহ Lagna এবং Navamsa চার্ট",
+  "kPdfChartStyle": "চার্ট শৈলী",
+  "kPdfEastIndian": "পূর্ব ভারতীয়",
+  "kPdfShareCta": "ডাউনলোড করুন এবং শেয়ার করুন",
+  "kPdfPreparing": "আপনার পিডিএফ প্রস্তুত করা হচ্ছে...",
+  "kPdfNote": "পিডিএফ ইংরেজিতে আছে। এটি আপনার ফোনে সেভ করুন বা WhatsApp এ পাঠান।",
+  "kPdfUnavailable": "PDF রিপোর্ট এই মুহূর্তে উপলব্ধ নেই. পরে আবার চেষ্টা করুন.",
+  "kOvEyebrow": "জনম কুণ্ডলী",
+  "kOvMoonChip": "চাঁদ · {sign}",
+  "kOvTapHouseHint": "আপনার সম্পর্কে কী বলে তা পড়তে যে কোনও বাড়িতে আলতো চাপুন৷",
+  "kOvBirthDetailsSub": "অবকাহদা, জন্মে পঞ্চাং এবং ড",
+  "kOvGroupCharts": "চার্ট এবং গ্রহ",
+  "kOvGroupTiming": "সময় এবং সময়কাল",
+  "kOvGroupGuidance": "নির্দেশনা ও প্রতিকার",
+  "kOvLoadError": "আমরা এই কুন্ডলী খুলতে পারিনি",
+  "kKitAskTitle": "আপনার চার্ট সম্পর্কে একটি প্রশ্ন আছে?",
+  "kKitAskBody": "একজন যাচাইকৃত জ্যোতিষী এটি আপনার সাথে পড়তে পারেন — ব্যক্তিগতভাবে, মিনিটের মধ্যে।",
+  "kFcExploreMore": "গভীরে যান",
+  "kFcAllHousesSub": "আপনার লগনা চার্টের বারোটি ঘর, প্রতিটিতে একটি করে ট্যাপ করুন",
+  "kFcAllChartsSub": "D1 থেকে D60 পর্যন্ত প্রতিটি বিভাগীয় চার্ট",
+  "kPlanetsHeroSub": "নয়টি গ্রহ, কোথায় বসে তারা কত শক্তিশালী। এটি পড়তে যেকোনো গ্রহে ট্যাপ করুন।",
+  "kPlanetsStrongCount": "{count} শক্তিশালী",
+  "kPlanetsRetroCount": "{count} বিপরীতমুখী",
+  "kPlanetRetrograde": "বিপরীতমুখী",
+  "kPlanetCombust": "দহন",
+  "kDashaTimelineTitle": "আপনার জীবন টাইমলাইন",
+  "kDashaProgressPct": "{pct} % সম্পূর্ণ",
+  "kBhavaHeroSub": "বারোটি ঘর, জীবনের বারোটি ক্ষেত্র — কী প্রতিটিকে সমর্থন করে এবং কী চাপ দেয়।",
+  "kBhavaSupportedCount": "{count} সমর্থিত",
+  "kBhavaStrainedCount": "{count} স্ট্রেনের অধীনে",
+  "kYdDoshaHeroSub": "প্রথাগত দোষগুলি আপনার চার্টে চেক করা হয়েছে, প্রতিটি আসলে কতটা শক্তিশালী।",
+  "kYdYogaHeroSub": "গ্রহের সংমিশ্রণ যা আপনার উপহার এবং সুযোগকে আকার দেয়।",
+  "kYdDoshaCount": "{count} বর্তমান",
+  "kYdYogaCount": "{count} যোগাসন",
+  "kYdClear": "পরিষ্কার",
+  "kYdRemediesSub": "মৃদু, ঐতিহ্যগত প্রতিকার আপনার চার্টের জন্য উপযুক্ত",
+  "kSsLifetimeTitle": "আপনার জীবনকাল জুড়ে",
+  "kSsNotRunning": "এখন চলছে না",
+  "kTrHeroSub": "আজকের গ্রহগুলি আপনার চাঁদ থেকে {sign} এ পড়েছে৷",
+  "kTrJupiterChip": "চাঁদ থেকে বৃহস্পতি {house}",
+  "kTrSadeSatiCalendarSub": "শনির চক্রের প্রতিটি পর্যায়, অতীত এবং আসন্ন",
+  "kSsEyebrow": "শনির চক্র",
+  "kAdvHeroSub": "টেকনিক্যাল লেয়ার জ্যোতিষীদের কাছ থেকে পড়ে",
+  "kAdvReportCount": "{count} প্রতিবেদন",
+  "kAdvPdfChip": "পিডিএফ ডাউনলোড",
+  "kAdvReportsTitle": "প্রযুক্তিগত প্রতিবেদন",
+  "kAdvAvHousesTitle": "বাড়ির দ্বারা পয়েন্ট",
+  "kAdvSarvaTotal": "সব মিলিয়ে {total} পয়েন্ট",
+  "kInHeroSub": "আপনার জন্ম তালিকা থেকে আঁকা একটি চরিত্র এবং জীবন স্কেচ",
+  "kInSupportiveCount": "{count} সহায়ক",
+  "kInChallengingCount": "{count} যত্ন প্রয়োজন",
+  "kInGlanceTitle": "এক নজরে",
+  "kInAreasTitle": "এলাকা অনুযায়ী এলাকা",
+  "kLkHeroSub": "আপনার চার্টে উত্তরাধিকারসূত্রে প্রাপ্ত ঋণ এবং তাদের সহজ ঘরোয়া প্রতিকার",
+  "kLkDebtCount": "{count} সক্রিয় ঋণ",
+  "kLkWeakCount": "{count} দুর্বল গ্রহ",
+  "kMuHeroSub": "আজকের ভালো ঘন্টা, আপনার চার্টের জন্য পড়ুন",
+  "kMuTimingsTitle": "আজকের সময়",
+  "kMuTabDay": "দিন",
+  "kMuTabNight": "রাত্রি",
+  "kMuHoraOf": "{planet} হোরা",
+  "kMuAbhijit": "অভিজিৎ মুহুর্তা",
+  "kNumHeroSub": "আপনার মূল সংখ্যা এবং লো শু জন্ম গ্রিড",
+  "kNumYourNumbers": "আপনার নম্বর",
+  "kNumMissing": "অনুপস্থিত সংখ্যা",
+  "kNumRepeated": "বারবার সংখ্যা",
+  "kRmHeroSub": "মৃদু, ঐতিহ্যগত অনুশীলনগুলি আপনার চার্টের সাথে মিলেছে",
+  "kRmCount": "{count} প্রতিকার",
+  "kRmGatedChip": "কিছু একজন জ্যোতিষী প্রয়োজন",
+  "kRmCaution": "মনে রাখবেন",
+  "kUpHeroSub": "প্রতিটি গ্রহের জন্য রং, দিন, মন্ত্র এবং দাতব্য",
+  "kUpStrengthenCount": "{count} শক্তিশালী করতে",
+  "kUpPacifyCount": "{count} শান্ত করতে",
+  "kUpGateTitle": "আগে একজন জ্যোতিষীর সাথে কনফার্ম করুন",
+  "kUpPlanetsTitle": "গ্রহ দ্বারা গ্রহ",
+  "kVpHeadline": "আপনার বছর {year}",
+  "kVpMarkersTitle": "বছরের মূল চিহ্নিতকারী",
+  "kVpTajikaTitle": "তাজিকা দিক",
+  "kVpIthasala": "ইথাশালা · প্রয়োগ করা",
+  "kVpIshrafa": "ইশরাফা · আলাদা করা",
+  "followFollow": "অনুসরণ করুন",
+  "followFollowing": "অনুসরণ করছে",
+  "followNotifying": "অবহিত করা হচ্ছে",
+  "followNotifyingWhenOnline": "অনলাইন হলে আমরা আপনাকে অবহিত করব",
+  "followedToast": "{name} অনুসরণ করছে — তারা অনলাইনে বা লাইভ হলে আমরা আপনাকে জানাব",
+  "unfollowedToast": "{name} অনুসরণ করা বন্ধ",
+  "followFailed": "অনুসরণ আপডেট করা যায়নি. আবার চেষ্টা করুন.",
+  "followPromptTitle": "{name} অনুসরণ করবেন?",
+  "followPromptBody": "তারা অনলাইনে থাকলে বা লাইভ হলে একটি বিজ্ঞপ্তি পান।",
+  "followPromptDoneTitle": "আপনি অনুসরণ করছেন",
+  "followPromptDoneBody": "{name} অনলাইনে বা লাইভ হলে আমরা আপনাকে জানাব৷",
+  "followingTitle": "অনুসরণ করছে",
+  "followingHint": "এই জ্যোতিষীরা অনলাইনে এলে বা লাইভ হলে আপনি একটি বিজ্ঞপ্তি পাবেন। আনফলো করতে হার্টে ট্যাপ করুন।",
+  "followingEmptyTitle": "এখনও কাউকে অনুসরণ করছি না",
+  "followingEmptyBody": "জ্যোতিষীদের অনুসরণ করুন আপনি জানতে চান তারা কখন অনলাইনে থাকে বা লাইভ থাকে।",
+  "followingExplore": "জ্যোতিষীদের সন্ধান করুন",
+  "followingLoadError": "আপনার অনুসরণ করা জ্যোতিষীদের লোড করা যায়নি।",
+  "followingFilter": "অনুসরণ করছে",
+  "followingFilterEmpty": "তাদের অনুসরণ করতে একজন জ্যোতিষীর হার্টে ট্যাপ করুন — তারা এখানে দেখাবে।",
+  "astroStatFollowers": "অনুসারী",
+  "prefsFollowAlerts": "আপনি অনুসরণ করেন জ্যোতিষী",
+  "prefsFollowAlertsDesc": "যখন তারা অনলাইনে আসে বা লাইভে যায়",
+  "storeTitle": "প্রতিকারের দোকান",
+  "storeHeroSubtitle": "খাঁটি রুদ্রাক্ষ, রত্নপাথর, যন্ত্র এবং পূজা — জ্যোতিষীদের দ্বারা পরিচালিত",
+  "storeSearchHint": "রুদ্রাক্ষ, রত্নপাথর, পূজা অনুসন্ধান করুন...",
+  "storeVerdictToast": "একজন জ্যোতিষী আপনার পণ্য সম্পর্কে পরামর্শ শেয়ার করেছেন",
+  "storeView": "দেখুন",
+  "storeUnavailable": "অনুপলব্ধ",
+  "storePriceFrom": "{price} থেকে",
+  "storeOff": "{percent} % ছাড়",
+  "storeBadgePooja": "পুজো",
+  "storeBadgeAskAstrologer": "জ্যোতিষীকে জিজ্ঞাসা করুন",
+  "storeCartTitle": "কার্ট",
+  "storeTrustCertified": "ল্যাব প্রত্যয়িত",
+  "storeTrustGuided": "নির্দেশিত জ্যোতিষী",
+  "storeTrustSecure": "নিরাপদ পেমেন্ট",
+  "storeCategories": "বিভাগ অনুসারে কেনাকাটা করুন",
+  "storeFeatured": "হ্যান্ডপিকড প্রতিকার",
+  "storeFeaturedSub": "আমাদের জ্যোতিষীদের দ্বারা নির্বাচিত",
+  "storeCollections": "প্রতিকার সংগ্রহ",
+  "storePoojas": "একটি পুজো বুক করুন",
+  "storePoojasSub": "পবিত্র মন্দিরে তোমার নামে অনুষ্ঠান করা হয়",
+  "storeConsultBannerTitle": "আপনার জন্য উপযুক্ত কি নিশ্চিত না?",
+  "storeConsultBannerBody": "আপনি কেনার আগে একজন জ্যোতিষীকে ভিডিও কল করুন — তারা আপনার চার্ট পরীক্ষা করে সঠিক প্রতিকারের পরামর্শ দেয়।",
+  "storeConsultBannerCta": "একজন জ্যোতিষীর সাথে কথা বলুন",
+  "storeMyAdvice": "আপনার জ্যোতিষীদের কাছ থেকে পরামর্শ",
+  "storeDisclaimerFooter": "প্রতিকার হল ঐতিহ্যগত অভ্যাস। ফলাফল নিশ্চিত নয় এবং তারা চিকিৎসা, আইনি বা আর্থিক পরামর্শ প্রতিস্থাপন করে না।",
+  "storeEmptyTitle": "দোকান তৈরি হচ্ছে",
+  "storeEmptyBody": "প্রতিকার এবং পূজা শীঘ্রই এখানে প্রদর্শিত হবে.",
+  "storeLoadError": "দোকান লোড করা যায়নি",
+  "storeMyOrders": "আমার আদেশ",
+  "storeVerdictSuitable": "উপযুক্ত - এগিয়ে যান",
+  "storeVerdictNotSuitable": "আপনার জন্য উপযুক্ত নয়",
+  "storeVerdictAlternative": "অন্য কিছু সাজেস্ট করে",
+  "storeConsultCancelled": "কল হয়নি",
+  "storeConsultExpired": "কোন পরামর্শ শেয়ার করা হয়নি",
+  "storeConsultCallLive": "আপনার কল চলছে",
+  "storeConsultAwaiting": "জ্যোতিষীর পরামর্শের জন্য অপেক্ষা করছি",
+  "storeConsultWith": "{name} এর সাথে",
+  "storeVerdictFrom": "{name} এর পরামর্শ",
+  "storeBuyRecommended": "প্রস্তাবিত বিকল্প কিনুন",
+  "storeSuggestedInstead": "পরিবর্তে প্রস্তাবিত",
+  "storeConsultPromptTitle": "নিশ্চিত না এটা আপনার জন্য উপযুক্ত?",
+  "storeConsultPromptBody": "একজন জ্যোতিষীকে ভিডিও কল করুন - আপনি কেনার আগে তারা আপনার চার্ট পরীক্ষা করবে।",
+  "storeConsultRequiredTitle": "প্রথমে একজন জ্যোতিষীর সাথে পরামর্শ করুন",
+  "storeConsultRequiredBody": "একজন জ্যোতিষী নিশ্চিত করার পরেই এই প্রতিকারটি বিক্রি করা হয় এটি আপনার চার্টের জন্য উপযুক্ত।",
+  "storeNoResults": "কিছুই মেলে না",
+  "storeNoResultsBody": "অন্য শব্দ চেষ্টা করুন বা কিছু ফিল্টার সাফ করুন.",
+  "storeClearFilters": "ফিল্টার সাফ করুন",
+  "storeResultCount": "{count, plural, =1{1টি আইটেম} other{{count} আইটেম}}",
+  "storeFilters": "ফিল্টার",
+  "storeNoFilters": "এই নির্বাচনের জন্য এখনো কোনো ফিল্টার নেই।",
+  "storeSortBy": "অনুসারে সাজান",
+  "storeSortRecommended": "প্রস্তাবিত",
+  "storeSortPopular": "সবচেয়ে জনপ্রিয়",
+  "storeSortNew": "সবথেকে নতুন",
+  "storeSortRating": "শীর্ষ রেট",
+  "storeKindProducts": "পণ্য",
+  "storeKindPoojas": "পুজো",
+  "storeKindDigital": "রিপোর্ট",
+  "storeRemedyFor": "প্রতিকার: {key}",
+  "storeChoosePackage": "একটি প্যাকেজ চয়ন করুন",
+  "storeChooseOption": "একটি বিকল্প চয়ন করুন",
+  "storePickDate": "একটি তারিখ চয়ন করুন",
+  "storeSankalpDetails": "সংকল্প বিস্তারিত",
+  "storeYourDetails": "আপনার বিবরণ",
+  "storeSankalpHint": "পূজার সময় পুরোহিত এই নামে সংকল্প গ্রহণ করেন।",
+  "storeCertificate": "সত্যতা সার্টিফিকেট",
+  "storeCertificateNo": "সার্টিফিকেট নং।  {number}",
+  "storeVerify": "যাচাই করুন",
+  "storeHighlights": "হাইলাইট",
+  "storeAbout": "সম্পর্কে",
+  "storeSignificance": "ঐতিহ্যগত তাৎপর্য",
+  "storeHowToUse": "কিভাবে পরবেন/ব্যবহার করবেন",
+  "storeHowItWorks": "এটা কিভাবে কাজ করে",
+  "storeReadMore": "আরও পড়ুন",
+  "storeReadLess": "কম দেখান",
+  "storeRecommendedForYou": "আপনার জন্য প্রস্তাবিত",
+  "storeTaxInclusive": "সমস্ত ট্যাক্স সহ",
+  "storeOutOfStock": "স্টক শেষ",
+  "storeOnlyLeft": "শুধুমাত্র {count} বাকি",
+  "storeAskAnother": "অন্য একজন জ্যোতিষীকে জিজ্ঞাসা করুন",
+  "storeNoDates": "শীঘ্রই তারিখ ঘোষণা করা হবে.",
+  "storeOpenForBooking": "বুকিং এর জন্য খোলা",
+  "storeSeatsLeft": "{count} স্লট বাকি",
+  "storeReturnableDays": "প্রসবের {days} দিনের মধ্যে সহজে ফেরত",
+  "storeNotReturnable": "একবার বিতরণ করা হলে ফেরত দেওয়া যায় না",
+  "storeCancellable": "এটি পাঠানোর আগে বিনামূল্যে বাতিল করুন",
+  "storeNotCancellable": "একবার অর্ডার দিলে বাতিল করা যাবে না",
+  "storeMadeToOrder": "অর্ডার করার জন্য তৈরি · প্রায় {days} দিনের মধ্যে প্রস্তুত",
+  "storeShipsIndia": "ভারত জুড়ে বীমাকৃত শিপিং",
+  "storeVideoProof": "পুজোর ভিডিও আপনাদের সাথে শেয়ার করলাম",
+  "storeInstantDownload": "অর্থ প্রদানের পরে তাত্ক্ষণিক ডাউনলোড করুন",
+  "storeSoldBy": "{name} দ্বারা বিক্রি",
+  "storeSellerInfo": "বিক্রেতা এবং অভিযোগ বিবরণ",
+  "storeCountryOfOrigin": "উৎপত্তি দেশ: {country}",
+  "storeGrievanceOfficer": "অভিযোগ কর্মকর্তা",
+  "storeFieldRequired": "{label} প্রয়োজন",
+  "storeFieldParticipants": "{count} {label} লিখুন",
+  "storePickDateError": "পুজোর জন্য একটি তারিখ বেছে নিন",
+  "storeAddedToCart": "কার্টে যোগ করা হয়েছে",
+  "storeViewCart": "কার্ট দেখুন",
+  "storeFixDetails": "হাইলাইট বিবরণ চেক করুন",
+  "storeAddToCart": "কার্টে যোগ করুন",
+  "storeBuyNow": "এখন কিনুন",
+  "storeBookPooja": "পুজোর বই",
+  "storeConsultFirst": "প্রথমে পরামর্শ করুন",
+  "storePersonN": "ব্যক্তি {n}"
 }

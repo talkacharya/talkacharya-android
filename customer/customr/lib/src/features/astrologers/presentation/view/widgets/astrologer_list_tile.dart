@@ -7,6 +7,8 @@ import '../../../../../core/theme/astro_palette.dart';
 import '../../../../../core/theme/brand_colors.dart';
 import '../../../../../core/util/money.dart';
 import '../../../../../shared/widgets/pressable.dart';
+import '../../../../follows/data/follows_api.dart';
+import '../../../../follows/presentation/widgets/follow_widgets.dart';
 import '../../../data/models/astrologer.dart';
 
 /// Compact, professional discovery row: plain surface, hairline border, a small
@@ -77,6 +79,14 @@ class AstrologerListTile extends StatelessWidget {
                               color: AstroPalette.air.end,
                             ),
                           ],
+                          const Spacer(),
+                          const SizedBox(width: 6),
+                          FollowIconToggle(
+                            astrologerId: a.id,
+                            astrologerName: a.name,
+                            fallback: followEntryOf(a),
+                            size: 26,
+                          ),
                         ],
                       ),
                       const SizedBox(height: 1),
@@ -89,68 +99,76 @@ class AstrologerListTile extends StatelessWidget {
                         style: muted,
                       ),
                       const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          Icon(Icons.star_rounded, size: 14, color: brand.gold),
-                          const SizedBox(width: 2),
-                          Text(
-                            a.ratingAvg > 0
-                                ? a.ratingAvg.toStringAsFixed(1)
-                                : l.astroRatingNew,
-                            style: theme.textTheme.labelMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          if (a.ratingCount > 0)
-                            Text(' (${_compact(a.ratingCount)})', style: muted),
-                          if (a.yearsExperience > 0) ...[
-                            _Dot(color: brand.inkMuted),
-                            Text('${a.yearsExperience} yrs', style: muted),
-                          ],
-                          if (langs.isNotEmpty) ...[
-                            _Dot(color: brand.inkMuted),
-                            Flexible(
-                              child: Text(
-                                langs,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: muted,
+                      // one ellipsizing line, so large text scales and long
+                      // language lists can never push the card sideways
+                      Text.rich(
+                        TextSpan(
+                          style: muted,
+                          children: [
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 2),
+                                child: Icon(
+                                  Icons.star_rounded,
+                                  size: 14,
+                                  color: brand.gold,
+                                ),
                               ),
                             ),
+                            TextSpan(
+                              text: a.ratingAvg > 0
+                                  ? a.ratingAvg.toStringAsFixed(1)
+                                  : l.astroRatingNew,
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            if (a.ratingCount > 0)
+                              TextSpan(text: ' (${_compact(a.ratingCount)})'),
+                            if (a.yearsExperience > 0)
+                              TextSpan(text: '  ·  ${a.yearsExperience} yrs'),
+                            if (langs.isNotEmpty) TextSpan(text: '  ·  $langs'),
                           ],
-                        ],
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      rate == null
-                          ? '—'
-                          : l.astroPerMinute(
-                              Money.format(
-                                rate.perMinute,
-                                rate.currency,
-                                locale: locale,
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 120),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        rate == null
+                            ? '—'
+                            : l.astroPerMinute(
+                                Money.format(
+                                  rate.perMinute,
+                                  rate.currency,
+                                  locale: locale,
+                                ),
                               ),
-                            ),
-                      style: theme.textTheme.labelLarge?.copyWith(
-                        fontWeight: FontWeight.w800,
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    _Cta(
-                      available: available,
-                      icon: available
-                          ? _ctaIcon()
-                          : Icons.notifications_none_rounded,
-                      label: available ? _ctaLabel(l) : l.homeNotifyMeBtn,
-                      onTap: open,
-                    ),
-                  ],
+                      const SizedBox(height: 10),
+                      if (available)
+                        _Cta(
+                          available: true,
+                          icon: _ctaIcon(),
+                          label: _ctaLabel(l),
+                          onTap: open,
+                        )
+                      else
+                        _NotifyCta(astrologer: a),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -243,22 +261,37 @@ class _Avatar extends StatelessWidget {
   }
 }
 
-class _Dot extends StatelessWidget {
-  const _Dot({required this.color});
-  final Color color;
+/// Offline astrologer: "Notify me" follows them (online pushes), and reads
+/// "Notifying" once followed — tapping again unfollows.
+class _NotifyCta extends StatelessWidget {
+  const _NotifyCta({required this.astrologer});
+  final Astrologer astrologer;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 5),
-    child: Container(
-      width: 3,
-      height: 3,
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.6),
-        shape: BoxShape.circle,
-      ),
-    ),
-  );
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final a = astrologer;
+    final following =
+        watchFollow(context, a.id, followEntryOf(a))?.following ?? false;
+    final pending = watchFollowPending(context, a.id);
+    return _Cta(
+      available: false,
+      highlighted: following,
+      icon: following
+          ? Icons.notifications_active_rounded
+          : Icons.notifications_none_rounded,
+      label: following ? l.followNotifying : l.homeNotifyMeBtn,
+      onTap: pending
+          ? null
+          : () => toggleFollow(
+              context,
+              astrologerId: a.id,
+              astrologerName: a.name,
+              source: FollowSource.card,
+              fallback: followEntryOf(a),
+            ),
+    );
+  }
 }
 
 /// Outlined, compact CTA — green when the astrologer can take a session now.
@@ -268,18 +301,26 @@ class _Cta extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onTap,
+    this.highlighted = false,
   });
 
   final bool available;
   final IconData icon;
   final String label;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+
+  /// Offline but followed — tinted so "Notifying" reads as switched on.
+  final bool highlighted;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final brand = context.brand;
-    final color = available ? brand.online : brand.inkMuted;
+    final color = available
+        ? brand.online
+        : highlighted
+        ? AstroPalette.love.end
+        : brand.inkMuted;
     return SizedBox(
       height: 32,
       child: OutlinedButton.icon(
@@ -290,7 +331,9 @@ class _Cta extends StatelessWidget {
               ? brand.online.withValues(alpha: 0.06)
               : null,
           side: BorderSide(
-            color: color.withValues(alpha: available ? 0.9 : 0.4),
+            color: color.withValues(
+              alpha: available || highlighted ? 0.9 : 0.4,
+            ),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 12),
           minimumSize: const Size(0, 32),
@@ -304,7 +347,7 @@ class _Cta extends StatelessWidget {
           ),
         ),
         icon: Icon(icon, size: 15),
-        label: Text(label),
+        label: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
       ),
     );
   }

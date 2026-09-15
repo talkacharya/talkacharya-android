@@ -42,6 +42,9 @@ class ApiPaths {
 
   static const astrologers = '/app/astrologers';
   static String astrologer(String id) => '/app/astrologers/$id';
+  static String astrologerFollow(String id) => '/app/astrologers/$id/follow';
+  static const meFollowing = '/app/me/following';
+  static const followAlerts = '/app/follows/alerts';
   static const home = '/app/home';
   static const wallet = '/app/wallet';
   static const walletPacks = '/app/wallet/packs';
@@ -102,4 +105,42 @@ class ApiPaths {
   static const notificationsReadAll = '/notifications/read-all';
   static const livestreams = '/app/livestreams';
   static String livestream(String id) => '/app/livestreams/$id';
+
+  // store — /app/store/... (products, poojas, orders, consult before buying)
+  static const storeHome = '/app/store/home';
+  static const storeCategories = '/app/store/categories';
+  static const storeFilters = '/app/store/filters';
+  static const storeProducts = '/app/store/products';
+  static String storeProduct(String slug) => '/app/store/products/$slug';
+  static String storeProductEvents(String slug) =>
+      '/app/store/products/$slug/events';
+  static String storeProductConsult(String slug) =>
+      '/app/store/products/$slug/consult';
+  static String storeCollection(String slug) => '/app/store/collections/$slug';
+  static const storeCart = '/app/store/cart';
+  static const storeCartItems = '/app/store/cart/items';
+  static String storeCartItem(String id) => '/app/store/cart/items/$id';
+  static const storeAddresses = '/app/store/addresses';
+  static String storeAddress(String id) => '/app/store/addresses/$id';
+  static const storeCheckoutQuote = '/app/store/checkout/quote';
+  static const storeCheckout = '/app/store/checkout';
+  static const storeOrders = '/app/store/orders';
+  static String storeOrder(String id) => '/app/store/orders/$id';
+  static String storeOrderVerify(String id) =>
+      '/app/store/orders/$id/verify-payment';
+  static String storeOrderRetry(String id) =>
+      '/app/store/orders/$id/retry-payment';
+  static String storeOrderCancel(String id) => '/app/store/orders/$id/cancel';
+  static String storeSubOrderCancel(String orderId, String subOrderId) =>
+      '/app/store/orders/$orderId/sub-orders/$subOrderId/cancel';
+  static String storeOrderInvoices(String id) =>
+      '/app/store/orders/$id/invoices';
+  static String storeLineReturn(String orderId, String lineId) =>
+      '/app/store/orders/$orderId/lines/$lineId/return';
+  static const storeReturns = '/app/store/returns';
+  static const storeBookings = '/app/store/bookings';
+  static String storeDownload(String id) => '/app/store/downloads/$id';
+  static const storeRecommendations = '/app/store/recommendations';
+  static const storeConsults = '/app/store/consults';
+  static String storeConsult(String id) => '/app/store/consults/$id';
 }

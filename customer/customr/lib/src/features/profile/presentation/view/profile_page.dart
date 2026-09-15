@@ -87,6 +87,12 @@ class ProfilePage extends StatelessWidget {
                       label: l.profileNotificationPrefs,
                       onTap: () => context.push(Routes.notificationPrefs),
                     ),
+                    _MenuRow(
+                      icon: Icons.favorite_border_rounded,
+                      hue: AstroPalette.love,
+                      label: l.followingTitle,
+                      onTap: () => context.push(Routes.following),
+                    ),
                   ]),
                   _Group(l.profileGroupMoney, [
                     _MenuRow(
@@ -95,6 +101,26 @@ class ProfilePage extends StatelessWidget {
                       label: l.profileWalletAndTransactions,
                       onTap: () => context.push(Routes.wallet),
                     ),
+                    if (config.features.store) ...[
+                      _MenuRow(
+                        icon: Icons.shopping_bag_outlined,
+                        hue: AstroPalette.money,
+                        label: l.storeProfileOrders,
+                        onTap: () => context.push(Routes.storeOrders),
+                      ),
+                      _MenuRow(
+                        icon: Icons.forum_outlined,
+                        hue: AstroPalette.career,
+                        label: l.storeAdviceTitle,
+                        onTap: () => context.push(Routes.storeConsults),
+                      ),
+                      _MenuRow(
+                        icon: Icons.location_on_outlined,
+                        hue: AstroPalette.earth,
+                        label: l.storeAddressesTitle,
+                        onTap: () => context.push(Routes.storeAddresses),
+                      ),
+                    ],
                     if (config.features.referrals)
                       _MenuRow(
                         icon: Icons.card_giftcard_rounded,

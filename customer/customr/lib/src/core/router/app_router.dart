@@ -77,9 +77,36 @@ import '../../features/predictions/presentation/view/request_prediction_page.dar
 import '../../features/profile/presentation/view/delete_account_page.dart';
 import '../../features/profile/presentation/view/edit_profile_page.dart';
 import '../../features/profile/presentation/view/notification_prefs_page.dart';
+import '../../features/follows/presentation/cubit/follow_cubit.dart';
+import '../../features/follows/presentation/cubit/following_list_cubit.dart';
+import '../../features/follows/presentation/view/following_page.dart';
 import '../../features/profile/presentation/view/profile_page.dart';
 import '../../features/profile/presentation/view/referrals_page.dart';
 import '../../features/shell/presentation/view/app_shell.dart';
+import '../../features/store/data/models/address.dart';
+import '../../features/store/data/models/catalog.dart';
+import '../../features/store/data/models/order.dart';
+import '../../features/store/data/models/product.dart';
+import '../../features/store/presentation/cubit/cart_cubit.dart';
+import '../../features/store/presentation/cubit/checkout_cubit.dart';
+import '../../features/store/presentation/cubit/consult_cubits.dart';
+import '../../features/store/presentation/cubit/order_cubits.dart';
+import '../../features/store/presentation/cubit/product_detail_cubit.dart';
+import '../../features/store/presentation/cubit/product_list_cubit.dart';
+import '../../features/store/presentation/cubit/store_home_cubit.dart';
+import '../../features/store/presentation/cubit/store_payment.dart';
+import '../../features/store/presentation/view/addresses_pages.dart';
+import '../../features/store/presentation/view/cart_page.dart';
+import '../../features/store/presentation/view/checkout_page.dart';
+import '../../features/store/presentation/view/collection_page.dart';
+import '../../features/store/presentation/view/consult_astrologer_page.dart';
+import '../../features/store/presentation/view/consults_pages.dart';
+import '../../features/store/presentation/view/order_detail_page.dart';
+import '../../features/store/presentation/view/orders_page.dart';
+import '../../features/store/presentation/view/product_detail_page.dart';
+import '../../features/store/presentation/view/product_list_page.dart';
+import '../../features/store/presentation/view/return_request_page.dart';
+import '../../features/store/presentation/view/store_home_page.dart';
 import '../../features/support/data/models/dispute.dart';
 import '../../features/support/data/support_repository.dart';
 import '../../features/support/presentation/cubit/dispute_detail_cubit.dart';
@@ -92,6 +119,7 @@ import '../../features/wallet/presentation/view/invoices_page.dart';
 import '../../features/wallet/presentation/view/transactions_page.dart';
 import '../../features/wallet/presentation/view/wallet_page.dart';
 import '../di/service_locator.dart';
+import '../realtime/realtime_client.dart';
 import '../profile/active_profile_store.dart';
 import 'go_router_refresh.dart';
 import 'pending_deep_link.dart';
@@ -235,6 +263,188 @@ GoRouter buildRouter(
           )..load(),
           child: const DisputeDetailPage(),
         ),
+      ),
+
+      // Store — remedies shop, poojas, digital goods and consult-before-buying.
+      // Full-screen, above the bottom nav; every screen is deep-linkable.
+      GoRoute(
+        path: Routes.store,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => BlocProvider(
+          create: (_) => StoreHomeCubit(getIt())..load(),
+          child: const StoreHomePage(),
+        ),
+        routes: [
+          GoRoute(
+            path: 'products',
+            parentNavigatorKey: _rootKey,
+            builder: (_, s) => BlocProvider(
+              key: ValueKey('store-products-${s.uri.query}'),
+              create: (_) => ProductListCubit(
+                getIt(),
+                initial: ProductQuery.fromParams(s.uri.queryParameters),
+              )..init(),
+              child: ProductListPage(
+                focusSearch: s.uri.queryParameters['focus'] == 'search',
+              ),
+            ),
+            routes: [
+              GoRoute(
+                path: ':slug',
+                parentNavigatorKey: _rootKey,
+                builder: (_, s) => BlocProvider(
+                  key: ValueKey(
+                    'store-product-${s.pathParameters['slug']}-'
+                    '${s.uri.queryParameters['rec']}',
+                  ),
+                  create: (_) => ProductDetailCubit(
+                    repo: getIt(),
+                    cart: getIt<CartCubit>(),
+                    slug: s.pathParameters['slug']!,
+                    recommendationId: s.uri.queryParameters['rec'],
+                    realtime: getIt<RealtimeClient>().events,
+                  )..load(),
+                  child: const ProductDetailPage(),
+                ),
+                routes: [
+                  GoRoute(
+                    path: 'consult',
+                    parentNavigatorKey: _rootKey,
+                    builder: (_, s) => BlocProvider(
+                      create: (_) => ConsultOptionsCubit(
+                        repo: getIt(),
+                        slug: s.pathParameters['slug']!,
+                        product: s.extra is ProductDetail
+                            ? s.extra as ProductDetail
+                            : null,
+                      )..load(),
+                      child: const ConsultAstrologerPage(),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'collections/:slug',
+            parentNavigatorKey: _rootKey,
+            builder: (_, s) => BlocProvider(
+              key: ValueKey('store-collection-${s.pathParameters['slug']}'),
+              create: (_) => CollectionCubit(
+                repo: getIt(),
+                slug: s.pathParameters['slug']!,
+              )..load(),
+              child: const CollectionPage(),
+            ),
+          ),
+          GoRoute(
+            path: 'cart',
+            parentNavigatorKey: _rootKey,
+            builder: (_, _) => BlocProvider.value(
+              value: getIt<CartCubit>(),
+              child: const CartPage(),
+            ),
+          ),
+          GoRoute(
+            path: 'checkout',
+            parentNavigatorKey: _rootKey,
+            builder: (_, _) => BlocProvider(
+              create: (_) => CheckoutCubit(
+                repo: getIt(),
+                cart: getIt<CartCubit>(),
+                payments: _storePayments(),
+              )..init(),
+              child: const CheckoutPage(),
+            ),
+          ),
+          GoRoute(
+            path: 'addresses',
+            parentNavigatorKey: _rootKey,
+            builder: (_, _) => BlocProvider(
+              create: (_) => AddressesCubit(getIt())..load(),
+              child: const AddressesPage(),
+            ),
+            routes: [
+              GoRoute(
+                path: 'new',
+                parentNavigatorKey: _rootKey,
+                builder: (_, _) => const AddressFormPage(),
+              ),
+              GoRoute(
+                path: ':id/edit',
+                parentNavigatorKey: _rootKey,
+                builder: (_, s) => AddressFormPage(
+                  initial: s.extra is Address ? s.extra as Address : null,
+                  addressId: s.pathParameters['id'],
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'orders',
+            parentNavigatorKey: _rootKey,
+            builder: (_, s) => BlocProvider(
+              create: (_) => OrdersCubit(
+                getIt(),
+                realtime: getIt<RealtimeClient>().events,
+              ),
+              child: OrdersPage(
+                initialTab: s.uri.queryParameters['tab'] == 'poojas' ? 1 : 0,
+              ),
+            ),
+            routes: [
+              GoRoute(
+                path: ':id',
+                parentNavigatorKey: _rootKey,
+                builder: (_, s) => BlocProvider(
+                  key: ValueKey('store-order-${s.pathParameters['id']}'),
+                  create: (_) => OrderDetailCubit(
+                    repo: getIt(),
+                    payments: _storePayments(),
+                    id: s.pathParameters['id']!,
+                    realtime: getIt<RealtimeClient>().events,
+                  )..load(),
+                  child: OrderDetailPage(
+                    justPlaced: s.uri.queryParameters['placed'] == '1',
+                  ),
+                ),
+                routes: [
+                  GoRoute(
+                    path: 'lines/:lineId/return',
+                    parentNavigatorKey: _rootKey,
+                    builder: (_, s) => ReturnRequestPage(
+                      orderId: s.pathParameters['id']!,
+                      lineId: s.pathParameters['lineId']!,
+                      line: s.extra is OrderLine ? s.extra as OrderLine : null,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'consults',
+            parentNavigatorKey: _rootKey,
+            builder: (_, _) => BlocProvider(
+              create: (_) => ConsultsCubit(getIt())..load(),
+              child: const ConsultsPage(),
+            ),
+            routes: [
+              GoRoute(
+                path: ':id',
+                parentNavigatorKey: _rootKey,
+                builder: (_, s) => BlocProvider(
+                  key: ValueKey('store-consult-${s.pathParameters['id']}'),
+                  create: (_) => ConsultDetailCubit(
+                    repo: getIt(),
+                    id: s.pathParameters['id']!,
+                  )..load(),
+                  child: const ConsultDetailPage(),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
 
       // Wallet — full-screen, above the bottom nav. Reached from the home
@@ -590,6 +800,15 @@ GoRouter buildRouter(
                   _leaf('referrals', (_) => const ReferralsPage()),
                   _leaf('edit', (_) => const EditProfilePage()),
                   _leaf('notifications', (_) => const NotificationPrefsPage()),
+                  _leaf(
+                    'following',
+                    (_) => BlocProvider(
+                      create: (_) =>
+                          FollowingListCubit(getIt(), getIt<FollowCubit>())
+                            ..load(),
+                      child: const FollowingPage(),
+                    ),
+                  ),
                   _leaf('delete-account', (_) => const DeleteAccountPage()),
                   _leaf(
                     'help',
@@ -627,3 +846,6 @@ GoRouter buildRouter(
     ],
   );
 }
+
+StorePaymentFlow _storePayments() =>
+    StorePaymentFlow(repo: getIt(), razorpay: getIt(), wallet: getIt());

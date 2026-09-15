@@ -2596,5 +2596,869 @@
   "kPdfShareCta": "Download & share",
   "kPdfPreparing": "Preparing your PDF…",
   "kPdfNote": "The PDF is in English. Save it to your phone or send it on WhatsApp.",
-  "kPdfUnavailable": "PDF reports aren't available right now. Please try again later."
+  "kPdfUnavailable": "PDF reports aren't available right now. Please try again later.",
+  "kOvEyebrow": "Janam Kundali",
+  "kOvMoonChip": "Moon · {sign}",
+  "@kOvMoonChip": {
+    "placeholders": {
+      "sign": {
+        "type": "String"
+      }
+    }
+  },
+  "kOvTapHouseHint": "Tap any house to read what it says about you",
+  "kOvBirthDetailsSub": "Avakahada, panchang at birth and more",
+  "kOvGroupCharts": "Chart & planets",
+  "kOvGroupTiming": "Timing & periods",
+  "kOvGroupGuidance": "Guidance & remedies",
+  "kOvLoadError": "We couldn't open this kundali",
+  "kKitAskTitle": "Have a question about your chart?",
+  "kKitAskBody": "A verified astrologer can read it with you — personally, in minutes.",
+  "kFcExploreMore": "Go deeper",
+  "kFcAllHousesSub": "All twelve houses of your Lagna chart, one tap each",
+  "kFcAllChartsSub": "Every divisional chart from D1 to D60",
+  "kPlanetsHeroSub": "Nine grahas, where they sit and how strong they are. Tap any planet to read it.",
+  "kPlanetsStrongCount": "{count} strong",
+  "@kPlanetsStrongCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kPlanetsRetroCount": "{count} retrograde",
+  "@kPlanetsRetroCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kPlanetRetrograde": "Retrograde",
+  "kPlanetCombust": "Combust",
+  "kDashaTimelineTitle": "Your life timeline",
+  "kDashaProgressPct": "{pct}% complete",
+  "@kDashaProgressPct": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "kBhavaHeroSub": "Twelve houses, twelve areas of life — what supports each one and what strains it.",
+  "kBhavaSupportedCount": "{count} supported",
+  "@kBhavaSupportedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kBhavaStrainedCount": "{count} under strain",
+  "@kBhavaStrainedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kYdDoshaHeroSub": "Traditional doshas checked in your chart, with how strong each one really is.",
+  "kYdYogaHeroSub": "Planetary combinations that shape your gifts and opportunities.",
+  "kYdDoshaCount": "{count} present",
+  "@kYdDoshaCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kYdYogaCount": "{count} yogas",
+  "@kYdYogaCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kYdClear": "Clear",
+  "kYdRemediesSub": "Gentle, traditional remedies suited to your chart",
+  "kSsLifetimeTitle": "Across your lifetime",
+  "kSsNotRunning": "Not running now",
+  "kTrHeroSub": "Today's planets read from your Moon in {sign}",
+  "@kTrHeroSub": {
+    "placeholders": {
+      "sign": {
+        "type": "String"
+      }
+    }
+  },
+  "kTrJupiterChip": "Jupiter {house} from Moon",
+  "@kTrJupiterChip": {
+    "placeholders": {
+      "house": {
+        "type": "String"
+      }
+    }
+  },
+  "kTrSadeSatiCalendarSub": "Every phase of Saturn's cycle, past and upcoming",
+  "kSsEyebrow": "Saturn's cycle",
+  "kAdvHeroSub": "The technical layer astrologers read from",
+  "kAdvReportCount": "{count} reports",
+  "@kAdvReportCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kAdvPdfChip": "PDF download",
+  "kAdvReportsTitle": "Technical reports",
+  "kAdvAvHousesTitle": "Points by house",
+  "kAdvSarvaTotal": "{total} points in all",
+  "@kAdvSarvaTotal": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "kInHeroSub": "A character and life sketch drawn from your birth chart",
+  "kInSupportiveCount": "{count} supportive",
+  "@kInSupportiveCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kInChallengingCount": "{count} need care",
+  "@kInChallengingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kInGlanceTitle": "At a glance",
+  "kInAreasTitle": "Area by area",
+  "kLkHeroSub": "Inherited debts in your chart and their simple household remedies",
+  "kLkDebtCount": "{count} active debts",
+  "@kLkDebtCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kLkWeakCount": "{count} weak planets",
+  "@kLkWeakCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kMuHeroSub": "Today's good hours, read for your chart",
+  "kMuTimingsTitle": "Today's timings",
+  "kMuTabDay": "Day",
+  "kMuTabNight": "Night",
+  "kMuHoraOf": "{planet} hora",
+  "@kMuHoraOf": {
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      }
+    }
+  },
+  "kMuAbhijit": "Abhijit muhurta",
+  "kNumHeroSub": "Your core numbers and Lo Shu birth grid",
+  "kNumYourNumbers": "Your numbers",
+  "kNumMissing": "Missing numbers",
+  "kNumRepeated": "Repeated numbers",
+  "kRmHeroSub": "Gentle, traditional practices matched to your chart",
+  "kRmCount": "{count} remedies",
+  "@kRmCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kRmGatedChip": "Some need an astrologer",
+  "kRmCaution": "Keep in mind",
+  "kUpHeroSub": "Colours, days, mantras and charity for each planet",
+  "kUpStrengthenCount": "{count} to strengthen",
+  "@kUpStrengthenCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kUpPacifyCount": "{count} to pacify",
+  "@kUpPacifyCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kUpGateTitle": "Confirm with an astrologer first",
+  "kUpPlanetsTitle": "Planet by planet",
+  "kVpHeadline": "Your year {year}",
+  "@kVpHeadline": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "kVpMarkersTitle": "Key markers of the year",
+  "kVpTajikaTitle": "Tajika aspect",
+  "kVpIthasala": "Ithasala · applying",
+  "kVpIshrafa": "Ishrafa · separating",
+  "followFollow": "Follow",
+  "followFollowing": "Following",
+  "followNotifying": "Notifying",
+  "followNotifyingWhenOnline": "We'll notify you when online",
+  "followedToast": "Following {name} — we'll let you know when they're online or live",
+  "@followedToast": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "unfollowedToast": "Unfollowed {name}",
+  "@unfollowedToast": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "followFailed": "Couldn't update follow. Please try again.",
+  "followPromptTitle": "Follow {name}?",
+  "@followPromptTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "followPromptBody": "Get a notification when they're online or go live.",
+  "followPromptDoneTitle": "You're following",
+  "followPromptDoneBody": "We'll tell you when {name} is online or live.",
+  "@followPromptDoneBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "followingTitle": "Following",
+  "followingHint": "You'll get a notification when these astrologers come online or go live. Tap the heart to unfollow.",
+  "followingEmptyTitle": "Not following anyone yet",
+  "followingEmptyBody": "Follow astrologers you like to know when they're online or live.",
+  "followingExplore": "Find astrologers",
+  "followingLoadError": "Couldn't load the astrologers you follow.",
+  "followingFilter": "Following",
+  "followingFilterEmpty": "Tap the heart on an astrologer to follow them — they'll show up here.",
+  "astroStatFollowers": "Followers",
+  "prefsFollowAlerts": "Astrologers you follow",
+  "prefsFollowAlertsDesc": "When they come online or go live",
+  "storeTitle": "Remedy Store",
+  "storeHeroSubtitle": "Authentic rudraksha, gemstones, yantras and poojas — guided by astrologers",
+  "storeSearchHint": "Search rudraksha, gemstones, poojas…",
+  "storeVerdictToast": "An astrologer shared advice on your product",
+  "storeView": "View",
+  "storeUnavailable": "Unavailable",
+  "storePriceFrom": "from {price}",
+  "@storePriceFrom": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "storeOff": "{percent}% off",
+  "@storeOff": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "storeBadgePooja": "Pooja",
+  "storeBadgeAskAstrologer": "Ask astrologer",
+  "storeCartTitle": "Cart",
+  "storeTrustCertified": "Lab certified",
+  "storeTrustGuided": "Astrologer guided",
+  "storeTrustSecure": "Secure payments",
+  "storeCategories": "Shop by category",
+  "storeFeatured": "Handpicked remedies",
+  "storeFeaturedSub": "Chosen by our astrologers",
+  "storeCollections": "Remedy collections",
+  "storePoojas": "Book a pooja",
+  "storePoojasSub": "Performed in your name at sacred temples",
+  "storeConsultBannerTitle": "Not sure what suits you?",
+  "storeConsultBannerBody": "Video call an astrologer before you buy — they check your chart and recommend the right remedy.",
+  "storeConsultBannerCta": "Talk to an astrologer",
+  "storeMyAdvice": "Advice from your astrologers",
+  "storeDisclaimerFooter": "Remedies are traditional practices. Results are not guaranteed and they don't replace medical, legal or financial advice.",
+  "storeEmptyTitle": "The store is getting ready",
+  "storeEmptyBody": "Remedies and poojas will appear here soon.",
+  "storeLoadError": "Couldn't load the store",
+  "storeMyOrders": "My orders",
+  "storeVerdictSuitable": "Suitable — go ahead",
+  "storeVerdictNotSuitable": "Not suitable for you",
+  "storeVerdictAlternative": "Suggests something else",
+  "storeConsultCancelled": "Call didn't happen",
+  "storeConsultExpired": "No advice was shared",
+  "storeConsultCallLive": "Your call is in progress",
+  "storeConsultAwaiting": "Waiting for the astrologer's advice",
+  "storeConsultWith": "with {name}",
+  "@storeConsultWith": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "storeVerdictFrom": "{name}'s advice",
+  "@storeVerdictFrom": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "storeBuyRecommended": "Buy the recommended option",
+  "storeSuggestedInstead": "Suggested instead",
+  "storeConsultPromptTitle": "Not sure it suits you?",
+  "storeConsultPromptBody": "Video call an astrologer — they'll check your chart before you buy.",
+  "storeConsultRequiredTitle": "Consult an astrologer first",
+  "storeConsultRequiredBody": "This remedy is sold only after an astrologer confirms it suits your chart.",
+  "storeNoResults": "Nothing matches",
+  "storeNoResultsBody": "Try another word or clear some filters.",
+  "storeClearFilters": "Clear filters",
+  "storeResultCount": "{count, plural, =1{1 item} other{{count} items}}",
+  "@storeResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storeFilters": "Filters",
+  "storeNoFilters": "No filters for this selection yet.",
+  "storeSortBy": "Sort by",
+  "storeSortRecommended": "Recommended",
+  "storeSortPopular": "Most popular",
+  "storeSortNew": "Newest",
+  "storeSortRating": "Top rated",
+  "storeKindProducts": "Products",
+  "storeKindPoojas": "Poojas",
+  "storeKindDigital": "Reports",
+  "storeRemedyFor": "Remedy: {key}",
+  "@storeRemedyFor": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "storeChoosePackage": "Choose a package",
+  "storeChooseOption": "Choose an option",
+  "storePickDate": "Pick a date",
+  "storeSankalpDetails": "Sankalp details",
+  "storeYourDetails": "Your details",
+  "storeSankalpHint": "The priest takes the sankalp in these names during the pooja.",
+  "storeCertificate": "Certificate of authenticity",
+  "storeCertificateNo": "Certificate no. {number}",
+  "@storeCertificateNo": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "storeVerify": "Verify",
+  "storeHighlights": "Highlights",
+  "storeAbout": "About",
+  "storeSignificance": "Traditional significance",
+  "storeHowToUse": "How to wear / use",
+  "storeHowItWorks": "How it works",
+  "storeReadMore": "Read more",
+  "storeReadLess": "Show less",
+  "storeRecommendedForYou": "Recommended for you",
+  "storeTaxInclusive": "Inclusive of all taxes",
+  "storeOutOfStock": "Out of stock",
+  "storeOnlyLeft": "Only {count} left",
+  "@storeOnlyLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storeAskAnother": "Ask another astrologer",
+  "storeNoDates": "Dates will be announced soon.",
+  "storeOpenForBooking": "Open for booking",
+  "storeSeatsLeft": "{count} slots left",
+  "@storeSeatsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storeReturnableDays": "Easy returns within {days} days of delivery",
+  "@storeReturnableDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storeNotReturnable": "Not returnable once delivered",
+  "storeCancellable": "Cancel free before it's dispatched",
+  "storeNotCancellable": "Can't be cancelled once ordered",
+  "storeMadeToOrder": "Made to order · ready in about {days} days",
+  "@storeMadeToOrder": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storeShipsIndia": "Insured shipping across India",
+  "storeVideoProof": "Video of the pooja shared with you",
+  "storeInstantDownload": "Instant download after payment",
+  "storeSoldBy": "Sold by {name}",
+  "@storeSoldBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "storeSellerInfo": "Seller & grievance details",
+  "storeCountryOfOrigin": "Country of origin: {country}",
+  "@storeCountryOfOrigin": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  "storeGrievanceOfficer": "Grievance officer",
+  "storeFieldRequired": "{label} is required",
+  "@storeFieldRequired": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "storeFieldParticipants": "Enter {count} {label}",
+  "@storeFieldParticipants": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storePickDateError": "Pick a date for the pooja",
+  "storeAddedToCart": "Added to cart",
+  "storeViewCart": "View cart",
+  "storeFixDetails": "Please check the highlighted details",
+  "storeAddToCart": "Add to cart",
+  "storeBuyNow": "Buy now",
+  "storeBookPooja": "Book pooja",
+  "storeConsultFirst": "Consult first",
+  "storePersonN": "Person {n}",
+  "@storePersonN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "storeConsultTitle": "Talk before you buy",
+  "storeConsultPick": "Choose an astrologer",
+  "storeConsultNoneTitle": "No one's available right now",
+  "storeConsultNoneBody": "Astrologers who take video calls will show up here. Try again in a little while.",
+  "storeConsultBrowseAll": "Browse all astrologers",
+  "storeConsultAbout": "Consultation about",
+  "storeConsultVideoPerMinute": "Video call · billed per minute",
+  "storeConsultOffer": "Offer applied",
+  "storeConsultStep1": "Video call an astrologer",
+  "storeConsultStep2": "They check your chart and advise",
+  "storeConsultStep3": "Buy what's right for you",
+  "storePresenceOnline": "Online",
+  "storePresenceBusy": "In a call",
+  "storePresenceOffline": "Offline",
+  "storeSpecialist": "Specialist",
+  "storeYearsExp": "{years} yrs",
+  "@storeYearsExp": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "storePerMinute": "{price}/min",
+  "@storePerMinute": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "storeCall": "Call",
+  "storeConsultConfirmTitle": "Video call {name}",
+  "@storeConsultConfirmTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "storeConsultQuestion": "What would you like to ask?",
+  "storeConsultSharingChart": "Sharing {name}'s birth chart with the astrologer",
+  "@storeConsultSharingChart": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "storeConsultHoldNote": "{rate} per minute from your wallet. {hold} is held when the call starts; you only pay for the minutes you talk.",
+  "@storeConsultHoldNote": {
+    "placeholders": {
+      "rate": {
+        "type": "String"
+      },
+      "hold": {
+        "type": "String"
+      }
+    }
+  },
+  "storeConsultStartCall": "Start video call",
+  "storeConsultLowBalance": "Add money to your wallet to start the call",
+  "storeConsultBusy": "{name} just got busy — try another astrologer",
+  "@storeConsultBusy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "storeConsultOffline": "{name} went offline",
+  "@storeConsultOffline": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "storeAdviceTitle": "Astrologer advice",
+  "storeAdviceEmptyTitle": "No advice yet",
+  "storeAdviceEmptyBody": "Ask an astrologer about a remedy from any product page.",
+  "storeExplore": "Explore the store",
+  "storeOpenCall": "Open call",
+  "storeYourQuestion": "Your question",
+  "storeVideoCall": "Video call",
+  "storeRequired": "Required",
+  "storeAddAddress": "Add address",
+  "storeEditAddress": "Edit address",
+  "storeAddressesTitle": "Saved addresses",
+  "storeNoAddressesTitle": "No saved addresses",
+  "storeNoAddressesBody": "Add a delivery address to get products shipped to you.",
+  "storeDefault": "Default",
+  "storeEdit": "Edit",
+  "storeDelete": "Delete",
+  "storeMakeDefault": "Make default",
+  "storeChange": "Change",
+  "storeLabelHome": "Home",
+  "storeLabelWork": "Work",
+  "storeLabelOther": "Other",
+  "storeFullName": "Full name",
+  "storePhone": "Mobile number",
+  "storePhoneInvalid": "Enter a valid 10-digit mobile number",
+  "storeLine1": "House no., building, street",
+  "storeLine2": "Area, colony (optional)",
+  "storeLandmark": "Landmark (optional)",
+  "storeCity": "City",
+  "storePincode": "PIN code",
+  "storePincodeInvalid": "Enter a valid 6-digit PIN",
+  "storeState": "State",
+  "storeGstinOptional": "GSTIN (optional)",
+  "storeGstinHelp": "Add it to claim input tax credit on the invoice",
+  "storeGstinInvalid": "GSTIN has 15 characters",
+  "storeSaveAddress": "Save address",
+  "storeCheckout": "Checkout",
+  "storeCartEmptyTitle": "Your cart is empty",
+  "storeCartEmptyBody": "Rudraksha, gemstones, yantras and poojas — find what your chart needs.",
+  "storeCartTaxNote": "Prices include GST. Shipping is calculated at checkout.",
+  "storeItemsCount": "{count, plural, =1{1 item} other{{count} items}}",
+  "@storeItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storeRemove": "Remove",
+  "storeDeliverTo": "Deliver to",
+  "storeOrderSummary": "Order summary",
+  "storeBillDetails": "Bill details",
+  "storeSubtotal": "Item total",
+  "storeShipping": "Shipping",
+  "storeShippingAmount": "Shipping {amount}",
+  "@storeShippingAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "storeFree": "Free",
+  "storeGrandTotal": "Total",
+  "storeTaxIncluded": "Includes {amount} GST",
+  "@storeTaxIncluded": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "storePaidFromWallet": "From wallet",
+  "storePaidOnline": "Paid online",
+  "storeToPayNow": "To pay",
+  "storeUseWallet": "Use wallet balance",
+  "storeWalletAvailable": "{amount} available",
+  "@storeWalletAvailable": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "storeOrderNote": "Note for the seller (optional)",
+  "storeCheckoutTrust": "Secure payment. Certified products. Returns on damaged or wrong items.",
+  "storePlaceOrder": "Place order",
+  "storePayNow": "Pay now",
+  "storePayAmount": "Pay {amount}",
+  "@storePayAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "storePayDescription": "Remedies store order",
+  "storeDeliveryDays": "{days, plural, =1{In 1 day} other{In {days} days}}",
+  "@storeDeliveryDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "storeDeliveryDaysRange": "{min}–{max} days",
+  "@storeDeliveryDaysRange": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "storePaymentCancelled": "Payment cancelled. Your order is saved — pay before it expires.",
+  "storePaymentFailed": "Payment didn't go through. Try again.",
+  "storePaymentDone": "Payment received",
+  "storePaymentConfirming": "We're confirming your payment. This can take a minute.",
+  "storePaymentPendingTitle": "Payment pending",
+  "storePaymentPendingBody": "Items are held for you until the timer runs out. Any wallet amount is refunded if the order expires.",
+  "storeOrdersTitle": "My orders",
+  "storeOrderTitle": "Order",
+  "storeOrderNumber": "Order #{number}",
+  "@storeOrderNumber": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "storeItemAndMore": "{title} + {count} more",
+  "@storeItemAndMore": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storeTabAll": "All orders",
+  "storeTabPoojas": "Poojas",
+  "storeNoOrdersTitle": "No orders yet",
+  "storeNoOrdersBody": "Products and poojas you buy will show up here.",
+  "storeNoPoojasTitle": "No poojas booked",
+  "storeNoPoojasBody": "Book a pooja at a temple in your name — you'll get the video once it's done.",
+  "storeBrowsePoojas": "Browse poojas",
+  "storeDateToBeAnnounced": "Date to be announced",
+  "storeVideoReady": "Video ready",
+  "storeWatchPooja": "Watch pooja",
+  "storeOrderPendingPayment": "Payment pending",
+  "storeOrderPaid": "Confirmed",
+  "storeOrderCompleted": "Completed",
+  "storeOrderCancelled": "Cancelled",
+  "storeOrderExpired": "Expired",
+  "storeOrderRefunded": "Refunded",
+  "storeStagePending": "Pending",
+  "storeStageAwaitingApproval": "Awaiting seller",
+  "storeStageConfirmed": "Confirmed",
+  "storeStageProcessing": "Packing",
+  "storeStageShipped": "Shipped",
+  "storeStageDelivered": "Delivered",
+  "storeStageCompleted": "Completed",
+  "storeStageCancelled": "Cancelled",
+  "storeStageReturned": "Returned",
+  "storeBookingConfirmed": "Booked",
+  "storeBookingPerformed": "Performed",
+  "storeBookingProofReady": "Video shared",
+  "storeShipCreated": "Ready to ship",
+  "storeShipPickedUp": "Picked up",
+  "storeShipInTransit": "In transit",
+  "storeShipOutForDelivery": "Out for delivery",
+  "storeShipAttemptFailed": "Delivery attempt failed",
+  "storeShipReturning": "Returning to seller",
+  "storeShipLost": "Shipment issue — we're on it",
+  "storeAwb": "AWB {awb}",
+  "@storeAwb": {
+    "placeholders": {
+      "awb": {
+        "type": "String"
+      }
+    }
+  },
+  "storeTrack": "Track",
+  "storeQty": "Qty {count}",
+  "@storeQty": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "storePlacedOn": "Placed {date}",
+  "@storePlacedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "storeOrderPlacedTitle": "Order placed!",
+  "storeOrderPlacedBody": "We'll keep you posted as it's packed and shipped.",
+  "storeOrderPlacedPooja": "Your pooja is booked. You'll get the video once it's performed.",
+  "storeCancelOrder": "Cancel order",
+  "storeCancelThisPart": "Cancel these items",
+  "storeCancelOrderQ": "Cancel this order?",
+  "storeCancelPartQ": "Cancel items from {seller}?",
+  "@storeCancelPartQ": {
+    "placeholders": {
+      "seller": {
+        "type": "String"
+      }
+    }
+  },
+  "storeCancelReasonHint": "Tell us why (optional)",
+  "storeCancel": "Cancel",
+  "storeKeep": "Keep",
+  "storeCancelled": "Cancelled. Any refund goes back automatically.",
+  "storeRefunds": "Refunds",
+  "storeRefunded": "Refunded",
+  "storeRefundedAmount": "{amount} refunded",
+  "@storeRefundedAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "storeRefundToWallet": "{amount} to wallet",
+  "@storeRefundToWallet": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "storeRefundToSource": "{amount} to your bank / card",
+  "@storeRefundToSource": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "storeInvoices": "Invoices",
+  "storeTaxInvoice": "Tax invoice {number}",
+  "@storeTaxInvoice": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "storeCreditNote": "Credit note {number}",
+  "@storeCreditNote": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "storeDownload": "Download",
+  "storeDownloadFailed": "Couldn't open the file. Try again.",
+  "storeNoProducts": "Nothing here yet",
+  "storeReturnItem": "Return item",
+  "storeReturnUntil": "Return by {date}",
+  "@storeReturnUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "storeReturnWhy": "Why are you returning it?",
+  "storeReturnDetails": "Details (helps us resolve it faster)",
+  "storeReturnNote": "Keep the item and its certificate in original packaging. Pickup is arranged once the seller approves.",
+  "storeReturnSubmit": "Request return",
+  "storeReturnPickReason": "Pick a reason",
+  "storeReturnRequested": "Return requested. We'll update you soon.",
+  "storeReasonDamaged": "Arrived damaged",
+  "storeReasonWrongItem": "Wrong item",
+  "storeReasonNotAsDescribed": "Not as described",
+  "storeReasonAuthenticity": "Doubt about authenticity",
+  "storeReasonSize": "Size doesn't fit",
+  "storeReasonChangedMind": "Changed my mind",
+  "storeReasonOther": "Other",
+  "storeProfileOrders": "Store orders",
+  "storeProfileOrdersSub": "Products, poojas and downloads",
+  "storeProfileAdviceSub": "What astrologers said about products",
+  "storeProfileAddressesSub": "Delivery addresses",
+  "storeHomeRailTitle": "Remedies store",
+  "storeHomeRailSub": "Certified rudraksha, gemstones and temple poojas",
+  "storeSeeAll": "See all"
 }

@@ -46,6 +46,7 @@ class AstrologersPage extends StatelessWidget {
         skill: p['skill'],
         channel: p['channel'],
         search: p['q'],
+        following: p['following'] == '1',
         sort: p['sort'] ?? 'recommended',
       ),
     );
@@ -191,11 +192,17 @@ class _DiscoveryViewState extends State<_DiscoveryView> {
           hasScrollBody: false,
           child: Padding(
             padding: const EdgeInsets.only(bottom: 120),
-            child: EmptyState(
-              icon: Icons.search_off_rounded,
-              title: l.astroNoneFound,
-              message: l.astroNoneFoundHint,
-            ),
+            child: state.query.following
+                ? EmptyState(
+                    icon: Icons.favorite_border_rounded,
+                    title: l.followingEmptyTitle,
+                    message: l.followingFilterEmpty,
+                  )
+                : EmptyState(
+                    icon: Icons.search_off_rounded,
+                    title: l.astroNoneFound,
+                    message: l.astroNoneFoundHint,
+                  ),
           ),
         ),
       ];
@@ -517,6 +524,17 @@ class _FilterBar extends StatelessWidget {
           ),
           const SizedBox(width: 8),
         ],
+        _HueChip(
+          label: l.followingFilter,
+          icon: query.following
+              ? Icons.favorite_rounded
+              : Icons.favorite_border_rounded,
+          hue: AstroPalette.love,
+          selected: query.following,
+          onTap: () =>
+              cubit.applyQuery(query.copyWith(following: !query.following)),
+        ),
+        const SizedBox(width: 8),
         _HueChip(
           label: _sortLabel(l, sort),
           icon: Icons.swap_vert_rounded,

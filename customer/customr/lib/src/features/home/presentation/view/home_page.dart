@@ -6,7 +6,9 @@ import '../../../../core/di/service_locator.dart';
 import '../../../../core/theme/astro_palette.dart';
 import '../../../../core/theme/brand_colors.dart';
 import '../../../../shared/widgets/fade_slide_in.dart';
+import '../../../../core/config/config_repository.dart';
 import '../../../birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
+import '../../../store/presentation/widgets/store_home_rail.dart';
 import '../cubit/home_cubit.dart';
 import 'widgets/articles_rail.dart';
 import 'widgets/concern_chips.dart';
@@ -122,6 +124,7 @@ class _HomeViewState extends State<_HomeView> {
       const HoroscopeCard(),
       const PanchangStrip(),
       const FreeToolsGrid(),
+      if (getIt<ConfigRepository>().value.features.store) const StoreHomeRail(),
       if (hasTalkAgain) const TalkAgainRail(),
       if (hasArticles) const ArticlesRail(),
       const RechargePacksStrip(),

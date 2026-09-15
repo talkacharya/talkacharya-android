@@ -63,8 +63,71 @@ String? locationForUri(Uri uri) {
     case 'livestream':
     case 'live':
       return id == null ? '/live' : '/live/$id';
+    case 'store':
+    case 'shop':
+    case 'remedies-store':
+      return _storeLocation(segments.skip(1).toList(), uri.queryParameters);
+    case 'product':
+    case 'products':
+      return _storeLocation([
+        'products',
+        ...segments.skip(1),
+      ], uri.queryParameters);
     default:
       return null;
+  }
+}
+
+/// `store/…` sub-paths. Unknown sub-paths land on the store home rather than
+/// nowhere, so an outdated link in an old push still opens something useful.
+String _storeLocation(List<String> rest, Map<String, String> query) {
+  String withQuery(String path, [Map<String, String>? q]) {
+    final params = q ?? query;
+    return params.isEmpty
+        ? path
+        : Uri(path: path, queryParameters: params).toString();
+  }
+
+  final head = rest.isEmpty ? '' : rest.first;
+  final slug = rest.length > 1 ? rest[1] : null;
+  switch (head) {
+    case '':
+      return '/store';
+    case 'products':
+    case 'product':
+      return slug == null
+          ? withQuery('/store/products')
+          : withQuery('/store/products/$slug');
+    case 'categories':
+    case 'category':
+      return slug == null
+          ? '/store/products'
+          : withQuery('/store/products', {...query, 'category': slug});
+    case 'collections':
+    case 'collection':
+      return slug == null ? '/store' : '/store/collections/$slug';
+    case 'remedy':
+    case 'remedies':
+      return slug == null
+          ? '/store'
+          : withQuery('/store/products', {...query, 'remedy': slug});
+    case 'cart':
+    case 'checkout':
+      return '/store/cart';
+    case 'orders':
+    case 'order':
+      return slug == null ? '/store/orders' : '/store/orders/$slug';
+    case 'bookings':
+    case 'poojas':
+      return '/store/orders?tab=poojas';
+    case 'consults':
+    case 'consult':
+    case 'recommendations':
+      return slug == null || head == 'recommendations'
+          ? '/store/consults'
+          : '/store/consults/$slug';
+    default:
+      return '/store';
   }
 }
 

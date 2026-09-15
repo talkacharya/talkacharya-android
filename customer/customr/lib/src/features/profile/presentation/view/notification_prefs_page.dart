@@ -4,6 +4,7 @@ import '../../../../core/config/config_repository.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/utils/haptic_service.dart';
+import '../../../follows/data/follows_repository.dart';
 import '../../../kundali/data/kundali_api.dart';
 
 class NotificationPrefsPage extends StatelessWidget {
@@ -34,6 +35,13 @@ class NotificationPrefsPage extends StatelessWidget {
                 },
               ),
               _AstroPushTile(
+                icon: Icons.favorite_rounded,
+                title: l.prefsFollowAlerts,
+                subtitle: l.prefsFollowAlertsDesc,
+                load: getIt<FollowsRepository>().alertsEnabled,
+                save: getIt<FollowsRepository>().setAlertsEnabled,
+              ),
+              _AstroPushTile(
                 icon: Icons.mood_rounded,
                 title: l.prefsMoodAlerts,
                 subtitle: l.prefsMoodAlertsDesc,
@@ -55,9 +63,9 @@ class NotificationPrefsPage extends StatelessWidget {
   }
 }
 
-/// An astrology push toggle backed by a `GET/PUT {enabled}` endpoint (default on):
-/// transit alerts (`/app/astrology/transit-alerts`) and daily mood
-/// (`/app/astrology/mood-alerts`).
+/// A push toggle backed by a `GET/PUT {enabled}` endpoint (default on): follow
+/// alerts (`/app/follows/alerts`), transit alerts
+/// (`/app/astrology/transit-alerts`) and daily mood (`/app/astrology/mood-alerts`).
 class _AstroPushTile extends StatefulWidget {
   const _AstroPushTile({
     required this.icon,

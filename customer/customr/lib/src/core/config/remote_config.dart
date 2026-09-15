@@ -64,6 +64,7 @@ abstract class ConfigFeatures with _$ConfigFeatures {
     @Default(true) bool livestream,
     @Default(true) bool gifting,
     @Default(true) bool referrals,
+    @Default(true) bool store,
   }) = _ConfigFeatures;
 
   factory ConfigFeatures.fromJson(Map<String, dynamic> json) =>

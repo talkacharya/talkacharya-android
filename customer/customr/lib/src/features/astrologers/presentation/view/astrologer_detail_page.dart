@@ -14,6 +14,8 @@ import '../../../../shared/widgets/fade_slide_in.dart';
 import '../../../../shared/widgets/pressable.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../../consultations/presentation/view/book_consultation_sheet.dart';
+import '../../../follows/presentation/cubit/follow_cubit.dart';
+import '../../../follows/presentation/widgets/follow_widgets.dart';
 import '../../../gifting/data/models/gift.dart';
 import '../../../gifting/presentation/view/gift_sheet.dart';
 import '../../data/astrologers_repository.dart';
@@ -30,8 +32,14 @@ class AstrologerDetailPage extends StatefulWidget {
 class _AstrologerDetailPageState extends State<AstrologerDetailPage> {
   late Future<Astrologer> _future = _load();
 
-  Future<Astrologer> _load() =>
-      GetIt.I<AstrologersRepository>().detail(widget.astrologerId);
+  Future<Astrologer> _load() async {
+    final a = await GetIt.I<AstrologersRepository>().detail(
+      widget.astrologerId,
+    );
+    // fresh server truth for every follow control showing this astrologer
+    if (GetIt.I.isRegistered<FollowCubit>()) GetIt.I<FollowCubit>().seed([a]);
+    return a;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -221,6 +229,22 @@ class _Header extends StatelessWidget {
                 ),
               ),
               Positioned(
+                top: top + 8,
+                right: 12,
+                child: IgnorePointer(
+                  ignoring: collapsed,
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 180),
+                    opacity: collapsed ? 0 : 1,
+                    child: FollowGlassButton(
+                      astrologerId: a.id,
+                      astrologerName: a.name,
+                      fallback: followEntryOf(a),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
                 top: top,
                 left: 56,
                 right: 8,
@@ -267,6 +291,12 @@ class _Header extends StatelessWidget {
                           tooltip: l.giftAction,
                           color: BrandColors.goldGradient[1],
                           onTap: () => _sendGift(context, a),
+                        ),
+                        FollowGlassButton(
+                          astrologerId: a.id,
+                          astrologerName: a.name,
+                          fallback: followEntryOf(a),
+                          compact: true,
                         ),
                       ],
                     ),
@@ -444,8 +474,10 @@ class _StatsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = context.l10n;
     final brand = context.brand;
+    final followers =
+        watchFollow(context, a.id, followEntryOf(a))?.followersCount ?? 0;
 
-    final items = <(IconData, AstroHue, String, String)>[
+    final all = <(IconData, AstroHue, String, String)>[
       (
         Icons.star_rounded,
         AstroPalette.money,
@@ -454,6 +486,13 @@ class _StatsCard extends StatelessWidget {
             ? l.astroReviewsCount(a.ratingCount)
             : l.astroStatRating,
       ),
+      if (followers > 0)
+        (
+          Icons.people_alt_rounded,
+          AstroPalette.love,
+          compactFollowers(followers),
+          l.astroStatFollowers,
+        ),
       if (a.yearsExperience > 0)
         (
           Icons.workspace_premium_rounded,
@@ -476,6 +515,8 @@ class _StatsCard extends StatelessWidget {
           l.astroStatRepeatClients,
         ),
     ];
+    // four cells is the most a small phone fits legibly
+    final items = all.take(4).toList();
 
     return _Card(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 6),
@@ -738,21 +779,25 @@ class _RatesCard extends StatelessWidget {
                     ),
                   ),
                   if (ordered[i].perMinute == cheapest && rates.length > 1)
-                    Container(
-                      margin: const EdgeInsets.only(right: 8),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AstroPalette.health.tint(0.13),
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      child: Text(
-                        l.astroSortRecommended,
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: AstroPalette.health.end,
-                          fontWeight: FontWeight.w800,
+                    Flexible(
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AstroPalette.health.tint(0.13),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          l.astroSortRecommended,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: AstroPalette.health.end,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                       ),
                     ),
@@ -942,8 +987,10 @@ class _HeaderCtas extends StatelessWidget {
     final priceLabel = lead == null
         ? null
         : Money.format(lead.perMinute, lead.currency, locale: locale);
+    final following =
+        watchFollow(context, a.id, followEntryOf(a))?.following ?? false;
     final chatLabel = !a.isAvailable
-        ? l.astroNotifyWhenOnline
+        ? (following ? l.followNotifyingWhenOnline : l.astroNotifyWhenOnline)
         : priceLabel != null
         ? '${l.astroChat} · ${l.astroPerMinute(priceLabel)}'
         : l.astroChat;
@@ -955,9 +1002,21 @@ class _HeaderCtas extends StatelessWidget {
             label: chatLabel,
             icon: a.isAvailable
                 ? Icons.chat_bubble_rounded
-                : Icons.notifications_active_rounded,
+                : following
+                ? Icons.notifications_active_rounded
+                : Icons.notifications_none_rounded,
             enabled: canChat,
-            onTap: canChat ? () => _startChat(context, a) : null,
+            // offline: "Notify me when online" = follow (online pushes)
+            onTap: canChat
+                ? () => _startChat(context, a)
+                : !a.isAvailable
+                ? () => toggleFollow(
+                    context,
+                    astrologerId: a.id,
+                    astrologerName: a.name,
+                    fallback: followEntryOf(a),
+                  )
+                : null,
           ),
         ),
         const SizedBox(width: 10),

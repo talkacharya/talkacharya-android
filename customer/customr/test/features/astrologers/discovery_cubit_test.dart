@@ -153,4 +153,13 @@ void main() {
     expect(cubit.state.items.map((a) => a.id), ['1', '2', '3']);
     expect(cubit.state.loadMoreError, isFalse);
   });
+
+  test('following filter sends following=1 and survives copyWith', () {
+    const q = AstrologerQuery(sort: 'rating');
+    expect(q.toParams().containsKey('following'), isFalse);
+    final f = q.copyWith(following: true);
+    expect(f.toParams()['following'], '1');
+    expect(f.copyWith(channel: 'chat').following, isTrue);
+    expect(f, isNot(q));
+  });
 }

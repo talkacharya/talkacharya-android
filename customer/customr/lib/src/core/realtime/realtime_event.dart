@@ -44,6 +44,18 @@ sealed class RealtimeEvent {
         );
       case 'system.reconnect_hint':
         return const ReconnectHint();
+      case 'store.order.updated':
+        return StoreOrderUpdated(
+          orderId: data['order_id']?.toString() ?? '',
+          status: data['status']?.toString() ?? '',
+        );
+      case 'store.consult.verdict':
+        return StoreConsultVerdict(
+          consultId: data['consult']?.toString() ?? '',
+          consultationId: data['consultation']?.toString() ?? '',
+          verdict: data['verdict']?.toString() ?? '',
+          recommendationId: data['recommendation']?.toString(),
+        );
       default:
         // Anything else on `user:` (notifications, activity) → just nudge the inbox.
         return const InboxPing();
@@ -94,6 +106,27 @@ class NewChatMessage extends RealtimeEvent {
 
 class InboxPing extends RealtimeEvent {
   const InboxPing();
+}
+
+/// A store order changed (paid, shipped, delivered, refunded …) — refetch it.
+class StoreOrderUpdated extends RealtimeEvent {
+  const StoreOrderUpdated({required this.orderId, required this.status});
+  final String orderId;
+  final String status;
+}
+
+/// An astrologer gave (or revised) their verdict on a product consult.
+class StoreConsultVerdict extends RealtimeEvent {
+  const StoreConsultVerdict({
+    required this.consultId,
+    required this.consultationId,
+    required this.verdict,
+    this.recommendationId,
+  });
+  final String consultId;
+  final String consultationId;
+  final String verdict;
+  final String? recommendationId;
 }
 
 class ReconnectHint extends RealtimeEvent {

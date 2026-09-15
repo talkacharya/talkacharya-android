@@ -461,7 +461,7 @@ class AppLocalizationsGu extends AppLocalizations {
   String get astroProfileTitle => 'જ્યોતિષી';
 
   @override
-  String get astroExpertiseTitle => 'Expertise';
+  String get astroExpertiseTitle => 'નિપુણતા';
 
   @override
   String get astroAboutTitle => 'વિશે';
@@ -787,11 +787,11 @@ class AppLocalizationsGu extends AppLocalizations {
   String get profileWalletAndTransactions => 'વોલેટ અને વ્યવહારો';
 
   @override
-  String get profileOrders => 'Orders';
+  String get profileOrders => 'ઓર્ડર';
 
   @override
   String profileOrdersUnread(int count) {
-    return '$count new';
+    return '$count નવું';
   }
 
   @override
@@ -874,31 +874,31 @@ class AppLocalizationsGu extends AppLocalizations {
   String get editProfileSaveError => 'તમારા ફેરફારો સાચવી શકાયા નથી';
 
   @override
-  String get editGenderUndisclosed => 'Prefer not to say';
+  String get editGenderUndisclosed => 'ન કહેવાનું પસંદ કરે છે';
 
   @override
-  String get editNameInvalid => 'Enter your name (at least 2 letters)';
+  String get editNameInvalid => 'તમારું નામ દાખલ કરો (ઓછામાં ઓછા 2 અક્ષરો)';
 
   @override
-  String get editEmailInvalid => 'Enter a valid email address';
+  String get editEmailInvalid => 'માન્ય ઇમેઇલ સરનામું દાખલ કરો';
 
   @override
-  String get editPhone => 'Mobile number';
+  String get editPhone => 'મોબાઈલ નંબર';
 
   @override
-  String get editPhoneLocked => 'Your login number can\'t be changed';
+  String get editPhoneLocked => 'તમારો લૉગિન નંબર બદલી શકાતો નથી';
 
   @override
-  String get editSectionPersonal => 'Personal details';
+  String get editSectionPersonal => 'વ્યક્તિગત વિગતો';
 
   @override
-  String get editSectionContact => 'Contact';
+  String get editSectionContact => 'સંપર્ક કરો';
 
   @override
-  String get editDobPlaceholder => 'Add your date of birth';
+  String get editDobPlaceholder => 'તમારી જન્મ તારીખ ઉમેરો';
 
   @override
-  String get editPhotoUpdated => 'Photo updated';
+  String get editPhotoUpdated => 'ફોટો અપડેટ કર્યો';
 
   @override
   String get editCountry => 'દેશ';
@@ -1816,31 +1816,31 @@ class AppLocalizationsGu extends AppLocalizations {
   String get kSignPisces => 'કલ્પનાશીલ, દયાળુ, સીમા-રહિત';
 
   @override
-  String get kPlanetNameSun => 'Sun';
+  String get kPlanetNameSun => 'સૂર્ય';
 
   @override
-  String get kPlanetNameMoon => 'Moon';
+  String get kPlanetNameMoon => 'ચંદ્ર';
 
   @override
-  String get kPlanetNameMars => 'Mars';
+  String get kPlanetNameMars => 'મંગળ';
 
   @override
-  String get kPlanetNameMercury => 'Mercury';
+  String get kPlanetNameMercury => 'બુધ';
 
   @override
-  String get kPlanetNameJupiter => 'Jupiter';
+  String get kPlanetNameJupiter => 'ગુરુ';
 
   @override
-  String get kPlanetNameVenus => 'Venus';
+  String get kPlanetNameVenus => 'શુક્ર';
 
   @override
-  String get kPlanetNameSaturn => 'Saturn';
+  String get kPlanetNameSaturn => 'શનિ';
 
   @override
-  String get kPlanetNameRahu => 'Rahu';
+  String get kPlanetNameRahu => 'રાહુ';
 
   @override
-  String get kPlanetNameKetu => 'Ketu';
+  String get kPlanetNameKetu => 'કેતુ';
 
   @override
   String get kPlanetSun => 'આત્મા, આત્મવિશ્વાસ, પિતા, સત્તા';
@@ -2915,11 +2915,11 @@ class AppLocalizationsGu extends AppLocalizations {
   }
 
   @override
-  String get muhurtaTitle => 'Today\'s timing';
+  String get muhurtaTitle => 'આજનો સમય';
 
   @override
   String get muhurtaIntro =>
-      'Choghadiya and Hora for today, worked out for your birth city and personalised to your chart\'s helpful planets. A guide to better and weaker windows for starting things — not a rule.';
+      'આજે માટે ચોઘડિયા અને હોરા, તમારા જન્મ શહેર માટે કામ કર્યું અને તમારા ચાર્ટના મદદરૂપ ગ્રહો માટે વ્યક્તિગત કર્યું. વસ્તુઓ શરૂ કરવા માટે વધુ સારી અને નબળી વિન્ડો માટે માર્ગદર્શિકા — નિયમ નહીં.';
 
   @override
   String muhurtaSunTimes(
@@ -2928,136 +2928,136 @@ class AppLocalizationsGu extends AppLocalizations {
     String weekday,
     String lord,
   ) {
-    return '$sunrise sunrise · $sunset sunset · $weekday ($lord)';
+    return '$sunrise સૂર્યોદય · $sunset સૂર્યાસ્ત · $weekday ( $lord )';
   }
 
   @override
-  String get muhurtaBestWindows => 'Best windows for you today';
+  String get muhurtaBestWindows => 'આજે તમારા માટે શ્રેષ્ઠ વિન્ડો';
 
   @override
   String get muhurtaNoBest =>
-      'No stand-out window today — pick a good Choghadiya below.';
+      'આજે કોઈ સ્ટૅન્ડ-આઉટ વિન્ડો નથી — નીચે એક સારા ચોઘડિયા પસંદ કરો.';
 
   @override
-  String get muhurtaDayChoghadiya => 'Day Choghadiya';
+  String get muhurtaDayChoghadiya => 'ડે ચોઘડિયા';
 
   @override
-  String get muhurtaNightChoghadiya => 'Night Choghadiya';
+  String get muhurtaNightChoghadiya => 'રાત્રિ ચોઘડિયા';
 
   @override
-  String get muhurtaHora => 'Planetary Hora';
+  String get muhurtaHora => 'ગ્રહોની હોરા';
 
   @override
-  String get muhurtaNow => 'Now';
+  String get muhurtaNow => 'હવે';
 
   @override
-  String get muhurtaChoGood => 'Good';
+  String get muhurtaChoGood => 'સારું';
 
   @override
-  String get muhurtaChoBad => 'Avoid';
+  String get muhurtaChoBad => 'ટાળો';
 
   @override
-  String get muhurtaChoNeutral => 'Neutral';
+  String get muhurtaChoNeutral => 'તટસ્થ';
 
   @override
-  String get muhurtaHoraFavourable => 'Good for you';
+  String get muhurtaHoraFavourable => 'તમારા માટે સારું';
 
   @override
-  String get muhurtaHoraCaution => 'Keep light';
+  String get muhurtaHoraCaution => 'પ્રકાશ રાખો';
 
   @override
-  String get upayaTitle => 'Gemstones & upaya';
+  String get upayaTitle => 'રત્ન અને ઉપાયા';
 
   @override
   String upayaIntro(String sign) {
-    return 'The classical remedy table for your ascendant ($sign) — favourable colours, days, deities, mantras and charity you can adopt freely, plus the traditional gemstone and rudraksha for each planet.';
+    return 'તમારા ચડતા ( $sign ) માટે શાસ્ત્રીય ઉપાય કોષ્ટક — અનુકૂળ રંગો, દિવસો, દેવતાઓ, મંત્રો અને ધર્માદા તમે મુક્તપણે અપનાવી શકો છો, ઉપરાંત દરેક ગ્રહ માટે પરંપરાગત રત્ન અને રુદ્રાક્ષ.';
   }
 
   @override
-  String get upayaLagnaFavourable => 'Favourable for your ascendant';
+  String get upayaLagnaFavourable => 'તમારા આરોહણ માટે અનુકૂળ';
 
   @override
-  String get upayaColours => 'Colours';
+  String get upayaColours => 'રંગો';
 
   @override
-  String get upayaDirection => 'Direction';
+  String get upayaDirection => 'દિશા';
 
   @override
-  String get upayaDay => 'Day';
+  String get upayaDay => 'દિવસ';
 
   @override
-  String get upayaDeity => 'Deity';
+  String get upayaDeity => 'દેવતા';
 
   @override
-  String get upayaStrengthen => 'Support';
+  String get upayaStrengthen => 'આધાર';
 
   @override
-  String get upayaPacify => 'Pacify';
+  String get upayaPacify => 'શાંત કરો';
 
   @override
-  String get upayaMixed => 'Mixed';
+  String get upayaMixed => 'મિશ્ર';
 
   @override
-  String get upayaNeutral => 'Neutral';
+  String get upayaNeutral => 'તટસ્થ';
 
   @override
-  String get upayaFreeMeasures => 'Free measures';
+  String get upayaFreeMeasures => 'મફત પગલાં';
 
   @override
-  String get upayaMantra => 'Mantra';
+  String get upayaMantra => 'મંત્ર';
 
   @override
-  String get upayaCharity => 'Charity (daan)';
+  String get upayaCharity => 'દાન (દાન)';
 
   @override
-  String get upayaGemstone => 'Gemstone';
+  String get upayaGemstone => 'રત્ન';
 
   @override
-  String get upayaRudraksha => 'Rudraksha';
+  String get upayaRudraksha => 'રૂદ્રાક્ષ';
 
   @override
-  String get upayaGatedCta => 'Confirm with an astrologer first';
+  String get upayaGatedCta => 'પહેલા કોઈ જ્યોતિષ સાથે પુષ્ટિ કરો';
 
   @override
-  String get upayaPriority => 'Priority';
+  String get upayaPriority => 'પ્રાથમિકતા';
 
   @override
-  String get lalKitabTitle => 'Lal Kitab — debts & remedies';
+  String get lalKitabTitle => 'લાલ કિતાબ - દેવા અને ઉપાયો';
 
   @override
   String get lalKitabIntro =>
-      'Lal Kitab reads a few inherited debts (rin) from your chart and clears each with simple, free household acts (totke). No gemstones, no cost.';
+      'લાલ કિતાબ તમારા ચાર્ટમાંથી કેટલાક વારસાગત દેવા (રિન) વાંચે છે અને દરેકને સરળ, મફત ઘરગથ્થુ કાર્યો (ટોટકે) સાથે સાફ કરે છે. કોઈ રત્ન નથી, કોઈ કિંમત નથી.';
 
   @override
-  String get lalKitabActiveDebts => 'Active debts';
+  String get lalKitabActiveDebts => 'સક્રિય દેવાં';
 
   @override
   String get lalKitabNoDebts =>
-      'No strongly active rin — keep the everyday duties and nothing builds up.';
+      'કોઈ મજબૂત રીતે સક્રિય રિન નથી — રોજિંદા ફરજો રાખો અને કંઈપણ નિર્માણ થતું નથી.';
 
   @override
-  String get lalKitabWhyFlagged => 'Why it\'s flagged';
+  String get lalKitabWhyFlagged => 'શા માટે તે ધ્વજાંકિત છે';
 
   @override
-  String get lalKitabRemedy => 'Remedy (totka)';
+  String get lalKitabRemedy => 'ઉપાય (ટોટકા)';
 
   @override
-  String get lalKitabWeakPlanets => 'Weak planet placements';
+  String get lalKitabWeakPlanets => 'નબળા ગ્રહ પ્લેસમેન્ટ';
 
   @override
-  String get lalKitabAllRemedies => 'Your remedies';
+  String get lalKitabAllRemedies => 'તમારા ઉપાયો';
 
   @override
   String lalKitabPakkaGhar(String planet, String house) {
-    return '$planet\'s home house is the $house';
+    return '$planet નું ઘરનું ઘર $house છે';
   }
 
   @override
-  String get varshphalTitle => 'Varshphal — this year\'s chart';
+  String get varshphalTitle => 'વર્ષફલ — આ વર્ષનો ચાર્ટ';
 
   @override
   String varshphalIntro(String age) {
-    return 'The Tajika annual chart for your $age-year, cast for the moment the Sun returns to its birth position. Themes to work with — not fixed events.';
+    return 'તમારા $age -વર્ષ માટેનો તાજિકા વાર્ષિક ચાર્ટ, સૂર્ય તેની જન્મસ્થિતિ પર પાછો ફરે તે ક્ષણ માટે કાસ્ટ કરો. કામ કરવા માટેની થીમ્સ - નિશ્ચિત ઇવેન્ટ્સ નથી.';
   }
 
   @override
@@ -3066,31 +3066,31 @@ class AppLocalizationsGu extends AppLocalizations {
   }
 
   @override
-  String get varshphalLagna => 'Varsha Lagna';
+  String get varshphalLagna => 'વર્ષા લગન';
 
   @override
-  String get varshphalMuntha => 'Muntha';
+  String get varshphalMuntha => 'મુંથા';
 
   @override
-  String get varshphalYearLord => 'Year lord (Varsheshwara)';
+  String get varshphalYearLord => 'વર્ષના સ્વામી (વર્ષેશ્વર)';
 
   @override
-  String get varshphalTajika => 'Tajika aspect';
+  String get varshphalTajika => 'તાજિકા પાસા';
 
   @override
   String varshphalMunthaLine(String house, String theme) {
-    return 'Muntha in the $house house — $theme';
+    return '$house ઘરમાં મુંથા — $theme';
   }
 
   @override
-  String get varshphalChart => 'Annual chart planets';
+  String get varshphalChart => 'વાર્ષિક ચાર્ટ ગ્રહો';
 
   @override
-  String get prefsTransitAlerts => 'Transit alerts';
+  String get prefsTransitAlerts => 'પરિવહન ચેતવણીઓ';
 
   @override
   String get prefsTransitAlertsDesc =>
-      'A heads-up when a slow planet (Jupiter, Saturn) is about to change sign into a new house in your chart.';
+      'જ્યારે ધીમો ગ્રહ (ગુરુ, શનિ) તમારા ચાર્ટમાં નવા મકાનમાં સાઇન બદલવાનો હોય ત્યારે હેડ-અપ.';
 
   @override
   String get errNetwork =>
@@ -3189,632 +3189,630 @@ class AppLocalizationsGu extends AppLocalizations {
   String get homeTalkToAstrologerTitle => 'કોઈ જ્યોતિષી સાથે વાત કરો.';
 
   @override
-  String get kSignNameAries => 'Aries';
+  String get kSignNameAries => 'મેષ';
 
   @override
-  String get kSignNameTaurus => 'Taurus';
+  String get kSignNameTaurus => 'વૃષભ';
 
   @override
-  String get kSignNameGemini => 'Gemini';
+  String get kSignNameGemini => 'મિથુન';
 
   @override
-  String get kSignNameCancer => 'Cancer';
+  String get kSignNameCancer => 'કેન્સર';
 
   @override
-  String get kSignNameLeo => 'Leo';
+  String get kSignNameLeo => 'સિંહ';
 
   @override
-  String get kSignNameVirgo => 'Virgo';
+  String get kSignNameVirgo => 'કન્યા રાશિ';
 
   @override
-  String get kSignNameLibra => 'Libra';
+  String get kSignNameLibra => 'તુલા';
 
   @override
-  String get kSignNameScorpio => 'Scorpio';
+  String get kSignNameScorpio => 'વૃશ્ચિક';
 
   @override
-  String get kSignNameSagittarius => 'Sagittarius';
+  String get kSignNameSagittarius => 'ધનુરાશિ';
 
   @override
-  String get kSignNameCapricorn => 'Capricorn';
+  String get kSignNameCapricorn => 'મકર';
 
   @override
-  String get kSignNameAquarius => 'Aquarius';
+  String get kSignNameAquarius => 'કુંભ';
 
   @override
-  String get kSignNamePisces => 'Pisces';
+  String get kSignNamePisces => 'મીન';
 
   @override
-  String get kNakNameAshwini => 'Ashwini';
+  String get kNakNameAshwini => 'અશ્વિની';
 
   @override
-  String get kNakNameBharani => 'Bharani';
+  String get kNakNameBharani => 'ભરણી';
 
   @override
-  String get kNakNameKrittika => 'Krittika';
+  String get kNakNameKrittika => 'કૃતિકા';
 
   @override
-  String get kNakNameRohini => 'Rohini';
+  String get kNakNameRohini => 'રોહિણી';
 
   @override
-  String get kNakNameMrigashira => 'Mrigashira';
+  String get kNakNameMrigashira => 'મૃગશિરા';
 
   @override
-  String get kNakNameArdra => 'Ardra';
+  String get kNakNameArdra => 'આર્દ્રા';
 
   @override
-  String get kNakNamePunarvasu => 'Punarvasu';
+  String get kNakNamePunarvasu => 'પુનર્વસુ';
 
   @override
-  String get kNakNamePushya => 'Pushya';
+  String get kNakNamePushya => 'પુષ્ય';
 
   @override
-  String get kNakNameAshlesha => 'Ashlesha';
+  String get kNakNameAshlesha => 'આશ્લેષા';
 
   @override
-  String get kNakNameMagha => 'Magha';
+  String get kNakNameMagha => 'માગા';
 
   @override
-  String get kNakNamePurvaPhalguni => 'Purva Phalguni';
+  String get kNakNamePurvaPhalguni => 'પૂર્વા ફાલ્ગુની';
 
   @override
-  String get kNakNameUttaraPhalguni => 'Uttara Phalguni';
+  String get kNakNameUttaraPhalguni => 'ઉત્તરા ફાલ્ગુની';
 
   @override
-  String get kNakNameHasta => 'Hasta';
+  String get kNakNameHasta => 'હસ્તા';
 
   @override
-  String get kNakNameChitra => 'Chitra';
+  String get kNakNameChitra => 'ચિત્રા';
 
   @override
-  String get kNakNameSwati => 'Swati';
+  String get kNakNameSwati => 'સ્વાતિ';
 
   @override
-  String get kNakNameVishakha => 'Vishakha';
+  String get kNakNameVishakha => 'વિશાખા';
 
   @override
-  String get kNakNameAnuradha => 'Anuradha';
+  String get kNakNameAnuradha => 'અનુરાધા';
 
   @override
-  String get kNakNameJyeshtha => 'Jyeshtha';
+  String get kNakNameJyeshtha => 'જ્યેષ્ઠા';
 
   @override
-  String get kNakNameMula => 'Mula';
+  String get kNakNameMula => 'મુલા';
 
   @override
-  String get kNakNamePurvaAshadha => 'Purva Ashadha';
+  String get kNakNamePurvaAshadha => 'પૂર્વા અષાઢ';
 
   @override
-  String get kNakNameUttaraAshadha => 'Uttara Ashadha';
+  String get kNakNameUttaraAshadha => 'ઉત્તરા અષાઢ';
 
   @override
-  String get kNakNameShravana => 'Shravana';
+  String get kNakNameShravana => 'શ્રાવણ';
 
   @override
-  String get kNakNameDhanishta => 'Dhanishta';
+  String get kNakNameDhanishta => 'ધનિષ્ઠા';
 
   @override
-  String get kNakNameShatabhisha => 'Shatabhisha';
+  String get kNakNameShatabhisha => 'શતભિષા';
 
   @override
-  String get kNakNamePurvaBhadrapada => 'Purva Bhadrapada';
+  String get kNakNamePurvaBhadrapada => 'પૂર્વા ભાદ્રપદ';
 
   @override
-  String get kNakNameUttaraBhadrapada => 'Uttara Bhadrapada';
+  String get kNakNameUttaraBhadrapada => 'ઉત્તરા ભાદ્રપદ';
 
   @override
-  String get kNakNameRevati => 'Revati';
+  String get kNakNameRevati => 'રેવતી';
 
   @override
-  String get kChartNameD1 => 'Rashi';
+  String get kChartNameD1 => 'રાશી';
 
   @override
-  String get kChartSigD1 => 'Physical body, overall life, everything';
+  String get kChartSigD1 => 'ભૌતિક શરીર, એકંદર જીવન, બધું';
 
   @override
-  String get kChartNameD2 => 'Hora';
+  String get kChartNameD2 => 'હોરા';
 
   @override
-  String get kChartSigD2 => 'Wealth, financial prosperity';
+  String get kChartSigD2 => 'સંપત્તિ, નાણાકીય સમૃદ્ધિ';
 
   @override
-  String get kChartNameD3 => 'Drekkana';
+  String get kChartNameD3 => 'ડ્રેક્કાના';
 
   @override
-  String get kChartSigD3 => 'Siblings, courage, initiative';
+  String get kChartSigD3 => 'ભાઈ-બહેન, હિંમત, પહેલ';
 
   @override
-  String get kChartNameD4 => 'Chaturthamsha';
+  String get kChartNameD4 => 'ચતુર્થમશા';
 
   @override
-  String get kChartSigD4 => 'Fortune, property, fixed assets, home';
+  String get kChartSigD4 => 'નસીબ, મિલકત, સ્થિર સંપત્તિ, ઘર';
 
   @override
-  String get kChartNameD5 => 'Panchamsha';
+  String get kChartNameD5 => 'પંચમશા';
 
   @override
-  String get kChartSigD5 => 'Fame, authority, spiritual merit (punya)';
+  String get kChartSigD5 => 'ખ્યાતિ, સત્તા, આધ્યાત્મિક યોગ્યતા (પુણ્ય)';
 
   @override
-  String get kChartNameD6 => 'Shashthamsha';
+  String get kChartNameD6 => 'શષ્ટમશા';
 
   @override
-  String get kChartSigD6 => 'Health, disease, debts, enemies';
+  String get kChartSigD6 => 'આરોગ્ય, રોગ, દેવાં, દુશ્મનો';
 
   @override
-  String get kChartNameD7 => 'Saptamsha';
+  String get kChartNameD7 => 'સપ્તમશા';
 
   @override
-  String get kChartSigD7 => 'Children, progeny, creativity';
+  String get kChartSigD7 => 'બાળકો, સંતાન, સર્જનાત્મકતા';
 
   @override
-  String get kChartNameD8 => 'Ashtamsha';
+  String get kChartNameD8 => 'અષ્ટમશા';
 
   @override
-  String get kChartSigD8 => 'Sudden events, longevity troubles, obstacles';
+  String get kChartSigD8 => 'આકસ્મિક ઘટનાઓ, આયુષ્યની મુશ્કેલીઓ, અવરોધો';
 
   @override
-  String get kChartNameD9 => 'Navamsha';
+  String get kChartNameD9 => 'નવમશા';
 
   @override
-  String get kChartSigD9 =>
-      'Spouse, dharma, inner self — the primary support chart';
+  String get kChartSigD9 => 'જીવનસાથી, ધર્મ, આંતરિક સ્વ — પ્રાથમિક આધાર ચાર્ટ';
 
   @override
-  String get kChartNameD10 => 'Dashamsha';
+  String get kChartNameD10 => 'દશમશા';
 
   @override
-  String get kChartSigD10 => 'Career, profession, status, achievement';
+  String get kChartSigD10 => 'કારકિર્દી, વ્યવસાય, સ્થિતિ, સિદ્ધિ';
 
   @override
-  String get kChartNameD11 => 'Rudramsha';
+  String get kChartNameD11 => 'રૂદ્રમશા';
 
   @override
-  String get kChartSigD11 => 'Death, destruction, gains from adversity (Labha)';
+  String get kChartSigD11 => 'મૃત્યુ, વિનાશ, પ્રતિકૂળતામાંથી લાભ (લાભા)';
 
   @override
-  String get kChartNameD12 => 'Dvadashamsha';
+  String get kChartNameD12 => 'દ્વાદશમ્';
 
   @override
-  String get kChartSigD12 => 'Parents, ancestry, inherited karma';
+  String get kChartSigD12 => 'માતાપિતા, વંશ, વારસાગત કર્મ';
 
   @override
-  String get kChartNameD16 => 'Shodashamsha';
+  String get kChartNameD16 => 'ષોડશંશા';
 
   @override
-  String get kChartSigD16 => 'Vehicles, comforts, luxuries, happiness';
+  String get kChartSigD16 => 'વાહન, સુખ-સુવિધા, વિલાસ, સુખ';
 
   @override
-  String get kChartNameD20 => 'Vimshamsha';
+  String get kChartNameD20 => 'વિમશાં';
 
   @override
-  String get kChartSigD20 => 'Spiritual practice, worship, devotion';
+  String get kChartSigD20 => 'આધ્યાત્મિક અભ્યાસ, ઉપાસના, ભક્તિ';
 
   @override
-  String get kChartNameD24 => 'Chaturvimshamsha';
+  String get kChartNameD24 => 'ચતુર્વિંશમશા';
 
   @override
-  String get kChartSigD24 => 'Education, learning, knowledge';
+  String get kChartSigD24 => 'શિક્ષણ, શિક્ષણ, જ્ઞાન';
 
   @override
-  String get kChartNameD27 => 'Saptavimshamsha';
+  String get kChartNameD27 => 'સપ્તવિમંશા';
 
   @override
-  String get kChartSigD27 => 'Strength and weakness, stamina';
+  String get kChartSigD27 => 'શક્તિ અને નબળાઈ, સહનશક્તિ';
 
   @override
-  String get kChartNameD30 => 'Trimshamsha';
+  String get kChartNameD30 => 'ત્રિમશાંશા';
 
   @override
-  String get kChartSigD30 => 'Misfortunes, evils, moral character';
+  String get kChartSigD30 => 'કમનસીબી, દુષ્ટતા, નૈતિક પાત્ર';
 
   @override
-  String get kChartNameD40 => 'Chatvarimshamsha';
+  String get kChartNameD40 => 'ચત્વારિમશામશા';
 
   @override
-  String get kChartSigD40 => 'Maternal legacy, auspicious/inauspicious effects';
+  String get kChartSigD40 => 'માતાનો વારસો, શુભ/અશુભ અસરો';
 
   @override
-  String get kChartNameD45 => 'Akshavedamsha';
+  String get kChartNameD45 => 'અક્ષવેદમશા';
 
   @override
-  String get kChartSigD45 => 'Paternal legacy, overall character and conduct';
+  String get kChartSigD45 => 'પૈતૃક વારસો, એકંદર પાત્ર અને આચરણ';
 
   @override
-  String get kChartNameD60 => 'Shashtiamsha';
+  String get kChartNameD60 => 'શાષ્ટીયમશા';
 
   @override
-  String get kChartSigD60 => 'Past-life karma, the finest layer — overall';
+  String get kChartSigD60 => 'ભૂતકાળના જીવનના કર્મ, શ્રેષ્ઠ સ્તર - એકંદરે';
 
   @override
-  String get kChartNameMoon => 'Moon chart (Chandra)';
+  String get kChartNameMoon => 'ચંદ્ર ચાર્ટ (ચંદ્ર)';
 
   @override
-  String get kChartSigMoon =>
-      'The mind and emotions — the rasi chart read from the Moon';
+  String get kChartSigMoon => 'મન અને લાગણીઓ - ચંદ્ર પરથી વાંચેલી રાસી ચાર્ટ';
 
   @override
-  String get kChartNameChalit => 'Bhava Chalit';
+  String get kChartNameChalit => 'ભાવ ચલિત';
 
   @override
   String get kChartSigChalit =>
-      'House results by the actual bhava cusps (Sripati), not whole sign';
+      'વાસ્તવિક ભવ કુપ્સ (શ્રીપતિ) દ્વારા ઘરના પરિણામો, સંપૂર્ણ સંકેત નથી';
 
   @override
-  String get kChartNameTransit => 'Transit (Gochar)';
+  String get kChartNameTransit => 'પરિવહન (ગોચર)';
 
   @override
-  String get kChartSigTransit => 'Current grahas over the natal houses';
+  String get kChartSigTransit => 'પ્રસૂતિ ગૃહો ઉપર વર્તમાન ગ્રહો';
 
   @override
-  String get kChartShortMoon => 'Moon';
+  String get kChartShortMoon => 'ચંદ્ર';
 
   @override
-  String get kChartShortChalit => 'Chalit';
+  String get kChartShortChalit => 'ચલિત';
 
   @override
-  String get kChartShortTransit => 'Transit';
+  String get kChartShortTransit => 'પરિવહન';
 
   @override
-  String get kChAscendant => 'Ascendant';
+  String get kChAscendant => 'ચડતી';
 
   @override
-  String get kChLagnaVargottama => 'Lagna vargottama';
+  String get kChLagnaVargottama => 'લગના વર્ગોત્તમા';
 
   @override
   String kChAsOf(Object when) {
-    return 'As of $when';
+    return '$when મુજબ';
   }
 
   @override
   String get kChUnverified =>
-      'This division is not yet verified against DrikPanchang — treat the placements as experimental.';
+      'આ વિભાગ હજુ સુધી દ્રિકપંચંગ સામે ચકાસાયેલ નથી — પ્લેસમેન્ટને પ્રાયોગિક ગણો.';
 
   @override
   String kChChalitShiftedOne(Object planets) {
-    return '$planets sits in a different bhava than the whole-sign house.';
+    return '$planets આખા-સાઇન હાઉસ કરતાં અલગ ભવમાં બેસે છે.';
   }
 
   @override
   String kChChalitShiftedMany(Object planets) {
-    return '$planets sit in a different bhava than the whole-sign house.';
+    return '$planets આખા-સાઇન હાઉસ કરતાં અલગ ભવમાં બેસો.';
   }
 
   @override
-  String get kChColPlanet => 'PLANET';
+  String get kChColPlanet => 'ગ્રહ';
 
   @override
-  String get kChColSign => 'SIGN';
+  String get kChColSign => 'સાઇન કરો';
 
   @override
-  String get kChColDegree => 'DEG';
+  String get kChColDegree => 'ડીઇજી';
 
   @override
-  String get kChColHouse => 'HOUSE';
+  String get kChColHouse => 'ઘર';
 
   @override
-  String get kChColBhava => 'BHAVA';
+  String get kChColBhava => 'ભવા';
 
   @override
-  String get kChColFromMoon => 'MOON';
+  String get kChColFromMoon => 'ચંદ્ર';
 
   @override
-  String get kChLegend => 'Legend';
+  String get kChLegend => 'દંતકથા';
 
   @override
   String get kChLegendNote =>
-      '℞ retrograde   ⬦ vargottama   ← moved bhava (chalit)\nNorth: cell number = rasi (1 Aries … 12 Pisces), 1st house is top-centre.';
+      '℞ પૂર્વવર્તી ⬦ વર્ગોત્તમ ← ખસેડાયેલ ભવ (ચલિત)\nઉત્તર: કોષ નંબર = રાશી (1 મેષ … 12 મીન), પહેલું ઘર ટોચનું કેન્દ્ર છે.';
 
   @override
-  String get kChNorthIndian => 'North Indian';
+  String get kChNorthIndian => 'ઉત્તર ભારતીય';
 
   @override
-  String get kChSouthIndian => 'South Indian';
+  String get kChSouthIndian => 'દક્ષિણ ભારતીય';
 
   @override
-  String get kChPickerCharts => 'Charts';
+  String get kChPickerCharts => 'ચાર્ટ્સ';
 
   @override
-  String get kChPickerDivisional => 'Divisional charts (Varga)';
+  String get kChPickerDivisional => 'વિભાગીય ચાર્ટ (વર્ગ)';
 
   @override
-  String get kOvTitle => 'Kundali';
+  String get kOvTitle => 'કુંડળી';
 
   @override
   String kOvTitleNamed(Object name) {
-    return '$name’s Kundali';
+    return '$name ની કુંડળી';
   }
 
   @override
-  String get kOvDownloadPdf => 'Download PDF';
+  String get kOvDownloadPdf => 'PDF ડાઉનલોડ કરો';
 
   @override
-  String get kOvShare => 'Share';
+  String get kOvShare => 'શેર કરો';
 
   @override
-  String get kOvMoonSignLabel => 'Moon sign · Rashi';
+  String get kOvMoonSignLabel => 'ચંદ્ર ચિહ્ન · રાશિ';
 
   @override
   String kOvLagnaChip(Object sign) {
-    return 'Lagna · $sign';
+    return 'લગના · $sign';
   }
 
   @override
   String kOvNakshatraChip(Object name) {
-    return 'Nakshatra · $name';
+    return 'નક્ષત્ર · $name';
   }
 
   @override
-  String get kOvTimeApprox => 'Birth time approximate';
+  String get kOvTimeApprox => 'અંદાજિત જન્મ સમય';
 
   @override
-  String get kOvEdit => 'Edit';
+  String get kOvEdit => 'સંપાદિત કરો';
 
   @override
-  String get kOvLagnaChart => 'Lagna chart';
+  String get kOvLagnaChart => 'લગના ચાર્ટ';
 
   @override
-  String get kOvD1Rasi => 'D1 Rasi';
+  String get kOvD1Rasi => 'D1 રાસી';
 
   @override
-  String get kOvOpenFullChart => 'Open full chart';
+  String get kOvOpenFullChart => 'સંપૂર્ણ ચાર્ટ ખોલો';
 
   @override
-  String get kOvDashaUnavailable => 'Dasha unavailable right now.';
+  String get kOvDashaUnavailable => 'દશા અત્યારે ઉપલબ્ધ નથી.';
 
   @override
-  String get kOvDashaRunning => 'You are currently running';
+  String get kOvDashaRunning => 'તમે હાલમાં ચાલી રહ્યા છો';
 
   @override
   String kOvMahadasha(Object planet) {
-    return '$planet Mahadasha';
+    return '$planet મહાદશા';
   }
 
   @override
   String kOvSubPeriods(Object antar, Object pratyantar) {
-    return '$antar sub-period · $pratyantar pratyantar';
+    return '$antar પેટા-કાળ · $pratyantar પ્રત્યન્તર';
   }
 
   @override
   String kOvDashaProgress(Object end, Object percent, Object start) {
-    return '$start → $end  ·  $percent% through';
+    return '$start → $end · $percent % થી';
   }
 
   @override
-  String get kOvSeeTimeline => 'See full timeline';
+  String get kOvSeeTimeline => 'સંપૂર્ણ સમયરેખા જુઓ';
 
   @override
-  String get kOvAtAGlance => 'At a glance';
+  String get kOvAtAGlance => 'એક નજરમાં';
 
   @override
-  String get kOvMangalDosha => 'Mangal Dosha';
+  String get kOvMangalDosha => 'મંગલ દોષ';
 
   @override
-  String get kOvManglik => 'Manglik';
+  String get kOvManglik => 'માંગલિક';
 
   @override
-  String get kOvNotManglik => 'Not Manglik';
+  String get kOvNotManglik => 'માંગલિક નહિ';
 
   @override
   String kOvMangalFrom(Object refs) {
-    return 'From $refs';
+    return '$refs થી';
   }
 
   @override
-  String get kOvMarsClear => 'Mars is clear';
+  String get kOvMarsClear => 'મંગળ સ્પષ્ટ છે';
 
   @override
-  String get kOvMangalCancelled => 'Present, but cancelled in your chart';
+  String get kOvMangalCancelled =>
+      'પ્રસ્તુત કરો, પરંતુ તમારા ચાર્ટમાં રદ કર્યું';
 
   @override
   String kOvMangalLevelFrom(Object level, Object refs) {
-    return '$level · from $refs';
+    return '$level · $refs થી';
   }
 
   @override
-  String get kOvRefLagna => 'Lagna';
+  String get kOvRefLagna => 'લગના';
 
   @override
-  String get kOvYogas => 'Yogas';
+  String get kOvYogas => 'યોગાસન';
 
   @override
   String kOvYogasFound(Object count) {
-    return '$count found';
+    return '$count મળ્યું';
   }
 
   @override
-  String get kOvNakshatra => 'Nakshatra';
+  String get kOvNakshatra => 'નક્ષત્ર';
 
   @override
-  String get kOvLagnaLord => 'Lagna lord';
+  String get kOvLagnaLord => 'લગના સ્વામી';
 
   @override
-  String get kOvExInsights => 'Personality & life overview';
+  String get kOvExInsights => 'વ્યક્તિત્વ અને જીવન ઝાંખી';
 
   @override
   String get kOvExInsightsSub =>
-      'A free reading of your chart — nature, work, marriage & more';
+      'તમારા ચાર્ટનું મફત વાંચન — પ્રકૃતિ, કાર્ય, લગ્ન અને વધુ';
 
   @override
-  String get kOvExForecast => 'Written forecast';
+  String get kOvExForecast => 'લેખિત આગાહી';
 
   @override
   String get kOvExForecastSub =>
-      'A paid forecast for one area of life, written by an astrologer';
+      'જીવનના એક ક્ષેત્ર માટે ચૂકવેલ આગાહી, જ્યોતિષ દ્વારા લખાયેલ';
 
   @override
-  String get kOvExPlanets => 'Planets & positions';
+  String get kOvExPlanets => 'ગ્રહો અને સ્થિતિ';
 
   @override
-  String get kOvExPlanetsSub => 'Where each planet sits and what it does';
+  String get kOvExPlanetsSub => 'દરેક ગ્રહ ક્યાં બેસે છે અને શું કરે છે';
 
   @override
-  String get kOvExDasha => 'Dasha periods';
+  String get kOvExDasha => 'દશાનો સમયગાળો';
 
   @override
-  String get kOvExDashaSub => 'Your life timeline — Vimshottari';
+  String get kOvExDashaSub => 'તમારી જીવન સમયરેખા - વિમશોત્તરી';
 
   @override
-  String get kOvExVarshphal => 'Varshphal (annual chart)';
+  String get kOvExVarshphal => 'વર્ષફલ (વાર્ષિક ચાર્ટ)';
 
   @override
   String get kOvExVarshphalSub =>
-      'This solar-return year — Muntha, year lord & Tajika aspect';
+      'આ સૌર-વળતરનું વર્ષ — મુન્થા, વર્ષનો સ્વામી અને તાજિકા પાસા';
 
   @override
-  String get kOvExYogas => 'Yogas & Doshas';
+  String get kOvExYogas => 'યોગ અને દોષ';
 
   @override
-  String get kOvExYogasSub => 'Special combinations in your chart';
+  String get kOvExYogasSub => 'તમારા ચાર્ટમાં વિશિષ્ટ સંયોજનો';
 
   @override
-  String get kOvExRemedies => 'Remedies';
+  String get kOvExRemedies => 'ઉપાયો';
 
   @override
   String get kOvExRemediesSub =>
-      'Traditional mantras, daan and practices for your chart';
+      'તમારા ચાર્ટ માટે પરંપરાગત મંત્રો, દાન અને પ્રથાઓ';
 
   @override
-  String get kOvExUpaya => 'Gemstones & upaya';
+  String get kOvExUpaya => 'રત્ન અને ઉપાયા';
 
   @override
   String get kOvExUpayaSub =>
-      'Per-planet gemstone, colour, day & mantra — gemstones gated';
+      'પ્રતિ-ગ્રહ રત્ન, રંગ, દિવસ અને મંત્ર - રત્ન દ્વારવાળા';
 
   @override
-  String get kOvExLalKitab => 'Lal Kitab';
+  String get kOvExLalKitab => 'લાલ કિતાબ';
 
   @override
   String get kOvExLalKitabSub =>
-      'Inherited debts (rin) and their simple, free totka remedies';
+      'વારસાગત દેવું (રિન) અને તેમના સરળ, મફત ટોટકા ઉપાયો';
 
   @override
-  String get kOvExTransits => 'Transits & Sade Sati';
+  String get kOvExTransits => 'સંક્રમણ અને સાદે સતી';
 
   @override
-  String get kOvExTransitsSub => 'What the sky is doing right now';
+  String get kOvExTransitsSub => 'આકાશ અત્યારે શું કરી રહ્યો છે';
 
   @override
-  String get kOvExSadeSati => 'Sade Sati & Dhaiya calendar';
+  String get kOvExSadeSati => 'સાદે સતી અને ધૈયા કેલેન્ડર';
 
   @override
-  String get kOvExSadeSatiSub =>
-      'Every Saturn window over your life, with dates';
+  String get kOvExSadeSatiSub => 'તમારા જીવનની દરેક શનિ વિંડો, તારીખો સાથે';
 
   @override
-  String get kOvExMuhurta => 'Today\'s timing';
+  String get kOvExMuhurta => 'આજનો સમય';
 
   @override
   String get kOvExMuhurtaSub =>
-      'Choghadiya & Hora, with your best windows marked';
+      'ચોઘડિયા અને હોરા, તમારી શ્રેષ્ઠ વિન્ડો ચિહ્નિત સાથે';
 
   @override
-  String get kOvExHouses => 'Houses (Bhava)';
+  String get kOvExHouses => 'ઘરો (ભાવ)';
 
   @override
-  String get kOvExHousesSub => 'A reading for each of the 12 houses';
+  String get kOvExHousesSub => '12 ઘરોમાંના દરેક માટે વાંચન';
 
   @override
-  String get kOvExNumerology => 'Numerology & Lo Shu grid';
+  String get kOvExNumerology => 'અંકશાસ્ત્ર અને લો શુ ગ્રીડ';
 
   @override
   String get kOvExNumerologySub =>
-      'Your numbers from date of birth — days, colours, birth grid';
+      'જન્મ તારીખથી તમારા નંબરો — દિવસો, રંગો, જન્મ ગ્રીડ';
 
   @override
-  String get kOvExAdvanced => 'Advanced reports';
+  String get kOvExAdvanced => 'અદ્યતન અહેવાલો';
 
   @override
-  String get kOvExAdvancedSub => 'Ashtakavarga, Shadbala, KP, Jaimini';
+  String get kOvExAdvancedSub => 'અષ્ટકવર્ગ, શદબાલા, કેપી, જૈમિની';
 
   @override
-  String get kOvAskAstrologer => 'Ask an astrologer about your kundali';
+  String get kOvAskAstrologer => 'કોઈ જ્યોતિષને તમારી કુંડળી વિશે પૂછો';
 
   @override
-  String get kReadingCardTitle => 'What this means';
+  String get kReadingCardTitle => 'આનો અર્થ શું છે';
 
   @override
   String kSsTitle(Object phase) {
-    return 'Sade Sati · $phase phase';
+    return 'સાદે સતી · $phase તબક્કો';
   }
 
   @override
-  String get kSsPhaseRising => 'Rising (1 of 3)';
+  String get kSsPhaseRising => 'વધતો (3 માંથી 1)';
 
   @override
-  String get kSsPhasePeak => 'Peak (2 of 3)';
+  String get kSsPhasePeak => 'ટોચ (3 માંથી 2)';
 
   @override
-  String get kSsPhaseSetting => 'Setting (3 of 3)';
+  String get kSsPhaseSetting => 'સેટિંગ (3 માંથી 3)';
 
   @override
-  String get kSsRising => 'Rising';
+  String get kSsRising => 'રાઇઝિંગ';
 
   @override
-  String get kSsPeak => 'Peak';
+  String get kSsPeak => 'પીક';
 
   @override
-  String get kSsSetting => 'Setting';
+  String get kSsSetting => 'સેટિંગ';
 
   @override
   String get kSsNotCurse =>
-      'Sade Sati is a period of hard work and maturing — not a curse. Steady, honest effort is rewarded.';
+      'સાદે સતી એ સખત મહેનત અને પરિપક્વતાનો સમયગાળો છે - શ્રાપ નથી. સ્થિર, પ્રામાણિક પ્રયાસને વળતર મળે છે.';
 
   @override
-  String get kSsWhatForMe => 'What this means for me';
+  String get kSsWhatForMe => 'મારા માટે આનો અર્થ શું છે';
 
   @override
   String kSsPanotiTitle(Object type) {
-    return 'Small Panoti — $type';
+    return 'નાની પનોતી — $type';
   }
 
   @override
   String get kSsPanotiBody =>
-      'A shorter Saturn phase (about 2½ years) that asks for patience with health, effort and daily obstacles.';
+      'શનિનો ટૂંકો તબક્કો (લગભગ 2½ વર્ષ) જે આરોગ્ય, પ્રયત્નો અને દૈનિક અવરોધો સાથે ધીરજ રાખવા માટે પૂછે છે.';
 
   @override
-  String get kSsSeeTransits => 'See transits';
+  String get kSsSeeTransits => 'ટ્રાન્ઝિટ જુઓ';
 
   @override
-  String get kSsSkyNow => 'Right now in the sky';
+  String get kSsSkyNow => 'અત્યારે આકાશમાં';
 
   @override
   String get kSsJupiterGood =>
-      'Jupiter is transiting favourably for you — a supportive window for growth, learning and money.';
+      'ગુરુ તમારા માટે સાનુકૂળ રીતે સંક્રમણ કરી રહ્યો છે - વૃદ્ધિ, શિક્ષણ અને પૈસા માટે સહાયક વિંડો.';
 
   @override
   String get kSsJupiterNeutral =>
-      'No Sade Sati or major Saturn phase is active. Jupiter’s transit is neutral for you right now.';
+      'કોઈ સાદે સતી અથવા મુખ્ય શનિ તબક્કો સક્રિય નથી. ગુરુનું સંક્રમણ અત્યારે તમારા માટે તટસ્થ છે.';
 
   @override
-  String get kSsSeeAllTransits => 'See all transits';
+  String get kSsSeeAllTransits => 'બધા પરિવહન જુઓ';
 
   @override
-  String get kFcTitle => 'Birth chart';
+  String get kFcTitle => 'જન્મ ચાર્ટ';
 
   @override
-  String get kFcTransitingGrahas => 'Transiting grahas';
+  String get kFcTransitingGrahas => 'સંક્રમણ ગ્રહો';
 
   @override
-  String get kFcPlanets => 'Planets';
+  String get kFcPlanets => 'ગ્રહો';
 
   @override
-  String get kFcAllHouses => 'All 12 houses & readings';
+  String get kFcAllHouses => 'બધા 12 ઘરો અને વાંચન';
 
   @override
-  String get kFcAllCharts => 'All charts — D1 to D60';
+  String get kFcAllCharts => 'બધા ચાર્ટ્સ — D1 થી D60';
 
   @override
-  String get kFcAllChartsTooltip => 'All charts';
+  String get kFcAllChartsTooltip => 'બધા ચાર્ટ';
 
   @override
-  String get kFcLoadError => 'Could not load this chart';
+  String get kFcLoadError => 'આ ચાર્ટ લોડ કરી શકાયો નથી';
 
   @override
-  String get kFcTwelveHouses => 'The 12 houses';
+  String get kFcTwelveHouses => 'આ 12 ઘરો';
 
   @override
-  String get kFcNoPlanets => 'No planets';
+  String get kFcNoPlanets => 'કોઈ ગ્રહો નથી';
 
   @override
   String kBdTithi(String key, Object raw) {
@@ -3883,727 +3881,728 @@ class AppLocalizationsGu extends AppLocalizations {
   }
 
   @override
-  String get horoTitle => 'Horoscope';
+  String get horoTitle => 'જન્માક્ષર';
 
   @override
-  String get horoReadFull => 'Read full horoscope';
+  String get horoReadFull => 'સંપૂર્ણ જન્માક્ષર વાંચો';
 
   @override
-  String get horoSpanYesterday => 'Yesterday';
+  String get horoSpanYesterday => 'ગઈકાલે';
 
   @override
-  String get horoSpanToday => 'Today';
+  String get horoSpanToday => 'આજે';
 
   @override
-  String get horoSpanTomorrow => 'Tomorrow';
+  String get horoSpanTomorrow => 'કાલે';
 
   @override
-  String get horoSpanWeek => 'This week';
+  String get horoSpanWeek => 'આ અઠવાડિયે';
 
   @override
-  String get horoSpanMonth => 'This month';
+  String get horoSpanMonth => 'આ મહિને';
 
   @override
-  String get horoAreaLove => 'Love';
+  String get horoAreaLove => 'પ્રેમ';
 
   @override
-  String get horoAreaCareer => 'Career';
+  String get horoAreaCareer => 'કારકિર્દી';
 
   @override
-  String get horoAreaMoney => 'Money';
+  String get horoAreaMoney => 'પૈસા';
 
   @override
-  String get horoAreaHealth => 'Health';
+  String get horoAreaHealth => 'આરોગ્ય';
 
   @override
-  String get horoOverall => 'Overall';
+  String get horoOverall => 'એકંદરે';
 
   @override
-  String get horoOutOfFive => 'out of 5';
+  String get horoOutOfFive => '5 માંથી';
 
   @override
-  String get horoToneSupportive => 'Supportive';
+  String get horoToneSupportive => 'સહાયક';
 
   @override
-  String get horoToneBalanced => 'Balanced';
+  String get horoToneBalanced => 'સંતુલિત';
 
   @override
-  String get horoToneChallenging => 'Needs care';
+  String get horoToneChallenging => 'કાળજીની જરૂર છે';
 
   @override
-  String get horoLuckyColour => 'Lucky colour';
+  String get horoLuckyColour => 'લકી કલર';
 
   @override
-  String get horoLuckyNumber => 'Lucky number';
+  String get horoLuckyNumber => 'નસીબદાર નંબર';
 
   @override
-  String get horoLuckyPlanet => 'Strongest planet';
+  String get horoLuckyPlanet => 'સૌથી મજબૂત ગ્રહ';
 
   @override
-  String get horoBestDays => 'Your best days';
+  String get horoBestDays => 'તમારા શ્રેષ્ઠ દિવસો';
 
   @override
-  String get horoTipTitle => 'Remedy & tip';
+  String get horoTipTitle => 'ઉપાય અને ટીપ';
 
   @override
   String horoTipFor(String planet) {
-    return 'Remedy for $planet';
+    return '$planet માટે ઉપાય';
   }
 
   @override
-  String get horoWhyTitle => 'Why the stars say this';
+  String get horoWhyTitle => 'તારાઓ આવું કેમ કહે છે';
 
   @override
   String get horoWhyBody =>
-      'Vedic horoscopes are read from where each planet is transiting, counted from your Moon sign. Arrows show whether a placement supports you or asks for care.';
+      'વૈદિક જન્માક્ષર વાંચવામાં આવે છે જ્યાંથી દરેક ગ્રહ સંક્રમણ કરી રહ્યા છે, તમારા ચંદ્ર ચિહ્નમાંથી ગણવામાં આવે છે. એરો બતાવે છે કે પ્લેસમેન્ટ તમને સપોર્ટ કરે છે અથવા કાળજી માટે પૂછે છે.';
 
   @override
   String horoMoonLine(String sign, String nakshatra, String house) {
-    return 'Moon in $sign · $nakshatra · house $house';
+    return '$sign · $nakshatra · ઘર $house માં ચંદ્ર';
   }
 
   @override
   String horoHouseN(String n) {
-    return 'House $n';
+    return 'ઘર $n';
   }
 
   @override
   String horoAboutSign(String sign) {
-    return 'About $sign';
+    return 'લગભગ $sign';
   }
 
   @override
-  String get horoElement => 'Element';
+  String get horoElement => 'તત્વ';
 
   @override
-  String get horoRuler => 'Ruling planet';
+  String get horoRuler => 'શાસક ગ્રહ';
 
   @override
-  String get horoQuality => 'Nature';
+  String get horoQuality => 'કુદરત';
 
   @override
-  String get horoElementFire => 'Fire';
+  String get horoElementFire => 'આગ';
 
   @override
-  String get horoElementEarth => 'Earth';
+  String get horoElementEarth => 'પૃથ્વી';
 
   @override
-  String get horoElementAir => 'Air';
+  String get horoElementAir => 'હવા';
 
   @override
-  String get horoElementWater => 'Water';
+  String get horoElementWater => 'પાણી';
 
   @override
-  String get horoQualityMovable => 'Movable';
+  String get horoQualityMovable => 'જંગમ';
 
   @override
-  String get horoQualityFixed => 'Fixed';
+  String get horoQualityFixed => 'સ્થિર';
 
   @override
-  String get horoQualityDual => 'Dual';
+  String get horoQualityDual => 'ડ્યુઅલ';
 
   @override
-  String get horoChangeSign => 'Change sign';
+  String get horoChangeSign => 'ચિહ્ન બદલો';
 
   @override
-  String get horoChooseSign => 'Choose your sign';
+  String get horoChooseSign => 'તમારી નિશાની પસંદ કરો';
 
   @override
-  String get horoWhichSignTitle => 'Which sign should I pick?';
+  String get horoWhichSignTitle => 'મારે કયું ચિહ્ન પસંદ કરવું જોઈએ?';
 
   @override
   String get horoWhichSignBody =>
-      'Vedic horoscopes are read from your Moon sign (Rashi) — the sign the Moon was in when you were born. It is often different from your Western sun sign. Your Kundali shows your Moon sign; pick that here for the most accurate reading.';
+      'વૈદિક જન્માક્ષર તમારા ચંદ્ર ચિન્હ (રાશિ) પરથી વાંચવામાં આવે છે - જ્યારે તમે જન્મ્યા હતા ત્યારે ચંદ્રની નિશાની હતી. તે ઘણીવાર તમારા પશ્ચિમી સૂર્ય ચિહ્નથી અલગ હોય છે. તમારી કુંડળી તમારી ચંદ્ર ચિહ્ન દર્શાવે છે; સૌથી સચોટ વાંચન માટે તેને અહીં પસંદ કરો.';
 
   @override
-  String get horoOpenKundali => 'See my Moon sign in Kundali';
+  String get horoOpenKundali => 'કુંડળીમાં મારી ચંદ્ર રાશિ જુઓ';
 
   @override
-  String get horoCtaTitle => 'Want a reading just for you?';
+  String get horoCtaTitle => 'ફક્ત તમારા માટે જ વાંચન જોઈએ છે?';
 
   @override
   String horoCtaBody(String sign) {
-    return 'This forecast is for everyone born under $sign. An astrologer can read your personal chart.';
+    return 'આ આગાહી $sign હેઠળ જન્મેલા દરેક માટે છે. જ્યોતિષી તમારો વ્યક્તિગત ચાર્ટ વાંચી શકે છે.';
   }
 
   @override
-  String get horoCtaButton => 'Talk to an astrologer';
+  String get horoCtaButton => 'જ્યોતિષ સાથે વાત કરો';
 
   @override
-  String get horoShare => 'Share';
+  String get horoShare => 'શેર કરો';
 
   @override
-  String get horoEditorialBadge => 'Written by our astrologers';
+  String get horoEditorialBadge => 'અમારા જ્યોતિષીઓ દ્વારા લખાયેલ';
 
   @override
-  String get horoError => 'We couldn\'t load the horoscope';
+  String get horoError => 'અમે જન્માક્ષર લોડ કરી શક્યા નથી';
 
   @override
   String get horoSourceNote =>
-      'Based on live planetary transits from your Moon sign. For guidance, not certainty.';
+      'તમારા ચંદ્ર ચિહ્નથી જીવંત ગ્રહોના સંક્રમણોના આધારે. માર્ગદર્શન માટે, નિશ્ચિતતા માટે નહીં.';
 
   @override
-  String get matchTitle => 'Kundali Milan';
+  String get matchTitle => 'કુંડળી મિલન';
 
   @override
-  String get matchHeroTitle => 'Match two kundalis';
+  String get matchHeroTitle => 'બે કુંડળીનો મેળ કરો';
 
   @override
-  String get matchHeroBody => 'Guna Milan, Manglik and dosha check in seconds.';
+  String get matchHeroBody => 'ગુણ મિલન, માંગલિક અને દોષ સેકન્ડમાં તપાસો.';
 
   @override
-  String get matchBoy => 'Boy';
+  String get matchBoy => 'છોકરો';
 
   @override
-  String get matchGirl => 'Girl';
+  String get matchGirl => 'છોકરી';
 
   @override
-  String get matchSwap => 'Swap';
+  String get matchSwap => 'સ્વેપ';
 
   @override
-  String get matchChoosePerson => 'Choose person';
+  String get matchChoosePerson => 'વ્યક્તિ પસંદ કરો';
 
   @override
-  String get matchTapToSelect => 'Tap to select';
+  String get matchTapToSelect => 'પસંદ કરવા માટે ટેપ કરો';
 
   @override
-  String get matchRunCta => 'Check compatibility';
+  String get matchRunCta => 'સુસંગતતા તપાસો';
 
   @override
-  String get matchPickBothHint => 'Pick both people to see your match score.';
+  String get matchPickBothHint =>
+      'તમારો મેચ સ્કોર જોવા માટે બંને લોકોને ચૂંટો.';
 
   @override
-  String get matchPickBoyTitle => 'Choose the boy\'s birth details';
+  String get matchPickBoyTitle => 'છોકરાના જન્મની વિગતો પસંદ કરો';
 
   @override
-  String get matchPickGirlTitle => 'Choose the girl\'s birth details';
+  String get matchPickGirlTitle => 'છોકરીના જન્મની વિગતો પસંદ કરો';
 
   @override
-  String get matchAddPerson => 'Add a new person';
+  String get matchAddPerson => 'નવી વ્યક્તિ ઉમેરો';
 
   @override
-  String get matchAddPersonHint => 'Birth date, time and place';
+  String get matchAddPersonHint => 'જન્મ તારીખ, સમય અને સ્થળ';
 
   @override
   String get matchNoProfiles =>
-      'No saved birth details yet. Add a person to get started.';
+      'હજી સુધી કોઈ સાચવેલ જન્મ વિગતો નથી. પ્રારંભ કરવા માટે એક વ્યક્તિ ઉમેરો.';
 
   @override
-  String get matchHowTitle => 'How it works';
+  String get matchHowTitle => 'તે કેવી રીતે કામ કરે છે';
 
   @override
-  String get matchStep1Title => 'Choose two people';
+  String get matchStep1Title => 'બે લોકોને પસંદ કરો';
 
   @override
   String get matchStep1Body =>
-      'Use saved birth details or add new ones — time and place make it accurate.';
+      'સાચવેલી જન્મ વિગતોનો ઉપયોગ કરો અથવા નવી ઉમેરો — સમય અને સ્થળ તેને સચોટ બનાવે છે.';
 
   @override
-  String get matchStep2Title => 'We compare both Moon charts';
+  String get matchStep2Title => 'અમે બંને ચંદ્ર ચાર્ટની તુલના કરીએ છીએ';
 
   @override
   String get matchStep2Body =>
-      'Eight kootas — from temperament to health — are scored the traditional Ashtakoota way.';
+      'આઠ કૂટ - સ્વભાવથી લઈને સ્વાસ્થ્ય સુધી - પરંપરાગત અષ્ટકૂટની રીતે બનાવવામાં આવે છે.';
 
   @override
-  String get matchStep3Title => 'Get your score and dosha check';
+  String get matchStep3Title => 'તમારો સ્કોર અને દોષ તપાસો';
 
   @override
   String get matchStep3Body =>
-      'A score out of 36, Manglik compatibility and what each part means.';
+      '36 માંથી સ્કોર, માંગલિક સુસંગતતા અને દરેક ભાગનો અર્થ શું છે.';
 
   @override
-  String get matchHistoryTitle => 'Your matches';
+  String get matchHistoryTitle => 'તમારા મેળ';
 
   @override
   String get matchHistoryEmpty =>
-      'Your matches will appear here so you can revisit them anytime.';
+      'તમારી મેચો અહીં દેખાશે જેથી તમે કોઈપણ સમયે તેમની ફરી મુલાકાત લઈ શકો.';
 
   @override
-  String get matchRetry => 'Retry';
+  String get matchRetry => 'ફરી પ્રયાસ કરો';
 
   @override
   String matchPairNames(String boy, String girl) {
-    return '$boy & $girl';
+    return '$boy અને $girl';
   }
 
   @override
-  String get matchResultTitle => 'Match result';
+  String get matchResultTitle => 'મેચ પરિણામ';
 
   @override
-  String get matchOutOf36 => 'out of 36';
+  String get matchOutOf36 => '36 માંથી';
 
   @override
   String matchShareScore(String score, String verdict) {
-    return 'Guna Milan: $score/36 · $verdict';
+    return 'ગુના મિલાન: $score /36 · $verdict';
   }
 
   @override
-  String get matchVerdictExcellent => 'Excellent match';
+  String get matchVerdictExcellent => 'ઉત્તમ મેચ';
 
   @override
-  String get matchVerdictGood => 'Good match';
+  String get matchVerdictGood => 'સારી મેચ';
 
   @override
-  String get matchVerdictAverage => 'Average match';
+  String get matchVerdictAverage => 'સરેરાશ મેચ';
 
   @override
-  String get matchVerdictLow => 'Needs a closer look';
+  String get matchVerdictLow => 'નજીકથી જોવાની જરૂર છે';
 
   @override
   String get matchVerdictExcellentBody =>
-      'Most kootas align — traditionally a sign of a harmonious, supportive marriage.';
+      'મોટાભાગના કૂટા સંરેખિત કરે છે - પરંપરાગત રીતે સુમેળભર્યા, સહાયક લગ્નની નિશાની છે.';
 
   @override
   String get matchVerdictGoodBody =>
-      '18 or more gunas is considered suitable for marriage. Check the low-scoring kootas below.';
+      '18 કે તેથી વધુ ગુણ લગ્ન માટે યોગ્ય માનવામાં આવે છે. નીચે લો-સ્કોરિંગ કૂટા તપાસો.';
 
   @override
   String get matchVerdictAverageBody =>
-      'Below 18 gunas, astrologers usually suggest a full chart review before deciding.';
+      '18 ગુણોની નીચે, જ્યોતિષીઓ સામાન્ય રીતે નિર્ણય લેતા પહેલા સંપૂર્ણ ચાર્ટ સમીક્ષા સૂચવે છે.';
 
   @override
   String get matchVerdictLowBody =>
-      'Don\'t decide on this score alone — a full kundali review often changes the picture.';
+      'એકલા આ સ્કોર પર નિર્ણય કરશો નહીં — કુંડળીની સંપૂર્ણ સમીક્ષા ઘણીવાર ચિત્રને બદલી નાખે છે.';
 
   @override
-  String get matchManglikShort => 'Manglik';
+  String get matchManglikShort => 'માંગલિક';
 
   @override
-  String get matchManglikTitle => 'Manglik (Mangal dosha) check';
+  String get matchManglikTitle => 'માંગલિક (મંગલ દોષ) તપાસો';
 
   @override
   String get matchManglikNone =>
-      'Neither of you is Manglik — no Mangal dosha concern.';
+      'તમારામાંથી કોઈ માંગલિક નથી - કોઈ મંગલ દોષની ચિંતા નથી.';
 
   @override
   String get matchManglikBoth =>
-      'Both of you are Manglik — traditionally the dosha cancels out.';
+      'તમે બંને માંગલિક છો - પરંપરાગત રીતે દોષ રદ થાય છે.';
 
   @override
   String get matchManglikCancelled =>
-      'Mangal dosha is present but cancelled by other placements in the chart.';
+      'મંગલ દોષ હાજર છે પરંતુ ચાર્ટમાં અન્ય પ્લેસમેન્ટ દ્વારા રદ કરવામાં આવ્યો છે.';
 
   @override
   String get matchManglikMismatch =>
-      'Only one of you is Manglik. Talk to an astrologer about remedies and a full chart review.';
+      'તમારામાંથી એક જ માંગલિક છે. ઉપાયો અને સંપૂર્ણ ચાર્ટ સમીક્ષા વિશે જ્યોતિષ સાથે વાત કરો.';
 
   @override
-  String get matchIsManglik => 'Manglik';
+  String get matchIsManglik => 'માંગલિક';
 
   @override
-  String get matchNotManglik => 'Not Manglik';
+  String get matchNotManglik => 'માંગલિક નહિ';
 
   @override
-  String get matchManglikCancelledShort => 'Manglik (cancelled)';
+  String get matchManglikCancelledShort => 'માંગલિક (રદ કરેલ)';
 
   @override
   String matchCheckClear(String name) {
-    return '$name: clear';
+    return '$name : સ્પષ્ટ';
   }
 
   @override
   String matchCheckPresent(String name) {
-    return '$name: present';
+    return '$name : હાજર';
   }
 
   @override
-  String get matchDoshaNadi => 'Nadi dosha';
+  String get matchDoshaNadi => 'નાડી દોષ';
 
   @override
-  String get matchDoshaBhakoot => 'Bhakoot dosha';
+  String get matchDoshaBhakoot => 'ભકૂટ દોષ';
 
   @override
-  String get matchDoshaGana => 'Gana dosha';
+  String get matchDoshaGana => 'ગણ દોષ';
 
   @override
-  String get matchDoshaTag => 'Dosha';
+  String get matchDoshaTag => 'દોષા';
 
   @override
-  String get matchBreakdownTitle => 'Guna breakdown';
+  String get matchBreakdownTitle => 'ગુના ભંગાણ';
 
   @override
-  String get matchBreakdownSub => 'Tap any koota to see what it means.';
+  String get matchBreakdownSub =>
+      'તેનો અર્થ શું છે તે જોવા માટે કોઈપણ કૂટાને ટેપ કરો.';
 
   @override
-  String get matchKootaVarna => 'Varna';
+  String get matchKootaVarna => 'વર્ણા';
 
   @override
-  String get matchKootaVashya => 'Vashya';
+  String get matchKootaVashya => 'વશ્ય';
 
   @override
-  String get matchKootaTara => 'Tara';
+  String get matchKootaTara => 'તારા';
 
   @override
-  String get matchKootaYoni => 'Yoni';
+  String get matchKootaYoni => 'યોની';
 
   @override
-  String get matchKootaMaitri => 'Graha Maitri';
+  String get matchKootaMaitri => 'ગ્રહ મૈત્રી';
 
   @override
-  String get matchKootaGana => 'Gana';
+  String get matchKootaGana => 'ગણ';
 
   @override
-  String get matchKootaBhakoot => 'Bhakoot';
+  String get matchKootaBhakoot => 'ભકૂટ';
 
   @override
-  String get matchKootaNadi => 'Nadi';
+  String get matchKootaNadi => 'નાડી';
 
   @override
-  String get matchKootaVarnaMeaning => 'Values & ego';
+  String get matchKootaVarnaMeaning => 'મૂલ્યો અને અહંકાર';
 
   @override
-  String get matchKootaVashyaMeaning => 'Mutual attraction';
+  String get matchKootaVashyaMeaning => 'પરસ્પર આકર્ષણ';
 
   @override
-  String get matchKootaTaraMeaning => 'Destiny & well-being';
+  String get matchKootaTaraMeaning => 'નિયતિ અને સુખાકારી';
 
   @override
-  String get matchKootaYoniMeaning => 'Physical harmony';
+  String get matchKootaYoniMeaning => 'શારીરિક સંવાદિતા';
 
   @override
-  String get matchKootaMaitriMeaning => 'Mental wavelength';
+  String get matchKootaMaitriMeaning => 'માનસિક તરંગલંબાઇ';
 
   @override
-  String get matchKootaGanaMeaning => 'Temperament';
+  String get matchKootaGanaMeaning => 'સ્વભાવ';
 
   @override
-  String get matchKootaBhakootMeaning => 'Love, family & finances';
+  String get matchKootaBhakootMeaning => 'પ્રેમ, કુટુંબ અને નાણાકીય';
 
   @override
-  String get matchKootaNadiMeaning => 'Health & children';
+  String get matchKootaNadiMeaning => 'આરોગ્ય અને બાળકો';
 
   @override
   String get matchKootaVarnaDetail =>
-      'Compares the spiritual temperament of both Moon signs — how naturally your values and sense of duty line up. Worth 1 point.';
+      'બંને ચંદ્ર ચિહ્નોના આધ્યાત્મિક સ્વભાવની તુલના કરે છે - તમારા મૂલ્યો અને ફરજની ભાવના કેટલી સ્વાભાવિક રીતે છે. 1 પોઈન્ટ વર્થ.';
 
   @override
   String get matchKootaVashyaDetail =>
-      'Shows the natural pull and influence between partners — who leads, who adapts, and how easily you agree. Worth 2 points.';
+      'ભાગીદારો વચ્ચે કુદરતી ખેંચાણ અને પ્રભાવ દર્શાવે છે - કોણ દોરી જાય છે, કોણ અનુકૂલન કરે છે અને તમે કેટલી સરળતાથી સંમત થાઓ છો. 2 પોઈન્ટ વર્થ.';
 
   @override
   String get matchKootaTaraDetail =>
-      'Counts the nakshatras between you to judge fortune, health and longevity of the bond. Worth 3 points.';
+      'નસીબ, આરોગ્ય અને બોન્ડની આયુષ્યનો નિર્ણય કરવા માટે તમારી વચ્ચેના નક્ષત્રોની ગણતરી કરે છે. 3 પોઈન્ટ વર્થ.';
 
   @override
   String get matchKootaYoniDetail =>
-      'Each nakshatra has an animal nature; this koota compares them for intimacy and physical compatibility. Worth 4 points.';
+      'દરેક નક્ષત્રમાં પ્રાણી સ્વભાવ હોય છે; આ કૂટા આત્મીયતા અને શારીરિક સુસંગતતા માટે તેમની તુલના કરે છે. 4 પોઈન્ટ વર્થ.';
 
   @override
   String get matchKootaMaitriDetail =>
-      'Compares the lords of your Moon signs — friendship between them means you think alike and resolve issues easily. Worth 5 points.';
+      'તમારા ચંદ્ર ચિહ્નોના સ્વામીઓની તુલના કરો - તેમની વચ્ચે મિત્રતાનો અર્થ એ છે કે તમે એકસરખું વિચારો છો અને સમસ્યાઓ સરળતાથી ઉકેલી શકો છો. 5 પોઈન્ટ વર્થ.';
 
   @override
   String get matchKootaGanaDetail =>
-      'Groups nakshatras into Deva, Manushya and Rakshasa temperaments. A mismatch can mean frequent friction. Worth 6 points.';
+      'નક્ષત્રોને દેવ, મનુષ્ય અને રક્ષા સ્વભાવમાં જૂથબદ્ધ કરે છે. મિસમેચનો અર્થ વારંવાર ઘર્ષણ થઈ શકે છે. 6 પોઈન્ટ વર્થ.';
 
   @override
   String get matchKootaBhakootDetail =>
-      'Looks at the distance between your Moon signs, which traditionally affects love, family growth and shared finances. Worth 7 points.';
+      'તમારા ચંદ્ર ચિહ્નો વચ્ચેનું અંતર જુએ છે, જે પરંપરાગત રીતે પ્રેમ, કૌટુંબિક વૃદ્ધિ અને વહેંચાયેલ નાણાકીય બાબતોને અસર કરે છે. 7 પોઈન્ટ વર્થ.';
 
   @override
   String get matchKootaNadiDetail =>
-      'The most weighted koota. Same Nadi (0 points) is traditionally linked to health and progeny concerns and has well-known exceptions. Worth 8 points.';
+      'સૌથી વધુ વજનવાળા કૂટા. સમાન નાડી (0 પોઈન્ટ) પરંપરાગત રીતે આરોગ્ય અને સંતાનની ચિંતાઓ સાથે જોડાયેલી છે અને તેમાં જાણીતા અપવાદો છે. 8 પોઈન્ટ વર્થ.';
 
   @override
-  String get matchChartsTitle => 'Birth chart details';
+  String get matchChartsTitle => 'જન્મ ચાર્ટ વિગતો';
 
   @override
-  String get matchRowRasi => 'Moon sign';
+  String get matchRowRasi => 'ચંદ્ર ચિહ્ન';
 
   @override
-  String get matchRowNakshatra => 'Nakshatra';
+  String get matchRowNakshatra => 'નક્ષત્ર';
 
   @override
-  String get matchRowGana => 'Gana';
+  String get matchRowGana => 'ગણ';
 
   @override
-  String get matchRowYoni => 'Yoni';
+  String get matchRowYoni => 'યોની';
 
   @override
-  String get matchAskTitle => 'Talk it through with an astrologer';
+  String get matchAskTitle => 'કોઈ જ્યોતિષ સાથે વાત કરો';
 
   @override
   String get matchAskBody =>
-      'Doshas often have cancellations and remedies. Get a full reading of both charts.';
+      'દોષોમાં વારંવાર રદબાતલ અને ઉપાયો હોય છે. બંને ચાર્ટનું સંપૂર્ણ વાંચન મેળવો.';
 
   @override
   String get matchDisclaimer =>
-      'Guna Milan is a traditional guide, not a guarantee. Consider the full charts and your own judgement.';
+      'ગુણ મિલન એ પરંપરાગત માર્ગદર્શિકા છે, ગેરંટી નથી. સંપૂર્ણ ચાર્ટ અને તમારા પોતાના નિર્ણયને ધ્યાનમાં લો.';
 
   @override
-  String get matchRelSelf => 'Myself';
+  String get matchRelSelf => 'મારી જાત';
 
   @override
-  String get matchRelPartner => 'Partner';
+  String get matchRelPartner => 'જીવનસાથી';
 
   @override
-  String get matchRelChild => 'Child';
+  String get matchRelChild => 'બાળક';
 
   @override
-  String get matchRelParent => 'Parent';
+  String get matchRelParent => 'પિતૃ';
 
   @override
-  String get matchRelSibling => 'Sibling';
+  String get matchRelSibling => 'બહેન';
 
   @override
-  String get matchRelFriend => 'Friend';
+  String get matchRelFriend => 'મિત્ર';
 
   @override
-  String get kAdvTitle => 'Advanced reports';
+  String get kAdvTitle => 'અદ્યતન અહેવાલો';
 
   @override
   String get kAdvIntro =>
-      'The technical layers astrologers use for depth and timing. Skim them for interest, or open one during a consultation.';
+      'તકનીકી સ્તરો જ્યોતિષીઓ ઊંડાઈ અને સમય માટે વાપરે છે. રસ માટે તેમને સ્કિમ કરો, અથવા પરામર્શ દરમિયાન એક ખોલો.';
 
   @override
-  String get kAdvAshtakavarga => 'Ashtakavarga';
+  String get kAdvAshtakavarga => 'અષ્ટકવર્ગ';
 
   @override
   String get kAdvAshtakavargaSub =>
-      'Point-strength of every sign. Higher = the sky supports transits there.';
+      'દરેક ચિહ્નની બિંદુ-શક્તિ. ઉચ્ચ = આકાશ ત્યાં પરિવહનને સમર્થન આપે છે.';
 
   @override
-  String get kAdvShadbala => 'Shadbala';
+  String get kAdvShadbala => 'શાદબાલા';
 
   @override
   String get kAdvShadbalaSub =>
-      'The six-fold strength of each planet, measured against what it needs.';
+      'દરેક ગ્રહની છ-ગણી તાકાત, તેની જરૂરિયાત સામે માપવામાં આવે છે.';
 
   @override
-  String get kAdvKp => 'KP System';
+  String get kAdvKp => 'કેપી સિસ્ટમ';
 
   @override
   String get kAdvKpSub =>
-      'Krishnamurti Paddhati — cuspal sub-lords and ruling planets for timing.';
+      'કૃષ્ણમૂર્તિ પધ્ધતિ - સમય માટે કુશળ ઉપ-સ્વામી અને શાસક ગ્રહો.';
 
   @override
-  String get kAdvJaimini => 'Jaimini';
+  String get kAdvJaimini => 'જૈમિની';
 
   @override
   String get kAdvJaiminiSub =>
-      'Chara Karakas, Arudha Lagna and the Jaimini way of reading a chart.';
+      'ચારા કરકસ, અરુધા લગ્ન અને ચાર્ટ વાંચવાની જૈમિની રીત.';
 
   @override
-  String get kAdvDownloadPdf => 'Download the full PDF report';
+  String get kAdvDownloadPdf => 'સંપૂર્ણ પીડીએફ રિપોર્ટ ડાઉનલોડ કરો';
 
   @override
   String get kAdvFooter =>
-      'These are technical. For a reading in plain words, talk to an astrologer.';
+      'આ તકનીકી છે. સાદા શબ્દોમાં વાંચવા માટે, જ્યોતિષ સાથે વાત કરો.';
 
   @override
-  String get kAdvReport => 'Report';
+  String get kAdvReport => 'જાણ કરો';
 
   @override
-  String get kAdvLoadError => 'Could not load this report.';
+  String get kAdvLoadError => 'આ રિપોર્ટ લોડ કરી શકાયો નથી.';
 
   @override
   String get kAdvKpIntro =>
-      'KP divides the zodiac into 249 sub-parts. The sub-lord of a house cusp decides whether that area of life delivers; the ruling planets are used for on-the-spot timing.';
+      'KP રાશિચક્રને 249 પેટા ભાગોમાં વિભાજિત કરે છે. હાઉસ કુપ્સનો ઉપ-સ્વામી નક્કી કરે છે કે જીવનનું તે ક્ષેત્ર વિતરિત કરે છે કે કેમ; શાસક ગ્રહોનો ઉપયોગ સ્થળ પરના સમય માટે થાય છે.';
 
   @override
   String get kAdvJaiminiIntro =>
-      'Jaimini reads the chart through the Chara Karakas (planets ranked by degree, each signifying a life area) and the Arudha padas — how things appear to the world.';
+      'જૈમિની ચારા કરાક (પક્ષીય દ્વારા ક્રમાંકિત ગ્રહો, દરેક જીવન વિસ્તાર દર્શાવે છે) અને અરુધા પદો દ્વારા ચાર્ટ વાંચે છે — વસ્તુઓ વિશ્વમાં કેવી રીતે દેખાય છે.';
 
   @override
   String get kAdvAvIntro =>
-      'Sarvashtakavarga adds every planet’s contribution to each house — the total is always 337. A house scoring 28+ supports planets transiting through it; below 25 is a weaker patch.';
+      'સર્વાષ્ટકવર્ગ દરેક ઘરમાં દરેક ગ્રહનું યોગદાન ઉમેરે છે — કુલ હંમેશા 337 છે. 28+ સ્કોર કરતું ઘર તેમાંથી પસાર થતા ગ્રહોને સમર્થન આપે છે; 25 ની નીચે એક નબળો પેચ છે.';
 
   @override
   String kAdvHouseN(Object n) {
-    return 'House $n';
+    return 'ઘર $n';
   }
 
   @override
-  String get kAdvBhinnaTotals => 'Per-planet totals (Bhinnashtakavarga)';
+  String get kAdvBhinnaTotals => 'ગ્રહ દીઠ કુલ (ભિન્નષ્ટકવર્ગ)';
 
   @override
   String get kAdvShadbalaIntro =>
-      'Shadbala scores each planet’s strength in rupas against the minimum it needs. A ratio above 1.0 means the planet can deliver its results reliably.';
+      'શાદબાલા દરેક ગ્રહની તાકાતને તેની જરૂરિયાતની ન્યૂનતમ સામે રૂપામાં સ્કોર કરે છે. 1.0 થી ઉપરનો ગુણોત્તર એટલે કે ગ્રહ તેના પરિણામો વિશ્વસનીય રીતે આપી શકે છે.';
 
   @override
   String kAdvStrongest(Object planet) {
-    return 'Strongest: $planet';
+    return 'સૌથી મજબૂત: $planet';
   }
 
   @override
   String kAdvWeakest(Object planet) {
-    return 'Weakest: $planet';
+    return 'સૌથી નબળું: $planet';
   }
 
   @override
-  String get kAdvReadWithAstrologer =>
-      'This report is meant to be read with an astrologer.';
+  String get kAdvReadWithAstrologer => 'આ અહેવાલ જ્યોતિષ પાસે વાંચવાનો છે.';
 
   @override
-  String get kAdvSecCuspalSublords => 'Cuspal sub-lords';
+  String get kAdvSecCuspalSublords => 'કુસ્પલ સબ-લોર્ડ્સ';
 
   @override
-  String get kAdvSecRulingPlanets => 'Ruling planets';
+  String get kAdvSecRulingPlanets => 'શાસક ગ્રહો';
 
   @override
-  String get kAdvSecHouseSignificators => 'House significators';
+  String get kAdvSecHouseSignificators => 'ઘરના અર્થકર્તાઓ';
 
   @override
-  String get kAdvSecCharaKarakas => 'Chara karakas';
+  String get kAdvSecCharaKarakas => 'ચરા કરકસ';
 
   @override
-  String get kAdvSecArudhaPadas => 'Arudha padas';
+  String get kAdvSecArudhaPadas => 'અરુધા પાડો';
 
   @override
-  String get kAdvSecKarakamsa => 'Karakamsa';
+  String get kAdvSecKarakamsa => 'કરકંસા';
 
   @override
-  String get kAdvSecCharaDasha => 'Chara dasha';
+  String get kAdvSecCharaDasha => 'ચરા દશા';
 
   @override
-  String get kBhavaTitle => 'Houses · Bhava';
+  String get kBhavaTitle => 'ઘરો · ભાવ';
 
   @override
   String get kBhavaIntro =>
-      'Each of the 12 houses, its natural significations, and how its lord and occupants shape it.';
+      '12 ઘરોમાંથી દરેક, તેના કુદરતી સંકેતો અને તેના સ્વામી અને રહેવાસીઓ તેને કેવી રીતે આકાર આપે છે.';
 
   @override
-  String get kBhavaMoreBenefic => 'More benefic than malefic influence';
+  String get kBhavaMoreBenefic => 'હાનિકારક પ્રભાવ કરતાં વધુ ફાયદાકારક';
 
   @override
-  String get kBhavaMoreMalefic => 'More malefic than benefic influence';
+  String get kBhavaMoreMalefic => 'ફાયદાકારક પ્રભાવ કરતાં વધુ નુકસાનકારક';
 
   @override
   String kBhavaOccupiedBy(Object planets) {
-    return 'Occupied by $planets';
+    return '$planets દ્વારા કબજો';
   }
 
   @override
   String kBhavaAspectedBy(Object planets) {
-    return 'Aspected by $planets';
+    return '$planets દ્વારા આસ્પેક્ટેડ';
   }
 
   @override
   String kBhavaBeneficCount(Object count) {
-    return '$count benefic';
+    return '$count ફાયદાકારક';
   }
 
   @override
   String kBhavaMaleficCount(Object count) {
-    return '$count malefic';
+    return '$count નુકસાનકારક';
   }
 
   @override
-  String get kBhavaNeedsTime => 'House analysis needs a birth time';
+  String get kBhavaNeedsTime => 'ઘરના વિશ્લેષણ માટે જન્મ સમયની જરૂર છે';
 
   @override
   String get kBhavaNeedsTimeBody =>
-      'Add an exact time of birth to this profile to see how each house is shaped.';
+      'દરેક ઘરનો આકાર કેવો છે તે જોવા માટે આ પ્રોફાઇલમાં જન્મનો ચોક્કસ સમય ઉમેરો.';
 
   @override
   String get kDashaIntroVimshottari =>
-      'Vimshottari is a 120-year cycle of planetary periods, timed from where the Moon sat at your birth.';
+      'વિમશોત્તરી એ ગ્રહોના સમયગાળાનું 120-વર્ષનું ચક્ર છે, જ્યાંથી તમારા જન્મ સમયે ચંદ્ર બેઠો હતો.';
 
   @override
   String get kDashaIntroYogini =>
-      'Yogini is a 36-year cycle of eight yoginis, from the Moon’s nakshatra.';
+      'યોગિની એ ચંદ્રના નક્ષત્રથી આઠ યોગિનીઓનું 36 વર્ષનું ચક્ર છે.';
 
   @override
   String get kDashaIntroAshtottari =>
-      'Ashtottari is a 108-year cycle counted from Ardra.';
+      'અષ્ટોત્તરી એ 108 વર્ષનું ચક્ર છે જે આર્દ્રામાંથી ગણવામાં આવે છે.';
 
   @override
   String kDashaBalance(Object lord, Object years) {
-    return 'Balance of $lord dasha at birth: $years yrs';
+    return 'જન્મ સમયે $lord દશાનું સંતુલન: $years વર્ષ';
   }
 
   @override
-  String get kDashaVimshottari => 'Vimshottari';
+  String get kDashaVimshottari => 'વિમશોત્તરી';
 
   @override
-  String get kDashaYogini => 'Yogini';
+  String get kDashaYogini => 'યોગિની';
 
   @override
-  String get kDashaAshtottari => 'Ashtottari';
+  String get kDashaAshtottari => 'અષ્ટોત્તરી';
 
   @override
-  String get kDashaNowRunning => 'Now running';
+  String get kDashaNowRunning => 'હવે ચાલી રહ્યું છે';
 
   @override
-  String get kDashaNow => 'NOW';
+  String get kDashaNow => 'હવે';
 
   @override
   String kDashaYears(Object count) {
-    return '$count yrs';
+    return '$count વર્ષ';
   }
 
   @override
   String get kPlanetsIntro =>
-      'Where each planet sits, how strong it is, and what it tends to bring. Tap to read more. Positions are sidereal (Lahiri).';
+      'દરેક ગ્રહ ક્યાં બેસે છે, તે કેટલો મજબૂત છે અને તે શું લાવે છે. વધુ વાંચવા માટે ટૅપ કરો. પોઝિશન્સ સાઈડરીયલ (લહેરી) છે.';
 
   @override
-  String get kTrTitle => 'Transits';
+  String get kTrTitle => 'પરિવહન';
 
   @override
   String get kTrSadeSatiCalendar =>
-      'See the full Sade Sati calendar (with dates)';
+      'સંપૂર્ણ સાદે સતી કેલેન્ડર જુઓ (તારીખ સાથે)';
 
   @override
-  String get kTrSkyNow => 'The sky right now — against your chart';
+  String get kTrSkyNow => 'અત્યારે આકાશ - તમારા ચાર્ટની સામે';
 
   @override
-  String get kTrSadeSati => 'Sade Sati';
+  String get kTrSadeSati => 'સાદે સતી';
 
   @override
   String kTrPhaseOf(Object n) {
-    return 'Phase $n of 3';
+    return '3 માંથી $n તબક્કો';
   }
 
   @override
-  String get kTrPhaseHintRising => 'Saturn in the 12th';
+  String get kTrPhaseHintRising => '12માં શનિ';
 
   @override
-  String get kTrPhaseHintPeak => 'over the Moon';
+  String get kTrPhaseHintPeak => 'ચંદ્ર ઉપર';
 
   @override
-  String get kTrPhaseHintSetting => 'Saturn in the 2nd';
+  String get kTrPhaseHintSetting => '2જીમાં શનિ';
 
   @override
-  String get kTrHowToWork => 'How to work with it';
+  String get kTrHowToWork => 'તેની સાથે કેવી રીતે કામ કરવું';
 
   @override
   String get kTrTip1 =>
-      'Cut what isn’t working — Saturn rewards honesty about it';
+      'જે કામ કરતું નથી તેને કાપો - શનિ તેના વિશે પ્રમાણિકતાને પુરસ્કાર આપે છે';
 
   @override
-  String get kTrTip2 => 'Build routines and finish what you start';
+  String get kTrTip2 => 'દિનચર્યાઓ બનાવો અને તમે જે શરૂ કરો તે પૂર્ણ કરો';
 
   @override
-  String get kTrTip3 => 'Care for your sleep, knees, teeth and older relatives';
+  String get kTrTip3 => 'તમારી ઊંઘ, ઘૂંટણ, દાંત અને વૃદ્ધ સંબંધીઓની સંભાળ રાખો';
 
   @override
   String get kTrTip4 =>
-      'It is a rebuild, not a punishment. Results show after it ends.';
+      'તે પુનઃનિર્માણ છે, સજા નથી. તે સમાપ્ત થયા પછી પરિણામો દર્શાવે છે.';
 
   @override
   String get kTrPanotiBody =>
-      'A shorter (~2½ year) Saturn phase. Expect friction with health, daily effort and obstacles — meet it with patience and routine.';
+      'ટૂંકા (~2½ વર્ષ) શનિનો તબક્કો. સ્વાસ્થ્ય, રોજિંદા પ્રયત્નો અને અવરોધો સાથે ઘર્ષણની અપેક્ષા રાખો - તેને ધીરજ અને દિનચર્યા સાથે મળો.';
 
   @override
   String kTrPlanetInSign(Object planet, Object sign) {
-    return '$planet in $sign';
+    return '$sign માં $planet';
   }
 
   @override
   String get kTrJupiterGood =>
-      'Jupiter’s transit is favourable — supportive for growth, learning, money and family right now.';
+      'ગુરુનું સંક્રમણ સાનુકૂળ છે - અત્યારે વૃદ્ધિ, ભણતર, પૈસા અને કુટુંબ માટે સહાયક છે.';
 
   @override
   String get kTrJupiterNeutral =>
-      'Jupiter’s transit is neutral for you at the moment.';
+      'ગુરુનું સંક્રમણ અત્યારે તમારા માટે તટસ્થ છે.';
 
   @override
-  String get kTrCloseContacts => 'Close contacts now';
+  String get kTrCloseContacts => 'હવે સંપર્કો બંધ કરો';
 
   @override
   String kTrCloseContactLine(Object natal, Object planet) {
-    return 'Transiting $planet is within 3° of your natal $natal — that area of life is active this week.';
+    return '$planet સંક્રમણ તમારા જન્મના $natal ના 3°ની અંદર છે — જીવનનું તે ક્ષેત્ર આ અઠવાડિયે સક્રિય છે.';
   }
 
   @override
@@ -4614,637 +4613,1980 @@ class AppLocalizationsGu extends AppLocalizations {
 
   @override
   String kUpOr(Object name) {
-    return 'or $name';
+    return 'અથવા $name';
   }
 
   @override
   String kUpFinger(Object finger) {
-    return '$finger finger';
+    return '$finger આંગળી';
   }
 
   @override
-  String get kYdPartial => 'partial';
+  String get kYdPartial => 'આંશિક';
 
   @override
-  String get moodTitle => 'Today\'s mood';
+  String get moodTitle => 'આજનો મૂડ';
 
   @override
-  String get moodMeter => 'Mood meter';
+  String get moodMeter => 'મૂડ મીટર';
 
   @override
-  String get moodWhyTitle => 'Why today feels this way';
+  String get moodWhyTitle => 'આજે કેમ આવું લાગે છે';
 
   @override
-  String get moodTipTitle => 'One small thing for today';
+  String get moodTipTitle => 'આજની એક નાની વાત';
 
   @override
-  String get moodLockedTitle => 'Your astrologer can tell you';
+  String get moodLockedTitle => 'તમારા જ્યોતિષી તમને કહી શકે છે';
 
   @override
   String get moodLockedSub =>
-      'The full picture needs your whole chart, not just the Moon.';
+      'સંપૂર્ણ ચિત્રને તમારા આખા ચાર્ટની જરૂર છે, માત્ર ચંદ્રની જ નહીં.';
 
   @override
-  String get moodTalkCta => 'Talk to an astrologer now';
+  String get moodTalkCta => 'હવે કોઈ જ્યોતિષ સાથે વાત કરો';
 
   @override
   String moodNextChange(Object when) {
-    return 'Your mood shifts next on $when';
+    return 'તમારો મૂડ $when ના રોજ બદલાશે';
   }
 
   @override
-  String get kOvExMood => 'Today\'s mood';
+  String get kOvExMood => 'આજનો મૂડ';
 
   @override
-  String get kOvExMoodSub => 'How the Moon is shaping your mind today';
+  String get kOvExMoodSub => 'ચંદ્ર આજે તમારા મનને કેવી રીતે આકાર આપી રહ્યો છે';
 
   @override
-  String get prefsMoodAlerts => 'Daily mood alerts';
+  String get prefsMoodAlerts => 'દૈનિક મૂડ ચેતવણીઓ';
 
   @override
   String get prefsMoodAlertsDesc =>
-      'About three mornings a week, when the Moon changes sign in your chart.';
+      'અઠવાડિયામાં લગભગ ત્રણ સવારે, જ્યારે ચંદ્ર તમારા ચાર્ટમાં સાઇન બદલાય છે.';
 
   @override
-  String get callCalling => 'Calling…';
+  String get callCalling => 'કૉલ કરી રહ્યાં છીએ…';
 
   @override
-  String get callRinging => 'Ringing…';
+  String get callRinging => 'રિંગિંગ…';
 
   @override
-  String get callConnecting => 'Connecting…';
+  String get callConnecting => 'કનેક્ટ કરી રહ્યું છે...';
 
   @override
-  String get callReconnecting => 'Reconnecting…';
+  String get callReconnecting => 'ફરીથી કનેક્ટ કરી રહ્યું છે...';
 
   @override
-  String get callEnded => 'Call ended';
+  String get callEnded => 'કૉલ સમાપ્ત થયો';
 
   @override
-  String get callPoorConnection => 'Weak connection';
+  String get callPoorConnection => 'નબળું જોડાણ';
 
   @override
-  String get callMute => 'Mute';
+  String get callMute => 'મ્યૂટ કરો';
 
   @override
-  String get callSpeaker => 'Speaker';
+  String get callSpeaker => 'વક્તા';
 
   @override
-  String get callEnd => 'End';
+  String get callEnd => 'અંત';
 
   @override
-  String get callEncrypted => 'Encrypted call';
+  String get callEncrypted => 'એન્ક્રિપ્ટેડ કૉલ';
 
   @override
-  String get callMicTitle => 'Microphone needed';
+  String get callMicTitle => 'માઇક્રોફોન જરૂરી છે';
 
   @override
   String get callMicBody =>
-      'Allow microphone access so the astrologer can hear you.';
+      'માઇક્રોફોનને ઍક્સેસ કરવાની મંજૂરી આપો જેથી જ્યોતિષી તમને સાંભળી શકે.';
 
   @override
   String get callMicBlockedBody =>
-      'Microphone access is turned off for TalkAcharya. Turn it on in Settings.';
+      'TalkAcharya માટે માઇક્રોફોન ઍક્સેસ બંધ છે. તેને સેટિંગ્સમાં ચાલુ કરો.';
 
   @override
-  String get callOpenSettings => 'Open settings';
+  String get callOpenSettings => 'સેટિંગ્સ ખોલો';
 
   @override
-  String get callTryAgain => 'Try again';
+  String get callTryAgain => 'ફરી પ્રયાસ કરો';
 
   @override
-  String get callFailedTitle => 'Couldn\'t start the call';
+  String get callFailedTitle => 'કૉલ શરૂ કરી શકાયો નથી';
 
   @override
-  String get callEndConfirmTitle => 'End this call?';
+  String get callEndConfirmTitle => 'આ કૉલ સમાપ્ત કરીએ?';
 
   @override
-  String get callEndConfirmBody => 'Billing stops as soon as the call ends.';
+  String get callEndConfirmBody =>
+      'કૉલ સમાપ્ત થતાંની સાથે જ બિલિંગ બંધ થઈ જાય છે.';
 
   @override
-  String get callEndConfirmYes => 'End call';
+  String get callEndConfirmYes => 'કૉલ સમાપ્ત કરો';
 
   @override
-  String get callEndConfirmNo => 'Keep talking';
+  String get callEndConfirmNo => 'બોલતા રહો';
 
   @override
   String callWaitingAccept(String name) {
-    return 'Waiting for $name to accept…';
+    return '$name સ્વીકારવાની રાહ જોઈ રહ્યાં છીએ...';
   }
 
   @override
   String callBookTitle(String name) {
-    return 'Call $name';
+    return '$name પર કૉલ કરો';
   }
 
   @override
-  String get callBookBilling => 'Voice call · billed per minute once connected';
+  String get callBookBilling =>
+      'વૉઇસ કૉલ · એકવાર કનેક્ટ થયા પછી પ્રતિ મિનિટ બિલ';
 
   @override
   String callBookCta(String price) {
-    return 'Start call · $price/min';
+    return 'કૉલ શરૂ કરો · $price /મિનિટ';
   }
 
   @override
-  String get callUnavailable =>
-      'This astrologer is not taking calls right now.';
+  String get callUnavailable => 'આ જ્યોતિષી અત્યારે ફોન નથી લઈ રહ્યા.';
 
   @override
-  String get giftAction => 'Send a gift';
+  String get giftAction => 'ભેટ મોકલો';
 
   @override
   String giftSheetTitle(String name) {
-    return 'Send a gift to $name';
+    return '$name ને ભેટ મોકલો';
   }
 
   @override
   String get giftSheetSubtitle =>
-      'A small token of gratitude — they see it instantly.';
+      'કૃતજ્ઞતાનું એક નાનું પ્રતીક - તેઓ તેને તરત જ જુએ છે.';
 
   @override
-  String get giftQuantity => 'Quantity';
+  String get giftQuantity => 'જથ્થો';
 
   @override
-  String get giftAddNote => 'Add a note';
+  String get giftAddNote => 'એક નોંધ ઉમેરો';
 
   @override
-  String get giftNoteHint => 'Write a short message (optional)';
+  String get giftNoteHint => 'ટૂંકો સંદેશ લખો (વૈકલ્પિક)';
 
   @override
-  String get giftChoose => 'Choose a gift';
+  String get giftChoose => 'ભેટ પસંદ કરો';
 
   @override
   String giftSendCta(String gift, String price) {
-    return 'Send $gift · $price';
+    return '$gift · $price મોકલો';
   }
 
   @override
   String giftWalletBalance(String amount) {
-    return 'Balance $amount';
+    return 'બેલેન્સ $amount';
   }
 
   @override
-  String get giftAddMoney => 'Add money';
+  String get giftAddMoney => 'પૈસા ઉમેરો';
 
   @override
-  String get giftLowBalanceTitle => 'Not enough balance';
+  String get giftLowBalanceTitle => 'પર્યાપ્ત સંતુલન નથી';
 
   @override
   String get giftLowBalanceBody =>
-      'Add money to your wallet to send this gift.';
+      'આ ભેટ મોકલવા માટે તમારા વૉલેટમાં પૈસા ઉમેરો.';
 
   @override
   String giftSentTitle(String gift, String name) {
-    return '$gift sent to $name';
+    return '$name ને $gift મોકલ્યો';
   }
 
   @override
-  String get giftSentBody =>
-      'They\'ll see it right away. Thank you for your kindness!';
+  String get giftSentBody => 'તેઓ તેને તરત જ જોશે. તમારી દયા બદલ આભાર!';
 
   @override
-  String get giftSendAnother => 'Send another';
+  String get giftSendAnother => 'બીજું મોકલો';
 
   @override
-  String get giftLoadError => 'Couldn\'t load gifts';
+  String get giftLoadError => 'ભેટ લોડ કરી શકાઈ નથી';
 
   @override
-  String get giftThankYouTitle => 'Say thanks with a gift';
+  String get giftThankYouTitle => 'ભેટ સાથે આભાર કહો';
 
   @override
   String giftThankYouBody(String name) {
-    return 'Loved the session? Send $name a small token of gratitude.';
+    return 'સત્ર ગમ્યું? $name ને કૃતજ્ઞતાનું નાનું પ્રતીક મોકલો.';
   }
 
   @override
-  String get giftThankYouSentTitle => 'Thank you for your gift';
+  String get giftThankYouSentTitle => 'તમારી ભેટ બદલ આભાર';
 
   @override
-  String get helpTitle => 'Help & support';
+  String get helpTitle => 'મદદ અને સમર્થન';
 
   @override
-  String get helpHeroTitle => 'How can we help?';
+  String get helpHeroTitle => 'અમે કેવી રીતે મદદ કરી શકીએ?';
 
   @override
   String get helpHeroBody =>
-      'Report a problem with a session, track your reports or reach our team.';
+      'સત્રમાં સમસ્યાની જાણ કરો, તમારા અહેવાલોને ટ્રૅક કરો અથવા અમારી ટીમ સુધી પહોંચો.';
 
   @override
-  String get helpReportSection => 'Report a problem with a session';
+  String get helpReportSection => 'સત્રમાં સમસ્યાની જાણ કરો';
 
   @override
-  String get helpReportEmpty => 'Your completed sessions will appear here.';
+  String get helpReportEmpty => 'તમારા પૂર્ણ થયેલા સત્રો અહીં દેખાશે.';
 
   @override
-  String get helpReportAction => 'Report';
+  String get helpReportAction => 'જાણ કરો';
 
   @override
-  String get helpYourReports => 'Your reports';
+  String get helpYourReports => 'તમારા અહેવાલો';
 
   @override
-  String get helpContactSection => 'Contact us';
+  String get helpContactSection => 'અમારો સંપર્ક કરો';
 
   @override
-  String get helpWhatsapp => 'Chat on WhatsApp';
+  String get helpWhatsapp => 'વોટ્સએપ પર ચેટ કરો';
 
   @override
-  String get helpEmailUs => 'Email us';
+  String get helpEmailUs => 'અમને ઇમેઇલ કરો';
 
   @override
-  String get helpCentre => 'Help centre';
+  String get helpCentre => 'મદદ કેન્દ્ર';
 
   @override
-  String get helpFaqSection => 'Frequently asked questions';
+  String get helpFaqSection => 'વારંવાર પૂછાતા પ્રશ્નો';
 
   @override
-  String get helpLoadError => 'Couldn\'t load your sessions.';
+  String get helpLoadError => 'તમારા સત્રો લોડ કરી શકાયા નથી.';
 
   @override
-  String get helpFaqChargesQ => 'How am I charged for a consultation?';
+  String get helpFaqChargesQ =>
+      'પરામર્શ માટે મારી પાસેથી કેવી રીતે શુલ્ક લેવામાં આવે છે?';
 
   @override
   String get helpFaqChargesA =>
-      'You pay per minute, only while the session is live. Billing starts once the astrologer joins and stops the moment either of you ends it.';
+      'સત્ર લાઇવ હોય ત્યારે જ તમે પ્રતિ મિનિટ ચૂકવણી કરો છો. જ્યારે જ્યોતિષી જોડાય છે ત્યારે બિલિંગ શરૂ થાય છે અને તમારામાંથી કોઈ એક તેને સમાપ્ત કરે તે ક્ષણ બંધ થાય છે.';
 
   @override
-  String get helpFaqNoResponseQ => 'What if the astrologer doesn\'t respond?';
+  String get helpFaqNoResponseQ => 'જો જ્યોતિષી જવાબ ન આપે તો શું?';
 
   @override
   String get helpFaqNoResponseA =>
-      'If your request isn\'t accepted, you aren\'t charged — any amount held for the session goes back to your wallet.';
+      'જો તમારી વિનંતી સ્વીકારવામાં ન આવે, તો તમારી પાસેથી શુલ્ક લેવામાં આવશે નહીં — સત્ર માટે રાખવામાં આવેલી કોઈપણ રકમ તમારા વૉલેટમાં પાછી જાય છે.';
 
   @override
-  String get helpFaqRefundQ => 'Can I get a refund?';
+  String get helpFaqRefundQ => 'શું હું રિફંડ મેળવી શકું?';
 
   @override
   String get helpFaqRefundA =>
-      'If something went wrong — wrong charges, a technical problem or an unhelpful session — report it from that session. Our team reviews every report and refunds to your wallet when it\'s warranted.';
+      'જો કંઈક ખોટું થયું હોય - ખોટા શુલ્ક, તકનીકી સમસ્યા અથવા બિનસહાયક સત્ર - તે સત્રમાંથી તેની જાણ કરો. અમારી ટીમ દરેક રિપોર્ટની સમીક્ષા કરે છે અને જ્યારે તેની ખાતરી હોય ત્યારે તમારા વૉલેટમાં રિફંડ કરવામાં આવે છે.';
 
   @override
   String get helpFaqBalanceQ =>
-      'My balance ran out during a session. What now?';
+      'સત્ર દરમિયાન મારું સંતુલન સમાપ્ત થઈ ગયું. હવે શું?';
 
   @override
   String get helpFaqBalanceA =>
-      'The session ends automatically when your balance runs out. Recharge your wallet and start again with the same astrologer from the session summary.';
+      'જ્યારે તમારું બેલેન્સ સમાપ્ત થાય છે ત્યારે સત્ર આપમેળે સમાપ્ત થાય છે. તમારું વૉલેટ રિચાર્જ કરો અને સત્રના સારાંશમાંથી એ જ જ્યોતિષ સાથે ફરી શરૂ કરો.';
 
   @override
-  String get helpFaqPrivacyQ => 'Are my conversations private?';
+  String get helpFaqPrivacyQ => 'શું મારી વાતચીત ખાનગી છે?';
 
   @override
   String get helpFaqPrivacyA =>
-      'Your consultations are between you and your astrologer. Our support team looks at a session only to resolve a report or keep the platform safe.';
+      'તમારી પરામર્શ તમારી અને તમારા જ્યોતિષી વચ્ચે છે. અમારી સપોર્ટ ટીમ માત્ર રિપોર્ટને ઉકેલવા અથવા પ્લેટફોર્મને સુરક્ષિત રાખવા માટે સત્રને જુએ છે.';
 
   @override
-  String get helpFaqLanguageQ => 'How do I change the app language?';
+  String get helpFaqLanguageQ => 'હું એપ્લિકેશનની ભાષા કેવી રીતે બદલી શકું?';
 
   @override
   String get helpFaqLanguageA =>
-      'Go to Profile → Language and choose the language you\'re most comfortable in.';
+      'પ્રોફાઇલ → ભાષા પર જાઓ અને તમને સૌથી વધુ અનુકૂળ હોય તેવી ભાષા પસંદ કરો.';
 
   @override
-  String get reportTitle => 'Report a problem';
+  String get reportTitle => 'સમસ્યાની જાણ કરો';
 
   @override
   String reportSessionWith(String name) {
-    return 'Session with $name';
+    return '$name સાથે સત્ર';
   }
 
   @override
-  String get reportWhatHappened => 'What went wrong?';
+  String get reportWhatHappened => 'શું ખોટું થયું?';
 
   @override
-  String get reportTypeBilling => 'Wrong charges';
+  String get reportTypeBilling => 'ખોટા આરોપો';
 
   @override
-  String get reportTypeBillingHint =>
-      'I was charged more than I should have been';
+  String get reportTypeBillingHint => 'મારાથી વધુ ચાર્જ લેવામાં આવ્યો હતો';
 
   @override
-  String get reportTypeQuality => 'Unhelpful session';
+  String get reportTypeQuality => 'બિનઉપયોગી સત્ર';
 
   @override
-  String get reportTypeQualityHint => 'The guidance wasn\'t what was promised';
+  String get reportTypeQualityHint =>
+      'માર્ગદર્શન એ ન હતું જેનું વચન આપવામાં આવ્યું હતું';
 
   @override
-  String get reportTypeConduct => 'Inappropriate behaviour';
+  String get reportTypeConduct => 'અયોગ્ય વર્તન';
 
   @override
   String get reportTypeConductHint =>
-      'The astrologer was rude or unprofessional';
+      'જ્યોતિષી અસંસ્કારી અથવા બિનવ્યાવસાયિક હતો';
 
   @override
-  String get reportTypeNoShow => 'Astrologer didn\'t respond';
+  String get reportTypeNoShow => 'જ્યોતિષીએ જવાબ ન આપ્યો';
 
   @override
-  String get reportTypeNoShowHint => 'They accepted but never really joined';
+  String get reportTypeNoShowHint =>
+      'તેઓએ સ્વીકાર્યું પરંતુ ખરેખર ક્યારેય જોડાયા નહીં';
 
   @override
-  String get reportTypeTechnical => 'Technical problem';
+  String get reportTypeTechnical => 'ટેકનિકલ સમસ્યા';
 
   @override
-  String get reportTypeTechnicalHint => 'The chat or call kept failing';
+  String get reportTypeTechnicalHint => 'ચેટ કે કોલ ફેલ થતો રહ્યો';
 
   @override
-  String get reportDescribe => 'Tell us more';
+  String get reportDescribe => 'અમને વધુ કહો';
 
   @override
   String get reportDescribeHint =>
-      'Share what happened — the more detail, the faster we can help.';
+      'શું થયું તે શેર કરો — જેટલી વધુ વિગત, તેટલી ઝડપથી અમે મદદ કરી શકીએ.';
 
   @override
   String reportMinChars(String count) {
-    return 'At least $count characters';
+    return 'ઓછામાં ઓછા $count અક્ષરો';
   }
 
   @override
   String get reportPrivacyNote =>
-      'To look into your report, our support team will review this session.';
+      'તમારી રિપોર્ટ જોવા માટે, અમારી સપોર્ટ ટીમ આ સત્રની સમીક્ષા કરશે.';
 
   @override
-  String get reportSubmit => 'Submit report';
+  String get reportSubmit => 'રિપોર્ટ સબમિટ કરો';
 
   @override
-  String get reportSubmittedTitle => 'Report submitted';
+  String get reportSubmittedTitle => 'રિપોર્ટ સબમિટ કર્યો';
 
   @override
   String get reportSubmittedBody =>
-      'We\'ll look into it and notify you as soon as there\'s an update.';
+      'અમે તેની તપાસ કરીશું અને અપડેટ આવતાં જ તમને સૂચિત કરીશું.';
 
   @override
-  String get reportAlreadyTitle => 'You\'ve already reported this session';
+  String get reportAlreadyTitle => 'તમે પહેલાથી જ આ સત્રની જાણ કરી છે';
 
   @override
   String get reportAlreadyBody =>
-      'Our team is looking into it. You\'ll be notified when there\'s an update.';
+      'અમારી ટીમ તેની તપાસ કરી રહી છે. જ્યારે અપડેટ આવશે ત્યારે તમને સૂચિત કરવામાં આવશે.';
 
   @override
-  String get reportViewStatus => 'View report status';
+  String get reportViewStatus => 'રિપોર્ટની સ્થિતિ જુઓ';
 
   @override
-  String get disputeTitle => 'Report details';
+  String get disputeTitle => 'વિગતોની જાણ કરો';
 
   @override
-  String get disputeStatusOpen => 'Received';
+  String get disputeStatusOpen => 'પ્રાપ્ત';
 
   @override
-  String get disputeStatusInvestigating => 'Under review';
+  String get disputeStatusInvestigating => 'સમીક્ષા હેઠળ';
 
   @override
-  String get disputeStatusResolved => 'Resolved';
+  String get disputeStatusResolved => 'ઉકેલાઈ';
 
   @override
-  String get disputeStatusRejected => 'Closed';
+  String get disputeStatusRejected => 'બંધ';
 
   @override
-  String get disputeHeadlineOpen => 'We\'ve received your report';
+  String get disputeHeadlineOpen => 'અમને તમારો રિપોર્ટ મળ્યો છે';
 
   @override
   String get disputeHeadlineInvestigating =>
-      'Our team is reviewing your report';
+      'અમારી ટીમ તમારા રિપોર્ટની સમીક્ષા કરી રહી છે';
 
   @override
-  String get disputeHeadlineResolved => 'Your report is resolved';
+  String get disputeHeadlineResolved => 'તમારો રિપોર્ટ ઉકેલાઈ ગયો છે';
 
   @override
-  String get disputeHeadlineRejected => 'We\'ve reviewed your report';
+  String get disputeHeadlineRejected => 'અમે તમારી રિપોર્ટની સમીક્ષા કરી છે';
 
   @override
-  String get disputeOpenBody =>
-      'We\'ll notify you as soon as there\'s an update.';
+  String get disputeOpenBody => 'અપડેટ આવતાં જ અમે તમને સૂચિત કરીશું.';
 
   @override
   String disputeReportedOn(String date) {
-    return 'Reported on $date';
+    return '$date પર જાણ કરી';
   }
 
   @override
   String disputeRefundedTitle(String amount) {
-    return '$amount refunded to your wallet';
+    return 'તમારા વૉલેટમાં $amount રિફંડ';
   }
 
   @override
-  String get disputeOpenWallet => 'Wallet';
+  String get disputeOpenWallet => 'વૉલેટ';
 
   @override
-  String get disputeOutcome => 'Outcome';
+  String get disputeOutcome => 'પરિણામ';
 
   @override
-  String get disputeOutcomeNoRefund => 'No refund was issued for this session.';
+  String get disputeOutcomeNoRefund =>
+      'આ સત્ર માટે કોઈ રિફંડ જારી કરવામાં આવ્યું નથી.';
 
   @override
-  String get disputeTimeline => 'Progress';
+  String get disputeTimeline => 'પ્રગતિ';
 
   @override
-  String get disputeStepRaised => 'Report submitted';
+  String get disputeStepRaised => 'રિપોર્ટ સબમિટ કર્યો';
 
   @override
-  String get disputeStepReviewing => 'Under review';
+  String get disputeStepReviewing => 'સમીક્ષા હેઠળ';
 
   @override
-  String get disputeStepResolved => 'Resolved';
+  String get disputeStepResolved => 'ઉકેલાઈ';
 
   @override
-  String get disputeStepRejected => 'Closed';
+  String get disputeStepRejected => 'બંધ';
 
   @override
-  String get disputeYourReport => 'Your report';
+  String get disputeYourReport => 'તમારો રિપોર્ટ';
 
   @override
-  String get roomReportProblem => 'Report a problem';
+  String get roomReportProblem => 'સમસ્યાની જાણ કરો';
 
   @override
-  String get articlesTitle => 'Read & learn';
+  String get articlesTitle => 'વાંચો અને શીખો';
 
   @override
-  String get articlesRailSubtitle => 'Guides, remedies and festivals';
+  String get articlesRailSubtitle => 'માર્ગદર્શિકાઓ, ઉપાયો અને ઉત્સવો';
 
   @override
-  String get articlesAll => 'All';
+  String get articlesAll => 'બધા';
 
   @override
-  String get articlesEmptyTitle => 'Nothing to read here yet';
+  String get articlesEmptyTitle => 'હજુ સુધી અહીં વાંચવા માટે કંઈ નથી';
 
   @override
   String get articlesEmptyBody =>
-      'New articles are on their way — check back soon.';
+      'નવા લેખો તેમના માર્ગ પર છે — ટૂંક સમયમાં પાછા તપાસો.';
 
   @override
-  String get articleCatAstrology => 'Astrology';
+  String get articleCatAstrology => 'જ્યોતિષશાસ્ત્ર';
 
   @override
-  String get articleCatHoroscope => 'Horoscope';
+  String get articleCatHoroscope => 'જન્માક્ષર';
 
   @override
-  String get articleCatFestivals => 'Festivals';
+  String get articleCatFestivals => 'તહેવારો';
 
   @override
-  String get articleCatRemedies => 'Remedies';
+  String get articleCatRemedies => 'ઉપાયો';
 
   @override
-  String get articleCatGuides => 'Guides';
+  String get articleCatGuides => 'માર્ગદર્શિકાઓ';
 
   @override
-  String get articleCatNews => 'News';
+  String get articleCatNews => 'સમાચાર';
 
   @override
   String articleMinRead(int minutes) {
-    return '$minutes min read';
+    return '$minutes મિનિટ વાંચ્યું';
   }
 
   @override
-  String get articleShare => 'Share';
+  String get articleShare => 'શેર કરો';
 
   @override
-  String get articleMoreToRead => 'More to read';
+  String get articleMoreToRead => 'વધુ વાંચવા માટે';
 
   @override
-  String get articleAskTitle => 'Want guidance for your own chart?';
+  String get articleAskTitle => 'તમારા પોતાના ચાર્ટ માટે માર્ગદર્શન જોઈએ છે?';
 
   @override
-  String get articleAskBody => 'Talk to a verified astrologer in minutes.';
+  String get articleAskBody => 'ચકાસાયેલ જ્યોતિષ સાથે મિનિટોમાં વાત કરો.';
 
   @override
-  String get articleAskCta => 'Ask now';
+  String get articleAskCta => 'હવે પૂછો';
 
   @override
-  String get panchangTitle => 'Panchang';
+  String get panchangTitle => 'પંચાંગ';
 
   @override
-  String get panchangToday => 'Today';
+  String get panchangToday => 'આજે';
 
   @override
-  String get panchangPickDate => 'Pick a date';
+  String get panchangPickDate => 'તારીખ ચૂંટો';
 
   @override
   String panchangMoonIn(String sign) {
-    return 'Moon in $sign';
+    return '$sign માં ચંદ્ર';
   }
 
   @override
   String panchangTill(String time) {
-    return 'till $time';
+    return '$time સુધી';
   }
 
   @override
-  String get panchangRightNow => 'Right now';
+  String get panchangRightNow => 'અત્યારે';
 
   @override
   String panchangNowChoghadiya(String name, String time) {
-    return '$name Choghadiya until $time';
+    return '$name ચોઘડિયા $time સુધી';
   }
 
   @override
   String panchangRahuNow(String time) {
-    return 'Rahu Kaal is on until $time — hold off on new beginnings.';
+    return 'રાહુ કાલ $time સુધી ચાલુ છે — નવી શરૂઆત માટે રોકો.';
   }
 
   @override
-  String get panchangLimbs => 'Today\'s Panchang';
+  String get panchangLimbs => 'આજનો પંચાંગ';
 
   @override
-  String get panchangAuspicious => 'Auspicious timings';
+  String get panchangAuspicious => 'શુભ સમય';
 
   @override
-  String get panchangInauspicious => 'Avoid starting new work';
+  String get panchangInauspicious => 'નવું કામ શરૂ કરવાનું ટાળો';
 
   @override
-  String get panchangBrahma => 'Brahma Muhurta';
+  String get panchangBrahma => 'બ્રહ્મ મુહૂર્ત';
 
   @override
-  String get panchangAbhijit => 'Abhijit Muhurta';
+  String get panchangAbhijit => 'અભિજિત મુહૂર્ત';
 
   @override
-  String get panchangNoAbhijit =>
-      'Abhijit Muhurta isn\'t observed on Wednesdays.';
+  String get panchangNoAbhijit => 'બુધવારે અભિજિત મુહૂર્ત મનાવવામાં આવતું નથી.';
 
   @override
-  String get panchangRahuKaal => 'Rahu Kaal';
+  String get panchangRahuKaal => 'રાહુ કાલ';
 
   @override
-  String get panchangYamaganda => 'Yamaganda';
+  String get panchangYamaganda => 'યમાગંડા';
 
   @override
-  String get panchangGulika => 'Gulika Kaal';
+  String get panchangGulika => 'ગુલિકા કાલ';
 
   @override
-  String get panchangChoghadiya => 'Choghadiya';
+  String get panchangChoghadiya => 'ચોઘડિયા';
 
   @override
-  String get panchangDay => 'Day';
+  String get panchangDay => 'દિવસ';
 
   @override
-  String get panchangNight => 'Night';
+  String get panchangNight => 'રાત્રિ';
 
   @override
-  String get panchangNotes => 'Notes from our astrologers';
+  String get panchangNotes => 'અમારા જ્યોતિષીઓ તરફથી નોંધો';
 
   @override
-  String get panchangPersonalTitle => 'Timings for your chart';
+  String get panchangPersonalTitle => 'તમારા ચાર્ટ માટે સમય';
 
   @override
   String get panchangPersonalBody =>
-      'See the hours that suit you best, worked out from your kundali.';
+      'તમારી કુંડળીમાંથી વર્કઆઉટ કરેલા કલાકો જુઓ જે તમને શ્રેષ્ઠ અનુરૂપ છે.';
 
   @override
   String panchangFooter(String place, String timezone) {
-    return 'Calculated for $place · $timezone · from local sunrise';
+    return 'સ્થાનિક સૂર્યોદયથી $place · $timezone · માટે ગણતરી';
   }
 
   @override
-  String get panchangChoosePlaceTitle => 'Choose your city';
+  String get panchangChoosePlaceTitle => 'તમારું શહેર પસંદ કરો';
 
   @override
   String get panchangChoosePlaceBody =>
-      'Panchang timings depend on where you are — pick the city you want them for.';
+      'પંચાંગનો સમય તમે ક્યાં છો તેના પર આધાર રાખે છે — તમે જે શહેર માટે ઇચ્છો છો તે પસંદ કરો.';
 
   @override
-  String get panchangChoosePlaceCta => 'Choose city';
+  String get panchangChoosePlaceCta => 'શહેર પસંદ કરો';
 
   @override
   String panchangUsePlace(String place) {
-    return 'Use $place';
+    return '$place નો ઉપયોગ કરો';
   }
 
   @override
-  String get panchangCity => 'City';
+  String get panchangCity => 'શહેર';
 
   @override
-  String get panchangCityHint => 'Search a city or town';
+  String get panchangCityHint => 'શહેર અથવા નગર શોધો';
 
   @override
-  String get kPdfTitle => 'Kundali report (PDF)';
+  String get kPdfTitle => 'કુંડળી રિપોર્ટ (PDF)';
 
   @override
-  String get kPdfFull => 'Full report';
+  String get kPdfFull => 'સંપૂર્ણ અહેવાલ';
 
   @override
-  String get kPdfFullSub =>
-      'Charts, planets, avakahada, dasha timeline, yogas and doshas';
+  String get kPdfFullSub => 'ચાર્ટ, ગ્રહો, અવકાહદ, દશા સમયરેખા, યોગ અને દોષ';
 
   @override
-  String get kPdfBasic => 'One-page summary';
+  String get kPdfBasic => 'એક-પૃષ્ઠનો સારાંશ';
 
   @override
-  String get kPdfBasicSub => 'Lagna and Navamsa charts with planet positions';
+  String get kPdfBasicSub => 'ગ્રહ સ્થિતિ સાથે લગ્ન અને નવમસા ચાર્ટ';
 
   @override
-  String get kPdfChartStyle => 'Chart style';
+  String get kPdfChartStyle => 'ચાર્ટ શૈલી';
 
   @override
-  String get kPdfEastIndian => 'East Indian';
+  String get kPdfEastIndian => 'પૂર્વ ભારતીય';
 
   @override
-  String get kPdfShareCta => 'Download & share';
+  String get kPdfShareCta => 'ડાઉનલોડ કરો અને શેર કરો';
 
   @override
-  String get kPdfPreparing => 'Preparing your PDF…';
+  String get kPdfPreparing => 'તમારી PDF તૈયાર કરી રહ્યાં છીએ...';
 
   @override
   String get kPdfNote =>
-      'The PDF is in English. Save it to your phone or send it on WhatsApp.';
+      'પીડીએફ અંગ્રેજીમાં છે. તેને તમારા ફોનમાં સેવ કરો અથવા WhatsApp પર મોકલો.';
 
   @override
   String get kPdfUnavailable =>
-      'PDF reports aren\'t available right now. Please try again later.';
+      'PDF રિપોર્ટ અત્યારે ઉપલબ્ધ નથી. કૃપા કરીને પછીથી ફરી પ્રયાસ કરો.';
+
+  @override
+  String get kOvEyebrow => 'જન્મ કુંડળી';
+
+  @override
+  String kOvMoonChip(String sign) {
+    return 'ચંદ્ર · $sign';
+  }
+
+  @override
+  String get kOvTapHouseHint =>
+      'કોઈપણ ઘર તમારા વિશે શું કહે છે તે વાંચવા માટે તેને ટૅપ કરો';
+
+  @override
+  String get kOvBirthDetailsSub => 'અવકાહડા, જન્મ સમયે પંચાંગ અને વધુ';
+
+  @override
+  String get kOvGroupCharts => 'ચાર્ટ અને ગ્રહો';
+
+  @override
+  String get kOvGroupTiming => 'સમય અને સમયગાળો';
+
+  @override
+  String get kOvGroupGuidance => 'માર્ગદર્શન અને ઉપાયો';
+
+  @override
+  String get kOvLoadError => 'અમે આ કુંડળી ખોલી શક્યા નથી';
+
+  @override
+  String get kKitAskTitle => 'તમારા ચાર્ટ વિશે કોઈ પ્રશ્ન છે?';
+
+  @override
+  String get kKitAskBody =>
+      'એક ચકાસાયેલ જ્યોતિષી તેને તમારી સાથે વાંચી શકે છે — વ્યક્તિગત રીતે, મિનિટોમાં.';
+
+  @override
+  String get kFcExploreMore => 'ઊંડા જાઓ';
+
+  @override
+  String get kFcAllHousesSub =>
+      'તમારા લગના ચાર્ટના તમામ બાર ઘરો, દરેકમાં એક ટૅપ કરો';
+
+  @override
+  String get kFcAllChartsSub => 'D1 થી D60 સુધીનો દરેક વિભાગીય ચાર્ટ';
+
+  @override
+  String get kPlanetsHeroSub =>
+      'નવ ગ્રહો, તેઓ ક્યાં બેસે છે અને કેટલા મજબૂત છે. તેને વાંચવા માટે કોઈપણ ગ્રહને ટેપ કરો.';
+
+  @override
+  String kPlanetsStrongCount(int count) {
+    return '$count મજબૂત';
+  }
+
+  @override
+  String kPlanetsRetroCount(int count) {
+    return '$count રેટ્રોગ્રેડ';
+  }
+
+  @override
+  String get kPlanetRetrograde => 'પૂર્વવર્તી';
+
+  @override
+  String get kPlanetCombust => 'કમ્બસ્ટ';
+
+  @override
+  String get kDashaTimelineTitle => 'તમારી જીવન સમયરેખા';
+
+  @override
+  String kDashaProgressPct(String pct) {
+    return '$pct % પૂર્ણ';
+  }
+
+  @override
+  String get kBhavaHeroSub =>
+      'બાર ઘરો, જીવનના બાર ક્ષેત્રો - દરેકને શું ટેકો આપે છે અને શું તાણ કરે છે.';
+
+  @override
+  String kBhavaSupportedCount(int count) {
+    return '$count સપોર્ટેડ';
+  }
+
+  @override
+  String kBhavaStrainedCount(int count) {
+    return '$count તાણ હેઠળ';
+  }
+
+  @override
+  String get kYdDoshaHeroSub =>
+      'તમારા ચાર્ટમાં પરંપરાગત દોષો તપાસવામાં આવ્યા છે, જેમાં દરેક ખરેખર કેટલો મજબૂત છે.';
+
+  @override
+  String get kYdYogaHeroSub =>
+      'ગ્રહોના સંયોજનો જે તમારી ભેટો અને તકોને આકાર આપે છે.';
+
+  @override
+  String kYdDoshaCount(int count) {
+    return '$count હાજર';
+  }
+
+  @override
+  String kYdYogaCount(int count) {
+    return '$count યોગાસનો';
+  }
+
+  @override
+  String get kYdClear => 'સાફ કરો';
+
+  @override
+  String get kYdRemediesSub => 'તમારા ચાર્ટને અનુરૂપ સૌમ્ય, પરંપરાગત ઉપાયો';
+
+  @override
+  String get kSsLifetimeTitle => 'તમારા જીવનકાળ દરમ્યાન';
+
+  @override
+  String get kSsNotRunning => 'અત્યારે નથી ચાલી';
+
+  @override
+  String kTrHeroSub(String sign) {
+    return 'આજના ગ્રહો તમારા ચંદ્ર પરથી $sign માં વાંચે છે';
+  }
+
+  @override
+  String kTrJupiterChip(String house) {
+    return 'ચંદ્ર પરથી ગુરુ $house';
+  }
+
+  @override
+  String get kTrSadeSatiCalendarSub =>
+      'શનિના ચક્રનો દરેક તબક્કો, ભૂતકાળ અને આગામી';
+
+  @override
+  String get kSsEyebrow => 'શનિનું ચક્ર';
+
+  @override
+  String get kAdvHeroSub => 'ટેકનિકલ સ્તર જ્યોતિષીઓ પાસેથી વાંચો';
+
+  @override
+  String kAdvReportCount(int count) {
+    return '$count અહેવાલો';
+  }
+
+  @override
+  String get kAdvPdfChip => 'પીડીએફ ડાઉનલોડ';
+
+  @override
+  String get kAdvReportsTitle => 'તકનીકી અહેવાલો';
+
+  @override
+  String get kAdvAvHousesTitle => 'ઘર દ્વારા પોઈન્ટ';
+
+  @override
+  String kAdvSarvaTotal(int total) {
+    return 'બધામાં $total પોઈન્ટ';
+  }
+
+  @override
+  String get kInHeroSub =>
+      'તમારા જન્મના ચાર્ટમાંથી બનાવેલ પાત્ર અને જીવન સ્કેચ';
+
+  @override
+  String kInSupportiveCount(int count) {
+    return '$count સહાયક';
+  }
+
+  @override
+  String kInChallengingCount(int count) {
+    return '$count ને કાળજીની જરૂર છે';
+  }
+
+  @override
+  String get kInGlanceTitle => 'એક નજરમાં';
+
+  @override
+  String get kInAreasTitle => 'વિસ્તાર દ્વારા વિસ્તાર';
+
+  @override
+  String get kLkHeroSub =>
+      'તમારા ચાર્ટમાં વારસાગત દેવું અને તેમના સરળ ઘરગથ્થુ ઉપાયો';
+
+  @override
+  String kLkDebtCount(int count) {
+    return '$count સક્રિય દેવાં';
+  }
+
+  @override
+  String kLkWeakCount(int count) {
+    return '$count નબળા ગ્રહો';
+  }
+
+  @override
+  String get kMuHeroSub => 'આજના સારા કલાકો, તમારા ચાર્ટ માટે વાંચો';
+
+  @override
+  String get kMuTimingsTitle => 'આજના સમય';
+
+  @override
+  String get kMuTabDay => 'દિવસ';
+
+  @override
+  String get kMuTabNight => 'રાત્રિ';
+
+  @override
+  String kMuHoraOf(String planet) {
+    return '$planet હોરા';
+  }
+
+  @override
+  String get kMuAbhijit => 'અભિજિત મુહૂર્ત';
+
+  @override
+  String get kNumHeroSub => 'તમારા મુખ્ય નંબરો અને લો શુ જન્મ ગ્રીડ';
+
+  @override
+  String get kNumYourNumbers => 'તમારા નંબરો';
+
+  @override
+  String get kNumMissing => 'ખૂટતી સંખ્યાઓ';
+
+  @override
+  String get kNumRepeated => 'પુનરાવર્તિત સંખ્યાઓ';
+
+  @override
+  String get kRmHeroSub => 'તમારા ચાર્ટ સાથે મેળ ખાતી સૌમ્ય, પરંપરાગત પ્રથાઓ';
+
+  @override
+  String kRmCount(int count) {
+    return '$count ઉપાયો';
+  }
+
+  @override
+  String get kRmGatedChip => 'કેટલાકને જ્યોતિષની જરૂર હોય છે';
+
+  @override
+  String get kRmCaution => 'ધ્યાનમાં રાખો';
+
+  @override
+  String get kUpHeroSub => 'દરેક ગ્રહ માટે રંગો, દિવસો, મંત્રો અને દાન';
+
+  @override
+  String kUpStrengthenCount(int count) {
+    return '$count મજબૂત કરવા';
+  }
+
+  @override
+  String kUpPacifyCount(int count) {
+    return '$count શાંત કરવા માટે';
+  }
+
+  @override
+  String get kUpGateTitle => 'પહેલા કોઈ જ્યોતિષ સાથે પુષ્ટિ કરો';
+
+  @override
+  String get kUpPlanetsTitle => 'ગ્રહ દ્વારા ગ્રહ';
+
+  @override
+  String kVpHeadline(String year) {
+    return 'તમારું વર્ષ $year';
+  }
+
+  @override
+  String get kVpMarkersTitle => 'વર્ષના મુખ્ય માર્કર્સ';
+
+  @override
+  String get kVpTajikaTitle => 'તાજિકા પાસા';
+
+  @override
+  String get kVpIthasala => 'ઇથશાલા · અરજી કરવી';
+
+  @override
+  String get kVpIshrafa => 'ઈશરફા · અલગ થઈ રહ્યું છે';
+
+  @override
+  String get followFollow => 'અનુસરો';
+
+  @override
+  String get followFollowing => 'અનુસરે છે';
+
+  @override
+  String get followNotifying => 'સૂચના આપી રહી છે';
+
+  @override
+  String get followNotifyingWhenOnline => 'ઓનલાઈન થવા પર અમે તમને સૂચિત કરીશું';
+
+  @override
+  String followedToast(String name) {
+    return '__PH_0___ ને અનુસરી રહ્યાં છે — જ્યારે તેઓ ઑનલાઇન અથવા લાઇવ હશે ત્યારે અમે તમને જણાવીશું';
+  }
+
+  @override
+  String unfollowedToast(String name) {
+    return '$name ને અનુસરવાનું બંધ કર્યું';
+  }
+
+  @override
+  String get followFailed =>
+      'ફોલો અપડેટ કરી શકાયું નથી. કૃપા કરીને ફરી પ્રયાસ કરો.';
+
+  @override
+  String followPromptTitle(String name) {
+    return '$name ને અનુસરો?';
+  }
+
+  @override
+  String get followPromptBody =>
+      'જ્યારે તેઓ ઑનલાઇન હોય અથવા લાઇવ થાય ત્યારે સૂચના મેળવો.';
+
+  @override
+  String get followPromptDoneTitle => 'તમે અનુસરી રહ્યાં છો';
+
+  @override
+  String followPromptDoneBody(String name) {
+    return 'અમે તમને જણાવીશું કે $name ક્યારે ઓનલાઇન અથવા લાઇવ હશે.';
+  }
+
+  @override
+  String get followingTitle => 'અનુસરે છે';
+
+  @override
+  String get followingHint =>
+      'જ્યારે આ જ્યોતિષીઓ ઓનલાઈન આવશે અથવા લાઈવ થશે ત્યારે તમને એક સૂચના મળશે. અનફૉલો કરવા માટે હૃદયને ટૅપ કરો.';
+
+  @override
+  String get followingEmptyTitle => 'હજુ સુધી કોઈને અનુસરતા નથી';
+
+  @override
+  String get followingEmptyBody =>
+      'જ્યોતિષીઓને ફૉલો કરો જ્યારે તેઓ ઑનલાઇન હોય અથવા લાઇવ હોય ત્યારે તમે જાણવા માગો છો.';
+
+  @override
+  String get followingExplore => 'જ્યોતિષીઓ શોધો';
+
+  @override
+  String get followingLoadError =>
+      'તમે ફૉલો કરો છો તે જ્યોતિષીઓને લોડ કરી શક્યાં નથી.';
+
+  @override
+  String get followingFilter => 'અનુસરે છે';
+
+  @override
+  String get followingFilterEmpty =>
+      'તેમને અનુસરવા માટે જ્યોતિષી પર હૃદયને ટેપ કરો — તેઓ અહીં દેખાશે.';
+
+  @override
+  String get astroStatFollowers => 'અનુયાયીઓ';
+
+  @override
+  String get prefsFollowAlerts => 'જ્યોતિષીઓને તમે અનુસરો છો';
+
+  @override
+  String get prefsFollowAlertsDesc =>
+      'જ્યારે તેઓ ઑનલાઇન આવે છે અથવા લાઇવ જાય છે';
+
+  @override
+  String get storeTitle => 'ઉપાય સ્ટોર';
+
+  @override
+  String get storeHeroSubtitle =>
+      'અધિકૃત રુદ્રાક્ષ, રત્ન, યંત્રો અને પૂજા - જ્યોતિષીઓ દ્વારા માર્ગદર્શન';
+
+  @override
+  String get storeSearchHint => 'રુદ્રાક્ષ, રત્ન, પૂજા શોધો…';
+
+  @override
+  String get storeVerdictToast => 'એક જ્યોતિષીએ તમારા ઉત્પાદન વિશે સલાહ આપી';
+
+  @override
+  String get storeView => 'જુઓ';
+
+  @override
+  String get storeUnavailable => 'અનુપલબ્ધ';
+
+  @override
+  String storePriceFrom(String price) {
+    return '$price થી';
+  }
+
+  @override
+  String storeOff(int percent) {
+    return '$percent % છૂટ';
+  }
+
+  @override
+  String get storeBadgePooja => 'પૂજા';
+
+  @override
+  String get storeBadgeAskAstrologer => 'જ્યોતિષીને પૂછો';
+
+  @override
+  String get storeCartTitle => 'કાર્ટ';
+
+  @override
+  String get storeTrustCertified => 'લેબ પ્રમાણિત';
+
+  @override
+  String get storeTrustGuided => 'જ્યોતિષે માર્ગદર્શન આપ્યું';
+
+  @override
+  String get storeTrustSecure => 'સુરક્ષિત ચૂકવણી';
+
+  @override
+  String get storeCategories => 'શ્રેણી દ્વારા ખરીદી કરો';
+
+  @override
+  String get storeFeatured => 'હાથથી પસંદ કરેલા ઉપાયો';
+
+  @override
+  String get storeFeaturedSub => 'અમારા જ્યોતિષીઓ દ્વારા પસંદ કરાયેલ';
+
+  @override
+  String get storeCollections => 'ઉપાય સંગ્રહ';
+
+  @override
+  String get storePoojas => 'પૂજા બુક કરો';
+
+  @override
+  String get storePoojasSub => 'પવિત્ર મંદિરોમાં તમારા નામ પર પ્રદર્શન કર્યું';
+
+  @override
+  String get storeConsultBannerTitle => 'ખાતરી નથી કે તમને શું અનુકૂળ છે?';
+
+  @override
+  String get storeConsultBannerBody =>
+      'તમે ખરીદો તે પહેલાં કોઈ જ્યોતિષીને વિડિયો કૉલ કરો — તેઓ તમારો ચાર્ટ તપાસે છે અને યોગ્ય ઉપાયની ભલામણ કરે છે.';
+
+  @override
+  String get storeConsultBannerCta => 'જ્યોતિષ સાથે વાત કરો';
+
+  @override
+  String get storeMyAdvice => 'તમારા જ્યોતિષીઓ પાસેથી સલાહ';
+
+  @override
+  String get storeDisclaimerFooter =>
+      'ઉપાય એ પરંપરાગત પ્રથા છે. પરિણામોની ખાતરી આપવામાં આવતી નથી અને તેઓ તબીબી, કાનૂની અથવા નાણાકીય સલાહને બદલતા નથી.';
+
+  @override
+  String get storeEmptyTitle => 'સ્ટોર તૈયાર થઈ રહ્યો છે';
+
+  @override
+  String get storeEmptyBody => 'અહીં જલ્દી જ ઉપાયો અને પૂજાઓ દેખાશે.';
+
+  @override
+  String get storeLoadError => 'સ્ટોર લોડ કરી શકાયો નથી';
+
+  @override
+  String get storeMyOrders => 'મારા ઓર્ડર';
+
+  @override
+  String get storeVerdictSuitable => 'યોગ્ય - આગળ વધો';
+
+  @override
+  String get storeVerdictNotSuitable => 'તમારા માટે યોગ્ય નથી';
+
+  @override
+  String get storeVerdictAlternative => 'બીજું કંઈક સૂચવે છે';
+
+  @override
+  String get storeConsultCancelled => 'કૉલ ન થયો';
+
+  @override
+  String get storeConsultExpired => 'કોઈ સલાહ શેર કરવામાં આવી ન હતી';
+
+  @override
+  String get storeConsultCallLive => 'તમારો કૉલ ચાલુ છે';
+
+  @override
+  String get storeConsultAwaiting => 'જ્યોતિષની સલાહની રાહ જોવી';
+
+  @override
+  String storeConsultWith(String name) {
+    return '$name સાથે';
+  }
+
+  @override
+  String storeVerdictFrom(String name) {
+    return '$name ની સલાહ';
+  }
+
+  @override
+  String get storeBuyRecommended => 'ભલામણ કરેલ વિકલ્પ ખરીદો';
+
+  @override
+  String get storeSuggestedInstead => 'તેના બદલે સૂચવ્યું';
+
+  @override
+  String get storeConsultPromptTitle => 'ખાતરી નથી કે તે તમને અનુકૂળ છે?';
+
+  @override
+  String get storeConsultPromptBody =>
+      'જ્યોતિષીને વીડિયો કૉલ કરો — તમે ખરીદો તે પહેલાં તેઓ તમારો ચાર્ટ તપાસશે.';
+
+  @override
+  String get storeConsultRequiredTitle => 'પહેલા જ્યોતિષની સલાહ લો';
+
+  @override
+  String get storeConsultRequiredBody =>
+      'કોઈ જ્યોતિષી પુષ્ટિ કરે કે તે તમારા ચાર્ટને અનુરૂપ છે તે પછી જ આ ઉપાય વેચવામાં આવે છે.';
+
+  @override
+  String get storeNoResults => 'કંઈ મેળ ખાતું નથી';
+
+  @override
+  String get storeNoResultsBody =>
+      'બીજો શબ્દ અજમાવો અથવા કેટલાક ફિલ્ટર્સ સાફ કરો.';
+
+  @override
+  String get storeClearFilters => 'ફિલ્ટર્સ સાફ કરો';
+
+  @override
+  String storeResultCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count આઇટમ્સ',
+      one: '1 આઇટમ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storeFilters => 'ફિલ્ટર્સ';
+
+  @override
+  String get storeNoFilters => 'આ પસંદગી માટે હજુ સુધી કોઈ ફિલ્ટર્સ નથી.';
+
+  @override
+  String get storeSortBy => 'દ્વારા સૉર્ટ કરો';
+
+  @override
+  String get storeSortRecommended => 'ભલામણ કરેલ';
+
+  @override
+  String get storeSortPopular => 'સૌથી વધુ લોકપ્રિય';
+
+  @override
+  String get storeSortNew => 'નવીનતમ';
+
+  @override
+  String get storeSortRating => 'ટોચના રેટેડ';
+
+  @override
+  String get storeKindProducts => 'ઉત્પાદનો';
+
+  @override
+  String get storeKindPoojas => 'પૂજા';
+
+  @override
+  String get storeKindDigital => 'અહેવાલો';
+
+  @override
+  String storeRemedyFor(String key) {
+    return 'ઉપાય: $key';
+  }
+
+  @override
+  String get storeChoosePackage => 'એક પેકેજ પસંદ કરો';
+
+  @override
+  String get storeChooseOption => 'એક વિકલ્પ પસંદ કરો';
+
+  @override
+  String get storePickDate => 'તારીખ ચૂંટો';
+
+  @override
+  String get storeSankalpDetails => 'સંકલ્પ વિગતો';
+
+  @override
+  String get storeYourDetails => 'તમારી વિગતો';
+
+  @override
+  String get storeSankalpHint => 'પૂજા દરમિયાન પૂજારી આ નામોનો સંકલ્પ લે છે.';
+
+  @override
+  String get storeCertificate => 'અધિકૃતતા પ્રમાણપત્ર';
+
+  @override
+  String storeCertificateNo(String number) {
+    return 'પ્રમાણપત્ર નં.  $number';
+  }
+
+  @override
+  String get storeVerify => 'ચકાસો';
+
+  @override
+  String get storeHighlights => 'હાઇલાઇટ્સ';
+
+  @override
+  String get storeAbout => 'વિશે';
+
+  @override
+  String get storeSignificance => 'પરંપરાગત મહત્વ';
+
+  @override
+  String get storeHowToUse => 'કેવી રીતે પહેરવું/ઉપયોગ કરવો';
+
+  @override
+  String get storeHowItWorks => 'તે કેવી રીતે કામ કરે છે';
+
+  @override
+  String get storeReadMore => 'વધુ વાંચો';
+
+  @override
+  String get storeReadLess => 'ઓછું બતાવો';
+
+  @override
+  String get storeRecommendedForYou => 'તમારા માટે ભલામણ કરેલ';
+
+  @override
+  String get storeTaxInclusive => 'તમામ કર સહિત';
+
+  @override
+  String get storeOutOfStock => 'સ્ટોક નથી';
+
+  @override
+  String storeOnlyLeft(int count) {
+    return 'માત્ર $count બાકી';
+  }
+
+  @override
+  String get storeAskAnother => 'બીજા જ્યોતિષીને પૂછો';
+
+  @override
+  String get storeNoDates => 'તારીખો ટૂંક સમયમાં જાહેર કરવામાં આવશે.';
+
+  @override
+  String get storeOpenForBooking => 'બુકિંગ માટે ખોલો';
+
+  @override
+  String storeSeatsLeft(int count) {
+    return '$count સ્લોટ બાકી';
+  }
+
+  @override
+  String storeReturnableDays(int days) {
+    return 'ડિલિવરીના $days દિવસમાં સરળ વળતર';
+  }
+
+  @override
+  String get storeNotReturnable =>
+      'એકવાર વિતરિત કરવામાં આવે તે પરત કરી શકાતું નથી';
+
+  @override
+  String get storeCancellable => 'તે મોકલવામાં આવે તે પહેલાં મફત રદ કરો';
+
+  @override
+  String get storeNotCancellable => 'એકવાર ઓર્ડર કર્યા પછી રદ કરી શકાતો નથી';
+
+  @override
+  String storeMadeToOrder(int days) {
+    return 'ઓર્ડર કરવા માટે બનાવેલ · લગભગ $days દિવસમાં તૈયાર';
+  }
+
+  @override
+  String get storeShipsIndia => 'સમગ્ર ભારતમાં વીમાકૃત શિપિંગ';
+
+  @override
+  String get storeVideoProof => 'પૂજાનો વીડિયો તમારી સાથે શેર કર્યો છે';
+
+  @override
+  String get storeInstantDownload => 'ચુકવણી પછી તરત જ ડાઉનલોડ કરો';
+
+  @override
+  String storeSoldBy(String name) {
+    return '$name દ્વારા વેચાયેલ';
+  }
+
+  @override
+  String get storeSellerInfo => 'વિક્રેતા અને ફરિયાદ વિગતો';
+
+  @override
+  String storeCountryOfOrigin(String country) {
+    return 'મૂળ દેશ: $country';
+  }
+
+  @override
+  String get storeGrievanceOfficer => 'ફરિયાદ અધિકારી';
+
+  @override
+  String storeFieldRequired(String label) {
+    return '$label જરૂરી છે';
+  }
+
+  @override
+  String storeFieldParticipants(String label, int count) {
+    return '$count $label દાખલ કરો';
+  }
+
+  @override
+  String get storePickDateError => 'પૂજા માટે તારીખ પસંદ કરો';
+
+  @override
+  String get storeAddedToCart => 'કાર્ટમાં ઉમેર્યું';
+
+  @override
+  String get storeViewCart => 'કાર્ટ જુઓ';
+
+  @override
+  String get storeFixDetails => 'કૃપા કરીને પ્રકાશિત વિગતો તપાસો';
+
+  @override
+  String get storeAddToCart => 'કાર્ટમાં ઉમેરો';
+
+  @override
+  String get storeBuyNow => 'હવે ખરીદો';
+
+  @override
+  String get storeBookPooja => 'બુક પૂજા';
+
+  @override
+  String get storeConsultFirst => 'પહેલા સલાહ લો';
+
+  @override
+  String storePersonN(int n) {
+    return 'વ્યક્તિ $n';
+  }
+
+  @override
+  String get storeConsultTitle => 'Talk before you buy';
+
+  @override
+  String get storeConsultPick => 'Choose an astrologer';
+
+  @override
+  String get storeConsultNoneTitle => 'No one\'s available right now';
+
+  @override
+  String get storeConsultNoneBody =>
+      'Astrologers who take video calls will show up here. Try again in a little while.';
+
+  @override
+  String get storeConsultBrowseAll => 'Browse all astrologers';
+
+  @override
+  String get storeConsultAbout => 'Consultation about';
+
+  @override
+  String get storeConsultVideoPerMinute => 'Video call · billed per minute';
+
+  @override
+  String get storeConsultOffer => 'Offer applied';
+
+  @override
+  String get storeConsultStep1 => 'Video call an astrologer';
+
+  @override
+  String get storeConsultStep2 => 'They check your chart and advise';
+
+  @override
+  String get storeConsultStep3 => 'Buy what\'s right for you';
+
+  @override
+  String get storePresenceOnline => 'Online';
+
+  @override
+  String get storePresenceBusy => 'In a call';
+
+  @override
+  String get storePresenceOffline => 'Offline';
+
+  @override
+  String get storeSpecialist => 'Specialist';
+
+  @override
+  String storeYearsExp(int years) {
+    return '$years yrs';
+  }
+
+  @override
+  String storePerMinute(String price) {
+    return '$price/min';
+  }
+
+  @override
+  String get storeCall => 'Call';
+
+  @override
+  String storeConsultConfirmTitle(String name) {
+    return 'Video call $name';
+  }
+
+  @override
+  String get storeConsultQuestion => 'What would you like to ask?';
+
+  @override
+  String storeConsultSharingChart(String name) {
+    return 'Sharing $name\'s birth chart with the astrologer';
+  }
+
+  @override
+  String storeConsultHoldNote(String rate, String hold) {
+    return '$rate per minute from your wallet. $hold is held when the call starts; you only pay for the minutes you talk.';
+  }
+
+  @override
+  String get storeConsultStartCall => 'Start video call';
+
+  @override
+  String get storeConsultLowBalance =>
+      'Add money to your wallet to start the call';
+
+  @override
+  String storeConsultBusy(String name) {
+    return '$name just got busy — try another astrologer';
+  }
+
+  @override
+  String storeConsultOffline(String name) {
+    return '$name went offline';
+  }
+
+  @override
+  String get storeAdviceTitle => 'Astrologer advice';
+
+  @override
+  String get storeAdviceEmptyTitle => 'No advice yet';
+
+  @override
+  String get storeAdviceEmptyBody =>
+      'Ask an astrologer about a remedy from any product page.';
+
+  @override
+  String get storeExplore => 'Explore the store';
+
+  @override
+  String get storeOpenCall => 'Open call';
+
+  @override
+  String get storeYourQuestion => 'Your question';
+
+  @override
+  String get storeVideoCall => 'Video call';
+
+  @override
+  String get storeRequired => 'Required';
+
+  @override
+  String get storeAddAddress => 'Add address';
+
+  @override
+  String get storeEditAddress => 'Edit address';
+
+  @override
+  String get storeAddressesTitle => 'Saved addresses';
+
+  @override
+  String get storeNoAddressesTitle => 'No saved addresses';
+
+  @override
+  String get storeNoAddressesBody =>
+      'Add a delivery address to get products shipped to you.';
+
+  @override
+  String get storeDefault => 'Default';
+
+  @override
+  String get storeEdit => 'Edit';
+
+  @override
+  String get storeDelete => 'Delete';
+
+  @override
+  String get storeMakeDefault => 'Make default';
+
+  @override
+  String get storeChange => 'Change';
+
+  @override
+  String get storeLabelHome => 'Home';
+
+  @override
+  String get storeLabelWork => 'Work';
+
+  @override
+  String get storeLabelOther => 'Other';
+
+  @override
+  String get storeFullName => 'Full name';
+
+  @override
+  String get storePhone => 'Mobile number';
+
+  @override
+  String get storePhoneInvalid => 'Enter a valid 10-digit mobile number';
+
+  @override
+  String get storeLine1 => 'House no., building, street';
+
+  @override
+  String get storeLine2 => 'Area, colony (optional)';
+
+  @override
+  String get storeLandmark => 'Landmark (optional)';
+
+  @override
+  String get storeCity => 'City';
+
+  @override
+  String get storePincode => 'PIN code';
+
+  @override
+  String get storePincodeInvalid => 'Enter a valid 6-digit PIN';
+
+  @override
+  String get storeState => 'State';
+
+  @override
+  String get storeGstinOptional => 'GSTIN (optional)';
+
+  @override
+  String get storeGstinHelp =>
+      'Add it to claim input tax credit on the invoice';
+
+  @override
+  String get storeGstinInvalid => 'GSTIN has 15 characters';
+
+  @override
+  String get storeSaveAddress => 'Save address';
+
+  @override
+  String get storeCheckout => 'Checkout';
+
+  @override
+  String get storeCartEmptyTitle => 'Your cart is empty';
+
+  @override
+  String get storeCartEmptyBody =>
+      'Rudraksha, gemstones, yantras and poojas — find what your chart needs.';
+
+  @override
+  String get storeCartTaxNote =>
+      'Prices include GST. Shipping is calculated at checkout.';
+
+  @override
+  String storeItemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items',
+      one: '1 item',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storeRemove => 'Remove';
+
+  @override
+  String get storeDeliverTo => 'Deliver to';
+
+  @override
+  String get storeOrderSummary => 'Order summary';
+
+  @override
+  String get storeBillDetails => 'Bill details';
+
+  @override
+  String get storeSubtotal => 'Item total';
+
+  @override
+  String get storeShipping => 'Shipping';
+
+  @override
+  String storeShippingAmount(String amount) {
+    return 'Shipping $amount';
+  }
+
+  @override
+  String get storeFree => 'Free';
+
+  @override
+  String get storeGrandTotal => 'Total';
+
+  @override
+  String storeTaxIncluded(String amount) {
+    return 'Includes $amount GST';
+  }
+
+  @override
+  String get storePaidFromWallet => 'From wallet';
+
+  @override
+  String get storePaidOnline => 'Paid online';
+
+  @override
+  String get storeToPayNow => 'To pay';
+
+  @override
+  String get storeUseWallet => 'Use wallet balance';
+
+  @override
+  String storeWalletAvailable(String amount) {
+    return '$amount available';
+  }
+
+  @override
+  String get storeOrderNote => 'Note for the seller (optional)';
+
+  @override
+  String get storeCheckoutTrust =>
+      'Secure payment. Certified products. Returns on damaged or wrong items.';
+
+  @override
+  String get storePlaceOrder => 'Place order';
+
+  @override
+  String get storePayNow => 'Pay now';
+
+  @override
+  String storePayAmount(String amount) {
+    return 'Pay $amount';
+  }
+
+  @override
+  String get storePayDescription => 'Remedies store order';
+
+  @override
+  String storeDeliveryDays(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'In $days days',
+      one: 'In 1 day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String storeDeliveryDaysRange(int min, int max) {
+    return '$min–$max days';
+  }
+
+  @override
+  String get storePaymentCancelled =>
+      'Payment cancelled. Your order is saved — pay before it expires.';
+
+  @override
+  String get storePaymentFailed => 'Payment didn\'t go through. Try again.';
+
+  @override
+  String get storePaymentDone => 'Payment received';
+
+  @override
+  String get storePaymentConfirming =>
+      'We\'re confirming your payment. This can take a minute.';
+
+  @override
+  String get storePaymentPendingTitle => 'Payment pending';
+
+  @override
+  String get storePaymentPendingBody =>
+      'Items are held for you until the timer runs out. Any wallet amount is refunded if the order expires.';
+
+  @override
+  String get storeOrdersTitle => 'My orders';
+
+  @override
+  String get storeOrderTitle => 'Order';
+
+  @override
+  String storeOrderNumber(String number) {
+    return 'Order #$number';
+  }
+
+  @override
+  String storeItemAndMore(String title, int count) {
+    return '$title + $count more';
+  }
+
+  @override
+  String get storeTabAll => 'All orders';
+
+  @override
+  String get storeTabPoojas => 'Poojas';
+
+  @override
+  String get storeNoOrdersTitle => 'No orders yet';
+
+  @override
+  String get storeNoOrdersBody =>
+      'Products and poojas you buy will show up here.';
+
+  @override
+  String get storeNoPoojasTitle => 'No poojas booked';
+
+  @override
+  String get storeNoPoojasBody =>
+      'Book a pooja at a temple in your name — you\'ll get the video once it\'s done.';
+
+  @override
+  String get storeBrowsePoojas => 'Browse poojas';
+
+  @override
+  String get storeDateToBeAnnounced => 'Date to be announced';
+
+  @override
+  String get storeVideoReady => 'Video ready';
+
+  @override
+  String get storeWatchPooja => 'Watch pooja';
+
+  @override
+  String get storeOrderPendingPayment => 'Payment pending';
+
+  @override
+  String get storeOrderPaid => 'Confirmed';
+
+  @override
+  String get storeOrderCompleted => 'Completed';
+
+  @override
+  String get storeOrderCancelled => 'Cancelled';
+
+  @override
+  String get storeOrderExpired => 'Expired';
+
+  @override
+  String get storeOrderRefunded => 'Refunded';
+
+  @override
+  String get storeStagePending => 'Pending';
+
+  @override
+  String get storeStageAwaitingApproval => 'Awaiting seller';
+
+  @override
+  String get storeStageConfirmed => 'Confirmed';
+
+  @override
+  String get storeStageProcessing => 'Packing';
+
+  @override
+  String get storeStageShipped => 'Shipped';
+
+  @override
+  String get storeStageDelivered => 'Delivered';
+
+  @override
+  String get storeStageCompleted => 'Completed';
+
+  @override
+  String get storeStageCancelled => 'Cancelled';
+
+  @override
+  String get storeStageReturned => 'Returned';
+
+  @override
+  String get storeBookingConfirmed => 'Booked';
+
+  @override
+  String get storeBookingPerformed => 'Performed';
+
+  @override
+  String get storeBookingProofReady => 'Video shared';
+
+  @override
+  String get storeShipCreated => 'Ready to ship';
+
+  @override
+  String get storeShipPickedUp => 'Picked up';
+
+  @override
+  String get storeShipInTransit => 'In transit';
+
+  @override
+  String get storeShipOutForDelivery => 'Out for delivery';
+
+  @override
+  String get storeShipAttemptFailed => 'Delivery attempt failed';
+
+  @override
+  String get storeShipReturning => 'Returning to seller';
+
+  @override
+  String get storeShipLost => 'Shipment issue — we\'re on it';
+
+  @override
+  String storeAwb(String awb) {
+    return 'AWB $awb';
+  }
+
+  @override
+  String get storeTrack => 'Track';
+
+  @override
+  String storeQty(int count) {
+    return 'Qty $count';
+  }
+
+  @override
+  String storePlacedOn(String date) {
+    return 'Placed $date';
+  }
+
+  @override
+  String get storeOrderPlacedTitle => 'Order placed!';
+
+  @override
+  String get storeOrderPlacedBody =>
+      'We\'ll keep you posted as it\'s packed and shipped.';
+
+  @override
+  String get storeOrderPlacedPooja =>
+      'Your pooja is booked. You\'ll get the video once it\'s performed.';
+
+  @override
+  String get storeCancelOrder => 'Cancel order';
+
+  @override
+  String get storeCancelThisPart => 'Cancel these items';
+
+  @override
+  String get storeCancelOrderQ => 'Cancel this order?';
+
+  @override
+  String storeCancelPartQ(String seller) {
+    return 'Cancel items from $seller?';
+  }
+
+  @override
+  String get storeCancelReasonHint => 'Tell us why (optional)';
+
+  @override
+  String get storeCancel => 'Cancel';
+
+  @override
+  String get storeKeep => 'Keep';
+
+  @override
+  String get storeCancelled => 'Cancelled. Any refund goes back automatically.';
+
+  @override
+  String get storeRefunds => 'Refunds';
+
+  @override
+  String get storeRefunded => 'Refunded';
+
+  @override
+  String storeRefundedAmount(String amount) {
+    return '$amount refunded';
+  }
+
+  @override
+  String storeRefundToWallet(String amount) {
+    return '$amount to wallet';
+  }
+
+  @override
+  String storeRefundToSource(String amount) {
+    return '$amount to your bank / card';
+  }
+
+  @override
+  String get storeInvoices => 'Invoices';
+
+  @override
+  String storeTaxInvoice(String number) {
+    return 'Tax invoice $number';
+  }
+
+  @override
+  String storeCreditNote(String number) {
+    return 'Credit note $number';
+  }
+
+  @override
+  String get storeDownload => 'Download';
+
+  @override
+  String get storeDownloadFailed => 'Couldn\'t open the file. Try again.';
+
+  @override
+  String get storeNoProducts => 'Nothing here yet';
+
+  @override
+  String get storeReturnItem => 'Return item';
+
+  @override
+  String storeReturnUntil(String date) {
+    return 'Return by $date';
+  }
+
+  @override
+  String get storeReturnWhy => 'Why are you returning it?';
+
+  @override
+  String get storeReturnDetails => 'Details (helps us resolve it faster)';
+
+  @override
+  String get storeReturnNote =>
+      'Keep the item and its certificate in original packaging. Pickup is arranged once the seller approves.';
+
+  @override
+  String get storeReturnSubmit => 'Request return';
+
+  @override
+  String get storeReturnPickReason => 'Pick a reason';
+
+  @override
+  String get storeReturnRequested =>
+      'Return requested. We\'ll update you soon.';
+
+  @override
+  String get storeReasonDamaged => 'Arrived damaged';
+
+  @override
+  String get storeReasonWrongItem => 'Wrong item';
+
+  @override
+  String get storeReasonNotAsDescribed => 'Not as described';
+
+  @override
+  String get storeReasonAuthenticity => 'Doubt about authenticity';
+
+  @override
+  String get storeReasonSize => 'Size doesn\'t fit';
+
+  @override
+  String get storeReasonChangedMind => 'Changed my mind';
+
+  @override
+  String get storeReasonOther => 'Other';
+
+  @override
+  String get storeProfileOrders => 'Store orders';
+
+  @override
+  String get storeProfileOrdersSub => 'Products, poojas and downloads';
+
+  @override
+  String get storeProfileAdviceSub => 'What astrologers said about products';
+
+  @override
+  String get storeProfileAddressesSub => 'Delivery addresses';
+
+  @override
+  String get storeHomeRailTitle => 'Remedies store';
+
+  @override
+  String get storeHomeRailSub =>
+      'Certified rudraksha, gemstones and temple poojas';
+
+  @override
+  String get storeSeeAll => 'See all';
 }

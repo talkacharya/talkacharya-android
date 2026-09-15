@@ -10,6 +10,7 @@ import '../../../../core/realtime/realtime_client.dart';
 import '../../../../core/router/routes.dart';
 import '../../../../features/auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../../../shared/widgets/error_view.dart';
+import '../../../follows/presentation/widgets/follow_widgets.dart';
 import '../../../gifting/data/models/gift.dart';
 import '../../../gifting/presentation/view/gift_sheet.dart';
 import '../../../gifting/presentation/widgets/gift_prompt_card.dart';
@@ -21,6 +22,8 @@ import '../../data/models/consultation.dart';
 import '../cubit/chat_cubit.dart';
 import 'book_consultation_sheet.dart';
 import 'widgets/billing_hud.dart';
+import '../../../../core/config/config_repository.dart';
+import '../../../store/presentation/view/consults_pages.dart';
 
 /// One route (`/consultations/:id`) that renders whichever face the consultation
 /// is in: waiting for accept → live chat → ended summary. The live chat surface
@@ -481,6 +484,9 @@ class _SummaryViewState extends State<_SummaryView> {
               child: Text(l10n.roomStartAgain(c.astrologerName)),
             ),
           ],
+          // Consulted about a store product: show the verdict / buy link.
+          if (getIt<ConfigRepository>().value.features.store)
+            StoreConsultSummaryCard(consultationId: c.id),
           const SizedBox(height: 20),
           if (ended)
             Card(
@@ -549,8 +555,15 @@ class _SummaryViewState extends State<_SummaryView> {
               padding: const EdgeInsets.only(top: 12),
               child: Text(l10n.roomRatingThanks, textAlign: TextAlign.center),
             ),
-          if (_canThank(c)) ...[
+          if (ended && c.billedSeconds > 0 && c.astrologerId.isNotEmpty) ...[
             const SizedBox(height: 20),
+            FollowPromptCard(
+              astrologerId: c.astrologerId,
+              astrologerName: c.astrologerName,
+            ),
+          ],
+          if (_canThank(c)) ...[
+            const SizedBox(height: 12),
             GiftPromptCard(
               target: ConsultationGiftTarget(
                 consultationId: c.id,

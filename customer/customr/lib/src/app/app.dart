@@ -19,6 +19,7 @@ import '../core/router/pending_deep_link.dart';
 import '../core/theme/app_theme.dart';
 import '../features/auth/presentation/bloc/auth/auth_bloc.dart';
 import '../features/birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
+import '../features/follows/presentation/cubit/follow_cubit.dart';
 import '../features/consultations/presentation/cubit/chats_list_cubit.dart';
 import '../features/notifications/presentation/bloc/notifications_cubit.dart';
 import '../features/wallet/presentation/cubit/wallet_cubit.dart';
@@ -90,6 +91,7 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
         BlocProvider.value(value: getIt<AuthBloc>()),
         BlocProvider.value(value: getIt<NotificationsCubit>()),
         BlocProvider.value(value: getIt<BirthProfilesCubit>()),
+        BlocProvider.value(value: getIt<FollowCubit>()),
         BlocProvider.value(value: getIt<WalletCubit>()),
         BlocProvider.value(value: getIt<ChatsListCubit>()),
       ],

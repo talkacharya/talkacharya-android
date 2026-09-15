@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'src/app/app.dart';
 import 'src/core/config/config_repository.dart';
 import 'src/core/config/flavor.dart';
@@ -43,7 +41,7 @@ Future<void> bootstrap(Flavor flavor) async {
       systemNavigationBarContrastEnforced: false,
     ),
   );
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   FlutterError.onError = (details) {
     FlutterError.presentError(details);

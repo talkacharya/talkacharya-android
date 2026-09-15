@@ -20,6 +20,10 @@ abstract class Astrologer with _$Astrologer {
     @JsonKey(name: 'rating_avg') @Default(0) double ratingAvg,
     @JsonKey(name: 'rating_count') @Default(0) int ratingCount,
     @JsonKey(name: 'consultations_count') @Default(0) int consultationsCount,
+    @JsonKey(name: 'followers_count') @Default(0) int followersCount,
+
+    /// Whether the signed-in viewer follows this astrologer (false for guests).
+    @JsonKey(name: 'is_following') @Default(false) bool isFollowing,
     @JsonKey(name: 'is_available_flag') @Default(false) bool isAvailable,
     @Default(<AstrologerSkill>[]) List<AstrologerSkill> skills,
     @Default(<AstrologerLanguage>[]) List<AstrologerLanguage> languages,

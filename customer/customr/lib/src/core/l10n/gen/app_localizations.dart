@@ -9253,6 +9253,2304 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'PDF reports aren\'t available right now. Please try again later.'**
   String get kPdfUnavailable;
+
+  /// No description provided for @kOvEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Janam Kundali'**
+  String get kOvEyebrow;
+
+  /// No description provided for @kOvMoonChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Moon · {sign}'**
+  String kOvMoonChip(String sign);
+
+  /// No description provided for @kOvTapHouseHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap any house to read what it says about you'**
+  String get kOvTapHouseHint;
+
+  /// No description provided for @kOvBirthDetailsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Avakahada, panchang at birth and more'**
+  String get kOvBirthDetailsSub;
+
+  /// No description provided for @kOvGroupCharts.
+  ///
+  /// In en, this message translates to:
+  /// **'Chart & planets'**
+  String get kOvGroupCharts;
+
+  /// No description provided for @kOvGroupTiming.
+  ///
+  /// In en, this message translates to:
+  /// **'Timing & periods'**
+  String get kOvGroupTiming;
+
+  /// No description provided for @kOvGroupGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Guidance & remedies'**
+  String get kOvGroupGuidance;
+
+  /// No description provided for @kOvLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t open this kundali'**
+  String get kOvLoadError;
+
+  /// No description provided for @kKitAskTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Have a question about your chart?'**
+  String get kKitAskTitle;
+
+  /// No description provided for @kKitAskBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A verified astrologer can read it with you — personally, in minutes.'**
+  String get kKitAskBody;
+
+  /// No description provided for @kFcExploreMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Go deeper'**
+  String get kFcExploreMore;
+
+  /// No description provided for @kFcAllHousesSub.
+  ///
+  /// In en, this message translates to:
+  /// **'All twelve houses of your Lagna chart, one tap each'**
+  String get kFcAllHousesSub;
+
+  /// No description provided for @kFcAllChartsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Every divisional chart from D1 to D60'**
+  String get kFcAllChartsSub;
+
+  /// No description provided for @kPlanetsHeroSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Nine grahas, where they sit and how strong they are. Tap any planet to read it.'**
+  String get kPlanetsHeroSub;
+
+  /// No description provided for @kPlanetsStrongCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} strong'**
+  String kPlanetsStrongCount(int count);
+
+  /// No description provided for @kPlanetsRetroCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} retrograde'**
+  String kPlanetsRetroCount(int count);
+
+  /// No description provided for @kPlanetRetrograde.
+  ///
+  /// In en, this message translates to:
+  /// **'Retrograde'**
+  String get kPlanetRetrograde;
+
+  /// No description provided for @kPlanetCombust.
+  ///
+  /// In en, this message translates to:
+  /// **'Combust'**
+  String get kPlanetCombust;
+
+  /// No description provided for @kDashaTimelineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your life timeline'**
+  String get kDashaTimelineTitle;
+
+  /// No description provided for @kDashaProgressPct.
+  ///
+  /// In en, this message translates to:
+  /// **'{pct}% complete'**
+  String kDashaProgressPct(String pct);
+
+  /// No description provided for @kBhavaHeroSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Twelve houses, twelve areas of life — what supports each one and what strains it.'**
+  String get kBhavaHeroSub;
+
+  /// No description provided for @kBhavaSupportedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} supported'**
+  String kBhavaSupportedCount(int count);
+
+  /// No description provided for @kBhavaStrainedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} under strain'**
+  String kBhavaStrainedCount(int count);
+
+  /// No description provided for @kYdDoshaHeroSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Traditional doshas checked in your chart, with how strong each one really is.'**
+  String get kYdDoshaHeroSub;
+
+  /// No description provided for @kYdYogaHeroSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Planetary combinations that shape your gifts and opportunities.'**
+  String get kYdYogaHeroSub;
+
+  /// No description provided for @kYdDoshaCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} present'**
+  String kYdDoshaCount(int count);
+
+  /// No description provided for @kYdYogaCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} yogas'**
+  String kYdYogaCount(int count);
+
+  /// No description provided for @kYdClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get kYdClear;
+
+  /// No description provided for @kYdRemediesSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Gentle, traditional remedies suited to your chart'**
+  String get kYdRemediesSub;
+
+  /// No description provided for @kSsLifetimeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Across your lifetime'**
+  String get kSsLifetimeTitle;
+
+  /// No description provided for @kSsNotRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Not running now'**
+  String get kSsNotRunning;
+
+  /// No description provided for @kTrHeroSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s planets read from your Moon in {sign}'**
+  String kTrHeroSub(String sign);
+
+  /// No description provided for @kTrJupiterChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Jupiter {house} from Moon'**
+  String kTrJupiterChip(String house);
+
+  /// No description provided for @kTrSadeSatiCalendarSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Every phase of Saturn\'s cycle, past and upcoming'**
+  String get kTrSadeSatiCalendarSub;
+
+  /// No description provided for @kSsEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Saturn\'s cycle'**
+  String get kSsEyebrow;
+
+  /// No description provided for @kAdvHeroSub.
+  ///
+  /// In en, this message translates to:
+  /// **'The technical layer astrologers read from'**
+  String get kAdvHeroSub;
+
+  /// No description provided for @kAdvReportCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} reports'**
+  String kAdvReportCount(int count);
+
+  /// No description provided for @kAdvPdfChip.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF download'**
+  String get kAdvPdfChip;
+
+  /// No description provided for @kAdvReportsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Technical reports'**
+  String get kAdvReportsTitle;
+
+  /// No description provided for @kAdvAvHousesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Points by house'**
+  String get kAdvAvHousesTitle;
+
+  /// No description provided for @kAdvSarvaTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{total} points in all'**
+  String kAdvSarvaTotal(int total);
+
+  /// No description provided for @kInHeroSub.
+  ///
+  /// In en, this message translates to:
+  /// **'A character and life sketch drawn from your birth chart'**
+  String get kInHeroSub;
+
+  /// No description provided for @kInSupportiveCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} supportive'**
+  String kInSupportiveCount(int count);
+
+  /// No description provided for @kInChallengingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} need care'**
+  String kInChallengingCount(int count);
+
+  /// No description provided for @kInGlanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'At a glance'**
+  String get kInGlanceTitle;
+
+  /// No description provided for @kInAreasTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Area by area'**
+  String get kInAreasTitle;
+
+  /// No description provided for @kLkHeroSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Inherited debts in your chart and their simple household remedies'**
+  String get kLkHeroSub;
+
+  /// No description provided for @kLkDebtCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} active debts'**
+  String kLkDebtCount(int count);
+
+  /// No description provided for @kLkWeakCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} weak planets'**
+  String kLkWeakCount(int count);
+
+  /// No description provided for @kMuHeroSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s good hours, read for your chart'**
+  String get kMuHeroSub;
+
+  /// No description provided for @kMuTimingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s timings'**
+  String get kMuTimingsTitle;
+
+  /// No description provided for @kMuTabDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get kMuTabDay;
+
+  /// No description provided for @kMuTabNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Night'**
+  String get kMuTabNight;
+
+  /// No description provided for @kMuHoraOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{planet} hora'**
+  String kMuHoraOf(String planet);
+
+  /// No description provided for @kMuAbhijit.
+  ///
+  /// In en, this message translates to:
+  /// **'Abhijit muhurta'**
+  String get kMuAbhijit;
+
+  /// No description provided for @kNumHeroSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Your core numbers and Lo Shu birth grid'**
+  String get kNumHeroSub;
+
+  /// No description provided for @kNumYourNumbers.
+  ///
+  /// In en, this message translates to:
+  /// **'Your numbers'**
+  String get kNumYourNumbers;
+
+  /// No description provided for @kNumMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing numbers'**
+  String get kNumMissing;
+
+  /// No description provided for @kNumRepeated.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeated numbers'**
+  String get kNumRepeated;
+
+  /// No description provided for @kRmHeroSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Gentle, traditional practices matched to your chart'**
+  String get kRmHeroSub;
+
+  /// No description provided for @kRmCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} remedies'**
+  String kRmCount(int count);
+
+  /// No description provided for @kRmGatedChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Some need an astrologer'**
+  String get kRmGatedChip;
+
+  /// No description provided for @kRmCaution.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep in mind'**
+  String get kRmCaution;
+
+  /// No description provided for @kUpHeroSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Colours, days, mantras and charity for each planet'**
+  String get kUpHeroSub;
+
+  /// No description provided for @kUpStrengthenCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} to strengthen'**
+  String kUpStrengthenCount(int count);
+
+  /// No description provided for @kUpPacifyCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} to pacify'**
+  String kUpPacifyCount(int count);
+
+  /// No description provided for @kUpGateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm with an astrologer first'**
+  String get kUpGateTitle;
+
+  /// No description provided for @kUpPlanetsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Planet by planet'**
+  String get kUpPlanetsTitle;
+
+  /// No description provided for @kVpHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your year {year}'**
+  String kVpHeadline(String year);
+
+  /// No description provided for @kVpMarkersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Key markers of the year'**
+  String get kVpMarkersTitle;
+
+  /// No description provided for @kVpTajikaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tajika aspect'**
+  String get kVpTajikaTitle;
+
+  /// No description provided for @kVpIthasala.
+  ///
+  /// In en, this message translates to:
+  /// **'Ithasala · applying'**
+  String get kVpIthasala;
+
+  /// No description provided for @kVpIshrafa.
+  ///
+  /// In en, this message translates to:
+  /// **'Ishrafa · separating'**
+  String get kVpIshrafa;
+
+  /// No description provided for @followFollow.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow'**
+  String get followFollow;
+
+  /// No description provided for @followFollowing.
+  ///
+  /// In en, this message translates to:
+  /// **'Following'**
+  String get followFollowing;
+
+  /// No description provided for @followNotifying.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifying'**
+  String get followNotifying;
+
+  /// No description provided for @followNotifyingWhenOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll notify you when online'**
+  String get followNotifyingWhenOnline;
+
+  /// No description provided for @followedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Following {name} — we\'ll let you know when they\'re online or live'**
+  String followedToast(String name);
+
+  /// No description provided for @unfollowedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Unfollowed {name}'**
+  String unfollowedToast(String name);
+
+  /// No description provided for @followFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update follow. Please try again.'**
+  String get followFailed;
+
+  /// No description provided for @followPromptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow {name}?'**
+  String followPromptTitle(String name);
+
+  /// No description provided for @followPromptBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Get a notification when they\'re online or go live.'**
+  String get followPromptBody;
+
+  /// No description provided for @followPromptDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re following'**
+  String get followPromptDoneTitle;
+
+  /// No description provided for @followPromptDoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll tell you when {name} is online or live.'**
+  String followPromptDoneBody(String name);
+
+  /// No description provided for @followingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Following'**
+  String get followingTitle;
+
+  /// No description provided for @followingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll get a notification when these astrologers come online or go live. Tap the heart to unfollow.'**
+  String get followingHint;
+
+  /// No description provided for @followingEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not following anyone yet'**
+  String get followingEmptyTitle;
+
+  /// No description provided for @followingEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow astrologers you like to know when they\'re online or live.'**
+  String get followingEmptyBody;
+
+  /// No description provided for @followingExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Find astrologers'**
+  String get followingExplore;
+
+  /// No description provided for @followingLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the astrologers you follow.'**
+  String get followingLoadError;
+
+  /// No description provided for @followingFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Following'**
+  String get followingFilter;
+
+  /// No description provided for @followingFilterEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the heart on an astrologer to follow them — they\'ll show up here.'**
+  String get followingFilterEmpty;
+
+  /// No description provided for @astroStatFollowers.
+  ///
+  /// In en, this message translates to:
+  /// **'Followers'**
+  String get astroStatFollowers;
+
+  /// No description provided for @prefsFollowAlerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Astrologers you follow'**
+  String get prefsFollowAlerts;
+
+  /// No description provided for @prefsFollowAlertsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'When they come online or go live'**
+  String get prefsFollowAlertsDesc;
+
+  /// No description provided for @storeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remedy Store'**
+  String get storeTitle;
+
+  /// No description provided for @storeHeroSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentic rudraksha, gemstones, yantras and poojas — guided by astrologers'**
+  String get storeHeroSubtitle;
+
+  /// No description provided for @storeSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search rudraksha, gemstones, poojas…'**
+  String get storeSearchHint;
+
+  /// No description provided for @storeVerdictToast.
+  ///
+  /// In en, this message translates to:
+  /// **'An astrologer shared advice on your product'**
+  String get storeVerdictToast;
+
+  /// No description provided for @storeView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get storeView;
+
+  /// No description provided for @storeUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get storeUnavailable;
+
+  /// No description provided for @storePriceFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'from {price}'**
+  String storePriceFrom(String price);
+
+  /// No description provided for @storeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% off'**
+  String storeOff(int percent);
+
+  /// No description provided for @storeBadgePooja.
+  ///
+  /// In en, this message translates to:
+  /// **'Pooja'**
+  String get storeBadgePooja;
+
+  /// No description provided for @storeBadgeAskAstrologer.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask astrologer'**
+  String get storeBadgeAskAstrologer;
+
+  /// No description provided for @storeCartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cart'**
+  String get storeCartTitle;
+
+  /// No description provided for @storeTrustCertified.
+  ///
+  /// In en, this message translates to:
+  /// **'Lab certified'**
+  String get storeTrustCertified;
+
+  /// No description provided for @storeTrustGuided.
+  ///
+  /// In en, this message translates to:
+  /// **'Astrologer guided'**
+  String get storeTrustGuided;
+
+  /// No description provided for @storeTrustSecure.
+  ///
+  /// In en, this message translates to:
+  /// **'Secure payments'**
+  String get storeTrustSecure;
+
+  /// No description provided for @storeCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop by category'**
+  String get storeCategories;
+
+  /// No description provided for @storeFeatured.
+  ///
+  /// In en, this message translates to:
+  /// **'Handpicked remedies'**
+  String get storeFeatured;
+
+  /// No description provided for @storeFeaturedSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Chosen by our astrologers'**
+  String get storeFeaturedSub;
+
+  /// No description provided for @storeCollections.
+  ///
+  /// In en, this message translates to:
+  /// **'Remedy collections'**
+  String get storeCollections;
+
+  /// No description provided for @storePoojas.
+  ///
+  /// In en, this message translates to:
+  /// **'Book a pooja'**
+  String get storePoojas;
+
+  /// No description provided for @storePoojasSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Performed in your name at sacred temples'**
+  String get storePoojasSub;
+
+  /// No description provided for @storeConsultBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sure what suits you?'**
+  String get storeConsultBannerTitle;
+
+  /// No description provided for @storeConsultBannerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call an astrologer before you buy — they check your chart and recommend the right remedy.'**
+  String get storeConsultBannerBody;
+
+  /// No description provided for @storeConsultBannerCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Talk to an astrologer'**
+  String get storeConsultBannerCta;
+
+  /// No description provided for @storeMyAdvice.
+  ///
+  /// In en, this message translates to:
+  /// **'Advice from your astrologers'**
+  String get storeMyAdvice;
+
+  /// No description provided for @storeDisclaimerFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Remedies are traditional practices. Results are not guaranteed and they don\'t replace medical, legal or financial advice.'**
+  String get storeDisclaimerFooter;
+
+  /// No description provided for @storeEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The store is getting ready'**
+  String get storeEmptyTitle;
+
+  /// No description provided for @storeEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Remedies and poojas will appear here soon.'**
+  String get storeEmptyBody;
+
+  /// No description provided for @storeLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the store'**
+  String get storeLoadError;
+
+  /// No description provided for @storeMyOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'My orders'**
+  String get storeMyOrders;
+
+  /// No description provided for @storeVerdictSuitable.
+  ///
+  /// In en, this message translates to:
+  /// **'Suitable — go ahead'**
+  String get storeVerdictSuitable;
+
+  /// No description provided for @storeVerdictNotSuitable.
+  ///
+  /// In en, this message translates to:
+  /// **'Not suitable for you'**
+  String get storeVerdictNotSuitable;
+
+  /// No description provided for @storeVerdictAlternative.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggests something else'**
+  String get storeVerdictAlternative;
+
+  /// No description provided for @storeConsultCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Call didn\'t happen'**
+  String get storeConsultCancelled;
+
+  /// No description provided for @storeConsultExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'No advice was shared'**
+  String get storeConsultExpired;
+
+  /// No description provided for @storeConsultCallLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Your call is in progress'**
+  String get storeConsultCallLive;
+
+  /// No description provided for @storeConsultAwaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the astrologer\'s advice'**
+  String get storeConsultAwaiting;
+
+  /// No description provided for @storeConsultWith.
+  ///
+  /// In en, this message translates to:
+  /// **'with {name}'**
+  String storeConsultWith(String name);
+
+  /// No description provided for @storeVerdictFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}\'s advice'**
+  String storeVerdictFrom(String name);
+
+  /// No description provided for @storeBuyRecommended.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy the recommended option'**
+  String get storeBuyRecommended;
+
+  /// No description provided for @storeSuggestedInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested instead'**
+  String get storeSuggestedInstead;
+
+  /// No description provided for @storeConsultPromptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sure it suits you?'**
+  String get storeConsultPromptTitle;
+
+  /// No description provided for @storeConsultPromptBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call an astrologer — they\'ll check your chart before you buy.'**
+  String get storeConsultPromptBody;
+
+  /// No description provided for @storeConsultRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Consult an astrologer first'**
+  String get storeConsultRequiredTitle;
+
+  /// No description provided for @storeConsultRequiredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This remedy is sold only after an astrologer confirms it suits your chart.'**
+  String get storeConsultRequiredBody;
+
+  /// No description provided for @storeNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing matches'**
+  String get storeNoResults;
+
+  /// No description provided for @storeNoResultsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Try another word or clear some filters.'**
+  String get storeNoResultsBody;
+
+  /// No description provided for @storeClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get storeClearFilters;
+
+  /// No description provided for @storeResultCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 item} other{{count} items}}'**
+  String storeResultCount(int count);
+
+  /// No description provided for @storeFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get storeFilters;
+
+  /// No description provided for @storeNoFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'No filters for this selection yet.'**
+  String get storeNoFilters;
+
+  /// No description provided for @storeSortBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get storeSortBy;
+
+  /// No description provided for @storeSortRecommended.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended'**
+  String get storeSortRecommended;
+
+  /// No description provided for @storeSortPopular.
+  ///
+  /// In en, this message translates to:
+  /// **'Most popular'**
+  String get storeSortPopular;
+
+  /// No description provided for @storeSortNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest'**
+  String get storeSortNew;
+
+  /// No description provided for @storeSortRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Top rated'**
+  String get storeSortRating;
+
+  /// No description provided for @storeKindProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Products'**
+  String get storeKindProducts;
+
+  /// No description provided for @storeKindPoojas.
+  ///
+  /// In en, this message translates to:
+  /// **'Poojas'**
+  String get storeKindPoojas;
+
+  /// No description provided for @storeKindDigital.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports'**
+  String get storeKindDigital;
+
+  /// No description provided for @storeRemedyFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Remedy: {key}'**
+  String storeRemedyFor(String key);
+
+  /// No description provided for @storeChoosePackage.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a package'**
+  String get storeChoosePackage;
+
+  /// No description provided for @storeChooseOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an option'**
+  String get storeChooseOption;
+
+  /// No description provided for @storePickDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a date'**
+  String get storePickDate;
+
+  /// No description provided for @storeSankalpDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Sankalp details'**
+  String get storeSankalpDetails;
+
+  /// No description provided for @storeYourDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Your details'**
+  String get storeYourDetails;
+
+  /// No description provided for @storeSankalpHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The priest takes the sankalp in these names during the pooja.'**
+  String get storeSankalpHint;
+
+  /// No description provided for @storeCertificate.
+  ///
+  /// In en, this message translates to:
+  /// **'Certificate of authenticity'**
+  String get storeCertificate;
+
+  /// No description provided for @storeCertificateNo.
+  ///
+  /// In en, this message translates to:
+  /// **'Certificate no. {number}'**
+  String storeCertificateNo(String number);
+
+  /// No description provided for @storeVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get storeVerify;
+
+  /// No description provided for @storeHighlights.
+  ///
+  /// In en, this message translates to:
+  /// **'Highlights'**
+  String get storeHighlights;
+
+  /// No description provided for @storeAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get storeAbout;
+
+  /// No description provided for @storeSignificance.
+  ///
+  /// In en, this message translates to:
+  /// **'Traditional significance'**
+  String get storeSignificance;
+
+  /// No description provided for @storeHowToUse.
+  ///
+  /// In en, this message translates to:
+  /// **'How to wear / use'**
+  String get storeHowToUse;
+
+  /// No description provided for @storeHowItWorks.
+  ///
+  /// In en, this message translates to:
+  /// **'How it works'**
+  String get storeHowItWorks;
+
+  /// No description provided for @storeReadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Read more'**
+  String get storeReadMore;
+
+  /// No description provided for @storeReadLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get storeReadLess;
+
+  /// No description provided for @storeRecommendedForYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended for you'**
+  String get storeRecommendedForYou;
+
+  /// No description provided for @storeTaxInclusive.
+  ///
+  /// In en, this message translates to:
+  /// **'Inclusive of all taxes'**
+  String get storeTaxInclusive;
+
+  /// No description provided for @storeOutOfStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of stock'**
+  String get storeOutOfStock;
+
+  /// No description provided for @storeOnlyLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Only {count} left'**
+  String storeOnlyLeft(int count);
+
+  /// No description provided for @storeAskAnother.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask another astrologer'**
+  String get storeAskAnother;
+
+  /// No description provided for @storeNoDates.
+  ///
+  /// In en, this message translates to:
+  /// **'Dates will be announced soon.'**
+  String get storeNoDates;
+
+  /// No description provided for @storeOpenForBooking.
+  ///
+  /// In en, this message translates to:
+  /// **'Open for booking'**
+  String get storeOpenForBooking;
+
+  /// No description provided for @storeSeatsLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} slots left'**
+  String storeSeatsLeft(int count);
+
+  /// No description provided for @storeReturnableDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy returns within {days} days of delivery'**
+  String storeReturnableDays(int days);
+
+  /// No description provided for @storeNotReturnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Not returnable once delivered'**
+  String get storeNotReturnable;
+
+  /// No description provided for @storeCancellable.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel free before it\'s dispatched'**
+  String get storeCancellable;
+
+  /// No description provided for @storeNotCancellable.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t be cancelled once ordered'**
+  String get storeNotCancellable;
+
+  /// No description provided for @storeMadeToOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Made to order · ready in about {days} days'**
+  String storeMadeToOrder(int days);
+
+  /// No description provided for @storeShipsIndia.
+  ///
+  /// In en, this message translates to:
+  /// **'Insured shipping across India'**
+  String get storeShipsIndia;
+
+  /// No description provided for @storeVideoProof.
+  ///
+  /// In en, this message translates to:
+  /// **'Video of the pooja shared with you'**
+  String get storeVideoProof;
+
+  /// No description provided for @storeInstantDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Instant download after payment'**
+  String get storeInstantDownload;
+
+  /// No description provided for @storeSoldBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold by {name}'**
+  String storeSoldBy(String name);
+
+  /// No description provided for @storeSellerInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller & grievance details'**
+  String get storeSellerInfo;
+
+  /// No description provided for @storeCountryOfOrigin.
+  ///
+  /// In en, this message translates to:
+  /// **'Country of origin: {country}'**
+  String storeCountryOfOrigin(String country);
+
+  /// No description provided for @storeGrievanceOfficer.
+  ///
+  /// In en, this message translates to:
+  /// **'Grievance officer'**
+  String get storeGrievanceOfficer;
+
+  /// No description provided for @storeFieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} is required'**
+  String storeFieldRequired(String label);
+
+  /// No description provided for @storeFieldParticipants.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter {count} {label}'**
+  String storeFieldParticipants(String label, int count);
+
+  /// No description provided for @storePickDateError.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a date for the pooja'**
+  String get storePickDateError;
+
+  /// No description provided for @storeAddedToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to cart'**
+  String get storeAddedToCart;
+
+  /// No description provided for @storeViewCart.
+  ///
+  /// In en, this message translates to:
+  /// **'View cart'**
+  String get storeViewCart;
+
+  /// No description provided for @storeFixDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check the highlighted details'**
+  String get storeFixDetails;
+
+  /// No description provided for @storeAddToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to cart'**
+  String get storeAddToCart;
+
+  /// No description provided for @storeBuyNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy now'**
+  String get storeBuyNow;
+
+  /// No description provided for @storeBookPooja.
+  ///
+  /// In en, this message translates to:
+  /// **'Book pooja'**
+  String get storeBookPooja;
+
+  /// No description provided for @storeConsultFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Consult first'**
+  String get storeConsultFirst;
+
+  /// No description provided for @storePersonN.
+  ///
+  /// In en, this message translates to:
+  /// **'Person {n}'**
+  String storePersonN(int n);
+
+  /// No description provided for @storeConsultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Talk before you buy'**
+  String get storeConsultTitle;
+
+  /// No description provided for @storeConsultPick.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an astrologer'**
+  String get storeConsultPick;
+
+  /// No description provided for @storeConsultNoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No one\'s available right now'**
+  String get storeConsultNoneTitle;
+
+  /// No description provided for @storeConsultNoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Astrologers who take video calls will show up here. Try again in a little while.'**
+  String get storeConsultNoneBody;
+
+  /// No description provided for @storeConsultBrowseAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse all astrologers'**
+  String get storeConsultBrowseAll;
+
+  /// No description provided for @storeConsultAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'Consultation about'**
+  String get storeConsultAbout;
+
+  /// No description provided for @storeConsultVideoPerMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call · billed per minute'**
+  String get storeConsultVideoPerMinute;
+
+  /// No description provided for @storeConsultOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer applied'**
+  String get storeConsultOffer;
+
+  /// No description provided for @storeConsultStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call an astrologer'**
+  String get storeConsultStep1;
+
+  /// No description provided for @storeConsultStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'They check your chart and advise'**
+  String get storeConsultStep2;
+
+  /// No description provided for @storeConsultStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy what\'s right for you'**
+  String get storeConsultStep3;
+
+  /// No description provided for @storePresenceOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get storePresenceOnline;
+
+  /// No description provided for @storePresenceBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'In a call'**
+  String get storePresenceBusy;
+
+  /// No description provided for @storePresenceOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get storePresenceOffline;
+
+  /// No description provided for @storeSpecialist.
+  ///
+  /// In en, this message translates to:
+  /// **'Specialist'**
+  String get storeSpecialist;
+
+  /// No description provided for @storeYearsExp.
+  ///
+  /// In en, this message translates to:
+  /// **'{years} yrs'**
+  String storeYearsExp(int years);
+
+  /// No description provided for @storePerMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'{price}/min'**
+  String storePerMinute(String price);
+
+  /// No description provided for @storeCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get storeCall;
+
+  /// No description provided for @storeConsultConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call {name}'**
+  String storeConsultConfirmTitle(String name);
+
+  /// No description provided for @storeConsultQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'What would you like to ask?'**
+  String get storeConsultQuestion;
+
+  /// No description provided for @storeConsultSharingChart.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing {name}\'s birth chart with the astrologer'**
+  String storeConsultSharingChart(String name);
+
+  /// No description provided for @storeConsultHoldNote.
+  ///
+  /// In en, this message translates to:
+  /// **'{rate} per minute from your wallet. {hold} is held when the call starts; you only pay for the minutes you talk.'**
+  String storeConsultHoldNote(String rate, String hold);
+
+  /// No description provided for @storeConsultStartCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Start video call'**
+  String get storeConsultStartCall;
+
+  /// No description provided for @storeConsultLowBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Add money to your wallet to start the call'**
+  String get storeConsultLowBalance;
+
+  /// No description provided for @storeConsultBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} just got busy — try another astrologer'**
+  String storeConsultBusy(String name);
+
+  /// No description provided for @storeConsultOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} went offline'**
+  String storeConsultOffline(String name);
+
+  /// No description provided for @storeAdviceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Astrologer advice'**
+  String get storeAdviceTitle;
+
+  /// No description provided for @storeAdviceEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No advice yet'**
+  String get storeAdviceEmptyTitle;
+
+  /// No description provided for @storeAdviceEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask an astrologer about a remedy from any product page.'**
+  String get storeAdviceEmptyBody;
+
+  /// No description provided for @storeExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore the store'**
+  String get storeExplore;
+
+  /// No description provided for @storeOpenCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Open call'**
+  String get storeOpenCall;
+
+  /// No description provided for @storeYourQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Your question'**
+  String get storeYourQuestion;
+
+  /// No description provided for @storeVideoCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call'**
+  String get storeVideoCall;
+
+  /// No description provided for @storeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get storeRequired;
+
+  /// No description provided for @storeAddAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Add address'**
+  String get storeAddAddress;
+
+  /// No description provided for @storeEditAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit address'**
+  String get storeEditAddress;
+
+  /// No description provided for @storeAddressesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved addresses'**
+  String get storeAddressesTitle;
+
+  /// No description provided for @storeNoAddressesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved addresses'**
+  String get storeNoAddressesTitle;
+
+  /// No description provided for @storeNoAddressesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a delivery address to get products shipped to you.'**
+  String get storeNoAddressesBody;
+
+  /// No description provided for @storeDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get storeDefault;
+
+  /// No description provided for @storeEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get storeEdit;
+
+  /// No description provided for @storeDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get storeDelete;
+
+  /// No description provided for @storeMakeDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Make default'**
+  String get storeMakeDefault;
+
+  /// No description provided for @storeChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get storeChange;
+
+  /// No description provided for @storeLabelHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get storeLabelHome;
+
+  /// No description provided for @storeLabelWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Work'**
+  String get storeLabelWork;
+
+  /// No description provided for @storeLabelOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get storeLabelOther;
+
+  /// No description provided for @storeFullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name'**
+  String get storeFullName;
+
+  /// No description provided for @storePhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number'**
+  String get storePhone;
+
+  /// No description provided for @storePhoneInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid 10-digit mobile number'**
+  String get storePhoneInvalid;
+
+  /// No description provided for @storeLine1.
+  ///
+  /// In en, this message translates to:
+  /// **'House no., building, street'**
+  String get storeLine1;
+
+  /// No description provided for @storeLine2.
+  ///
+  /// In en, this message translates to:
+  /// **'Area, colony (optional)'**
+  String get storeLine2;
+
+  /// No description provided for @storeLandmark.
+  ///
+  /// In en, this message translates to:
+  /// **'Landmark (optional)'**
+  String get storeLandmark;
+
+  /// No description provided for @storeCity.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get storeCity;
+
+  /// No description provided for @storePincode.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN code'**
+  String get storePincode;
+
+  /// No description provided for @storePincodeInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid 6-digit PIN'**
+  String get storePincodeInvalid;
+
+  /// No description provided for @storeState.
+  ///
+  /// In en, this message translates to:
+  /// **'State'**
+  String get storeState;
+
+  /// No description provided for @storeGstinOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'GSTIN (optional)'**
+  String get storeGstinOptional;
+
+  /// No description provided for @storeGstinHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Add it to claim input tax credit on the invoice'**
+  String get storeGstinHelp;
+
+  /// No description provided for @storeGstinInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'GSTIN has 15 characters'**
+  String get storeGstinInvalid;
+
+  /// No description provided for @storeSaveAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Save address'**
+  String get storeSaveAddress;
+
+  /// No description provided for @storeCheckout.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkout'**
+  String get storeCheckout;
+
+  /// No description provided for @storeCartEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your cart is empty'**
+  String get storeCartEmptyTitle;
+
+  /// No description provided for @storeCartEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Rudraksha, gemstones, yantras and poojas — find what your chart needs.'**
+  String get storeCartEmptyBody;
+
+  /// No description provided for @storeCartTaxNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Prices include GST. Shipping is calculated at checkout.'**
+  String get storeCartTaxNote;
+
+  /// No description provided for @storeItemsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 item} other{{count} items}}'**
+  String storeItemsCount(int count);
+
+  /// No description provided for @storeRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get storeRemove;
+
+  /// No description provided for @storeDeliverTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Deliver to'**
+  String get storeDeliverTo;
+
+  /// No description provided for @storeOrderSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Order summary'**
+  String get storeOrderSummary;
+
+  /// No description provided for @storeBillDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Bill details'**
+  String get storeBillDetails;
+
+  /// No description provided for @storeSubtotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Item total'**
+  String get storeSubtotal;
+
+  /// No description provided for @storeShipping.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping'**
+  String get storeShipping;
+
+  /// No description provided for @storeShippingAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping {amount}'**
+  String storeShippingAmount(String amount);
+
+  /// No description provided for @storeFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get storeFree;
+
+  /// No description provided for @storeGrandTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get storeGrandTotal;
+
+  /// No description provided for @storeTaxIncluded.
+  ///
+  /// In en, this message translates to:
+  /// **'Includes {amount} GST'**
+  String storeTaxIncluded(String amount);
+
+  /// No description provided for @storePaidFromWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'From wallet'**
+  String get storePaidFromWallet;
+
+  /// No description provided for @storePaidOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid online'**
+  String get storePaidOnline;
+
+  /// No description provided for @storeToPayNow.
+  ///
+  /// In en, this message translates to:
+  /// **'To pay'**
+  String get storeToPayNow;
+
+  /// No description provided for @storeUseWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Use wallet balance'**
+  String get storeUseWallet;
+
+  /// No description provided for @storeWalletAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} available'**
+  String storeWalletAvailable(String amount);
+
+  /// No description provided for @storeOrderNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note for the seller (optional)'**
+  String get storeOrderNote;
+
+  /// No description provided for @storeCheckoutTrust.
+  ///
+  /// In en, this message translates to:
+  /// **'Secure payment. Certified products. Returns on damaged or wrong items.'**
+  String get storeCheckoutTrust;
+
+  /// No description provided for @storePlaceOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Place order'**
+  String get storePlaceOrder;
+
+  /// No description provided for @storePayNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay now'**
+  String get storePayNow;
+
+  /// No description provided for @storePayAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay {amount}'**
+  String storePayAmount(String amount);
+
+  /// No description provided for @storePayDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Remedies store order'**
+  String get storePayDescription;
+
+  /// No description provided for @storeDeliveryDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =1{In 1 day} other{In {days} days}}'**
+  String storeDeliveryDays(int days);
+
+  /// No description provided for @storeDeliveryDaysRange.
+  ///
+  /// In en, this message translates to:
+  /// **'{min}–{max} days'**
+  String storeDeliveryDaysRange(int min, int max);
+
+  /// No description provided for @storePaymentCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment cancelled. Your order is saved — pay before it expires.'**
+  String get storePaymentCancelled;
+
+  /// No description provided for @storePaymentFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment didn\'t go through. Try again.'**
+  String get storePaymentFailed;
+
+  /// No description provided for @storePaymentDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment received'**
+  String get storePaymentDone;
+
+  /// No description provided for @storePaymentConfirming.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re confirming your payment. This can take a minute.'**
+  String get storePaymentConfirming;
+
+  /// No description provided for @storePaymentPendingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment pending'**
+  String get storePaymentPendingTitle;
+
+  /// No description provided for @storePaymentPendingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Items are held for you until the timer runs out. Any wallet amount is refunded if the order expires.'**
+  String get storePaymentPendingBody;
+
+  /// No description provided for @storeOrdersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My orders'**
+  String get storeOrdersTitle;
+
+  /// No description provided for @storeOrderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get storeOrderTitle;
+
+  /// No description provided for @storeOrderNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Order #{number}'**
+  String storeOrderNumber(String number);
+
+  /// No description provided for @storeItemAndMore.
+  ///
+  /// In en, this message translates to:
+  /// **'{title} + {count} more'**
+  String storeItemAndMore(String title, int count);
+
+  /// No description provided for @storeTabAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All orders'**
+  String get storeTabAll;
+
+  /// No description provided for @storeTabPoojas.
+  ///
+  /// In en, this message translates to:
+  /// **'Poojas'**
+  String get storeTabPoojas;
+
+  /// No description provided for @storeNoOrdersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No orders yet'**
+  String get storeNoOrdersTitle;
+
+  /// No description provided for @storeNoOrdersBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Products and poojas you buy will show up here.'**
+  String get storeNoOrdersBody;
+
+  /// No description provided for @storeNoPoojasTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No poojas booked'**
+  String get storeNoPoojasTitle;
+
+  /// No description provided for @storeNoPoojasBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Book a pooja at a temple in your name — you\'ll get the video once it\'s done.'**
+  String get storeNoPoojasBody;
+
+  /// No description provided for @storeBrowsePoojas.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse poojas'**
+  String get storeBrowsePoojas;
+
+  /// No description provided for @storeDateToBeAnnounced.
+  ///
+  /// In en, this message translates to:
+  /// **'Date to be announced'**
+  String get storeDateToBeAnnounced;
+
+  /// No description provided for @storeVideoReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Video ready'**
+  String get storeVideoReady;
+
+  /// No description provided for @storeWatchPooja.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch pooja'**
+  String get storeWatchPooja;
+
+  /// No description provided for @storeOrderPendingPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment pending'**
+  String get storeOrderPendingPayment;
+
+  /// No description provided for @storeOrderPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get storeOrderPaid;
+
+  /// No description provided for @storeOrderCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get storeOrderCompleted;
+
+  /// No description provided for @storeOrderCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get storeOrderCancelled;
+
+  /// No description provided for @storeOrderExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get storeOrderExpired;
+
+  /// No description provided for @storeOrderRefunded.
+  ///
+  /// In en, this message translates to:
+  /// **'Refunded'**
+  String get storeOrderRefunded;
+
+  /// No description provided for @storeStagePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get storeStagePending;
+
+  /// No description provided for @storeStageAwaitingApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting seller'**
+  String get storeStageAwaitingApproval;
+
+  /// No description provided for @storeStageConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get storeStageConfirmed;
+
+  /// No description provided for @storeStageProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Packing'**
+  String get storeStageProcessing;
+
+  /// No description provided for @storeStageShipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipped'**
+  String get storeStageShipped;
+
+  /// No description provided for @storeStageDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get storeStageDelivered;
+
+  /// No description provided for @storeStageCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get storeStageCompleted;
+
+  /// No description provided for @storeStageCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get storeStageCancelled;
+
+  /// No description provided for @storeStageReturned.
+  ///
+  /// In en, this message translates to:
+  /// **'Returned'**
+  String get storeStageReturned;
+
+  /// No description provided for @storeBookingConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Booked'**
+  String get storeBookingConfirmed;
+
+  /// No description provided for @storeBookingPerformed.
+  ///
+  /// In en, this message translates to:
+  /// **'Performed'**
+  String get storeBookingPerformed;
+
+  /// No description provided for @storeBookingProofReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Video shared'**
+  String get storeBookingProofReady;
+
+  /// No description provided for @storeShipCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to ship'**
+  String get storeShipCreated;
+
+  /// No description provided for @storeShipPickedUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Picked up'**
+  String get storeShipPickedUp;
+
+  /// No description provided for @storeShipInTransit.
+  ///
+  /// In en, this message translates to:
+  /// **'In transit'**
+  String get storeShipInTransit;
+
+  /// No description provided for @storeShipOutForDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Out for delivery'**
+  String get storeShipOutForDelivery;
+
+  /// No description provided for @storeShipAttemptFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery attempt failed'**
+  String get storeShipAttemptFailed;
+
+  /// No description provided for @storeShipReturning.
+  ///
+  /// In en, this message translates to:
+  /// **'Returning to seller'**
+  String get storeShipReturning;
+
+  /// No description provided for @storeShipLost.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipment issue — we\'re on it'**
+  String get storeShipLost;
+
+  /// No description provided for @storeAwb.
+  ///
+  /// In en, this message translates to:
+  /// **'AWB {awb}'**
+  String storeAwb(String awb);
+
+  /// No description provided for @storeTrack.
+  ///
+  /// In en, this message translates to:
+  /// **'Track'**
+  String get storeTrack;
+
+  /// No description provided for @storeQty.
+  ///
+  /// In en, this message translates to:
+  /// **'Qty {count}'**
+  String storeQty(int count);
+
+  /// No description provided for @storePlacedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Placed {date}'**
+  String storePlacedOn(String date);
+
+  /// No description provided for @storeOrderPlacedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Order placed!'**
+  String get storeOrderPlacedTitle;
+
+  /// No description provided for @storeOrderPlacedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll keep you posted as it\'s packed and shipped.'**
+  String get storeOrderPlacedBody;
+
+  /// No description provided for @storeOrderPlacedPooja.
+  ///
+  /// In en, this message translates to:
+  /// **'Your pooja is booked. You\'ll get the video once it\'s performed.'**
+  String get storeOrderPlacedPooja;
+
+  /// No description provided for @storeCancelOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel order'**
+  String get storeCancelOrder;
+
+  /// No description provided for @storeCancelThisPart.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel these items'**
+  String get storeCancelThisPart;
+
+  /// No description provided for @storeCancelOrderQ.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel this order?'**
+  String get storeCancelOrderQ;
+
+  /// No description provided for @storeCancelPartQ.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel items from {seller}?'**
+  String storeCancelPartQ(String seller);
+
+  /// No description provided for @storeCancelReasonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us why (optional)'**
+  String get storeCancelReasonHint;
+
+  /// No description provided for @storeCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get storeCancel;
+
+  /// No description provided for @storeKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep'**
+  String get storeKeep;
+
+  /// No description provided for @storeCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled. Any refund goes back automatically.'**
+  String get storeCancelled;
+
+  /// No description provided for @storeRefunds.
+  ///
+  /// In en, this message translates to:
+  /// **'Refunds'**
+  String get storeRefunds;
+
+  /// No description provided for @storeRefunded.
+  ///
+  /// In en, this message translates to:
+  /// **'Refunded'**
+  String get storeRefunded;
+
+  /// No description provided for @storeRefundedAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} refunded'**
+  String storeRefundedAmount(String amount);
+
+  /// No description provided for @storeRefundToWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} to wallet'**
+  String storeRefundToWallet(String amount);
+
+  /// No description provided for @storeRefundToSource.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} to your bank / card'**
+  String storeRefundToSource(String amount);
+
+  /// No description provided for @storeInvoices.
+  ///
+  /// In en, this message translates to:
+  /// **'Invoices'**
+  String get storeInvoices;
+
+  /// No description provided for @storeTaxInvoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax invoice {number}'**
+  String storeTaxInvoice(String number);
+
+  /// No description provided for @storeCreditNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit note {number}'**
+  String storeCreditNote(String number);
+
+  /// No description provided for @storeDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get storeDownload;
+
+  /// No description provided for @storeDownloadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open the file. Try again.'**
+  String get storeDownloadFailed;
+
+  /// No description provided for @storeNoProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here yet'**
+  String get storeNoProducts;
+
+  /// No description provided for @storeReturnItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Return item'**
+  String get storeReturnItem;
+
+  /// No description provided for @storeReturnUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Return by {date}'**
+  String storeReturnUntil(String date);
+
+  /// No description provided for @storeReturnWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Why are you returning it?'**
+  String get storeReturnWhy;
+
+  /// No description provided for @storeReturnDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details (helps us resolve it faster)'**
+  String get storeReturnDetails;
+
+  /// No description provided for @storeReturnNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the item and its certificate in original packaging. Pickup is arranged once the seller approves.'**
+  String get storeReturnNote;
+
+  /// No description provided for @storeReturnSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Request return'**
+  String get storeReturnSubmit;
+
+  /// No description provided for @storeReturnPickReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a reason'**
+  String get storeReturnPickReason;
+
+  /// No description provided for @storeReturnRequested.
+  ///
+  /// In en, this message translates to:
+  /// **'Return requested. We\'ll update you soon.'**
+  String get storeReturnRequested;
+
+  /// No description provided for @storeReasonDamaged.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrived damaged'**
+  String get storeReasonDamaged;
+
+  /// No description provided for @storeReasonWrongItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong item'**
+  String get storeReasonWrongItem;
+
+  /// No description provided for @storeReasonNotAsDescribed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not as described'**
+  String get storeReasonNotAsDescribed;
+
+  /// No description provided for @storeReasonAuthenticity.
+  ///
+  /// In en, this message translates to:
+  /// **'Doubt about authenticity'**
+  String get storeReasonAuthenticity;
+
+  /// No description provided for @storeReasonSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Size doesn\'t fit'**
+  String get storeReasonSize;
+
+  /// No description provided for @storeReasonChangedMind.
+  ///
+  /// In en, this message translates to:
+  /// **'Changed my mind'**
+  String get storeReasonChangedMind;
+
+  /// No description provided for @storeReasonOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get storeReasonOther;
+
+  /// No description provided for @storeProfileOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Store orders'**
+  String get storeProfileOrders;
+
+  /// No description provided for @storeProfileOrdersSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Products, poojas and downloads'**
+  String get storeProfileOrdersSub;
+
+  /// No description provided for @storeProfileAdviceSub.
+  ///
+  /// In en, this message translates to:
+  /// **'What astrologers said about products'**
+  String get storeProfileAdviceSub;
+
+  /// No description provided for @storeProfileAddressesSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery addresses'**
+  String get storeProfileAddressesSub;
+
+  /// No description provided for @storeHomeRailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remedies store'**
+  String get storeHomeRailTitle;
+
+  /// No description provided for @storeHomeRailSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Certified rudraksha, gemstones and temple poojas'**
+  String get storeHomeRailSub;
+
+  /// No description provided for @storeSeeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get storeSeeAll;
 }
 
 class _AppLocalizationsDelegate

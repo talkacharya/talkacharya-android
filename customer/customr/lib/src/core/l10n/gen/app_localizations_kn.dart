@@ -5262,4 +5262,1351 @@ class AppLocalizationsKn extends AppLocalizations {
   @override
   String get kPdfUnavailable =>
       'PDF reports aren\'t available right now. Please try again later.';
+
+  @override
+  String get kOvEyebrow => 'Janam Kundali';
+
+  @override
+  String kOvMoonChip(String sign) {
+    return 'Moon · $sign';
+  }
+
+  @override
+  String get kOvTapHouseHint => 'Tap any house to read what it says about you';
+
+  @override
+  String get kOvBirthDetailsSub => 'Avakahada, panchang at birth and more';
+
+  @override
+  String get kOvGroupCharts => 'Chart & planets';
+
+  @override
+  String get kOvGroupTiming => 'Timing & periods';
+
+  @override
+  String get kOvGroupGuidance => 'Guidance & remedies';
+
+  @override
+  String get kOvLoadError => 'We couldn\'t open this kundali';
+
+  @override
+  String get kKitAskTitle => 'Have a question about your chart?';
+
+  @override
+  String get kKitAskBody =>
+      'A verified astrologer can read it with you — personally, in minutes.';
+
+  @override
+  String get kFcExploreMore => 'Go deeper';
+
+  @override
+  String get kFcAllHousesSub =>
+      'All twelve houses of your Lagna chart, one tap each';
+
+  @override
+  String get kFcAllChartsSub => 'Every divisional chart from D1 to D60';
+
+  @override
+  String get kPlanetsHeroSub =>
+      'Nine grahas, where they sit and how strong they are. Tap any planet to read it.';
+
+  @override
+  String kPlanetsStrongCount(int count) {
+    return '$count strong';
+  }
+
+  @override
+  String kPlanetsRetroCount(int count) {
+    return '$count retrograde';
+  }
+
+  @override
+  String get kPlanetRetrograde => 'Retrograde';
+
+  @override
+  String get kPlanetCombust => 'Combust';
+
+  @override
+  String get kDashaTimelineTitle => 'Your life timeline';
+
+  @override
+  String kDashaProgressPct(String pct) {
+    return '$pct% complete';
+  }
+
+  @override
+  String get kBhavaHeroSub =>
+      'Twelve houses, twelve areas of life — what supports each one and what strains it.';
+
+  @override
+  String kBhavaSupportedCount(int count) {
+    return '$count supported';
+  }
+
+  @override
+  String kBhavaStrainedCount(int count) {
+    return '$count under strain';
+  }
+
+  @override
+  String get kYdDoshaHeroSub =>
+      'Traditional doshas checked in your chart, with how strong each one really is.';
+
+  @override
+  String get kYdYogaHeroSub =>
+      'Planetary combinations that shape your gifts and opportunities.';
+
+  @override
+  String kYdDoshaCount(int count) {
+    return '$count present';
+  }
+
+  @override
+  String kYdYogaCount(int count) {
+    return '$count yogas';
+  }
+
+  @override
+  String get kYdClear => 'Clear';
+
+  @override
+  String get kYdRemediesSub =>
+      'Gentle, traditional remedies suited to your chart';
+
+  @override
+  String get kSsLifetimeTitle => 'Across your lifetime';
+
+  @override
+  String get kSsNotRunning => 'Not running now';
+
+  @override
+  String kTrHeroSub(String sign) {
+    return 'Today\'s planets read from your Moon in $sign';
+  }
+
+  @override
+  String kTrJupiterChip(String house) {
+    return 'Jupiter $house from Moon';
+  }
+
+  @override
+  String get kTrSadeSatiCalendarSub =>
+      'Every phase of Saturn\'s cycle, past and upcoming';
+
+  @override
+  String get kSsEyebrow => 'Saturn\'s cycle';
+
+  @override
+  String get kAdvHeroSub => 'ತಾಂತ್ರಿಕ ಪದರದ ಜ್ಯೋತಿಷಿಗಳು ಓದುತ್ತಾರೆ';
+
+  @override
+  String kAdvReportCount(int count) {
+    return '$count ವರದಿಗಳು';
+  }
+
+  @override
+  String get kAdvPdfChip => 'PDF ಡೌನ್‌ಲೋಡ್';
+
+  @override
+  String get kAdvReportsTitle => 'ತಾಂತ್ರಿಕ ವರದಿಗಳು';
+
+  @override
+  String get kAdvAvHousesTitle => 'Points by house';
+
+  @override
+  String kAdvSarvaTotal(int total) {
+    return 'ಒಟ್ಟಾರೆಯಾಗಿ $total ಅಂಕಗಳು';
+  }
+
+  @override
+  String get kInHeroSub =>
+      'ನಿಮ್ಮ ಜನ್ಮ ಚಾರ್ಟ್‌ನಿಂದ ಚಿತ್ರಿಸಿದ ಪಾತ್ರ ಮತ್ತು ಜೀವನ ರೇಖಾಚಿತ್ರ';
+
+  @override
+  String kInSupportiveCount(int count) {
+    return '$count ಬೆಂಬಲ';
+  }
+
+  @override
+  String kInChallengingCount(int count) {
+    return '$count ಆರೈಕೆಯ ಅಗತ್ಯವಿದೆ';
+  }
+
+  @override
+  String get kInGlanceTitle => 'ಒಂದು ನೋಟದಲ್ಲಿ';
+
+  @override
+  String get kInAreasTitle => 'ಪ್ರದೇಶದಿಂದ ಪ್ರದೇಶ';
+
+  @override
+  String get kLkHeroSub =>
+      'ನಿಮ್ಮ ಚಾರ್ಟ್‌ನಲ್ಲಿರುವ ಆನುವಂಶಿಕ ಸಾಲಗಳು ಮತ್ತು ಅವುಗಳ ಸರಳ ಮನೆಮದ್ದುಗಳು';
+
+  @override
+  String kLkDebtCount(int count) {
+    return '$count ಸಕ್ರಿಯ ಸಾಲಗಳು';
+  }
+
+  @override
+  String kLkWeakCount(int count) {
+    return '$count ದುರ್ಬಲ ಗ್ರಹಗಳು';
+  }
+
+  @override
+  String get kMuHeroSub => 'Today\'s good hours, read for your chart';
+
+  @override
+  String get kMuTimingsTitle => 'Today\'s timings';
+
+  @override
+  String get kMuTabDay => 'ದಿನ';
+
+  @override
+  String get kMuTabNight => 'ರಾತ್ರಿ';
+
+  @override
+  String kMuHoraOf(String planet) {
+    return '$planet hora';
+  }
+
+  @override
+  String get kMuAbhijit => 'ಅಭಿಜಿತ್ ಮುಹೂರ್ತ';
+
+  @override
+  String get kNumHeroSub => 'ನಿಮ್ಮ ಪ್ರಮುಖ ಸಂಖ್ಯೆಗಳು ಮತ್ತು ಲೋ ಶು ಜನ್ಮ ಗ್ರಿಡ್';
+
+  @override
+  String get kNumYourNumbers => 'ನಿಮ್ಮ ಸಂಖ್ಯೆಗಳು';
+
+  @override
+  String get kNumMissing => 'Missing numbers';
+
+  @override
+  String get kNumRepeated => 'Repeated numbers';
+
+  @override
+  String get kRmHeroSub =>
+      'Gentle, traditional practices matched to your chart';
+
+  @override
+  String kRmCount(int count) {
+    return '$count ಪರಿಹಾರಗಳು';
+  }
+
+  @override
+  String get kRmGatedChip => 'Some need an astrologer';
+
+  @override
+  String get kRmCaution => 'ನೆನಪಿನಲ್ಲಿಡಿ';
+
+  @override
+  String get kUpHeroSub => 'Colours, days, mantras and charity for each planet';
+
+  @override
+  String kUpStrengthenCount(int count) {
+    return '$count to strengthen';
+  }
+
+  @override
+  String kUpPacifyCount(int count) {
+    return 'ಸಮಾಧಾನಪಡಿಸಲು $count';
+  }
+
+  @override
+  String get kUpGateTitle => 'ಮೊದಲು ಜ್ಯೋತಿಷಿಯೊಂದಿಗೆ ಕನ್ಫರ್ಮ್ ಮಾಡಿಕೊಳ್ಳಿ';
+
+  @override
+  String get kUpPlanetsTitle => 'ಗ್ರಹದಿಂದ ಗ್ರಹ';
+
+  @override
+  String kVpHeadline(String year) {
+    return 'Your year $year';
+  }
+
+  @override
+  String get kVpMarkersTitle => 'Key markers of the year';
+
+  @override
+  String get kVpTajikaTitle => 'Tajika aspect';
+
+  @override
+  String get kVpIthasala => 'Ithasala · ಅರ್ಜಿ ಸಲ್ಲಿಸಲಾಗುತ್ತಿದೆ';
+
+  @override
+  String get kVpIshrafa => 'ಇಶ್ರಾಫಾ · ಬೇರ್ಪಡುತ್ತಿದ್ದಾರೆ';
+
+  @override
+  String get followFollow => 'Follow';
+
+  @override
+  String get followFollowing => 'ಅನುಸರಿಸುತ್ತಿದೆ';
+
+  @override
+  String get followNotifying => 'ಸೂಚನೆ ನೀಡುತ್ತಿದೆ';
+
+  @override
+  String get followNotifyingWhenOnline =>
+      'ಆನ್‌ಲೈನ್‌ನಲ್ಲಿರುವಾಗ ನಾವು ನಿಮಗೆ ತಿಳಿಸುತ್ತೇವೆ';
+
+  @override
+  String followedToast(String name) {
+    return '$name ಅನುಸರಿಸಿ — ಅವರು ಆನ್‌ಲೈನ್‌ನಲ್ಲಿರುವಾಗ ಅಥವಾ ಲೈವ್‌ನಲ್ಲಿರುವಾಗ ನಾವು ನಿಮಗೆ ತಿಳಿಸುತ್ತೇವೆ';
+  }
+
+  @override
+  String unfollowedToast(String name) {
+    return 'Unfollowed $name';
+  }
+
+  @override
+  String get followFailed => 'Couldn\'t update follow. Please try again.';
+
+  @override
+  String followPromptTitle(String name) {
+    return '$name ಅನುಸರಿಸಿರುವಿರಾ?';
+  }
+
+  @override
+  String get followPromptBody =>
+      'ಅವರು ಆನ್‌ಲೈನ್‌ನಲ್ಲಿರುವಾಗ ಅಥವಾ ಲೈವ್‌ಗೆ ಹೋದಾಗ ಅಧಿಸೂಚನೆಯನ್ನು ಪಡೆಯಿರಿ.';
+
+  @override
+  String get followPromptDoneTitle => 'ನೀವು ಅನುಸರಿಸುತ್ತಿರುವಿರಿ';
+
+  @override
+  String followPromptDoneBody(String name) {
+    return '$name ಆನ್‌ಲೈನ್‌ನಲ್ಲಿರುವಾಗ ಅಥವಾ ಲೈವ್ ಆಗಿರುವಾಗ ನಾವು ನಿಮಗೆ ಹೇಳುತ್ತೇವೆ.';
+  }
+
+  @override
+  String get followingTitle => 'ಅನುಸರಿಸುತ್ತಿದೆ';
+
+  @override
+  String get followingHint =>
+      'ಈ ಜ್ಯೋತಿಷಿಗಳು ಆನ್‌ಲೈನ್‌ಗೆ ಬಂದಾಗ ಅಥವಾ ಲೈವ್‌ಗೆ ಬಂದಾಗ ನೀವು ಅಧಿಸೂಚನೆಯನ್ನು ಪಡೆಯುತ್ತೀರಿ. ಅನುಸರಿಸದಿರಲು ಹೃದಯವನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ.';
+
+  @override
+  String get followingEmptyTitle => 'ಇನ್ನೂ ಯಾರನ್ನೂ ಅನುಸರಿಸುತ್ತಿಲ್ಲ';
+
+  @override
+  String get followingEmptyBody =>
+      'Follow astrologers you like to know when they\'re online or live.';
+
+  @override
+  String get followingExplore => 'ಜ್ಯೋತಿಷಿಗಳನ್ನು ಹುಡುಕಿ';
+
+  @override
+  String get followingLoadError =>
+      'ನೀವು ಅನುಸರಿಸುವ ಜ್ಯೋತಿಷಿಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.';
+
+  @override
+  String get followingFilter => 'ಅನುಸರಿಸುತ್ತಿದೆ';
+
+  @override
+  String get followingFilterEmpty =>
+      'ಜ್ಯೋತಿಷಿಯನ್ನು ಅನುಸರಿಸಲು ಅವರ ಹೃದಯವನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ — ಅವರು ಇಲ್ಲಿ ತೋರಿಸುತ್ತಾರೆ.';
+
+  @override
+  String get astroStatFollowers => 'ಅನುಯಾಯಿಗಳು';
+
+  @override
+  String get prefsFollowAlerts => 'ನೀವು ಅನುಸರಿಸುವ ಜ್ಯೋತಿಷಿಗಳು';
+
+  @override
+  String get prefsFollowAlertsDesc =>
+      'ಅವರು ಆನ್‌ಲೈನ್‌ಗೆ ಬಂದಾಗ ಅಥವಾ ಲೈವ್‌ಗೆ ಹೋದಾಗ';
+
+  @override
+  String get storeTitle => 'ಪರಿಹಾರ ಅಂಗಡಿ';
+
+  @override
+  String get storeHeroSubtitle =>
+      'ಅಧಿಕೃತ ರುದ್ರಾಕ್ಷ, ರತ್ನದ ಕಲ್ಲುಗಳು, ಯಂತ್ರಗಳು ಮತ್ತು ಪೂಜೆಗಳು - ಜ್ಯೋತಿಷಿಗಳಿಂದ ಮಾರ್ಗದರ್ಶನ';
+
+  @override
+  String get storeSearchHint =>
+      'ರುದ್ರಾಕ್ಷಿ, ರತ್ನದ ಕಲ್ಲುಗಳು, ಪೂಜೆಗಳನ್ನು ಹುಡುಕಿ...';
+
+  @override
+  String get storeVerdictToast =>
+      'ಜ್ಯೋತಿಷಿಯೊಬ್ಬರು ನಿಮ್ಮ ಉತ್ಪನ್ನದ ಕುರಿತು ಸಲಹೆಯನ್ನು ಹಂಚಿಕೊಂಡಿದ್ದಾರೆ';
+
+  @override
+  String get storeView => 'ವೀಕ್ಷಿಸಿ';
+
+  @override
+  String get storeUnavailable => 'Unavailable';
+
+  @override
+  String storePriceFrom(String price) {
+    return '$price ನಿಂದ';
+  }
+
+  @override
+  String storeOff(int percent) {
+    return '$percent % ರಿಯಾಯಿತಿ';
+  }
+
+  @override
+  String get storeBadgePooja => 'Pooja';
+
+  @override
+  String get storeBadgeAskAstrologer => 'ಜ್ಯೋತಿಷಿಯನ್ನು ಕೇಳಿ';
+
+  @override
+  String get storeCartTitle => 'ಕಾರ್ಟ್';
+
+  @override
+  String get storeTrustCertified => 'Lab certified';
+
+  @override
+  String get storeTrustGuided => 'Astrologer guided';
+
+  @override
+  String get storeTrustSecure => 'ಸುರಕ್ಷಿತ ಪಾವತಿಗಳು';
+
+  @override
+  String get storeCategories => 'Shop by category';
+
+  @override
+  String get storeFeatured => 'ಕೈಯಿಂದ ಆರಿಸಿದ ಪರಿಹಾರಗಳು';
+
+  @override
+  String get storeFeaturedSub => 'ನಮ್ಮ ಜ್ಯೋತಿಷಿಗಳು ಆಯ್ಕೆ ಮಾಡಿದ್ದಾರೆ';
+
+  @override
+  String get storeCollections => 'ಪರಿಹಾರ ಸಂಗ್ರಹಗಳು';
+
+  @override
+  String get storePoojas => 'Book a pooja';
+
+  @override
+  String get storePoojasSub => 'Performed in your name at sacred temples';
+
+  @override
+  String get storeConsultBannerTitle =>
+      'ಯಾವುದು ನಿಮಗೆ ಸರಿಹೊಂದುತ್ತದೆ ಎಂದು ಖಚಿತವಾಗಿಲ್ಲವೇ?';
+
+  @override
+  String get storeConsultBannerBody =>
+      'ನೀವು ಖರೀದಿಸುವ ಮೊದಲು ಜ್ಯೋತಿಷಿಗೆ ವೀಡಿಯೊ ಕರೆ ಮಾಡಿ - ಅವರು ನಿಮ್ಮ ಚಾರ್ಟ್ ಅನ್ನು ಪರಿಶೀಲಿಸುತ್ತಾರೆ ಮತ್ತು ಸರಿಯಾದ ಪರಿಹಾರವನ್ನು ಶಿಫಾರಸು ಮಾಡುತ್ತಾರೆ.';
+
+  @override
+  String get storeConsultBannerCta => 'Talk to an astrologer';
+
+  @override
+  String get storeMyAdvice => 'Advice from your astrologers';
+
+  @override
+  String get storeDisclaimerFooter =>
+      'Remedies are traditional practices. Results are not guaranteed and they don\'t replace medical, legal or financial advice.';
+
+  @override
+  String get storeEmptyTitle => 'The store is getting ready';
+
+  @override
+  String get storeEmptyBody =>
+      'ಶೀಘ್ರದಲ್ಲೇ ಇಲ್ಲಿ ಪರಿಹಾರಗಳು ಮತ್ತು ಪೂಜೆಗಳು ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತವೆ.';
+
+  @override
+  String get storeLoadError => 'Couldn\'t load the store';
+
+  @override
+  String get storeMyOrders => 'My orders';
+
+  @override
+  String get storeVerdictSuitable => 'ಸೂಕ್ತವಾಗಿದೆ - ಮುಂದುವರಿಯಿರಿ';
+
+  @override
+  String get storeVerdictNotSuitable => 'ನಿಮಗೆ ಸೂಕ್ತವಲ್ಲ';
+
+  @override
+  String get storeVerdictAlternative => 'ಮತ್ತೇನನ್ನೋ ಸೂಚಿಸುತ್ತಾರೆ';
+
+  @override
+  String get storeConsultCancelled => 'ಕರೆ ಆಗಲಿಲ್ಲ';
+
+  @override
+  String get storeConsultExpired => 'ಯಾವುದೇ ಸಲಹೆಯನ್ನು ಹಂಚಿಕೊಂಡಿಲ್ಲ';
+
+  @override
+  String get storeConsultCallLive => 'Your call is in progress';
+
+  @override
+  String get storeConsultAwaiting => 'Waiting for the astrologer\'s advice';
+
+  @override
+  String storeConsultWith(String name) {
+    return 'with $name';
+  }
+
+  @override
+  String storeVerdictFrom(String name) {
+    return '$name\'s advice';
+  }
+
+  @override
+  String get storeBuyRecommended => 'ಶಿಫಾರಸು ಮಾಡಲಾದ ಆಯ್ಕೆಯನ್ನು ಖರೀದಿಸಿ';
+
+  @override
+  String get storeSuggestedInstead => 'Suggested instead';
+
+  @override
+  String get storeConsultPromptTitle => 'Not sure it suits you?';
+
+  @override
+  String get storeConsultPromptBody =>
+      'ಜ್ಯೋತಿಷಿಗೆ ವೀಡಿಯೊ ಕರೆ ಮಾಡಿ — ನೀವು ಖರೀದಿಸುವ ಮೊದಲು ಅವರು ನಿಮ್ಮ ಚಾರ್ಟ್ ಅನ್ನು ಪರಿಶೀಲಿಸುತ್ತಾರೆ.';
+
+  @override
+  String get storeConsultRequiredTitle => 'Consult an astrologer first';
+
+  @override
+  String get storeConsultRequiredBody =>
+      'ಜ್ಯೋತಿಷಿಯು ನಿಮ್ಮ ಚಾರ್ಟ್‌ಗೆ ಸರಿಹೊಂದುತ್ತದೆ ಎಂದು ಖಚಿತಪಡಿಸಿದ ನಂತರವೇ ಈ ಪರಿಹಾರವನ್ನು ಮಾರಾಟ ಮಾಡಲಾಗುತ್ತದೆ.';
+
+  @override
+  String get storeNoResults => 'Nothing matches';
+
+  @override
+  String get storeNoResultsBody => 'Try another word or clear some filters.';
+
+  @override
+  String get storeClearFilters => 'ಫಿಲ್ಟರ್‌ಗಳನ್ನು ತೆರವುಗೊಳಿಸಿ';
+
+  @override
+  String storeResultCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ಐಟಂಗಳು',
+      one: '1 item',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storeFilters => 'Filters';
+
+  @override
+  String get storeNoFilters => 'No filters for this selection yet.';
+
+  @override
+  String get storeSortBy => 'ವಿಂಗಡಿಸಿ';
+
+  @override
+  String get storeSortRecommended => 'Recommended';
+
+  @override
+  String get storeSortPopular => 'Most popular';
+
+  @override
+  String get storeSortNew => 'Newest';
+
+  @override
+  String get storeSortRating => 'ಟಾಪ್ ರೇಟಿಂಗ್';
+
+  @override
+  String get storeKindProducts => 'Products';
+
+  @override
+  String get storeKindPoojas => 'Poojas';
+
+  @override
+  String get storeKindDigital => 'Reports';
+
+  @override
+  String storeRemedyFor(String key) {
+    return 'ಪರಿಹಾರ: $key';
+  }
+
+  @override
+  String get storeChoosePackage => 'Choose a package';
+
+  @override
+  String get storeChooseOption => 'ಒಂದು ಆಯ್ಕೆಯನ್ನು ಆರಿಸಿ';
+
+  @override
+  String get storePickDate => 'Pick a date';
+
+  @override
+  String get storeSankalpDetails => 'Sankalp details';
+
+  @override
+  String get storeYourDetails => 'ನಿಮ್ಮ ವಿವರಗಳು';
+
+  @override
+  String get storeSankalpHint =>
+      'The priest takes the sankalp in these names during the pooja.';
+
+  @override
+  String get storeCertificate => 'Certificate of authenticity';
+
+  @override
+  String storeCertificateNo(String number) {
+    return 'Certificate no. $number';
+  }
+
+  @override
+  String get storeVerify => 'Verify';
+
+  @override
+  String get storeHighlights => 'Highlights';
+
+  @override
+  String get storeAbout => 'ಬಗ್ಗೆ';
+
+  @override
+  String get storeSignificance => 'Traditional significance';
+
+  @override
+  String get storeHowToUse => 'How to wear / use';
+
+  @override
+  String get storeHowItWorks => 'ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ';
+
+  @override
+  String get storeReadMore => 'Read more';
+
+  @override
+  String get storeReadLess => 'ಕಡಿಮೆ ತೋರಿಸು';
+
+  @override
+  String get storeRecommendedForYou => 'Recommended for you';
+
+  @override
+  String get storeTaxInclusive => 'Inclusive of all taxes';
+
+  @override
+  String get storeOutOfStock => 'Out of stock';
+
+  @override
+  String storeOnlyLeft(int count) {
+    return '$count ಮಾತ್ರ ಉಳಿದಿದೆ';
+  }
+
+  @override
+  String get storeAskAnother => 'Ask another astrologer';
+
+  @override
+  String get storeNoDates => 'Dates will be announced soon.';
+
+  @override
+  String get storeOpenForBooking => 'Open for booking';
+
+  @override
+  String storeSeatsLeft(int count) {
+    return '$count slots left';
+  }
+
+  @override
+  String storeReturnableDays(int days) {
+    return 'Easy returns within $days days of delivery';
+  }
+
+  @override
+  String get storeNotReturnable => 'Not returnable once delivered';
+
+  @override
+  String get storeCancellable => 'Cancel free before it\'s dispatched';
+
+  @override
+  String get storeNotCancellable => 'Can\'t be cancelled once ordered';
+
+  @override
+  String storeMadeToOrder(int days) {
+    return 'Made to order · ready in about $days days';
+  }
+
+  @override
+  String get storeShipsIndia => 'Insured shipping across India';
+
+  @override
+  String get storeVideoProof => 'Video of the pooja shared with you';
+
+  @override
+  String get storeInstantDownload => 'Instant download after payment';
+
+  @override
+  String storeSoldBy(String name) {
+    return 'Sold by $name';
+  }
+
+  @override
+  String get storeSellerInfo => 'Seller & grievance details';
+
+  @override
+  String storeCountryOfOrigin(String country) {
+    return 'Country of origin: $country';
+  }
+
+  @override
+  String get storeGrievanceOfficer => 'Grievance officer';
+
+  @override
+  String storeFieldRequired(String label) {
+    return '$label is required';
+  }
+
+  @override
+  String storeFieldParticipants(String label, int count) {
+    return 'Enter $count $label';
+  }
+
+  @override
+  String get storePickDateError => 'Pick a date for the pooja';
+
+  @override
+  String get storeAddedToCart => 'Added to cart';
+
+  @override
+  String get storeViewCart => 'View cart';
+
+  @override
+  String get storeFixDetails => 'Please check the highlighted details';
+
+  @override
+  String get storeAddToCart => 'Add to cart';
+
+  @override
+  String get storeBuyNow => 'Buy now';
+
+  @override
+  String get storeBookPooja => 'Book pooja';
+
+  @override
+  String get storeConsultFirst => 'Consult first';
+
+  @override
+  String storePersonN(int n) {
+    return 'Person $n';
+  }
+
+  @override
+  String get storeConsultTitle => 'Talk before you buy';
+
+  @override
+  String get storeConsultPick => 'Choose an astrologer';
+
+  @override
+  String get storeConsultNoneTitle => 'No one\'s available right now';
+
+  @override
+  String get storeConsultNoneBody =>
+      'Astrologers who take video calls will show up here. Try again in a little while.';
+
+  @override
+  String get storeConsultBrowseAll => 'Browse all astrologers';
+
+  @override
+  String get storeConsultAbout => 'Consultation about';
+
+  @override
+  String get storeConsultVideoPerMinute => 'Video call · billed per minute';
+
+  @override
+  String get storeConsultOffer => 'Offer applied';
+
+  @override
+  String get storeConsultStep1 => 'Video call an astrologer';
+
+  @override
+  String get storeConsultStep2 => 'They check your chart and advise';
+
+  @override
+  String get storeConsultStep3 => 'Buy what\'s right for you';
+
+  @override
+  String get storePresenceOnline => 'Online';
+
+  @override
+  String get storePresenceBusy => 'In a call';
+
+  @override
+  String get storePresenceOffline => 'Offline';
+
+  @override
+  String get storeSpecialist => 'Specialist';
+
+  @override
+  String storeYearsExp(int years) {
+    return '$years yrs';
+  }
+
+  @override
+  String storePerMinute(String price) {
+    return '$price/min';
+  }
+
+  @override
+  String get storeCall => 'Call';
+
+  @override
+  String storeConsultConfirmTitle(String name) {
+    return 'Video call $name';
+  }
+
+  @override
+  String get storeConsultQuestion => 'What would you like to ask?';
+
+  @override
+  String storeConsultSharingChart(String name) {
+    return 'Sharing $name\'s birth chart with the astrologer';
+  }
+
+  @override
+  String storeConsultHoldNote(String rate, String hold) {
+    return '$rate per minute from your wallet. $hold is held when the call starts; you only pay for the minutes you talk.';
+  }
+
+  @override
+  String get storeConsultStartCall => 'Start video call';
+
+  @override
+  String get storeConsultLowBalance =>
+      'Add money to your wallet to start the call';
+
+  @override
+  String storeConsultBusy(String name) {
+    return '$name just got busy — try another astrologer';
+  }
+
+  @override
+  String storeConsultOffline(String name) {
+    return '$name went offline';
+  }
+
+  @override
+  String get storeAdviceTitle => 'Astrologer advice';
+
+  @override
+  String get storeAdviceEmptyTitle => 'No advice yet';
+
+  @override
+  String get storeAdviceEmptyBody =>
+      'Ask an astrologer about a remedy from any product page.';
+
+  @override
+  String get storeExplore => 'Explore the store';
+
+  @override
+  String get storeOpenCall => 'Open call';
+
+  @override
+  String get storeYourQuestion => 'Your question';
+
+  @override
+  String get storeVideoCall => 'Video call';
+
+  @override
+  String get storeRequired => 'Required';
+
+  @override
+  String get storeAddAddress => 'Add address';
+
+  @override
+  String get storeEditAddress => 'Edit address';
+
+  @override
+  String get storeAddressesTitle => 'Saved addresses';
+
+  @override
+  String get storeNoAddressesTitle => 'No saved addresses';
+
+  @override
+  String get storeNoAddressesBody =>
+      'Add a delivery address to get products shipped to you.';
+
+  @override
+  String get storeDefault => 'Default';
+
+  @override
+  String get storeEdit => 'Edit';
+
+  @override
+  String get storeDelete => 'Delete';
+
+  @override
+  String get storeMakeDefault => 'Make default';
+
+  @override
+  String get storeChange => 'Change';
+
+  @override
+  String get storeLabelHome => 'Home';
+
+  @override
+  String get storeLabelWork => 'Work';
+
+  @override
+  String get storeLabelOther => 'Other';
+
+  @override
+  String get storeFullName => 'Full name';
+
+  @override
+  String get storePhone => 'Mobile number';
+
+  @override
+  String get storePhoneInvalid => 'Enter a valid 10-digit mobile number';
+
+  @override
+  String get storeLine1 => 'House no., building, street';
+
+  @override
+  String get storeLine2 => 'Area, colony (optional)';
+
+  @override
+  String get storeLandmark => 'Landmark (optional)';
+
+  @override
+  String get storeCity => 'City';
+
+  @override
+  String get storePincode => 'PIN code';
+
+  @override
+  String get storePincodeInvalid => 'Enter a valid 6-digit PIN';
+
+  @override
+  String get storeState => 'State';
+
+  @override
+  String get storeGstinOptional => 'GSTIN (optional)';
+
+  @override
+  String get storeGstinHelp =>
+      'Add it to claim input tax credit on the invoice';
+
+  @override
+  String get storeGstinInvalid => 'GSTIN has 15 characters';
+
+  @override
+  String get storeSaveAddress => 'Save address';
+
+  @override
+  String get storeCheckout => 'Checkout';
+
+  @override
+  String get storeCartEmptyTitle => 'Your cart is empty';
+
+  @override
+  String get storeCartEmptyBody =>
+      'Rudraksha, gemstones, yantras and poojas — find what your chart needs.';
+
+  @override
+  String get storeCartTaxNote =>
+      'Prices include GST. Shipping is calculated at checkout.';
+
+  @override
+  String storeItemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items',
+      one: '1 item',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storeRemove => 'Remove';
+
+  @override
+  String get storeDeliverTo => 'Deliver to';
+
+  @override
+  String get storeOrderSummary => 'Order summary';
+
+  @override
+  String get storeBillDetails => 'Bill details';
+
+  @override
+  String get storeSubtotal => 'Item total';
+
+  @override
+  String get storeShipping => 'Shipping';
+
+  @override
+  String storeShippingAmount(String amount) {
+    return 'Shipping $amount';
+  }
+
+  @override
+  String get storeFree => 'Free';
+
+  @override
+  String get storeGrandTotal => 'Total';
+
+  @override
+  String storeTaxIncluded(String amount) {
+    return 'Includes $amount GST';
+  }
+
+  @override
+  String get storePaidFromWallet => 'From wallet';
+
+  @override
+  String get storePaidOnline => 'Paid online';
+
+  @override
+  String get storeToPayNow => 'To pay';
+
+  @override
+  String get storeUseWallet => 'Use wallet balance';
+
+  @override
+  String storeWalletAvailable(String amount) {
+    return '$amount available';
+  }
+
+  @override
+  String get storeOrderNote => 'Note for the seller (optional)';
+
+  @override
+  String get storeCheckoutTrust =>
+      'Secure payment. Certified products. Returns on damaged or wrong items.';
+
+  @override
+  String get storePlaceOrder => 'Place order';
+
+  @override
+  String get storePayNow => 'Pay now';
+
+  @override
+  String storePayAmount(String amount) {
+    return 'Pay $amount';
+  }
+
+  @override
+  String get storePayDescription => 'Remedies store order';
+
+  @override
+  String storeDeliveryDays(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'In $days days',
+      one: 'In 1 day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String storeDeliveryDaysRange(int min, int max) {
+    return '$min–$max days';
+  }
+
+  @override
+  String get storePaymentCancelled =>
+      'Payment cancelled. Your order is saved — pay before it expires.';
+
+  @override
+  String get storePaymentFailed => 'Payment didn\'t go through. Try again.';
+
+  @override
+  String get storePaymentDone => 'Payment received';
+
+  @override
+  String get storePaymentConfirming =>
+      'We\'re confirming your payment. This can take a minute.';
+
+  @override
+  String get storePaymentPendingTitle => 'Payment pending';
+
+  @override
+  String get storePaymentPendingBody =>
+      'Items are held for you until the timer runs out. Any wallet amount is refunded if the order expires.';
+
+  @override
+  String get storeOrdersTitle => 'My orders';
+
+  @override
+  String get storeOrderTitle => 'Order';
+
+  @override
+  String storeOrderNumber(String number) {
+    return 'Order #$number';
+  }
+
+  @override
+  String storeItemAndMore(String title, int count) {
+    return '$title + $count more';
+  }
+
+  @override
+  String get storeTabAll => 'All orders';
+
+  @override
+  String get storeTabPoojas => 'Poojas';
+
+  @override
+  String get storeNoOrdersTitle => 'No orders yet';
+
+  @override
+  String get storeNoOrdersBody =>
+      'Products and poojas you buy will show up here.';
+
+  @override
+  String get storeNoPoojasTitle => 'No poojas booked';
+
+  @override
+  String get storeNoPoojasBody =>
+      'Book a pooja at a temple in your name — you\'ll get the video once it\'s done.';
+
+  @override
+  String get storeBrowsePoojas => 'Browse poojas';
+
+  @override
+  String get storeDateToBeAnnounced => 'Date to be announced';
+
+  @override
+  String get storeVideoReady => 'Video ready';
+
+  @override
+  String get storeWatchPooja => 'Watch pooja';
+
+  @override
+  String get storeOrderPendingPayment => 'Payment pending';
+
+  @override
+  String get storeOrderPaid => 'Confirmed';
+
+  @override
+  String get storeOrderCompleted => 'Completed';
+
+  @override
+  String get storeOrderCancelled => 'Cancelled';
+
+  @override
+  String get storeOrderExpired => 'Expired';
+
+  @override
+  String get storeOrderRefunded => 'Refunded';
+
+  @override
+  String get storeStagePending => 'Pending';
+
+  @override
+  String get storeStageAwaitingApproval => 'Awaiting seller';
+
+  @override
+  String get storeStageConfirmed => 'Confirmed';
+
+  @override
+  String get storeStageProcessing => 'Packing';
+
+  @override
+  String get storeStageShipped => 'Shipped';
+
+  @override
+  String get storeStageDelivered => 'Delivered';
+
+  @override
+  String get storeStageCompleted => 'Completed';
+
+  @override
+  String get storeStageCancelled => 'Cancelled';
+
+  @override
+  String get storeStageReturned => 'Returned';
+
+  @override
+  String get storeBookingConfirmed => 'Booked';
+
+  @override
+  String get storeBookingPerformed => 'Performed';
+
+  @override
+  String get storeBookingProofReady => 'Video shared';
+
+  @override
+  String get storeShipCreated => 'Ready to ship';
+
+  @override
+  String get storeShipPickedUp => 'Picked up';
+
+  @override
+  String get storeShipInTransit => 'In transit';
+
+  @override
+  String get storeShipOutForDelivery => 'Out for delivery';
+
+  @override
+  String get storeShipAttemptFailed => 'Delivery attempt failed';
+
+  @override
+  String get storeShipReturning => 'Returning to seller';
+
+  @override
+  String get storeShipLost => 'Shipment issue — we\'re on it';
+
+  @override
+  String storeAwb(String awb) {
+    return 'AWB $awb';
+  }
+
+  @override
+  String get storeTrack => 'Track';
+
+  @override
+  String storeQty(int count) {
+    return 'Qty $count';
+  }
+
+  @override
+  String storePlacedOn(String date) {
+    return 'Placed $date';
+  }
+
+  @override
+  String get storeOrderPlacedTitle => 'Order placed!';
+
+  @override
+  String get storeOrderPlacedBody =>
+      'We\'ll keep you posted as it\'s packed and shipped.';
+
+  @override
+  String get storeOrderPlacedPooja =>
+      'Your pooja is booked. You\'ll get the video once it\'s performed.';
+
+  @override
+  String get storeCancelOrder => 'Cancel order';
+
+  @override
+  String get storeCancelThisPart => 'Cancel these items';
+
+  @override
+  String get storeCancelOrderQ => 'Cancel this order?';
+
+  @override
+  String storeCancelPartQ(String seller) {
+    return 'Cancel items from $seller?';
+  }
+
+  @override
+  String get storeCancelReasonHint => 'Tell us why (optional)';
+
+  @override
+  String get storeCancel => 'Cancel';
+
+  @override
+  String get storeKeep => 'Keep';
+
+  @override
+  String get storeCancelled => 'Cancelled. Any refund goes back automatically.';
+
+  @override
+  String get storeRefunds => 'Refunds';
+
+  @override
+  String get storeRefunded => 'Refunded';
+
+  @override
+  String storeRefundedAmount(String amount) {
+    return '$amount refunded';
+  }
+
+  @override
+  String storeRefundToWallet(String amount) {
+    return '$amount to wallet';
+  }
+
+  @override
+  String storeRefundToSource(String amount) {
+    return '$amount to your bank / card';
+  }
+
+  @override
+  String get storeInvoices => 'Invoices';
+
+  @override
+  String storeTaxInvoice(String number) {
+    return 'Tax invoice $number';
+  }
+
+  @override
+  String storeCreditNote(String number) {
+    return 'Credit note $number';
+  }
+
+  @override
+  String get storeDownload => 'Download';
+
+  @override
+  String get storeDownloadFailed => 'Couldn\'t open the file. Try again.';
+
+  @override
+  String get storeNoProducts => 'Nothing here yet';
+
+  @override
+  String get storeReturnItem => 'Return item';
+
+  @override
+  String storeReturnUntil(String date) {
+    return 'Return by $date';
+  }
+
+  @override
+  String get storeReturnWhy => 'Why are you returning it?';
+
+  @override
+  String get storeReturnDetails => 'Details (helps us resolve it faster)';
+
+  @override
+  String get storeReturnNote =>
+      'Keep the item and its certificate in original packaging. Pickup is arranged once the seller approves.';
+
+  @override
+  String get storeReturnSubmit => 'Request return';
+
+  @override
+  String get storeReturnPickReason => 'Pick a reason';
+
+  @override
+  String get storeReturnRequested =>
+      'Return requested. We\'ll update you soon.';
+
+  @override
+  String get storeReasonDamaged => 'Arrived damaged';
+
+  @override
+  String get storeReasonWrongItem => 'Wrong item';
+
+  @override
+  String get storeReasonNotAsDescribed => 'Not as described';
+
+  @override
+  String get storeReasonAuthenticity => 'Doubt about authenticity';
+
+  @override
+  String get storeReasonSize => 'Size doesn\'t fit';
+
+  @override
+  String get storeReasonChangedMind => 'Changed my mind';
+
+  @override
+  String get storeReasonOther => 'Other';
+
+  @override
+  String get storeProfileOrders => 'Store orders';
+
+  @override
+  String get storeProfileOrdersSub => 'Products, poojas and downloads';
+
+  @override
+  String get storeProfileAdviceSub => 'What astrologers said about products';
+
+  @override
+  String get storeProfileAddressesSub => 'Delivery addresses';
+
+  @override
+  String get storeHomeRailTitle => 'Remedies store';
+
+  @override
+  String get storeHomeRailSub =>
+      'Certified rudraksha, gemstones and temple poojas';
+
+  @override
+  String get storeSeeAll => 'See all';
 }
