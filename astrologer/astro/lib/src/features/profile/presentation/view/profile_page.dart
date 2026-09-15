@@ -35,7 +35,16 @@ class ProfilePage extends StatelessWidget {
               user?.shortName ?? '—',
               style: const TextStyle(fontWeight: FontWeight.w700),
             ),
-            subtitle: Text(profile?.headline ?? user?.phone ?? ''),
+            subtitle: Text(
+              [
+                if ((profile?.headline ?? '').isNotEmpty)
+                  profile!.headline
+                else
+                  user?.phone ?? '',
+                if ((profile?.followersCount ?? 0) > 0)
+                  '${profile!.followersCount} followers',
+              ].join(' · '),
+            ),
             trailing: profile != null && profile.ratingCount > 0
                 ? Row(
                     mainAxisSize: MainAxisSize.min,

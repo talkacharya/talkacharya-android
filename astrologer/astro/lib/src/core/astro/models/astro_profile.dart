@@ -80,6 +80,7 @@ class AstroProfile {
     required this.ratingAvg,
     required this.ratingCount,
     required this.consultationsCount,
+    this.followersCount = 0,
     required this.skills,
     required this.languages,
     required this.rates,
@@ -102,6 +103,10 @@ class AstroProfile {
   final double ratingAvg;
   final int ratingCount;
   final int consultationsCount;
+
+  /// Customers following this astrologer — they get a push when you come
+  /// online or go live.
+  final int followersCount;
   final List<AstroSkill> skills;
   final List<String> languages;
   final List<AstroRate> rates;
@@ -126,6 +131,7 @@ class AstroProfile {
     ratingAvg: (j['rating_avg'] as num?)?.toDouble() ?? 0,
     ratingCount: (j['rating_count'] as num?)?.toInt() ?? 0,
     consultationsCount: (j['consultations_count'] as num?)?.toInt() ?? 0,
+    followersCount: (j['followers_count'] as num?)?.toInt() ?? 0,
     skills: (j['skills'] as List? ?? const [])
         .map((e) => AstroSkill.fromJson((e as Map).cast<String, dynamic>()))
         .toList(),

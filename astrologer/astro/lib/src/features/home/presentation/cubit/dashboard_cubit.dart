@@ -14,6 +14,7 @@ class DashboardData {
     this.availableToPay = '0',
     this.currency = 'INR',
     this.incomingCount = 0,
+    this.followersCount = 0,
   });
   final bool loading;
   final int requested;
@@ -24,6 +25,7 @@ class DashboardData {
   final String availableToPay;
   final String currency;
   final int incomingCount;
+  final int followersCount;
 
   DashboardData copyWith({
     bool? loading,
@@ -35,6 +37,7 @@ class DashboardData {
     String? availableToPay,
     String? currency,
     int? incomingCount,
+    int? followersCount,
   }) => DashboardData(
     loading: loading ?? this.loading,
     requested: requested ?? this.requested,
@@ -45,6 +48,7 @@ class DashboardData {
     availableToPay: availableToPay ?? this.availableToPay,
     currency: currency ?? this.currency,
     incomingCount: incomingCount ?? this.incomingCount,
+    followersCount: followersCount ?? this.followersCount,
   );
 }
 
@@ -62,6 +66,7 @@ class DashboardCubit extends Cubit<DashboardData> {
         ),
         _dio.get<Map<String, dynamic>>(ApiPaths.astroEarnings),
         _dio.get<dynamic>(ApiPaths.astroConsultationRequests),
+        _dio.get<Map<String, dynamic>>(ApiPaths.astroProfile),
       ]);
       final dash = results[0].data as Map<String, dynamic>? ?? const {};
       final cons = (dash['consultations'] as Map?) ?? const {};
@@ -70,6 +75,7 @@ class DashboardCubit extends Cubit<DashboardData> {
           ((results[1].data as Map?)?['by_currency'] as List?) ?? const [];
       final first = earn.isNotEmpty ? (earn.first as Map) : const {};
       final incoming = (results[2].data as List?) ?? const [];
+      final profile = results[3].data as Map<String, dynamic>? ?? const {};
 
       emit(
         DashboardData(
@@ -82,6 +88,7 @@ class DashboardCubit extends Cubit<DashboardData> {
           availableToPay: '${first['available_to_pay'] ?? '0'}',
           currency: '${first['currency'] ?? 'INR'}',
           incomingCount: incoming.length,
+          followersCount: (profile['followers_count'] as num?)?.toInt() ?? 0,
         ),
       );
     } catch (_) {

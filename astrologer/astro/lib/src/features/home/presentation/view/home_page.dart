@@ -107,6 +107,18 @@ class _HomeView extends StatelessWidget {
                 const SizedBox(height: 12),
                 Card(
                   child: ListTile(
+                    leading: const Icon(Icons.favorite_rounded),
+                    title: Text(
+                      '${d.followersCount} follower${d.followersCount == 1 ? '' : 's'}',
+                    ),
+                    subtitle: const Text(
+                      "They're notified when you come online or go live",
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Card(
+                  child: ListTile(
                     leading: const Icon(Icons.account_balance_wallet_rounded),
                     title: const Text('Available to pay out'),
                     subtitle: Text('${d.currency} ${d.availableToPay}'),
