@@ -55,14 +55,17 @@ class OnboardingStore extends ChangeNotifier {
 
   Future<void> refresh() async {
     try {
-      final res = await _dio.get<Map<String, dynamic>>(ApiPaths.astroOnboarding);
+      final res = await _dio.get<Map<String, dynamic>>(
+        ApiPaths.astroOnboarding,
+      );
       if (res.statusCode == 200 && res.data != null) {
         _profile = AstroProfile.fromJson(res.data!);
-        _stage = _stageFor(_profile!.status, _profile!.gaps, _profile!.hasProfile);
-        await _storage.write(
-          key: _key,
-          value: _profile!.status.name,
+        _stage = _stageFor(
+          _profile!.status,
+          _profile!.gaps,
+          _profile!.hasProfile,
         );
+        await _storage.write(key: _key, value: _profile!.status.name);
       }
     } on DioException catch (e) {
       // 403 => not an astrologer account; keep any cached stage on a network error
@@ -96,13 +99,12 @@ class OnboardingStore extends ChangeNotifier {
     return switch (status) {
       OnboardingStatus.approved => OnboardingStage.approved,
       OnboardingStatus.submitted ||
-      OnboardingStatus.underReview =>
-        OnboardingStage.underReview,
+      OnboardingStatus.underReview => OnboardingStage.underReview,
       OnboardingStatus.suspended => OnboardingStage.suspended,
-      OnboardingStatus.draft || OnboardingStatus.rejected => OnboardingStage.wizard,
+      OnboardingStatus.draft ||
+      OnboardingStatus.rejected => OnboardingStage.wizard,
       OnboardingStatus.unknown =>
         hasProfile ? OnboardingStage.wizard : OnboardingStage.notAstrologer,
     };
   }
-
 }

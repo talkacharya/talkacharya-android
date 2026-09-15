@@ -8,9 +8,13 @@ import '../../features/consultations/presentation/view/consultation_room_page.da
 import '../../features/earnings/presentation/view/earnings_page.dart';
 import '../../features/earnings/presentation/view/payout_detail_page.dart';
 import '../../features/home/presentation/view/home_page.dart';
+import '../../features/kundali/presentation/view/chart_detail_page.dart';
+import '../../features/kundali/presentation/view/consultation_kundali_page.dart';
 import '../../features/notifications/presentation/view/notifications_page.dart';
 import '../../features/onboarding/presentation/view/onboarding_gate_page.dart';
 import '../../features/onboarding/presentation/view/wizard_page.dart';
+import '../../features/predictions/presentation/view/prediction_work_page.dart';
+import '../../features/predictions/presentation/view/predictions_queue_page.dart';
 import '../../features/profile/presentation/view/edit_profile_page.dart';
 import '../../features/profile/presentation/view/kyc_page.dart';
 import '../../features/profile/presentation/view/profile_page.dart';
@@ -78,9 +82,7 @@ GoRouter buildRouter(
         path: Routes.onboarding,
         parentNavigatorKey: _rootKey,
         builder: (_, _) => const OnboardingGatePage(),
-        routes: [
-          _leaf('wizard', (_) => const WizardPage()),
-        ],
+        routes: [_leaf('wizard', (_) => const WizardPage())],
       ),
 
       GoRoute(
@@ -101,9 +103,36 @@ GoRouter buildRouter(
             RequestDetailPage(consultationId: s.pathParameters['id']!),
       ),
       GoRoute(
+        path: '/consultations/:id/kundali',
+        parentNavigatorKey: _rootKey,
+        builder: (_, s) => ConsultationKundaliPage(
+          consultationId: s.pathParameters['id']!,
+          clientName: s.extra is String ? s.extra as String : null,
+        ),
+      ),
+      GoRoute(
+        path: '/consultations/:id/kundali/chart/:type',
+        parentNavigatorKey: _rootKey,
+        builder: (_, s) => ChartDetailPage(
+          consultationId: s.pathParameters['id']!,
+          type: s.pathParameters['type']!,
+        ),
+      ),
+      GoRoute(
         path: '/earnings/payouts/:id',
         parentNavigatorKey: _rootKey,
         builder: (_, s) => PayoutDetailPage(payoutId: s.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/predictions',
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const PredictionsQueuePage(),
+      ),
+      GoRoute(
+        path: '/predictions/:id',
+        parentNavigatorKey: _rootKey,
+        builder: (_, s) =>
+            PredictionWorkPage(id: s.pathParameters['id']!),
       ),
 
       StatefulShellRoute.indexedStack(

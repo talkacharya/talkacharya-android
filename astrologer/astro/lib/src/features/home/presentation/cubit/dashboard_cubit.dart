@@ -35,18 +35,17 @@ class DashboardData {
     String? availableToPay,
     String? currency,
     int? incomingCount,
-  }) =>
-      DashboardData(
-        loading: loading ?? this.loading,
-        requested: requested ?? this.requested,
-        completed: completed ?? this.completed,
-        acceptanceRate: acceptanceRate ?? this.acceptanceRate,
-        ratingAvg: ratingAvg ?? this.ratingAvg,
-        ratingCount: ratingCount ?? this.ratingCount,
-        availableToPay: availableToPay ?? this.availableToPay,
-        currency: currency ?? this.currency,
-        incomingCount: incomingCount ?? this.incomingCount,
-      );
+  }) => DashboardData(
+    loading: loading ?? this.loading,
+    requested: requested ?? this.requested,
+    completed: completed ?? this.completed,
+    acceptanceRate: acceptanceRate ?? this.acceptanceRate,
+    ratingAvg: ratingAvg ?? this.ratingAvg,
+    ratingCount: ratingCount ?? this.ratingCount,
+    availableToPay: availableToPay ?? this.availableToPay,
+    currency: currency ?? this.currency,
+    incomingCount: incomingCount ?? this.incomingCount,
+  );
 }
 
 class DashboardCubit extends Cubit<DashboardData> {
@@ -57,29 +56,34 @@ class DashboardCubit extends Cubit<DashboardData> {
     emit(state.copyWith(loading: true));
     try {
       final results = await Future.wait([
-        _dio.get<Map<String, dynamic>>(ApiPaths.astroAnalytics,
-            queryParameters: {'days': 7}),
+        _dio.get<Map<String, dynamic>>(
+          ApiPaths.astroAnalytics,
+          queryParameters: {'days': 7},
+        ),
         _dio.get<Map<String, dynamic>>(ApiPaths.astroEarnings),
         _dio.get<dynamic>(ApiPaths.astroConsultationRequests),
       ]);
       final dash = results[0].data as Map<String, dynamic>? ?? const {};
       final cons = (dash['consultations'] as Map?) ?? const {};
       final rating = (dash['rating'] as Map?) ?? const {};
-      final earn = ((results[1].data as Map?)?['by_currency'] as List?) ?? const [];
+      final earn =
+          ((results[1].data as Map?)?['by_currency'] as List?) ?? const [];
       final first = earn.isNotEmpty ? (earn.first as Map) : const {};
       final incoming = (results[2].data as List?) ?? const [];
 
-      emit(DashboardData(
-        loading: false,
-        requested: (cons['requested'] as num?)?.toInt() ?? 0,
-        completed: (cons['completed'] as num?)?.toInt() ?? 0,
-        acceptanceRate: (cons['acceptance_rate'] as num?)?.toDouble() ?? 0,
-        ratingAvg: (rating['avg'] as num?)?.toDouble() ?? 0,
-        ratingCount: (rating['count'] as num?)?.toInt() ?? 0,
-        availableToPay: '${first['available_to_pay'] ?? '0'}',
-        currency: '${first['currency'] ?? 'INR'}',
-        incomingCount: incoming.length,
-      ));
+      emit(
+        DashboardData(
+          loading: false,
+          requested: (cons['requested'] as num?)?.toInt() ?? 0,
+          completed: (cons['completed'] as num?)?.toInt() ?? 0,
+          acceptanceRate: (cons['acceptance_rate'] as num?)?.toDouble() ?? 0,
+          ratingAvg: (rating['avg'] as num?)?.toDouble() ?? 0,
+          ratingCount: (rating['count'] as num?)?.toInt() ?? 0,
+          availableToPay: '${first['available_to_pay'] ?? '0'}',
+          currency: '${first['currency'] ?? 'INR'}',
+          incomingCount: incoming.length,
+        ),
+      );
     } catch (_) {
       emit(state.copyWith(loading: false));
     }

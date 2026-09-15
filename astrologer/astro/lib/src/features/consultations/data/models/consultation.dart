@@ -37,23 +37,32 @@ class Consultation {
   bool get isLive => status == 'active' || status == 'accepted';
   bool get isRequested => status == 'requested';
   bool get isEnded => status == 'ended';
+  bool get isCall => channel != 'chat';
+  bool get isTerminal => const {
+    'ended',
+    'rejected',
+    'cancelled',
+    'expired',
+    'no_show',
+    'failed',
+  }.contains(status);
   int get billedMinutes => (billedSeconds / 60).ceil();
 
   factory Consultation.fromJson(Map<String, dynamic> j) => Consultation(
-        id: j['id']?.toString() ?? '',
-        channel: j['channel'] as String? ?? 'chat',
-        status: j['status'] as String? ?? 'requested',
-        customerName: j['customer_name'] as String? ?? 'Customer',
-        question: j['question'] as String? ?? '',
-        rateSnapshot: '${j['rate_snapshot'] ?? '0'}',
-        currency: j['currency'] as String? ?? 'INR',
-        billedSeconds: (j['billed_seconds'] as num?)?.toInt() ?? 0,
-        grossAmount: '${j['gross_amount'] ?? '0'}',
-        astrologerAmount: '${j['astrologer_amount'] ?? '0'}',
-        runwaySeconds: (j['runway_seconds'] as num?)?.toInt() ?? 0,
-        unreadCount: (j['unread_count'] as num?)?.toInt() ?? 0,
-        requestedAt: DateTime.tryParse('${j['requested_at'] ?? ''}'),
-        endedAt: DateTime.tryParse('${j['ended_at'] ?? ''}'),
-        rating: (j['rating'] as num?)?.toInt(),
-      );
+    id: j['id']?.toString() ?? '',
+    channel: j['channel'] as String? ?? 'chat',
+    status: j['status'] as String? ?? 'requested',
+    customerName: j['customer_name'] as String? ?? 'Customer',
+    question: j['question'] as String? ?? '',
+    rateSnapshot: '${j['rate_snapshot'] ?? '0'}',
+    currency: j['currency'] as String? ?? 'INR',
+    billedSeconds: (j['billed_seconds'] as num?)?.toInt() ?? 0,
+    grossAmount: '${j['gross_amount'] ?? '0'}',
+    astrologerAmount: '${j['astrologer_amount'] ?? '0'}',
+    runwaySeconds: (j['runway_seconds'] as num?)?.toInt() ?? 0,
+    unreadCount: (j['unread_count'] as num?)?.toInt() ?? 0,
+    requestedAt: DateTime.tryParse('${j['requested_at'] ?? ''}'),
+    endedAt: DateTime.tryParse('${j['ended_at'] ?? ''}'),
+    rating: (j['rating'] as num?)?.toInt(),
+  );
 }

@@ -1,0 +1,2600 @@
+{
+  "@@locale": "en",
+  "appName": "TalkAcharya",
+  "commonOk": "OK",
+  "commonCancel": "Cancel",
+  "commonDone": "Done",
+  "commonNext": "Next",
+  "commonBack": "Back",
+  "commonRetry": "Retry",
+  "commonSave": "Save",
+  "commonEdit": "Edit",
+  "commonDelete": "Delete",
+  "commonClose": "Close",
+  "commonContinue": "Continue",
+  "commonConfirm": "Confirm",
+  "commonSeeAll": "See all",
+  "commonViewAll": "View all",
+  "commonShare": "Share",
+  "commonCopy": "Copy",
+  "commonCopied": "Copied",
+  "commonApply": "Apply",
+  "commonSearch": "Search",
+  "commonYes": "Yes",
+  "commonNo": "No",
+  "commonLoading": "Loading…",
+  "commonSomethingWentWrong": "Something went wrong",
+  "commonCheckConnection": "Check your internet connection and try again",
+  "commonComingSoon": "Coming soon",
+  "commonToday": "Today",
+  "commonYesterday": "Yesterday",
+  "commonMinutesShort": "{count} min",
+  "@commonMinutesShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonOffline": "You are offline",
+  "navHome": "Home",
+  "navAstrologers": "Astrologers",
+  "navLive": "Live",
+  "navWallet": "Wallet",
+  "navProfile": "Profile",
+  "authWelcomeTitle": "Talk to trusted astrologers",
+  "authWelcomeSubtitle": "Chat or call for guidance on love, career, money and more",
+  "authPhoneTitle": "Enter your mobile number",
+  "authPhoneSubtitle": "Enter your mobile number and we'll send you a one-time code.",
+  "authOtpSubtitle": "We sent a 6-digit code to {phone}.",
+  "@authOtpSubtitle": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "authTestModeCode": "Test mode — your code is {code}",
+  "@authTestModeCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "authPhoneHint": "Mobile number",
+  "authPhoneHelper": "We will send a one-time code by SMS",
+  "authGetOtp": "Get OTP",
+  "authOtpTitle": "Enter the 6-digit code",
+  "authOtpSentTo": "Sent to {phone}",
+  "@authOtpSentTo": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "authOtpResend": "Resend code",
+  "authOtpResendIn": "Resend in {seconds}s",
+  "@authOtpResendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authVerify": "Verify",
+  "authChangeNumber": "Change number",
+  "authInvalidPhone": "Enter a valid mobile number",
+  "authInvalidOtp": "Enter the 6-digit code",
+  "authWrongApp": "This number is registered for the astrologer app",
+  "authDevCode": "Dev code: {code}",
+  "@authDevCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "authTermsNotice": "By continuing you agree to our Terms and Privacy Policy",
+  "authLogout": "Log out",
+  "authLogoutConfirm": "Log out of TalkAcharya? You will need to sign in again.",
+  "homeGreeting": "Namaste, {name}",
+  "@homeGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGuidanceTagline": "Guidance, whenever you need it",
+  "homeGreetingFallbackName": "there",
+  "walletAddShort": "Add",
+  "homeChatNow": "Chat now",
+  "homeCallNow": "Call now",
+  "homeFromPerMin": "from {price}/min",
+  "@homeFromPerMin": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "homeOnlineCount": "{count} online",
+  "@homeOnlineCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeOnlineNow": "Online now",
+  "homeTalkToAstrologer": "Talk to an astrologer",
+  "homeLiveNow": "Live now",
+  "homeWhatsOnYourMind": "What's on your mind?",
+  "homeTodaysHoroscope": "Today's horoscope",
+  "homeChooseYourSign": "Choose your sign",
+  "homeReadMore": "Read more",
+  "homeShowLess": "Show less",
+  "homeLuckToday": "Luck today · {rating}",
+  "@homeLuckToday": {
+    "placeholders": {
+      "rating": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTodaysPanchang": "Today's Panchang",
+  "homePanchangAddProfile": "Add your birth details for a Panchang tuned to your place",
+  "homeFreeTools": "Free tools",
+  "homeTalkAgain": "Talk again",
+  "homeAddMoneyGetBonus": "Add money, get bonus",
+  "homeReferAFriend": "Refer a friend, both earn",
+  "homeReferShort": "Share your code — you both get wallet credit",
+  "homeReferYourCode": "Your code: {code}",
+  "@homeReferYourCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "homeInvite": "Invite",
+  "homeResumeInProgress": "{channel} · in progress",
+  "@homeResumeInProgress": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
+  "homeResumePaused": "{channel} · paused",
+  "@homeResumePaused": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
+  "homeResume": "Resume",
+  "homeTrustVerified": "Every astrologer is ID-verified before they go live",
+  "homeTrustPrivate": "100% private and confidential consultations",
+  "homeTrustVolume": "Thousands of consultations every week",
+  "homeCouldntLoadAstrologers": "Couldn't load astrologers",
+  "homeCouldntLoadReading": "Couldn't fetch today's reading",
+  "homeCouldntLoadPanchang": "Couldn't load the Panchang",
+  "homeNoAstrologersFilter": "No astrologers match this filter right now",
+  "concernLove": "Love",
+  "concernMarriage": "Marriage",
+  "concernCareer": "Career",
+  "concernFinance": "Finance",
+  "concernHealth": "Health",
+  "concernEducation": "Education",
+  "concernBusiness": "Business",
+  "concernLegal": "Legal",
+  "channelChat": "Chat",
+  "channelCall": "Call",
+  "channelVoice": "Voice call",
+  "channelVideo": "Video call",
+  "channelAll": "All",
+  "astroFilterAll": "All",
+  "astroSortRecommended": "Recommended",
+  "astroSortTopRated": "Top rated",
+  "astroSortExperienced": "Most experienced",
+  "astroSortConsulted": "Most consulted",
+  "astroSortNew": "New here",
+  "astroOnline": "Online",
+  "astroBusy": "Busy",
+  "astroNotifyMe": "Notify me",
+  "astroWaitMinutes": "~{count} min wait",
+  "@astroWaitMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "astroPerMinute": "{price}/min",
+  "@astroPerMinute": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "astroYearsExp": "{count} yrs exp",
+  "@astroYearsExp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "astroRatingNew": "New",
+  "astroSessionsCount": "{count} sessions",
+  "@astroSessionsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "astroSearchHint": "Search by name, skill or language",
+  "astroNoneFound": "No astrologers found",
+  "astroNoneFoundHint": "Try removing a filter or searching for something else",
+  "astroThatsEveryone": "That's everyone for now",
+  "astroRateOnRequest": "Rate on request",
+  "astroCouldntLoad": "Couldn't load astrologers",
+  "astroSortBy": "Sort by",
+  "astroLoadMoreFailed": "Couldn't load more",
+  "astroDefaultSkill": "Vedic astrology",
+  "astroYears": "{count} yrs",
+  "@astroYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "astroSessions": "{count} sessions",
+  "@astroSessions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "astroChat": "Chat",
+  "astroCall": "Call",
+  "astroVideo": "Video",
+  "astroProfileTitle": "Astrologer",
+  "astroExpertiseTitle": "Expertise",
+  "astroAboutTitle": "About",
+  "astroRatesTitle": "Consultation rates",
+  "astroReviewsCount": "{count, plural, =0{No reviews yet} one{1 review} other{{count} reviews}}",
+  "@astroReviewsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "astroStatRating": "Rating",
+  "astroStatExperience": "Experience",
+  "astroStatSessions": "Sessions",
+  "astroStatRepeatClients": "Repeat clients",
+  "astroSpeaks": "Speaks {languages}",
+  "@astroSpeaks": {
+    "placeholders": {
+      "languages": {
+        "type": "String"
+      }
+    }
+  },
+  "astroRepliesIn": "Replies in ~{time}",
+  "@astroRepliesIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "astroOnlineNow": "Online now",
+  "astroOfflineTitle": "Currently offline",
+  "astroNotifyWhenOnline": "Notify me when online",
+  "astroReadMore": "Read more",
+  "astroReadLess": "Show less",
+  "astroCouldntLoadOne": "Couldn't load this astrologer",
+  "astroCallsComingSoon": "Voice & video calls are coming soon",
+  "astroTrustLine": "ID-verified · Private & confidential · Pay by the minute",
+  "walletTitle": "Wallet",
+  "walletAvailableBalance": "Available balance",
+  "walletOnHold": "{amount} on hold",
+  "@walletOnHold": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "walletOnHoldReason": "{amount} on hold · a call is running",
+  "@walletOnHoldReason": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "walletAddMoney": "Add money",
+  "walletRecentActivity": "Recent activity",
+  "walletTransactions": "Transactions",
+  "walletHowItWorksTitle": "How the wallet works",
+  "walletHowItWorksBody": "Wallet balance is used only for consultations and never expires. Unused balance is refundable — see our refund policy.",
+  "walletRefundPolicy": "Refund policy",
+  "walletHaveCoupon": "Have a coupon code?",
+  "walletCouponHint": "Enter code",
+  "walletCouponApplied": "{amount} added to your wallet",
+  "@walletCouponApplied": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "walletSecuredBy": "Secured by Razorpay · UPI · Cards · Netbanking",
+  "walletGstInvoices": "GST invoices",
+  "walletInvoicesSubtitle": "Invoices and receipts for your recharges",
+  "walletNoTransactions": "No transactions yet",
+  "walletNoTransactionsHint": "Add money to your wallet to get started",
+  "walletBalanceAfter": "Bal {amount}",
+  "@walletBalanceAfter": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "walletFilterAll": "All",
+  "walletFilterRecharge": "Added",
+  "walletFilterConsultation": "Consultations",
+  "walletFilterRefund": "Refunds",
+  "walletFilterBonus": "Bonus",
+  "kindRecharge": "Money added",
+  "kindConsultationCharge": "Consultation",
+  "kindConsultationRefund": "Refund",
+  "kindPromoCredit": "Promo credit",
+  "kindCouponDiscount": "Coupon discount",
+  "kindSignupBonus": "Signup bonus",
+  "kindReferralBonus": "Referral bonus",
+  "kindAdjustment": "Adjustment",
+  "kindGiftSpend": "Gift sent",
+  "kindHold": "Reserved for a call",
+  "kindChargeback": "Chargeback",
+  "rechargeChooseAmount": "Add money to wallet",
+  "rechargeAmountLabel": "Amount",
+  "rechargePayAmount": "Pay {amount}",
+  "@rechargePayAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rechargeAddCoupon": "Add a coupon code",
+  "rechargeBonusBadge": "+{amount}",
+  "@rechargeBonusBadge": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rechargeStarterPack": "Starter",
+  "rechargeMinAmount": "Minimum {amount}",
+  "@rechargeMinAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rechargeMaxAmount": "Maximum {amount}",
+  "@rechargeMaxAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rechargeOpeningCheckout": "Opening secure checkout…",
+  "rechargeConfirming": "Payment received — updating your balance…",
+  "rechargeSuccessTitle": "{amount} added",
+  "@rechargeSuccessTitle": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rechargeNewBalance": "New balance {amount}",
+  "@rechargeNewBalance": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rechargeViewTransaction": "View transaction",
+  "rechargeFailedTitle": "Payment didn't go through",
+  "rechargeNotCharged": "You have not been charged.",
+  "rechargeAutoRefund": "If any amount was debited, it will be refunded in 3–5 working days.",
+  "rechargeTryAgain": "Try again",
+  "rechargeChangeAmount": "Change amount",
+  "rechargeCreditedSoon": "Payment received. We'll credit it to your wallet in a moment.",
+  "rechargeOfferAutoApplied": "Add {amount}, get {bonus} extra — auto-applied",
+  "@rechargeOfferAutoApplied": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "bonus": {
+        "type": "String"
+      }
+    }
+  },
+  "profileTitle": "Profile",
+  "profileEditProfile": "Edit profile",
+  "profilePhoneMasked": "+91 ●●●●● {last4}",
+  "@profilePhoneMasked": {
+    "placeholders": {
+      "last4": {
+        "type": "String"
+      }
+    }
+  },
+  "profileCompleteAddEmail": "Add your email to finish your profile",
+  "profileCompleteAddBirth": "Add your birth details for personalised readings",
+  "profileRoleCustomer": "Customer",
+  "profileWallet": "Wallet",
+  "profileBirthProfiles": "Birth profiles",
+  "profileBirthProfilesCount": "{count} charts",
+  "@profileBirthProfilesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileGroupAccount": "Account",
+  "profileGroupMoney": "Money",
+  "profileGroupPreferences": "Preferences",
+  "profileGroupSupport": "Support",
+  "profileGroupLegal": "Legal",
+  "profileNotifications": "Notifications",
+  "profileNotificationPrefs": "Notification preferences",
+  "profileHapticFeedback": "Haptic feedback",
+  "profileHapticFeedbackDesc": "Vibrate on buttons and interactions",
+  "profileWalletAndTransactions": "Wallet and transactions",
+  "profileOrders": "Orders",
+  "profileOrdersUnread": "{count} new",
+  "@profileOrdersUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileReferAndEarn": "Refer and earn",
+  "profileLanguage": "Language",
+  "profileCurrency": "Currency",
+  "profileHelpCentre": "Help centre",
+  "profileContactWhatsapp": "Contact us on WhatsApp",
+  "profileRateApp": "Rate TalkAcharya",
+  "profileShareApp": "Share the app",
+  "profileShareMessage": "I'm using TalkAcharya to talk to astrologers. Try it: {link}",
+  "@profileShareMessage": {
+    "placeholders": {
+      "link": {
+        "type": "String"
+      }
+    }
+  },
+  "profileTerms": "Terms of service",
+  "profilePrivacy": "Privacy policy",
+  "profileLicenses": "Open-source licences",
+  "profileDeleteAccount": "Delete account",
+  "profileVersion": "TalkAcharya · v{version} ({build})",
+  "@profileVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
+    }
+  },
+  "editFullName": "Full name",
+  "editDisplayName": "Display name",
+  "editDateOfBirth": "Date of birth",
+  "editGender": "Gender",
+  "editGenderMale": "Male",
+  "editGenderFemale": "Female",
+  "editGenderOther": "Other",
+  "editEmail": "Email",
+  "editEmailUnverified": "Not verified",
+  "editChangePhoto": "Change photo",
+  "editProfileSaved": "Profile updated",
+  "editProfileSaveError": "Couldn't save your changes",
+  "editGenderUndisclosed": "Prefer not to say",
+  "editNameInvalid": "Enter your name (at least 2 letters)",
+  "editEmailInvalid": "Enter a valid email address",
+  "editPhone": "Mobile number",
+  "editPhoneLocked": "Your login number can't be changed",
+  "editSectionPersonal": "Personal details",
+  "editSectionContact": "Contact",
+  "editDobPlaceholder": "Add your date of birth",
+  "editPhotoUpdated": "Photo updated",
+  "editCountry": "Country",
+  "chooseLanguage": "Choose language",
+  "chooseCurrency": "Choose currency",
+  "deleteAccountTitle": "Delete your account",
+  "deleteAccountBody": "This permanently removes your profile, birth charts and chat history. Your wallet balance, if any, is refunded to the original payment method. Consultation records are kept as required by law.",
+  "deleteAccountHold": "Your account is deactivated immediately and fully deleted after 30 days. Sign in again within 30 days to cancel.",
+  "deleteAccountConfirm": "Yes, delete my account",
+  "deleteAccountRequested": "Account deletion requested",
+  "referTitle": "Refer and earn",
+  "referHeroTitle": "Give {friendAmount}, get {youAmount}",
+  "@referHeroTitle": {
+    "placeholders": {
+      "friendAmount": {
+        "type": "String"
+      },
+      "youAmount": {
+        "type": "String"
+      }
+    }
+  },
+  "referHeroBody": "Your friend gets {friendAmount} off their first consultation. You get {youAmount} in your wallet when they take it.",
+  "@referHeroBody": {
+    "placeholders": {
+      "friendAmount": {
+        "type": "String"
+      },
+      "youAmount": {
+        "type": "String"
+      }
+    }
+  },
+  "referYourCode": "Your referral code",
+  "referShareLink": "Share invite link",
+  "referInvited": "Invited",
+  "referJoined": "Joined",
+  "referEarned": "Earned",
+  "referHowItWorks": "How it works",
+  "referStep1": "Share your code or link. Your friend enters it while signing up.",
+  "referStep2": "They get {amount} off their first paid consultation.",
+  "@referStep2": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "referStep3": "The moment that consultation is billed, {amount} lands in your wallet.",
+  "@referStep3": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "referYourReferrals": "Your referrals",
+  "referStatusPending": "Pending",
+  "referStatusJoined": "Joined",
+  "referStatusRewarded": "Rewarded",
+  "referJoinedOn": "Joined {date}",
+  "@referJoinedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "referFirstCallDone": "first call done",
+  "referShareText": "Use my code {code} on TalkAcharya and get {amount} off your first astrology consultation. {link}",
+  "@referShareText": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "link": {
+        "type": "String"
+      }
+    }
+  },
+  "kundaliYogasDoshasTitle": "Yogas & Doshas",
+  "kundaliTabDoshas": "Doshas",
+  "kundaliTabYogas": "Yogas",
+  "doshaIntro": "Doshas are sensitive points in the chart. Most soften with time, a supportive dasha, or a classical remedy — an astrologer confirms what actually matters for you.",
+  "doshaDisclaimer": "Structural indications only, not predictions. Talk to an astrologer before wearing a gemstone or starting a serious remedy.",
+  "doshaPresent": "Present",
+  "doshaNotPresent": "Not present",
+  "doshaCancelled": "Effectively cancelled",
+  "doshaSeverityClear": "Clear",
+  "doshaSeverityMild": "Mild",
+  "doshaSeverityModerate": "Moderate",
+  "doshaSeverityStrong": "Strong",
+  "doshaWhy": "Why it's flagged",
+  "doshaWhatReduces": "What reduces it",
+  "doshaReducedNote": "{count, plural, one{One classical factor} other{{count} classical factors}} in your chart ease this.",
+  "@doshaReducedNote": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "doshaClearSectionTitle": "Clear — not in your chart",
+  "doshaAllClear": "None of the common doshas are present in your chart.",
+  "doshaAskCta": "Ask an astrologer what this means for you",
+  "insightsTitle": "Personality & life overview",
+  "insightsIntro": "A free reading of your birth (D1) chart — the tendencies it leans towards across the main areas of life. It's a sketch for self-reflection, not a forecast of events or dates.",
+  "insightsDisclaimer": "General guidance from your chart, not a prediction. It names no dates and makes no claims about health, lifespan or relationships. For anything specific, talk to an astrologer.",
+  "insightsAskCta": "Ask an astrologer about your chart",
+  "insightsWhatItReadsFrom": "What this reads from",
+  "insightsToneSupportive": "Supportive",
+  "insightsToneBalanced": "Balanced",
+  "insightsToneChallenging": "Needs care",
+  "insightsToneMixed": "Mixed",
+  "insightsAreaPersonality": "Personality & Nature",
+  "insightsAreaAppearance": "Physical Appearance",
+  "insightsAreaMind": "Mind & Emotions",
+  "insightsAreaCareer": "Career & Profession",
+  "insightsAreaWealth": "Wealth & Finances",
+  "insightsAreaEducation": "Education & Intellect",
+  "insightsAreaMarriage": "Marriage & Spouse",
+  "insightsAreaFamily": "Family & Relationships",
+  "insightsAreaHealth": "Health & Vitality",
+  "insightsAreaFortune": "Fortune & Dharma",
+  "insightsAreaStrengths": "Strengths & Challenges",
+  "predTitle": "Predictions",
+  "predReadingTitle": "Your forecast",
+  "predRequestTitle": "Request a forecast",
+  "predHeroTitle": "A forecast written for you",
+  "predHeroBody": "An astrologer reads your birth chart, dasha and current transits and writes a forecast for one area of life. Delivered in your language, usually within 3 days.",
+  "predChooseArea": "Choose an area",
+  "predMyReadings": "Your forecasts",
+  "predNoReadings": "No forecasts yet. Pick an area above to request one.",
+  "predSeePacks": "See packs",
+  "predSubscribed": "Subscribed",
+  "predCredits": "{count, plural, =1{1 credit} other{{count} credits}}",
+  "@predCredits": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "predBuyTitle": "Prediction credits",
+  "predBuyBody": "One credit = one written forecast. Buy a pack and it's ready whenever you want a reading.",
+  "predBuyWalletNote": "Paid from your wallet balance.",
+  "predPackName": "{count, plural, =1{1 credit} other{Pack of {count}}}",
+  "@predPackName": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "predPackPer": "{price} per credit",
+  "@predPackPer": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "predBuySuccess": "Added. You now have {count} credits.",
+  "@predBuySuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "predForProfile": "For which birth profile",
+  "predAddProfile": "Add a birth profile",
+  "predPickProfile": "Choose a birth profile first.",
+  "predArea": "Area of life",
+  "predPeriod": "Period",
+  "predCostsOne": "Uses 1 of your {count} credits.",
+  "@predCostsOne": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "predNoCreditYet": "You'll need a credit — we'll show the packs next.",
+  "predRequestCta": "Request forecast",
+  "predRequestDisclaimer": "The astrologer writes from your chart, dasha and transits. Astrology is guidance for reflection and planning, not a guarantee.",
+  "predAreaCareer": "Career & work",
+  "predAreaMarriage": "Marriage & love",
+  "predAreaFinance": "Money & finance",
+  "predAreaHealth": "Health & energy",
+  "predAreaEducation": "Study & learning",
+  "predAreaGeneral": "Life overview",
+  "predPeriodMonth": "The month ahead",
+  "predPeriodQuarter": "The next 3 months",
+  "predPeriodYear": "The year ahead",
+  "predStatusWriting": "Being written",
+  "predStatusReview": "In review",
+  "predStatusReady": "Ready to read",
+  "predStatusUnavailable": "Not available",
+  "predStatusRefunded": "Refunded",
+  "predDeliveredOn": "Delivered {date}",
+  "@predDeliveredOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "predEta": "Expected by {date}",
+  "@predEta": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "predWritingTitle": "An astrologer is writing this",
+  "predWritingBody": "We'll send you a notification the moment it's ready.",
+  "predWritingEta": "Expected by {date}. We'll notify you when it's ready.",
+  "@predWritingEta": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "predRefundedTitle": "Credit refunded",
+  "predRefundedBody": "We couldn't deliver this in time, so your credit is back in your account.",
+  "predDisclaimer": "Written for you by an astrologer from your birth chart, dasha and current transits. Astrology is guidance for reflection and planning — the choices and the outcome stay yours.",
+  "predAskFollowUp": "Ask a follow-up question",
+  "remediesTitle": "Remedies",
+  "remediesIntro": "Traditional remedies matched to what your chart shows — its active doshas, weaker planets, the running dasha and strained houses. They are acts of discipline and devotion, chosen to fit your faith, health and means.",
+  "remediesNone": "Nothing stands out in your chart that calls for a specific remedy right now. Keeping a small, steady daily practice is always worthwhile.",
+  "remediesDisclaimer": "Do only what fits your faith, health and means. Skip fasting if it is unsafe for you, and never take a loan to give charity.",
+  "remediesAskCta": "Talk to an astrologer about your remedies",
+  "remediesConfirmCta": "Confirm with an astrologer first",
+  "remediesSource": "Source: {source}",
+  "@remediesSource": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "doshaSeeRemedies": "See remedies for your chart",
+  "remedyCatMantra": "Mantra & japa",
+  "remedyCatStotra": "Stotra & recitation",
+  "remedyCatPuja": "Puja & ritual",
+  "remedyCatVrat": "Vrat & fasting",
+  "remedyCatDaan": "Daan & charity",
+  "remedyCatLifestyle": "Lifestyle",
+  "remedyCatYantra": "Yantra",
+  "remedyCatGemstone": "Gemstone",
+  "remedyCatRudraksha": "Rudraksha",
+  "prashnaTitle": "Ask one question",
+  "prashnaHeroTitle": "A yes-or-no on the moment",
+  "prashnaHeroBody": "KP horary (Prashna) reads the exact moment you ask a question to give a leaning — yes, no or mixed — with the reasoning. One traditional method's pointer, not a promise.",
+  "prashnaAbout": "What is the question about?",
+  "prashnaHint": "e.g. Will I get this job offer?",
+  "prashnaAskCta": "Ask ({price})",
+  "@prashnaAskCta": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "prashnaDisclaimer": "A KP horary reading of the moment you asked. It is one traditional method's pointer — not a promise, and not a substitute for a full consultation.",
+  "prashnaNeedQuestion": "Pick a topic and type your question first.",
+  "prashnaLowBalance": "Your wallet balance is too low. Add money to ask.",
+  "prashnaHistory": "Your questions",
+  "prashnaNoHistory": "You haven't asked a question yet.",
+  "prashnaAnswerTitle": "The reading",
+  "prashnaAskAstrologer": "Talk it through with an astrologer",
+  "prashnaHowRead": "How this was read",
+  "prashnaConfidence": "{level, plural, =0{unclear} =1{weak} =2{moderate} other{clear}} indication",
+  "@prashnaConfidence": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "prashnaVerdictYes": "Leaning yes",
+  "prashnaVerdictNo": "Leaning no",
+  "prashnaVerdictMixed": "Mixed signals",
+  "prashnaVerdictUnclear": "Not decisive",
+  "prashnaCatMarriage": "Marriage",
+  "prashnaCatJob": "A job",
+  "prashnaCatPromotion": "Promotion",
+  "prashnaCatBusiness": "Business",
+  "prashnaCatProperty": "Property",
+  "prashnaCatMoney": "A loan or money",
+  "prashnaCatChild": "Children",
+  "prashnaCatTravel": "Foreign travel",
+  "prashnaCatLitigation": "A court matter",
+  "prashnaCatHealth": "Health & recovery",
+  "prashnaCatLost": "A lost item",
+  "prashnaCatReunion": "A reunion",
+  "prashnaCatGeneral": "Something else",
+  "yogaIntro": "Yogas are tendencies, not guarantees — they strengthen when the planets involved are well placed and running their dasha.",
+  "yogaNoneTitle": "No classical yogas detected",
+  "yogaNoneBody": "That's common and not a bad sign — the chart is still read through its houses and dasha.",
+  "kundaliTalkToAstrologer": "Talk to an astrologer",
+  "kundaliHowItPlaysOut": "Want to know how these play out in your life and timing?",
+  "yogaGajakesariName": "Gajakesari Yoga",
+  "yogaGajakesariMeaning": "Jupiter in a kendra from the Moon — poise, good judgement and a name that carries weight.",
+  "yogaBudhadityaName": "Budhaditya Yoga",
+  "yogaBudhadityaMeaning": "Sun and Mercury together — a sharp, expressive mind; strong for study, writing and analysis.",
+  "yogaChandraMangalaName": "Chandra-Mangala Yoga",
+  "yogaChandraMangalaMeaning": "Moon with Mars — drive around money and enterprise; earning through effort and initiative.",
+  "yogaRajaName": "Raja Yoga",
+  "yogaRajaMeaning": "A kendra lord tied to a trikona lord — a lift in status, authority and opportunity when the period runs.",
+  "yogaDhanaName": "Dhana Yoga",
+  "yogaDhanaMeaning": "The wealth and gains houses linked — supports savings and steady financial growth.",
+  "yogaNeechabhangaName": "Neechabhanga Raja Yoga",
+  "yogaNeechabhangaMeaning": "A debilitated planet whose weakness is cancelled — an early struggle that turns into strength.",
+  "yogaKaalSarpaName": "Kaal Sarpa Yoga",
+  "yogaKaalSarpaMeaning": "All seven planets on one side of the Rahu-Ketu axis — life can feel hemmed in until a clear direction is found.",
+  "yogaAdhiName": "Adhi Yoga",
+  "yogaAdhiMeaning": "Benefics in the 6th, 7th and 8th from the Moon — protection, capable helpers and a settled position.",
+  "yogaShakataName": "Shakata Yoga",
+  "yogaShakataMeaning": "Moon in the 6th, 8th or 12th from Jupiter — fortunes that rise and fall; steadier when the Moon is strong.",
+  "yogaVishName": "Vish Yoga",
+  "yogaVishMeaning": "Moon with Saturn — the mind carries weight; results tend to come later, with maturity.",
+  "yogaKahalaName": "Kahala Yoga",
+  "yogaKahalaMeaning": "The 4th and 9th lords in mutual kendra with a strong Lagna lord — bold, enterprising, willing to take a risk.",
+  "yogaPushkalaName": "Pushkala Yoga",
+  "yogaPushkalaMeaning": "The Moon's lord with the Lagna lord in a kendra — respect, a good name and persuasive speech.",
+  "yogaDaridraName": "Daridra Yoga",
+  "yogaDaridraMeaning": "The 11th (gains) lord fallen into a difficult house — gains come slowly; a strong dasha turns it around.",
+  "yogaAmalaName": "Amala Yoga",
+  "yogaAmalaMeaning": "Only a benefic in the 10th from the Lagna or Moon — a clean reputation and lasting goodwill.",
+  "yogaSaraswatiName": "Saraswati Yoga",
+  "yogaSaraswatiMeaning": "Mercury, Venus and a strong Jupiter well placed — learning, art and eloquence.",
+  "yogaLakshmiName": "Lakshmi Yoga",
+  "yogaLakshmiMeaning": "A strong 9th lord in a kendra or trikona with a strong Lagna lord — fortune, comfort and grace.",
+  "yogaRuchakaName": "Ruchaka Yoga",
+  "yogaRuchakaMeaning": "Mars strong in a kendra — courage, physical vigour and leadership under pressure.",
+  "yogaBhadraName": "Bhadra Yoga",
+  "yogaBhadraMeaning": "Mercury strong in a kendra — intelligence, clear speech and skill in trade and communication.",
+  "yogaHamsaName": "Hamsa Yoga",
+  "yogaHamsaMeaning": "Jupiter strong in a kendra — wisdom, ethics, a teaching or advisory nature and general good fortune.",
+  "yogaMalavyaName": "Malavya Yoga",
+  "yogaMalavyaMeaning": "Venus strong in a kendra — charm, comfort, an eye for beauty and a pleasant home life.",
+  "yogaSasaName": "Sasa Yoga",
+  "yogaSasaMeaning": "Saturn strong in a kendra — discipline, endurance and authority built slowly and kept.",
+  "yogaUbhayachariName": "Ubhayachari Yoga",
+  "yogaUbhayachariMeaning": "Planets on both sides of the Sun — a well-supported, visible life and good all-round standing.",
+  "yogaVesiName": "Vesi Yoga",
+  "yogaVesiMeaning": "A planet in the 2nd from the Sun — steady speech, a balanced outlook and a fair name.",
+  "yogaVasiName": "Vasi Yoga",
+  "yogaVasiMeaning": "A planet in the 12th from the Sun — capability, influence and a generous streak.",
+  "yogaShubhaKartariName": "Shubha Kartari Yoga",
+  "yogaShubhaKartariMeaning": "Benefics on either side of the Lagna — protection, a gentler path and helpful circumstances.",
+  "yogaPapaKartariName": "Papa Kartari Yoga",
+  "yogaPapaKartariMeaning": "Malefics on either side of the Lagna — pressure on the self and health; guard your energy and boundaries.",
+  "yogaDurudharaName": "Durudhara Yoga",
+  "yogaDurudharaMeaning": "Planets flank the Moon in the 2nd and 12th — resources, comfort and steady support around you.",
+  "yogaSunaphaName": "Sunapha Yoga",
+  "yogaSunaphaMeaning": "A planet in the 2nd from the Moon — self-made means, intelligence and a good reputation.",
+  "yogaAnaphaName": "Anapha Yoga",
+  "yogaAnaphaMeaning": "A planet in the 12th from the Moon — an easy nature, well-being and freedom from want.",
+  "yogaKemadrumaYogaName": "Kemadruma Yoga",
+  "yogaKemadrumaYogaMeaning": "The Moon stands alone, unsupported — an inner restlessness that eases when the Moon is strong or a kendra is occupied.",
+  "yogaVasumatiName": "Vasumati Yoga",
+  "yogaVasumatiMeaning": "Benefics in the growth houses from the Lagna or Moon — accumulating wealth and rising resources.",
+  "yogaKalanidhiName": "Kalanidhi Yoga",
+  "yogaKalanidhiMeaning": "Jupiter in the 2nd or 5th tied to Mercury or Venus — learning, the arts, refinement and honour.",
+  "yogaChamaraName": "Chamara Yoga",
+  "yogaChamaraMeaning": "An exalted Lagna lord in a kendra aspected by Jupiter — eloquence, long life and respected standing.",
+  "yogaShankhaName": "Shankha Yoga",
+  "yogaShankhaMeaning": "The 5th and 6th lords linked with a strong Lagna lord — a good life, kind nature and comfort in later years.",
+  "yogaParvataName": "Parvata Yoga",
+  "yogaParvataMeaning": "Benefics in the kendras with the 6th and 8th clean — fortune, generosity and an eminent name.",
+  "yogaHarshaName": "Harsha Yoga",
+  "yogaHarshaMeaning": "The 6th lord in a difficult house — enemies, debts and illness lose their grip; competitive strength.",
+  "yogaSaralaName": "Sarala Yoga",
+  "yogaSaralaMeaning": "The 8th lord in a difficult house — resilience through crises, longevity and fearlessness.",
+  "yogaVimalaName": "Vimala Yoga",
+  "yogaVimalaMeaning": "The 12th lord in a difficult house — controlled spending, a clean conscience and an independent life.",
+  "yogaMahaParivartanaName": "Maha Parivartana Yoga",
+  "yogaMahaParivartanaMeaning": "Two lords of good houses exchange signs — the affairs of both houses lift each other over time.",
+  "yogaKhalaParivartanaName": "Khala Parivartana Yoga",
+  "yogaKhalaParivartanaMeaning": "An exchange involving the 3rd house — mixed results, ups and downs, gains through effort and courage.",
+  "yogaDainyaParivartanaName": "Dainya Parivartana Yoga",
+  "yogaDainyaParivartanaMeaning": "An exchange involving a difficult house — obstacles that need patience; a strong dasha turns it.",
+  "kSignAries": "bold, direct, quick to start",
+  "kSignTaurus": "steady, sensual, values comfort and security",
+  "kSignGemini": "curious, verbal, quick-thinking",
+  "kSignCancer": "caring, protective, led by feeling",
+  "kSignLeo": "proud, warm, wants to be seen",
+  "kSignVirgo": "precise, useful, improvement-minded",
+  "kSignLibra": "fair, relational, seeks balance",
+  "kSignScorpio": "intense, private, all-or-nothing",
+  "kSignSagittarius": "free, believing, big-picture",
+  "kSignCapricorn": "disciplined, ambitious, plays the long game",
+  "kSignAquarius": "independent, systems-minded, unconventional",
+  "kSignPisces": "imaginative, compassionate, boundary-less",
+  "kPlanetNameSun": "Sun",
+  "kPlanetNameMoon": "Moon",
+  "kPlanetNameMars": "Mars",
+  "kPlanetNameMercury": "Mercury",
+  "kPlanetNameJupiter": "Jupiter",
+  "kPlanetNameVenus": "Venus",
+  "kPlanetNameSaturn": "Saturn",
+  "kPlanetNameRahu": "Rahu",
+  "kPlanetNameKetu": "Ketu",
+  "kPlanetSun": "soul, confidence, father, authority",
+  "kPlanetMoon": "mind, emotions, mother, comfort",
+  "kPlanetMars": "drive, courage, anger, siblings",
+  "kPlanetMercury": "intellect, speech, trade, skill",
+  "kPlanetJupiter": "wisdom, growth, luck, teachers, children",
+  "kPlanetVenus": "love, beauty, comfort, partnership, art",
+  "kPlanetSaturn": "discipline, time, limits, hard-won reward",
+  "kPlanetRahu": "ambition, obsession, the foreign and new",
+  "kPlanetKetu": "detachment, mastery, letting go, spirituality",
+  "kHouse1": "Self, body, vitality",
+  "kHouse2": "Wealth, family, speech, food",
+  "kHouse3": "Courage, siblings, effort, short travel",
+  "kHouse4": "Home, mother, land, inner peace",
+  "kHouse5": "Children, education, creativity, romance",
+  "kHouse6": "Health, debt, enemies, daily work",
+  "kHouse7": "Marriage, partnership, business",
+  "kHouse8": "Longevity, sudden change, the hidden, inheritance",
+  "kHouse9": "Fortune, dharma, father, higher learning, long travel",
+  "kHouse10": "Career, status, public life",
+  "kHouse11": "Income, gains, network, elder siblings",
+  "kHouse12": "Loss, expenses, foreign lands, sleep, liberation",
+  "kDignityExalted": "Exalted — very strong",
+  "kDignityDebilitated": "Debilitated — under strain here",
+  "kDignityMoolatrikona": "Moolatrikona — comfortable and strong",
+  "kDignityOwn": "Own sign — stable and effective",
+  "kDignityGreatFriend": "In a great friend's sign — supported",
+  "kDignityFriend": "In a friend's sign — supported",
+  "kDignityNeutral": "Neutral sign",
+  "kDignityEnemy": "In an enemy's sign — works harder",
+  "kDignityGreatEnemy": "In a great enemy's sign — under pressure",
+  "kDashaSun": "A period for identity, authority and recognition. Ego and health of the eyes/heart come into focus.",
+  "kDashaMoon": "A softer, more emotional chapter — home, mother, moods and public life.",
+  "kDashaMars": "Energy, competition and initiative rise. Watch temper, accidents and property matters.",
+  "kDashaMercury": "Learning, trading, writing and communication. Good for study and business, restless for stillness.",
+  "kDashaJupiter": "Growth, teachers, family, meaning. Often a fortunate, expansive phase.",
+  "kDashaVenus": "Relationships, comfort, art, money and pleasure. Usually the easiest of the periods.",
+  "kDashaSaturn": "Hard work, responsibility and slow, lasting results. Rewards patience; punishes shortcuts.",
+  "kDashaRahu": "Ambition without limits — foreign lands, technology, sudden rises and confusion.",
+  "kDashaKetu": "Detachment, endings and spiritual turning inward. Material things feel hollow; skill deepens.",
+  "kNakAshwini": "quick, pioneering, healing",
+  "kNakBharani": "intense, holds space for change, disciplined",
+  "kNakKrittika": "sharp, cutting through, protective",
+  "kNakRohini": "creative, sensual, nurturing, magnetic",
+  "kNakMrigashira": "searching, curious, gentle",
+  "kNakArdra": "stormy, transformative, brilliant under pressure",
+  "kNakPunarvasu": "renewing, generous, returns to safety",
+  "kNakPushya": "nourishing, dutiful, deeply supportive",
+  "kNakAshlesha": "perceptive, strategic, hypnotic",
+  "kNakMagha": "regal, tradition-bound, ancestral",
+  "kNakPurvaPhalguni": "playful, romantic, values leisure",
+  "kNakUttaraPhalguni": "reliable, contractual, helpful",
+  "kNakHasta": "skilled with the hands, clever, healing",
+  "kNakChitra": "artistic, striking, builds beautiful things",
+  "kNakSwati": "independent, adaptable, freedom-loving",
+  "kNakVishakha": "goal-driven, determined, dual-natured",
+  "kNakAnuradha": "devoted, friendly, thrives abroad",
+  "kNakJyeshtha": "senior, responsible, carries burdens",
+  "kNakMula": "root-seeking, radical, gets to the core",
+  "kNakPurvaAshadha": "invincible spirit, persuasive",
+  "kNakUttaraAshadha": "principled, enduring, later success",
+  "kNakShravana": "listening, learning, connecting people",
+  "kNakDhanishta": "rhythmic, wealthy, musical, adaptable",
+  "kNakShatabhisha": "private, healing, systems-minded",
+  "kNakPurvaBhadrapada": "idealistic, intense, transformative",
+  "kNakUttaraBhadrapada": "deep, calm, wise counsel",
+  "kNakRevati": "kind, protective of travellers, imaginative",
+  "kSadeSatiRising": "Rising phase — Saturn is in the 12th sign from your Moon. Endings, tiredness and a sense of things winding down. Start clearing what no longer works.",
+  "kSadeSatiPeak": "Peak phase — Saturn is over your Moon sign itself. The heaviest stretch: responsibility, pressure and slow progress. Keep routines, protect your health.",
+  "kSadeSatiSetting": "Setting phase — Saturn is in the 2nd sign from your Moon. The weight lifts. Money and family stabilise; the lessons of the last years start paying off.",
+  "kSadeSatiGeneric": "Saturn is transiting the signs around your Moon.",
+  "kPlanetInSignHouse": "Your {planet} in {sign} makes you {signTrait}. In the {house} house it touches {houseTheme}.",
+  "@kPlanetInSignHouse": {
+    "placeholders": {
+      "planet": {},
+      "sign": {},
+      "signTrait": {},
+      "house": {},
+      "houseTheme": {}
+    }
+  },
+  "kPlanetInSign": "Your {planet} in {sign} makes you {signTrait}.",
+  "@kPlanetInSign": {
+    "placeholders": {
+      "planet": {},
+      "sign": {},
+      "signTrait": {}
+    }
+  },
+  "kHouseSans1": "Tanu Bhava",
+  "kHouseSans2": "Dhana Bhava",
+  "kHouseSans3": "Sahaja Bhava",
+  "kHouseSans4": "Sukha Bhava",
+  "kHouseSans5": "Putra Bhava",
+  "kHouseSans6": "Ripu Bhava",
+  "kHouseSans7": "Yuvati Bhava",
+  "kHouseSans8": "Ayu / Randhra Bhava",
+  "kHouseSans9": "Dharma Bhava",
+  "kHouseSans10": "Karma Bhava",
+  "kHouseSans11": "Labha Bhava",
+  "kHouseSans12": "Vyaya Bhava",
+  "kHouseTitleWithSign": "{sign} · {theme}",
+  "@kHouseTitleWithSign": {
+    "placeholders": {
+      "sign": {},
+      "theme": {}
+    }
+  },
+  "kHouseSheetTitle": "{ordinal} House · {sign}",
+  "@kHouseSheetTitle": {
+    "placeholders": {
+      "ordinal": {},
+      "sign": {}
+    }
+  },
+  "kHouseSheetSubtitle": "{sanskrit} — {theme}",
+  "@kHouseSheetSubtitle": {
+    "placeholders": {
+      "sanskrit": {},
+      "theme": {}
+    }
+  },
+  "kHouseChipLord": "House lord · {lord}",
+  "@kHouseChipLord": {
+    "placeholders": {
+      "lord": {}
+    }
+  },
+  "kHouseChipLordIn": "Lord in the {nthHouse}",
+  "@kHouseChipLordIn": {
+    "placeholders": {
+      "nthHouse": {}
+    }
+  },
+  "kHouseNoPlanets": "No planets sit in this house. Its story is told mainly by its lord, {lord}{lordWhere}.",
+  "@kHouseNoPlanets": {
+    "placeholders": {
+      "lord": {},
+      "lordWhere": {}
+    }
+  },
+  "kHouseLordWhere": ", now in the {nthHouse}",
+  "@kHouseLordWhere": {
+    "placeholders": {
+      "nthHouse": {}
+    }
+  },
+  "kHousePlanetsHeader": "Planets in this house",
+  "kHouseAskCta": "Ask an astrologer about your {ordinal} house",
+  "@kHouseAskCta": {
+    "placeholders": {
+      "ordinal": {}
+    }
+  },
+  "kHouseReadingLord": "Your {ordinal}-house lord {lord} sits in the {nthHouse}, so {theme} connects to {lordTheme}.",
+  "@kHouseReadingLord": {
+    "placeholders": {
+      "ordinal": {},
+      "lord": {},
+      "nthHouse": {},
+      "theme": {},
+      "lordTheme": {}
+    }
+  },
+  "kHouseReadingOccupant": "{planet} here brings its themes — {planetTheme} — into {theme}.",
+  "@kHouseReadingOccupant": {
+    "placeholders": {
+      "planet": {},
+      "planetTheme": {},
+      "theme": {}
+    }
+  },
+  "kHouseReadingEmpty": "This house is read through its lord and the planets that aspect it. An astrologer can walk you through it.",
+  "kBhavaSubheadKaraka": "Karaka {karaka}",
+  "@kBhavaSubheadKaraka": {
+    "placeholders": {
+      "karaka": {}
+    }
+  },
+  "kBhavaSubheadLord": "lord {lord}, {nthHouse}",
+  "@kBhavaSubheadLord": {
+    "placeholders": {
+      "lord": {},
+      "nthHouse": {}
+    }
+  },
+  "kBhavaSubheadLordOnly": "lord {lord}",
+  "@kBhavaSubheadLordOnly": {
+    "placeholders": {
+      "lord": {}
+    }
+  },
+  "kBhavaReadingGoverns": "This house governs {theme}.",
+  "@kBhavaReadingGoverns": {
+    "placeholders": {
+      "theme": {}
+    }
+  },
+  "kBhavaReadingLord": "Its lord {lord} is in the {nthHouse}, so {theme} connects to {lordTheme}.{dignity}{occupants}",
+  "@kBhavaReadingLord": {
+    "placeholders": {
+      "lord": {},
+      "nthHouse": {},
+      "theme": {},
+      "lordTheme": {},
+      "dignity": {},
+      "occupants": {}
+    }
+  },
+  "kBhavaReadingDignity": " The lord is {dignity}.",
+  "@kBhavaReadingDignity": {
+    "placeholders": {
+      "dignity": {}
+    }
+  },
+  "kBhavaReadingOccupants": " {planets} sit here, adding {themes}.",
+  "@kBhavaReadingOccupants": {
+    "placeholders": {
+      "planets": {},
+      "themes": {}
+    }
+  },
+  "kTransitHouseLine": "Your {nthHouse} · {theme}",
+  "@kTransitHouseLine": {
+    "placeholders": {
+      "nthHouse": {},
+      "theme": {}
+    }
+  },
+  "kPlanetRowMeta": "{sign} · {nthHouse} · {degree}°",
+  "@kPlanetRowMeta": {
+    "placeholders": {
+      "sign": {},
+      "nthHouse": {},
+      "degree": {}
+    }
+  },
+  "kLagnaLordIn": "in the {nthHouse}",
+  "@kLagnaLordIn": {
+    "placeholders": {
+      "nthHouse": {}
+    }
+  },
+  "kDignityShortExalted": "Exalted",
+  "kDignityShortMoolatrikona": "Moolatrikona",
+  "kDignityShortOwn": "Own",
+  "kDignityShortDebilitated": "Debilitated",
+  "kDignityShortEnemy": "Enemy sign",
+  "kDignityShortGreatEnemy": "Great enemy",
+  "kCombustNote": "Combust — very close to the Sun, so its independent voice is dimmed.",
+  "kWhatThisMeans": "What this means for you",
+  "ovStrengthStrong": "strong",
+  "ovStrengthSteady": "steady",
+  "ovStrengthStrain": "under strain",
+  "ovStrengthWeak": "weak",
+  "ovRoleSpouse": "Spouse significator",
+  "ovRoleDarakaraka": "Darakaraka (Jaimini)",
+  "ovRoleWealth": "Wealth significator",
+  "ovRoleIntellect": "Intellect significator",
+  "ovRoleWisdom": "Wisdom significator",
+  "ovRoleFortune": "Fortune significator",
+  "ovRoleFather": "Father significator",
+  "ovRoleMother": "Mother significator",
+  "ovRoleGeneric": "Significator",
+  "ovfPada": "pada {pada}",
+  "@ovfPada": {
+    "placeholders": {
+      "pada": {
+        "type": "int"
+      }
+    }
+  },
+  "ovfLagnaSign": "Rising sign {sign}",
+  "@ovfLagnaSign": {
+    "placeholders": {
+      "sign": {}
+    }
+  },
+  "ovfLagnaLord": "Ascendant lord {planet} in the {nthHouse}{dignity}",
+  "@ovfLagnaLord": {
+    "placeholders": {
+      "planet": {},
+      "nthHouse": {},
+      "dignity": {}
+    }
+  },
+  "ovfHouseLord": "{ordinal}-house lord {planet} in the {nthHouse}",
+  "@ovfHouseLord": {
+    "placeholders": {
+      "ordinal": {},
+      "planet": {},
+      "nthHouse": {}
+    }
+  },
+  "ovfHouseStrength": "{ordinal} house — {strength}",
+  "@ovfHouseStrength": {
+    "placeholders": {
+      "ordinal": {},
+      "strength": {}
+    }
+  },
+  "ovfMoonSign": "Moon in {sign}",
+  "@ovfMoonSign": {
+    "placeholders": {
+      "sign": {}
+    }
+  },
+  "ovfMoonHouse": "Moon in the {nthHouse}",
+  "@ovfMoonHouse": {
+    "placeholders": {
+      "nthHouse": {}
+    }
+  },
+  "ovfMoonNakshatra": "Moon nakshatra {nakshatra}",
+  "@ovfMoonNakshatra": {
+    "placeholders": {
+      "nakshatra": {}
+    }
+  },
+  "ovfMoonDignity": "Moon {dignity}",
+  "@ovfMoonDignity": {
+    "placeholders": {
+      "dignity": {}
+    }
+  },
+  "ovfSunSign": "Sun in {sign}",
+  "@ovfSunSign": {
+    "placeholders": {
+      "sign": {}
+    }
+  },
+  "ovfSeventhSign": "7th house in {sign}",
+  "@ovfSeventhSign": {
+    "placeholders": {
+      "sign": {}
+    }
+  },
+  "ovfPlanetInHouse": "{planet} in the {nthHouse}",
+  "@ovfPlanetInHouse": {
+    "placeholders": {
+      "planet": {},
+      "nthHouse": {}
+    }
+  },
+  "ovfPlanetWithMoon": "{planet} with the Moon",
+  "@ovfPlanetWithMoon": {
+    "placeholders": {
+      "planet": {}
+    }
+  },
+  "ovfAppearanceIn": "{planet} in the 1st house",
+  "@ovfAppearanceIn": {
+    "placeholders": {
+      "planet": {}
+    }
+  },
+  "ovfAppearanceAspect": "{planet} aspecting the 1st house",
+  "@ovfAppearanceAspect": {
+    "placeholders": {
+      "planet": {}
+    }
+  },
+  "ovfMaleficOnLagna": "{planet} pressing on the ascendant",
+  "@ovfMaleficOnLagna": {
+    "placeholders": {
+      "planet": {}
+    }
+  },
+  "ovfKaraka": "{role}: {planet}",
+  "@ovfKaraka": {
+    "placeholders": {
+      "role": {},
+      "planet": {}
+    }
+  },
+  "ovfYoga": "Yoga — {name}",
+  "@ovfYoga": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "ovfDosha": "Dosha — {name}",
+  "@ovfDosha": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "doshaMangalName": "Mangal Dosha",
+  "doshaMangalMeaning": "Mars in a sensitive house — traditionally weighed before marriage. Often balanced when both partners are Manglik or Jupiter influences Mars.",
+  "doshaKaalSarpaName": "Kaal Sarpa Dosha",
+  "doshaKaalSarpaMeaning": "The whole chart held between Rahu and Ketu — life can feel hemmed in until a clear direction is found, then focus becomes intense.",
+  "doshaPitraName": "Pitra Dosha",
+  "doshaPitraMeaning": "The Sun and 9th house carry a shadow of ancestral karma — often addressed with shraddha and charity in the father's name.",
+  "doshaGandmoolName": "Gandmool Dosha",
+  "doshaGandmoolMeaning": "The Moon sits at a junction nakshatra. A Shanti puja on the 27th day is the traditional response.",
+  "doshaGrahanName": "Grahan Dosha",
+  "doshaGrahanMeaning": "A luminary (Sun or Moon) sits with a node, so that planet's significations dim until worked on.",
+  "doshaShrapitName": "Shrapit Dosha",
+  "doshaShrapitMeaning": "Saturn with Rahu — delay and confusion early on; steady, patient effort is the way through.",
+  "doshaGuruChandalName": "Guru Chandal Dosha",
+  "doshaGuruChandalMeaning": "Jupiter with a node — wisdom mixed with unorthodox ideas; choose your teachers and beliefs with care.",
+  "doshaAngarakName": "Angarak Dosha",
+  "doshaAngarakMeaning": "Mars with a node — an impulsive charge; anger, accidents and property disputes need care.",
+  "doshaKemadrumaName": "Kemadruma Dosha",
+  "doshaKemadrumaMeaning": "The Moon stands alone with no support around it — it eases when a kendra is occupied or the Moon is strong.",
+  "doshaDaridraName": "Daridra Dosha",
+  "doshaDaridraMeaning": "The money houses are strained — disciplined saving and a strong dasha turn it around.",
+  "birthDetailsCta": "Full birth details",
+  "birthDetailsTitle": "Birth details",
+  "birthDetailsAyanamsa": "Ayanamsha",
+  "birthDetailsPanchangTitle": "Panchang at birth",
+  "birthDetailsChakraTitle": "Avakahada Chakra",
+  "birthDetailsWeekday": "Weekday",
+  "birthDetailsTithi": "Tithi",
+  "birthDetailsNakshatra": "Nakshatra",
+  "birthDetailsYoga": "Yoga",
+  "birthDetailsKarana": "Karana",
+  "birthDetailsMoonSign": "Moon sign",
+  "birthDetailsSunSign": "Sun sign",
+  "birthDetailsSuryaNakshatra": "Sun's nakshatra",
+  "birthDetailsSunrise": "Sunrise",
+  "birthDetailsSunset": "Sunset",
+  "birthDetailsIshtaKala": "Ishta Kala",
+  "birthDetailsPada": "Pada {count}",
+  "@birthDetailsPada": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "birthDetailsGhatiPala": "{ghati} ghati {pala} pala {vipala} vipala",
+  "@birthDetailsGhatiPala": {
+    "placeholders": {
+      "ghati": {
+        "type": "int"
+      },
+      "pala": {
+        "type": "int"
+      },
+      "vipala": {
+        "type": "int"
+      }
+    }
+  },
+  "birthDetailsNakshatraLord": "Nakshatra lord",
+  "birthDetailsRashiLord": "Rashi lord",
+  "birthDetailsVarna": "Varna",
+  "birthDetailsVashya": "Vashya",
+  "birthDetailsYoni": "Yoni",
+  "birthDetailsGana": "Gana",
+  "birthDetailsNadi": "Nadi",
+  "birthDetailsTara": "Tara",
+  "birthDetailsTattva": "Tattva",
+  "birthDetailsYunja": "Yunja",
+  "birthDetailsRashiPaya": "Rashi Paya",
+  "birthDetailsNakshatraPaya": "Nakshatra Paya",
+  "birthDetailsDisclaimer": "Classical classificatory attributes — used mainly in muhurta and matchmaking, not predictions.",
+  "vaaraMonday": "Somvara (Monday)",
+  "vaaraTuesday": "Mangalvara (Tuesday)",
+  "vaaraWednesday": "Budhvara (Wednesday)",
+  "vaaraThursday": "Guruvara (Thursday)",
+  "vaaraFriday": "Shukravara (Friday)",
+  "vaaraSaturday": "Shanivara (Saturday)",
+  "vaaraSunday": "Ravivara (Sunday)",
+  "tattvaFire": "Agni (Fire)",
+  "tattvaEarth": "Prithvi (Earth)",
+  "tattvaAir": "Vayu (Air)",
+  "tattvaWater": "Jala (Water)",
+  "payaGold": "Gold",
+  "payaSilver": "Silver",
+  "payaCopper": "Copper",
+  "payaIron": "Iron",
+  "roomAppBarTitle": "Consultation",
+  "roomOpenError": "We couldn't open this consultation.",
+  "roomWaitingTitle": "Waiting for {name} to accept",
+  "@roomWaitingTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roomWaitingBody": "Usually under a minute. We'll open the chat the moment they join.",
+  "roomCancelRequest": "Cancel request",
+  "roomEndConfirmTitle": "End this consultation?",
+  "roomEndConfirmBody": "Billing stops when the session ends.",
+  "roomKeepTalking": "Keep talking",
+  "roomEnd": "End",
+  "roomAutoTranslateOn": "Auto-translate on",
+  "roomAutoTranslateOff": "Auto-translate off",
+  "roomEndedTitle": "Consultation ended",
+  "roomBalanceOutTitle": "Your balance ran out",
+  "roomBalanceOutBody": "The chat ended because your wallet balance finished. Recharge and start again to continue with {name}.",
+  "@roomBalanceOutBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roomRechargeWallet": "Recharge wallet",
+  "roomStartAgain": "Start again with {name}",
+  "@roomStartAgain": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roomRowAstrologer": "Astrologer",
+  "roomRowDuration": "Duration",
+  "roomRowAmount": "Amount",
+  "roomRowRate": "Rate",
+  "roomMinutes": "{minutes} min",
+  "@roomMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "roomRatePerMinute": "{currency} {amount}/min",
+  "@roomRatePerMinute": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "roomRateQuestion": "How was your consultation?",
+  "roomSubmitRating": "Submit rating",
+  "roomRatingThanks": "Thanks for the feedback!",
+  "roomBackHome": "Back to home",
+  "roomStatusRejected": "The astrologer couldn't take this request",
+  "roomStatusCancelled": "Request cancelled",
+  "roomStatusExpired": "Request expired — no response in time",
+  "roomStatusNoShow": "The call did not connect",
+  "roomStatusClosed": "Consultation closed",
+  "roomBalanceRunningOut": "Balance is running out",
+  "roomMinLeftRecharge": "~{minutes} min left · recharge to keep talking",
+  "@roomMinLeftRecharge": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "roomSpentMinLeft": "{currency} {amount} spent · ~{minutes} min left",
+  "@roomSpentMinLeft": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "roomAddMoney": "Add money",
+  "roomClientBalanceLow": "Client's balance is low — wrap up soon",
+  "navChats": "Chats",
+  "chatsTitle": "Chats",
+  "chatsLoadError": "We couldn't load your chats.",
+  "chatsEmptyTitle": "No chats yet",
+  "chatsEmptyBody": "Start a consultation with an astrologer and it shows up here.",
+  "chatsSectionActive": "Active",
+  "chatsSectionRecent": "Recent",
+  "chatsAstrologerFallback": "Astrologer",
+  "chatsStatusWaiting": "Waiting for the astrologer to accept",
+  "chatsStatusLive": "Live now · tap to open",
+  "chatsStatusEnded": "{minutes} min consultation",
+  "@chatsStatusEnded": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "chatsStatusCancelled": "Cancelled",
+  "chatsStatusRejected": "Not accepted",
+  "chatsStatusExpired": "Request expired",
+  "chatsStatusGeneric": "Consultation",
+  "numerologyTitle": "Numerology & Lo Shu grid",
+  "numerologyIntro": "A traditional numbers reading from your date of birth (and name) — the tendencies each number leans towards, favourable days and colours, and your Lo Shu birth grid. For reflection, not dated prediction.",
+  "numMoolank": "Moolank · psychic number",
+  "numBhagyank": "Bhagyank · destiny number",
+  "numNaamank": "Naamank · name number",
+  "numRuledBy": "Ruled by {planet}",
+  "@numRuledBy": {
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      }
+    }
+  },
+  "numFriendly": "Friendly",
+  "numNeutral": "Neutral",
+  "numUnfriendly": "Clashing",
+  "numFavDays": "Favourable days",
+  "numFavColours": "Favourable colours",
+  "numDirection": "Direction",
+  "numDeity": "Deity",
+  "numGemstone": "Traditional gemstone",
+  "numLoShuTitle": "Lo Shu birth grid",
+  "numLoShuMissing": "Not in your grid: {nums}",
+  "@numLoShuMissing": {
+    "placeholders": {
+      "nums": {
+        "type": "String"
+      }
+    }
+  },
+  "numLoShuRepeated": "Emphasised: {nums}",
+  "@numLoShuRepeated": {
+    "placeholders": {
+      "nums": {
+        "type": "String"
+      }
+    }
+  },
+  "numArrowStrength": "Complete line",
+  "numArrowAbsence": "Absent line",
+  "numAskCta": "Talk to an astrologer about this",
+  "sadeSatiTitle": "Sade Sati & Dhaiya calendar",
+  "sadeSatiIntro": "The dated Saturn windows over your life, reckoned from your Moon sign {sign}. Sade Sati is Saturn through the 12th, 1st and 2nd from the Moon (~7½ years); Dhaiya is the 4th or 8th (~2½ years).",
+  "@sadeSatiIntro": {
+    "placeholders": {
+      "sign": {
+        "type": "String"
+      }
+    }
+  },
+  "sadeSatiRunningNow": "Running now",
+  "sadeSatiPast": "Past",
+  "sadeSatiUpcoming": "Upcoming",
+  "sadeSatiPhaseRising": "Rising · Saturn in the 12th",
+  "sadeSatiPhasePeak": "Peak · Saturn over the Moon",
+  "sadeSatiPhaseSetting": "Setting · Saturn in the 2nd",
+  "sadeSatiPhaseKantaka": "Kantaka · Saturn in the 4th",
+  "sadeSatiPhaseAshtama": "Ashtama · Saturn in the 8th",
+  "sadeSatiDhaiyaHeading": "Dhaiya (small panoti) periods",
+  "sadeSatiRange": "{start} → {end}",
+  "@sadeSatiRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "avTransitHeading": "Ashtakavarga strength of today's transits",
+  "avTransitIntro": "How freely each planet's transit gives its results, from your natal bindu scores. 5+ of 8 is supportive, 4 mixed, less is weak.",
+  "avTransitBindus": "{bindus}/8 bindus",
+  "@avTransitBindus": {
+    "placeholders": {
+      "bindus": {
+        "type": "int"
+      }
+    }
+  },
+  "avTransitUpcoming": "Coming up",
+  "avTransitInHouse": "{planet} in your {house} house",
+  "@avTransitInHouse": {
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      },
+      "house": {
+        "type": "String"
+      }
+    }
+  },
+  "muhurtaTitle": "Today's timing",
+  "muhurtaIntro": "Choghadiya and Hora for today, worked out for your birth city and personalised to your chart's helpful planets. A guide to better and weaker windows for starting things — not a rule.",
+  "muhurtaSunTimes": "{sunrise} sunrise · {sunset} sunset · {weekday} ({lord})",
+  "@muhurtaSunTimes": {
+    "placeholders": {
+      "sunrise": {
+        "type": "String"
+      },
+      "sunset": {
+        "type": "String"
+      },
+      "weekday": {
+        "type": "String"
+      },
+      "lord": {
+        "type": "String"
+      }
+    }
+  },
+  "muhurtaBestWindows": "Best windows for you today",
+  "muhurtaNoBest": "No stand-out window today — pick a good Choghadiya below.",
+  "muhurtaDayChoghadiya": "Day Choghadiya",
+  "muhurtaNightChoghadiya": "Night Choghadiya",
+  "muhurtaHora": "Planetary Hora",
+  "muhurtaNow": "Now",
+  "muhurtaChoGood": "Good",
+  "muhurtaChoBad": "Avoid",
+  "muhurtaChoNeutral": "Neutral",
+  "muhurtaHoraFavourable": "Good for you",
+  "muhurtaHoraCaution": "Keep light",
+  "upayaTitle": "Gemstones & upaya",
+  "upayaIntro": "The classical remedy table for your ascendant ({sign}) — favourable colours, days, deities, mantras and charity you can adopt freely, plus the traditional gemstone and rudraksha for each planet.",
+  "@upayaIntro": {
+    "placeholders": {
+      "sign": {
+        "type": "String"
+      }
+    }
+  },
+  "upayaLagnaFavourable": "Favourable for your ascendant",
+  "upayaColours": "Colours",
+  "upayaDirection": "Direction",
+  "upayaDay": "Day",
+  "upayaDeity": "Deity",
+  "upayaStrengthen": "Support",
+  "upayaPacify": "Pacify",
+  "upayaMixed": "Mixed",
+  "upayaNeutral": "Neutral",
+  "upayaFreeMeasures": "Free measures",
+  "upayaMantra": "Mantra",
+  "upayaCharity": "Charity (daan)",
+  "upayaGemstone": "Gemstone",
+  "upayaRudraksha": "Rudraksha",
+  "upayaGatedCta": "Confirm with an astrologer first",
+  "upayaPriority": "Priority",
+  "lalKitabTitle": "Lal Kitab — debts & remedies",
+  "lalKitabIntro": "Lal Kitab reads a few inherited debts (rin) from your chart and clears each with simple, free household acts (totke). No gemstones, no cost.",
+  "lalKitabActiveDebts": "Active debts",
+  "lalKitabNoDebts": "No strongly active rin — keep the everyday duties and nothing builds up.",
+  "lalKitabWhyFlagged": "Why it's flagged",
+  "lalKitabRemedy": "Remedy (totka)",
+  "lalKitabWeakPlanets": "Weak planet placements",
+  "lalKitabAllRemedies": "Your remedies",
+  "lalKitabPakkaGhar": "{planet}'s home house is the {house}",
+  "@lalKitabPakkaGhar": {
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      },
+      "house": {
+        "type": "String"
+      }
+    }
+  },
+  "varshphalTitle": "Varshphal — this year's chart",
+  "varshphalIntro": "The Tajika annual chart for your {age}-year, cast for the moment the Sun returns to its birth position. Themes to work with — not fixed events.",
+  "@varshphalIntro": {
+    "placeholders": {
+      "age": {
+        "type": "String"
+      }
+    }
+  },
+  "varshphalWindow": "{start} → {end}",
+  "@varshphalWindow": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "varshphalLagna": "Varsha Lagna",
+  "varshphalMuntha": "Muntha",
+  "varshphalYearLord": "Year lord (Varsheshwara)",
+  "varshphalTajika": "Tajika aspect",
+  "varshphalMunthaLine": "Muntha in the {house} house — {theme}",
+  "@varshphalMunthaLine": {
+    "placeholders": {
+      "house": {
+        "type": "String"
+      },
+      "theme": {
+        "type": "String"
+      }
+    }
+  },
+  "varshphalChart": "Annual chart planets",
+  "prefsTransitAlerts": "Transit alerts",
+  "prefsTransitAlertsDesc": "A heads-up when a slow planet (Jupiter, Saturn) is about to change sign into a new house in your chart.",
+  "errNetwork": "Could not reach the server. Check your connection.",
+  "errTimeout": "The server took too long to respond.",
+  "errSession": "Your session expired. Please sign in again.",
+  "errWalletInsufficient": "Your wallet balance is too low for this.",
+  "errRateLimited": "Too many attempts. Please wait a little and try again.",
+  "errOtpInvalid": "The code is incorrect or has expired.",
+  "errOtpMaxAttempts": "Too many wrong attempts. Request a new code.",
+  "errPromoNotRedeemable": "This coupon code can't be used.",
+  "errRechargeInvalidAmount": "Enter an amount within the allowed range.",
+  "errAuthWrongApp": "This number is registered for the other TalkAcharya app.",
+  "errGeneric": "Something went wrong. Please try again.",
+  "homePanchangTitle": "Today's Panchang",
+  "homeLiveNowTitle": "Live now",
+  "homeFreeToolsTitle": "Free tools",
+  "homeResumeBtn": "Resume",
+  "homeAddBtn": "Add",
+  "homeNotifyMeBtn": "Notify me",
+  "homeKundaliAction": "Kundali",
+  "homeMatchingAction": "Matching",
+  "homeHoroscopeAction": "Horoscope",
+  "homeVastuAction": "Vastu",
+  "homeRetryBtn": "Retry",
+  "homeChooseSignTitle": "Choose your sign",
+  "homeChooseLanguageTitle": "Choose language",
+  "homeLanguageTooltip": "Language",
+  "homeLanguageSwitchError": "Could not switch: {error}",
+  "@homeLanguageSwitchError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "homeComingSoonSnackbar": "Coming soon!",
+  "homeTalkAgainTitle": "Talk again",
+  "homeRechargeWalletTitle": "Recharge your wallet",
+  "homeTalkToAstrologerTitle": "Talk to an astrologer",
+  "kSignNameAries": "Aries",
+  "kSignNameTaurus": "Taurus",
+  "kSignNameGemini": "Gemini",
+  "kSignNameCancer": "Cancer",
+  "kSignNameLeo": "Leo",
+  "kSignNameVirgo": "Virgo",
+  "kSignNameLibra": "Libra",
+  "kSignNameScorpio": "Scorpio",
+  "kSignNameSagittarius": "Sagittarius",
+  "kSignNameCapricorn": "Capricorn",
+  "kSignNameAquarius": "Aquarius",
+  "kSignNamePisces": "Pisces",
+  "kNakNameAshwini": "Ashwini",
+  "kNakNameBharani": "Bharani",
+  "kNakNameKrittika": "Krittika",
+  "kNakNameRohini": "Rohini",
+  "kNakNameMrigashira": "Mrigashira",
+  "kNakNameArdra": "Ardra",
+  "kNakNamePunarvasu": "Punarvasu",
+  "kNakNamePushya": "Pushya",
+  "kNakNameAshlesha": "Ashlesha",
+  "kNakNameMagha": "Magha",
+  "kNakNamePurvaPhalguni": "Purva Phalguni",
+  "kNakNameUttaraPhalguni": "Uttara Phalguni",
+  "kNakNameHasta": "Hasta",
+  "kNakNameChitra": "Chitra",
+  "kNakNameSwati": "Swati",
+  "kNakNameVishakha": "Vishakha",
+  "kNakNameAnuradha": "Anuradha",
+  "kNakNameJyeshtha": "Jyeshtha",
+  "kNakNameMula": "Mula",
+  "kNakNamePurvaAshadha": "Purva Ashadha",
+  "kNakNameUttaraAshadha": "Uttara Ashadha",
+  "kNakNameShravana": "Shravana",
+  "kNakNameDhanishta": "Dhanishta",
+  "kNakNameShatabhisha": "Shatabhisha",
+  "kNakNamePurvaBhadrapada": "Purva Bhadrapada",
+  "kNakNameUttaraBhadrapada": "Uttara Bhadrapada",
+  "kNakNameRevati": "Revati",
+  "kChartNameD1": "Rashi",
+  "kChartSigD1": "Physical body, overall life, everything",
+  "kChartNameD2": "Hora",
+  "kChartSigD2": "Wealth, financial prosperity",
+  "kChartNameD3": "Drekkana",
+  "kChartSigD3": "Siblings, courage, initiative",
+  "kChartNameD4": "Chaturthamsha",
+  "kChartSigD4": "Fortune, property, fixed assets, home",
+  "kChartNameD5": "Panchamsha",
+  "kChartSigD5": "Fame, authority, spiritual merit (punya)",
+  "kChartNameD6": "Shashthamsha",
+  "kChartSigD6": "Health, disease, debts, enemies",
+  "kChartNameD7": "Saptamsha",
+  "kChartSigD7": "Children, progeny, creativity",
+  "kChartNameD8": "Ashtamsha",
+  "kChartSigD8": "Sudden events, longevity troubles, obstacles",
+  "kChartNameD9": "Navamsha",
+  "kChartSigD9": "Spouse, dharma, inner self — the primary support chart",
+  "kChartNameD10": "Dashamsha",
+  "kChartSigD10": "Career, profession, status, achievement",
+  "kChartNameD11": "Rudramsha",
+  "kChartSigD11": "Death, destruction, gains from adversity (Labha)",
+  "kChartNameD12": "Dvadashamsha",
+  "kChartSigD12": "Parents, ancestry, inherited karma",
+  "kChartNameD16": "Shodashamsha",
+  "kChartSigD16": "Vehicles, comforts, luxuries, happiness",
+  "kChartNameD20": "Vimshamsha",
+  "kChartSigD20": "Spiritual practice, worship, devotion",
+  "kChartNameD24": "Chaturvimshamsha",
+  "kChartSigD24": "Education, learning, knowledge",
+  "kChartNameD27": "Saptavimshamsha",
+  "kChartSigD27": "Strength and weakness, stamina",
+  "kChartNameD30": "Trimshamsha",
+  "kChartSigD30": "Misfortunes, evils, moral character",
+  "kChartNameD40": "Chatvarimshamsha",
+  "kChartSigD40": "Maternal legacy, auspicious/inauspicious effects",
+  "kChartNameD45": "Akshavedamsha",
+  "kChartSigD45": "Paternal legacy, overall character and conduct",
+  "kChartNameD60": "Shashtiamsha",
+  "kChartSigD60": "Past-life karma, the finest layer — overall",
+  "kChartNameMoon": "Moon chart (Chandra)",
+  "kChartSigMoon": "The mind and emotions — the rasi chart read from the Moon",
+  "kChartNameChalit": "Bhava Chalit",
+  "kChartSigChalit": "House results by the actual bhava cusps (Sripati), not whole sign",
+  "kChartNameTransit": "Transit (Gochar)",
+  "kChartSigTransit": "Current grahas over the natal houses",
+  "kChartShortMoon": "Moon",
+  "kChartShortChalit": "Chalit",
+  "kChartShortTransit": "Transit",
+  "kChAscendant": "Ascendant",
+  "kChLagnaVargottama": "Lagna vargottama",
+  "kChAsOf": "As of {when}",
+  "kChUnverified": "This division is not yet verified against DrikPanchang — treat the placements as experimental.",
+  "kChChalitShiftedOne": "{planets} sits in a different bhava than the whole-sign house.",
+  "kChChalitShiftedMany": "{planets} sit in a different bhava than the whole-sign house.",
+  "kChColPlanet": "PLANET",
+  "kChColSign": "SIGN",
+  "kChColDegree": "DEG",
+  "kChColHouse": "HOUSE",
+  "kChColBhava": "BHAVA",
+  "kChColFromMoon": "MOON",
+  "kChLegend": "Legend",
+  "kChLegendNote": "℞ retrograde   ⬦ vargottama   ← moved bhava (chalit)\nNorth: cell number = rasi (1 Aries … 12 Pisces), 1st house is top-centre.",
+  "kChNorthIndian": "North Indian",
+  "kChSouthIndian": "South Indian",
+  "kChPickerCharts": "Charts",
+  "kChPickerDivisional": "Divisional charts (Varga)",
+  "kOvTitle": "Kundali",
+  "kOvTitleNamed": "{name}’s Kundali",
+  "kOvDownloadPdf": "Download PDF",
+  "kOvShare": "Share",
+  "kOvMoonSignLabel": "Moon sign · Rashi",
+  "kOvLagnaChip": "Lagna · {sign}",
+  "kOvNakshatraChip": "Nakshatra · {name}",
+  "kOvTimeApprox": "Birth time approximate",
+  "kOvEdit": "Edit",
+  "kOvLagnaChart": "Lagna chart",
+  "kOvD1Rasi": "D1 Rasi",
+  "kOvOpenFullChart": "Open full chart",
+  "kOvDashaUnavailable": "Dasha unavailable right now.",
+  "kOvDashaRunning": "You are currently running",
+  "kOvMahadasha": "{planet} Mahadasha",
+  "kOvSubPeriods": "{antar} sub-period · {pratyantar} pratyantar",
+  "kOvDashaProgress": "{start} → {end}  ·  {percent}% through",
+  "kOvSeeTimeline": "See full timeline",
+  "kOvAtAGlance": "At a glance",
+  "kOvMangalDosha": "Mangal Dosha",
+  "kOvManglik": "Manglik",
+  "kOvNotManglik": "Not Manglik",
+  "kOvMangalFrom": "From {refs}",
+  "kOvMarsClear": "Mars is clear",
+  "kOvMangalCancelled": "Present, but cancelled in your chart",
+  "kOvMangalLevelFrom": "{level} · from {refs}",
+  "kOvRefLagna": "Lagna",
+  "kOvYogas": "Yogas",
+  "kOvYogasFound": "{count} found",
+  "kOvNakshatra": "Nakshatra",
+  "kOvLagnaLord": "Lagna lord",
+  "kOvExInsights": "Personality & life overview",
+  "kOvExInsightsSub": "A free reading of your chart — nature, work, marriage & more",
+  "kOvExForecast": "Written forecast",
+  "kOvExForecastSub": "A paid forecast for one area of life, written by an astrologer",
+  "kOvExPlanets": "Planets & positions",
+  "kOvExPlanetsSub": "Where each planet sits and what it does",
+  "kOvExDasha": "Dasha periods",
+  "kOvExDashaSub": "Your life timeline — Vimshottari",
+  "kOvExVarshphal": "Varshphal (annual chart)",
+  "kOvExVarshphalSub": "This solar-return year — Muntha, year lord & Tajika aspect",
+  "kOvExYogas": "Yogas & Doshas",
+  "kOvExYogasSub": "Special combinations in your chart",
+  "kOvExRemedies": "Remedies",
+  "kOvExRemediesSub": "Traditional mantras, daan and practices for your chart",
+  "kOvExUpaya": "Gemstones & upaya",
+  "kOvExUpayaSub": "Per-planet gemstone, colour, day & mantra — gemstones gated",
+  "kOvExLalKitab": "Lal Kitab",
+  "kOvExLalKitabSub": "Inherited debts (rin) and their simple, free totka remedies",
+  "kOvExTransits": "Transits & Sade Sati",
+  "kOvExTransitsSub": "What the sky is doing right now",
+  "kOvExSadeSati": "Sade Sati & Dhaiya calendar",
+  "kOvExSadeSatiSub": "Every Saturn window over your life, with dates",
+  "kOvExMuhurta": "Today's timing",
+  "kOvExMuhurtaSub": "Choghadiya & Hora, with your best windows marked",
+  "kOvExHouses": "Houses (Bhava)",
+  "kOvExHousesSub": "A reading for each of the 12 houses",
+  "kOvExNumerology": "Numerology & Lo Shu grid",
+  "kOvExNumerologySub": "Your numbers from date of birth — days, colours, birth grid",
+  "kOvExAdvanced": "Advanced reports",
+  "kOvExAdvancedSub": "Ashtakavarga, Shadbala, KP, Jaimini",
+  "kOvAskAstrologer": "Ask an astrologer about your kundali",
+  "kReadingCardTitle": "What this means",
+  "kSsTitle": "Sade Sati · {phase} phase",
+  "kSsPhaseRising": "Rising (1 of 3)",
+  "kSsPhasePeak": "Peak (2 of 3)",
+  "kSsPhaseSetting": "Setting (3 of 3)",
+  "kSsRising": "Rising",
+  "kSsPeak": "Peak",
+  "kSsSetting": "Setting",
+  "kSsNotCurse": "Sade Sati is a period of hard work and maturing — not a curse. Steady, honest effort is rewarded.",
+  "kSsWhatForMe": "What this means for me",
+  "kSsPanotiTitle": "Small Panoti — {type}",
+  "kSsPanotiBody": "A shorter Saturn phase (about 2½ years) that asks for patience with health, effort and daily obstacles.",
+  "kSsSeeTransits": "See transits",
+  "kSsSkyNow": "Right now in the sky",
+  "kSsJupiterGood": "Jupiter is transiting favourably for you — a supportive window for growth, learning and money.",
+  "kSsJupiterNeutral": "No Sade Sati or major Saturn phase is active. Jupiter’s transit is neutral for you right now.",
+  "kSsSeeAllTransits": "See all transits",
+  "kFcTitle": "Birth chart",
+  "kFcTransitingGrahas": "Transiting grahas",
+  "kFcPlanets": "Planets",
+  "kFcAllHouses": "All 12 houses & readings",
+  "kFcAllCharts": "All charts — D1 to D60",
+  "kFcAllChartsTooltip": "All charts",
+  "kFcLoadError": "Could not load this chart",
+  "kFcTwelveHouses": "The 12 houses",
+  "kFcNoPlanets": "No planets",
+  "kBdTithi": "{key, select, other{{raw}}}",
+  "kBdPaksha": "{key, select, other{{raw}}}",
+  "kBdYoga": "{key, select, other{{raw}}}",
+  "kBdKarana": "{key, select, other{{raw}}}",
+  "kBdVarna": "{key, select, other{{raw}}}",
+  "kBdVashya": "{key, select, other{{raw}}}",
+  "kBdYoni": "{key, select, other{{raw}}}",
+  "kBdGana": "{key, select, other{{raw}}}",
+  "kBdNadi": "{key, select, other{{raw}}}",
+  "kBdTara": "{key, select, other{{raw}}}",
+  "kBdYunja": "{key, select, other{{raw}}}",
+  "horoTitle": "Horoscope",
+  "horoReadFull": "Read full horoscope",
+  "horoSpanYesterday": "Yesterday",
+  "horoSpanToday": "Today",
+  "horoSpanTomorrow": "Tomorrow",
+  "horoSpanWeek": "This week",
+  "horoSpanMonth": "This month",
+  "horoAreaLove": "Love",
+  "horoAreaCareer": "Career",
+  "horoAreaMoney": "Money",
+  "horoAreaHealth": "Health",
+  "horoOverall": "Overall",
+  "horoOutOfFive": "out of 5",
+  "horoToneSupportive": "Supportive",
+  "horoToneBalanced": "Balanced",
+  "horoToneChallenging": "Needs care",
+  "horoLuckyColour": "Lucky colour",
+  "horoLuckyNumber": "Lucky number",
+  "horoLuckyPlanet": "Strongest planet",
+  "horoBestDays": "Your best days",
+  "horoTipTitle": "Remedy & tip",
+  "horoTipFor": "Remedy for {planet}",
+  "@horoTipFor": {
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      }
+    }
+  },
+  "horoWhyTitle": "Why the stars say this",
+  "horoWhyBody": "Vedic horoscopes are read from where each planet is transiting, counted from your Moon sign. Arrows show whether a placement supports you or asks for care.",
+  "horoMoonLine": "Moon in {sign} · {nakshatra} · house {house}",
+  "@horoMoonLine": {
+    "placeholders": {
+      "sign": {
+        "type": "String"
+      },
+      "nakshatra": {
+        "type": "String"
+      },
+      "house": {
+        "type": "String"
+      }
+    }
+  },
+  "horoHouseN": "House {n}",
+  "@horoHouseN": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "horoAboutSign": "About {sign}",
+  "@horoAboutSign": {
+    "placeholders": {
+      "sign": {
+        "type": "String"
+      }
+    }
+  },
+  "horoElement": "Element",
+  "horoRuler": "Ruling planet",
+  "horoQuality": "Nature",
+  "horoElementFire": "Fire",
+  "horoElementEarth": "Earth",
+  "horoElementAir": "Air",
+  "horoElementWater": "Water",
+  "horoQualityMovable": "Movable",
+  "horoQualityFixed": "Fixed",
+  "horoQualityDual": "Dual",
+  "horoChangeSign": "Change sign",
+  "horoChooseSign": "Choose your sign",
+  "horoWhichSignTitle": "Which sign should I pick?",
+  "horoWhichSignBody": "Vedic horoscopes are read from your Moon sign (Rashi) — the sign the Moon was in when you were born. It is often different from your Western sun sign. Your Kundali shows your Moon sign; pick that here for the most accurate reading.",
+  "horoOpenKundali": "See my Moon sign in Kundali",
+  "horoCtaTitle": "Want a reading just for you?",
+  "horoCtaBody": "This forecast is for everyone born under {sign}. An astrologer can read your personal chart.",
+  "@horoCtaBody": {
+    "placeholders": {
+      "sign": {
+        "type": "String"
+      }
+    }
+  },
+  "horoCtaButton": "Talk to an astrologer",
+  "horoShare": "Share",
+  "horoEditorialBadge": "Written by our astrologers",
+  "horoError": "We couldn't load the horoscope",
+  "horoSourceNote": "Based on live planetary transits from your Moon sign. For guidance, not certainty.",
+  "matchTitle": "Kundali Milan",
+  "matchHeroTitle": "Match two kundalis",
+  "matchHeroBody": "Guna Milan, Manglik and dosha check in seconds.",
+  "matchBoy": "Boy",
+  "matchGirl": "Girl",
+  "matchSwap": "Swap",
+  "matchChoosePerson": "Choose person",
+  "matchTapToSelect": "Tap to select",
+  "matchRunCta": "Check compatibility",
+  "matchPickBothHint": "Pick both people to see your match score.",
+  "matchPickBoyTitle": "Choose the boy's birth details",
+  "matchPickGirlTitle": "Choose the girl's birth details",
+  "matchAddPerson": "Add a new person",
+  "matchAddPersonHint": "Birth date, time and place",
+  "matchNoProfiles": "No saved birth details yet. Add a person to get started.",
+  "matchHowTitle": "How it works",
+  "matchStep1Title": "Choose two people",
+  "matchStep1Body": "Use saved birth details or add new ones — time and place make it accurate.",
+  "matchStep2Title": "We compare both Moon charts",
+  "matchStep2Body": "Eight kootas — from temperament to health — are scored the traditional Ashtakoota way.",
+  "matchStep3Title": "Get your score and dosha check",
+  "matchStep3Body": "A score out of 36, Manglik compatibility and what each part means.",
+  "matchHistoryTitle": "Your matches",
+  "matchHistoryEmpty": "Your matches will appear here so you can revisit them anytime.",
+  "matchRetry": "Retry",
+  "matchPairNames": "{boy} & {girl}",
+  "@matchPairNames": {
+    "placeholders": {
+      "boy": {
+        "type": "String"
+      },
+      "girl": {
+        "type": "String"
+      }
+    }
+  },
+  "matchResultTitle": "Match result",
+  "matchOutOf36": "out of 36",
+  "matchShareScore": "Guna Milan: {score}/36 · {verdict}",
+  "@matchShareScore": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      },
+      "verdict": {
+        "type": "String"
+      }
+    }
+  },
+  "matchVerdictExcellent": "Excellent match",
+  "matchVerdictGood": "Good match",
+  "matchVerdictAverage": "Average match",
+  "matchVerdictLow": "Needs a closer look",
+  "matchVerdictExcellentBody": "Most kootas align — traditionally a sign of a harmonious, supportive marriage.",
+  "matchVerdictGoodBody": "18 or more gunas is considered suitable for marriage. Check the low-scoring kootas below.",
+  "matchVerdictAverageBody": "Below 18 gunas, astrologers usually suggest a full chart review before deciding.",
+  "matchVerdictLowBody": "Don't decide on this score alone — a full kundali review often changes the picture.",
+  "matchManglikShort": "Manglik",
+  "matchManglikTitle": "Manglik (Mangal dosha) check",
+  "matchManglikNone": "Neither of you is Manglik — no Mangal dosha concern.",
+  "matchManglikBoth": "Both of you are Manglik — traditionally the dosha cancels out.",
+  "matchManglikCancelled": "Mangal dosha is present but cancelled by other placements in the chart.",
+  "matchManglikMismatch": "Only one of you is Manglik. Talk to an astrologer about remedies and a full chart review.",
+  "matchIsManglik": "Manglik",
+  "matchNotManglik": "Not Manglik",
+  "matchManglikCancelledShort": "Manglik (cancelled)",
+  "matchCheckClear": "{name}: clear",
+  "@matchCheckClear": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "matchCheckPresent": "{name}: present",
+  "@matchCheckPresent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "matchDoshaNadi": "Nadi dosha",
+  "matchDoshaBhakoot": "Bhakoot dosha",
+  "matchDoshaGana": "Gana dosha",
+  "matchDoshaTag": "Dosha",
+  "matchBreakdownTitle": "Guna breakdown",
+  "matchBreakdownSub": "Tap any koota to see what it means.",
+  "matchKootaVarna": "Varna",
+  "matchKootaVashya": "Vashya",
+  "matchKootaTara": "Tara",
+  "matchKootaYoni": "Yoni",
+  "matchKootaMaitri": "Graha Maitri",
+  "matchKootaGana": "Gana",
+  "matchKootaBhakoot": "Bhakoot",
+  "matchKootaNadi": "Nadi",
+  "matchKootaVarnaMeaning": "Values & ego",
+  "matchKootaVashyaMeaning": "Mutual attraction",
+  "matchKootaTaraMeaning": "Destiny & well-being",
+  "matchKootaYoniMeaning": "Physical harmony",
+  "matchKootaMaitriMeaning": "Mental wavelength",
+  "matchKootaGanaMeaning": "Temperament",
+  "matchKootaBhakootMeaning": "Love, family & finances",
+  "matchKootaNadiMeaning": "Health & children",
+  "matchKootaVarnaDetail": "Compares the spiritual temperament of both Moon signs — how naturally your values and sense of duty line up. Worth 1 point.",
+  "matchKootaVashyaDetail": "Shows the natural pull and influence between partners — who leads, who adapts, and how easily you agree. Worth 2 points.",
+  "matchKootaTaraDetail": "Counts the nakshatras between you to judge fortune, health and longevity of the bond. Worth 3 points.",
+  "matchKootaYoniDetail": "Each nakshatra has an animal nature; this koota compares them for intimacy and physical compatibility. Worth 4 points.",
+  "matchKootaMaitriDetail": "Compares the lords of your Moon signs — friendship between them means you think alike and resolve issues easily. Worth 5 points.",
+  "matchKootaGanaDetail": "Groups nakshatras into Deva, Manushya and Rakshasa temperaments. A mismatch can mean frequent friction. Worth 6 points.",
+  "matchKootaBhakootDetail": "Looks at the distance between your Moon signs, which traditionally affects love, family growth and shared finances. Worth 7 points.",
+  "matchKootaNadiDetail": "The most weighted koota. Same Nadi (0 points) is traditionally linked to health and progeny concerns and has well-known exceptions. Worth 8 points.",
+  "matchChartsTitle": "Birth chart details",
+  "matchRowRasi": "Moon sign",
+  "matchRowNakshatra": "Nakshatra",
+  "matchRowGana": "Gana",
+  "matchRowYoni": "Yoni",
+  "matchAskTitle": "Talk it through with an astrologer",
+  "matchAskBody": "Doshas often have cancellations and remedies. Get a full reading of both charts.",
+  "matchDisclaimer": "Guna Milan is a traditional guide, not a guarantee. Consider the full charts and your own judgement.",
+  "matchRelSelf": "Myself",
+  "matchRelPartner": "Partner",
+  "matchRelChild": "Child",
+  "matchRelParent": "Parent",
+  "matchRelSibling": "Sibling",
+  "matchRelFriend": "Friend",
+  "kAdvTitle": "Advanced reports",
+  "kAdvIntro": "The technical layers astrologers use for depth and timing. Skim them for interest, or open one during a consultation.",
+  "kAdvAshtakavarga": "Ashtakavarga",
+  "kAdvAshtakavargaSub": "Point-strength of every sign. Higher = the sky supports transits there.",
+  "kAdvShadbala": "Shadbala",
+  "kAdvShadbalaSub": "The six-fold strength of each planet, measured against what it needs.",
+  "kAdvKp": "KP System",
+  "kAdvKpSub": "Krishnamurti Paddhati — cuspal sub-lords and ruling planets for timing.",
+  "kAdvJaimini": "Jaimini",
+  "kAdvJaiminiSub": "Chara Karakas, Arudha Lagna and the Jaimini way of reading a chart.",
+  "kAdvDownloadPdf": "Download the full PDF report",
+  "kAdvFooter": "These are technical. For a reading in plain words, talk to an astrologer.",
+  "kAdvReport": "Report",
+  "kAdvLoadError": "Could not load this report.",
+  "kAdvKpIntro": "KP divides the zodiac into 249 sub-parts. The sub-lord of a house cusp decides whether that area of life delivers; the ruling planets are used for on-the-spot timing.",
+  "kAdvJaiminiIntro": "Jaimini reads the chart through the Chara Karakas (planets ranked by degree, each signifying a life area) and the Arudha padas — how things appear to the world.",
+  "kAdvAvIntro": "Sarvashtakavarga adds every planet’s contribution to each house — the total is always 337. A house scoring 28+ supports planets transiting through it; below 25 is a weaker patch.",
+  "kAdvHouseN": "House {n}",
+  "kAdvBhinnaTotals": "Per-planet totals (Bhinnashtakavarga)",
+  "kAdvShadbalaIntro": "Shadbala scores each planet’s strength in rupas against the minimum it needs. A ratio above 1.0 means the planet can deliver its results reliably.",
+  "kAdvStrongest": "Strongest: {planet}",
+  "kAdvWeakest": "Weakest: {planet}",
+  "kAdvReadWithAstrologer": "This report is meant to be read with an astrologer.",
+  "kAdvSecCuspalSublords": "Cuspal sub-lords",
+  "kAdvSecRulingPlanets": "Ruling planets",
+  "kAdvSecHouseSignificators": "House significators",
+  "kAdvSecCharaKarakas": "Chara karakas",
+  "kAdvSecArudhaPadas": "Arudha padas",
+  "kAdvSecKarakamsa": "Karakamsa",
+  "kAdvSecCharaDasha": "Chara dasha",
+  "kBhavaTitle": "Houses · Bhava",
+  "kBhavaIntro": "Each of the 12 houses, its natural significations, and how its lord and occupants shape it.",
+  "kBhavaMoreBenefic": "More benefic than malefic influence",
+  "kBhavaMoreMalefic": "More malefic than benefic influence",
+  "kBhavaOccupiedBy": "Occupied by {planets}",
+  "kBhavaAspectedBy": "Aspected by {planets}",
+  "kBhavaBeneficCount": "{count} benefic",
+  "kBhavaMaleficCount": "{count} malefic",
+  "kBhavaNeedsTime": "House analysis needs a birth time",
+  "kBhavaNeedsTimeBody": "Add an exact time of birth to this profile to see how each house is shaped.",
+  "kDashaIntroVimshottari": "Vimshottari is a 120-year cycle of planetary periods, timed from where the Moon sat at your birth.",
+  "kDashaIntroYogini": "Yogini is a 36-year cycle of eight yoginis, from the Moon’s nakshatra.",
+  "kDashaIntroAshtottari": "Ashtottari is a 108-year cycle counted from Ardra.",
+  "kDashaBalance": "Balance of {lord} dasha at birth: {years} yrs",
+  "kDashaVimshottari": "Vimshottari",
+  "kDashaYogini": "Yogini",
+  "kDashaAshtottari": "Ashtottari",
+  "kDashaNowRunning": "Now running",
+  "kDashaNow": "NOW",
+  "kDashaYears": "{count} yrs",
+  "kPlanetsIntro": "Where each planet sits, how strong it is, and what it tends to bring. Tap to read more. Positions are sidereal (Lahiri).",
+  "kTrTitle": "Transits",
+  "kTrSadeSatiCalendar": "See the full Sade Sati calendar (with dates)",
+  "kTrSkyNow": "The sky right now — against your chart",
+  "kTrSadeSati": "Sade Sati",
+  "kTrPhaseOf": "Phase {n} of 3",
+  "kTrPhaseHintRising": "Saturn in the 12th",
+  "kTrPhaseHintPeak": "over the Moon",
+  "kTrPhaseHintSetting": "Saturn in the 2nd",
+  "kTrHowToWork": "How to work with it",
+  "kTrTip1": "Cut what isn’t working — Saturn rewards honesty about it",
+  "kTrTip2": "Build routines and finish what you start",
+  "kTrTip3": "Care for your sleep, knees, teeth and older relatives",
+  "kTrTip4": "It is a rebuild, not a punishment. Results show after it ends.",
+  "kTrPanotiBody": "A shorter (~2½ year) Saturn phase. Expect friction with health, daily effort and obstacles — meet it with patience and routine.",
+  "kTrPlanetInSign": "{planet} in {sign}",
+  "kTrJupiterGood": "Jupiter’s transit is favourable — supportive for growth, learning, money and family right now.",
+  "kTrJupiterNeutral": "Jupiter’s transit is neutral for you at the moment.",
+  "kTrCloseContacts": "Close contacts now",
+  "kTrCloseContactLine": "Transiting {planet} is within 3° of your natal {natal} — that area of life is active this week.",
+  "kMuChoghadiya": "{key, select, other{{raw}}}",
+  "kUpOr": "or {name}",
+  "kUpFinger": "{finger} finger",
+  "kYdPartial": "partial",
+  "moodTitle": "Today's mood",
+  "moodMeter": "Mood meter",
+  "moodWhyTitle": "Why today feels this way",
+  "moodTipTitle": "One small thing for today",
+  "moodLockedTitle": "Your astrologer can tell you",
+  "moodLockedSub": "The full picture needs your whole chart, not just the Moon.",
+  "moodTalkCta": "Talk to an astrologer now",
+  "moodNextChange": "Your mood shifts next on {when}",
+  "kOvExMood": "Today's mood",
+  "kOvExMoodSub": "How the Moon is shaping your mind today",
+  "prefsMoodAlerts": "Daily mood alerts",
+  "prefsMoodAlertsDesc": "About three mornings a week, when the Moon changes sign in your chart.",
+  "callCalling": "Calling…",
+  "callRinging": "Ringing…",
+  "callConnecting": "Connecting…",
+  "callReconnecting": "Reconnecting…",
+  "callEnded": "Call ended",
+  "callPoorConnection": "Weak connection",
+  "callMute": "Mute",
+  "callSpeaker": "Speaker",
+  "callEnd": "End",
+  "callEncrypted": "Encrypted call",
+  "callMicTitle": "Microphone needed",
+  "callMicBody": "Allow microphone access so the astrologer can hear you.",
+  "callMicBlockedBody": "Microphone access is turned off for TalkAcharya. Turn it on in Settings.",
+  "callOpenSettings": "Open settings",
+  "callTryAgain": "Try again",
+  "callFailedTitle": "Couldn't start the call",
+  "callEndConfirmTitle": "End this call?",
+  "callEndConfirmBody": "Billing stops as soon as the call ends.",
+  "callEndConfirmYes": "End call",
+  "callEndConfirmNo": "Keep talking",
+  "callWaitingAccept": "Waiting for {name} to accept…",
+  "@callWaitingAccept": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callBookTitle": "Call {name}",
+  "@callBookTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callBookBilling": "Voice call · billed per minute once connected",
+  "callBookCta": "Start call · {price}/min",
+  "@callBookCta": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "callUnavailable": "This astrologer is not taking calls right now.",
+  "giftAction": "Send a gift",
+  "giftSheetTitle": "Send a gift to {name}",
+  "@giftSheetTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "giftSheetSubtitle": "A small token of gratitude — they see it instantly.",
+  "giftQuantity": "Quantity",
+  "giftAddNote": "Add a note",
+  "giftNoteHint": "Write a short message (optional)",
+  "giftChoose": "Choose a gift",
+  "giftSendCta": "Send {gift} · {price}",
+  "@giftSendCta": {
+    "placeholders": {
+      "gift": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "giftWalletBalance": "Balance {amount}",
+  "@giftWalletBalance": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "giftAddMoney": "Add money",
+  "giftLowBalanceTitle": "Not enough balance",
+  "giftLowBalanceBody": "Add money to your wallet to send this gift.",
+  "giftSentTitle": "{gift} sent to {name}",
+  "@giftSentTitle": {
+    "placeholders": {
+      "gift": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "giftSentBody": "They'll see it right away. Thank you for your kindness!",
+  "giftSendAnother": "Send another",
+  "giftLoadError": "Couldn't load gifts",
+  "giftThankYouTitle": "Say thanks with a gift",
+  "giftThankYouBody": "Loved the session? Send {name} a small token of gratitude.",
+  "@giftThankYouBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "giftThankYouSentTitle": "Thank you for your gift",
+  "helpTitle": "Help & support",
+  "helpHeroTitle": "How can we help?",
+  "helpHeroBody": "Report a problem with a session, track your reports or reach our team.",
+  "helpReportSection": "Report a problem with a session",
+  "helpReportEmpty": "Your completed sessions will appear here.",
+  "helpReportAction": "Report",
+  "helpYourReports": "Your reports",
+  "helpContactSection": "Contact us",
+  "helpWhatsapp": "Chat on WhatsApp",
+  "helpEmailUs": "Email us",
+  "helpCentre": "Help centre",
+  "helpFaqSection": "Frequently asked questions",
+  "helpLoadError": "Couldn't load your sessions.",
+  "helpFaqChargesQ": "How am I charged for a consultation?",
+  "helpFaqChargesA": "You pay per minute, only while the session is live. Billing starts once the astrologer joins and stops the moment either of you ends it.",
+  "helpFaqNoResponseQ": "What if the astrologer doesn't respond?",
+  "helpFaqNoResponseA": "If your request isn't accepted, you aren't charged — any amount held for the session goes back to your wallet.",
+  "helpFaqRefundQ": "Can I get a refund?",
+  "helpFaqRefundA": "If something went wrong — wrong charges, a technical problem or an unhelpful session — report it from that session. Our team reviews every report and refunds to your wallet when it's warranted.",
+  "helpFaqBalanceQ": "My balance ran out during a session. What now?",
+  "helpFaqBalanceA": "The session ends automatically when your balance runs out. Recharge your wallet and start again with the same astrologer from the session summary.",
+  "helpFaqPrivacyQ": "Are my conversations private?",
+  "helpFaqPrivacyA": "Your consultations are between you and your astrologer. Our support team looks at a session only to resolve a report or keep the platform safe.",
+  "helpFaqLanguageQ": "How do I change the app language?",
+  "helpFaqLanguageA": "Go to Profile → Language and choose the language you're most comfortable in.",
+  "reportTitle": "Report a problem",
+  "reportSessionWith": "Session with {name}",
+  "@reportSessionWith": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reportWhatHappened": "What went wrong?",
+  "reportTypeBilling": "Wrong charges",
+  "reportTypeBillingHint": "I was charged more than I should have been",
+  "reportTypeQuality": "Unhelpful session",
+  "reportTypeQualityHint": "The guidance wasn't what was promised",
+  "reportTypeConduct": "Inappropriate behaviour",
+  "reportTypeConductHint": "The astrologer was rude or unprofessional",
+  "reportTypeNoShow": "Astrologer didn't respond",
+  "reportTypeNoShowHint": "They accepted but never really joined",
+  "reportTypeTechnical": "Technical problem",
+  "reportTypeTechnicalHint": "The chat or call kept failing",
+  "reportDescribe": "Tell us more",
+  "reportDescribeHint": "Share what happened — the more detail, the faster we can help.",
+  "reportMinChars": "At least {count} characters",
+  "@reportMinChars": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "reportPrivacyNote": "To look into your report, our support team will review this session.",
+  "reportSubmit": "Submit report",
+  "reportSubmittedTitle": "Report submitted",
+  "reportSubmittedBody": "We'll look into it and notify you as soon as there's an update.",
+  "reportAlreadyTitle": "You've already reported this session",
+  "reportAlreadyBody": "Our team is looking into it. You'll be notified when there's an update.",
+  "reportViewStatus": "View report status",
+  "disputeTitle": "Report details",
+  "disputeStatusOpen": "Received",
+  "disputeStatusInvestigating": "Under review",
+  "disputeStatusResolved": "Resolved",
+  "disputeStatusRejected": "Closed",
+  "disputeHeadlineOpen": "We've received your report",
+  "disputeHeadlineInvestigating": "Our team is reviewing your report",
+  "disputeHeadlineResolved": "Your report is resolved",
+  "disputeHeadlineRejected": "We've reviewed your report",
+  "disputeOpenBody": "We'll notify you as soon as there's an update.",
+  "disputeReportedOn": "Reported on {date}",
+  "@disputeReportedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "disputeRefundedTitle": "{amount} refunded to your wallet",
+  "@disputeRefundedTitle": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "disputeOpenWallet": "Wallet",
+  "disputeOutcome": "Outcome",
+  "disputeOutcomeNoRefund": "No refund was issued for this session.",
+  "disputeTimeline": "Progress",
+  "disputeStepRaised": "Report submitted",
+  "disputeStepReviewing": "Under review",
+  "disputeStepResolved": "Resolved",
+  "disputeStepRejected": "Closed",
+  "disputeYourReport": "Your report",
+  "roomReportProblem": "Report a problem",
+  "articlesTitle": "Read & learn",
+  "articlesRailSubtitle": "Guides, remedies and festivals",
+  "articlesAll": "All",
+  "articlesEmptyTitle": "Nothing to read here yet",
+  "articlesEmptyBody": "New articles are on their way — check back soon.",
+  "articleCatAstrology": "Astrology",
+  "articleCatHoroscope": "Horoscope",
+  "articleCatFestivals": "Festivals",
+  "articleCatRemedies": "Remedies",
+  "articleCatGuides": "Guides",
+  "articleCatNews": "News",
+  "articleMinRead": "{minutes} min read",
+  "@articleMinRead": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "articleShare": "Share",
+  "articleMoreToRead": "More to read",
+  "articleAskTitle": "Want guidance for your own chart?",
+  "articleAskBody": "Talk to a verified astrologer in minutes.",
+  "articleAskCta": "Ask now",
+  "panchangTitle": "Panchang",
+  "panchangToday": "Today",
+  "panchangPickDate": "Pick a date",
+  "panchangMoonIn": "Moon in {sign}",
+  "@panchangMoonIn": {
+    "placeholders": {
+      "sign": {
+        "type": "String"
+      }
+    }
+  },
+  "panchangTill": "till {time}",
+  "@panchangTill": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "panchangRightNow": "Right now",
+  "panchangNowChoghadiya": "{name} Choghadiya until {time}",
+  "@panchangNowChoghadiya": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "panchangRahuNow": "Rahu Kaal is on until {time} — hold off on new beginnings.",
+  "@panchangRahuNow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "panchangLimbs": "Today's Panchang",
+  "panchangAuspicious": "Auspicious timings",
+  "panchangInauspicious": "Avoid starting new work",
+  "panchangBrahma": "Brahma Muhurta",
+  "panchangAbhijit": "Abhijit Muhurta",
+  "panchangNoAbhijit": "Abhijit Muhurta isn't observed on Wednesdays.",
+  "panchangRahuKaal": "Rahu Kaal",
+  "panchangYamaganda": "Yamaganda",
+  "panchangGulika": "Gulika Kaal",
+  "panchangChoghadiya": "Choghadiya",
+  "panchangDay": "Day",
+  "panchangNight": "Night",
+  "panchangNotes": "Notes from our astrologers",
+  "panchangPersonalTitle": "Timings for your chart",
+  "panchangPersonalBody": "See the hours that suit you best, worked out from your kundali.",
+  "panchangFooter": "Calculated for {place} · {timezone} · from local sunrise",
+  "@panchangFooter": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      },
+      "timezone": {
+        "type": "String"
+      }
+    }
+  },
+  "panchangChoosePlaceTitle": "Choose your city",
+  "panchangChoosePlaceBody": "Panchang timings depend on where you are — pick the city you want them for.",
+  "panchangChoosePlaceCta": "Choose city",
+  "panchangUsePlace": "Use {place}",
+  "@panchangUsePlace": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "panchangCity": "City",
+  "panchangCityHint": "Search a city or town",
+  "kPdfTitle": "Kundali report (PDF)",
+  "kPdfFull": "Full report",
+  "kPdfFullSub": "Charts, planets, avakahada, dasha timeline, yogas and doshas",
+  "kPdfBasic": "One-page summary",
+  "kPdfBasicSub": "Lagna and Navamsa charts with planet positions",
+  "kPdfChartStyle": "Chart style",
+  "kPdfEastIndian": "East Indian",
+  "kPdfShareCta": "Download & share",
+  "kPdfPreparing": "Preparing your PDF…",
+  "kPdfNote": "The PDF is in English. Save it to your phone or send it on WhatsApp.",
+  "kPdfUnavailable": "PDF reports aren't available right now. Please try again later."
+}

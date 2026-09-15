@@ -35,30 +35,34 @@ class _RequestsView extends StatelessWidget {
         title: initialTab == 1 ? 'Chats' : 'Requests',
         child: Column(
           children: [
-            const TabBar(tabs: [
-              Tab(text: 'Incoming'),
-              Tab(text: 'Active'),
-              Tab(text: 'History'),
-            ]),
+            const TabBar(
+              tabs: [
+                Tab(text: 'Incoming'),
+                Tab(text: 'Active'),
+                Tab(text: 'History'),
+              ],
+            ),
             Expanded(
               child: BlocBuilder<RequestsCubit, RequestsState>(
                 builder: (context, state) {
                   if (state.loading) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  return TabBarView(children: [
-                    _IncomingList(state.incoming),
-                    _SimpleList(
-                      state.active,
-                      empty: 'No active consultations',
-                      onTap: (c) => context.push('/chats/${c.id}'),
-                    ),
-                    _SimpleList(
-                      state.history,
-                      empty: 'No past consultations',
-                      onTap: (c) => context.push('/requests/${c.id}'),
-                    ),
-                  ]);
+                  return TabBarView(
+                    children: [
+                      _IncomingList(state.incoming),
+                      _SimpleList(
+                        state.active,
+                        empty: 'No active consultations',
+                        onTap: (c) => context.push('/chats/${c.id}'),
+                      ),
+                      _SimpleList(
+                        state.history,
+                        empty: 'No past consultations',
+                        onTap: (c) => context.push('/requests/${c.id}'),
+                      ),
+                    ],
+                  );
                 },
               ),
             ),
@@ -97,43 +101,50 @@ class _IncomingList extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('${c.customerName} · ${c.channel}',
-                      style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    '${c.customerName} · ${c.channel}',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   if (c.question.isNotEmpty) ...[
                     const SizedBox(height: 4),
-                    Text(c.question,
-                        maxLines: 2, overflow: TextOverflow.ellipsis),
+                    Text(
+                      c.question,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ],
                   const SizedBox(height: 10),
-                  Row(children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => cubit.reject(c.id, 'unavailable'),
-                        child: const Text('Decline'),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => cubit.reject(c.id, 'unavailable'),
+                          child: const Text('Decline'),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: FilledButton(
-                        onPressed: () async {
-                          final accepted = await cubit.accept(c.id);
-                          if (accepted != null && context.mounted) {
-                            if (c.channel == 'chat') {
-                              context.push('/chats/${c.id}');
-                            } else {
-                              showIncomingRequestSheet(
-                                context,
-                                consultationId: c.id,
-                                channel: c.channel,
-                                question: c.question,
-                              );
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: FilledButton(
+                          onPressed: () async {
+                            final accepted = await cubit.accept(c.id);
+                            if (accepted != null && context.mounted) {
+                              if (c.channel == 'chat') {
+                                context.push('/chats/${c.id}');
+                              } else {
+                                showIncomingRequestSheet(
+                                  context,
+                                  consultationId: c.id,
+                                  channel: c.channel,
+                                  question: c.question,
+                                );
+                              }
                             }
-                          }
-                        },
-                        child: const Text('Accept'),
+                          },
+                          child: const Text('Accept'),
+                        ),
                       ),
-                    ),
-                  ]),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -167,14 +178,25 @@ class _SimpleList extends StatelessWidget {
             subtitle: Text(
               c.isEnded
                   ? '${c.billedMinutes} min · ${c.currency} ${c.astrologerAmount}'
-                  : c.channel,
+                  : (c.isLive ? 'Live now · tap to open' : c.channel),
             ),
-            trailing: c.rating != null
-                ? Row(mainAxisSize: MainAxisSize.min, children: [
-                    Text('${c.rating}'),
-                    const Icon(Icons.star_rounded, size: 16),
-                  ])
-                : const Icon(Icons.chevron_right_rounded),
+            trailing: c.unreadCount > 0
+                ? Badge(label: Text('${c.unreadCount}'))
+                : c.rating != null
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('${c.rating}'),
+                      const Icon(Icons.star_rounded, size: 16),
+                    ],
+                  )
+                : (c.isLive
+                      ? Icon(
+                          Icons.circle,
+                          size: 10,
+                          color: Theme.of(context).colorScheme.tertiary,
+                        )
+                      : const Icon(Icons.chevron_right_rounded)),
             onTap: () => onTap(c),
           );
         },

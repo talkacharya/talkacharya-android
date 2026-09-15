@@ -1,0 +1,2380 @@
+{
+  "@@locale": "hi",
+  "appName": "टॉकआचार्य",
+  "commonOk": "ठीक है",
+  "commonCancel": "रद्द करें",
+  "commonDone": "हो गया",
+  "commonNext": "आगे",
+  "commonBack": "पीछे",
+  "commonRetry": "फिर कोशिश करें",
+  "commonSave": "सेव करें",
+  "commonEdit": "बदलें",
+  "commonDelete": "हटाएँ",
+  "commonClose": "बंद करें",
+  "commonContinue": "आगे बढ़ें",
+  "commonConfirm": "पक्का करें",
+  "commonSeeAll": "सभी देखें",
+  "commonViewAll": "सभी देखें",
+  "commonShare": "शेयर करें",
+  "commonCopy": "कॉपी करें",
+  "commonCopied": "कॉपी हो गया",
+  "commonApply": "लगाएँ",
+  "commonSearch": "खोजें",
+  "commonYes": "हाँ",
+  "commonNo": "नहीं",
+  "commonLoading": "लोड हो रहा है…",
+  "commonSomethingWentWrong": "कुछ गड़बड़ हो गई",
+  "commonCheckConnection": "अपना इंटरनेट कनेक्शन जाँचें और फिर कोशिश करें",
+  "commonComingSoon": "जल्द आ रहा है",
+  "commonToday": "आज",
+  "commonYesterday": "कल",
+  "commonMinutesShort": "{count} मिनट",
+  "@commonMinutesShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commonOffline": "आप ऑफ़लाइन हैं",
+  "navHome": "होम",
+  "navAstrologers": "ज्योतिषी",
+  "navLive": "लाइव",
+  "navWallet": "वॉलेट",
+  "navProfile": "प्रोफ़ाइल",
+  "authWelcomeTitle": "भरोसेमंद ज्योतिषियों से बात करें",
+  "authWelcomeSubtitle": "प्रेम, करियर, पैसे और अन्य विषयों पर मार्गदर्शन के लिए चैट या कॉल करें",
+  "authPhoneTitle": "अपना मोबाइल नंबर डालें",
+  "authPhoneSubtitle": "अपना मोबाइल नंबर डालें, हम आपको एक बार का कोड भेजेंगे।",
+  "authOtpSubtitle": "हमने {phone} पर 6 अंकों का कोड भेजा है।",
+  "@authOtpSubtitle": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "authTestModeCode": "टेस्ट मोड — आपका कोड है {code}",
+  "@authTestModeCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "authPhoneHint": "मोबाइल नंबर",
+  "authPhoneHelper": "हम SMS से एक बार का कोड भेजेंगे",
+  "authGetOtp": "OTP पाएँ",
+  "authOtpTitle": "6 अंकों का कोड डालें",
+  "authOtpSentTo": "{phone} पर भेजा गया",
+  "@authOtpSentTo": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "authOtpResend": "कोड दोबारा भेजें",
+  "authOtpResendIn": "{seconds} सेकंड में दोबारा भेजें",
+  "@authOtpResendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authVerify": "पुष्टि करें",
+  "authChangeNumber": "नंबर बदलें",
+  "authInvalidPhone": "सही मोबाइल नंबर डालें",
+  "authInvalidOtp": "6 अंकों का कोड डालें",
+  "authWrongApp": "यह नंबर ज्योतिषी ऐप के लिए रजिस्टर्ड है",
+  "authDevCode": "डेव कोड: {code}",
+  "@authDevCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "authTermsNotice": "आगे बढ़ने का मतलब है कि आप हमारी शर्तें और गोपनीयता नीति मानते हैं",
+  "authLogout": "लॉग आउट",
+  "authLogoutConfirm": "टॉकआचार्य से लॉग आउट करें? आपको दोबारा साइन इन करना होगा।",
+  "homeGreeting": "नमस्ते, {name}",
+  "@homeGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeGuidanceTagline": "मार्गदर्शन, जब भी आपको ज़रूरत हो",
+  "homeGreetingFallbackName": "आप",
+  "walletAddShort": "जोड़ें",
+  "homeChatNow": "अभी चैट करें",
+  "homeCallNow": "अभी कॉल करें",
+  "homeFromPerMin": "{price}/मिनट से",
+  "@homeFromPerMin": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "homeOnlineCount": "{count} ऑनलाइन",
+  "@homeOnlineCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeOnlineNow": "अभी ऑनलाइन",
+  "homeTalkToAstrologer": "किसी ज्योतिषी से बात करें",
+  "homeLiveNow": "अभी लाइव",
+  "homeWhatsOnYourMind": "आपके मन में क्या है?",
+  "homeTodaysHoroscope": "आज का राशिफल",
+  "homeChooseYourSign": "अपनी राशि चुनें",
+  "homeReadMore": "और पढ़ें",
+  "homeShowLess": "कम दिखाएँ",
+  "homeLuckToday": "आज का भाग्य · {rating}",
+  "@homeLuckToday": {
+    "placeholders": {
+      "rating": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTodaysPanchang": "आज का पंचांग",
+  "homePanchangAddProfile": "अपनी जगह के अनुसार पंचांग के लिए अपनी जन्म जानकारी जोड़ें",
+  "homeFreeTools": "मुफ़्त टूल",
+  "homeTalkAgain": "फिर बात करें",
+  "homeAddMoneyGetBonus": "पैसे जोड़ें, बोनस पाएँ",
+  "homeReferAFriend": "दोस्त को बुलाएँ, दोनों कमाएँ",
+  "homeReferShort": "अपना कोड शेयर करें — आप दोनों को वॉलेट क्रेडिट मिलेगा",
+  "homeReferYourCode": "आपका कोड: {code}",
+  "@homeReferYourCode": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "homeInvite": "बुलाएँ",
+  "homeResumeInProgress": "{channel} · चल रहा है",
+  "@homeResumeInProgress": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
+  "homeResumePaused": "{channel} · रुका हुआ",
+  "@homeResumePaused": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
+  "homeResume": "जारी रखें",
+  "homeTrustVerified": "हर ज्योतिषी लाइव आने से पहले ID-सत्यापित होता है",
+  "homeTrustPrivate": "100% निजी और गोपनीय परामर्श",
+  "homeTrustVolume": "हर हफ़्ते हज़ारों परामर्श",
+  "homeCouldntLoadAstrologers": "ज्योतिषी लोड नहीं हो सके",
+  "homeCouldntLoadReading": "आज का राशिफल नहीं मिल सका",
+  "homeCouldntLoadPanchang": "पंचांग लोड नहीं हो सका",
+  "homeNoAstrologersFilter": "अभी इस फ़िल्टर से कोई ज्योतिषी नहीं मिला",
+  "concernLove": "प्रेम",
+  "concernMarriage": "विवाह",
+  "concernCareer": "करियर",
+  "concernFinance": "पैसा",
+  "concernHealth": "स्वास्थ्य",
+  "concernEducation": "शिक्षा",
+  "concernBusiness": "व्यापार",
+  "concernLegal": "कानूनी",
+  "channelChat": "चैट",
+  "channelCall": "कॉल",
+  "channelVoice": "वॉइस कॉल",
+  "channelVideo": "वीडियो कॉल",
+  "channelAll": "सभी",
+  "astroFilterAll": "सभी",
+  "astroSortRecommended": "सुझाए गए",
+  "astroSortTopRated": "सबसे ज़्यादा रेटेड",
+  "astroSortExperienced": "सबसे अनुभवी",
+  "astroSortConsulted": "सबसे ज़्यादा परामर्श",
+  "astroSortNew": "नए",
+  "astroOnline": "ऑनलाइन",
+  "astroBusy": "व्यस्त",
+  "astroNotifyMe": "मुझे बताएँ",
+  "astroWaitMinutes": "~{count} मिनट इंतज़ार",
+  "@astroWaitMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "astroPerMinute": "{price}/मिनट",
+  "@astroPerMinute": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "astroYearsExp": "{count} साल का अनुभव",
+  "@astroYearsExp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "astroRatingNew": "नया",
+  "astroSessionsCount": "{count} परामर्श",
+  "@astroSessionsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "astroSearchHint": "नाम, विद्या या भाषा से खोजें",
+  "astroNoneFound": "कोई ज्योतिषी नहीं मिला",
+  "astroNoneFoundHint": "कोई फ़िल्टर हटाकर या कुछ और खोजकर देखें",
+  "astroThatsEveryone": "अभी के लिए बस इतने ही",
+  "astroRateOnRequest": "दर पूछने पर",
+  "astroCouldntLoad": "ज्योतिषी लोड नहीं हो सके",
+  "astroSortBy": "क्रमबद्ध करें",
+  "astroLoadMoreFailed": "और लोड नहीं हो सका",
+  "astroDefaultSkill": "वैदिक ज्योतिष",
+  "astroYears": "{count} वर्ष",
+  "@astroYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "astroSessions": "{count} सत्र",
+  "@astroSessions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "astroChat": "चैट",
+  "astroCall": "कॉल",
+  "astroVideo": "वीडियो",
+  "astroProfileTitle": "ज्योतिषी",
+  "astroExpertiseTitle": "विशेषज्ञता",
+  "astroAboutTitle": "परिचय",
+  "astroRatesTitle": "परामर्श दरें",
+  "astroReviewsCount": "{count, plural, =0{No reviews yet} one{1 review} other{{count} reviews}}",
+  "@astroReviewsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "astroStatRating": "रेटिंग",
+  "astroStatExperience": "अनुभव",
+  "astroStatSessions": "सत्र",
+  "astroStatRepeatClients": "दोबारा आने वाले",
+  "astroSpeaks": "बोलते हैं: {languages}",
+  "@astroSpeaks": {
+    "placeholders": {
+      "languages": {
+        "type": "String"
+      }
+    }
+  },
+  "astroRepliesIn": "लगभग {time} में जवाब",
+  "@astroRepliesIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "astroOnlineNow": "अभी ऑनलाइन",
+  "astroOfflineTitle": "अभी ऑफ़लाइन",
+  "astroNotifyWhenOnline": "ऑनलाइन आने पर सूचित करें",
+  "astroReadMore": "और पढ़ें",
+  "astroReadLess": "कम दिखाएँ",
+  "astroCouldntLoadOne": "यह ज्योतिषी लोड नहीं हो सका",
+  "astroCallsComingSoon": "वॉइस और वीडियो कॉल जल्द आ रहे हैं",
+  "astroTrustLine": "आईडी-सत्यापित · निजी और गोपनीय · प्रति मिनट भुगतान",
+  "walletTitle": "वॉलेट",
+  "walletAvailableBalance": "उपलब्ध राशि",
+  "walletOnHold": "{amount} रोकी गई",
+  "@walletOnHold": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "walletOnHoldReason": "{amount} रोकी गई · एक कॉल चल रही है",
+  "@walletOnHoldReason": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "walletAddMoney": "पैसे जोड़ें",
+  "walletRecentActivity": "हाल की गतिविधि",
+  "walletTransactions": "लेन-देन",
+  "walletHowItWorksTitle": "वॉलेट कैसे काम करता है",
+  "walletHowItWorksBody": "वॉलेट की राशि सिर्फ़ परामर्श के लिए इस्तेमाल होती है और कभी समाप्त नहीं होती। बची हुई राशि वापस की जा सकती है — रिफ़ंड नीति देखें।",
+  "walletRefundPolicy": "रिफ़ंड नीति",
+  "walletHaveCoupon": "कोई कूपन कोड है?",
+  "walletCouponHint": "कोड डालें",
+  "walletCouponApplied": "आपके वॉलेट में {amount} जोड़े गए",
+  "@walletCouponApplied": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "walletSecuredBy": "Razorpay द्वारा सुरक्षित · UPI · कार्ड · नेटबैंकिंग",
+  "walletGstInvoices": "GST इनवॉइस",
+  "walletInvoicesSubtitle": "आपके रिचार्ज की इनवॉइस और रसीदें",
+  "walletNoTransactions": "अभी कोई लेन-देन नहीं",
+  "walletNoTransactionsHint": "शुरू करने के लिए अपने वॉलेट में पैसे जोड़ें",
+  "walletBalanceAfter": "शेष {amount}",
+  "@walletBalanceAfter": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "walletFilterAll": "सभी",
+  "walletFilterRecharge": "जोड़े गए",
+  "walletFilterConsultation": "परामर्श",
+  "walletFilterRefund": "रिफ़ंड",
+  "walletFilterBonus": "बोनस",
+  "kindRecharge": "पैसे जोड़े गए",
+  "kindConsultationCharge": "परामर्श",
+  "kindConsultationRefund": "रिफ़ंड",
+  "kindPromoCredit": "प्रोमो क्रेडिट",
+  "kindCouponDiscount": "कूपन छूट",
+  "kindSignupBonus": "साइनअप बोनस",
+  "kindReferralBonus": "रेफ़रल बोनस",
+  "kindAdjustment": "समायोजन",
+  "kindGiftSpend": "उपहार भेजा",
+  "kindHold": "कॉल के लिए रोकी गई",
+  "kindChargeback": "चार्जबैक",
+  "rechargeChooseAmount": "वॉलेट में पैसे जोड़ें",
+  "rechargeAmountLabel": "राशि",
+  "rechargePayAmount": "{amount} चुकाएँ",
+  "@rechargePayAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rechargeAddCoupon": "कूपन कोड जोड़ें",
+  "rechargeBonusBadge": "+{amount}",
+  "@rechargeBonusBadge": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rechargeStarterPack": "शुरुआती",
+  "rechargeMinAmount": "कम से कम {amount}",
+  "@rechargeMinAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rechargeMaxAmount": "ज़्यादा से ज़्यादा {amount}",
+  "@rechargeMaxAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rechargeOpeningCheckout": "सुरक्षित चेकआउट खुल रहा है…",
+  "rechargeConfirming": "भुगतान मिल गया — आपकी राशि अपडेट हो रही है…",
+  "rechargeSuccessTitle": "{amount} जोड़े गए",
+  "@rechargeSuccessTitle": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rechargeNewBalance": "नई राशि {amount}",
+  "@rechargeNewBalance": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "rechargeViewTransaction": "लेन-देन देखें",
+  "rechargeFailedTitle": "भुगतान नहीं हुआ",
+  "rechargeNotCharged": "आपसे कोई पैसा नहीं लिया गया।",
+  "rechargeAutoRefund": "अगर कोई राशि कटी है, तो वह 3–5 कार्यदिवसों में वापस कर दी जाएगी।",
+  "rechargeTryAgain": "फिर कोशिश करें",
+  "rechargeChangeAmount": "राशि बदलें",
+  "rechargeCreditedSoon": "भुगतान मिल गया। हम इसे थोड़ी देर में आपके वॉलेट में जोड़ देंगे।",
+  "rechargeOfferAutoApplied": "{amount} जोड़ें, {bonus} अतिरिक्त पाएँ — अपने आप लागू",
+  "@rechargeOfferAutoApplied": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "bonus": {
+        "type": "String"
+      }
+    }
+  },
+  "profileTitle": "प्रोफ़ाइल",
+  "profileEditProfile": "प्रोफ़ाइल बदलें",
+  "profilePhoneMasked": "+91 ●●●●● {last4}",
+  "@profilePhoneMasked": {
+    "placeholders": {
+      "last4": {
+        "type": "String"
+      }
+    }
+  },
+  "profileCompleteAddEmail": "अपनी प्रोफ़ाइल पूरी करने के लिए ईमेल जोड़ें",
+  "profileCompleteAddBirth": "बेहतर भविष्यफल के लिए अपनी जन्म जानकारी जोड़ें",
+  "profileRoleCustomer": "ग्राहक",
+  "profileWallet": "वॉलेट",
+  "profileBirthProfiles": "जन्म प्रोफ़ाइल",
+  "profileBirthProfilesCount": "{count} कुंडली",
+  "@profileBirthProfilesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileGroupAccount": "खाता",
+  "profileGroupMoney": "पैसा",
+  "profileGroupPreferences": "सेटिंग",
+  "profileGroupSupport": "सहायता",
+  "profileGroupLegal": "कानूनी",
+  "profileNotifications": "सूचनाएँ",
+  "profileNotificationPrefs": "सूचना सेटिंग",
+  "profileWalletAndTransactions": "वॉलेट और लेन-देन",
+  "profileOrders": "ऑर्डर",
+  "profileOrdersUnread": "{count} नए",
+  "@profileOrdersUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileReferAndEarn": "रेफ़र करें और कमाएँ",
+  "profileLanguage": "भाषा",
+  "profileCurrency": "मुद्रा",
+  "profileHelpCentre": "सहायता केंद्र",
+  "profileContactWhatsapp": "WhatsApp पर संपर्क करें",
+  "profileRateApp": "टॉकआचार्य को रेट करें",
+  "profileShareApp": "ऐप शेयर करें",
+  "profileShareMessage": "मैं ज्योतिषियों से बात करने के लिए टॉकआचार्य इस्तेमाल करता हूँ। आज़माएँ: {link}",
+  "@profileShareMessage": {
+    "placeholders": {
+      "link": {
+        "type": "String"
+      }
+    }
+  },
+  "profileTerms": "सेवा की शर्तें",
+  "profilePrivacy": "गोपनीयता नीति",
+  "profileLicenses": "ओपन-सोर्स लाइसेंस",
+  "profileDeleteAccount": "खाता हटाएँ",
+  "profileVersion": "टॉकआचार्य · v{version} ({build})",
+  "@profileVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
+    }
+  },
+  "editFullName": "पूरा नाम",
+  "editDisplayName": "दिखने वाला नाम",
+  "editDateOfBirth": "जन्म तिथि",
+  "editGender": "लिंग",
+  "editGenderMale": "पुरुष",
+  "editGenderFemale": "महिला",
+  "editGenderOther": "अन्य",
+  "editEmail": "ईमेल",
+  "editEmailUnverified": "सत्यापित नहीं",
+  "editChangePhoto": "फ़ोटो बदलें",
+  "editProfileSaved": "प्रोफ़ाइल अपडेट हो गई",
+  "editProfileSaveError": "आपके बदलाव सेव नहीं हो सके",
+  "editGenderUndisclosed": "नहीं बताना चाहते",
+  "editNameInvalid": "अपना नाम लिखें (कम से कम 2 अक्षर)",
+  "editEmailInvalid": "सही ईमेल पता लिखें",
+  "editPhone": "मोबाइल नंबर",
+  "editPhoneLocked": "लॉगिन नंबर बदला नहीं जा सकता",
+  "editSectionPersonal": "व्यक्तिगत जानकारी",
+  "editSectionContact": "संपर्क",
+  "editDobPlaceholder": "जन्म तिथि जोड़ें",
+  "editPhotoUpdated": "फ़ोटो अपडेट हो गई",
+  "editCountry": "देश",
+  "chooseLanguage": "भाषा चुनें",
+  "chooseCurrency": "मुद्रा चुनें",
+  "deleteAccountTitle": "अपना खाता हटाएँ",
+  "deleteAccountBody": "इससे आपकी प्रोफ़ाइल, कुंडलियाँ और चैट इतिहास हमेशा के लिए हट जाते हैं। आपके वॉलेट में बची राशि, यदि कोई हो, मूल भुगतान माध्यम में वापस कर दी जाती है। कानून के अनुसार परामर्श रिकॉर्ड रखे जाते हैं।",
+  "deleteAccountHold": "आपका खाता तुरंत निष्क्रिय हो जाता है और 30 दिनों के बाद पूरी तरह हट जाता है। रद्द करने के लिए 30 दिनों के भीतर दोबारा साइन इन करें।",
+  "deleteAccountConfirm": "हाँ, मेरा खाता हटाएँ",
+  "deleteAccountRequested": "खाता हटाने का अनुरोध दर्ज किया गया",
+  "referTitle": "रेफ़र करें और कमाएँ",
+  "referHeroTitle": "{friendAmount} दें, {youAmount} पाएँ",
+  "@referHeroTitle": {
+    "placeholders": {
+      "friendAmount": {
+        "type": "String"
+      },
+      "youAmount": {
+        "type": "String"
+      }
+    }
+  },
+  "referHeroBody": "आपके दोस्त को पहले परामर्श पर {friendAmount} की छूट मिलती है। जब वे परामर्श लेते हैं, आपके वॉलेट में {youAmount} आते हैं।",
+  "@referHeroBody": {
+    "placeholders": {
+      "friendAmount": {
+        "type": "String"
+      },
+      "youAmount": {
+        "type": "String"
+      }
+    }
+  },
+  "referYourCode": "आपका रेफ़रल कोड",
+  "referShareLink": "इनवाइट लिंक शेयर करें",
+  "referInvited": "बुलाए गए",
+  "referJoined": "जुड़े",
+  "referEarned": "कमाए",
+  "referHowItWorks": "यह कैसे काम करता है",
+  "referStep1": "अपना कोड या लिंक शेयर करें। आपका दोस्त साइन अप करते समय उसे डालता है।",
+  "referStep2": "उन्हें पहले भुगतान वाले परामर्श पर {amount} की छूट मिलती है।",
+  "@referStep2": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "referStep3": "जैसे ही उस परामर्श का बिल बनता है, {amount} आपके वॉलेट में आ जाते हैं।",
+  "@referStep3": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "referYourReferrals": "आपके रेफ़रल",
+  "referStatusPending": "बाकी",
+  "referStatusJoined": "जुड़ा",
+  "referStatusRewarded": "इनाम मिला",
+  "referJoinedOn": "{date} को जुड़े",
+  "@referJoinedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "referFirstCallDone": "पहली कॉल पूरी",
+  "referShareText": "टॉकआचार्य पर मेरा कोड {code} इस्तेमाल करें और अपने पहले ज्योतिष परामर्श पर {amount} की छूट पाएँ। {link}",
+  "@referShareText": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "link": {
+        "type": "String"
+      }
+    }
+  },
+  "kundaliYogasDoshasTitle": "योग और दोष",
+  "kundaliTabDoshas": "दोष",
+  "kundaliTabYogas": "योग",
+  "doshaIntro": "दोष कुंडली के संवेदनशील बिंदु हैं। अधिकांश समय के साथ, अनुकूल दशा या किसी शास्त्रीय उपाय से कम हो जाते हैं — असल में क्या महत्वपूर्ण है, यह ज्योतिषी बताते हैं।",
+  "doshaDisclaimer": "यह केवल संरचनात्मक संकेत हैं, भविष्यवाणी नहीं। रत्न पहनने या कोई बड़ा उपाय शुरू करने से पहले ज्योतिषी से बात करें।",
+  "doshaPresent": "मौजूद",
+  "doshaNotPresent": "मौजूद नहीं",
+  "doshaCancelled": "लगभग निष्प्रभावी",
+  "doshaSeverityClear": "स्पष्ट",
+  "doshaSeverityMild": "हल्का",
+  "doshaSeverityModerate": "मध्यम",
+  "doshaSeverityStrong": "प्रबल",
+  "doshaWhy": "क्यों चिह्नित हुआ",
+  "doshaWhatReduces": "क्या इसे कम करता है",
+  "doshaReducedNote": "{count, plural, one{One classical factor} other{{count} classical factors}} in your chart ease this.",
+  "@doshaReducedNote": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "doshaClearSectionTitle": "स्पष्ट — आपकी कुंडली में नहीं",
+  "doshaAllClear": "आपकी कुंडली में कोई सामान्य दोष मौजूद नहीं है।",
+  "doshaAskCta": "पूछें कि इसका आपके लिए क्या अर्थ है",
+  "insightsTitle": "व्यक्तित्व एवं जीवन का सार",
+  "insightsIntro": "आपकी जन्म (D1) कुंडली का एक निःशुल्क विश्लेषण — जीवन के मुख्य क्षेत्रों में आपकी प्रवृत्तियाँ। यह आत्म-चिंतन के लिए एक रेखाचित्र है, घटनाओं या तिथियों की भविष्यवाणी नहीं।",
+  "insightsDisclaimer": "यह आपकी कुंडली से सामान्य मार्गदर्शन है, कोई भविष्यवाणी नहीं। इसमें कोई तिथि नहीं बताई जाती और स्वास्थ्य, आयु या संबंधों के बारे में कोई दावा नहीं किया जाता। किसी भी विशेष बात के लिए ज्योतिषी से बात करें।",
+  "insightsAskCta": "अपनी कुंडली के बारे में ज्योतिषी से पूछें",
+  "insightsWhatItReadsFrom": "यह किस आधार पर है",
+  "insightsToneSupportive": "अनुकूल",
+  "insightsToneBalanced": "संतुलित",
+  "insightsToneChallenging": "ध्यान देने योग्य",
+  "insightsToneMixed": "मिश्रित",
+  "insightsAreaPersonality": "व्यक्तित्व एवं स्वभाव",
+  "insightsAreaAppearance": "शारीरिक रूप-रंग",
+  "insightsAreaMind": "मन एवं भावनाएँ",
+  "insightsAreaCareer": "करियर एवं व्यवसाय",
+  "insightsAreaWealth": "धन एवं वित्त",
+  "insightsAreaEducation": "शिक्षा एवं बुद्धि",
+  "insightsAreaMarriage": "विवाह एवं जीवनसाथी",
+  "insightsAreaFamily": "परिवार एवं संबंध",
+  "insightsAreaHealth": "स्वास्थ्य एवं जीवनशक्ति",
+  "insightsAreaFortune": "भाग्य एवं धर्म",
+  "insightsAreaStrengths": "शक्तियाँ एवं चुनौतियाँ",
+  "predTitle": "भविष्यवाणियाँ",
+  "predReadingTitle": "आपकी भविष्यवाणी",
+  "predRequestTitle": "भविष्यवाणी का अनुरोध करें",
+  "predHeroTitle": "आपके लिए लिखी गई भविष्यवाणी",
+  "predHeroBody": "ज्योतिषी आपकी जन्म कुंडली, दशा और वर्तमान गोचर देखकर जीवन के किसी एक क्षेत्र की भविष्यवाणी लिखते हैं। आपकी भाषा में, आमतौर पर 3 दिनों के भीतर।",
+  "predChooseArea": "क्षेत्र चुनें",
+  "predMyReadings": "आपकी भविष्यवाणियाँ",
+  "predNoReadings": "अभी कोई भविष्यवाणी नहीं। अनुरोध करने के लिए ऊपर से एक क्षेत्र चुनें।",
+  "predSeePacks": "पैक देखें",
+  "predSubscribed": "सदस्यता ली गई",
+  "predCredits": "{count, plural, =1{1 credit} other{{count} credits}}",
+  "@predCredits": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "predBuyTitle": "भविष्यवाणी क्रेडिट",
+  "predBuyBody": "एक क्रेडिट = एक लिखित भविष्यवाणी। एक पैक खरीदें और जब चाहें पढ़ने के लिए तैयार।",
+  "predBuyWalletNote": "आपके वॉलेट बैलेंस से भुगतान।",
+  "predPackName": "{count, plural, =1{1 credit} other{Pack of {count}}}",
+  "@predPackName": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "predPackPer": "{price} प्रति क्रेडिट",
+  "@predPackPer": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "predBuySuccess": "जुड़ गया। अब आपके पास {count} क्रेडिट हैं।",
+  "@predBuySuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "predForProfile": "किस जन्म प्रोफ़ाइल के लिए",
+  "predAddProfile": "जन्म प्रोफ़ाइल जोड़ें",
+  "predPickProfile": "पहले एक जन्म प्रोफ़ाइल चुनें।",
+  "predArea": "जीवन का क्षेत्र",
+  "predPeriod": "अवधि",
+  "predCostsOne": "आपके {count} क्रेडिट में से 1 का उपयोग होगा।",
+  "@predCostsOne": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "predNoCreditYet": "आपको एक क्रेडिट चाहिए — हम आगे पैक दिखाएँगे।",
+  "predRequestCta": "भविष्यवाणी का अनुरोध करें",
+  "predRequestDisclaimer": "ज्योतिषी आपकी कुंडली, दशा और गोचर से लिखते हैं। ज्योतिष चिंतन और योजना के लिए मार्गदर्शन है, गारंटी नहीं।",
+  "predAreaCareer": "करियर एवं कार्य",
+  "predAreaMarriage": "विवाह एवं प्रेम",
+  "predAreaFinance": "धन एवं वित्त",
+  "predAreaHealth": "स्वास्थ्य एवं ऊर्जा",
+  "predAreaEducation": "अध्ययन एवं शिक्षा",
+  "predAreaGeneral": "जीवन का सार",
+  "predPeriodMonth": "आने वाला महीना",
+  "predPeriodQuarter": "अगले 3 महीने",
+  "predPeriodYear": "आने वाला वर्ष",
+  "predStatusWriting": "लिखी जा रही है",
+  "predStatusReview": "समीक्षा में",
+  "predStatusReady": "पढ़ने के लिए तैयार",
+  "predStatusUnavailable": "उपलब्ध नहीं",
+  "predStatusRefunded": "वापस किया गया",
+  "predDeliveredOn": "{date} को दी गई",
+  "@predDeliveredOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "predEta": "{date} तक अपेक्षित",
+  "@predEta": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "predWritingTitle": "एक ज्योतिषी इसे लिख रहे हैं",
+  "predWritingBody": "तैयार होते ही हम आपको सूचना भेजेंगे।",
+  "predWritingEta": "{date} तक अपेक्षित। तैयार होने पर हम आपको सूचित करेंगे।",
+  "@predWritingEta": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "predRefundedTitle": "क्रेडिट वापस किया गया",
+  "predRefundedBody": "हम इसे समय पर नहीं दे सके, इसलिए आपका क्रेडिट वापस आपके खाते में है।",
+  "predDisclaimer": "आपकी जन्म कुंडली, दशा और वर्तमान गोचर से ज्योतिषी द्वारा आपके लिए लिखी गई। ज्योतिष चिंतन और योजना के लिए मार्गदर्शन है — चुनाव और परिणाम आपके अपने रहते हैं।",
+  "predAskFollowUp": "अनुवर्ती प्रश्न पूछें",
+  "remediesTitle": "उपाय",
+  "remediesIntro": "आपकी कुंडली के अनुसार पारंपरिक उपाय — इसके सक्रिय दोष, कमज़ोर ग्रह, चल रही दशा और पीड़ित भाव। ये अनुशासन और भक्ति के कार्य हैं, जो आपकी आस्था, स्वास्थ्य और सामर्थ्य के अनुसार चुने गए हैं।",
+  "remediesNone": "अभी आपकी कुंडली में ऐसा कुछ प्रमुख नहीं जिसके लिए कोई विशेष उपाय आवश्यक हो। एक छोटा, नियमित दैनिक अभ्यास हमेशा लाभकारी है।",
+  "remediesDisclaimer": "केवल वही करें जो आपकी आस्था, स्वास्थ्य और सामर्थ्य के अनुकूल हो। यदि उपवास आपके लिए असुरक्षित है तो न करें, और दान देने के लिए कभी ऋण न लें।",
+  "remediesAskCta": "अपने उपायों के बारे में ज्योतिषी से बात करें",
+  "remediesConfirmCta": "पहले ज्योतिषी से पुष्टि करें",
+  "remediesSource": "स्रोत: {source}",
+  "@remediesSource": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "doshaSeeRemedies": "अपनी कुंडली के लिए उपाय देखें",
+  "remedyCatMantra": "मंत्र एवं जप",
+  "remedyCatStotra": "स्तोत्र एवं पाठ",
+  "remedyCatPuja": "पूजा एवं अनुष्ठान",
+  "remedyCatVrat": "व्रत एवं उपवास",
+  "remedyCatDaan": "दान एवं परोपकार",
+  "remedyCatLifestyle": "जीवनशैली",
+  "remedyCatYantra": "यंत्र",
+  "remedyCatGemstone": "रत्न",
+  "remedyCatRudraksha": "रुद्राक्ष",
+  "prashnaTitle": "एक प्रश्न पूछें",
+  "prashnaHeroTitle": "इस क्षण पर हाँ-या-ना",
+  "prashnaHeroBody": "KP प्रश्न (होररी) उस ठीक क्षण को पढ़ता है जब आप प्रश्न पूछते हैं और एक झुकाव देता है — हाँ, ना या मिश्रित — कारण सहित। यह एक पारंपरिक विधि का संकेत है, वादा नहीं।",
+  "prashnaAbout": "प्रश्न किस बारे में है?",
+  "prashnaHint": "जैसे: क्या मुझे यह नौकरी मिलेगी?",
+  "prashnaAskCta": "पूछें ({price})",
+  "@prashnaAskCta": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "prashnaDisclaimer": "आपके पूछे गए क्षण का KP प्रश्न विश्लेषण। यह एक पारंपरिक विधि का संकेत है — वादा नहीं, और पूर्ण परामर्श का विकल्प नहीं।",
+  "prashnaNeedQuestion": "पहले एक विषय चुनें और अपना प्रश्न लिखें।",
+  "prashnaLowBalance": "आपका वॉलेट बैलेंस बहुत कम है। पूछने के लिए पैसे जोड़ें।",
+  "prashnaHistory": "आपके प्रश्न",
+  "prashnaNoHistory": "आपने अभी तक कोई प्रश्न नहीं पूछा।",
+  "prashnaAnswerTitle": "विश्लेषण",
+  "prashnaAskAstrologer": "किसी ज्योतिषी से इस पर चर्चा करें",
+  "prashnaHowRead": "यह कैसे पढ़ा गया",
+  "prashnaConfidence": "{level, plural, =0{unclear} =1{weak} =2{moderate} other{clear}} indication",
+  "@prashnaConfidence": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "prashnaVerdictYes": "हाँ की ओर",
+  "prashnaVerdictNo": "ना की ओर",
+  "prashnaVerdictMixed": "मिश्रित संकेत",
+  "prashnaVerdictUnclear": "अनिर्णायक",
+  "prashnaCatMarriage": "विवाह",
+  "prashnaCatJob": "नौकरी",
+  "prashnaCatPromotion": "पदोन्नति",
+  "prashnaCatBusiness": "व्यवसाय",
+  "prashnaCatProperty": "संपत्ति",
+  "prashnaCatMoney": "ऋण या धन",
+  "prashnaCatChild": "संतान",
+  "prashnaCatTravel": "विदेश यात्रा",
+  "prashnaCatLitigation": "न्यायालय का मामला",
+  "prashnaCatHealth": "स्वास्थ्य एवं स्वास्थ्य-लाभ",
+  "prashnaCatLost": "खोई हुई वस्तु",
+  "prashnaCatReunion": "पुनर्मिलन",
+  "prashnaCatGeneral": "कुछ और",
+  "yogaIntro": "योग प्रवृत्तियाँ हैं, गारंटी नहीं — ये तब मज़बूत होते हैं जब संबंधित ग्रह अच्छी स्थिति में हों और उनकी दशा चल रही हो।",
+  "yogaNoneTitle": "कोई शास्त्रीय योग नहीं मिला",
+  "yogaNoneBody": "यह आम बात है और बुरा संकेत नहीं — कुंडली फिर भी भावों और दशा से पढ़ी जाती है।",
+  "kundaliTalkToAstrologer": "ज्योतिषी से बात करें",
+  "kundaliHowItPlaysOut": "जानना चाहते हैं कि ये आपके जीवन और समय में कैसे प्रकट होते हैं?",
+  "yogaGajakesariName": "गजकेसरी योग",
+  "yogaGajakesariMeaning": "चंद्रमा से केंद्र में बृहस्पति — संतुलन, अच्छा निर्णय और प्रतिष्ठा।",
+  "yogaBudhadityaName": "बुधादित्य योग",
+  "yogaBudhadityaMeaning": "सूर्य और बुध साथ — तीव्र, अभिव्यक्तिशील बुद्धि; अध्ययन, लेखन और विश्लेषण में बल।",
+  "yogaChandraMangalaName": "चंद्र-मंगल योग",
+  "yogaChandraMangalaMeaning": "चंद्रमा के साथ मंगल — धन और उद्यम के प्रति प्रेरणा; परिश्रम और पहल से अर्जन।",
+  "yogaRajaName": "राज योग",
+  "yogaRajaMeaning": "केंद्र स्वामी का त्रिकोण स्वामी से संबंध — दशा चलने पर पद, अधिकार और अवसर में वृद्धि।",
+  "yogaDhanaName": "धन योग",
+  "yogaDhanaMeaning": "धन और लाभ भाव जुड़े हुए — बचत और स्थिर आर्थिक वृद्धि का समर्थन।",
+  "yogaNeechabhangaName": "नीचभंग राज योग",
+  "yogaNeechabhangaMeaning": "नीच ग्रह जिसकी दुर्बलता रद्द हो जाती है — आरंभिक संघर्ष जो आगे शक्ति बन जाता है।",
+  "yogaKaalSarpaName": "काल सर्प योग",
+  "yogaKaalSarpaMeaning": "सातों ग्रह राहु-केतु अक्ष के एक ओर — स्पष्ट दिशा मिलने तक जीवन बँधा-सा लग सकता है।",
+  "yogaAdhiName": "अधि योग",
+  "yogaAdhiMeaning": "चंद्रमा से 6वें, 7वें और 8वें में शुभ ग्रह — सुरक्षा, सक्षम सहयोगी और स्थिर स्थिति।",
+  "yogaShakataName": "शकट योग",
+  "yogaShakataMeaning": "बृहस्पति से 6वें, 8वें या 12वें में चंद्रमा — भाग्य में उतार-चढ़ाव; चंद्रमा बलवान हो तो अधिक स्थिर।",
+  "yogaVishName": "विष योग",
+  "yogaVishMeaning": "चंद्रमा के साथ शनि — मन पर भार; फल प्रायः बाद में, परिपक्वता के साथ आते हैं।",
+  "yogaKahalaName": "कहल योग",
+  "yogaKahalaMeaning": "4थे और 9वें स्वामी परस्पर केंद्र में और लग्नेश बलवान — साहसी, उद्यमी, जोखिम लेने को तैयार।",
+  "yogaPushkalaName": "पुष्कल योग",
+  "yogaPushkalaMeaning": "चंद्रमा का स्वामी लग्नेश के साथ केंद्र में — सम्मान, अच्छा नाम और प्रभावशाली वाणी।",
+  "yogaDaridraName": "दरिद्र योग",
+  "yogaDaridraMeaning": "11वें (लाभ) भाव का स्वामी कठिन भाव में — लाभ धीरे आते हैं; बलवान दशा इसे बदल देती है।",
+  "yogaAmalaName": "अमल योग",
+  "yogaAmalaMeaning": "लग्न या चंद्रमा से 10वें में केवल शुभ ग्रह — स्वच्छ प्रतिष्ठा और स्थायी सद्भावना।",
+  "yogaSaraswatiName": "सरस्वती योग",
+  "yogaSaraswatiMeaning": "बुध, शुक्र और बलवान बृहस्पति अच्छी स्थिति में — विद्या, कला और वाक्पटुता।",
+  "yogaLakshmiName": "लक्ष्मी योग",
+  "yogaLakshmiMeaning": "बलवान नवमेश केंद्र/त्रिकोण में और लग्नेश बलवान — भाग्य, सुख और शालीनता।",
+  "yogaRuchakaName": "रुचक योग",
+  "yogaRuchakaMeaning": "केंद्र में बलवान मंगल — साहस, शारीरिक बल और दबाव में नेतृत्व।",
+  "yogaBhadraName": "भद्र योग",
+  "yogaBhadraMeaning": "केंद्र में बलवान बुध — बुद्धि, स्पष्ट वाणी और व्यापार व संवाद में कुशलता।",
+  "yogaHamsaName": "हंस योग",
+  "yogaHamsaMeaning": "केंद्र में बलवान बृहस्पति — ज्ञान, नैतिकता, शिक्षक या सलाहकार स्वभाव और सामान्य सौभाग्य।",
+  "yogaMalavyaName": "मालव्य योग",
+  "yogaMalavyaMeaning": "केंद्र में बलवान शुक्र — आकर्षण, सुख, सौंदर्यबोध और सुखद गृहस्थ जीवन।",
+  "yogaSasaName": "शश योग",
+  "yogaSasaMeaning": "केंद्र में बलवान शनि — अनुशासन, सहनशक्ति और धीरे-धीरे अर्जित एवं टिकाऊ अधिकार।",
+  "yogaUbhayachariName": "उभयचरी योग",
+  "yogaUbhayachariMeaning": "सूर्य के दोनों ओर ग्रह — भली-भाँति समर्थित, प्रत्यक्ष जीवन और अच्छी समग्र प्रतिष्ठा।",
+  "yogaVesiName": "वेसि योग",
+  "yogaVesiMeaning": "सूर्य से दूसरे भाव में ग्रह — स्थिर वाणी, संतुलित दृष्टिकोण और अच्छा नाम।",
+  "yogaVasiName": "वासि योग",
+  "yogaVasiMeaning": "सूर्य से 12वें भाव में ग्रह — सामर्थ्य, प्रभाव और उदारता।",
+  "yogaShubhaKartariName": "शुभ कर्तरी योग",
+  "yogaShubhaKartariMeaning": "लग्न के दोनों ओर शुभ ग्रह — सुरक्षा, सहज मार्ग और अनुकूल परिस्थितियाँ।",
+  "yogaPapaKartariName": "पाप कर्तरी योग",
+  "yogaPapaKartariMeaning": "लग्न के दोनों ओर पाप ग्रह — स्वयं और स्वास्थ्य पर दबाव; अपनी ऊर्जा और सीमाओं की रक्षा करें।",
+  "yogaDurudharaName": "दुरुधरा योग",
+  "yogaDurudharaMeaning": "चंद्रमा के दूसरे और 12वें भाव में ग्रह — साधन, सुख और आसपास स्थिर सहयोग।",
+  "yogaSunaphaName": "सुनफा योग",
+  "yogaSunaphaMeaning": "चंद्रमा से दूसरे भाव में ग्रह — स्वअर्जित साधन, बुद्धि और अच्छी प्रतिष्ठा।",
+  "yogaAnaphaName": "अनफा योग",
+  "yogaAnaphaMeaning": "चंद्रमा से 12वें भाव में ग्रह — सरल स्वभाव, कुशलता और अभाव से मुक्ति।",
+  "yogaKemadrumaYogaName": "केमद्रुम योग",
+  "yogaKemadrumaYogaMeaning": "चंद्रमा अकेला, असमर्थित — भीतरी बेचैनी जो चंद्रमा के बलवान होने या केंद्र भरने पर कम होती है।",
+  "yogaVasumatiName": "वसुमति योग",
+  "yogaVasumatiMeaning": "लग्न या चंद्रमा से वृद्धि भावों में शुभ ग्रह — बढ़ता धन और साधन।",
+  "yogaKalanidhiName": "कलानिधि योग",
+  "yogaKalanidhiMeaning": "दूसरे या पाँचवें में बृहस्पति का बुध या शुक्र से संबंध — विद्या, कला, परिष्कार और सम्मान।",
+  "yogaChamaraName": "चामर योग",
+  "yogaChamaraMeaning": "केंद्र में उच्च का लग्नेश, बृहस्पति की दृष्टि — वाक्पटुता, दीर्घायु और सम्मानित स्थिति।",
+  "yogaShankhaName": "शंख योग",
+  "yogaShankhaMeaning": "5वें और 6वें भाव के स्वामी बलवान लग्नेश से जुड़े — अच्छा जीवन, दयालु स्वभाव और उत्तरार्ध में सुख।",
+  "yogaParvataName": "पर्वत योग",
+  "yogaParvataMeaning": "केंद्रों में शुभ ग्रह और 6ठा-8वाँ स्वच्छ — भाग्य, उदारता और प्रतिष्ठित नाम।",
+  "yogaHarshaName": "हर्ष योग",
+  "yogaHarshaMeaning": "6ठे भाव का स्वामी कठिन भाव में — शत्रु, ऋण और रोग की पकड़ ढीली; प्रतिस्पर्धी बल।",
+  "yogaSaralaName": "सरल योग",
+  "yogaSaralaMeaning": "8वें भाव का स्वामी कठिन भाव में — संकटों में दृढ़ता, दीर्घायु और निर्भयता।",
+  "yogaVimalaName": "विमल योग",
+  "yogaVimalaMeaning": "12वें भाव का स्वामी कठिन भाव में — संयमित व्यय, स्वच्छ अंतःकरण और स्वतंत्र जीवन।",
+  "yogaMahaParivartanaName": "महा परिवर्तन योग",
+  "yogaMahaParivartanaMeaning": "दो शुभ भावों के स्वामी राशि बदलते हैं — समय के साथ दोनों भावों के फल एक-दूसरे को उठाते हैं।",
+  "yogaKhalaParivartanaName": "खल परिवर्तन योग",
+  "yogaKhalaParivartanaMeaning": "3रे भाव से जुड़ा परिवर्तन — मिश्रित फल, उतार-चढ़ाव, परिश्रम और साहस से लाभ।",
+  "yogaDainyaParivartanaName": "दैन्य परिवर्तन योग",
+  "yogaDainyaParivartanaMeaning": "कठिन भाव से जुड़ा परिवर्तन — बाधाएँ जिनमें धैर्य चाहिए; बलवान दशा इसे बदल देती है।",
+  "kSignAries": "साहसी, सीधा, जल्दी शुरुआत करने वाला",
+  "kSignTaurus": "स्थिर, भोग-प्रिय, सुख और सुरक्षा को महत्व देने वाला",
+  "kSignGemini": "जिज्ञासु, बातूनी, तेज़ सोच वाला",
+  "kSignCancer": "देखभाल करने वाला, रक्षात्मक, भावनाओं से चलने वाला",
+  "kSignLeo": "स्वाभिमानी, गर्मजोश, पहचाना जाना चाहने वाला",
+  "kSignVirgo": "सटीक, उपयोगी, सुधार-केंद्रित",
+  "kSignLibra": "न्यायप्रिय, संबंध-केंद्रित, संतुलन खोजने वाला",
+  "kSignScorpio": "गहन, निजी, सब-कुछ-या-कुछ-नहीं",
+  "kSignSagittarius": "स्वतंत्र, आस्थावान, बड़ी तस्वीर देखने वाला",
+  "kSignCapricorn": "अनुशासित, महत्वाकांक्षी, लंबी दौड़ खेलने वाला",
+  "kSignAquarius": "स्वतंत्र, प्रणाली-केंद्रित, अपरंपरागत",
+  "kSignPisces": "कल्पनाशील, करुणामय, सीमाओं से परे",
+  "kPlanetNameSun": "सूर्य",
+  "kPlanetNameMoon": "चंद्र",
+  "kPlanetNameMars": "मंगल",
+  "kPlanetNameMercury": "बुध",
+  "kPlanetNameJupiter": "गुरु",
+  "kPlanetNameVenus": "शुक्र",
+  "kPlanetNameSaturn": "शनि",
+  "kPlanetNameRahu": "राहु",
+  "kPlanetNameKetu": "केतु",
+  "kPlanetSun": "आत्मा, आत्मविश्वास, पिता, अधिकार",
+  "kPlanetMoon": "मन, भावनाएँ, माता, सुख",
+  "kPlanetMars": "प्रेरणा, साहस, क्रोध, भाई-बहन",
+  "kPlanetMercury": "बुद्धि, वाणी, व्यापार, कौशल",
+  "kPlanetJupiter": "ज्ञान, वृद्धि, भाग्य, गुरु, संतान",
+  "kPlanetVenus": "प्रेम, सौंदर्य, सुख, साझेदारी, कला",
+  "kPlanetSaturn": "अनुशासन, समय, सीमाएँ, कठिन-अर्जित फल",
+  "kPlanetRahu": "महत्वाकांक्षा, जुनून, विदेशी और नया",
+  "kPlanetKetu": "वैराग्य, निपुणता, त्याग, आध्यात्म",
+  "kHouse1": "स्वयं, शरीर, जीवनशक्ति",
+  "kHouse2": "धन, परिवार, वाणी, भोजन",
+  "kHouse3": "साहस, भाई-बहन, प्रयास, छोटी यात्रा",
+  "kHouse4": "घर, माता, भूमि, आंतरिक शांति",
+  "kHouse5": "संतान, शिक्षा, रचनात्मकता, प्रेम",
+  "kHouse6": "स्वास्थ्य, ऋण, शत्रु, दैनिक कार्य",
+  "kHouse7": "विवाह, साझेदारी, व्यवसाय",
+  "kHouse8": "आयु, अचानक परिवर्तन, गुप्त, विरासत",
+  "kHouse9": "भाग्य, धर्म, पिता, उच्च शिक्षा, लंबी यात्रा",
+  "kHouse10": "करियर, प्रतिष्ठा, सार्वजनिक जीवन",
+  "kHouse11": "आय, लाभ, नेटवर्क, बड़े भाई-बहन",
+  "kHouse12": "हानि, व्यय, विदेश, नींद, मोक्ष",
+  "kDignityExalted": "उच्च का — बहुत बलवान",
+  "kDignityDebilitated": "नीच का — यहाँ दबाव में",
+  "kDignityMoolatrikona": "मूलत्रिकोण — सहज और बलवान",
+  "kDignityOwn": "स्वराशि — स्थिर और प्रभावी",
+  "kDignityGreatFriend": "परम मित्र की राशि में — समर्थित",
+  "kDignityFriend": "मित्र की राशि में — समर्थित",
+  "kDignityNeutral": "सम राशि",
+  "kDignityEnemy": "शत्रु की राशि में — अधिक परिश्रम",
+  "kDignityGreatEnemy": "परम शत्रु की राशि में — दबाव में",
+  "kDashaSun": "पहचान, अधिकार और मान्यता का काल। अहंकार तथा आँख/हृदय के स्वास्थ्य पर ध्यान।",
+  "kDashaMoon": "एक कोमल, अधिक भावनात्मक अध्याय — घर, माता, मनोदशा और सार्वजनिक जीवन।",
+  "kDashaMars": "ऊर्जा, प्रतिस्पर्धा और पहल बढ़ती है। क्रोध, दुर्घटना और संपत्ति के मामलों में सावधानी।",
+  "kDashaMercury": "अध्ययन, व्यापार, लेखन और संवाद। पढ़ाई और व्यवसाय के लिए अच्छा, ठहराव में बेचैन।",
+  "kDashaJupiter": "वृद्धि, गुरु, परिवार, अर्थ। प्रायः भाग्यशाली, विस्तृत काल।",
+  "kDashaVenus": "संबंध, सुख, कला, धन और आनंद। आमतौर पर सबसे सहज काल।",
+  "kDashaSaturn": "कठिन परिश्रम, ज़िम्मेदारी और धीमे, स्थायी फल। धैर्य को पुरस्कार, शॉर्टकट को दंड।",
+  "kDashaRahu": "असीम महत्वाकांक्षा — विदेश, तकनीक, अचानक उत्थान और भ्रम।",
+  "kDashaKetu": "वैराग्य, अंत और भीतर की ओर आध्यात्मिक मोड़। भौतिक वस्तुएँ खोखली लगती हैं; कौशल गहराता है।",
+  "kNakAshwini": "तेज़, अग्रणी, उपचारक",
+  "kNakBharani": "गहन, परिवर्तन के लिए स्थान देने वाला, अनुशासित",
+  "kNakKrittika": "तीक्ष्ण, भेदने वाला, रक्षात्मक",
+  "kNakRohini": "रचनात्मक, भोग-प्रिय, पोषक, आकर्षक",
+  "kNakMrigashira": "खोजी, जिज्ञासु, कोमल",
+  "kNakArdra": "तूफ़ानी, रूपांतरकारी, दबाव में प्रतिभाशाली",
+  "kNakPunarvasu": "नवीकरण करने वाला, उदार, सुरक्षा की ओर लौटने वाला",
+  "kNakPushya": "पोषक, कर्तव्यनिष्ठ, गहराई से सहायक",
+  "kNakAshlesha": "सूक्ष्मदर्शी, रणनीतिक, सम्मोहक",
+  "kNakMagha": "राजसी, परंपरा-बद्ध, पैतृक",
+  "kNakPurvaPhalguni": "क्रीड़ाप्रिय, रोमांटिक, विश्राम को महत्व देने वाला",
+  "kNakUttaraPhalguni": "विश्वसनीय, अनुबंधप्रिय, सहायक",
+  "kNakHasta": "हस्तकुशल, चतुर, उपचारक",
+  "kNakChitra": "कलात्मक, आकर्षक, सुंदर वस्तुएँ बनाने वाला",
+  "kNakSwati": "स्वतंत्र, अनुकूलनशील, स्वतंत्रता-प्रेमी",
+  "kNakVishakha": "लक्ष्य-केंद्रित, दृढ़, द्वि-स्वभावी",
+  "kNakAnuradha": "समर्पित, मित्रवत, विदेश में फलने-फूलने वाला",
+  "kNakJyeshtha": "वरिष्ठ, ज़िम्मेदार, बोझ उठाने वाला",
+  "kNakMula": "मूल तक जाने वाला, आमूल, गहराई तक पहुँचने वाला",
+  "kNakPurvaAshadha": "अजेय भावना, प्रभावशाली",
+  "kNakUttaraAshadha": "सिद्धांतवादी, टिकाऊ, बाद में सफलता",
+  "kNakShravana": "सुनने वाला, सीखने वाला, लोगों को जोड़ने वाला",
+  "kNakDhanishta": "लयबद्ध, धनवान, संगीतमय, अनुकूलनशील",
+  "kNakShatabhisha": "निजी, उपचारक, प्रणाली-केंद्रित",
+  "kNakPurvaBhadrapada": "आदर्शवादी, गहन, रूपांतरकारी",
+  "kNakUttaraBhadrapada": "गहरा, शांत, विवेकपूर्ण सलाह",
+  "kNakRevati": "दयालु, यात्रियों का रक्षक, कल्पनाशील",
+  "kSadeSatiRising": "आरोहण चरण — शनि आपके चंद्रमा से 12वीं राशि में। अंत, थकान और चीज़ों के समेटने का भाव। जो अब काम नहीं करता उसे हटाना शुरू करें।",
+  "kSadeSatiPeak": "शिखर चरण — शनि आपकी चंद्र राशि पर ही। सबसे भारी दौर: ज़िम्मेदारी, दबाव और धीमी प्रगति। दिनचर्या बनाए रखें, स्वास्थ्य की रक्षा करें।",
+  "kSadeSatiSetting": "अवरोहण चरण — शनि आपके चंद्रमा से दूसरी राशि में। भार हल्का होता है। धन और परिवार स्थिर होते हैं; पिछले वर्षों के सबक फल देने लगते हैं।",
+  "kSadeSatiGeneric": "शनि आपके चंद्रमा के आसपास की राशियों से गोचर कर रहा है।",
+  "kPlanetInSignHouse": "{sign} में आपका {planet} आपको {signTrait} बनाता है। {house} भाव में यह {houseTheme} को छूता है।",
+  "@kPlanetInSignHouse": {
+    "placeholders": {
+      "planet": {},
+      "sign": {},
+      "signTrait": {},
+      "house": {},
+      "houseTheme": {}
+    }
+  },
+  "kPlanetInSign": "{sign} में आपका {planet} आपको {signTrait} बनाता है।",
+  "@kPlanetInSign": {
+    "placeholders": {
+      "planet": {},
+      "sign": {},
+      "signTrait": {}
+    }
+  },
+  "kHouseSans1": "तनु भाव",
+  "kHouseSans2": "धन भाव",
+  "kHouseSans3": "सहज भाव",
+  "kHouseSans4": "सुख भाव",
+  "kHouseSans5": "पुत्र भाव",
+  "kHouseSans6": "रिपु भाव",
+  "kHouseSans7": "युवती भाव",
+  "kHouseSans8": "आयु / रंध्र भाव",
+  "kHouseSans9": "धर्म भाव",
+  "kHouseSans10": "कर्म भाव",
+  "kHouseSans11": "लाभ भाव",
+  "kHouseSans12": "व्यय भाव",
+  "kHouseTitleWithSign": "{sign} · {theme}",
+  "@kHouseTitleWithSign": {
+    "placeholders": {
+      "sign": {},
+      "theme": {}
+    }
+  },
+  "kHouseSheetTitle": "{ordinal} भाव · {sign}",
+  "@kHouseSheetTitle": {
+    "placeholders": {
+      "ordinal": {},
+      "sign": {}
+    }
+  },
+  "kHouseSheetSubtitle": "{sanskrit} — {theme}",
+  "@kHouseSheetSubtitle": {
+    "placeholders": {
+      "sanskrit": {},
+      "theme": {}
+    }
+  },
+  "kHouseChipLord": "भावेश · {lord}",
+  "@kHouseChipLord": {
+    "placeholders": {
+      "lord": {}
+    }
+  },
+  "kHouseChipLordIn": "स्वामी {nthHouse} में",
+  "@kHouseChipLordIn": {
+    "placeholders": {
+      "nthHouse": {}
+    }
+  },
+  "kHouseNoPlanets": "इस भाव में कोई ग्रह नहीं। इसकी कथा मुख्यतः इसके स्वामी {lord}{lordWhere} से कही जाती है।",
+  "@kHouseNoPlanets": {
+    "placeholders": {
+      "lord": {},
+      "lordWhere": {}
+    }
+  },
+  "kHouseLordWhere": ", जो अब {nthHouse} में है",
+  "@kHouseLordWhere": {
+    "placeholders": {
+      "nthHouse": {}
+    }
+  },
+  "kHousePlanetsHeader": "इस भाव में ग्रह",
+  "kHouseAskCta": "अपने {ordinal} भाव के बारे में ज्योतिषी से पूछें",
+  "@kHouseAskCta": {
+    "placeholders": {
+      "ordinal": {}
+    }
+  },
+  "kHouseReadingLord": "आपका {ordinal}-भाव स्वामी {lord} {nthHouse} में है, इसलिए {theme} का संबंध {lordTheme} से जुड़ता है।",
+  "@kHouseReadingLord": {
+    "placeholders": {
+      "ordinal": {},
+      "lord": {},
+      "nthHouse": {},
+      "theme": {},
+      "lordTheme": {}
+    }
+  },
+  "kHouseReadingOccupant": "{planet} यहाँ अपने विषय — {planetTheme} — {theme} में लाता है।",
+  "@kHouseReadingOccupant": {
+    "placeholders": {
+      "planet": {},
+      "planetTheme": {},
+      "theme": {}
+    }
+  },
+  "kHouseReadingEmpty": "यह भाव इसके स्वामी और इस पर दृष्टि डालने वाले ग्रहों से पढ़ा जाता है। ज्योतिषी आपको विस्तार से समझा सकते हैं।",
+  "kBhavaSubheadKaraka": "कारक {karaka}",
+  "@kBhavaSubheadKaraka": {
+    "placeholders": {
+      "karaka": {}
+    }
+  },
+  "kBhavaSubheadLord": "स्वामी {lord}, {nthHouse}",
+  "@kBhavaSubheadLord": {
+    "placeholders": {
+      "lord": {},
+      "nthHouse": {}
+    }
+  },
+  "kBhavaSubheadLordOnly": "स्वामी {lord}",
+  "@kBhavaSubheadLordOnly": {
+    "placeholders": {
+      "lord": {}
+    }
+  },
+  "kBhavaReadingGoverns": "यह भाव {theme} का शासक है।",
+  "@kBhavaReadingGoverns": {
+    "placeholders": {
+      "theme": {}
+    }
+  },
+  "kBhavaReadingLord": "इसका स्वामी {lord} {nthHouse} में है, इसलिए {theme} का संबंध {lordTheme} से जुड़ता है।{dignity}{occupants}",
+  "@kBhavaReadingLord": {
+    "placeholders": {
+      "lord": {},
+      "nthHouse": {},
+      "theme": {},
+      "lordTheme": {},
+      "dignity": {},
+      "occupants": {}
+    }
+  },
+  "kBhavaReadingDignity": " स्वामी {dignity}।",
+  "@kBhavaReadingDignity": {
+    "placeholders": {
+      "dignity": {}
+    }
+  },
+  "kBhavaReadingOccupants": " यहाँ {planets} स्थित हैं, जो {themes} जोड़ते हैं।",
+  "@kBhavaReadingOccupants": {
+    "placeholders": {
+      "planets": {},
+      "themes": {}
+    }
+  },
+  "kTransitHouseLine": "आपका {nthHouse} · {theme}",
+  "@kTransitHouseLine": {
+    "placeholders": {
+      "nthHouse": {},
+      "theme": {}
+    }
+  },
+  "kPlanetRowMeta": "{sign} · {nthHouse} · {degree}°",
+  "@kPlanetRowMeta": {
+    "placeholders": {
+      "sign": {},
+      "nthHouse": {},
+      "degree": {}
+    }
+  },
+  "kLagnaLordIn": "{nthHouse} में",
+  "@kLagnaLordIn": {
+    "placeholders": {
+      "nthHouse": {}
+    }
+  },
+  "kDignityShortExalted": "उच्च",
+  "kDignityShortMoolatrikona": "मूलत्रिकोण",
+  "kDignityShortOwn": "स्वग्रही",
+  "kDignityShortDebilitated": "नीच",
+  "kDignityShortEnemy": "शत्रु राशि",
+  "kDignityShortGreatEnemy": "परम शत्रु",
+  "kCombustNote": "अस्त — सूर्य के बहुत निकट, इसलिए इसका स्वतंत्र स्वर मंद हो जाता है।",
+  "kWhatThisMeans": "इसका आपके लिए क्या अर्थ है",
+  "ovStrengthStrong": "बलवान",
+  "ovStrengthSteady": "स्थिर",
+  "ovStrengthStrain": "दबाव में",
+  "ovStrengthWeak": "दुर्बल",
+  "ovRoleSpouse": "जीवनसाथी कारक",
+  "ovRoleDarakaraka": "दाराकारक (जैमिनी)",
+  "ovRoleWealth": "धन कारक",
+  "ovRoleIntellect": "बुद्धि कारक",
+  "ovRoleWisdom": "ज्ञान कारक",
+  "ovRoleFortune": "भाग्य कारक",
+  "ovRoleFather": "पिता कारक",
+  "ovRoleMother": "माता कारक",
+  "ovRoleGeneric": "कारक",
+  "ovfPada": "पाद {pada}",
+  "@ovfPada": {
+    "placeholders": {
+      "pada": {
+        "type": "int"
+      }
+    }
+  },
+  "ovfLagnaSign": "लग्न राशि {sign}",
+  "@ovfLagnaSign": {
+    "placeholders": {
+      "sign": {}
+    }
+  },
+  "ovfLagnaLord": "लग्नेश {planet} {nthHouse} में{dignity}",
+  "@ovfLagnaLord": {
+    "placeholders": {
+      "planet": {},
+      "nthHouse": {},
+      "dignity": {}
+    }
+  },
+  "ovfHouseLord": "{ordinal}-भाव स्वामी {planet} {nthHouse} में",
+  "@ovfHouseLord": {
+    "placeholders": {
+      "ordinal": {},
+      "planet": {},
+      "nthHouse": {}
+    }
+  },
+  "ovfHouseStrength": "{ordinal} भाव — {strength}",
+  "@ovfHouseStrength": {
+    "placeholders": {
+      "ordinal": {},
+      "strength": {}
+    }
+  },
+  "ovfMoonSign": "चंद्रमा {sign} में",
+  "@ovfMoonSign": {
+    "placeholders": {
+      "sign": {}
+    }
+  },
+  "ovfMoonHouse": "चंद्रमा {nthHouse} में",
+  "@ovfMoonHouse": {
+    "placeholders": {
+      "nthHouse": {}
+    }
+  },
+  "ovfMoonNakshatra": "चंद्र नक्षत्र {nakshatra}",
+  "@ovfMoonNakshatra": {
+    "placeholders": {
+      "nakshatra": {}
+    }
+  },
+  "ovfMoonDignity": "चंद्रमा {dignity}",
+  "@ovfMoonDignity": {
+    "placeholders": {
+      "dignity": {}
+    }
+  },
+  "ovfSunSign": "सूर्य {sign} में",
+  "@ovfSunSign": {
+    "placeholders": {
+      "sign": {}
+    }
+  },
+  "ovfSeventhSign": "7वाँ भाव {sign} में",
+  "@ovfSeventhSign": {
+    "placeholders": {
+      "sign": {}
+    }
+  },
+  "ovfPlanetInHouse": "{planet} in the {nthHouse}",
+  "@ovfPlanetInHouse": {
+    "placeholders": {
+      "planet": {},
+      "nthHouse": {}
+    }
+  },
+  "ovfPlanetWithMoon": "{planet} चंद्रमा के साथ",
+  "@ovfPlanetWithMoon": {
+    "placeholders": {
+      "planet": {}
+    }
+  },
+  "ovfAppearanceIn": "{planet} पहले भाव में",
+  "@ovfAppearanceIn": {
+    "placeholders": {
+      "planet": {}
+    }
+  },
+  "ovfAppearanceAspect": "{planet} की पहले भाव पर दृष्टि",
+  "@ovfAppearanceAspect": {
+    "placeholders": {
+      "planet": {}
+    }
+  },
+  "ovfMaleficOnLagna": "{planet} का लग्न पर दबाव",
+  "@ovfMaleficOnLagna": {
+    "placeholders": {
+      "planet": {}
+    }
+  },
+  "ovfKaraka": "{role}: {planet}",
+  "@ovfKaraka": {
+    "placeholders": {
+      "role": {},
+      "planet": {}
+    }
+  },
+  "ovfYoga": "योग — {name}",
+  "@ovfYoga": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "ovfDosha": "दोष — {name}",
+  "@ovfDosha": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "doshaMangalName": "मंगल दोष",
+  "doshaMangalMeaning": "मंगल संवेदनशील भाव में — विवाह से पहले परंपरागत रूप से विचार किया जाता है। अक्सर तब संतुलित होता है जब दोनों साथी मांगलिक हों या गुरु मंगल को प्रभावित करे।",
+  "doshaKaalSarpaName": "काल सर्प दोष",
+  "doshaKaalSarpaMeaning": "पूरी कुंडली राहु और केतु के बीच — दिशा मिलने तक जीवन बँधा-बँधा लग सकता है, फिर एकाग्रता तीव्र हो जाती है।",
+  "doshaPitraName": "पितृ दोष",
+  "doshaPitraMeaning": "सूर्य और नवम भाव पर पूर्वजों के कर्म की छाया — प्रायः पिता के नाम पर श्राद्ध और दान से इसका समाधान किया जाता है।",
+  "doshaGandmoolName": "गंडमूल दोष",
+  "doshaGandmoolMeaning": "चंद्रमा संधि नक्षत्र में है। 27वें दिन शांति पूजा परंपरागत उपाय है।",
+  "doshaGrahanName": "ग्रहण दोष",
+  "doshaGrahanMeaning": "सूर्य या चंद्र किसी छाया ग्रह के साथ — उस ग्रह के फल तब तक मंद रहते हैं जब तक उन पर काम न हो।",
+  "doshaShrapitName": "शापित दोष",
+  "doshaShrapitMeaning": "शनि के साथ राहु — शुरुआत में देरी और उलझन; धैर्य और लगातार प्रयास ही रास्ता है।",
+  "doshaGuruChandalName": "गुरु चांडाल दोष",
+  "doshaGuruChandalMeaning": "गुरु के साथ छाया ग्रह — ज्ञान के साथ अपरंपरागत विचार; गुरु और मान्यताएँ सोच-समझकर चुनें।",
+  "doshaAngarakName": "अंगारक दोष",
+  "doshaAngarakMeaning": "मंगल के साथ छाया ग्रह — आवेगपूर्ण ऊर्जा; क्रोध, दुर्घटना और संपत्ति विवाद में सावधानी ज़रूरी।",
+  "doshaKemadrumaName": "केमद्रुम दोष",
+  "doshaKemadrumaMeaning": "चंद्रमा अकेला, आसपास कोई सहारा नहीं — केंद्र भाव भरा हो या चंद्रमा बलवान हो तो कम हो जाता है।",
+  "doshaDaridraName": "दरिद्र दोष",
+  "doshaDaridraMeaning": "धन भाव दबाव में — अनुशासित बचत और बलवान दशा इसे बदल देती है।",
+  "birthDetailsCta": "पूरा जन्म विवरण",
+  "birthDetailsTitle": "जन्म विवरण",
+  "birthDetailsAyanamsa": "अयनांश",
+  "birthDetailsPanchangTitle": "जन्म समय का पंचांग",
+  "birthDetailsChakraTitle": "अवकहड़ा चक्र",
+  "birthDetailsWeekday": "वार",
+  "birthDetailsTithi": "तिथि",
+  "birthDetailsNakshatra": "नक्षत्र",
+  "birthDetailsYoga": "योग",
+  "birthDetailsKarana": "करण",
+  "birthDetailsMoonSign": "चंद्र राशि",
+  "birthDetailsSunSign": "सूर्य राशि",
+  "birthDetailsSuryaNakshatra": "सूर्य नक्षत्र",
+  "birthDetailsSunrise": "सूर्योदय",
+  "birthDetailsSunset": "सूर्यास्त",
+  "birthDetailsIshtaKala": "इष्ट काल",
+  "birthDetailsPada": "पाद {count}",
+  "@birthDetailsPada": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "birthDetailsGhatiPala": "{ghati} घटी {pala} पल {vipala} विपल",
+  "@birthDetailsGhatiPala": {
+    "placeholders": {
+      "ghati": {
+        "type": "int"
+      },
+      "pala": {
+        "type": "int"
+      },
+      "vipala": {
+        "type": "int"
+      }
+    }
+  },
+  "birthDetailsNakshatraLord": "नक्षत्र स्वामी",
+  "birthDetailsRashiLord": "राशि स्वामी",
+  "birthDetailsVarna": "वर्ण",
+  "birthDetailsVashya": "वश्य",
+  "birthDetailsYoni": "योनि",
+  "birthDetailsGana": "गण",
+  "birthDetailsNadi": "नाड़ी",
+  "birthDetailsTara": "तारा",
+  "birthDetailsTattva": "तत्त्व",
+  "birthDetailsYunja": "युंजा",
+  "birthDetailsRashiPaya": "राशि पाया",
+  "birthDetailsNakshatraPaya": "नक्षत्र पाया",
+  "birthDetailsDisclaimer": "पारंपरिक वर्गीकरण गुण — मुख्यतः मुहूर्त और गुण मिलान में प्रयुक्त, भविष्यवाणी नहीं।",
+  "vaaraMonday": "सोमवार",
+  "vaaraTuesday": "मंगलवार",
+  "vaaraWednesday": "बुधवार",
+  "vaaraThursday": "गुरुवार",
+  "vaaraFriday": "शुक्रवार",
+  "vaaraSaturday": "शनिवार",
+  "vaaraSunday": "रविवार",
+  "tattvaFire": "अग्नि",
+  "tattvaEarth": "पृथ्वी",
+  "tattvaAir": "वायु",
+  "tattvaWater": "जल",
+  "payaGold": "स्वर्ण",
+  "payaSilver": "रजत",
+  "payaCopper": "ताम्र",
+  "payaIron": "लौह",
+  "errNetwork": "सर्वर तक नहीं पहुँच सके। अपना कनेक्शन जाँचें।",
+  "errTimeout": "सर्वर ने जवाब देने में बहुत समय लिया।",
+  "errSession": "आपका सत्र समाप्त हो गया। कृपया दोबारा साइन इन करें।",
+  "errWalletInsufficient": "इसके लिए आपके वॉलेट में पर्याप्त राशि नहीं है।",
+  "errRateLimited": "बहुत ज़्यादा कोशिशें। थोड़ी देर रुककर फिर कोशिश करें।",
+  "errOtpInvalid": "कोड गलत है या उसकी समय-सीमा समाप्त हो गई है।",
+  "errOtpMaxAttempts": "बहुत ज़्यादा गलत कोशिशें। नया कोड मँगाएँ।",
+  "errPromoNotRedeemable": "यह कूपन कोड इस्तेमाल नहीं हो सकता।",
+  "errRechargeInvalidAmount": "अनुमत सीमा के भीतर राशि डालें।",
+  "errAuthWrongApp": "यह नंबर दूसरे टॉकआचार्य ऐप के लिए रजिस्टर्ड है।",
+  "errGeneric": "कुछ गड़बड़ हो गई। कृपया फिर कोशिश करें।",
+  "roomAppBarTitle": "परामर्श",
+  "roomOpenError": "यह परामर्श नहीं खुल पाया।",
+  "roomWaitingTitle": "{name} के स्वीकार करने का इंतज़ार",
+  "@roomWaitingTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roomWaitingBody": "आमतौर पर एक मिनट से कम। वे जुड़ते ही चैट खुल जाएगी।",
+  "roomCancelRequest": "अनुरोध रद्द करें",
+  "roomEndConfirmTitle": "यह परामर्श समाप्त करें?",
+  "roomEndConfirmBody": "सत्र समाप्त होते ही बिलिंग रुक जाती है।",
+  "roomKeepTalking": "बात जारी रखें",
+  "roomEnd": "समाप्त",
+  "roomAutoTranslateOn": "ऑटो-अनुवाद चालू",
+  "roomAutoTranslateOff": "ऑटो-अनुवाद बंद",
+  "roomEndedTitle": "परामर्श समाप्त",
+  "roomBalanceOutTitle": "आपका बैलेंस खत्म हो गया",
+  "roomBalanceOutBody": "आपके वॉलेट का बैलेंस खत्म होने से चैट समाप्त हुई। {name} के साथ जारी रखने के लिए रिचार्ज करके फिर शुरू करें।",
+  "@roomBalanceOutBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roomRechargeWallet": "वॉलेट रिचार्ज करें",
+  "roomStartAgain": "{name} के साथ फिर शुरू करें",
+  "@roomStartAgain": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roomRowAstrologer": "ज्योतिषी",
+  "roomRowDuration": "अवधि",
+  "roomRowAmount": "राशि",
+  "roomRowRate": "दर",
+  "roomMinutes": "{minutes} मिनट",
+  "@roomMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "roomRatePerMinute": "{currency} {amount}/मिनट",
+  "@roomRatePerMinute": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "roomRateQuestion": "आपका परामर्श कैसा रहा?",
+  "roomSubmitRating": "रेटिंग दें",
+  "roomRatingThanks": "आपकी राय के लिए धन्यवाद!",
+  "roomBackHome": "होम पर वापस",
+  "roomStatusRejected": "ज्योतिषी यह अनुरोध नहीं ले सके",
+  "roomStatusCancelled": "अनुरोध रद्द",
+  "roomStatusExpired": "अनुरोध समाप्त — समय पर कोई जवाब नहीं",
+  "roomStatusNoShow": "कॉल कनेक्ट नहीं हुई",
+  "roomStatusClosed": "परामर्श बंद",
+  "roomBalanceRunningOut": "बैलेंस खत्म हो रहा है",
+  "roomMinLeftRecharge": "~{minutes} मिनट बचे · बात जारी रखने के लिए रिचार्ज करें",
+  "@roomMinLeftRecharge": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "roomSpentMinLeft": "{currency} {amount} खर्च · ~{minutes} मिनट बचे",
+  "@roomSpentMinLeft": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "roomAddMoney": "पैसे जोड़ें",
+  "roomClientBalanceLow": "ग्राहक का बैलेंस कम है — जल्दी समेटें",
+  "navChats": "चैट",
+  "chatsTitle": "चैट",
+  "chatsLoadError": "आपकी चैट लोड नहीं हो पाईं।",
+  "chatsEmptyTitle": "अभी कोई चैट नहीं",
+  "chatsEmptyBody": "किसी ज्योतिषी से परामर्श शुरू करें, वह यहाँ दिखेगा।",
+  "chatsSectionActive": "चालू",
+  "chatsSectionRecent": "हाल की",
+  "chatsAstrologerFallback": "ज्योतिषी",
+  "chatsStatusWaiting": "ज्योतिषी के स्वीकार करने का इंतज़ार",
+  "chatsStatusLive": "अभी लाइव · खोलने के लिए टैप करें",
+  "chatsStatusEnded": "{minutes} मिनट का परामर्श",
+  "@chatsStatusEnded": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "chatsStatusCancelled": "रद्द",
+  "chatsStatusRejected": "स्वीकार नहीं हुआ",
+  "chatsStatusExpired": "अनुरोध समाप्त",
+  "chatsStatusGeneric": "परामर्श",
+  "numerologyTitle": "अंक ज्योतिष और लो शु ग्रिड",
+  "numerologyIntro": "आपकी जन्म तिथि (और नाम) से एक पारंपरिक अंक विश्लेषण — प्रत्येक अंक की प्रवृत्तियाँ, शुभ दिन और रंग, और आपका लो शु जन्म ग्रिड। यह चिंतन के लिए है, तिथिबद्ध भविष्यवाणी के लिए नहीं।",
+  "numMoolank": "मूलांक · मानसिक अंक",
+  "numBhagyank": "भाग्यांक · भाग्य अंक",
+  "numNaamank": "नामांक · नाम अंक",
+  "numRuledBy": "{planet} द्वारा शासित",
+  "@numRuledBy": {
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      }
+    }
+  },
+  "numFriendly": "मित्र",
+  "numNeutral": "सम",
+  "numUnfriendly": "शत्रु",
+  "numFavDays": "शुभ दिन",
+  "numFavColours": "शुभ रंग",
+  "numDirection": "दिशा",
+  "numDeity": "देवता",
+  "numGemstone": "पारंपरिक रत्न",
+  "numLoShuTitle": "लो शु जन्म ग्रिड",
+  "numLoShuMissing": "आपके ग्रिड में नहीं: {nums}",
+  "@numLoShuMissing": {
+    "placeholders": {
+      "nums": {
+        "type": "String"
+      }
+    }
+  },
+  "numLoShuRepeated": "प्रबल: {nums}",
+  "@numLoShuRepeated": {
+    "placeholders": {
+      "nums": {
+        "type": "String"
+      }
+    }
+  },
+  "numArrowStrength": "पूर्ण रेखा",
+  "numArrowAbsence": "अनुपस्थित रेखा",
+  "numAskCta": "इस बारे में ज्योतिषी से बात करें",
+  "sadeSatiTitle": "साढ़े साती और ढैया कैलेंडर",
+  "sadeSatiIntro": "आपके जीवन में शनि की तिथिबद्ध अवधियाँ, आपकी चंद्र राशि {sign} से गणना की गई। साढ़े साती शनि का चंद्रमा से 12वें, 1ले और 2रे में गोचर है (~7½ वर्ष); ढैया 4थे या 8वें में है (~2½ वर्ष)।",
+  "@sadeSatiIntro": {
+    "placeholders": {
+      "sign": {
+        "type": "String"
+      }
+    }
+  },
+  "sadeSatiRunningNow": "अभी चल रही",
+  "sadeSatiPast": "बीत चुकी",
+  "sadeSatiUpcoming": "आगामी",
+  "sadeSatiPhaseRising": "आरोही · शनि 12वें में",
+  "sadeSatiPhasePeak": "शिखर · शनि चंद्रमा पर",
+  "sadeSatiPhaseSetting": "अवरोही · शनि 2रे में",
+  "sadeSatiPhaseKantaka": "कंटक · शनि 4थे में",
+  "sadeSatiPhaseAshtama": "अष्टम · शनि 8वें में",
+  "sadeSatiDhaiyaHeading": "ढैया (छोटी पनोती) अवधियाँ",
+  "sadeSatiRange": "{start} → {end}",
+  "@sadeSatiRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "avTransitHeading": "आज के गोचर की अष्टकवर्ग शक्ति",
+  "avTransitIntro": "आपकी जन्म बिंदु संख्याओं के अनुसार प्रत्येक ग्रह का गोचर कितनी सहजता से फल देता है। 8 में से 5+ अनुकूल, 4 मिश्रित, इससे कम कमज़ोर।",
+  "avTransitBindus": "{bindus}/8 बिंदु",
+  "@avTransitBindus": {
+    "placeholders": {
+      "bindus": {
+        "type": "int"
+      }
+    }
+  },
+  "avTransitUpcoming": "आगे",
+  "avTransitInHouse": "{planet} in your {house} house",
+  "@avTransitInHouse": {
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      },
+      "house": {
+        "type": "String"
+      }
+    }
+  },
+  "muhurtaTitle": "आज का मुहूर्त",
+  "muhurtaIntro": "आज की चौघड़िया और होरा, आपके जन्म शहर के अनुसार और आपकी कुंडली के सहायक ग्रहों के अनुसार वैयक्तिकृत। काम शुरू करने के बेहतर और कमज़ोर समय का मार्गदर्शन — नियम नहीं।",
+  "muhurtaSunTimes": "{sunrise} सूर्योदय · {sunset} सूर्यास्त · {weekday} ({lord})",
+  "@muhurtaSunTimes": {
+    "placeholders": {
+      "sunrise": {
+        "type": "String"
+      },
+      "sunset": {
+        "type": "String"
+      },
+      "weekday": {
+        "type": "String"
+      },
+      "lord": {
+        "type": "String"
+      }
+    }
+  },
+  "muhurtaBestWindows": "आज आपके लिए सर्वोत्तम समय",
+  "muhurtaNoBest": "आज कोई विशेष समय नहीं — नीचे एक अच्छी चौघड़िया चुनें।",
+  "muhurtaDayChoghadiya": "दिन की चौघड़िया",
+  "muhurtaNightChoghadiya": "रात की चौघड़िया",
+  "muhurtaHora": "ग्रह होरा",
+  "muhurtaNow": "अभी",
+  "muhurtaChoGood": "शुभ",
+  "muhurtaChoBad": "त्यागें",
+  "muhurtaChoNeutral": "सम",
+  "muhurtaHoraFavourable": "आपके लिए अच्छा",
+  "muhurtaHoraCaution": "हल्का रखें",
+  "upayaTitle": "रत्न और उपाय",
+  "upayaIntro": "आपके लग्न ({sign}) के लिए पारंपरिक उपाय तालिका — शुभ रंग, दिन, देवता, मंत्र और दान जिन्हें आप स्वतंत्र रूप से अपना सकते हैं, साथ ही प्रत्येक ग्रह का पारंपरिक रत्न और रुद्राक्ष।",
+  "@upayaIntro": {
+    "placeholders": {
+      "sign": {
+        "type": "String"
+      }
+    }
+  },
+  "upayaLagnaFavourable": "आपके लग्न के लिए शुभ",
+  "upayaColours": "रंग",
+  "upayaDirection": "दिशा",
+  "upayaDay": "दिन",
+  "upayaDeity": "देवता",
+  "upayaStrengthen": "बल दें",
+  "upayaPacify": "शांत करें",
+  "upayaMixed": "मिश्रित",
+  "upayaNeutral": "सम",
+  "upayaFreeMeasures": "निःशुल्क उपाय",
+  "upayaMantra": "मंत्र",
+  "upayaCharity": "दान",
+  "upayaGemstone": "रत्न",
+  "upayaRudraksha": "रुद्राक्ष",
+  "upayaGatedCta": "पहले ज्योतिषी से पुष्टि करें",
+  "upayaPriority": "प्राथमिकता",
+  "lalKitabTitle": "लाल किताब — ऋण और उपाय",
+  "lalKitabIntro": "लाल किताब आपकी कुंडली से कुछ विरासत में मिले ऋण (रिन) पढ़ती है और प्रत्येक को सरल, निःशुल्क घरेलू टोटकों से दूर करती है। कोई रत्न नहीं, कोई खर्च नहीं।",
+  "lalKitabActiveDebts": "सक्रिय ऋण",
+  "lalKitabNoDebts": "कोई प्रबल सक्रिय रिन नहीं — रोज़मर्रा के कर्तव्य निभाते रहें और कुछ नहीं बढ़ता।",
+  "lalKitabWhyFlagged": "क्यों चिह्नित",
+  "lalKitabRemedy": "उपाय (टोटका)",
+  "lalKitabWeakPlanets": "कमज़ोर ग्रह स्थिति",
+  "lalKitabAllRemedies": "आपके उपाय",
+  "lalKitabPakkaGhar": "{planet} का पक्का घर {house} है",
+  "@lalKitabPakkaGhar": {
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      },
+      "house": {
+        "type": "String"
+      }
+    }
+  },
+  "varshphalTitle": "वर्षफल — इस वर्ष की कुंडली",
+  "varshphalIntro": "आपके {age}वें वर्ष के लिए ताजिक वार्षिक कुंडली, उस क्षण के लिए बनाई गई जब सूर्य अपनी जन्म स्थिति में लौटता है। ये कार्य करने योग्य विषय हैं — निश्चित घटनाएँ नहीं।",
+  "@varshphalIntro": {
+    "placeholders": {
+      "age": {
+        "type": "String"
+      }
+    }
+  },
+  "varshphalWindow": "{start} → {end}",
+  "@varshphalWindow": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "varshphalLagna": "वर्ष लग्न",
+  "varshphalMuntha": "मुंथा",
+  "varshphalYearLord": "वर्षेश्वर (वर्ष स्वामी)",
+  "varshphalTajika": "ताजिक दृष्टि",
+  "varshphalMunthaLine": "मुंथा {house} भाव में — {theme}",
+  "@varshphalMunthaLine": {
+    "placeholders": {
+      "house": {
+        "type": "String"
+      },
+      "theme": {
+        "type": "String"
+      }
+    }
+  },
+  "varshphalChart": "वार्षिक कुंडली के ग्रह",
+  "prefsTransitAlerts": "गोचर सूचनाएँ",
+  "prefsTransitAlertsDesc": "जब कोई धीमा ग्रह (बृहस्पति, शनि) आपकी कुंडली में एक नए भाव में राशि बदलने वाला हो, तब एक सूचना।",
+  "profileHapticFeedback": "हैप्टिक राय",
+  "profileHapticFeedbackDesc": "बटन दबाने और अन्य गतिविधियों पर कंपन करें",
+  "homePanchangTitle": "आज का पंचांग",
+  "homeLiveNowTitle": "अब सीधा प्रसारण हो रहा है",
+  "homeFreeToolsTitle": "निःशुल्क उपकरण",
+  "homeResumeBtn": "फिर शुरू करना",
+  "homeAddBtn": "जोड़ना",
+  "homeNotifyMeBtn": "मुझे सूचित करें",
+  "homeKundaliAction": "कुण्डली",
+  "homeMatchingAction": "मेल मिलाना",
+  "homeHoroscopeAction": "राशिफल",
+  "homeVastuAction": "वास्तु",
+  "homeRetryBtn": "पुन: प्रयास करें",
+  "homeChooseSignTitle": "अपनी राशि चुनें",
+  "homeChooseLanguageTitle": "भाषा चुनें",
+  "homeLanguageTooltip": "भाषा",
+  "homeLanguageSwitchError": "स्विच नहीं हो सका: {error}",
+  "@homeLanguageSwitchError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "homeComingSoonSnackbar": "जल्द आ रहा है!",
+  "homeTalkAgainTitle": "फिर से बात करें",
+  "homeRechargeWalletTitle": "अपने बटुए को फिर से भर लें",
+  "homeTalkToAstrologerTitle": "किसी ज्योतिषी से बात करें",
+  "kSignNameAries": "मेष",
+  "kSignNameTaurus": "वृषभ",
+  "kSignNameGemini": "मिथुन",
+  "kSignNameCancer": "कर्क",
+  "kSignNameLeo": "सिंह",
+  "kSignNameVirgo": "कन्या",
+  "kSignNameLibra": "तुला",
+  "kSignNameScorpio": "वृश्चिक",
+  "kSignNameSagittarius": "धनु",
+  "kSignNameCapricorn": "मकर",
+  "kSignNameAquarius": "कुंभ",
+  "kSignNamePisces": "मीन",
+  "kNakNameAshwini": "अश्विनी",
+  "kNakNameBharani": "भरणी",
+  "kNakNameKrittika": "कृत्तिका",
+  "kNakNameRohini": "रोहिणी",
+  "kNakNameMrigashira": "मृगशिरा",
+  "kNakNameArdra": "आर्द्रा",
+  "kNakNamePunarvasu": "पुनर्वसु",
+  "kNakNamePushya": "पुष्य",
+  "kNakNameAshlesha": "आश्लेषा",
+  "kNakNameMagha": "मघा",
+  "kNakNamePurvaPhalguni": "पूर्व फाल्गुनी",
+  "kNakNameUttaraPhalguni": "उत्तर फाल्गुनी",
+  "kNakNameHasta": "हस्त",
+  "kNakNameChitra": "चित्रा",
+  "kNakNameSwati": "स्वाति",
+  "kNakNameVishakha": "विशाखा",
+  "kNakNameAnuradha": "अनुराधा",
+  "kNakNameJyeshtha": "ज्येष्ठा",
+  "kNakNameMula": "मूल",
+  "kNakNamePurvaAshadha": "पूर्वाषाढ़ा",
+  "kNakNameUttaraAshadha": "उत्तराषाढ़ा",
+  "kNakNameShravana": "श्रवण",
+  "kNakNameDhanishta": "धनिष्ठा",
+  "kNakNameShatabhisha": "शतभिषा",
+  "kNakNamePurvaBhadrapada": "पूर्व भाद्रपद",
+  "kNakNameUttaraBhadrapada": "उत्तर भाद्रपद",
+  "kNakNameRevati": "रेवती",
+  "kChartNameD1": "राशि",
+  "kChartSigD1": "शरीर, संपूर्ण जीवन, सब कुछ",
+  "kChartNameD2": "होरा",
+  "kChartSigD2": "धन, आर्थिक समृद्धि",
+  "kChartNameD3": "द्रेष्काण",
+  "kChartSigD3": "भाई-बहन, साहस, पहल",
+  "kChartNameD4": "चतुर्थांश",
+  "kChartSigD4": "भाग्य, संपत्ति, अचल संपत्ति, घर",
+  "kChartNameD5": "पंचमांश",
+  "kChartSigD5": "यश, अधिकार, आध्यात्मिक पुण्य",
+  "kChartNameD6": "षष्ठांश",
+  "kChartSigD6": "स्वास्थ्य, रोग, ऋण, शत्रु",
+  "kChartNameD7": "सप्तमांश",
+  "kChartSigD7": "संतान, वंश, रचनात्मकता",
+  "kChartNameD8": "अष्टमांश",
+  "kChartSigD8": "आकस्मिक घटनाएँ, आयु संबंधी कष्ट, बाधाएँ",
+  "kChartNameD9": "नवमांश",
+  "kChartSigD9": "जीवनसाथी, धर्म, अंतर्मन — मुख्य सहायक कुंडली",
+  "kChartNameD10": "दशमांश",
+  "kChartSigD10": "करियर, व्यवसाय, प्रतिष्ठा, उपलब्धि",
+  "kChartNameD11": "रुद्रांश",
+  "kChartSigD11": "मृत्यु, विनाश, विपत्ति से लाभ",
+  "kChartNameD12": "द्वादशांश",
+  "kChartSigD12": "माता-पिता, पूर्वज, विरासत में मिला कर्म",
+  "kChartNameD16": "षोडशांश",
+  "kChartSigD16": "वाहन, सुख-सुविधाएँ, विलासिता, प्रसन्नता",
+  "kChartNameD20": "विंशांश",
+  "kChartSigD20": "आध्यात्मिक साधना, पूजा, भक्ति",
+  "kChartNameD24": "चतुर्विंशांश",
+  "kChartSigD24": "शिक्षा, विद्या, ज्ञान",
+  "kChartNameD27": "सप्तविंशांश",
+  "kChartSigD27": "शक्ति और दुर्बलता, सहनशक्ति",
+  "kChartNameD30": "त्रिंशांश",
+  "kChartSigD30": "दुर्भाग्य, अनिष्ट, नैतिक चरित्र",
+  "kChartNameD40": "चत्वारिंशांश",
+  "kChartSigD40": "मातृ विरासत, शुभ/अशुभ प्रभाव",
+  "kChartNameD45": "अक्षवेदांश",
+  "kChartSigD45": "पितृ विरासत, समग्र चरित्र और आचरण",
+  "kChartNameD60": "षष्ट्यंश",
+  "kChartSigD60": "पूर्व जन्म के कर्म, सबसे सूक्ष्म स्तर — समग्र",
+  "kChartNameMoon": "चंद्र कुंडली",
+  "kChartSigMoon": "मन और भावनाएँ — चंद्रमा से पढ़ी गई राशि कुंडली",
+  "kChartNameChalit": "भाव चलित",
+  "kChartSigChalit": "वास्तविक भाव संधियों (श्रीपति) के अनुसार भाव फल, पूर्ण राशि नहीं",
+  "kChartNameTransit": "गोचर",
+  "kChartSigTransit": "जन्म कुंडली के भावों पर वर्तमान ग्रह",
+  "kChartShortMoon": "चंद्र",
+  "kChartShortChalit": "चलित",
+  "kChartShortTransit": "गोचर",
+  "kChAscendant": "लग्न",
+  "kChLagnaVargottama": "लग्न वर्गोत्तम",
+  "kChAsOf": "{when} तक",
+  "kChUnverified": "यह वर्ग अभी DrikPanchang से सत्यापित नहीं है — ग्रह स्थितियों को प्रायोगिक मानें।",
+  "kChChalitShiftedOne": "{planets} पूर्ण-राशि भाव से अलग भाव में है।",
+  "kChChalitShiftedMany": "{planets} पूर्ण-राशि भाव से अलग भाव में हैं।",
+  "kChColPlanet": "ग्रह",
+  "kChColSign": "राशि",
+  "kChColDegree": "अंश",
+  "kChColHouse": "भाव",
+  "kChColBhava": "चलित भाव",
+  "kChColFromMoon": "चंद्र से",
+  "kChLegend": "संकेत",
+  "kChLegendNote": "℞ वक्री   ⬦ वर्गोत्तम   ← बदला हुआ भाव (चलित)\nउत्तर भारतीय: खाने की संख्या = राशि (1 मेष … 12 मीन), पहला भाव ऊपर बीच में।",
+  "kChNorthIndian": "उत्तर भारतीय",
+  "kChSouthIndian": "दक्षिण भारतीय",
+  "kChPickerCharts": "कुंडलियाँ",
+  "kChPickerDivisional": "वर्ग कुंडलियाँ",
+  "kOvTitle": "कुंडली",
+  "kOvTitleNamed": "{name} की कुंडली",
+  "kOvDownloadPdf": "PDF डाउनलोड करें",
+  "kOvShare": "शेयर करें",
+  "kOvMoonSignLabel": "चंद्र राशि",
+  "kOvLagnaChip": "लग्न · {sign}",
+  "kOvNakshatraChip": "नक्षत्र · {name}",
+  "kOvTimeApprox": "जन्म समय अनुमानित",
+  "kOvEdit": "बदलें",
+  "kOvLagnaChart": "लग्न कुंडली",
+  "kOvD1Rasi": "D1 राशि",
+  "kOvOpenFullChart": "पूरी कुंडली देखें",
+  "kOvDashaUnavailable": "दशा अभी उपलब्ध नहीं है।",
+  "kOvDashaRunning": "अभी आपकी चल रही दशा",
+  "kOvMahadasha": "{planet} महादशा",
+  "kOvSubPeriods": "{antar} अंतर्दशा · {pratyantar} प्रत्यंतर्दशा",
+  "kOvDashaProgress": "{start} → {end}  ·  {percent}% पूर्ण",
+  "kOvSeeTimeline": "पूरी समयरेखा देखें",
+  "kOvAtAGlance": "एक नज़र में",
+  "kOvMangalDosha": "मंगल दोष",
+  "kOvManglik": "मांगलिक",
+  "kOvNotManglik": "मांगलिक नहीं",
+  "kOvMangalFrom": "{refs} से",
+  "kOvMarsClear": "मंगल शुद्ध है",
+  "kOvMangalCancelled": "दोष बनता है, पर आपकी कुंडली में निरस्त है",
+  "kOvMangalLevelFrom": "{level} · {refs} से",
+  "kOvRefLagna": "लग्न",
+  "kOvYogas": "योग",
+  "kOvYogasFound": "{count} मिले",
+  "kOvNakshatra": "नक्षत्र",
+  "kOvLagnaLord": "लग्नेश",
+  "kOvExInsights": "व्यक्तित्व और जीवन सार",
+  "kOvExInsightsSub": "आपकी कुंडली का मुफ़्त विश्लेषण — स्वभाव, काम, विवाह और बहुत कुछ",
+  "kOvExForecast": "लिखित भविष्यफल",
+  "kOvExForecastSub": "जीवन के किसी एक क्षेत्र का सशुल्क भविष्यफल, ज्योतिषी द्वारा लिखित",
+  "kOvExPlanets": "ग्रह और स्थितियाँ",
+  "kOvExPlanetsSub": "हर ग्रह कहाँ बैठा है और क्या करता है",
+  "kOvExDasha": "दशा काल",
+  "kOvExDashaSub": "आपके जीवन की समयरेखा — विंशोत्तरी",
+  "kOvExVarshphal": "वर्षफल (वार्षिक कुंडली)",
+  "kOvExVarshphalSub": "इस सौर वर्ष का फल — मुंथा, वर्षेश और ताजिक दृष्टि",
+  "kOvExYogas": "योग और दोष",
+  "kOvExYogasSub": "आपकी कुंडली के विशेष योग",
+  "kOvExRemedies": "उपाय",
+  "kOvExRemediesSub": "आपकी कुंडली के लिए पारंपरिक मंत्र, दान और साधनाएँ",
+  "kOvExUpaya": "रत्न और उपाय",
+  "kOvExUpayaSub": "हर ग्रह का रत्न, रंग, दिन और मंत्र — रत्न परामर्श के बाद",
+  "kOvExLalKitab": "लाल किताब",
+  "kOvExLalKitabSub": "पैतृक ऋण और उनके आसान, मुफ़्त टोटके",
+  "kOvExTransits": "गोचर और साढ़े साती",
+  "kOvExTransitsSub": "अभी आकाश में क्या चल रहा है",
+  "kOvExSadeSati": "साढ़े साती और ढैया कैलेंडर",
+  "kOvExSadeSatiSub": "जीवन भर शनि के सभी चरण, तारीखों के साथ",
+  "kOvExMuhurta": "आज का समय",
+  "kOvExMuhurtaSub": "चौघड़िया और होरा, आपके सबसे अच्छे समय चिह्नित",
+  "kOvExHouses": "भाव",
+  "kOvExHousesSub": "सभी 12 भावों का फल",
+  "kOvExNumerology": "अंक ज्योतिष और लो शू ग्रिड",
+  "kOvExNumerologySub": "जन्म तिथि से आपके अंक — दिन, रंग, जन्म ग्रिड",
+  "kOvExAdvanced": "उन्नत रिपोर्ट",
+  "kOvExAdvancedSub": "अष्टकवर्ग, षड्बल, केपी, जैमिनी",
+  "kOvAskAstrologer": "अपनी कुंडली के बारे में ज्योतिषी से पूछें",
+  "kReadingCardTitle": "इसका अर्थ",
+  "kSsTitle": "साढ़े साती · {phase} चरण",
+  "kSsPhaseRising": "आरंभ (3 में से 1)",
+  "kSsPhasePeak": "चरम (3 में से 2)",
+  "kSsPhaseSetting": "उतार (3 में से 3)",
+  "kSsRising": "आरंभ",
+  "kSsPeak": "चरम",
+  "kSsSetting": "उतार",
+  "kSsNotCurse": "साढ़े साती मेहनत और परिपक्वता का समय है — कोई श्राप नहीं। निरंतर, ईमानदार प्रयास का फल मिलता है।",
+  "kSsWhatForMe": "मेरे लिए इसका क्या अर्थ है",
+  "kSsPanotiTitle": "लघु पनौती — {type}",
+  "kSsPanotiBody": "शनि का छोटा चरण (लगभग ढाई वर्ष) जो स्वास्थ्य, प्रयास और रोज़ की बाधाओं में धैर्य माँगता है।",
+  "kSsSeeTransits": "गोचर देखें",
+  "kSsSkyNow": "अभी आकाश में",
+  "kSsJupiterGood": "गुरु का गोचर आपके लिए अनुकूल है — विकास, शिक्षा और धन के लिए सहायक समय।",
+  "kSsJupiterNeutral": "कोई साढ़े साती या शनि का बड़ा चरण सक्रिय नहीं है। गुरु का गोचर अभी आपके लिए सामान्य है।",
+  "kSsSeeAllTransits": "सभी गोचर देखें",
+  "kFcTitle": "जन्म कुंडली",
+  "kFcTransitingGrahas": "गोचर ग्रह",
+  "kFcPlanets": "ग्रह",
+  "kFcAllHouses": "सभी 12 भाव और फल",
+  "kFcAllCharts": "सभी कुंडलियाँ — D1 से D60",
+  "kFcAllChartsTooltip": "सभी कुंडलियाँ",
+  "kFcLoadError": "यह कुंडली लोड नहीं हो सकी",
+  "kFcTwelveHouses": "12 भाव",
+  "kFcNoPlanets": "कोई ग्रह नहीं",
+  "kBdTithi": "{key, select, Pratipada{प्रतिपदा} Dwitiya{द्वितीया} Tritiya{तृतीया} Chaturthi{चतुर्थी} Panchami{पंचमी} Shashthi{षष्ठी} Saptami{सप्तमी} Ashtami{अष्टमी} Navami{नवमी} Dashami{दशमी} Ekadashi{एकादशी} Dwadashi{द्वादशी} Trayodashi{त्रयोदशी} Chaturdashi{चतुर्दशी} Purnima{पूर्णिमा} Amavasya{अमावस्या} other{{raw}}}",
+  "kBdPaksha": "{key, select, Shukla{शुक्ल} Krishna{कृष्ण} other{{raw}}}",
+  "kBdYoga": "{key, select, Vishkambha{विष्कम्भ} Priti{प्रीति} Ayushman{आयुष्मान} Saubhagya{सौभाग्य} Shobhana{शोभन} Atiganda{अतिगण्ड} Sukarman{सुकर्मा} Dhriti{धृति} Shula{शूल} Ganda{गण्ड} Vriddhi{वृद्धि} Dhruva{ध्रुव} Vyaghata{व्याघात} Harshana{हर्षण} Vajra{वज्र} Siddhi{सिद्धि} Vyatipata{व्यतीपात} Variyana{वरीयान} Parigha{परिघ} Shiva{शिव} Siddha{सिद्ध} Sadhya{साध्य} Shubha{शुभ} Shukla{शुक्ल} Brahma{ब्रह्म} Indra{इन्द्र} Vaidhriti{वैधृति} other{{raw}}}",
+  "kBdKarana": "{key, select, Bava{बव} Balava{बालव} Kaulava{कौलव} Taitila{तैतिल} Gara{गर} Vanija{वणिज} Vishti{विष्टि} Kimstughna{किंस्तुघ्न} Shakuni{शकुनि} Chatushpada{चतुष्पाद} Naga{नाग} other{{raw}}}",
+  "kBdVarna": "{key, select, Kshatriya{क्षत्रिय} Vaishya{वैश्य} Shudra{शूद्र} Brahmin{ब्राह्मण} other{{raw}}}",
+  "kBdVashya": "{key, select, Chatushpada{चतुष्पद} Manava{मानव} Jalachara{जलचर} Vanachara{वनचर} Keeta{कीट} other{{raw}}}",
+  "kBdYoni": "{key, select, Horse{अश्व} Elephant{गज} Sheep{मेष} Serpent{सर्प} Dog{श्वान} Cat{मार्जार} Rat{मूषक} Cow{गौ} Buffalo{महिष} Tiger{व्याघ्र} Deer{मृग} Monkey{वानर} Mongoose{नकुल} Lion{सिंह} other{{raw}}}",
+  "kBdGana": "{key, select, Deva{देव} Manushya{मनुष्य} Rakshasa{राक्षस} other{{raw}}}",
+  "kBdNadi": "{key, select, Aadi{आदि} Madhya{मध्य} Antya{अंत्य} other{{raw}}}",
+  "kBdTara": "{key, select, Janma{जन्म} Sampat{सम्पत} Vipat{विपत} Kshema{क्षेम} Pratyari{प्रत्यरि} Sadhaka{साधक} Vadha{वध} Mitra{मित्र} AtiMitra{अति मित्र} other{{raw}}}",
+  "kBdYunja": "{key, select, Purva{पूर्व} Madhya{मध्य} Uttara{उत्तर} other{{raw}}}",
+  "horoTitle": "राशिफल",
+  "horoReadFull": "पूरा राशिफल पढ़ें",
+  "horoSpanYesterday": "बीता कल",
+  "horoSpanToday": "आज",
+  "horoSpanTomorrow": "आने वाला कल",
+  "horoSpanWeek": "इस सप्ताह",
+  "horoSpanMonth": "इस महीने",
+  "horoAreaLove": "प्रेम",
+  "horoAreaCareer": "करियर",
+  "horoAreaMoney": "धन",
+  "horoAreaHealth": "स्वास्थ्य",
+  "horoOverall": "कुल मिलाकर",
+  "horoOutOfFive": "5 में से",
+  "horoToneSupportive": "अनुकूल",
+  "horoToneBalanced": "संतुलित",
+  "horoToneChallenging": "सावधानी रखें",
+  "horoLuckyColour": "शुभ रंग",
+  "horoLuckyNumber": "शुभ अंक",
+  "horoLuckyPlanet": "सबसे बलवान ग्रह",
+  "horoBestDays": "आपके शुभ दिन",
+  "horoTipTitle": "उपाय और सुझाव",
+  "horoTipFor": "{planet} के लिए उपाय",
+  "horoWhyTitle": "ग्रह ऐसा क्यों कहते हैं",
+  "horoWhyBody": "वैदिक राशिफल आपकी चंद्र राशि से गिनकर ग्रहों के गोचर से पढ़ा जाता है। तीर बताते हैं कि कोई स्थिति आपके अनुकूल है या सावधानी माँगती है।",
+  "horoMoonLine": "चंद्र {sign} में · {nakshatra} · भाव {house}",
+  "horoHouseN": "भाव {n}",
+  "horoAboutSign": "{sign} राशि के बारे में",
+  "horoElement": "तत्व",
+  "horoRuler": "स्वामी ग्रह",
+  "horoQuality": "स्वभाव",
+  "horoElementFire": "अग्नि",
+  "horoElementEarth": "पृथ्वी",
+  "horoElementAir": "वायु",
+  "horoElementWater": "जल",
+  "horoQualityMovable": "चर",
+  "horoQualityFixed": "स्थिर",
+  "horoQualityDual": "द्विस्वभाव",
+  "horoChangeSign": "राशि बदलें",
+  "horoChooseSign": "अपनी राशि चुनें",
+  "horoWhichSignTitle": "मुझे कौन-सी राशि चुननी चाहिए?",
+  "horoWhichSignBody": "वैदिक राशिफल आपकी चंद्र राशि से पढ़ा जाता है — जन्म के समय चंद्रमा जिस राशि में था। यह अक्सर पश्चिमी सूर्य राशि से अलग होती है। आपकी कुंडली में चंद्र राशि दिखती है; सबसे सटीक राशिफल के लिए वही चुनें।",
+  "horoOpenKundali": "कुंडली में मेरी चंद्र राशि देखें",
+  "horoCtaTitle": "सिर्फ़ आपके लिए भविष्यफल चाहिए?",
+  "horoCtaBody": "यह भविष्यफल {sign} राशि वाले सभी लोगों के लिए है। ज्योतिषी आपकी व्यक्तिगत कुंडली देख सकते हैं।",
+  "horoCtaButton": "ज्योतिषी से बात करें",
+  "horoShare": "शेयर करें",
+  "horoEditorialBadge": "हमारे ज्योतिषियों द्वारा लिखा गया",
+  "horoError": "राशिफल लोड नहीं हो सका",
+  "horoSourceNote": "आपकी चंद्र राशि से वर्तमान ग्रह-गोचर पर आधारित। यह मार्गदर्शन है, निश्चितता नहीं।",
+  "matchTitle": "कुंडली मिलान",
+  "matchHeroTitle": "दो कुंडलियाँ मिलाएँ",
+  "matchHeroBody": "गुण मिलान, मांगलिक और दोष जाँच — कुछ ही पलों में।",
+  "matchBoy": "वर",
+  "matchGirl": "वधू",
+  "matchSwap": "अदला-बदली",
+  "matchChoosePerson": "व्यक्ति चुनें",
+  "matchTapToSelect": "चुनने के लिए टैप करें",
+  "matchRunCta": "मिलान देखें",
+  "matchPickBothHint": "मिलान अंक देखने के लिए दोनों व्यक्ति चुनें।",
+  "matchPickBoyTitle": "वर का जन्म विवरण चुनें",
+  "matchPickGirlTitle": "वधू का जन्म विवरण चुनें",
+  "matchAddPerson": "नया व्यक्ति जोड़ें",
+  "matchAddPersonHint": "जन्म तिथि, समय और स्थान",
+  "matchNoProfiles": "अभी कोई जन्म विवरण सहेजा नहीं गया। शुरू करने के लिए व्यक्ति जोड़ें।",
+  "matchHowTitle": "यह कैसे काम करता है",
+  "matchStep1Title": "दो व्यक्ति चुनें",
+  "matchStep1Body": "सहेजे गए विवरण चुनें या नए जोड़ें — समय और स्थान से सटीकता बढ़ती है।",
+  "matchStep2Title": "दोनों की चंद्र कुंडली मिलाई जाती है",
+  "matchStep2Body": "स्वभाव से स्वास्थ्य तक, आठ कूटों को पारंपरिक अष्टकूट पद्धति से अंक दिए जाते हैं।",
+  "matchStep3Title": "अंक और दोष जाँच पाएँ",
+  "matchStep3Body": "36 में से अंक, मांगलिक मिलान और हर भाग का अर्थ।",
+  "matchHistoryTitle": "आपके मिलान",
+  "matchHistoryEmpty": "आपके मिलान यहाँ दिखेंगे ताकि आप कभी भी दोबारा देख सकें।",
+  "matchRetry": "फिर कोशिश करें",
+  "matchPairNames": "{boy} और {girl}",
+  "matchResultTitle": "मिलान परिणाम",
+  "matchOutOf36": "36 में से",
+  "matchShareScore": "गुण मिलान: {score}/36 · {verdict}",
+  "matchVerdictExcellent": "उत्तम मिलान",
+  "matchVerdictGood": "अच्छा मिलान",
+  "matchVerdictAverage": "सामान्य मिलान",
+  "matchVerdictLow": "विस्तृत जाँच ज़रूरी",
+  "matchVerdictExcellentBody": "अधिकांश कूट मेल खाते हैं — परंपरागत रूप से सुखद और सहयोगी विवाह का संकेत।",
+  "matchVerdictGoodBody": "18 या अधिक गुण विवाह के लिए उपयुक्त माने जाते हैं। नीचे कम अंक वाले कूट देखें।",
+  "matchVerdictAverageBody": "18 से कम गुण होने पर ज्योतिषी निर्णय से पहले पूरी कुंडली देखने की सलाह देते हैं।",
+  "matchVerdictLowBody": "सिर्फ़ इस अंक पर निर्णय न लें — पूरी कुंडली देखने से अक्सर तस्वीर बदल जाती है।",
+  "matchManglikShort": "मांगलिक",
+  "matchManglikTitle": "मांगलिक (मंगल दोष) जाँच",
+  "matchManglikNone": "आप दोनों में से कोई मांगलिक नहीं है — मंगल दोष की चिंता नहीं।",
+  "matchManglikBoth": "आप दोनों मांगलिक हैं — परंपरा के अनुसार दोष निरस्त हो जाता है।",
+  "matchManglikCancelled": "मंगल दोष है, पर कुंडली की अन्य स्थितियों से निरस्त हो जाता है।",
+  "matchManglikMismatch": "आप में से केवल एक मांगलिक है। उपाय और पूरी कुंडली के लिए ज्योतिषी से बात करें।",
+  "matchIsManglik": "मांगलिक",
+  "matchNotManglik": "मांगलिक नहीं",
+  "matchManglikCancelledShort": "मांगलिक (निरस्त)",
+  "matchCheckClear": "{name}: नहीं है",
+  "matchCheckPresent": "{name}: है",
+  "matchDoshaNadi": "नाड़ी दोष",
+  "matchDoshaBhakoot": "भकूट दोष",
+  "matchDoshaGana": "गण दोष",
+  "matchDoshaTag": "दोष",
+  "matchBreakdownTitle": "गुण विवरण",
+  "matchBreakdownSub": "किसी भी कूट का अर्थ जानने के लिए टैप करें।",
+  "matchKootaVarna": "वर्ण",
+  "matchKootaVashya": "वश्य",
+  "matchKootaTara": "तारा",
+  "matchKootaYoni": "योनि",
+  "matchKootaMaitri": "ग्रह मैत्री",
+  "matchKootaGana": "गण",
+  "matchKootaBhakoot": "भकूट",
+  "matchKootaNadi": "नाड़ी",
+  "matchKootaVarnaMeaning": "मूल्य और अहं",
+  "matchKootaVashyaMeaning": "आपसी आकर्षण",
+  "matchKootaTaraMeaning": "भाग्य और कुशलता",
+  "matchKootaYoniMeaning": "शारीरिक अनुकूलता",
+  "matchKootaMaitriMeaning": "मानसिक मेल",
+  "matchKootaGanaMeaning": "स्वभाव",
+  "matchKootaBhakootMeaning": "प्रेम, परिवार और धन",
+  "matchKootaNadiMeaning": "स्वास्थ्य और संतान",
+  "matchKootaVarnaDetail": "दोनों चंद्र राशियों के आध्यात्मिक स्वभाव की तुलना — आपके मूल्य और कर्तव्य-बोध कितने सहज रूप से मेल खाते हैं। 1 अंक।",
+  "matchKootaVashyaDetail": "साथियों के बीच स्वाभाविक खिंचाव और प्रभाव — कौन नेतृत्व करता है, कौन ढलता है और सहमति कितनी आसानी से बनती है। 2 अंक।",
+  "matchKootaTaraDetail": "आपके नक्षत्रों के बीच की दूरी से रिश्ते के भाग्य, स्वास्थ्य और स्थायित्व का आकलन। 3 अंक।",
+  "matchKootaYoniDetail": "हर नक्षत्र का एक पशु स्वभाव होता है; यह कूट अंतरंगता और शारीरिक अनुकूलता के लिए उनकी तुलना करता है। 4 अंक।",
+  "matchKootaMaitriDetail": "दोनों चंद्र राशियों के स्वामियों की तुलना — उनकी मित्रता का अर्थ है आप एक जैसा सोचते हैं और मतभेद आसानी से सुलझाते हैं। 5 अंक।",
+  "matchKootaGanaDetail": "नक्षत्रों को देव, मनुष्य और राक्षस गण में बाँटता है। बेमेल होने पर बार-बार टकराव हो सकता है। 6 अंक।",
+  "matchKootaBhakootDetail": "दोनों चंद्र राशियों की दूरी देखता है, जो परंपरा से प्रेम, परिवार की वृद्धि और साझा धन को प्रभावित करती है। 7 अंक।",
+  "matchKootaNadiDetail": "सबसे अधिक महत्व वाला कूट। एक ही नाड़ी (0 अंक) परंपरा से स्वास्थ्य और संतान संबंधी चिंता से जुड़ी है, और इसके प्रसिद्ध अपवाद भी हैं। 8 अंक।",
+  "matchChartsTitle": "जन्म कुंडली विवरण",
+  "matchRowRasi": "चंद्र राशि",
+  "matchRowNakshatra": "नक्षत्र",
+  "matchRowGana": "गण",
+  "matchRowYoni": "योनि",
+  "matchAskTitle": "ज्योतिषी से विस्तार से बात करें",
+  "matchAskBody": "दोषों के अक्सर परिहार और उपाय होते हैं। दोनों कुंडलियों का पूरा विश्लेषण पाएँ।",
+  "matchDisclaimer": "गुण मिलान एक पारंपरिक मार्गदर्शक है, गारंटी नहीं। पूरी कुंडली और अपने विवेक पर भी विचार करें।",
+  "matchRelSelf": "स्वयं",
+  "matchRelPartner": "साथी",
+  "matchRelChild": "संतान",
+  "matchRelParent": "माता-पिता",
+  "matchRelSibling": "भाई-बहन",
+  "matchRelFriend": "मित्र",
+  "kAdvTitle": "उन्नत रिपोर्ट",
+  "kAdvIntro": "गहराई और समय निर्धारण के लिए ज्योतिषी जिन तकनीकी परतों का उपयोग करते हैं। रुचि के लिए देखें, या परामर्श के दौरान खोलें।",
+  "kAdvAshtakavarga": "अष्टकवर्ग",
+  "kAdvAshtakavargaSub": "हर राशि की अंक-शक्ति। अधिक अंक = वहाँ के गोचर को आकाश का समर्थन।",
+  "kAdvShadbala": "षड्बल",
+  "kAdvShadbalaSub": "हर ग्रह का छह प्रकार का बल, उसकी आवश्यकता की तुलना में।",
+  "kAdvKp": "केपी पद्धति",
+  "kAdvKpSub": "कृष्णमूर्ति पद्धति — समय निर्धारण के लिए भाव-संधि उप-स्वामी और शासक ग्रह।",
+  "kAdvJaimini": "जैमिनी",
+  "kAdvJaiminiSub": "चर कारक, आरूढ़ लग्न और कुंडली पढ़ने की जैमिनी पद्धति।",
+  "kAdvDownloadPdf": "पूरी PDF रिपोर्ट डाउनलोड करें",
+  "kAdvFooter": "ये तकनीकी हैं। सरल शब्दों में फल के लिए ज्योतिषी से बात करें।",
+  "kAdvReport": "रिपोर्ट",
+  "kAdvLoadError": "यह रिपोर्ट लोड नहीं हो सकी।",
+  "kAdvKpIntro": "केपी राशिचक्र को 249 उप-भागों में बाँटता है। किसी भाव-संधि का उप-स्वामी तय करता है कि जीवन का वह क्षेत्र फल देगा या नहीं; शासक ग्रहों का उपयोग तत्काल समय निर्धारण के लिए होता है।",
+  "kAdvJaiminiIntro": "जैमिनी कुंडली को चर कारकों (अंश के क्रम में ग्रह, हर एक जीवन के किसी क्षेत्र का सूचक) और आरूढ़ पदों — दुनिया को चीज़ें कैसी दिखती हैं — के माध्यम से पढ़ता है।",
+  "kAdvAvIntro": "सर्वाष्टकवर्ग हर भाव में सभी ग्रहों का योगदान जोड़ता है — कुल योग हमेशा 337 होता है। 28+ अंक वाला भाव वहाँ से गुज़रने वाले ग्रहों का समर्थन करता है; 25 से कम कमज़ोर स्थान है।",
+  "kAdvHouseN": "भाव {n}",
+  "kAdvBhinnaTotals": "ग्रहवार योग (भिन्नाष्टकवर्ग)",
+  "kAdvShadbalaIntro": "षड्बल हर ग्रह की शक्ति को रूपों में, उसकी न्यूनतम आवश्यकता की तुलना में मापता है। 1.0 से अधिक अनुपात का अर्थ है कि ग्रह भरोसे से अपना फल दे सकता है।",
+  "kAdvStrongest": "सबसे बली: {planet}",
+  "kAdvWeakest": "सबसे निर्बल: {planet}",
+  "kAdvReadWithAstrologer": "यह रिपोर्ट ज्योतिषी के साथ पढ़ने के लिए है।",
+  "kAdvSecCuspalSublords": "भाव-संधि उप-स्वामी",
+  "kAdvSecRulingPlanets": "शासक ग्रह",
+  "kAdvSecHouseSignificators": "भाव कारक ग्रह",
+  "kAdvSecCharaKarakas": "चर कारक",
+  "kAdvSecArudhaPadas": "आरूढ़ पद",
+  "kAdvSecKarakamsa": "कारकांश",
+  "kAdvSecCharaDasha": "चर दशा",
+  "kBhavaTitle": "भाव",
+  "kBhavaIntro": "सभी 12 भाव, उनके स्वाभाविक कारकत्व, और उनके स्वामी व स्थित ग्रह उन्हें कैसे आकार देते हैं।",
+  "kBhavaMoreBenefic": "अशुभ से अधिक शुभ प्रभाव",
+  "kBhavaMoreMalefic": "शुभ से अधिक अशुभ प्रभाव",
+  "kBhavaOccupiedBy": "स्थित ग्रह: {planets}",
+  "kBhavaAspectedBy": "दृष्टि: {planets}",
+  "kBhavaBeneficCount": "{count} शुभ",
+  "kBhavaMaleficCount": "{count} अशुभ",
+  "kBhavaNeedsTime": "भाव विश्लेषण के लिए जन्म समय आवश्यक है",
+  "kBhavaNeedsTimeBody": "हर भाव का स्वरूप देखने के लिए इस प्रोफ़ाइल में जन्म का सटीक समय जोड़ें।",
+  "kDashaIntroVimshottari": "विंशोत्तरी ग्रहों की दशाओं का 120 वर्ष का चक्र है, जो जन्म के समय चंद्रमा की स्थिति से गिना जाता है।",
+  "kDashaIntroYogini": "योगिनी आठ योगिनियों का 36 वर्ष का चक्र है, जो चंद्रमा के नक्षत्र से गिना जाता है।",
+  "kDashaIntroAshtottari": "अष्टोत्तरी 108 वर्ष का चक्र है, जो आर्द्रा से गिना जाता है।",
+  "kDashaBalance": "जन्म के समय {lord} दशा का शेष: {years} वर्ष",
+  "kDashaVimshottari": "विंशोत्तरी",
+  "kDashaYogini": "योगिनी",
+  "kDashaAshtottari": "अष्टोत्तरी",
+  "kDashaNowRunning": "अभी चल रही दशा",
+  "kDashaNow": "अभी",
+  "kDashaYears": "{count} वर्ष",
+  "kPlanetsIntro": "हर ग्रह कहाँ बैठा है, कितना बली है, और क्या फल देता है। अधिक पढ़ने के लिए टैप करें। स्थितियाँ निरयण (लाहिड़ी) हैं।",
+  "kTrTitle": "गोचर",
+  "kTrSadeSatiCalendar": "पूरा साढ़े साती कैलेंडर देखें (तारीखों के साथ)",
+  "kTrSkyNow": "अभी का आकाश — आपकी कुंडली के सापेक्ष",
+  "kTrSadeSati": "साढ़े साती",
+  "kTrPhaseOf": "चरण {n} / 3",
+  "kTrPhaseHintRising": "शनि 12वें में",
+  "kTrPhaseHintPeak": "चंद्रमा के ऊपर",
+  "kTrPhaseHintSetting": "शनि दूसरे में",
+  "kTrHowToWork": "इसके साथ कैसे चलें",
+  "kTrTip1": "जो काम नहीं कर रहा उसे छोड़ें — शनि इस ईमानदारी का फल देता है",
+  "kTrTip2": "दिनचर्या बनाएँ और जो शुरू करें उसे पूरा करें",
+  "kTrTip3": "नींद, घुटनों, दाँतों और बुज़ुर्ग रिश्तेदारों का ध्यान रखें",
+  "kTrTip4": "यह पुनर्निर्माण है, दंड नहीं। परिणाम इसके समाप्त होने के बाद दिखते हैं।",
+  "kTrPanotiBody": "शनि का छोटा (लगभग ढाई वर्ष) चरण। स्वास्थ्य, रोज़ के प्रयास और बाधाओं में घर्षण की अपेक्षा करें — धैर्य और दिनचर्या से इसका सामना करें।",
+  "kTrPlanetInSign": "{sign} में {planet}",
+  "kTrJupiterGood": "गुरु का गोचर अनुकूल है — अभी विकास, शिक्षा, धन और परिवार के लिए सहायक।",
+  "kTrJupiterNeutral": "गुरु का गोचर अभी आपके लिए सामान्य है।",
+  "kTrCloseContacts": "अभी के निकट संपर्क",
+  "kTrCloseContactLine": "गोचर का {planet} आपके जन्म के {natal} से 3° के भीतर है — जीवन का वह क्षेत्र इस सप्ताह सक्रिय है।",
+  "kMuChoghadiya": "{key, select, udveg{उद्वेग} char{चर} labh{लाभ} amrit{अमृत} kaal{काल} shubh{शुभ} rog{रोग} abhijit{अभिजित} other{{raw}}}",
+  "kUpOr": "या {name}",
+  "kUpFinger": "{finger} उँगली",
+  "kYdPartial": "आंशिक",
+  "moodTitle": "आज का मन",
+  "moodMeter": "मन का मीटर",
+  "moodWhyTitle": "आज ऐसा क्यों लग रहा है",
+  "moodTipTitle": "आज के लिए एक छोटा सुझाव",
+  "moodLockedTitle": "आपके ज्योतिषी आपको बताएंगे",
+  "moodLockedSub": "पूरी तस्वीर के लिए सिर्फ़ चंद्रमा नहीं, आपकी पूरी कुंडली देखनी होती है।",
+  "moodTalkCta": "अभी ज्योतिषी से बात करें",
+  "moodNextChange": "आपका मन अगली बार {when} को बदलेगा",
+  "kOvExMood": "आज का मन",
+  "kOvExMoodSub": "आज चंद्रमा आपके मन पर कैसा असर डाल रहा है",
+  "prefsMoodAlerts": "दैनिक मन सूचनाएँ",
+  "prefsMoodAlertsDesc": "हफ़्ते में लगभग तीन सुबह, जब आपकी कुंडली में चंद्रमा राशि बदलता है।",
+  "callCalling": "कॉल की जा रही है…",
+  "callRinging": "घंटी बज रही है…",
+  "callConnecting": "कनेक्ट हो रहा है…",
+  "callReconnecting": "फिर से कनेक्ट हो रहा है…",
+  "callEnded": "कॉल समाप्त",
+  "callPoorConnection": "कमज़ोर नेटवर्क",
+  "callMute": "म्यूट",
+  "callSpeaker": "स्पीकर",
+  "callEnd": "समाप्त",
+  "callEncrypted": "एन्क्रिप्टेड कॉल",
+  "callMicTitle": "माइक्रोफ़ोन की अनुमति चाहिए",
+  "callMicBody": "माइक्रोफ़ोन की अनुमति दें ताकि ज्योतिषी आपको सुन सकें।",
+  "callMicBlockedBody": "TalkAcharya के लिए माइक्रोफ़ोन बंद है। सेटिंग्स में इसे चालू करें।",
+  "callOpenSettings": "सेटिंग्स खोलें",
+  "callTryAgain": "फिर कोशिश करें",
+  "callFailedTitle": "कॉल शुरू नहीं हो सकी",
+  "callEndConfirmTitle": "क्या कॉल समाप्त करें?",
+  "callEndConfirmBody": "कॉल समाप्त होते ही शुल्क रुक जाएगा।",
+  "callEndConfirmYes": "कॉल समाप्त करें",
+  "callEndConfirmNo": "बात जारी रखें",
+  "callWaitingAccept": "{name} के स्वीकार करने की प्रतीक्षा…",
+  "callBookTitle": "{name} को कॉल करें",
+  "callBookBilling": "वॉइस कॉल · कनेक्ट होने के बाद प्रति मिनट शुल्क",
+  "callBookCta": "कॉल शुरू करें · {price}/मिनट",
+  "callUnavailable": "यह ज्योतिषी अभी कॉल नहीं ले रहे हैं।",
+  "giftAction": "उपहार भेजें",
+  "giftSheetTitle": "{name} को उपहार भेजें",
+  "giftSheetSubtitle": "आभार का एक छोटा-सा प्रतीक — उन्हें तुरंत दिखेगा।",
+  "giftQuantity": "संख्या",
+  "giftAddNote": "संदेश जोड़ें",
+  "giftNoteHint": "छोटा-सा संदेश लिखें (वैकल्पिक)",
+  "giftChoose": "उपहार चुनें",
+  "giftSendCta": "{gift} भेजें · {price}",
+  "giftWalletBalance": "बैलेंस {amount}",
+  "giftAddMoney": "पैसे जोड़ें",
+  "giftLowBalanceTitle": "बैलेंस पर्याप्त नहीं है",
+  "giftLowBalanceBody": "यह उपहार भेजने के लिए वॉलेट में पैसे जोड़ें।",
+  "giftSentTitle": "{gift} {name} को भेजा गया",
+  "giftSentBody": "उन्हें यह तुरंत दिखेगा। आपकी सद्भावना के लिए धन्यवाद!",
+  "giftSendAnother": "एक और भेजें",
+  "giftLoadError": "उपहार लोड नहीं हो सके",
+  "giftThankYouTitle": "उपहार देकर धन्यवाद कहें",
+  "giftThankYouBody": "सत्र अच्छा लगा? {name} को आभार का एक छोटा-सा प्रतीक भेजें।",
+  "giftThankYouSentTitle": "आपके उपहार के लिए धन्यवाद",
+  "helpTitle": "सहायता और समर्थन",
+  "helpHeroTitle": "हम आपकी क्या मदद करें?",
+  "helpHeroBody": "किसी सत्र की समस्या बताएँ, अपनी शिकायतों की स्थिति देखें या हमारी टीम से संपर्क करें।",
+  "helpReportSection": "सत्र की समस्या बताएँ",
+  "helpReportEmpty": "आपके पूरे हुए सत्र यहाँ दिखेंगे।",
+  "helpReportAction": "बताएँ",
+  "helpYourReports": "आपकी शिकायतें",
+  "helpContactSection": "हमसे संपर्क करें",
+  "helpWhatsapp": "WhatsApp पर बात करें",
+  "helpEmailUs": "हमें ईमेल करें",
+  "helpCentre": "सहायता केंद्र",
+  "helpFaqSection": "अक्सर पूछे जाने वाले सवाल",
+  "helpLoadError": "आपके सत्र लोड नहीं हो सके।",
+  "helpFaqChargesQ": "परामर्श का शुल्क कैसे लगता है?",
+  "helpFaqChargesA": "आप प्रति मिनट भुगतान करते हैं, केवल तब तक जब तक सत्र चल रहा हो। ज्योतिषी के जुड़ते ही बिलिंग शुरू होती है और किसी के भी सत्र समाप्त करते ही रुक जाती है।",
+  "helpFaqNoResponseQ": "अगर ज्योतिषी जवाब न दें तो?",
+  "helpFaqNoResponseA": "अगर आपका अनुरोध स्वीकार नहीं होता, तो कोई शुल्क नहीं लगता — सत्र के लिए रोकी गई राशि आपके वॉलेट में लौट जाती है।",
+  "helpFaqRefundQ": "क्या मुझे रिफ़ंड मिल सकता है?",
+  "helpFaqRefundA": "अगर कुछ गलत हुआ — गलत शुल्क, तकनीकी समस्या या सत्र से मदद न मिलना — तो उसी सत्र से शिकायत करें। हमारी टीम हर शिकायत की जाँच करती है और उचित होने पर आपके वॉलेट में रिफ़ंड करती है।",
+  "helpFaqBalanceQ": "सत्र के दौरान मेरा बैलेंस खत्म हो गया। अब क्या करें?",
+  "helpFaqBalanceA": "बैलेंस खत्म होने पर सत्र अपने-आप समाप्त हो जाता है। वॉलेट रिचार्ज करें और सत्र सारांश से उन्हीं ज्योतिषी के साथ फिर शुरू करें।",
+  "helpFaqPrivacyQ": "क्या मेरी बातचीत निजी रहती है?",
+  "helpFaqPrivacyA": "आपका परामर्श आपके और आपके ज्योतिषी के बीच रहता है। हमारी सहायता टीम किसी सत्र को केवल शिकायत सुलझाने या प्लेटफ़ॉर्म को सुरक्षित रखने के लिए देखती है।",
+  "helpFaqLanguageQ": "ऐप की भाषा कैसे बदलें?",
+  "helpFaqLanguageA": "प्रोफ़ाइल → भाषा में जाएँ और अपनी पसंद की भाषा चुनें।",
+  "reportTitle": "समस्या बताएँ",
+  "reportSessionWith": "{name} के साथ सत्र",
+  "reportWhatHappened": "क्या गलत हुआ?",
+  "reportTypeBilling": "गलत शुल्क",
+  "reportTypeBillingHint": "मुझसे ज़्यादा शुल्क लिया गया",
+  "reportTypeQuality": "सत्र से मदद नहीं मिली",
+  "reportTypeQualityHint": "जैसा बताया गया था, वैसा मार्गदर्शन नहीं मिला",
+  "reportTypeConduct": "अनुचित व्यवहार",
+  "reportTypeConductHint": "ज्योतिषी का व्यवहार रूखा या अव्यावसायिक था",
+  "reportTypeNoShow": "ज्योतिषी ने जवाब नहीं दिया",
+  "reportTypeNoShowHint": "स्वीकार किया, पर असल में जुड़े ही नहीं",
+  "reportTypeTechnical": "तकनीकी समस्या",
+  "reportTypeTechnicalHint": "चैट या कॉल बार-बार रुकती रही",
+  "reportDescribe": "हमें विस्तार से बताएँ",
+  "reportDescribeHint": "बताएँ क्या हुआ — जितनी ज़्यादा जानकारी, उतनी जल्दी मदद।",
+  "reportMinChars": "कम से कम {count} अक्षर",
+  "reportPrivacyNote": "आपकी शिकायत की जाँच के लिए हमारी सहायता टीम इस सत्र को देखेगी।",
+  "reportSubmit": "शिकायत भेजें",
+  "reportSubmittedTitle": "शिकायत भेज दी गई",
+  "reportSubmittedBody": "हम इसकी जाँच करेंगे और कोई भी अपडेट होते ही आपको सूचित करेंगे।",
+  "reportAlreadyTitle": "आप इस सत्र की शिकायत पहले ही कर चुके हैं",
+  "reportAlreadyBody": "हमारी टीम इसकी जाँच कर रही है। अपडेट होते ही आपको सूचित किया जाएगा।",
+  "reportViewStatus": "शिकायत की स्थिति देखें",
+  "disputeTitle": "शिकायत का विवरण",
+  "disputeStatusOpen": "प्राप्त",
+  "disputeStatusInvestigating": "जाँच जारी",
+  "disputeStatusResolved": "सुलझाई गई",
+  "disputeStatusRejected": "बंद",
+  "disputeHeadlineOpen": "आपकी शिकायत हमें मिल गई है",
+  "disputeHeadlineInvestigating": "हमारी टीम आपकी शिकायत की जाँच कर रही है",
+  "disputeHeadlineResolved": "आपकी शिकायत सुलझा दी गई है",
+  "disputeHeadlineRejected": "हमने आपकी शिकायत की जाँच कर ली है",
+  "disputeOpenBody": "कोई भी अपडेट होते ही हम आपको सूचित करेंगे।",
+  "disputeReportedOn": "{date} को शिकायत की गई",
+  "disputeRefundedTitle": "{amount} आपके वॉलेट में लौटाए गए",
+  "disputeOpenWallet": "वॉलेट",
+  "disputeOutcome": "नतीजा",
+  "disputeOutcomeNoRefund": "इस सत्र के लिए कोई रिफ़ंड जारी नहीं किया गया।",
+  "disputeTimeline": "प्रगति",
+  "disputeStepRaised": "शिकायत भेजी गई",
+  "disputeStepReviewing": "जाँच जारी",
+  "disputeStepResolved": "सुलझाई गई",
+  "disputeStepRejected": "बंद",
+  "disputeYourReport": "आपकी शिकायत",
+  "roomReportProblem": "समस्या बताएँ",
+  "articlesTitle": "पढ़ें और जानें",
+  "articlesRailSubtitle": "मार्गदर्शन, उपाय और त्योहार",
+  "articlesAll": "सभी",
+  "articlesEmptyTitle": "यहाँ अभी पढ़ने को कुछ नहीं है",
+  "articlesEmptyBody": "नए लेख जल्द आ रहे हैं — थोड़ी देर बाद फिर देखें।",
+  "articleCatAstrology": "ज्योतिष",
+  "articleCatHoroscope": "राशिफल",
+  "articleCatFestivals": "त्योहार",
+  "articleCatRemedies": "उपाय",
+  "articleCatGuides": "मार्गदर्शिका",
+  "articleCatNews": "समाचार",
+  "articleMinRead": "{minutes} मिनट का पाठ",
+  "articleShare": "साझा करें",
+  "articleMoreToRead": "और पढ़ें",
+  "articleAskTitle": "अपनी कुंडली के लिए मार्गदर्शन चाहिए?",
+  "articleAskBody": "कुछ ही मिनटों में सत्यापित ज्योतिषी से बात करें।",
+  "articleAskCta": "अभी पूछें",
+  "panchangTitle": "पंचांग",
+  "panchangToday": "आज",
+  "panchangPickDate": "तारीख चुनें",
+  "panchangMoonIn": "चंद्र {sign} में",
+  "panchangTill": "{time} तक",
+  "panchangRightNow": "अभी",
+  "panchangNowChoghadiya": "{name} चौघड़िया {time} तक",
+  "panchangRahuNow": "राहु काल {time} तक है — नए काम की शुरुआत टालें।",
+  "panchangLimbs": "आज का पंचांग",
+  "panchangAuspicious": "शुभ मुहूर्त",
+  "panchangInauspicious": "नए काम शुरू करने से बचें",
+  "panchangBrahma": "ब्रह्म मुहूर्त",
+  "panchangAbhijit": "अभिजित मुहूर्त",
+  "panchangNoAbhijit": "बुधवार को अभिजित मुहूर्त नहीं माना जाता।",
+  "panchangRahuKaal": "राहु काल",
+  "panchangYamaganda": "यमगंड",
+  "panchangGulika": "गुलिक काल",
+  "panchangChoghadiya": "चौघड़िया",
+  "panchangDay": "दिन",
+  "panchangNight": "रात",
+  "panchangNotes": "हमारे ज्योतिषियों की टिप्पणी",
+  "panchangPersonalTitle": "आपकी कुंडली के अनुसार समय",
+  "panchangPersonalBody": "आपकी कुंडली से निकाले गए, आपके लिए सबसे अच्छे समय देखें।",
+  "panchangFooter": "{place} · {timezone} के लिए · स्थानीय सूर्योदय से गणना",
+  "panchangChoosePlaceTitle": "अपना शहर चुनें",
+  "panchangChoosePlaceBody": "पंचांग का समय स्थान पर निर्भर करता है — जिस शहर के लिए चाहिए, उसे चुनें।",
+  "panchangChoosePlaceCta": "शहर चुनें",
+  "panchangUsePlace": "{place} चुनें",
+  "panchangCity": "शहर",
+  "panchangCityHint": "शहर या कस्बा खोजें",
+  "kPdfTitle": "कुंडली रिपोर्ट (PDF)",
+  "kPdfFull": "पूरी रिपोर्ट",
+  "kPdfFullSub": "चार्ट, ग्रह, अवकहड़ा, दशा समय-रेखा, योग और दोष",
+  "kPdfBasic": "एक पेज का सारांश",
+  "kPdfBasicSub": "लग्न और नवांश चार्ट के साथ ग्रह स्थिति",
+  "kPdfChartStyle": "चार्ट शैली",
+  "kPdfEastIndian": "पूर्वी भारतीय",
+  "kPdfShareCta": "डाउनलोड करें और साझा करें",
+  "kPdfPreparing": "आपकी PDF तैयार हो रही है…",
+  "kPdfNote": "PDF अंग्रेज़ी में है। इसे फ़ोन में सेव करें या WhatsApp पर भेजें।",
+  "kPdfUnavailable": "PDF रिपोर्ट अभी उपलब्ध नहीं है। कृपया बाद में कोशिश करें।"
+}

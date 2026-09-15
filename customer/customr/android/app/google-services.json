@@ -1,0 +1,97 @@
+{
+  "project_info": {
+    "project_number": "51248771144",
+    "project_id": "talk-acharya-ji",
+    "storage_bucket": "talk-acharya-ji.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51248771144:android:21af65a6a6c44aa975687d",
+        "android_client_info": {
+          "package_name": "com.talkacharya.astrologer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "51248771144-5jbl4arfeh4r2vcjk4jk6ig7ve4pui7a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmOSTYxca7XVNlF-_uXz3kYebpI5NYR4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "51248771144-5jbl4arfeh4r2vcjk4jk6ig7ve4pui7a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51248771144:android:5b37e8b3d2d94d6f75687d",
+        "android_client_info": {
+          "package_name": "com.talkacharya.astrologer.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "51248771144-5jbl4arfeh4r2vcjk4jk6ig7ve4pui7a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmOSTYxca7XVNlF-_uXz3kYebpI5NYR4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "51248771144-5jbl4arfeh4r2vcjk4jk6ig7ve4pui7a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51248771144:android:61d2531149bacabf75687d",
+        "android_client_info": {
+          "package_name": "com.talkacharya.customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "51248771144-5jbl4arfeh4r2vcjk4jk6ig7ve4pui7a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmOSTYxca7XVNlF-_uXz3kYebpI5NYR4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "51248771144-5jbl4arfeh4r2vcjk4jk6ig7ve4pui7a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

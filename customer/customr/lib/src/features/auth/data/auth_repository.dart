@@ -35,6 +35,17 @@ class AuthRepository {
     return session.user;
   }
 
+  /// Exchange a verified Firebase ID token for our session.
+  Future<AuthUser> loginWithFirebase(String idToken) async {
+    final session = await _api.loginWithFirebase(
+      idToken: idToken,
+      device: _devicePayload(),
+    );
+    await _persist(session);
+    await _cacheUser(session.user);
+    return session.user;
+  }
+
   /// Fetch `/me` and refresh the offline cache.
   Future<AuthUser> currentUser() async {
     final user = await _api.me();

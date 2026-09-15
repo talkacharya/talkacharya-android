@@ -103,7 +103,11 @@ class BrandColors extends ThemeExtension<BrandColors> {
       online: Color.lerp(online, other.online, t)!,
       gold: Color.lerp(gold, other.gold, t)!,
       shimmerBase: Color.lerp(shimmerBase, other.shimmerBase, t)!,
-      shimmerHighlight: Color.lerp(shimmerHighlight, other.shimmerHighlight, t)!,
+      shimmerHighlight: Color.lerp(
+        shimmerHighlight,
+        other.shimmerHighlight,
+        t,
+      )!,
     );
   }
 }

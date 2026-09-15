@@ -41,7 +41,11 @@ class _AppShellState extends State<AppShell> {
   void _onRealtime(RealtimeEvent event) {
     if (!mounted) return;
     switch (event) {
-      case ConsultationRequested(:final consultationId, :final channel, :final question):
+      case ConsultationRequested(
+        :final consultationId,
+        :final channel,
+        :final question,
+      ):
         showIncomingRequestSheet(
           context,
           consultationId: consultationId,
@@ -57,9 +61,9 @@ class _AppShellState extends State<AppShell> {
   }
 
   void _goBranch(int i) => widget.navigationShell.goBranch(
-        i,
-        initialLocation: i == widget.navigationShell.currentIndex,
-      );
+    i,
+    initialLocation: i == widget.navigationShell.currentIndex,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -80,9 +84,11 @@ class _AppShellState extends State<AppShell> {
             label: 'Home',
           ),
           NavigationDestination(
-            icon: _RequestsIcon(context.select(
-              (NotificationsCubit c) => 0, // badge wired in Phase 5
-            )),
+            icon: _RequestsIcon(
+              context.select(
+                (NotificationsCubit c) => 0, // badge wired in Phase 5
+              ),
+            ),
             label: 'Requests',
           ),
           const NavigationDestination(
@@ -128,24 +134,32 @@ class _OfflineBanner extends StatelessWidget {
       builder: (context, online, _) {
         return AnimatedCrossFade(
           duration: const Duration(milliseconds: 200),
-          crossFadeState:
-              online ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+          crossFadeState: online
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
           firstChild: const SizedBox(width: double.infinity),
           secondChild: Material(
             color: scheme.errorContainer,
             child: SafeArea(
               bottom: false,
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 6,
+                  horizontal: 16,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.wifi_off_rounded,
-                        size: 16, color: scheme.onErrorContainer),
+                    Icon(
+                      Icons.wifi_off_rounded,
+                      size: 16,
+                      color: scheme.onErrorContainer,
+                    ),
                     const SizedBox(width: 8),
-                    Text('You are offline',
-                        style: TextStyle(color: scheme.onErrorContainer)),
+                    Text(
+                      'You are offline',
+                      style: TextStyle(color: scheme.onErrorContainer),
+                    ),
                   ],
                 ),
               ),

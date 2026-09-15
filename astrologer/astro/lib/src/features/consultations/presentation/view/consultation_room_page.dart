@@ -1,99 +1,108 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:talkacharya_call/talkacharya_call.dart';
+import 'package:talkacharya_chat/talkacharya_chat.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/realtime/realtime_client.dart';
+import '../../../../core/router/routes.dart';
+import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
+import '../../data/call_adapters.dart';
+import '../../data/chat_adapters.dart';
 import '../../data/consultation_api.dart';
-import '../../data/models/chat_message.dart';
+import '../../data/models/consultation.dart';
 import '../cubit/chat_cubit.dart';
 
+/// The astrologer's consultation room: the shared chat engine + a shell for
+/// billing, the client's kundali, and ending the session.
 class ConsultationRoomPage extends StatelessWidget {
   const ConsultationRoomPage({required this.consultationId, super.key});
   final String consultationId;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ChatCubit(
-        api: getIt<ConsultationApi>(),
-        realtime: getIt<RealtimeClient>(),
-        consultationId: consultationId,
-      )..init(),
+    final user = getIt<AuthBloc>().state.user;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => ChatCubit(
+            api: getIt<ConsultationApi>(),
+            realtime: getIt<RealtimeClient>(),
+            consultationId: consultationId,
+          )..init(),
+        ),
+        BlocProvider(
+          create: (_) => ChatController(
+            consultationId: consultationId,
+            transport: DioChatTransport(getIt(), consultationId),
+            realtime: RealtimeChatAdapter(getIt<RealtimeClient>()),
+            identity: AstrologerChatIdentity(
+              userId: user?.id ?? '',
+              language: user?.preferredLanguage ?? 'en',
+            ),
+            pickImages: pickChatImages,
+            outbox: SecureStorageChatOutbox(getIt()),
+          )..start(),
+        ),
+      ],
       child: const _RoomView(),
     );
   }
 }
 
-class _RoomView extends StatefulWidget {
+class _RoomView extends StatelessWidget {
   const _RoomView();
-  @override
-  State<_RoomView> createState() => _RoomViewState();
-}
 
-class _RoomViewState extends State<_RoomView> {
-  final _composer = TextEditingController();
-  final _scroll = ScrollController();
-
-  @override
-  void dispose() {
-    _composer.dispose();
-    _scroll.dispose();
-    super.dispose();
-  }
-
-  Future<void> _viewKundali(BuildContext context) async {
-    final id = context.read<ChatCubit>().consultationId;
-    await showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      builder: (_) => FutureBuilder<Map<String, dynamic>>(
-        future: getIt<ConsultationApi>().chart(id),
-        builder: (context, snap) {
-          if (snap.connectionState != ConnectionState.done) {
-            return const SizedBox(
-                height: 200, child: Center(child: CircularProgressIndicator()));
-          }
-          final payload = snap.data?['payload'] ?? snap.data ?? const {};
-          return SizedBox(
-            height: MediaQuery.of(context).size.height * 0.7,
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Text(payload.toString()),
-            ),
-          );
-        },
-      ),
+  void _viewKundali(BuildContext context) {
+    final state = context.read<ChatCubit>().state;
+    context.push(
+      Routes.consultationKundali(context.read<ChatCubit>().consultationId),
+      extra: state.consultation?.customerName,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ChatCubit, ChatState>(
-      listenWhen: (a, b) => a.messages.length != b.messages.length,
-      listener: (_, _) {
-        if (_scroll.hasClients) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _scroll.animateTo(_scroll.position.maxScrollExtent,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeOut);
-          });
-        }
-      },
+    return BlocBuilder<ChatCubit, ChatState>(
       builder: (context, state) {
         final c = state.consultation;
+        if (state.loading) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        if (c != null && c.isEnded) return _Summary(c);
+        if (c != null && c.isCall) {
+          if (c.isTerminal) return _Summary(c);
+          return _AstroCallRoom(
+            consultation: c,
+            clientLowBalance: state.clientLowBalance,
+          );
+        }
+
         return Scaffold(
           appBar: AppBar(
-            title: Text(c?.customerName ?? 'Consultation'),
-            bottom: state.otherTyping
-                ? const PreferredSize(
-                    preferredSize: Size.fromHeight(20),
-                    child: Text('typing…', style: TextStyle(fontSize: 12)),
-                  )
-                : null,
+            titleSpacing: 0,
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  c?.customerName ?? 'Consultation',
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const ChatHeaderStatus(),
+              ],
+            ),
             actions: [
+              _AutoTranslateToggle(),
               IconButton(
                 icon: const Icon(Icons.auto_awesome_rounded),
-                tooltip: 'View kundali',
+                tooltip: 'Client kundali',
                 onPressed: () => _viewKundali(context),
               ),
               if (c != null && c.isLive)
@@ -103,120 +112,181 @@ class _RoomViewState extends State<_RoomView> {
                 ),
             ],
           ),
-          body: state.loading
-              ? const Center(child: CircularProgressIndicator())
-              : c != null && c.isEnded
-                  ? _Summary(c)
-                  : Column(
-                      children: [
-                        if (c != null && c.isLive)
-                          _BillingHud(minutes: c.billedMinutes, earned: c.astrologerAmount, currency: c.currency),
-                        Expanded(
-                          child: ListView.builder(
-                            controller: _scroll,
-                            padding: const EdgeInsets.all(12),
-                            itemCount: state.messages.length,
-                            itemBuilder: (context, i) =>
-                                _Bubble(state.messages[i]),
-                          ),
-                        ),
-                        _Composer(
-                          controller: _composer,
-                          onChanged:
-                              context.read<ChatCubit>().onComposerChanged,
-                          onSend: () {
-                            context
-                                .read<ChatCubit>()
-                                .sendText(_composer.text);
-                            _composer.clear();
-                          },
-                        ),
-                      ],
-                    ),
+          body: Column(
+            children: [
+              if (c != null && c.isLive)
+                _BillingHud(
+                  minutes: c.billedMinutes,
+                  earned: c.astrologerAmount,
+                  currency: c.currency,
+                  clientLowBalance: state.clientLowBalance,
+                ),
+              Expanded(child: ChatView(composerEnabled: c?.isLive ?? false)),
+            ],
+          ),
         );
       },
     );
   }
 }
 
-class _BillingHud extends StatelessWidget {
-  const _BillingHud({required this.minutes, required this.earned, required this.currency});
-  final int minutes;
-  final String earned;
-  final String currency;
+/// Voice consultation for the astrologer: the shared self-hosted WebRTC call
+/// screen with earnings + the client's low-balance warning on top.
+class _AstroCallRoom extends StatefulWidget {
+  const _AstroCallRoom({
+    required this.consultation,
+    required this.clientLowBalance,
+  });
+  final Consultation consultation;
+  final bool clientLowBalance;
+
   @override
-  Widget build(BuildContext context) => Container(
-        width: double.infinity,
-        color: Theme.of(context).colorScheme.primaryContainer,
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-        child: Text('$minutes min · earned $currency $earned',
-            textAlign: TextAlign.center),
-      );
+  State<_AstroCallRoom> createState() => _AstroCallRoomState();
 }
 
-class _Bubble extends StatelessWidget {
-  const _Bubble(this.m);
-  final ChatMessage m;
+class _AstroCallRoomState extends State<_AstroCallRoom> {
+  late final CallController _call;
+
+  @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<ChatCubit>();
+    _call = CallController(
+      backend: DioCallBackend(
+        getIt(),
+        widget.consultation.id,
+        onEnd: cubit.endConsultation,
+      ),
+      signaling: RealtimeCallSignaling(getIt<RealtimeClient>()),
+      engine: FlutterWebRtcEngine(),
+      permissions: const PermissionHandlerCallPermissions(),
+      keepAlive: ForegroundServiceCallKeepAlive(),
+      keepAliveTitle: 'TalkAcharya Astrologer',
+    );
+    _maybeStart();
+  }
+
+  @override
+  void didUpdateWidget(covariant _AstroCallRoom old) {
+    super.didUpdateWidget(old);
+    _maybeStart();
+  }
+
+  void _maybeStart() {
+    if (widget.consultation.isLive && _call.state.phase == CallPhase.idle) {
+      _call.start();
+    }
+  }
+
+  @override
+  void dispose() {
+    _call.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (m.isSystem) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6),
-          child: Text(m.body, style: Theme.of(context).textTheme.labelSmall),
+    final c = widget.consultation;
+    return BlocProvider.value(
+      value: _call,
+      child: CallScreen(
+        peerName: c.customerName,
+        accent: const Color(0xFF8B8CFF),
+        strings: const CallStrings(
+          endConfirmBody: 'The client stops being billed when the call ends.',
         ),
-      );
-    }
-    final scheme = Theme.of(context).colorScheme;
-    return Align(
-      alignment: m.isMine ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 3),
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-        constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width * 0.75),
-        decoration: BoxDecoration(
-          color: m.isMine ? scheme.primary : scheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(14),
+        top: c.status == 'active'
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: _BillingHud(
+                  minutes: c.billedMinutes,
+                  earned: c.astrologerAmount,
+                  currency: c.currency,
+                  clientLowBalance: widget.clientLowBalance,
+                ),
+              )
+            : null,
+        onEnded: () => context.read<ChatCubit>().refresh(),
+      ),
+    );
+  }
+}
+
+class _AutoTranslateToggle extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ChatController, ChatSessionState>(
+      buildWhen: (a, b) => a.autoTranslate != b.autoTranslate,
+      builder: (context, state) => IconButton(
+        tooltip: 'Auto-translate',
+        icon: Icon(
+          state.autoTranslate
+              ? Icons.translate_rounded
+              : Icons.translate_outlined,
+          color: state.autoTranslate
+              ? Theme.of(context).colorScheme.primary
+              : null,
         ),
-        child: Text(
-          m.body,
-          style: TextStyle(color: m.isMine ? scheme.onPrimary : null),
+        onPressed: () => context.read<ChatController>().setAutoTranslate(
+          !state.autoTranslate,
         ),
       ),
     );
   }
 }
 
-class _Composer extends StatelessWidget {
-  const _Composer({
-    required this.controller,
-    required this.onChanged,
-    required this.onSend,
+class _BillingHud extends StatelessWidget {
+  const _BillingHud({
+    required this.minutes,
+    required this.earned,
+    required this.currency,
+    this.clientLowBalance = false,
   });
-  final TextEditingController controller;
-  final ValueChanged<String> onChanged;
-  final VoidCallback onSend;
+  final int minutes;
+  final String earned;
+  final String currency;
+  final bool clientLowBalance;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Row(children: [
-          Expanded(
-            child: TextField(
-              controller: controller,
-              onChanged: onChanged,
-              minLines: 1,
-              maxLines: 4,
-              decoration: const InputDecoration(hintText: 'Message'),
+    final scheme = Theme.of(context).colorScheme;
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          color: scheme.primaryContainer,
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+          child: Text(
+            '$minutes min · earned $currency $earned',
+            textAlign: TextAlign.center,
+          ),
+        ),
+        if (clientLowBalance)
+          Container(
+            width: double.infinity,
+            color: scheme.errorContainer,
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.warning_amber_rounded,
+                  size: 15,
+                  color: scheme.onErrorContainer,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  "Client's balance is low — wrap up soon",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: scheme.onErrorContainer,
+                  ),
+                ),
+              ],
             ),
           ),
-          IconButton(
-              icon: const Icon(Icons.send_rounded), onPressed: onSend),
-        ]),
-      ),
+      ],
     );
   }
 }
@@ -224,27 +294,45 @@ class _Composer extends StatelessWidget {
 class _Summary extends StatelessWidget {
   const _Summary(this.c);
   final dynamic c;
+
   @override
   Widget build(BuildContext context) {
-    return ListView(padding: const EdgeInsets.all(24), children: [
-      const Icon(Icons.check_circle_outline_rounded, size: 56),
-      const SizedBox(height: 12),
-      Center(
-        child: Text('Consultation ended',
-            style: Theme.of(context).textTheme.headlineSmall),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Consultation')),
+      body: ListView(
+        padding: const EdgeInsets.all(24),
+        children: [
+          const Icon(Icons.check_circle_outline_rounded, size: 56),
+          const SizedBox(height: 12),
+          Center(
+            child: Text(
+              'Consultation ended',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          ),
+          const SizedBox(height: 24),
+          _row(context, 'Billed', '${c.billedMinutes} min'),
+          _row(context, 'Rate', '${c.currency} ${c.rateSnapshot}/min'),
+          _row(context, 'You earned', '${c.currency} ${c.astrologerAmount}'),
+        ],
       ),
-      const SizedBox(height: 24),
-      _row('Billed', '${c.billedMinutes} min'),
-      _row('Rate', '${c.currency} ${c.rateSnapshot}/min'),
-      _row('You earned', '${c.currency} ${c.astrologerAmount}'),
-    ]);
+    );
   }
 
-  Widget _row(String k, String v) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        child: Row(children: [
-          Expanded(child: Text(k, style: const TextStyle(color: Colors.grey))),
-          Text(v),
-        ]),
-      );
+  Widget _row(BuildContext context, String k, String v) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 6),
+    child: Row(
+      children: [
+        Expanded(
+          child: Text(
+            k,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+        Text(v),
+      ],
+    ),
+  );
 }

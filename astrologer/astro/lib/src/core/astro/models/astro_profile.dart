@@ -10,27 +10,31 @@ enum OnboardingStatus {
   unknown;
 
   static OnboardingStatus parse(String? raw) => switch (raw) {
-        'draft' => OnboardingStatus.draft,
-        'submitted' => OnboardingStatus.submitted,
-        'under_review' => OnboardingStatus.underReview,
-        'approved' => OnboardingStatus.approved,
-        'rejected' => OnboardingStatus.rejected,
-        'suspended' => OnboardingStatus.suspended,
-        _ => OnboardingStatus.unknown,
-      };
+    'draft' => OnboardingStatus.draft,
+    'submitted' => OnboardingStatus.submitted,
+    'under_review' => OnboardingStatus.underReview,
+    'approved' => OnboardingStatus.approved,
+    'rejected' => OnboardingStatus.rejected,
+    'suspended' => OnboardingStatus.suspended,
+    _ => OnboardingStatus.unknown,
+  };
 }
 
 class AstroRate {
-  const AstroRate({required this.channel, required this.currency, required this.perMinute});
+  const AstroRate({
+    required this.channel,
+    required this.currency,
+    required this.perMinute,
+  });
   final String channel;
   final String currency;
   final String perMinute;
 
   factory AstroRate.fromJson(Map<String, dynamic> j) => AstroRate(
-        channel: j['channel'] as String? ?? '',
-        currency: j['currency'] as String? ?? 'INR',
-        perMinute: '${j['per_minute_amount'] ?? '0'}',
-      );
+    channel: j['channel'] as String? ?? '',
+    currency: j['currency'] as String? ?? 'INR',
+    perMinute: '${j['per_minute_amount'] ?? '0'}',
+  );
 }
 
 class AstroSkill {
@@ -39,9 +43,9 @@ class AstroSkill {
   final bool isPrimary;
 
   factory AstroSkill.fromJson(Map<String, dynamic> j) => AstroSkill(
-        slug: j['slug'] as String? ?? '',
-        isPrimary: j['is_primary'] as bool? ?? false,
-      );
+    slug: j['slug'] as String? ?? '',
+    isPrimary: j['is_primary'] as bool? ?? false,
+  );
 }
 
 class AstroCommission {
@@ -55,15 +59,16 @@ class AstroCommission {
   final int payoutCycleDays;
 
   factory AstroCommission.fromJson(Map<String, dynamic> j) => AstroCommission(
-        name: j['name'] as String? ?? '',
-        platformPercentage: '${j['platform_percentage'] ?? ''}',
-        payoutCycleDays: (j['payout_cycle_days'] as num?)?.toInt() ?? 7,
-      );
+    name: j['name'] as String? ?? '',
+    platformPercentage: '${j['platform_percentage'] ?? ''}',
+    payoutCycleDays: (j['payout_cycle_days'] as num?)?.toInt() ?? 7,
+  );
 }
 
 class AstroProfile {
   AstroProfile({
     required this.id,
+    this.banner,
     required this.headline,
     required this.bio,
     required this.sourceLanguage,
@@ -83,6 +88,9 @@ class AstroProfile {
   });
 
   final String id;
+
+  /// Absolute URL of the cover image shown behind the public profile header.
+  final String? banner;
   final String headline;
   final String bio;
   final String sourceLanguage;
@@ -103,32 +111,37 @@ class AstroProfile {
   bool get hasProfile => id.isNotEmpty;
 
   factory AstroProfile.fromJson(Map<String, dynamic> j) => AstroProfile(
-        id: j['id']?.toString() ?? '',
-        headline: j['headline'] as String? ?? '',
-        bio: j['bio'] as String? ?? '',
-        sourceLanguage: j['source_language'] as String? ?? 'en',
-        yearsExperience: (j['years_experience'] as num?)?.toInt() ?? 0,
-        status: OnboardingStatus.parse(j['onboarding_status'] as String?),
-        verificationLevel: j['verification_level'] as String? ?? '',
-        rejectionReason: j['rejection_reason'] as String? ?? '',
-        isAvailable: j['is_available_flag'] as bool? ?? false,
-        ratingAvg: (j['rating_avg'] as num?)?.toDouble() ?? 0,
-        ratingCount: (j['rating_count'] as num?)?.toInt() ?? 0,
-        consultationsCount: (j['consultations_count'] as num?)?.toInt() ?? 0,
-        skills: (j['skills'] as List? ?? const [])
-            .map((e) => AstroSkill.fromJson((e as Map).cast<String, dynamic>()))
-            .toList(),
-        languages: (j['languages'] as List? ?? const [])
-            .map((e) => e.toString())
-            .toList(),
-        rates: (j['rates'] as List? ?? const [])
-            .map((e) => AstroRate.fromJson((e as Map).cast<String, dynamic>()))
-            .toList(),
-        commission: j['commission'] is Map
-            ? AstroCommission.fromJson((j['commission'] as Map).cast<String, dynamic>())
-            : null,
-        gaps: (j['onboarding_gaps'] as List? ?? const [])
-            .map((e) => e.toString())
-            .toList(),
-      );
+    id: j['id']?.toString() ?? '',
+    banner: (j['banner'] as String?)?.isNotEmpty == true
+        ? j['banner'] as String
+        : null,
+    headline: j['headline'] as String? ?? '',
+    bio: j['bio'] as String? ?? '',
+    sourceLanguage: j['source_language'] as String? ?? 'en',
+    yearsExperience: (j['years_experience'] as num?)?.toInt() ?? 0,
+    status: OnboardingStatus.parse(j['onboarding_status'] as String?),
+    verificationLevel: j['verification_level'] as String? ?? '',
+    rejectionReason: j['rejection_reason'] as String? ?? '',
+    isAvailable: j['is_available_flag'] as bool? ?? false,
+    ratingAvg: (j['rating_avg'] as num?)?.toDouble() ?? 0,
+    ratingCount: (j['rating_count'] as num?)?.toInt() ?? 0,
+    consultationsCount: (j['consultations_count'] as num?)?.toInt() ?? 0,
+    skills: (j['skills'] as List? ?? const [])
+        .map((e) => AstroSkill.fromJson((e as Map).cast<String, dynamic>()))
+        .toList(),
+    languages: (j['languages'] as List? ?? const [])
+        .map((e) => e.toString())
+        .toList(),
+    rates: (j['rates'] as List? ?? const [])
+        .map((e) => AstroRate.fromJson((e as Map).cast<String, dynamic>()))
+        .toList(),
+    commission: j['commission'] is Map
+        ? AstroCommission.fromJson(
+            (j['commission'] as Map).cast<String, dynamic>(),
+          )
+        : null,
+    gaps: (j['onboarding_gaps'] as List? ?? const [])
+        .map((e) => e.toString())
+        .toList(),
+  );
 }

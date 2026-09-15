@@ -141,7 +141,9 @@ class AuthInterceptor extends Interceptor {
       if (code == 401 || code == 400) {
         return const _RefreshResult(_RefreshOutcome.rejected);
       }
-      return const _RefreshResult(_RefreshOutcome.transient); // network / server down
+      return const _RefreshResult(
+        _RefreshOutcome.transient,
+      ); // network / server down
     }
   }
 }

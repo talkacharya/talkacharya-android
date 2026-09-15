@@ -53,11 +53,10 @@ class RealtimeCoordinator {
   void _sync() {
     final state = _authBloc.state;
     final user = state.user;
-    if (state.status == AuthStatus.authenticated && user != null && _foreground) {
-      _client.connect(
-        userId: user.id,
-        astroProfileId: _onboarding.profileId,
-      );
+    if (state.status == AuthStatus.authenticated &&
+        user != null &&
+        _foreground) {
+      _client.connect(userId: user.id, astroProfileId: _onboarding.profileId);
     } else if (state.status != AuthStatus.authenticated) {
       _client.disconnect();
     }

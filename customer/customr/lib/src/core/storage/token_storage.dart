@@ -20,7 +20,8 @@ class TokenStorage {
   /// Last known user, cached so the app opens instantly (and works offline)
   /// while `/me` is re-fetched in the background.
   Future<String?> readUserJson() => _store.read(key: _kUser);
-  Future<void> saveUserJson(String json) => _store.write(key: _kUser, value: json);
+  Future<void> saveUserJson(String json) =>
+      _store.write(key: _kUser, value: json);
 
   Future<void> save({required String access, required String refresh}) async {
     await Future.wait([

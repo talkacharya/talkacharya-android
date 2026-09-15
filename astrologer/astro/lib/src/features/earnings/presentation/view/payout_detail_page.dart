@@ -31,11 +31,14 @@ class PayoutDetailPage extends StatelessWidget {
               _row('Status', '${p['status']}'),
               _row('Gross', '${p['currency']} ${p['gross']}'),
               _row('TDS', '${p['currency']} ${p['tds_amount']}'),
-              if ((p['utr'] ?? '').toString().isNotEmpty) _row('UTR', '${p['utr']}'),
+              if ((p['utr'] ?? '').toString().isNotEmpty)
+                _row('UTR', '${p['utr']}'),
               _row('Paid at', '${p['paid_at'] ?? '—'}'),
               const Divider(height: 32),
-              Text('Earning entries (${entries.length})',
-                  style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                'Earning entries (${entries.length})',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               for (final e in entries)
                 ListTile(
                   dense: true,
@@ -44,7 +47,10 @@ class PayoutDetailPage extends StatelessWidget {
                 ),
               if (docs.isNotEmpty) ...[
                 const Divider(height: 32),
-                Text('Documents', style: Theme.of(context).textTheme.titleMedium),
+                Text(
+                  'Documents',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
                 for (final d in docs)
                   ListTile(
                     dense: true,
@@ -61,10 +67,15 @@ class PayoutDetailPage extends StatelessWidget {
   }
 
   Widget _row(String k, String v) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        child: Row(children: [
-          SizedBox(width: 90, child: Text(k, style: const TextStyle(color: Colors.grey))),
-          Expanded(child: Text(v)),
-        ]),
-      );
+    padding: const EdgeInsets.symmetric(vertical: 6),
+    child: Row(
+      children: [
+        SizedBox(
+          width: 90,
+          child: Text(k, style: const TextStyle(color: Colors.grey)),
+        ),
+        Expanded(child: Text(v)),
+      ],
+    ),
+  );
 }

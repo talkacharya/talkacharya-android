@@ -33,33 +33,47 @@ class _EarningsView extends StatelessWidget {
             if (state.loading) {
               return const Center(child: CircularProgressIndicator());
             }
-            final cur = state.byCurrency.isNotEmpty ? state.byCurrency.first : const {};
+            final cur = state.byCurrency.isNotEmpty
+                ? state.byCurrency.first
+                : const {};
             return Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Row(children: [
-                    _Tile('Available',
-                        '${cur['currency'] ?? 'INR'} ${cur['available_to_pay'] ?? '0'}'),
-                    const SizedBox(width: 12),
-                    _Tile('Pending',
-                        '${cur['currency'] ?? 'INR'} ${cur['pending_clearance'] ?? '0'}'),
-                    const SizedBox(width: 12),
-                    _Tile('Lifetime',
-                        '${cur['currency'] ?? 'INR'} ${cur['lifetime_net'] ?? '0'}'),
-                  ]),
+                  child: Row(
+                    children: [
+                      _Tile(
+                        'Available',
+                        '${cur['currency'] ?? 'INR'} ${cur['available_to_pay'] ?? '0'}',
+                      ),
+                      const SizedBox(width: 12),
+                      _Tile(
+                        'Pending',
+                        '${cur['currency'] ?? 'INR'} ${cur['pending_clearance'] ?? '0'}',
+                      ),
+                      const SizedBox(width: 12),
+                      _Tile(
+                        'Lifetime',
+                        '${cur['currency'] ?? 'INR'} ${cur['lifetime_net'] ?? '0'}',
+                      ),
+                    ],
+                  ),
                 ),
-                const TabBar(tabs: [
-                  Tab(text: 'Ledger'),
-                  Tab(text: 'Payouts'),
-                  Tab(text: 'Documents'),
-                ]),
+                const TabBar(
+                  tabs: [
+                    Tab(text: 'Ledger'),
+                    Tab(text: 'Payouts'),
+                    Tab(text: 'Documents'),
+                  ],
+                ),
                 Expanded(
-                  child: TabBarView(children: [
-                    _Ledger(state.entries),
-                    _Payouts(state.payouts),
-                    _Documents(state.documents),
-                  ]),
+                  child: TabBarView(
+                    children: [
+                      _Ledger(state.entries),
+                      _Payouts(state.payouts),
+                      _Documents(state.documents),
+                    ],
+                  ),
                 ),
               ],
             );
@@ -75,18 +89,22 @@ class _Tile extends StatelessWidget {
   final String label, value;
   @override
   Widget build(BuildContext context) => Expanded(
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-            child: Column(children: [
-              Text(value,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  textAlign: TextAlign.center),
-              Text(label, style: Theme.of(context).textTheme.labelSmall),
-            ]),
-          ),
+    child: Card(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+        child: Column(
+          children: [
+            Text(
+              value,
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            Text(label, style: Theme.of(context).textTheme.labelSmall),
+          ],
         ),
-      );
+      ),
+    ),
+  );
 }
 
 class _Ledger extends StatelessWidget {
@@ -95,7 +113,10 @@ class _Ledger extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (rows.isEmpty) {
-      return const EmptyState(icon: Icons.receipt_long_outlined, title: 'No earnings yet');
+      return const EmptyState(
+        icon: Icons.receipt_long_outlined,
+        title: 'No earnings yet',
+      );
     }
     return ListView.builder(
       itemCount: rows.length,
@@ -103,9 +124,13 @@ class _Ledger extends StatelessWidget {
         final r = rows[i];
         return ListTile(
           title: Text('${r['currency']} ${r['net_amount']}'),
-          subtitle: Text('${r['kind']} · available ${r['available_on'] ?? '—'}'),
-          trailing: Text('gross ${r['gross_amount']}',
-              style: Theme.of(context).textTheme.labelSmall),
+          subtitle: Text(
+            '${r['kind']} · available ${r['available_on'] ?? '—'}',
+          ),
+          trailing: Text(
+            'gross ${r['gross_amount']}',
+            style: Theme.of(context).textTheme.labelSmall,
+          ),
         );
       },
     );
@@ -118,7 +143,10 @@ class _Payouts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (rows.isEmpty) {
-      return const EmptyState(icon: Icons.payments_outlined, title: 'No payouts yet');
+      return const EmptyState(
+        icon: Icons.payments_outlined,
+        title: 'No payouts yet',
+      );
     }
     return ListView.builder(
       itemCount: rows.length,
@@ -126,7 +154,9 @@ class _Payouts extends StatelessWidget {
         final r = rows[i];
         return ListTile(
           title: Text('${r['currency']} ${r['net_amount']}'),
-          subtitle: Text('${r['status']} · ${r['period_start'] ?? ''}–${r['period_end'] ?? ''}'),
+          subtitle: Text(
+            '${r['status']} · ${r['period_start'] ?? ''}–${r['period_end'] ?? ''}',
+          ),
           trailing: const Icon(Icons.chevron_right_rounded),
           onTap: () => context.push('/earnings/payouts/${r['public_id']}'),
         );
@@ -141,7 +171,10 @@ class _Documents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (rows.isEmpty) {
-      return const EmptyState(icon: Icons.description_outlined, title: 'No documents yet');
+      return const EmptyState(
+        icon: Icons.description_outlined,
+        title: 'No documents yet',
+      );
     }
     return ListView.builder(
       itemCount: rows.length,
@@ -150,7 +183,9 @@ class _Documents extends StatelessWidget {
         return ListTile(
           leading: const Icon(Icons.picture_as_pdf_outlined),
           title: Text('${r['kind']}'.replaceAll('_', ' ')),
-          subtitle: Text('${r['number']} · ${r['currency']} ${r['total_amount']}'),
+          subtitle: Text(
+            '${r['number']} · ${r['currency']} ${r['total_amount']}',
+          ),
         );
       },
     );

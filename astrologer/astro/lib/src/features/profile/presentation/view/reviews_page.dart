@@ -28,11 +28,13 @@ class _ReviewsPageState extends State<ReviewsPage> {
         content: TextField(controller: controller, maxLines: 3),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel')),
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
           FilledButton(
-              onPressed: () => Navigator.pop(context, controller.text.trim()),
-              child: const Text('Send')),
+            onPressed: () => Navigator.pop(context, controller.text.trim()),
+            child: const Text('Send'),
+          ),
         ],
       ),
     );
@@ -56,7 +58,9 @@ class _ReviewsPageState extends State<ReviewsPage> {
           final rows = snap.data ?? const [];
           if (rows.isEmpty) {
             return const EmptyState(
-                icon: Icons.reviews_outlined, title: 'No reviews yet');
+              icon: Icons.reviews_outlined,
+              title: 'No reviews yet',
+            );
           }
           return ListView.separated(
             padding: const EdgeInsets.all(16),
@@ -68,26 +72,32 @@ class _ReviewsPageState extends State<ReviewsPage> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(children: [
-                    for (var s = 0; s < 5; s++)
-                      Icon(
-                        s < ((r['rating'] as num?)?.toInt() ?? 0)
-                            ? Icons.star_rounded
-                            : Icons.star_border_rounded,
-                        size: 16,
+                  Row(
+                    children: [
+                      for (var s = 0; s < 5; s++)
+                        Icon(
+                          s < ((r['rating'] as num?)?.toInt() ?? 0)
+                              ? Icons.star_rounded
+                              : Icons.star_border_rounded,
+                          size: 16,
+                        ),
+                      const Spacer(),
+                      Text(
+                        '${r['status']}',
+                        style: Theme.of(context).textTheme.labelSmall,
                       ),
-                    const Spacer(),
-                    Text('${r['status']}',
-                        style: Theme.of(context).textTheme.labelSmall),
-                  ]),
+                    ],
+                  ),
                   if ('${r['text'] ?? ''}'.isNotEmpty) ...[
                     const SizedBox(height: 4),
                     Text('${r['text']}'),
                   ],
                   if (reply.isNotEmpty) ...[
                     const SizedBox(height: 6),
-                    Text('You: $reply',
-                        style: const TextStyle(fontStyle: FontStyle.italic)),
+                    Text(
+                      'You: $reply',
+                      style: const TextStyle(fontStyle: FontStyle.italic),
+                    ),
                   ] else
                     TextButton(
                       onPressed: () => _reply('${r['id'] ?? r['public_id']}'),

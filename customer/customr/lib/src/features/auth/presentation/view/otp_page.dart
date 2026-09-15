@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pinput/pinput.dart';
 
-import '../../../../core/theme/app_theme.dart';
-import '../../../../shared/widgets/app_button.dart';
+import '../../../../core/l10n/l10n.dart';
 import '../bloc/login/login_cubit.dart';
+import 'widgets/auth_scaffold.dart';
+import 'widgets/primary_button.dart';
+import 'widgets/resend_timer.dart';
+
+const _gold = Color(0xFFC5A358);
 
 class OtpPage extends StatefulWidget {
   const OtpPage({super.key});
@@ -24,83 +28,96 @@ class _OtpPageState extends State<OtpPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final defaultPin = PinTheme(
+      width: 48,
+      height: 54,
+      textStyle: const TextStyle(
+        fontSize: 22,
+        color: Colors.white,
+        fontWeight: FontWeight.w700,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.04),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+      ),
+    );
+    final focusedPin = defaultPin.copyWith(
+      decoration: defaultPin.decoration!.copyWith(
+        border: Border.all(color: _gold, width: 1.5),
+        boxShadow: [
+          BoxShadow(color: _gold.withValues(alpha: 0.2), blurRadius: 10),
+        ],
+      ),
+    );
+    final submittedPin = defaultPin.copyWith(
+      decoration: defaultPin.decoration!.copyWith(
+        border: Border.all(color: _gold.withValues(alpha: 0.5)),
+      ),
+    );
+
     return BlocConsumer<LoginCubit, LoginState>(
       listenWhen: (a, b) => a.error != b.error && b.error != null,
       listener: (context, state) {
+        _controller.clear();
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text(state.error!)));
+          ..showSnackBar(
+            SnackBar(
+              content: Text(state.error!),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
       },
       builder: (context, state) {
-        // prefill for dev-mode convenience
         if (state.devCode != null && _controller.text.isEmpty) {
           _controller.text = state.devCode!;
         }
-        return Scaffold(
-          appBar: AppBar(
-            leading: BackButton(
-              onPressed: () => context.read<LoginCubit>().editPhone(),
-            ),
-          ),
-          body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Enter the code',
-                    style: theme.textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  Gap.sm,
-                  Text(
-                    'Sent to ${state.phone}',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  Gap.xl,
-                  TextField(
-                    controller: _controller,
-                    keyboardType: TextInputType.number,
-                    maxLength: 6,
-                    autofocus: true,
-                    style: const TextStyle(fontSize: 28, letterSpacing: 12),
-                    textAlign: TextAlign.center,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    decoration: const InputDecoration(
-                      counterText: '',
-                      hintText: '••••••',
-                    ),
-                    onChanged: (v) {
-                      if (v.length == 6) _submit(context, state);
-                    },
-                  ),
-                  if (state.devCode != null) ...[
-                    Gap.sm,
-                    _DevCodeBanner(code: state.devCode!),
-                  ],
-                  Gap.lg,
-                  AppButton(
-                    label: 'Verify',
-                    loading: state.submitting,
-                    onPressed: () => _submit(context, state),
-                  ),
-                  Gap.md,
-                  Center(
-                    child: TextButton(
-                      onPressed: state.submitting
-                          ? null
-                          : () => context.read<LoginCubit>().resendOtp(),
-                      child: const Text('Resend code'),
-                    ),
-                  ),
-                ],
+
+        return AuthScaffold(
+          title: context.l10n.authOtpTitle,
+          subtitle: context.l10n.authOtpSubtitle(_prettyPhone(state.phone)),
+          onBack: () => context.read<LoginCubit>().editPhone(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Pinput(
+                  length: 6,
+                  controller: _controller,
+                  autofocus: true,
+                  defaultPinTheme: defaultPin,
+                  focusedPinTheme: focusedPin,
+                  submittedPinTheme: submittedPin,
+                  separatorBuilder: (_) => const SizedBox(width: 8),
+                  hapticFeedbackType: HapticFeedbackType.lightImpact,
+                  onCompleted: (_) => _submit(context, state),
+                  cursor: Container(width: 2, height: 22, color: _gold),
+                ),
               ),
-            ),
+              if (state.devCode != null) ...[
+                const SizedBox(height: 14),
+                _DevCodeHint(code: state.devCode!),
+              ],
+              const SizedBox(height: 24),
+              PrimaryButton(
+                label: context.l10n.authVerify,
+                loading: state.submitting,
+                onPressed: () => _submit(context, state),
+              ),
+              const SizedBox(height: 16),
+              Center(
+                child: ResendTimer(
+                  enabled: !state.submitting,
+                  resetToken:
+                      state.challengeExpiresAt?.millisecondsSinceEpoch ?? 0,
+                  onResend: () {
+                    _controller.clear();
+                    context.read<LoginCubit>().resendOtp();
+                  },
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -112,33 +129,38 @@ class _OtpPageState extends State<OtpPage> {
     FocusScope.of(context).unfocus();
     context.read<LoginCubit>().verifyOtp(_controller.text);
   }
+
+  /// `+919565901765` -> `+91 95659 01765`
+  static String _prettyPhone(String e164) {
+    if (e164.startsWith('+91') && e164.length == 13) {
+      final n = e164.substring(3);
+      return '+91 ${n.substring(0, 5)} ${n.substring(5)}';
+    }
+    return e164;
+  }
 }
 
-class _DevCodeBanner extends StatelessWidget {
-  const _DevCodeBanner({required this.code});
+class _DevCodeHint extends StatelessWidget {
+  const _DevCodeHint({required this.code});
   final String code;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: scheme.tertiaryContainer,
-        borderRadius: BorderRadius.circular(8),
+        color: _gold.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: _gold.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
-          Icon(
-            Icons.build_circle_outlined,
-            size: 18,
-            color: scheme.onTertiaryContainer,
-          ),
+          const Icon(Icons.info_outline_rounded, size: 16, color: _gold),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              'Dev mode — code is $code',
-              style: TextStyle(color: scheme.onTertiaryContainer),
+              context.l10n.authTestModeCode(code),
+              style: const TextStyle(color: Colors.white70, fontSize: 12.5),
             ),
           ),
         ],

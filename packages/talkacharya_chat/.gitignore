@@ -1,0 +1,9 @@
+# Dart / Flutter
+.dart_tool/
+.packages
+build/
+pubspec.lock
+
+# NOTE: generated *.freezed.dart files ARE committed here — a path-dependency
+# package's codegen is not run by the consuming app's build_runner, so the
+# generated sources must be in the tree for the apps to analyze/build.

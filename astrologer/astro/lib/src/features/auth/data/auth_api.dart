@@ -18,12 +18,6 @@ class AuthApi {
   ) async {
     try {
       final res = await call();
-      final status = res.statusCode ?? 0;
-      if (status >= 400) {
-        throw ApiException.fromDio(
-          DioException(requestOptions: res.requestOptions, response: res),
-        );
-      }
       return parse(res.data ?? const {});
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
@@ -58,6 +52,20 @@ class AuthApi {
           'purpose': purpose,
           'device': ?device,
         },
+      ),
+      AuthSession.fromJson,
+    );
+  }
+
+  /// Exchange a Firebase phone-auth ID token for our session.
+  Future<AuthSession> loginWithFirebase({
+    required String idToken,
+    Map<String, dynamic>? device,
+  }) {
+    return _guard(
+      () => _dio.post<Map<String, dynamic>>(
+        ApiPaths.authFirebase,
+        data: {'id_token': idToken, 'device': ?device},
       ),
       AuthSession.fromJson,
     );

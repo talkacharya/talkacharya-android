@@ -23,6 +23,7 @@
 **/android/**/GeneratedPluginRegistrant.java
 **/*.keystore
 **/*.jks
+**/*.jks.*
 
 # iOS / macOS
 **/ios/Pods/

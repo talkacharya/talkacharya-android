@@ -1,0 +1,27 @@
+name: talkacharya_chat
+description: "Shared consultation-chat layer for the TalkAcharya customer and astrologer apps — the chat engine (history, optimistic send, realtime, receipts, presence, translation, TTS/STT) and its widgets. Networking, routing and DI stay in each app."
+version: 0.1.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  bloc: ^9.0.1
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.7
+  freezed_annotation: ^3.1.0
+  intl: any
+  flutter_tts: ^4.2.0
+  speech_to_text: ^7.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.13
+  freezed: ^3.1.0
+
+flutter:

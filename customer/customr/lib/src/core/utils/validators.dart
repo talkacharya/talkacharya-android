@@ -1,9 +1,14 @@
 class Validators {
   const Validators._();
 
-  /// Accepts a 10-digit Indian mobile (optionally prefixed with +91 / 0 / spaces).
-  /// Returns the E.164 form (`+91XXXXXXXXXX`) or null if invalid.
-  static String? toE164India(String raw) {
+  /// Generic E.164 formatter. If input already has +, returns it cleaned.
+  /// Otherwise defaults to India (+91).
+  static String? toE164(String raw) {
+    final clean = raw.replaceAll(RegExp(r'[^0-9+]'), '');
+    if (clean.startsWith('+')) {
+      return clean.length >= 8 ? clean : null;
+    }
+
     var digits = raw.replaceAll(RegExp(r'[^0-9]'), '');
     if (digits.length == 12 && digits.startsWith('91')) {
       digits = digits.substring(2);

@@ -32,9 +32,7 @@ class ConfigRepository extends ChangeNotifier {
     try {
       final raw = await _storage.read(key: _cacheKey);
       if (raw != null && raw.isNotEmpty) {
-        _value = RemoteConfig.fromJson(
-          jsonDecode(raw) as Map<String, dynamic>,
-        );
+        _value = RemoteConfig.fromJson(jsonDecode(raw) as Map<String, dynamic>);
         notifyListeners();
       }
     } catch (e) {
@@ -52,7 +50,9 @@ class ConfigRepository extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      debugPrint('ConfigRepository: refresh failed ($e) — using cached/fallback');
+      debugPrint(
+        'ConfigRepository: refresh failed ($e) — using cached/fallback',
+      );
     }
   }
 }

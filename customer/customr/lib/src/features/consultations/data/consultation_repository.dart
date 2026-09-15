@@ -1,0 +1,31 @@
+import 'consultation_api.dart';
+import 'models/consultation.dart';
+
+/// Consultation lifecycle (request / detail / list / cancel / end / review).
+/// The live chat stream is owned by `talkacharya_chat`'s `ChatController` via
+/// `DioChatTransport` — not this repo.
+class ConsultationRepository {
+  ConsultationRepository(this._api);
+
+  final ConsultationApi _api;
+
+  Future<Consultation> request({
+    required String astrologerId,
+    required String channel,
+    String? birthProfileId,
+    String question = '',
+  }) => _api.request(
+    astrologerId: astrologerId,
+    channel: channel,
+    birthProfileId: birthProfileId,
+    question: question,
+  );
+
+  Future<Consultation> detail(String id) => _api.detail(id);
+  Future<List<Consultation>> list({String? status}) =>
+      _api.list(status: status);
+  Future<Consultation> cancel(String id) => _api.cancel(id);
+  Future<Consultation> end(String id) => _api.end(id);
+  Future<void> review(String id, {required int rating, String text = ''}) =>
+      _api.review(id, rating: rating, text: text);
+}

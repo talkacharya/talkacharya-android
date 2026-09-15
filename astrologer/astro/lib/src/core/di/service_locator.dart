@@ -4,11 +4,16 @@ import 'package:get_it/get_it.dart';
 
 import '../../features/auth/data/auth_api.dart';
 import '../../features/auth/data/auth_repository.dart';
+import '../../features/auth/data/firebase_phone_auth.dart';
 import '../../features/auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../features/consultations/data/consultation_api.dart';
 import '../../features/consultations/data/consultation_repository.dart';
 import '../../features/earnings/data/earnings_api.dart';
 import '../../features/earnings/presentation/cubit/earnings_cubit.dart';
+import '../../features/kundali/data/kundali_api.dart';
+import '../../features/kundali/data/kundali_repository.dart';
+import '../../features/predictions/data/predictions_api.dart';
+import '../../features/predictions/data/predictions_repository.dart';
 import '../../features/home/presentation/cubit/dashboard_cubit.dart';
 import '../../features/notifications/data/notifications_api.dart';
 import '../../features/notifications/data/notifications_repository.dart';
@@ -59,7 +64,8 @@ Future<void> configureDependencies(AppConfig config) async {
     ..registerLazySingleton<AuthApi>(() => AuthApi(dio))
     ..registerLazySingleton<AuthRepository>(
       () => AuthRepository(api: getIt(), tokens: getIt()),
-    );
+    )
+    ..registerLazySingleton<FirebasePhoneAuth>(() => FirebasePhoneAuth());
 
   authBloc = AuthBloc(getIt<AuthRepository>());
   getIt.registerSingleton<AuthBloc>(authBloc);
@@ -131,6 +137,12 @@ Future<void> configureDependencies(AppConfig config) async {
     ..registerLazySingleton<ConsultationApi>(() => ConsultationApi(dio))
     ..registerLazySingleton<ConsultationRepository>(
       () => ConsultationRepository(getIt()),
+    )
+    ..registerLazySingleton<KundaliApi>(() => KundaliApi(dio))
+    ..registerLazySingleton<KundaliRepository>(() => KundaliRepository(getIt()))
+    ..registerLazySingleton<PredictionsApi>(() => PredictionsApi(dio))
+    ..registerLazySingleton<PredictionsRepository>(
+      () => PredictionsRepository(getIt()),
     )
     ..registerLazySingleton<EarningsApi>(() => EarningsApi(dio))
     ..registerLazySingleton<ProfileApi>(() => ProfileApi(dio))

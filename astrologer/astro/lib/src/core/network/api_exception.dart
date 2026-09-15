@@ -45,13 +45,22 @@ class ApiException implements Exception {
     if (data is Map) {
       code = data['code'] as String?;
       final detail = data['detail'];
-      if (detail is String) {
+      final serverMessage = data['message'] as String?;
+
+      if (serverMessage != null && serverMessage.isNotEmpty) {
+        message = serverMessage;
+      } else if (detail is String) {
         message = detail;
-      } else if (detail is Map) {
+      } else if (detail is Map && detail.isNotEmpty) {
         message = detail.values.first.toString();
       }
+
       for (final entry in data.entries) {
-        if (entry.key == 'code' || entry.key == 'detail') continue;
+        if (entry.key == 'code' ||
+            entry.key == 'detail' ||
+            entry.key == 'message') {
+          continue;
+        }
         final value = entry.value;
         if (value is List) {
           fieldErrors[entry.key.toString()] = value
@@ -61,7 +70,10 @@ class ApiException implements Exception {
           fieldErrors[entry.key.toString()] = [value];
         }
       }
-      if (fieldErrors.isNotEmpty && detail is! String) {
+
+      if (fieldErrors.isNotEmpty &&
+          detail is! String &&
+          (serverMessage == null || serverMessage.isEmpty)) {
         message = fieldErrors.values.first.first;
       }
     }

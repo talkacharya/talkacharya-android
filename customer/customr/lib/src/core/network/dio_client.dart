@@ -3,6 +3,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../config/flavor.dart';
 import '../storage/token_storage.dart';
+import 'app_check_interceptor.dart';
 import 'auth_interceptor.dart';
 
 /// Builds the app's Dio instances. [buildApiClient] is the authenticated client
@@ -31,10 +32,12 @@ class DioClientFactory {
     validateStatus: (s) => s != null && s < 500 && s != 401,
   );
 
-  Dio _buildBareClient() => Dio(_baseOptions);
+  Dio _buildBareClient() =>
+      Dio(_baseOptions)..interceptors.add(const AppCheckInterceptor());
 
   Dio buildApiClient({required Future<void> Function() onSessionExpired}) {
     final dio = Dio(_baseOptions);
+    dio.interceptors.add(const AppCheckInterceptor());
     dio.interceptors.add(
       AuthInterceptor(
         tokens: _tokens,

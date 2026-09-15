@@ -30,10 +30,9 @@ class AppTheme {
         ? BrandColors.light
         : BrandColors.dark;
 
-    final textTheme = _textTheme(base.textTheme).apply(
-      bodyColor: scheme.onSurface,
-      displayColor: scheme.onSurface,
-    );
+    final textTheme = _textTheme(
+      base.textTheme,
+    ).apply(bodyColor: scheme.onSurface, displayColor: scheme.onSurface);
 
     return base.copyWith(
       colorScheme: scheme,

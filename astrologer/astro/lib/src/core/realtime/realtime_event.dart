@@ -12,7 +12,8 @@ sealed class RealtimeEvent {
     switch (type) {
       case 'consultation.requested':
         return ConsultationRequested(
-          consultationId: _nested(data, 'consultation', 'id') ??
+          consultationId:
+              _nested(data, 'consultation', 'id') ??
               data['consultation']?.toString() ??
               '',
           channel: data['channel'] as String? ?? 'chat',
@@ -20,7 +21,8 @@ sealed class RealtimeEvent {
         );
       case 'call.ringing':
         return CallRinging(
-          consultationId: _nested(data, 'consultation', 'id') ??
+          consultationId:
+              _nested(data, 'consultation', 'id') ??
               data['consultation']?.toString() ??
               '',
           channel: data['channel'] as String? ?? 'voice',
@@ -30,7 +32,8 @@ sealed class RealtimeEvent {
       case 'consultation.expired':
       case 'consultation.no_show':
         return RequestRemoved(
-          consultationId: _nested(data, 'consultation', 'id') ??
+          consultationId:
+              _nested(data, 'consultation', 'id') ??
               data['consultation']?.toString() ??
               '',
           reason: type.split('.').last,
@@ -42,6 +45,14 @@ sealed class RealtimeEvent {
         return ConsultationEvent(
           kind: type.split('.').last,
           consultationId: _nested(data, 'consultation', 'id'),
+        );
+      case 'chat.new_message':
+        return NewChatMessage(
+          consultationId:
+              _nested(data, 'consultation', 'id') ??
+              data['consultation']?.toString() ??
+              '',
+          preview: data['preview'] as String? ?? '',
         );
       case 'billing.tick':
         return BillingTick(
@@ -105,6 +116,12 @@ class ConsultationEvent extends RealtimeEvent {
   const ConsultationEvent({required this.kind, this.consultationId});
   final String kind; // accepted | started | ended | rejected
   final String? consultationId;
+}
+
+class NewChatMessage extends RealtimeEvent {
+  const NewChatMessage({required this.consultationId, required this.preview});
+  final String consultationId;
+  final String preview;
 }
 
 class BillingTick extends RealtimeEvent {

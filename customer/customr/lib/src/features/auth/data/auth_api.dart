@@ -63,6 +63,20 @@ class AuthApi {
     );
   }
 
+  /// Exchange a Firebase phone-auth ID token for our session.
+  Future<AuthSession> loginWithFirebase({
+    required String idToken,
+    Map<String, dynamic>? device,
+  }) {
+    return _guard(
+      () => _dio.post<Map<String, dynamic>>(
+        ApiPaths.authFirebase,
+        data: {'id_token': idToken, 'device': ?device},
+      ),
+      AuthSession.fromJson,
+    );
+  }
+
   Future<AuthUser> me() {
     return _guard(
       () => _dio.get<Map<String, dynamic>>(ApiPaths.me),

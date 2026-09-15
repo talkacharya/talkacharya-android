@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/theme/app_theme.dart';
-import '../../../../shared/widgets/app_button.dart';
+import '../../../../core/l10n/l10n.dart';
 import '../bloc/login/login_cubit.dart';
+import 'widgets/auth_scaffold.dart';
+import 'widgets/phone_field.dart';
+import 'widgets/primary_button.dart';
 
 class PhonePage extends StatefulWidget {
   const PhonePage({super.key});
@@ -17,6 +18,12 @@ class _PhonePageState extends State<PhonePage> {
   final _controller = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() => setState(() {}));
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -24,74 +31,66 @@ class _PhonePageState extends State<PhonePage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: BlocConsumer<LoginCubit, LoginState>(
-            listenWhen: (a, b) => a.error != b.error && b.error != null,
-            listener: (context, state) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(content: Text(state.error!)));
-            },
-            builder: (context, state) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Gap.xl,
-                  Text(
-                    'Welcome to TalkAcharya',
-                    style: theme.textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  Gap.sm,
-                  Text(
-                    'Log in or sign up with your mobile number.',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  Gap.xl,
-                  TextField(
-                    controller: _controller,
-                    keyboardType: TextInputType.phone,
-                    maxLength: 10,
-                    autofocus: true,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    decoration: const InputDecoration(
-                      prefixText: '+91  ',
-                      hintText: 'Mobile number',
-                      counterText: '',
-                    ),
-                    onSubmitted: (_) => _submit(context, state),
-                  ),
-                  Gap.lg,
-                  AppButton(
-                    label: 'Continue',
-                    loading: state.submitting,
-                    onPressed: () => _submit(context, state),
-                  ),
-                  const Spacer(),
-                  Text(
-                    'By continuing you agree to our Terms & Privacy Policy.',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
+    final l = context.l10n;
+    return AuthScaffold(
+      title: l.authPhoneTitle,
+      subtitle: l.authPhoneSubtitle,
+      child: BlocConsumer<LoginCubit, LoginState>(
+        listenWhen: (a, b) => a.error != b.error && b.error != null,
+        listener: (context, state) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(state.error!),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+        },
+        builder: (context, state) {
+          final valid = _controller.text.length == 10;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                l.authPhoneHint,
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 10),
+              PhoneNumberField(
+                controller: _controller,
+                enabled: !state.submitting,
+                onSubmit: valid ? () => _submit(context) : null,
+              ),
+              const SizedBox(height: 24),
+              PrimaryButton(
+                label: l.authGetOtp,
+                loading: state.submitting,
+                onPressed: valid ? () => _submit(context) : null,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                l.authTermsNotice,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.4),
+                  fontSize: 12,
+                  height: 1.5,
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
-  void _submit(BuildContext context, LoginState state) {
-    if (state.submitting) return;
+  void _submit(BuildContext context) {
     FocusScope.of(context).unfocus();
     context.read<LoginCubit>().requestOtp(_controller.text);
   }

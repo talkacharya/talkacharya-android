@@ -13,6 +13,10 @@ abstract class AuthUser with _$AuthUser {
     @JsonKey(name: 'display_name') @Default('') String displayName,
     @Default('') String email,
     String? avatar,
+    @Default('undisclosed') String gender,
+
+    /// `yyyy-MM-dd`, or null when the user hasn't set it.
+    @JsonKey(name: 'date_of_birth') String? dateOfBirth,
     @JsonKey(name: 'preferred_language')
     @Default('en')
     String preferredLanguage,

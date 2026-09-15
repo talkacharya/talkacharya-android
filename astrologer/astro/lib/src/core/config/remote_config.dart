@@ -21,6 +21,7 @@ abstract class RemoteConfig with _$RemoteConfig {
     MoneyAmount minRecharge,
     @Default(ConfigFeatures()) ConfigFeatures features,
     @Default(ConfigSupport()) ConfigSupport support,
+    @Default(ConfigAuth()) ConfigAuth auth,
   }) = _RemoteConfig;
 
   const RemoteConfig._();
@@ -39,10 +40,8 @@ abstract class RemoteConfig with _$RemoteConfig {
 
 @freezed
 abstract class ConfigLanguage with _$ConfigLanguage {
-  const factory ConfigLanguage({
-    required String code,
-    required String name,
-  }) = _ConfigLanguage;
+  const factory ConfigLanguage({required String code, required String name}) =
+      _ConfigLanguage;
 
   factory ConfigLanguage.fromJson(Map<String, dynamic> json) =>
       _$ConfigLanguageFromJson(json);
@@ -69,6 +68,23 @@ abstract class ConfigFeatures with _$ConfigFeatures {
 
   factory ConfigFeatures.fromJson(Map<String, dynamic> json) =>
       _$ConfigFeaturesFromJson(json);
+}
+
+/// Which login method the app should use (`GET /api/v1/config` -> `auth`).
+/// `firebase` true → run the firebase_auth phone flow and POST /auth/firebase;
+/// otherwise the built-in OTP flow (POST /auth/otp/*).
+@freezed
+abstract class ConfigAuth with _$ConfigAuth {
+  const factory ConfigAuth({
+    @Default(false) bool firebase,
+    @Default(true) bool otp,
+    @JsonKey(name: 'firebase_project_id')
+    @Default('')
+    String firebaseProjectId,
+  }) = _ConfigAuth;
+
+  factory ConfigAuth.fromJson(Map<String, dynamic> json) =>
+      _$ConfigAuthFromJson(json);
 }
 
 @freezed

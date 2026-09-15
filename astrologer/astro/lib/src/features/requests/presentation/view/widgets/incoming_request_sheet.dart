@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/di/service_locator.dart';
@@ -48,9 +49,12 @@ class _IncomingRequestSheetState extends State<_IncomingRequestSheet> {
   bool _busy = false;
   String _customer = 'A customer';
 
+  Timer? _buzz;
+
   @override
   void initState() {
     super.initState();
+    _alert();
     _timer = Timer.periodic(const Duration(seconds: 1), (t) {
       setState(() => _left -= 1);
       if (_left <= 0) {
@@ -59,6 +63,22 @@ class _IncomingRequestSheetState extends State<_IncomingRequestSheet> {
       }
     });
     _loadDetail();
+  }
+
+  void _alert() {
+    // A short repeating buzz + alert tone until the astrologer acts, so an
+    // incoming request is impossible to miss when the app is foregrounded.
+    HapticFeedback.heavyImpact();
+    SystemSound.play(SystemSoundType.alert);
+    var beats = 0;
+    _buzz = Timer.periodic(const Duration(milliseconds: 1400), (t) {
+      if (!mounted || beats++ >= 6) {
+        t.cancel();
+        return;
+      }
+      HapticFeedback.mediumImpact();
+      SystemSound.play(SystemSoundType.alert);
+    });
   }
 
   Future<void> _loadDetail() async {
@@ -71,38 +91,40 @@ class _IncomingRequestSheetState extends State<_IncomingRequestSheet> {
   @override
   void dispose() {
     _timer?.cancel();
+    _buzz?.cancel();
     super.dispose();
   }
 
   Future<void> _accept() async {
+    _buzz?.cancel();
     setState(() => _busy = true);
     try {
       await getIt<ConsultationApi>().accept(widget.consultationId);
       if (!mounted) return;
       Navigator.of(context).pop();
       // ignore: use_build_context_synchronously
-      if (widget.channel == 'chat') {
-        context.go('/chats/${widget.consultationId}');
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Voice & video calls coming soon')),
-        );
-      }
+      // chat and voice both open the consultation room; it renders the call
+      // screen for voice and connects as soon as the client picks up
+      context.go('/chats/${widget.consultationId}');
     } catch (e) {
       if (mounted) {
         setState(() => _busy = false);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('$e')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('$e')));
         Navigator.of(context).maybePop();
       }
     }
   }
 
   Future<void> _decline() async {
+    _buzz?.cancel();
     setState(() => _busy = true);
     try {
-      await getIt<ConsultationApi>()
-          .reject(widget.consultationId, 'unavailable');
+      await getIt<ConsultationApi>().reject(
+        widget.consultationId,
+        'unavailable',
+      );
     } catch (_) {}
     if (mounted) Navigator.of(context).pop();
   }
@@ -131,8 +153,10 @@ class _IncomingRequestSheetState extends State<_IncomingRequestSheet> {
               ],
             ),
             const SizedBox(height: 16),
-            Text('New ${widget.channel} request',
-                style: theme.textTheme.headlineSmall),
+            Text(
+              'New ${widget.channel} request',
+              style: theme.textTheme.headlineSmall,
+            ),
             const SizedBox(height: 4),
             Text(_customer, style: theme.textTheme.bodyMedium),
             if (widget.question.isNotEmpty) ...[

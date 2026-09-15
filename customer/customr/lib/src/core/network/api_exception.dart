@@ -62,7 +62,10 @@ class ApiException implements Exception {
         }
       }
       if (fieldErrors.isNotEmpty && detail is! String) {
-        message = fieldErrors.values.first.first;
+        final firstErrorList = fieldErrors.values.firstOrNull;
+        if (firstErrorList != null && firstErrorList.isNotEmpty) {
+          message = firstErrorList.first;
+        }
       }
     }
 

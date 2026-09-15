@@ -26,7 +26,7 @@ class AppConfig {
     const override = String.fromEnvironment('API_BASE_URL');
     final defaults = switch (flavor) {
       // Local development server address.
-      Flavor.dev => 'http://10.10.10.22:8000/api/v1',
+      Flavor.dev => 'https://api.talkacharya.com/api/v1',
       Flavor.staging => 'https://staging-api.talkacharya.com/api/v1',
       Flavor.prod => 'https://api.talkacharya.com/api/v1',
     };

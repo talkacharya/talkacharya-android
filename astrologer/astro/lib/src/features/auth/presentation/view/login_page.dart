@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../core/config/config_repository.dart';
 import '../../data/auth_repository.dart';
+import '../../data/firebase_phone_auth.dart';
 import '../bloc/auth/auth_bloc.dart';
 import '../bloc/login/login_cubit.dart';
 import 'otp_page.dart';
@@ -18,6 +20,8 @@ class LoginPage extends StatelessWidget {
       create: (_) => LoginCubit(
         repo: GetIt.I<AuthRepository>(),
         authBloc: context.read<AuthBloc>(),
+        config: GetIt.I<ConfigRepository>(),
+        firebasePhoneAuth: GetIt.I<FirebasePhoneAuth>(),
       ),
       child: BlocBuilder<LoginCubit, LoginState>(
         buildWhen: (a, b) => a.step != b.step,

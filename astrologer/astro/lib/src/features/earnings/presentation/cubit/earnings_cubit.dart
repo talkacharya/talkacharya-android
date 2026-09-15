@@ -27,14 +27,13 @@ class EarningsState {
     List<Map<String, dynamic>>? entries,
     List<Map<String, dynamic>>? payouts,
     List<Map<String, dynamic>>? documents,
-  }) =>
-      EarningsState(
-        loading: loading ?? this.loading,
-        summary: summary ?? this.summary,
-        entries: entries ?? this.entries,
-        payouts: payouts ?? this.payouts,
-        documents: documents ?? this.documents,
-      );
+  }) => EarningsState(
+    loading: loading ?? this.loading,
+    summary: summary ?? this.summary,
+    entries: entries ?? this.entries,
+    payouts: payouts ?? this.payouts,
+    documents: documents ?? this.documents,
+  );
 }
 
 class EarningsCubit extends Cubit<EarningsState> {
@@ -50,13 +49,15 @@ class EarningsCubit extends Cubit<EarningsState> {
         _api.payouts(),
         _api.taxDocuments(),
       ]);
-      emit(EarningsState(
-        loading: false,
-        summary: r[0] as Map<String, dynamic>,
-        entries: r[1] as List<Map<String, dynamic>>,
-        payouts: r[2] as List<Map<String, dynamic>>,
-        documents: r[3] as List<Map<String, dynamic>>,
-      ));
+      emit(
+        EarningsState(
+          loading: false,
+          summary: r[0] as Map<String, dynamic>,
+          entries: r[1] as List<Map<String, dynamic>>,
+          payouts: r[2] as List<Map<String, dynamic>>,
+          documents: r[3] as List<Map<String, dynamic>>,
+        ),
+      );
     } catch (_) {
       emit(state.copyWith(loading: false));
     }

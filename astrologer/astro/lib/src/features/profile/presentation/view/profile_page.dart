@@ -23,33 +23,56 @@ class ProfilePage extends StatelessWidget {
           ListTile(
             leading: CircleAvatar(
               radius: 28,
-              backgroundImage: (user?.avatar != null && user!.avatar!.isNotEmpty)
+              backgroundImage:
+                  (user?.avatar != null && user!.avatar!.isNotEmpty)
                   ? NetworkImage(user.avatar!)
                   : null,
               child: (user?.avatar == null || user!.avatar!.isEmpty)
                   ? const Icon(Icons.person_rounded)
                   : null,
             ),
-            title: Text(user?.shortName ?? '—',
-                style: const TextStyle(fontWeight: FontWeight.w700)),
+            title: Text(
+              user?.shortName ?? '—',
+              style: const TextStyle(fontWeight: FontWeight.w700),
+            ),
             subtitle: Text(profile?.headline ?? user?.phone ?? ''),
             trailing: profile != null && profile.ratingCount > 0
-                ? Row(mainAxisSize: MainAxisSize.min, children: [
-                    Text(profile.ratingAvg.toStringAsFixed(1)),
-                    const Icon(Icons.star_rounded, size: 16),
-                  ])
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(profile.ratingAvg.toStringAsFixed(1)),
+                      const Icon(Icons.star_rounded, size: 16),
+                    ],
+                  )
                 : null,
           ),
           const Divider(),
           _row(context, Icons.edit_outlined, 'Edit profile', '/profile/edit'),
-          _row(context, Icons.currency_rupee_rounded, 'Rates', '/profile/rates'),
-          _row(context, Icons.schedule_rounded, 'Availability & hours',
-              '/profile/working-hours'),
+          _row(
+            context,
+            Icons.currency_rupee_rounded,
+            'Rates',
+            '/profile/rates',
+          ),
+          _row(
+            context,
+            Icons.schedule_rounded,
+            'Availability & hours',
+            '/profile/working-hours',
+          ),
           _row(context, Icons.reviews_outlined, 'Reviews', '/profile/reviews'),
-          _row(context, Icons.verified_user_outlined, 'KYC & documents',
-              '/profile/kyc'),
-          _row(context, Icons.star_border_rounded, 'Featured slots',
-              '/profile/featured'),
+          _row(
+            context,
+            Icons.verified_user_outlined,
+            'KYC & documents',
+            '/profile/kyc',
+          ),
+          _row(
+            context,
+            Icons.star_border_rounded,
+            'Featured slots',
+            '/profile/featured',
+          ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.notifications_none_rounded),
@@ -58,10 +81,14 @@ class ProfilePage extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: Icon(Icons.logout_rounded,
-                color: Theme.of(context).colorScheme.error),
-            title: Text('Log out',
-                style: TextStyle(color: Theme.of(context).colorScheme.error)),
+            leading: Icon(
+              Icons.logout_rounded,
+              color: Theme.of(context).colorScheme.error,
+            ),
+            title: Text(
+              'Log out',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
             onTap: () => _confirmLogout(context),
           ),
           const _AppVersion(),
@@ -87,11 +114,13 @@ class ProfilePage extends StatelessWidget {
         content: const Text('You will need to sign in again with an OTP.'),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel')),
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
           FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Log out')),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Log out'),
+          ),
         ],
       ),
     );
@@ -105,17 +134,17 @@ class _AppVersion extends StatelessWidget {
   const _AppVersion();
   @override
   Widget build(BuildContext context) => FutureBuilder<PackageInfo>(
-        future: PackageInfo.fromPlatform(),
-        builder: (context, snap) => Padding(
-          padding: const EdgeInsets.only(top: 16),
-          child: Center(
-            child: Text(
-              snap.data == null
-                  ? ''
-                  : 'v${snap.data!.version} (${snap.data!.buildNumber})',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-          ),
+    future: PackageInfo.fromPlatform(),
+    builder: (context, snap) => Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: Center(
+        child: Text(
+          snap.data == null
+              ? ''
+              : 'v${snap.data!.version} (${snap.data!.buildNumber})',
+          style: Theme.of(context).textTheme.bodySmall,
         ),
-      );
+      ),
+    ),
+  );
 }

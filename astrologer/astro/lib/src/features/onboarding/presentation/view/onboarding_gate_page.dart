@@ -47,29 +47,29 @@ class _OnboardingGatePageState extends State<OnboardingGatePage> {
               child: switch (stage) {
                 OnboardingStage.wizard => _Wizard(store: store),
                 OnboardingStage.underReview => const _Simple(
-                    icon: Icons.hourglass_top_rounded,
-                    title: 'Application under review',
-                    body:
-                        'Our team is verifying your profile and documents. '
-                        "You'll get a notification the moment it's approved — "
-                        'usually within 1–2 business days.',
-                  ),
+                  icon: Icons.hourglass_top_rounded,
+                  title: 'Application under review',
+                  body:
+                      'Our team is verifying your profile and documents. '
+                      "You'll get a notification the moment it's approved — "
+                      'usually within 1–2 business days.',
+                ),
                 OnboardingStage.suspended => const _Simple(
-                    icon: Icons.block_rounded,
-                    title: 'Account suspended',
-                    body:
-                        'Your astrologer account is suspended. Contact support '
-                        'to understand why and how to reinstate it.',
-                    showSupport: true,
-                  ),
+                  icon: Icons.block_rounded,
+                  title: 'Account suspended',
+                  body:
+                      'Your astrologer account is suspended. Contact support '
+                      'to understand why and how to reinstate it.',
+                  showSupport: true,
+                ),
                 OnboardingStage.notAstrologer => const _Simple(
-                    icon: Icons.person_off_rounded,
-                    title: 'Not an astrologer account',
-                    body:
-                        'This phone number is not registered as an astrologer. '
-                        'If you believe this is a mistake, contact support.',
-                    showSupport: true,
-                  ),
+                  icon: Icons.person_off_rounded,
+                  title: 'Not an astrologer account',
+                  body:
+                      'This phone number is not registered as an astrologer. '
+                      'If you believe this is a mistake, contact support.',
+                  showSupport: true,
+                ),
                 _ => const CircularProgressIndicator(),
               },
             ),
@@ -90,8 +90,11 @@ class _Wizard extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(Icons.auto_awesome_rounded,
-            size: 56, color: Theme.of(context).colorScheme.primary),
+        Icon(
+          Icons.auto_awesome_rounded,
+          size: 56,
+          color: Theme.of(context).colorScheme.primary,
+        ),
         const SizedBox(height: 16),
         Text(
           rejected.isEmpty ? 'Set up your profile' : 'A few things to fix',
@@ -102,7 +105,7 @@ class _Wizard extends StatelessWidget {
         Text(
           rejected.isEmpty
               ? 'Add your expertise, verify your identity and bank account, '
-                  'then submit for review.'
+                    'then submit for review.'
               : rejected,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyMedium,
@@ -136,13 +139,17 @@ class _Simple extends StatelessWidget {
       children: [
         Icon(icon, size: 56, color: Theme.of(context).colorScheme.primary),
         const SizedBox(height: 16),
-        Text(title,
-            style: Theme.of(context).textTheme.headlineSmall,
-            textAlign: TextAlign.center),
+        Text(
+          title,
+          style: Theme.of(context).textTheme.headlineSmall,
+          textAlign: TextAlign.center,
+        ),
         const SizedBox(height: 8),
-        Text(body,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium),
+        Text(
+          body,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
         if (showSupport) ...[
           const SizedBox(height: 20),
           OutlinedButton.icon(

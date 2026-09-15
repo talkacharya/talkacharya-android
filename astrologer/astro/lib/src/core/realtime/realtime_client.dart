@@ -38,34 +38,72 @@ class RealtimeClient {
   /// Subscribe to an additional private channel (e.g. `conv:{id}`) for as long
   /// as the returned stream has a listener. Frames are the raw decoded JSON
   /// (`{v, type, ts, data}`). No-ops (empty stream) when realtime is unavailable.
-  Stream<Map<String, dynamic>> channelFrames(String name) {
-    final existing = _extra[name];
-    if (existing != null) return existing.controller.stream;
+  Stream<Map<String, dynamic>> channelFrames(String name) =>
+      _channel(name).controller.stream;
 
-    final sub = _ChannelSub(StreamController<Map<String, dynamic>>.broadcast());
+  /// Centrifugo join/leave on [name] — `(userId, joined)` per event.
+  Stream<({String userId, bool joined})> channelPresence(String name) =>
+      _channel(name).presence.stream;
+
+  /// Publish [data] straight to [name] (the ephemeral typing channel). Best-effort.
+  Future<void> publishToChannel(String name, Map<String, dynamic> data) async {
+    final s = _channel(name).subscription;
+    if (s == null) return;
+    try {
+      // a just-created subscription is still subscribing — wait briefly so the
+      // first call-signaling frames (hello / offer) aren't dropped
+      await s.ready().timeout(const Duration(seconds: 3));
+    } catch (_) {}
+    try {
+      await s.publish(utf8.encode(jsonEncode(data)));
+    } catch (_) {}
+  }
+
+  _ChannelSub _channel(String name) {
+    final existing = _extra[name];
+    if (existing != null) return existing;
+
+    final sub = _ChannelSub(
+      StreamController<Map<String, dynamic>>.broadcast(),
+      StreamController<({String userId, bool joined})>.broadcast(),
+    );
     _extra[name] = sub;
     sub.controller.onCancel = () {
-      if (!sub.controller.hasListener) {
+      if (!sub.controller.hasListener && !sub.presence.hasListener) {
         sub.subscription?.unsubscribe();
         sub.controller.close();
+        sub.presence.close();
         _extra.remove(name);
       }
     };
 
     final client = _client;
-    if (client != null) {
-      final s = client.newSubscription(name);
-      sub.subscription = s;
-      s.publication.listen((event) {
-        try {
-          sub.controller.add(
-            jsonDecode(utf8.decode(event.data)) as Map<String, dynamic>,
-          );
-        } catch (_) {}
-      });
-      s.subscribe().ignore();
-    }
-    return sub.controller.stream;
+    if (client != null) _attachChannel(client, name, sub);
+    return sub;
+  }
+
+  void _attachChannel(centrifuge.Client client, String name, _ChannelSub sub) {
+    final s = client.newSubscription(
+      name,
+      centrifuge.SubscriptionConfig(joinLeave: true),
+    );
+    sub.subscription = s;
+    s.publication.listen((event) {
+      try {
+        sub.controller.add(
+          jsonDecode(utf8.decode(event.data)) as Map<String, dynamic>,
+        );
+      } catch (_) {}
+    });
+    s.join.listen(
+      (e) => sub.presence.add((userId: e.user, joined: true)),
+      onError: (_) {},
+    );
+    s.leave.listen(
+      (e) => sub.presence.add((userId: e.user, joined: false)),
+      onError: (_) {},
+    );
+    s.subscribe().ignore();
   }
 
   Future<_TokenGrant?> _fetchToken() async {
@@ -87,7 +125,9 @@ class RealtimeClient {
   /// [astroProfileId] is the `AstrologerProfile.public_id` (from `/astro/onboarding`),
   /// used for the `astro:{id}` channel that carries incoming requests.
   Future<void> connect({required String userId, String? astroProfileId}) async {
-    if (_client != null && _userId == userId && _astroProfileId == astroProfileId) {
+    if (_client != null &&
+        _userId == userId &&
+        _astroProfileId == astroProfileId) {
       return;
     }
     await disconnect();
@@ -126,16 +166,7 @@ class RealtimeClient {
 
     // Re-attach any channel subscriptions that outlived the previous connection.
     for (final entry in _extra.entries) {
-      final s = client.newSubscription(entry.key);
-      entry.value.subscription = s;
-      s.publication.listen((event) {
-        try {
-          entry.value.controller.add(
-            jsonDecode(utf8.decode(event.data)) as Map<String, dynamic>,
-          );
-        } catch (_) {}
-      });
-      s.subscribe().ignore();
+      _attachChannel(client, entry.key, entry.value);
     }
 
     try {
@@ -187,7 +218,8 @@ class _TokenGrant {
 }
 
 class _ChannelSub {
-  _ChannelSub(this.controller);
+  _ChannelSub(this.controller, this.presence);
   final StreamController<Map<String, dynamic>> controller;
+  final StreamController<({String userId, bool joined})> presence;
   centrifuge.Subscription? subscription;
 }

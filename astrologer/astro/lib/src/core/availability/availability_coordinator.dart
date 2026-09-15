@@ -16,9 +16,9 @@ class AvailabilityCoordinator with ChangeNotifier {
     required Dio dio,
     required AuthBloc authBloc,
     required OnboardingStore onboarding,
-  })  : _dio = dio,
-        _authBloc = authBloc,
-        _onboarding = onboarding;
+  }) : _dio = dio,
+       _authBloc = authBloc,
+       _onboarding = onboarding;
 
   final Dio _dio;
   final AuthBloc _authBloc;
@@ -61,7 +61,9 @@ class AvailabilityCoordinator with ChangeNotifier {
     } else {
       _timer?.cancel();
       try {
-        final res = await _dio.post<Map<String, dynamic>>(ApiPaths.astroOffline);
+        final res = await _dio.post<Map<String, dynamic>>(
+          ApiPaths.astroOffline,
+        );
         presence = res.data?['presence_state'] as String? ?? 'offline';
       } catch (_) {}
       notifyListeners();
@@ -69,7 +71,8 @@ class AvailabilityCoordinator with ChangeNotifier {
   }
 
   void _sync() {
-    final live = _authBloc.state.status == AuthStatus.authenticated &&
+    final live =
+        _authBloc.state.status == AuthStatus.authenticated &&
         _onboarding.stage == OnboardingStage.approved &&
         _foreground &&
         _enabled;
@@ -84,7 +87,9 @@ class AvailabilityCoordinator with ChangeNotifier {
 
   Future<void> _beat() async {
     try {
-      final res = await _dio.post<Map<String, dynamic>>(ApiPaths.astroHeartbeat);
+      final res = await _dio.post<Map<String, dynamic>>(
+        ApiPaths.astroHeartbeat,
+      );
       final next = res.data?['presence_state'] as String?;
       if (next != null && next != presence) {
         presence = next;

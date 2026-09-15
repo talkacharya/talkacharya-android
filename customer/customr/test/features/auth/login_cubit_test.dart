@@ -1,6 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:customr/src/core/config/config_repository.dart';
+import 'package:customr/src/core/config/remote_config.dart';
 import 'package:customr/src/core/network/api_exception.dart';
 import 'package:customr/src/features/auth/data/auth_repository.dart';
+import 'package:customr/src/features/auth/data/firebase_phone_auth.dart';
 import 'package:customr/src/features/auth/data/models/auth_user.dart';
 import 'package:customr/src/features/auth/data/models/otp_request_result.dart';
 import 'package:customr/src/features/auth/presentation/bloc/auth/auth_bloc.dart';
@@ -12,6 +15,10 @@ class _MockRepo extends Mock implements AuthRepository {}
 
 class _MockAuthBloc extends MockBloc<AuthEvent, AuthState>
     implements AuthBloc {}
+
+class _MockConfig extends Mock implements ConfigRepository {}
+
+class _MockFirebase extends Mock implements FirebasePhoneAuth {}
 
 void main() {
   setUpAll(() => registerFallbackValue(const AuthStarted()));
@@ -99,4 +106,102 @@ void main() {
           .having((s) => s.error, 'error', contains('incorrect')),
     ],
   );
+
+  group('firebase mode', () {
+    late _MockConfig config;
+    late _MockFirebase firebase;
+
+    setUp(() {
+      config = _MockConfig();
+      firebase = _MockFirebase();
+      when(() => config.value).thenReturn(
+        const RemoteConfig(auth: ConfigAuth(firebase: true)),
+      );
+    });
+
+    LoginCubit build() => LoginCubit(
+      repo: repo,
+      authBloc: authBloc,
+      config: config,
+      firebasePhoneAuth: firebase,
+    );
+
+    blocTest<LoginCubit, LoginState>(
+      'sendCode -> codeSent moves to enterOtp with a verificationId',
+      build: build,
+      setUp: () {
+        when(
+          () => firebase.sendCode(
+            any(),
+            onCodeSent: any(named: 'onCodeSent'),
+            onAutoVerified: any(named: 'onAutoVerified'),
+            onError: any(named: 'onError'),
+            resendToken: any(named: 'resendToken'),
+          ),
+        ).thenAnswer((inv) async {
+          final onCodeSent =
+              inv.namedArguments[#onCodeSent] as void Function(String, int?);
+          onCodeSent('vid-123', 7);
+        });
+      },
+      act: (c) => c.requestOtp('9565901765'),
+      expect: () => [
+        isA<LoginState>().having((s) => s.submitting, 'submitting', true),
+        isA<LoginState>()
+            .having((s) => s.step, 'step', LoginStep.enterOtp)
+            .having((s) => s.verificationId, 'verificationId', 'vid-123')
+            .having((s) => s.resendToken, 'resendToken', 7),
+      ],
+    );
+
+    blocTest<LoginCubit, LoginState>(
+      'confirmCode -> loginWithFirebase -> AuthLoggedIn',
+      build: build,
+      seed: () => const LoginState(
+        step: LoginStep.enterOtp,
+        phone: '+919565901765',
+        verificationId: 'vid-123',
+      ),
+      setUp: () {
+        when(() => firebase.confirmCode('vid-123', '123456'))
+            .thenAnswer((_) async => 'firebase-id-token');
+        when(() => repo.loginWithFirebase('firebase-id-token')).thenAnswer(
+          (_) async => const AuthUser(id: 'u1', phone: '+919565901765'),
+        );
+      },
+      act: (c) => c.verifyOtp('123456'),
+      verify: (_) {
+        verify(() => repo.loginWithFirebase('firebase-id-token')).called(1);
+        verify(() => authBloc.add(any(that: isA<AuthLoggedIn>()))).called(1);
+      },
+    );
+
+    blocTest<LoginCubit, LoginState>(
+      'auto-verification skips the code screen and logs in',
+      build: build,
+      setUp: () {
+        when(
+          () => firebase.sendCode(
+            any(),
+            onCodeSent: any(named: 'onCodeSent'),
+            onAutoVerified: any(named: 'onAutoVerified'),
+            onError: any(named: 'onError'),
+            resendToken: any(named: 'resendToken'),
+          ),
+        ).thenAnswer((inv) async {
+          final onAutoVerified =
+              inv.namedArguments[#onAutoVerified] as void Function(String);
+          onAutoVerified('auto-id-token');
+        });
+        when(() => repo.loginWithFirebase('auto-id-token')).thenAnswer(
+          (_) async => const AuthUser(id: 'u1', phone: '+919565901765'),
+        );
+      },
+      act: (c) => c.requestOtp('9565901765'),
+      verify: (_) {
+        verify(() => repo.loginWithFirebase('auto-id-token')).called(1);
+        verify(() => authBloc.add(any(that: isA<AuthLoggedIn>()))).called(1);
+      },
+    );
+  });
 }

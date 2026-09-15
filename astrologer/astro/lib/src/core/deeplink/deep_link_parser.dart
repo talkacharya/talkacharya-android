@@ -15,7 +15,7 @@ String? locationForUri(Uri uri) {
     case 'home':
       return '/home';
     case 'requests':
-      return '/requests';
+      return id == null ? '/requests' : '/requests/$id';
     case 'earnings':
     case 'payouts':
       return '/earnings';
@@ -27,8 +27,9 @@ String? locationForUri(Uri uri) {
       return '/onboarding';
     case 'consultations':
     case 'consultation':
-      // an astrologer's consultation link opens the session room
-      return id == null ? '/chats' : '/chats/$id';
+      // A consultation link (usually an incoming-request push) opens the
+      // request screen, which accepts or bounces into the room by status.
+      return id == null ? '/requests' : '/requests/$id';
     case 'profile':
       // talkacharya://profile/kyc, talkacharya://profile/reviews, …
       return id == null ? '/profile' : '/profile/$id';

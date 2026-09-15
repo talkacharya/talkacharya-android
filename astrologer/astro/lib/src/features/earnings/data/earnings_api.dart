@@ -18,8 +18,7 @@ class EarningsApi {
       _page(ApiPaths.astroPayouts, cursor);
 
   Future<Map<String, dynamic>> payout(String id) async {
-    final res =
-        await _dio.get<Map<String, dynamic>>(ApiPaths.astroPayout(id));
+    final res = await _dio.get<Map<String, dynamic>>(ApiPaths.astroPayout(id));
     return res.data ?? const {};
   }
 

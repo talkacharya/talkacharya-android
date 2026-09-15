@@ -1,0 +1,1352 @@
+{
+  "@@locale": "kn",
+  "appName": "TalkAcharya",
+  "commonOk": "ಸರಿ",
+  "commonCancel": "ರದ್ದುಮಾಡಿ",
+  "commonDone": "ಮುಗಿದಿದೆ",
+  "commonNext": "ಮುಂದೆ",
+  "commonBack": "ಹಿಂದಕ್ಕೆ",
+  "commonRetry": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
+  "commonSave": "ಉಳಿಸಿ",
+  "commonEdit": "ತಿದ್ದಿ",
+  "commonDelete": "ಅಳಿಸಿ",
+  "commonClose": "ಮುಚ್ಚಿ",
+  "commonContinue": "ಮುಂದುವರಿಸಿ",
+  "commonConfirm": "ಖಚಿತಪಡಿಸಿ",
+  "commonSeeAll": "ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
+  "commonViewAll": "ಎಲ್ಲವನ್ನೂ ನೋಡಿ",
+  "commonShare": "ಹಂಚಿಕೊಳ್ಳಿ",
+  "commonCopy": "ನಕಲಿಸಿ",
+  "commonCopied": "ನಕಲಿಸಲಾಗಿದೆ",
+  "commonApply": "ಅನ್ವಯಿಸಿ",
+  "commonSearch": "ಹುಡುಕಿ",
+  "commonYes": "ಹೌದು",
+  "commonNo": "ಇಲ್ಲ",
+  "commonLoading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ…",
+  "commonSomethingWentWrong": "ಏನೋ ತಪ್ಪಾಗಿದೆ",
+  "commonCheckConnection": "ನಿಮ್ಮ ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕವನ್ನು ಪರೀಕ್ಷಿಸಿ ಮತ್ತು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
+  "commonComingSoon": "ಶೀಘ್ರದಲ್ಲೇ ಬರಲಿದೆ",
+  "commonToday": "ಇಂದು",
+  "commonYesterday": "ನಿನ್ನೆ",
+  "commonMinutesShort": "{count} ನಿಮಿಷ",
+  "commonOffline": "ನೀವು ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿದ್ದೀರಿ",
+  "navHome": "ಮುಖಪುಟ",
+  "navAstrologers": "ಜ್ಯೋತಿಷಿಗಳು",
+  "navLive": "ಲೈವ್",
+  "navWallet": "ವ್ಯಾಲೆಟ್",
+  "navProfile": "ಪ್ರೊಫೈಲ್",
+  "authWelcomeTitle": "ನಂಬಿಕಸ್ತ ಜ್ಯೋತಿಷಿಗಳೊಂದಿಗೆ ಮಾತನಾಡಿ",
+  "authWelcomeSubtitle": "ಪ್ರೀತಿ, ವೃತ್ತಿಜೀವನ, ಹಣ ಮತ್ತು ಹೆಚ್ಚಿನ ಮಾರ್ಗದರ್ಶನಕ್ಕಾಗಿ ಚಾಟ್ ಮಾಡಿ ಅಥವಾ ಕರೆ ಮಾಡಿ",
+  "authPhoneTitle": "ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ",
+  "authPhoneSubtitle": "ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ ಮತ್ತು ನಾವು ನಿಮಗೆ ಒಂದು ಬಾರಿ ಬಳಸುವ ಕೋಡ್ ಕಳುಹಿಸುತ್ತೇವೆ.",
+  "authOtpSubtitle": "ನಾವು {phone} ಗೆ 6-ಅಂಕಿಯ ಕೋಡ್ ಕಳುಹಿಸಿದ್ದೇವೆ.",
+  "authTestModeCode": "ಟೆಸ್ಟ್ ಮೋಡ್ — ನಿಮ್ಮ ಕೋಡ್ {code}",
+  "authPhoneHint": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+  "authPhoneHelper": "ನಾವು SMS ಮೂಲಕ ಒಂದು ಬಾರಿ ಬಳಸುವ ಕೋಡ್ ಕಳುಹಿಸುತ್ತೇವೆ",
+  "authGetOtp": "OTP ಪಡೆಯಿರಿ",
+  "authOtpTitle": "6-ಅಂಕಿಯ ಕೋಡ್ ನಮೂದಿಸಿ",
+  "authOtpSentTo": "{phone} ಗೆ ಕಳುಹಿಸಲಾಗಿದೆ",
+  "authOtpResend": "ಕೋಡ್ ಮತ್ತೆ ಕಳುಹಿಸಿ",
+  "authOtpResendIn": "{seconds} ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಮತ್ತೆ ಕಳುಹಿಸಿ",
+  "authVerify": "ಪರಿಶೀಲಿಸಿ",
+  "authChangeNumber": "ಸಂಖ್ಯೆ ಬದಲಾಯಿಸಿ",
+  "authInvalidPhone": "ಮಾನ್ಯವಾದ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ",
+  "authInvalidOtp": "6-ಅಂಕಿಯ ಕೋಡ್ ನಮೂದಿಸಿ",
+  "authWrongApp": "ಈ ಸಂಖ್ಯೆಯು ಜ್ಯೋತಿಷಿ ಆಪ್‌ಗಾಗಿ ನೋಂದಾಯಿಸಲಾಗಿದೆ",
+  "authDevCode": "ದೇವ್ ಕೋಡ್: {code}",
+  "authTermsNotice": "ಮುಂದುವರಿಯುವ ಮೂಲಕ ನೀವು ನಮ್ಮ ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತಾ ನೀತಿಯನ್ನು ಒಪ್ಪುತ್ತೀರಿ",
+  "authLogout": "ಲೋಗ್ ಔಟ್",
+  "authLogoutConfirm": "TalkAcharya ದಿಂದ ಲೋಗ್ ಔಟ್ ಮಾಡಬೇಕೆ? ನೀವು ಮತ್ತೆ ಸೈನ್ ಇನ್ ಮಾಡಬೇಕಾಗುತ್ತದೆ.",
+  "homeGreeting": "ನಮಸ್ತೆ, {name}",
+  "homeGuidanceTagline": "ನಿಮಗೆ ಅಗತ್ಯವಿರುವಾಗ ಮಾರ್ಗದರ್ಶನ",
+  "homeGreetingFallbackName": "ಅಲ್ಲಿ",
+  "walletAddShort": "ಸೇರಿಸಿ",
+  "homeChatNow": "ಈಗಲೇ ಚಾಟ್ ಮಾಡಿ",
+  "homeCallNow": "ಈಗಲೇ ಕರೆ ಮಾಡಿ",
+  "homeFromPerMin": "{price}/ನಿಮಿಷದಿಂದ",
+  "homeOnlineCount": "{count} ಜನರು ಆನ್‌ಲೈನ್‌ನಲ್ಲಿದ್ದಾರೆ",
+  "homeTalkToAstrologer": "ಜ್ಯೋತಿಷಿಯೊಂದಿಗೆ ಮಾತನಾಡಿ",
+  "homeLiveNow": "ಈಗ ಲೈವ್",
+  "homeWhatsOnYourMind": "ನಿಮ್ಮ ಮನಸ್ಸಿನಲ್ಲಿ ಏನಿದೆ?",
+  "homeTodaysHoroscope": "ಇಂದಿನ ರಾಶಿಫಲ",
+  "homeChooseYourSign": "ನಿಮ್ಮ ರಾಶಿಯನ್ನು ಆರಿಸಿ",
+  "homeReadMore": "ಹೆಚ್ಚು ಓದಿ",
+  "homeShowLess": "ಕಡಿಮೆ ತೋರಿಸಿ",
+  "homeLuckToday": "ಇಂದಿನ ಅದೃಷ್ಟ · {rating}",
+  "homeTodaysPanchang": "ಇಂದಿನ ಪಂಚಾಂಗ",
+  "homePanchangAddProfile": "ನಿಮ್ಮ ಸ್ಥಳಕ್ಕೆ ಅನುಗುಣವಾಗಿ ಪಂಚಾಂಗ ಪಡೆಯಲು ಜನ್ಮ ವಿವರಗಳನ್ನು ಸೇರಿಸಿ",
+  "homeFreeTools": "ಉಚಿತ ಪರಿಕರಗಳು",
+  "homeTalkAgain": "ಮತ್ತೆ ಮಾತನಾಡಿ",
+  "homeAddMoneyGetBonus": "ಹಣ ಸೇರಿಸಿ, ಬೋನಸ್ ಪಡೆಯಿರಿ",
+  "homeReferAFriend": "ಸ್ನೇಹಿತರನ್ನು ಶಿಫಾರಸು ಮಾಡಿ, ಇಬ್ಬರೂ ಸಂಪಾದಿಸಿ",
+  "homeReferShort": "ನಿಮ್ಮ ಕೋಡ್ ಹಂಚಿಕೊಳ್ಳಿ — ನಿಮ್ಮಿಬ್ಬರಿಗೂ ವ್ಯಾಲೆಟ್ ಕ್ರೆಡಿಟ್ ಸಿಗುತ್ತದೆ",
+  "homeReferYourCode": "ನಿಮ್ಮ ಕೋಡ್: {code}",
+  "homeInvite": "ಆಹ್ವಾನಿಸಿ",
+  "homeResumeInProgress": "{channel} · ಪ್ರಗತಿಯಲ್ಲಿದೆ",
+  "homeResumePaused": "{channel} · ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ",
+  "homeResume": "ಪುನರಾರಂಭಿಸಿ",
+  "homeTrustVerified": "ಪ್ರತಿ ಜ್ಯೋತಿಷಿಯು ಲೈವ್ ಹೋಗುವ ಮೊದಲು ಐಡಿ-ಪರಿಶೀಲನೆಗೆ ಒಳಗಾಗುತ್ತಾರೆ",
+  "homeTrustPrivate": "100% ಖಾಸಗಿ ಮತ್ತು ಗೌಪ್ಯ ಸಮಾಲೋಚನೆಗಳು",
+  "homeTrustVolume": "ಪ್ರತಿ ವಾರ ಸಾವಿರಾರು ಸಮಾಲೋಚನೆಗಳು",
+  "homeCouldntLoadAstrologers": "ಜ್ಯೋತಿಷಿಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ",
+  "homeCouldntLoadReading": "ಇಂದಿನ ರಾಶಿಫಲ ಪಡೆಯಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ",
+  "homeCouldntLoadPanchang": "ಪಂಚಾಂಗ ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ",
+  "homeNoAstrologersFilter": "ಈ ಫಿಲ್ಟರ್‌ಗೆ ಹೊಂದಿಕೆಯಾಗುವ ಯಾವುದೇ ಜ್ಯೋತಿಷಿಗಳು ಈಗ ಲಭ್ಯವಿಲ್ಲ",
+  "concernLove": "ಪ್ರೀತಿ",
+  "concernMarriage": "ಮದುವೆ",
+  "concernCareer": "ವೃತ್ತಿಜೀವನ",
+  "concernFinance": "ಹಣಕಾಸು",
+  "concernHealth": "ಆರೋಗ್ಯ",
+  "concernEducation": "ಶಿಕ್ಷಣ",
+  "concernBusiness": "ವ್ಯವಹಾರ",
+  "concernLegal": "ಕಾನೂನು",
+  "channelChat": "ಚಾಟ್",
+  "channelCall": "ಕರೆ",
+  "channelVoice": "ವಾಯ್ಸ್ ಕರೆ",
+  "channelVideo": "ವಿಡಿಯೋ ಕರೆ",
+  "channelAll": "ಎಲ್ಲಾ",
+  "astroFilterAll": "ಎಲ್ಲಾ",
+  "astroSortRecommended": "ಶಿಫಾರಸು ಮಾಡಿದ",
+  "astroSortTopRated": "ಉನ್ನತ ಶ್ರೇಣಿಯ",
+  "astroSortExperienced": "ಹೆಚ್ಚು ಅನುಭವಿ",
+  "astroSortConsulted": "ಹೆಚ್ಚು ಸಮಾಲೋಚಿಸಿದ",
+  "astroSortNew": "ಇಲ್ಲಿ ಹೊಸಬರು",
+  "astroOnline": "ಆನ್‌ಲೈನ್",
+  "astroBusy": "ಕಾರ್ಯನಿರತ",
+  "astroNotifyMe": "ನನಗೆ ತಿಳಿಸಿ",
+  "astroWaitMinutes": "~{count} ನಿಮಿಷ ಕಾಯುವಿಕೆ",
+  "astroPerMinute": "{price}/ನಿಮಿಷ",
+  "astroYearsExp": "{count} ವರ್ಷಗಳ ಅನುಭವ",
+  "astroRatingNew": "ಹೊಸ",
+  "astroSessionsCount": "{count} ಸೆಷನ್‌ಗಳು",
+  "astroSearchHint": "ಹೆಸರು, ಕೌಶಲ ಅಥವಾ ಭಾಷೆಯ ಮೂಲಕ ಹುಡುಕಿ",
+  "astroNoneFound": "ಯಾವುದೇ ಜ್ಯೋತಿಷಿಗಳು ಕಂಡುಬಂದಿಲ್ಲ",
+  "astroNoneFoundHint": "ಫಿಲ್ಟರ್ ತೆಗೆದುಹಾಕಲು ಅಥವಾ ಬೇರೆ ಯಾವುದನ್ನಾದರೂ ಹುಡುಕಲು ಪ್ರಯತ್ನಿಸಿ",
+  "astroThatsEveryone": "ಸದ್ಯಕ್ಕೆ ಇಷ್ಟೇ",
+  "astroRateOnRequest": "ವಿನಂತಿಯ ಮೇರೆಗೆ ದರ",
+  "walletTitle": "ವ್ಯಾಲೆಟ್",
+  "walletAvailableBalance": "ಲಭ್ಯವಿರುವ ಬ್ಯಾಲೆನ್ಸ್",
+  "walletOnHold": "{amount} ತಡೆಹಿಡಿಯಲಾಗಿದೆ",
+  "walletOnHoldReason": "{amount} ತಡೆಹಿಡಿಯಲಾಗಿದೆ · ಕರೆ ನಡೆಯುತ್ತಿದೆ",
+  "walletAddMoney": "ಹಣ ಸೇರಿಸಿ",
+  "walletRecentActivity": "ಇತ್ತೀಚಿನ ಚಟುವಟಿಕೆ",
+  "walletTransactions": "ವಹಿವಾಟುಗಳು",
+  "walletHowItWorksTitle": "ವ್ಯಾಲೆಟ್ ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ",
+  "walletHowItWorksBody": "ವ್ಯಾಲೆಟ್ ಬ್ಯಾಲೆನ್ಸ್ ಅನ್ನು ಸಮಾಲೋಚನೆಗಳಿಗೆ ಮಾತ್ರ ಬಳಸಲಾಗುತ್ತದೆ ಮತ್ತು ಇದು ಎಂದಿಗೂ ಅವಧಿ ಮೀರುವುದಿಲ್ಲ. ಬಳಸದ ಬ್ಯಾಲೆನ್ಸ್ ಮರುಪಾವತಿಗೆ ಅರ್ಹವಾಗಿದೆ — ನಮ್ಮ ಮರುಪಾವತಿ ನೀತಿಯನ್ನು ನೋಡಿ.",
+  "walletRefundPolicy": "ಮರುಪಾವತಿ ನೀತಿ",
+  "walletHaveCoupon": "ಕೂಪನ್ ಕೋಡ್ ಇದೆಯೇ?",
+  "walletCouponHint": "ಕೋಡ್ ನಮೂದಿಸಿ",
+  "walletCouponApplied": "{amount} ನಿಮ್ಮ ವ್ಯಾಲೆಟ್‌ಗೆ ಸೇರಿಸಲಾಗಿದೆ",
+  "walletSecuredBy": "Razorpay · UPI · ಕಾರ್ಡ್‌ಗಳು · ನೆಟ್‌ಬ್ಯಾಂಕಿಂಗ್ ಮೂಲಕ ಸುರಕ್ಷಿತವಾಗಿದೆ",
+  "walletGstInvoices": "GST ಇನ್‌ವಾಯ್ಸ್‌ಗಳು",
+  "walletInvoicesSubtitle": "ನಿಮ್ಮ ರೀಚಾರ್ಜ್‌ಗಳ ಇನ್‌ವಾಯ್ಸ್‌ಗಳು ಮತ್ತು ರಶೀದಿಗಳು",
+  "walletNoTransactions": "ಇನ್ನೂ ಯಾವುದೇ ವಹಿವಾಟುಗಳಿಲ್ಲ",
+  "walletNoTransactionsHint": "ಪ್ರಾರಂಭಿಸಲು ನಿಮ್ಮ ವ್ಯಾಲೆಟ್‌ಗೆ ಹಣವನ್ನು ಸೇರಿಸಿ",
+  "walletBalanceAfter": "ಬ್ಯಾಲೆನ್ಸ್ {amount}",
+  "walletFilterAll": "ಎಲ್ಲಾ",
+  "walletFilterRecharge": "ಸೇರಿಸಲಾಗಿದೆ",
+  "walletFilterConsultation": "ಸಮಾಲೋಚನೆಗಳು",
+  "walletFilterRefund": "ಮರುಪಾವತಿಗಳು",
+  "walletFilterBonus": "ಬೋನಸ್",
+  "kindRecharge": "ಹಣ ಸೇರಿಸಲಾಗಿದೆ",
+  "kindConsultationCharge": "ಸಮಾಲೋಚನೆ",
+  "kindConsultationRefund": "ಮರುಪಾವತಿ",
+  "kindPromoCredit": "ಪ್ರೋಮೊ ಕ್ರೆಡಿಟ್",
+  "kindCouponDiscount": "ಕೂಪನ್ ರಿಯಾಯಿತಿ",
+  "kindSignupBonus": "ಸೈನ್ ಅಪ್ ಬೋನಸ್",
+  "kindReferralBonus": "ರೆಫರಲ್ ಬೋನಸ್",
+  "kindAdjustment": "ಹೊಂದಾಣಿಕೆ",
+  "kindGiftSpend": "ಉಡುಗೊರೆ ಕಳುಹಿಸಲಾಗಿದೆ",
+  "kindHold": "ಕರೆಗಾಗಿ ಕಾಯ್ದಿರಿಸಲಾಗಿದೆ",
+  "kindChargeback": "ಚಾರ್ಜ್‌ಬ್ಯಾಕ್",
+  "rechargeChooseAmount": "ವ್ಯಾಲೆಟ್‌ಗೆ ಹಣ ಸೇರಿಸಿ",
+  "rechargeAmountLabel": "ಮೊತ್ತ",
+  "rechargePayAmount": "{amount} ಪಾವತಿಸಿ",
+  "rechargeAddCoupon": "ಕೂಪನ್ ಕೋಡ್ ಸೇರಿಸಿ",
+  "rechargeBonusBadge": "+{amount}",
+  "rechargeStarterPack": "ಸ್ಟಾರ್ಟರ್",
+  "rechargeMinAmount": "ಕನಿಷ್ಠ {amount}",
+  "rechargeMaxAmount": "ಗರಿಷ್ಠ {amount}",
+  "rechargeOpeningCheckout": "ಸುರಕ್ಷಿತ ಚೆಕ್‌ಔಟ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ…",
+  "rechargeConfirming": "ಪಾವತಿ ಸ್ವೀಕರಿಸಲಾಗಿದೆ — ನಿಮ್ಮ ಬ್ಯಾಲೆನ್ಸ್ ಅಪ್‌ಡೇಟ್ ಮಾಡಲಾಗುತ್ತಿದೆ…",
+  "rechargeSuccessTitle": "{amount} ಸೇರಿಸಲಾಗಿದೆ",
+  "rechargeNewBalance": "ಹೊಸ ಬ್ಯಾಲೆನ್ಸ್ {amount}",
+  "rechargeViewTransaction": "ವಹಿವಾಟು ನೋಡಿ",
+  "rechargeFailedTitle": "ಪಾವತಿ ವಿಫಲವಾಗಿದೆ",
+  "rechargeNotCharged": "ನಿಮಗೆ ಯಾವುದೇ ಶುಲ್ಕ ವಿಧಿಸಲಾಗಿಲ್ಲ.",
+  "rechargeAutoRefund": "ಯಾವುದೇ ಮೊತ್ತ ಕಡಿತವಾಗಿದ್ದರೆ, ಅದು 3-5 ಕೆಲಸದ ದಿನಗಳಲ್ಲಿ ಮರುಪಾವತಿಯಾಗುತ್ತದೆ.",
+  "rechargeTryAgain": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
+  "rechargeChangeAmount": "ಮೊತ್ತ ಬದಲಾಯಿಸಿ",
+  "rechargeCreditedSoon": "ಪಾವತಿ ಸ್ವೀಕರಿಸಲಾಗಿದೆ. ನಾವು ಶೀಘ್ರದಲ್ಲೇ ಅದನ್ನು ನಿಮ್ಮ ವ್ಯಾಲೆಟ್‌ಗೆ ಜಮಾ ಮಾಡುತ್ತೇವೆ.",
+  "rechargeOfferAutoApplied": "{amount} ಸೇರಿಸಿ, {bonus} ಹೆಚ್ಚುವರಿ ಪಡೆಯಿರಿ — ಸ್ವಯಂ-ಅನ್ವಯಿಸಲಾಗಿದೆ",
+  "profileTitle": "ಪ್ರೊಫೈಲ್",
+  "profileEditProfile": "ಪ್ರೊಫೈಲ್ ತಿದ್ದಿ",
+  "profilePhoneMasked": "+91 ●●●●● {last4}",
+  "profileCompleteAddEmail": "ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಪೂರ್ಣಗೊಳಿಸಲು ಇಮೇಲ್ ಸೇರಿಸಿ",
+  "profileCompleteAddBirth": "ವೈಯಕ್ತಿಕ ರಾಶಿಫಲಗಳಿಗಾಗಿ ನಿಮ್ಮ ಜನ್ಮ ವಿವರಗಳನ್ನು ಸೇರಿಸಿ",
+  "profileRoleCustomer": "ಗ್ರಾಹಕ",
+  "profileWallet": "ವ್ಯಾಲೆಟ್",
+  "profileBirthProfiles": "ಜನ್ಮ ವಿವರಗಳು",
+  "profileBirthProfilesCount": "{count} ಚಾರ್ಟ್‌ಗಳು",
+  "profileGroupAccount": "ಖಾತೆ",
+  "profileGroupMoney": "ಹಣ",
+  "profileGroupPreferences": "ಆದ್ಯತೆಗಳು",
+  "profileGroupSupport": "ಬೆಂಬಲ",
+  "profileGroupLegal": "ಕಾನೂನು",
+  "profileNotifications": "ಅಧಿಸೂಚನೆಗಳು",
+  "profileNotificationPrefs": "ಅಧಿಸೂಚನೆ ಆದ್ಯತೆಗಳು",
+  "profileWalletAndTransactions": "ವ್ಯಾಲೆಟ್ ಮತ್ತು ವಹಿವಾಟುಗಳು",
+  "profileReferAndEarn": "ರೆಫರ್ ಮಾಡಿ ಮತ್ತು ಸಂಪಾದಿಸಿ",
+  "profileLanguage": "ಭಾಷೆ",
+  "profileCurrency": "ಕರೆನ್ಸಿ",
+  "profileHelpCentre": "ಸಹಾಯ ಕೇಂದ್ರ",
+  "profileContactWhatsapp": "WhatsApp ನಲ್ಲಿ ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ",
+  "profileRateApp": "TalkAcharya ರೇಟ್ ಮಾಡಿ",
+  "profileShareApp": "ಆಪ್ ಹಂಚಿಕೊಳ್ಳಿ",
+  "profileShareMessage": "ನಾನು ಜ್ಯೋತಿಷಿಗಳೊಂದಿಗೆ ಮಾತನಾಡಲು TalkAcharya ಬಳಸುತ್ತಿದ್ದೇನೆ. ನೀವೂ ಪ್ರಯತ್ನಿಸಿ: {link}",
+  "profileTerms": "ಸೇವಾ ನಿಯಮಗಳು",
+  "profilePrivacy": "ಗೌಪ್ಯತಾ ನೀತಿ",
+  "profileLicenses": "ಓಪನ್ ಸೋರ್ಸ್ ಪರವಾನಗಿಗಳು",
+  "profileDeleteAccount": "ಖಾತೆ ಅಳಿಸಿ",
+  "profileVersion": "TalkAcharya · v{version} ({build})",
+  "editFullName": "ಪೂರ್ಣ ಹೆಸರು",
+  "editDisplayName": "ಪ್ರದರ್ಶನದ ಹೆಸರು",
+  "editDateOfBirth": "ಜನ್ಮ ದಿನಾಂಕ",
+  "editGender": "ಲಿಂಗ",
+  "editGenderMale": "ಪುರುಷ",
+  "editGenderFemale": "ಮಹಿಳೆ",
+  "editGenderOther": "ಇತರೆ",
+  "editEmail": "ಇಮೇಲ್",
+  "editEmailUnverified": "ಪರಿಶೀಲಿಸಿಲ್ಲ",
+  "editChangePhoto": "ಫೋಟೋ ಬದಲಾಯಿಸಿ",
+  "editProfileSaved": "ಪ್ರೊಫೈಲ್ ಅಪ್‌ಡೇಟ್ ಮಾಡಲಾಗಿದೆ",
+  "editProfileSaveError": "ನಿಮ್ಮ ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ",
+  "editCountry": "ದೇಶ",
+  "chooseLanguage": "ಭಾಷೆ ಆರಿಸಿ",
+  "chooseCurrency": "ಕರೆನ್ಸಿ ಆರಿಸಿ",
+  "deleteAccountTitle": "ನಿಮ್ಮ ಖಾತೆ ಅಳಿಸಿ",
+  "deleteAccountBody": "ಇದು ನಿಮ್ಮ ಪ್ರೊಫೈಲ್, ಜನ್ಮ ಚಾರ್ಟ್‌ಗಳು ಮತ್ತು ಚಾಟ್ ಇತಿಹಾಸವನ್ನು ಶಾಶ್ವತವಾಗಿ ತೆಗೆದುಹಾಕುತ್ತದೆ. ನಿಮ್ಮ ವ್ಯಾಲೆಟ್ ಬ್ಯಾಲೆನ್ಸ್ ಏನಾದರೂ ಇದ್ದರೆ ಅದನ್ನು ಮೂಲ ಪಾವತಿ ವಿಧಾನಕ್ಕೆ ಮರುಪಾವತಿಸಲಾಗುತ್ತದೆ. ಕಾನೂನಿನ ಪ್ರಕಾರ ಸಮಾಲೋಚನೆ ದಾಖಲೆಗಳನ್ನು ಇರಿಸಲಾಗುತ್ತದೆ.",
+  "deleteAccountHold": "ನಿಮ್ಮ ಖಾತೆಯನ್ನು ತಕ್ಷಣವೇ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗುತ್ತದೆ ಮತ್ತು 30 ದಿನಗಳ ನಂತರ ಸಂಪೂರ್ಣವಾಗಿ ಅಳಿಸಲಾಗುತ್ತದೆ. ರದ್ದುಗೊಳಿಸಲು 30 ದಿನಗಳ ಒಳಗೆ ಮತ್ತೆ ಸೈನ್ ಇನ್ ಮಾಡಿ.",
+  "deleteAccountConfirm": "ಹೌದು, ನನ್ನ ಖಾತೆ ಅಳಿಸಿ",
+  "deleteAccountRequested": "ಖಾತೆ ಅಳಿಸುವಿಕೆ ವಿನಂತಿಸಲಾಗಿದೆ",
+  "referTitle": "ರೆಫರ್ ಮಾಡಿ ಮತ್ತು ಸಂಪಾದಿಸಿ",
+  "referHeroTitle": "{friendAmount} ನೀಡಿ, {youAmount} ಪಡೆಯಿರಿ",
+  "referHeroBody": "ನಿಮ್ಮ ಸ್ನೇಹಿತರಿಗೆ ಅವರ ಮೊದಲ ಸಮಾಲೋಚನೆಯಲ್ಲಿ {friendAmount} ರಿಯಾಯಿತಿ ಸಿಗುತ್ತದೆ. ಅವರು ಅದನ್ನು ಪಡೆದಾಗ ನಿಮ್ಮ ವ್ಯಾಲೆಟ್‌ಗೆ {youAmount} ಸಿಗುತ್ತದೆ.",
+  "referYourCode": "ನಿಮ್ಮ ರೆಫರಲ್ ಕೋಡ್",
+  "referShareLink": "ಆಹ್ವಾನ ಲಿಂಕ್ ಹಂಚಿಕೊಳ್ಳಿ",
+  "referInvited": "ಆಹ್ವಾನಿಸಲಾಗಿದೆ",
+  "referJoined": "ಸೇರಿದ್ದಾರೆ",
+  "referEarned": "ಸಂಪಾದಿಸಲಾಗಿದೆ",
+  "referHowItWorks": "ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ",
+  "referStep1": "ನಿಮ್ಮ ಕೋಡ್ ಅಥವಾ ಲಿಂಕ್ ಹಂಚಿಕೊಳ್ಳಿ. ಸೈನ್ ಅಪ್ ಮಾಡುವಾಗ ನಿಮ್ಮ ಸ್ನೇಹಿತ ಅದನ್ನು ನಮೂದಿಸುತ್ತಾರೆ.",
+  "referStep2": "ಅವರ ಮೊದಲ ಪಾವತಿಸಿದ ಸಮಾಲೋಚನೆಯಲ್ಲಿ ಅವರಿಗೆ {amount} ರಿಯಾಯಿತಿ ಸಿಗುತ್ತದೆ.",
+  "referStep3": "ಸಮಾಲೋಚನೆಯ ಬಿಲ್ ಆದ ತಕ್ಷಣ, {amount} ನಿಮ್ಮ ವ್ಯಾಲೆಟ್‌ಗೆ ಬರುತ್ತದೆ.",
+  "referYourReferrals": "ನಿಮ್ಮ ರೆಫರಲ್‌ಗಳು",
+  "referStatusPending": "ಬಾಕಿ ಇದೆ",
+  "referStatusJoined": "ಸೇರಿದ್ದಾರೆ",
+  "referStatusRewarded": "ಬಹುಮಾನ ನೀಡಲಾಗಿದೆ",
+  "referJoinedOn": "{date} ರಂದು ಸೇರಿದ್ದಾರೆ",
+  "referFirstCallDone": "ಮೊದಲ ಕರೆ ಮುಗಿದಿದೆ",
+  "referShareText": "TalkAcharya ದಲ್ಲಿ ನನ್ನ ಕೋಡ್ {code} ಬಳಸಿ ಮತ್ತು ನಿಮ್ಮ ಮೊದಲ ಜ್ಯೋತಿಷ್ಯ ಸಮಾಲೋಚನೆಯಲ್ಲಿ {amount} ರಿಯಾಯಿತಿ ಪಡೆಯಿರಿ. {link}",
+  "errNetwork": "ಸರ್ವರ್ ಸಂಪರ್ಕಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ನಿಮ್ಮ ಸಂಪರ್ಕವನ್ನು ಪರೀಕ್ಷಿಸಿ.",
+  "errTimeout": "ಸರ್ವರ್ ಪ್ರತಿಕ್ರಿಯಿಸಲು ಬಹಳ ಸಮಯ ತೆಗೆದುಕೊಳ್ಳುತ್ತಿದೆ.",
+  "errSession": "ನಿಮ್ಮ ಸೆಷನ್ ಅವಧಿ ಮುಗಿದಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಸೈನ್ ಇನ್ ಮಾಡಿ.",
+  "errWalletInsufficient": "ಇದಕ್ಕಾಗಿ ನಿಮ್ಮ ವ್ಯಾಲೆಟ್ ಬ್ಯಾಲೆನ್ಸ್ ತುಂಬಾ ಕಡಿಮೆಯಿದೆ.",
+  "errRateLimited": "ಬಹಳಷ್ಟು ಪ್ರಯತ್ನಗಳು ನಡೆದಿವೆ. ದಯವಿಟ್ಟು ಸ್ವಲ್ಪ ಸಮಯ ಕಾಯ್ದು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "errOtpInvalid": "ಕೋಡ್ ತಪ್ಪಾಗಿದೆ ಅಥವಾ ಅವಧಿ ಮುಗಿದಿದೆ.",
+  "errOtpMaxAttempts": "ಬಹಳಷ್ಟು ತಪ್ಪು ಪ್ರಯತ್ನಗಳು. ಹೊಸ ಕೋಡ್‌ಗಾಗಿ ವಿನಂತಿಸಿ.",
+  "errPromoNotRedeemable": "ಈ ಕೂಪನ್ ಕೋಡ್ ಬಳಸಲು ಸಾಧ್ಯವಿಲ್ಲ.",
+  "errRechargeInvalidAmount": "ಅನುಮತಿಸಲಾದ ಮಿತಿಯೊಳಗೆ ಮೊತ್ತವನ್ನು ನಮೂದಿಸಿ.",
+  "errAuthWrongApp": "ಈ ಸಂಖ್ಯೆಯು ಇತರ TalkAcharya ಆಪ್‌ಗಾಗಿ ನೋಂದಾಯಿಸಲಾಗಿದೆ.",
+  "errGeneric": "ಏನೋ ತಪ್ಪಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "homeOnlineNow": "ಈಗ ಆನ್‌ಲೈನ್‌ನಲ್ಲಿ",
+  "astroCouldntLoad": "ಜ್ಯೋತಿಷಿಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+  "astroSortBy": "ವಿಂಗಡಿಸಿ",
+  "astroLoadMoreFailed": "ಇನ್ನಷ್ಟು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+  "astroDefaultSkill": "ವೈದಿಕ ಜ್ಯೋತಿಷ್ಯ",
+  "astroYears": "{count} ವರ್ಷಗಳು",
+  "@astroYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "astroSessions": "{count} ಅವಧಿಗಳು",
+  "@astroSessions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "astroChat": "ಚಾಟ್ ಮಾಡಿ",
+  "astroCall": "ಕರೆ ಮಾಡಿ",
+  "astroVideo": "ವೀಡಿಯೊ",
+  "astroProfileTitle": "ಜ್ಯೋತಿಷಿ",
+  "astroAboutTitle": "ನಮ್ಮ ಬಗ್ಗೆ",
+  "astroRatesTitle": "ಸಮಾಲೋಚನೆ ದರಗಳು",
+  "astroReviewsCount": "{count, plural, =0{No reviews yet} one{1 review} other{{count} reviews}}",
+  "@astroReviewsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "astroStatRating": "ರೇಟಿಂಗ್",
+  "astroStatExperience": "ಅನುಭವ",
+  "astroStatSessions": "ಅವಧಿಗಳು",
+  "astroStatRepeatClients": "ಪುನರಾವರ್ತಿತ ಕ್ಲೈಂಟ್‌ಗಳು",
+  "astroSpeaks": "{languages} ಮಾತನಾಡುತ್ತಾರೆ",
+  "@astroSpeaks": {
+    "placeholders": {
+      "languages": {
+        "type": "String"
+      }
+    }
+  },
+  "astroRepliesIn": "~ {time} ಗಳಲ್ಲಿ ಪ್ರತ್ಯುತ್ತರಗಳು",
+  "@astroRepliesIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "astroOnlineNow": "ಈಗ ಆನ್‌ಲೈನ್‌ನಲ್ಲಿ",
+  "astroOfflineTitle": "ಪ್ರಸ್ತುತ ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿದ್ದಾರೆ",
+  "astroNotifyWhenOnline": "ಆನ್‌ಲೈನ್‌ನಲ್ಲಿರುವಾಗ ನನಗೆ ಸೂಚಿಸಿ",
+  "astroReadMore": "ಮತ್ತಷ್ಟು ಓದು",
+  "astroReadLess": "ಕಡಿಮೆ ತೋರಿಸಿ",
+  "astroCouldntLoadOne": "ಈ ಜ್ಯೋತಿಷಿಯನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+  "astroCallsComingSoon": "ಧ್ವನಿ ಮತ್ತು ವೀಡಿಯೊ ಕರೆಗಳು ಶೀಘ್ರದಲ್ಲೇ ಬರಲಿವೆ.",
+  "astroTrustLine": "ಐಡಿ-ಪರಿಶೀಲಿಸಲಾಗಿದೆ · ಖಾಸಗಿ ಮತ್ತು ಗೌಪ್ಯ · ನಿಮಿಷಕ್ಕೆ ಪಾವತಿಸಿ",
+  "profileHapticFeedback": "ಸ್ಪರ್ಶ ಪ್ರತಿಕ್ರಿಯೆ",
+  "profileHapticFeedbackDesc": "ಬಟನ್‌ಗಳು ಮತ್ತು ಸಂವಹನಗಳಲ್ಲಿ ಕಂಪಿಸಿ",
+  "kundaliYogasDoshasTitle": "ಯೋಗಗಳು ಮತ್ತು ದೋಷಗಳು",
+  "kundaliTabDoshas": "ದೋಶಗಳು",
+  "kundaliTabYogas": "ಯೋಗಗಳು",
+  "doshaIntro": "ದೋಷಗಳು ಕುಂಡಲಿಯಲ್ಲಿ ಸೂಕ್ಷ್ಮ ಬಿಂದುಗಳಾಗಿವೆ. ಹೆಚ್ಚಿನ ದೋಷಗಳು ಸಮಯ, ಬೆಂಬಲಿತ ದಶಾ ಅಥವಾ ಶಾಸ್ತ್ರೀಯ ಪರಿಹಾರದೊಂದಿಗೆ ಮೃದುವಾಗುತ್ತವೆ - ನಿಮಗೆ ನಿಜವಾಗಿಯೂ ಮುಖ್ಯವಾದುದನ್ನು ಜ್ಯೋತಿಷಿ ದೃಢೀಕರಿಸುತ್ತಾರೆ.",
+  "doshaDisclaimer": "ರಚನಾತ್ಮಕ ಸೂಚನೆಗಳು ಮಾತ್ರ, ಭವಿಷ್ಯವಾಣಿಗಳಲ್ಲ. ರತ್ನವನ್ನು ಧರಿಸುವ ಮೊದಲು ಅಥವಾ ಗಂಭೀರ ಪರಿಹಾರವನ್ನು ಪ್ರಾರಂಭಿಸುವ ಮೊದಲು ಜ್ಯೋತಿಷಿಯೊಂದಿಗೆ ಮಾತನಾಡಿ.",
+  "doshaPresent": "ಪ್ರಸ್ತುತ",
+  "doshaNotPresent": "ಇಲ್ಲ",
+  "doshaCancelled": "ಪರಿಣಾಮಕಾರಿಯಾಗಿ ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ",
+  "doshaSeverityClear": "ಸ್ಪಷ್ಟ",
+  "doshaSeverityMild": "ಸೌಮ್ಯ",
+  "doshaSeverityModerate": "ಮಧ್ಯಮ",
+  "doshaSeverityStrong": "ಬಲಿಷ್ಠ",
+  "doshaWhy": "ಅದನ್ನು ಏಕೆ ಫ್ಲ್ಯಾಗ್ ಮಾಡಲಾಗಿದೆ",
+  "doshaWhatReduces": "ಏನು ಕಡಿಮೆ ಮಾಡುತ್ತದೆ?",
+  "doshaReducedNote": "{count, plural, one{One classical factor} other{{count} classical factors}} in your chart ease this.",
+  "@doshaReducedNote": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "doshaClearSectionTitle": "ಸ್ಪಷ್ಟವಾಗಿದೆ — ನಿಮ್ಮ ಪಟ್ಟಿಯಲ್ಲಿಲ್ಲ.",
+  "doshaAllClear": "ನಿಮ್ಮ ಜಾತಕದಲ್ಲಿ ಸಾಮಾನ್ಯ ದೋಷಗಳು ಯಾವುದೂ ಇಲ್ಲ.",
+  "doshaAskCta": "ಇದು ನಿಮಗೆ ಏನನ್ನು ಸೂಚಿಸುತ್ತದೆ ಎಂದು ಜ್ಯೋತಿಷಿಯನ್ನು ಕೇಳಿ.",
+  "insightsTitle": "ವ್ಯಕ್ತಿತ್ವ ಮತ್ತು ಜೀವನದ ಅವಲೋಕನ",
+  "insightsIntro": "ನಿಮ್ಮ ಜನ್ಮ (D1) ಚಾರ್ಟ್‌ನ ಉಚಿತ ಓದುವಿಕೆ - ಜೀವನದ ಪ್ರಮುಖ ಕ್ಷೇತ್ರಗಳಲ್ಲಿ ಅದು ಒಲವು ತೋರುವ ಪ್ರವೃತ್ತಿಗಳು. ಇದು ಆತ್ಮಾವಲೋಕನಕ್ಕಾಗಿ ಒಂದು ರೇಖಾಚಿತ್ರವಾಗಿದೆ, ಘಟನೆಗಳು ಅಥವಾ ದಿನಾಂಕಗಳ ಮುನ್ಸೂಚನೆಯಲ್ಲ.",
+  "insightsDisclaimer": "ನಿಮ್ಮ ಚಾರ್ಟ್‌ನಿಂದ ಸಾಮಾನ್ಯ ಮಾರ್ಗದರ್ಶನ, ಭವಿಷ್ಯವಾಣಿಯಲ್ಲ. ಇದು ಯಾವುದೇ ದಿನಾಂಕಗಳನ್ನು ಹೆಸರಿಸುವುದಿಲ್ಲ ಮತ್ತು ಆರೋಗ್ಯ, ಜೀವಿತಾವಧಿ ಅಥವಾ ಸಂಬಂಧಗಳ ಬಗ್ಗೆ ಯಾವುದೇ ಹಕ್ಕುಗಳನ್ನು ನೀಡುವುದಿಲ್ಲ. ನಿರ್ದಿಷ್ಟವಾದ ಯಾವುದಕ್ಕೂ, ಜ್ಯೋತಿಷಿಯೊಂದಿಗೆ ಮಾತನಾಡಿ.",
+  "insightsAskCta": "ನಿಮ್ಮ ನಕ್ಷೆಯ ಬಗ್ಗೆ ಜ್ಯೋತಿಷಿಯನ್ನು ಕೇಳಿ",
+  "insightsWhatItReadsFrom": "ಇದರಿಂದ ಏನು ಓದುತ್ತದೆ",
+  "insightsToneSupportive": "ಬೆಂಬಲ ನೀಡುವ",
+  "insightsToneBalanced": "ಸಮತೋಲಿತ",
+  "insightsToneChallenging": "ಕಾಳಜಿ ಬೇಕು",
+  "insightsToneMixed": "ಮಿಶ್ರಿತ",
+  "insightsAreaPersonality": "ವ್ಯಕ್ತಿತ್ವ ಮತ್ತು ಪ್ರಕೃತಿ",
+  "insightsAreaAppearance": "ದೈಹಿಕ ಗೋಚರತೆ",
+  "insightsAreaMind": "ಮನಸ್ಸು ಮತ್ತು ಭಾವನೆಗಳು",
+  "insightsAreaCareer": "ವೃತ್ತಿ & ವೃತ್ತಿ",
+  "insightsAreaWealth": "ಸಂಪತ್ತು ಮತ್ತು ಹಣಕಾಸು",
+  "insightsAreaEducation": "ಶಿಕ್ಷಣ ಮತ್ತು ಬುದ್ಧಿಶಕ್ತಿ",
+  "insightsAreaMarriage": "ಮದುವೆ ಮತ್ತು ಸಂಗಾತಿ",
+  "insightsAreaFamily": "ಕುಟುಂಬ ಮತ್ತು ಸಂಬಂಧಗಳು",
+  "insightsAreaHealth": "ಆರೋಗ್ಯ ಮತ್ತು ಚೈತನ್ಯ",
+  "insightsAreaFortune": "ಅದೃಷ್ಟ ಮತ್ತು ಧರ್ಮ",
+  "insightsAreaStrengths": "ಸಾಮರ್ಥ್ಯಗಳು ಮತ್ತು ಸವಾಲುಗಳು",
+  "predTitle": "ಭವಿಷ್ಯವಾಣಿಗಳು",
+  "predReadingTitle": "ನಿಮ್ಮ ಮುನ್ಸೂಚನೆ",
+  "predRequestTitle": "ಮುನ್ಸೂಚನೆಯನ್ನು ವಿನಂತಿಸಿ",
+  "predHeroTitle": "ನಿಮಗಾಗಿ ಬರೆಯಲಾದ ಮುನ್ಸೂಚನೆ",
+  "predHeroBody": "ಜ್ಯೋತಿಷಿಯೊಬ್ಬರು ನಿಮ್ಮ ಜನ್ಮ ಕುಂಡಲಿ, ದಶಾ ಮತ್ತು ಪ್ರಸ್ತುತ ಸಂಚಾರಗಳನ್ನು ಓದುತ್ತಾರೆ ಮತ್ತು ಜೀವನದ ಒಂದು ಕ್ಷೇತ್ರಕ್ಕೆ ಭವಿಷ್ಯವನ್ನು ಬರೆಯುತ್ತಾರೆ. ಸಾಮಾನ್ಯವಾಗಿ 3 ದಿನಗಳಲ್ಲಿ ನಿಮ್ಮ ಭಾಷೆಯಲ್ಲಿ ತಲುಪಿಸಲಾಗುತ್ತದೆ.",
+  "predChooseArea": "ಪ್ರದೇಶವನ್ನು ಆರಿಸಿ",
+  "predMyReadings": "ನಿಮ್ಮ ಮುನ್ಸೂಚನೆಗಳು",
+  "predNoReadings": "ಇನ್ನೂ ಯಾವುದೇ ಮುನ್ಸೂಚನೆಗಳಿಲ್ಲ. ವಿನಂತಿಸಲು ಮೇಲಿನ ಪ್ರದೇಶವನ್ನು ಆರಿಸಿ.",
+  "predSeePacks": "ಪ್ಯಾಕ್‌ಗಳನ್ನು ನೋಡಿ",
+  "predSubscribed": "ಚಂದಾದಾರರಾಗಿದ್ದಾರೆ",
+  "predCredits": "{count, plural, =1{1 credit} other{{count} credits}}",
+  "@predCredits": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "predBuyTitle": "ಭವಿಷ್ಯವಾಣಿ ಕ್ರೆಡಿಟ್‌ಗಳು",
+  "predBuyBody": "ಒಂದು ಕ್ರೆಡಿಟ್ = ಒಂದು ಲಿಖಿತ ಮುನ್ಸೂಚನೆ. ಒಂದು ಪ್ಯಾಕ್ ಖರೀದಿಸಿ, ನಿಮಗೆ ಓದುವಿಕೆ ಬೇಕಾದಾಗ ಅದು ಸಿದ್ಧವಾಗಿರುತ್ತದೆ.",
+  "predBuyWalletNote": "ನಿಮ್ಮ ವ್ಯಾಲೆಟ್ ಬ್ಯಾಲೆನ್ಸ್‌ನಿಂದ ಪಾವತಿಸಲಾಗಿದೆ.",
+  "predPackName": "{count, plural, =1{1 credit} other{Pack of {count}}}",
+  "@predPackName": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "predPackPer": "ಪ್ರತಿ ಕ್ರೆಡಿಟ್‌ಗೆ {price}",
+  "@predPackPer": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "predBuySuccess": "ಸೇರಿಸಲಾಗಿದೆ. ನೀವು ಈಗ {count} ಕ್ರೆಡಿಟ್‌ಗಳನ್ನು ಹೊಂದಿದ್ದೀರಿ.",
+  "@predBuySuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "predForProfile": "ಯಾವ ಜನ್ಮ ವಿವರಕ್ಕಾಗಿ",
+  "predAddProfile": "ಜನನ ಪ್ರೊಫೈಲ್ ಸೇರಿಸಿ",
+  "predPickProfile": "ಮೊದಲು ಜನನ ವಿವರವನ್ನು ಆರಿಸಿ.",
+  "predArea": "ಜೀವನದ ಕ್ಷೇತ್ರ.",
+  "predPeriod": "ಅವಧಿ",
+  "predCostsOne": "ನಿಮ್ಮ {count} ಕ್ರೆಡಿಟ್‌ಗಳಲ್ಲಿ 1 ಅನ್ನು ಬಳಸುತ್ತದೆ.",
+  "@predCostsOne": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "predNoCreditYet": "ನಿಮಗೆ ಕ್ರೆಡಿಟ್ ಬೇಕಾಗುತ್ತದೆ — ನಾವು ಮುಂದೆ ಪ್ಯಾಕ್‌ಗಳನ್ನು ತೋರಿಸುತ್ತೇವೆ.",
+  "predRequestCta": "ಮುನ್ಸೂಚನೆ ವಿನಂತಿಸಿ",
+  "predRequestDisclaimer": "ಜ್ಯೋತಿಷಿಯು ನಿಮ್ಮ ಜಾತಕ, ದಶಾ ಮತ್ತು ಸಂಚಾರಗಳನ್ನು ಆಧರಿಸಿ ಬರೆಯುತ್ತಾರೆ. ಜ್ಯೋತಿಷ್ಯವು ಚಿಂತನೆ ಮತ್ತು ಯೋಜನೆಗೆ ಮಾರ್ಗದರ್ಶನವಾಗಿದೆ, ಖಾತರಿಯಲ್ಲ.",
+  "predAreaCareer": "ವೃತ್ತಿ ಮತ್ತು ಕೆಲಸ",
+  "predAreaMarriage": "ಮದುವೆ ಮತ್ತು ಪ್ರೀತಿ",
+  "predAreaFinance": "ಹಣ ಮತ್ತು ಹಣಕಾಸು",
+  "predAreaHealth": "ಆರೋಗ್ಯ ಮತ್ತು ಶಕ್ತಿ",
+  "predAreaEducation": "ಅಧ್ಯಯನ ಮತ್ತು ಕಲಿಕೆ",
+  "predAreaGeneral": "ಜೀವನ ಅವಲೋಕನ",
+  "predPeriodMonth": "ಮುಂಬರುವ ತಿಂಗಳು",
+  "predPeriodQuarter": "ಮುಂದಿನ 3 ತಿಂಗಳುಗಳು",
+  "predPeriodYear": "ಮುಂಬರುವ ವರ್ಷ",
+  "predStatusWriting": "ಬರೆಯಲಾಗುತ್ತಿದೆ",
+  "predStatusReview": "ಪರಿಶೀಲನೆಯಲ್ಲಿದೆ",
+  "predStatusReady": "ಓದಲು ಸಿದ್ಧವಾಗಿದೆ",
+  "predStatusUnavailable": "ಲಭ್ಯವಿಲ್ಲ",
+  "predStatusRefunded": "ಮರುಪಾವತಿಸಲಾಗಿದೆ",
+  "predDeliveredOn": "ತಲುಪಿಸಲಾಗಿದೆ {date}",
+  "@predDeliveredOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "predEta": "{date} ರೊಳಗೆ ನಿರೀಕ್ಷಿಸಲಾಗಿದೆ",
+  "@predEta": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "predWritingTitle": "ಇದನ್ನು ಒಬ್ಬ ಜ್ಯೋತಿಷಿ ಬರೆಯುತ್ತಿದ್ದಾರೆ.",
+  "predWritingBody": "ಅದು ಸಿದ್ಧವಾದ ತಕ್ಷಣ ನಾವು ನಿಮಗೆ ಅಧಿಸೂಚನೆಯನ್ನು ಕಳುಹಿಸುತ್ತೇವೆ.",
+  "predWritingEta": "{date} ರೊಳಗೆ ನಿರೀಕ್ಷಿಸಲಾಗಿದೆ. ಅದು ಸಿದ್ಧವಾದಾಗ ನಾವು ನಿಮಗೆ ತಿಳಿಸುತ್ತೇವೆ.",
+  "@predWritingEta": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "predRefundedTitle": "ಕ್ರೆಡಿಟ್ ಮರುಪಾವತಿಸಲಾಗಿದೆ",
+  "predRefundedBody": "ನಾವು ಇದನ್ನು ಸಮಯಕ್ಕೆ ತಲುಪಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ, ಆದ್ದರಿಂದ ನಿಮ್ಮ ಕ್ರೆಡಿಟ್ ನಿಮ್ಮ ಖಾತೆಗೆ ಹಿಂತಿರುಗಿದೆ.",
+  "predDisclaimer": "ನಿಮ್ಮ ಜನ್ಮ ಕುಂಡಲಿ, ದಶಾ ಮತ್ತು ಪ್ರಸ್ತುತ ಸಂಚಾರಗಳನ್ನು ಆಧರಿಸಿ ಜ್ಯೋತಿಷಿಯೊಬ್ಬರು ನಿಮಗಾಗಿ ಬರೆದಿದ್ದಾರೆ. ಜ್ಯೋತಿಷ್ಯವು ಚಿಂತನೆ ಮತ್ತು ಯೋಜನೆಗೆ ಮಾರ್ಗದರ್ಶನವಾಗಿದೆ - ಆಯ್ಕೆಗಳು ಮತ್ತು ಫಲಿತಾಂಶವು ನಿಮ್ಮದೇ ಆಗಿರುತ್ತದೆ.",
+  "predAskFollowUp": "ಮುಂದಿನ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ",
+  "remediesTitle": "ಪರಿಹಾರಗಳು",
+  "remediesIntro": "ನಿಮ್ಮ ಜಾತಕದಲ್ಲಿ ತೋರಿಸಿರುವ ಸಕ್ರಿಯ ದೋಷಗಳು, ದುರ್ಬಲ ಗ್ರಹಗಳು, ಚಾಲನೆಯಲ್ಲಿರುವ ದಶಾ ಮತ್ತು ಒತ್ತಡದ ಮನೆಗಳಿಗೆ ಹೊಂದಿಕೆಯಾಗುವ ಸಾಂಪ್ರದಾಯಿಕ ಪರಿಹಾರಗಳು. ಅವು ನಿಮ್ಮ ನಂಬಿಕೆ, ಆರೋಗ್ಯ ಮತ್ತು ಸಾಧನಗಳಿಗೆ ಸರಿಹೊಂದುವಂತೆ ಆಯ್ಕೆ ಮಾಡಲಾದ ಶಿಸ್ತು ಮತ್ತು ಭಕ್ತಿಯ ಕ್ರಿಯೆಗಳಾಗಿವೆ.",
+  "remediesNone": "ನಿಮ್ಮ ಪಟ್ಟಿಯಲ್ಲಿ ಈಗ ನಿರ್ದಿಷ್ಟ ಪರಿಹಾರದ ಅಗತ್ಯವಿರುವ ಯಾವುದೂ ಎದ್ದು ಕಾಣುತ್ತಿಲ್ಲ. ಸಣ್ಣ, ಸ್ಥಿರವಾದ ದೈನಂದಿನ ಅಭ್ಯಾಸವನ್ನು ಇಟ್ಟುಕೊಳ್ಳುವುದು ಯಾವಾಗಲೂ ಯೋಗ್ಯವಾಗಿರುತ್ತದೆ.",
+  "remediesDisclaimer": "ನಿಮ್ಮ ನಂಬಿಕೆ, ಆರೋಗ್ಯ ಮತ್ತು ಆರ್ಥಿಕ ಸ್ಥಿತಿಗೆ ಸರಿಹೊಂದುವದನ್ನು ಮಾತ್ರ ಮಾಡಿ. ನಿಮಗೆ ಅಸುರಕ್ಷಿತವಾಗಿದ್ದರೆ ಉಪವಾಸವನ್ನು ಬಿಟ್ಟುಬಿಡಿ ಮತ್ತು ದಾನ ಮಾಡಲು ಎಂದಿಗೂ ಸಾಲ ತೆಗೆದುಕೊಳ್ಳಬೇಡಿ.",
+  "remediesAskCta": "ನಿಮ್ಮ ಪರಿಹಾರಗಳ ಬಗ್ಗೆ ಜ್ಯೋತಿಷಿಯೊಂದಿಗೆ ಮಾತನಾಡಿ",
+  "remediesConfirmCta": "ಮೊದಲು ಜ್ಯೋತಿಷಿಯೊಂದಿಗೆ ದೃಢೀಕರಿಸಿ",
+  "remediesSource": "ಮೂಲ: {source}",
+  "@remediesSource": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "doshaSeeRemedies": "ನಿಮ್ಮ ಚಾರ್ಟ್‌ಗೆ ಪರಿಹಾರಗಳನ್ನು ನೋಡಿ.",
+  "remedyCatMantra": "ಮಂತ್ರ ಮತ್ತು ಜಪ",
+  "remedyCatStotra": "ಸ್ತೋತ್ರ ಮತ್ತು ಪಠಣ",
+  "remedyCatPuja": "ಪೂಜೆ ಮತ್ತು ಆಚರಣೆ",
+  "remedyCatVrat": "ವ್ರತ ಮತ್ತು ಉಪವಾಸ",
+  "remedyCatDaan": "ದಾನ ಮತ್ತು ದತ್ತಿ",
+  "remedyCatLifestyle": "ಜೀವನ ಶೈಲಿ",
+  "remedyCatYantra": "ಯಂತ್ರ",
+  "remedyCatGemstone": "ರತ್ನ",
+  "remedyCatRudraksha": "ರುದ್ರಾಕ್ಷ",
+  "prashnaTitle": "ಒಂದು ಪ್ರಶ್ನೆ ಕೇಳಿ",
+  "prashnaHeroTitle": "ಈ ಕ್ಷಣಕ್ಕೆ ಹೌದು ಅಥವಾ ಇಲ್ಲ ಎಂಬ ಉತ್ತರ",
+  "prashnaHeroBody": "ನೀವು ಪ್ರಶ್ನೆ ಕೇಳುವ ಕ್ಷಣವನ್ನೇ ಕೆ.ಪಿ. ಹೊರಾರಿ (ಪ್ರಶ್ನ) ಓದುತ್ತಾರೆ. ಅವರು ಹೌದು, ಇಲ್ಲ ಅಥವಾ ಮಿಶ್ರಿತ ಎಂಬ ಒಲವನ್ನು ತಾರ್ಕಿಕವಾಗಿ ನೀಡುತ್ತಾರೆ. ಇದು ಒಂದು ಸಾಂಪ್ರದಾಯಿಕ ವಿಧಾನದ ಸೂಚಕ, ಭರವಸೆಯಲ್ಲ.",
+  "prashnaAbout": "ಪ್ರಶ್ನೆ ಯಾವುದರ ಬಗ್ಗೆ?",
+  "prashnaHint": "ಉದಾ: ನನಗೆ ಈ ಉದ್ಯೋಗದ ಆಫರ್ ಸಿಗುತ್ತದೆಯೇ?",
+  "prashnaAskCta": "ಕೇಳಿ ( {price} )",
+  "@prashnaAskCta": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "prashnaDisclaimer": "ನೀವು ಕೇಳಿದ ಕ್ಷಣದ ಕೆಪಿಯ ಭಯಾನಕ ಓದುವಿಕೆ. ಇದು ಒಂದು ಸಾಂಪ್ರದಾಯಿಕ ವಿಧಾನದ ಸೂಚಕ - ಭರವಸೆಯಲ್ಲ, ಮತ್ತು ಪೂರ್ಣ ಸಮಾಲೋಚನೆಗೆ ಪರ್ಯಾಯವಲ್ಲ.",
+  "prashnaNeedQuestion": "ಮೊದಲು ಒಂದು ವಿಷಯವನ್ನು ಆರಿಸಿ ಮತ್ತು ನಿಮ್ಮ ಪ್ರಶ್ನೆಯನ್ನು ಟೈಪ್ ಮಾಡಿ.",
+  "prashnaLowBalance": "ನಿಮ್ಮ ವಾಲೆಟ್ ಬ್ಯಾಲೆನ್ಸ್ ತುಂಬಾ ಕಡಿಮೆ ಇದೆ. ಕೇಳಲು ಹಣವನ್ನು ಸೇರಿಸಿ.",
+  "prashnaHistory": "ನಿಮ್ಮ ಪ್ರಶ್ನೆಗಳು",
+  "prashnaNoHistory": "ನೀವು ಇನ್ನೂ ಯಾವುದೇ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿಲ್ಲ.",
+  "prashnaAnswerTitle": "ಓದುವಿಕೆ",
+  "prashnaAskAstrologer": "ಜ್ಯೋತಿಷಿ ಜೊತೆ ಮಾತನಾಡಿ",
+  "prashnaHowRead": "ಇದನ್ನು ಹೇಗೆ ಓದಲಾಯಿತು",
+  "prashnaConfidence": "{level, plural, =0{unclear} =1{weak} =2{moderate} other{clear}} indication",
+  "@prashnaConfidence": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "prashnaVerdictYes": "ಹೌದು ಎಂದು ಬಾಗಿ",
+  "prashnaVerdictNo": "ಇಲ್ಲ ಎಂದು ಹೇಳುವುದು",
+  "prashnaVerdictMixed": "ಮಿಶ್ರ ಸಂಕೇತಗಳು",
+  "prashnaVerdictUnclear": "ನಿರ್ಣಾಯಕವಲ್ಲ",
+  "prashnaCatMarriage": "ಮದುವೆ",
+  "prashnaCatJob": "ಒಂದು ಕೆಲಸ",
+  "prashnaCatPromotion": "ಪ್ರಚಾರ",
+  "prashnaCatBusiness": "ವ್ಯಾಪಾರ",
+  "prashnaCatProperty": "ಆಸ್ತಿ",
+  "prashnaCatMoney": "ಸಾಲ ಅಥವಾ ಹಣ",
+  "prashnaCatChild": "ಮಕ್ಕಳು",
+  "prashnaCatTravel": "ವಿದೇಶ ಪ್ರಯಾಣ",
+  "prashnaCatLitigation": "ನ್ಯಾಯಾಲಯದ ವಿಷಯ",
+  "prashnaCatHealth": "ಆರೋಗ್ಯ ಮತ್ತು ಚೇತರಿಕೆ",
+  "prashnaCatLost": "ಕಳೆದುಹೋದ ವಸ್ತು",
+  "prashnaCatReunion": "ಪುನರ್ಮಿಲನ",
+  "prashnaCatGeneral": "ಬೇರೆ ಏನೋ",
+  "yogaIntro": "ಯೋಗಗಳು ಪ್ರವೃತ್ತಿಗಳು, ಖಾತರಿಗಳಲ್ಲ - ಗ್ರಹಗಳು ಉತ್ತಮ ಸ್ಥಾನದಲ್ಲಿದ್ದಾಗ ಮತ್ತು ಅವುಗಳ ದಶಾವನ್ನು ನಡೆಸಿದಾಗ ಅವು ಬಲಗೊಳ್ಳುತ್ತವೆ.",
+  "yogaNoneTitle": "ಯಾವುದೇ ಶಾಸ್ತ್ರೀಯ ಯೋಗಗಳು ಪತ್ತೆಯಾಗಿಲ್ಲ.",
+  "yogaNoneBody": "ಅದು ಸಾಮಾನ್ಯ ಮತ್ತು ಕೆಟ್ಟ ಸಂಕೇತವಲ್ಲ - ಚಾರ್ಟ್ ಅನ್ನು ಇನ್ನೂ ಅದರ ಮನೆಗಳು ಮತ್ತು ದಶಾಗಳಲ್ಲಿ ಓದಲಾಗುತ್ತದೆ.",
+  "kundaliTalkToAstrologer": "ಜ್ಯೋತಿಷಿ ಜೊತೆ ಮಾತನಾಡಿ",
+  "kundaliHowItPlaysOut": "ಇವು ನಿಮ್ಮ ಜೀವನ ಮತ್ತು ಸಮಯದಲ್ಲಿ ಹೇಗೆ ಪರಿಣಾಮ ಬೀರುತ್ತವೆ ಎಂದು ತಿಳಿಯಲು ಬಯಸುವಿರಾ?",
+  "yogaGajakesariName": "ಗಜಕೇಸರಿ ಯೋಗ",
+  "yogaGajakesariMeaning": "ಚಂದ್ರನಿಂದ ಕೇಂದ್ರದಲ್ಲಿ ಗುರು - ಸಮತೋಲನ, ಉತ್ತಮ ತೀರ್ಪು ಮತ್ತು ತೂಕವನ್ನು ಹೊಂದಿರುವ ಹೆಸರು.",
+  "yogaBudhadityaName": "ಬುಧಾದಿತ್ಯ ಯೋಗ",
+  "yogaBudhadityaMeaning": "ಸೂರ್ಯ ಮತ್ತು ಬುಧ ಒಟ್ಟಿಗೆ - ತೀಕ್ಷ್ಣವಾದ, ಅಭಿವ್ಯಕ್ತಿಶೀಲ ಮನಸ್ಸು; ಅಧ್ಯಯನ, ಬರವಣಿಗೆ ಮತ್ತು ವಿಶ್ಲೇಷಣೆಗೆ ಬಲಿಷ್ಠ.",
+  "yogaChandraMangalaName": "ಚಂದ್ರ-ಮಂಗಳ ಯೋಗ",
+  "yogaChandraMangalaMeaning": "ಮಂಗಳನೊಂದಿಗೆ ಚಂದ್ರ - ಹಣ ಮತ್ತು ಉದ್ಯಮದ ಸುತ್ತ ಚಾಲನೆ; ಪ್ರಯತ್ನ ಮತ್ತು ಉಪಕ್ರಮದ ಮೂಲಕ ಗಳಿಕೆ.",
+  "yogaRajaName": "ರಾಜ ಯೋಗ",
+  "yogaRajaMeaning": "ತ್ರಿಕೋನ ಅಧಿಪತಿಗೆ ಬಂಧಿಸಲಾದ ಕೇಂದ್ರ ಅಧಿಪತಿ - ಅವಧಿ ಮುಗಿದಾಗ ಸ್ಥಾನಮಾನ, ಅಧಿಕಾರ ಮತ್ತು ಅವಕಾಶದಲ್ಲಿ ಏರಿಕೆ.",
+  "yogaDhanaName": "ಧನ ಯೋಗ",
+  "yogaDhanaMeaning": "ಸಂಪತ್ತು ಮತ್ತು ಲಾಭಗಳು ಮನೆಗಳಿಗೆ ಸಂಬಂಧಿಸಿವೆ - ಉಳಿತಾಯ ಮತ್ತು ಸ್ಥಿರ ಆರ್ಥಿಕ ಬೆಳವಣಿಗೆಯನ್ನು ಬೆಂಬಲಿಸುತ್ತದೆ.",
+  "yogaNeechabhangaName": "ನೀಚಭಂಗ ರಾಜ ಯೋಗ",
+  "yogaNeechabhangaMeaning": "ದುರ್ಬಲಗೊಂಡ ಗ್ರಹ, ಅದರ ದೌರ್ಬಲ್ಯವು ರದ್ದಾಗುತ್ತದೆ - ಆರಂಭಿಕ ಹೋರಾಟವು ಬಲವಾಗಿ ಬದಲಾಗುತ್ತದೆ.",
+  "yogaKaalSarpaName": "ಕಾಲ ಸರ್ಪ ಯೋಗ",
+  "yogaKaalSarpaMeaning": "ರಾಹು-ಕೇತು ಅಕ್ಷದ ಒಂದು ಬದಿಯಲ್ಲಿರುವ ಎಲ್ಲಾ ಏಳು ಗ್ರಹಗಳು - ಸ್ಪಷ್ಟ ದಿಕ್ಕು ಕಂಡುಬರುವವರೆಗೆ ಜೀವನವು ಸೀಮಿತವಾಗಿರಬಹುದು.",
+  "yogaAdhiName": "ಅಧಿ ಯೋಗ",
+  "yogaAdhiMeaning": "ಚಂದ್ರನಿಂದ 6ನೇ, 7ನೇ ಮತ್ತು 8ನೇ ಮನೆಯಲ್ಲಿ ಶುಭಫಲಗಳು - ರಕ್ಷಣೆ, ಸಮರ್ಥ ಸಹಾಯಕರು ಮತ್ತು ಸ್ಥಿರ ಸ್ಥಾನ.",
+  "yogaShakataName": "ಶಕಟ ಯೋಗ",
+  "yogaShakataMeaning": "ಗುರು ಗ್ರಹದಿಂದ 6, 8 ಅಥವಾ 12ನೇ ಮನೆಯಲ್ಲಿ ಚಂದ್ರ - ಏರಿಳಿತಗೊಳ್ಳುವ ಅದೃಷ್ಟ; ಚಂದ್ರ ಬಲವಾಗಿದ್ದಾಗ ಸ್ಥಿರವಾಗಿರುತ್ತದೆ.",
+  "yogaVishName": "ವಿಷ್ ಯೋಗಾ",
+  "yogaVishMeaning": "ಶನಿಯೊಂದಿಗೆ ಚಂದ್ರ - ಮನಸ್ಸು ಭಾರವನ್ನು ಹೊರುತ್ತದೆ; ಫಲಿತಾಂಶಗಳು ಸಾಮಾನ್ಯವಾಗಿ ನಂತರ, ಪ್ರಬುದ್ಧತೆಯೊಂದಿಗೆ ಬರುತ್ತವೆ.",
+  "yogaKahalaName": "ಕಹಲ ಯೋಗ",
+  "yogaKahalaMeaning": "ಬಲವಾದ ಲಗ್ನಾಧಿಪತಿಯೊಂದಿಗೆ ಪರಸ್ಪರ ಕೇಂದ್ರದಲ್ಲಿ 4 ಮತ್ತು 9 ನೇ ಅಧಿಪತಿಗಳು - ಧೈರ್ಯಶಾಲಿ, ಉದ್ಯಮಶೀಲ, ಅಪಾಯವನ್ನು ತೆಗೆದುಕೊಳ್ಳಲು ಸಿದ್ಧರಿರುವವರು.",
+  "yogaPushkalaName": "ಪುಷ್ಕಲಾ ಯೋಗ",
+  "yogaPushkalaMeaning": "ಚಂದ್ರನ ಅಧಿಪತಿಯು ಲಗ್ನಾಧಿಪತಿ ಕೇಂದ್ರದಲ್ಲಿ — ಗೌರವ, ಒಳ್ಳೆಯ ಹೆಸರು ಮತ್ತು ಮನವೊಲಿಸುವ ಮಾತು.",
+  "yogaDaridraName": "ದರಿದ್ರ ಯೋಗ",
+  "yogaDaridraMeaning": "11 ನೇ (ಲಾಭ) ಅಧಿಪತಿಯು ಕಠಿಣ ಮನೆಗೆ ಬಿದ್ದಿದ್ದಾನೆ - ಲಾಭಗಳು ನಿಧಾನವಾಗಿ ಬರುತ್ತವೆ; ಬಲವಾದ ದಶಾ ಅದನ್ನು ತಿರುಗಿಸುತ್ತದೆ.",
+  "yogaAmalaName": "ಅಮಲ ಯೋಗ",
+  "yogaAmalaMeaning": "ಲಗ್ನ ಅಥವಾ ಚಂದ್ರನಿಂದ 10ನೇ ಮನೆಯಲ್ಲಿ ಶುಭ - ಶುದ್ಧ ಖ್ಯಾತಿ ಮತ್ತು ಶಾಶ್ವತ ಸದ್ಭಾವನೆ.",
+  "yogaSaraswatiName": "ಸರಸ್ವತಿ ಯೋಗ",
+  "yogaSaraswatiMeaning": "ಬುಧ, ಶುಕ್ರ ಮತ್ತು ಬಲಿಷ್ಠ ಗುರು ಉತ್ತಮ ಸ್ಥಾನದಲ್ಲಿದ್ದಾರೆ - ಕಲಿಕೆ, ಕಲೆ ಮತ್ತು ವಾಗ್ಮಿತೆ.",
+  "yogaLakshmiName": "ಲಕ್ಷ್ಮಿ ಯೋಗಾ",
+  "yogaLakshmiMeaning": "ಕೇಂದ್ರ ಅಥವಾ ತ್ರಿಕೋನದಲ್ಲಿ ಬಲಿಷ್ಠ 9ನೇ ಅಧಿಪತಿಯು ಬಲಿಷ್ಠ ಲಗ್ನಾಧಿಪತಿಯೊಂದಿಗೆ - ಅದೃಷ್ಟ, ಸೌಕರ್ಯ ಮತ್ತು ಅನುಗ್ರಹ.",
+  "yogaRuchakaName": "ರುಚಕ ಯೋಗ",
+  "yogaRuchakaMeaning": "ಮಂಗಳ ಕೇಂದ್ರದಲ್ಲಿ ಬಲಶಾಲಿ - ಧೈರ್ಯ, ದೈಹಿಕ ಶಕ್ತಿ ಮತ್ತು ಒತ್ತಡದಲ್ಲಿ ನಾಯಕತ್ವ.",
+  "yogaBhadraName": "ಭದ್ರ ಯೋಗ",
+  "yogaBhadraMeaning": "ಕೇಂದ್ರದಲ್ಲಿ ಬುಧ ಬಲಶಾಲಿ — ಬುದ್ಧಿವಂತಿಕೆ, ಸ್ಪಷ್ಟ ಮಾತು ಮತ್ತು ವ್ಯಾಪಾರ ಮತ್ತು ಸಂವಹನದಲ್ಲಿ ಕೌಶಲ್ಯ.",
+  "yogaHamsaName": "ಹಂಸ ಯೋಗ",
+  "yogaHamsaMeaning": "ಕೇಂದ್ರದಲ್ಲಿ ಗುರು ಬಲಶಾಲಿ - ಬುದ್ಧಿವಂತಿಕೆ, ನೀತಿಶಾಸ್ತ್ರ, ಬೋಧನೆ ಅಥವಾ ಸಲಹೆ ನೀಡುವ ಸ್ವಭಾವ ಮತ್ತು ಸಾಮಾನ್ಯ ಅದೃಷ್ಟ.",
+  "yogaMalavyaName": "ಮಾಲವ್ಯ ಯೋಗ",
+  "yogaMalavyaMeaning": "ಕೇಂದ್ರದಲ್ಲಿ ಶುಕ್ರ ಬಲಶಾಲಿ - ಮೋಡಿ, ಸೌಕರ್ಯ, ಸೌಂದರ್ಯದ ಕಣ್ಣು ಮತ್ತು ಆಹ್ಲಾದಕರ ಗೃಹ ಜೀವನ.",
+  "yogaSasaName": "ಸಸ ಯೋಗ",
+  "yogaSasaMeaning": "ಕೇಂದ್ರದಲ್ಲಿ ಬಲಿಷ್ಠವಾಗಿರುವ ಶನಿ - ಶಿಸ್ತು, ಸಹಿಷ್ಣುತೆ ಮತ್ತು ಅಧಿಕಾರ ನಿಧಾನವಾಗಿ ನಿರ್ಮಿಸಲ್ಪಟ್ಟಿದೆ ಮತ್ತು ನಿರ್ವಹಿಸಲ್ಪಡುತ್ತದೆ.",
+  "yogaUbhayachariName": "ಉಭಯಚಾರಿ ಯೋಗ",
+  "yogaUbhayachariMeaning": "ಸೂರ್ಯನ ಎರಡೂ ಬದಿಗಳಲ್ಲಿರುವ ಗ್ರಹಗಳು - ಉತ್ತಮ ಬೆಂಬಲಿತ, ಗೋಚರ ಜೀವನ ಮತ್ತು ಉತ್ತಮ ಸರ್ವತೋಮುಖ ನಿಲುವು.",
+  "yogaVesiName": "ವೆಸಿ ಯೋಗ",
+  "yogaVesiMeaning": "ಸೂರ್ಯನಿಂದ 2 ನೇ ಮನೆಯಲ್ಲಿ ಗ್ರಹ - ಸ್ಥಿರ ಮಾತು, ಸಮತೋಲಿತ ದೃಷ್ಟಿಕೋನ ಮತ್ತು ಉತ್ತಮ ಹೆಸರು.",
+  "yogaVasiName": "ವಾಸಿ ಯೋಗ",
+  "yogaVasiMeaning": "ಸೂರ್ಯನಿಂದ 12ನೇ ಮನೆಯಲ್ಲಿ ಗ್ರಹ - ಸಾಮರ್ಥ್ಯ, ಪ್ರಭಾವ ಮತ್ತು ಉದಾರ ಗುಣ.",
+  "yogaShubhaKartariName": "ಶುಭ ಕರ್ತಾರಿ ಯೋಗ",
+  "yogaShubhaKartariMeaning": "ಲಗ್ನದ ಎರಡೂ ಬದಿಗಳಲ್ಲಿ ಶುಭಫಲಗಳು - ರಕ್ಷಣೆ, ಸೌಮ್ಯ ಮಾರ್ಗ ಮತ್ತು ಸಹಾಯಕವಾದ ಸಂದರ್ಭಗಳು.",
+  "yogaPapaKartariName": "ಪಾಪಾ ಕರ್ತಾರಿ ಯೋಗ",
+  "yogaPapaKartariMeaning": "ಲಗ್ನದ ಎರಡೂ ಬದಿಗಳಲ್ಲಿ ದೋಷಗಳು - ಸ್ವಯಂ ಮತ್ತು ಆರೋಗ್ಯದ ಮೇಲೆ ಒತ್ತಡ; ನಿಮ್ಮ ಶಕ್ತಿ ಮತ್ತು ಗಡಿಗಳನ್ನು ಕಾಪಾಡಿಕೊಳ್ಳಿ.",
+  "yogaDurudharaName": "ದುರುಧಾರ ಯೋಗ",
+  "yogaDurudharaMeaning": "ಗ್ರಹಗಳು 2 ಮತ್ತು 12 ನೇ ಸ್ಥಾನದಲ್ಲಿ ಚಂದ್ರನ ಪಕ್ಕದಲ್ಲಿವೆ - ನಿಮ್ಮ ಸುತ್ತಲಿನ ಸಂಪನ್ಮೂಲಗಳು, ಸೌಕರ್ಯ ಮತ್ತು ಸ್ಥಿರ ಬೆಂಬಲ.",
+  "yogaSunaphaName": "ಸುನಫ ಯೋಗ",
+  "yogaSunaphaMeaning": "ಚಂದ್ರನಿಂದ 2 ನೇ ಮನೆಯಲ್ಲಿ ಇರುವ ಗ್ರಹ - ಸ್ವ-ನಿರ್ಮಿತ ಸಾಧನ, ಬುದ್ಧಿವಂತಿಕೆ ಮತ್ತು ಒಳ್ಳೆಯ ಹೆಸರು.",
+  "yogaAnaphaName": "ಅನಫ ಯೋಗ",
+  "yogaAnaphaMeaning": "ಚಂದ್ರನಿಂದ 12 ನೇ ಮನೆಯಲ್ಲಿ ಇರುವ ಗ್ರಹ - ಸುಲಭ ಸ್ವಭಾವ, ಯೋಗಕ್ಷೇಮ ಮತ್ತು ಬಡತನದಿಂದ ಮುಕ್ತಿ.",
+  "yogaKemadrumaYogaName": "ಕೇಮದ್ರುಮ ಯೋಗ",
+  "yogaKemadrumaYogaMeaning": "ಚಂದ್ರನು ಬೆಂಬಲವಿಲ್ಲದೆ ಒಂಟಿಯಾಗಿ ನಿಲ್ಲುತ್ತಾನೆ - ಚಂದ್ರನು ಬಲವಾಗಿದ್ದಾಗ ಅಥವಾ ಒಂದು ಕೇಂದ್ರವು ಕಾರ್ಯನಿರತವಾಗಿದ್ದಾಗ ಶಮನವಾಗುವ ಆಂತರಿಕ ಚಡಪಡಿಕೆ.",
+  "yogaVasumatiName": "ವಸುಮತಿ ಯೋಗ",
+  "yogaVasumatiMeaning": "ಲಗ್ನ ಅಥವಾ ಚಂದ್ರನಿಂದ ಬೆಳವಣಿಗೆಯ ಮನೆಗಳಲ್ಲಿ ಶುಭಫಲಗಳು - ಸಂಪತ್ತು ಸಂಗ್ರಹವಾಗುವುದು ಮತ್ತು ಸಂಪನ್ಮೂಲಗಳು ಹೆಚ್ಚಾಗುವುದು.",
+  "yogaKalanidhiName": "ಕಲಾನಿಧಿ ಯೋಗ",
+  "yogaKalanidhiMeaning": "2 ಅಥವಾ 5 ನೇ ಮನೆಯಲ್ಲಿ ಗುರು ಬುಧ ಅಥವಾ ಶುಕ್ರನೊಂದಿಗೆ ಸಂಬಂಧ ಹೊಂದಿದ್ದಾನೆ - ಕಲಿಕೆ, ಕಲೆಗಳು, ಸುಧಾರಣೆ ಮತ್ತು ಗೌರವ.",
+  "yogaChamaraName": "ಚಾಮರ ಯೋಗ",
+  "yogaChamaraMeaning": "ಗುರುವಿನ ದೃಷ್ಟಿಯಲ್ಲಿರುವ ಕೇಂದ್ರದಲ್ಲಿ ಲಗ್ನಾಧಿಪತಿ ಉತ್ತುಂಗಕ್ಕೇರಿದ್ದಾನೆ - ವಾಗ್ಮಿತೆ, ದೀರ್ಘಾಯುಷ್ಯ ಮತ್ತು ಗೌರವಾನ್ವಿತ ಸ್ಥಾನ.",
+  "yogaShankhaName": "ಶಂಖ ಯೋಗ",
+  "yogaShankhaMeaning": "5 ನೇ ಮತ್ತು 6 ನೇ ಅಧಿಪತಿಗಳು ಬಲವಾದ ಲಗ್ನಾಧಿಪತಿಯೊಂದಿಗೆ ಸಂಬಂಧ ಹೊಂದಿದ್ದಾರೆ - ಉತ್ತಮ ಜೀವನ, ದಯೆಯ ಸ್ವಭಾವ ಮತ್ತು ನಂತರದ ವರ್ಷಗಳಲ್ಲಿ ಸೌಕರ್ಯ.",
+  "yogaParvataName": "ಪರ್ವತ ಯೋಗ",
+  "yogaParvataMeaning": "6 ನೇ ಮತ್ತು 8 ನೇ ವಾಸಸ್ಥಾನವು ಶುದ್ಧವಾಗಿರುವ ಕೇಂದ್ರಗಳಲ್ಲಿ ಲಾಭಕಾರರು - ಅದೃಷ್ಟ, ಔದಾರ್ಯ ಮತ್ತು ಶ್ರೇಷ್ಠ ಹೆಸರು.",
+  "yogaHarshaName": "ಹರ್ಷ ಯೋಗಾ",
+  "yogaHarshaMeaning": "ಕಠಿಣ ಮನೆಯಲ್ಲಿ 6 ನೇ ಅಧಿಪತಿ - ಶತ್ರುಗಳು, ಸಾಲಗಳು ಮತ್ತು ಅನಾರೋಗ್ಯವು ತಮ್ಮ ಹಿಡಿತವನ್ನು ಕಳೆದುಕೊಳ್ಳುತ್ತದೆ; ಸ್ಪರ್ಧಾತ್ಮಕ ಶಕ್ತಿ.",
+  "yogaSaralaName": "ಸರಳಾ ಯೋಗಾ",
+  "yogaSaralaMeaning": "ಕಠಿಣ ಮನೆಯಲ್ಲಿ 8 ನೇ ಅಧಿಪತಿ - ಬಿಕ್ಕಟ್ಟುಗಳ ಮೂಲಕ ಸ್ಥಿತಿಸ್ಥಾಪಕತ್ವ, ದೀರ್ಘಾಯುಷ್ಯ ಮತ್ತು ನಿರ್ಭಯತೆ.",
+  "yogaVimalaName": "ವಿಮಲ ಯೋಗ",
+  "yogaVimalaMeaning": "ಕಠಿಣ ಮನೆಯಲ್ಲಿ 12 ನೇ ಅಧಿಪತಿ — ನಿಯಂತ್ರಿತ ಖರ್ಚು, ಶುದ್ಧ ಮನಸ್ಸಾಕ್ಷಿ ಮತ್ತು ಸ್ವತಂತ್ರ ಜೀವನ.",
+  "yogaMahaParivartanaName": "ಮಹಾ ಪರಿವರ್ತನಾ ಯೋಗ",
+  "yogaMahaParivartanaMeaning": "ಒಳ್ಳೆಯ ಮನೆಗಳ ಇಬ್ಬರು ಅಧಿಪತಿಗಳು ಚಿಹ್ನೆಗಳನ್ನು ವಿನಿಮಯ ಮಾಡಿಕೊಳ್ಳುತ್ತಾರೆ - ಎರಡೂ ಮನೆಗಳ ವ್ಯವಹಾರಗಳು ಕಾಲಾನಂತರದಲ್ಲಿ ಪರಸ್ಪರ ಎತ್ತುತ್ತವೆ.",
+  "yogaKhalaParivartanaName": "ಖಲ ಪರಿವರ್ತನಾ ಯೋಗ",
+  "yogaKhalaParivartanaMeaning": "3 ನೇ ಮನೆಯನ್ನು ಒಳಗೊಂಡ ವಿನಿಮಯ - ಮಿಶ್ರ ಫಲಿತಾಂಶಗಳು, ಏರಿಳಿತಗಳು, ಪ್ರಯತ್ನ ಮತ್ತು ಧೈರ್ಯದಿಂದ ಲಾಭಗಳು.",
+  "yogaDainyaParivartanaName": "ದೈನ್ಯ ಪರಿವರ್ತನಾ ಯೋಗ",
+  "yogaDainyaParivartanaMeaning": "ಕಷ್ಟಕರವಾದ ಮನೆಯನ್ನು ಒಳಗೊಂಡ ವಿನಿಮಯ - ತಾಳ್ಮೆ ಅಗತ್ಯವಿರುವ ಅಡೆತಡೆಗಳು; ಬಲವಾದ ದಶಾ ಅದನ್ನು ತಿರುಗಿಸುತ್ತದೆ.",
+  "kSignAries": "ದಪ್ಪ, ನೇರ, ತ್ವರಿತವಾಗಿ ಪ್ರಾರಂಭಿಸಿ",
+  "kSignTaurus": "ಸ್ಥಿರ, ಇಂದ್ರಿಯ, ಸೌಕರ್ಯ ಮತ್ತು ಭದ್ರತೆಯನ್ನು ಮೌಲ್ಯೀಕರಿಸುತ್ತದೆ",
+  "kSignGemini": "ಕುತೂಹಲ, ಮಾತಿನ, ಚುರುಕಾಗಿ ಯೋಚಿಸುವ",
+  "kSignCancer": "ಕಾಳಜಿಯುಳ್ಳ, ರಕ್ಷಣಾತ್ಮಕ, ಭಾವನೆಯಿಂದ ನಡೆಸಲ್ಪಡುವ",
+  "kSignLeo": "ಹೆಮ್ಮೆ, ಆತ್ಮೀಯತೆ, ನೋಡಲು ಬಯಸುತ್ತೇನೆ",
+  "kSignVirgo": "ನಿಖರ, ಉಪಯುಕ್ತ, ಸುಧಾರಣಾ ಮನೋಭಾವದ",
+  "kSignLibra": "ನ್ಯಾಯಯುತ, ಸಂಬಂಧಾತ್ಮಕ, ಸಮತೋಲನವನ್ನು ಬಯಸುತ್ತದೆ",
+  "kSignScorpio": "ತೀವ್ರ, ಖಾಸಗಿ, ಎಲ್ಲವೂ ಅಥವಾ ಏನೂ ಇಲ್ಲ",
+  "kSignSagittarius": "ಸ್ವತಂತ್ರ, ನಂಬಿಕೆಯುಳ್ಳ, ದೊಡ್ಡ ಚಿತ್ರಣ",
+  "kSignCapricorn": "ಶಿಸ್ತುಬದ್ಧ, ಮಹತ್ವಾಕಾಂಕ್ಷೆಯುಳ್ಳ, ದೀರ್ಘ ಆಟವನ್ನು ಆಡುವ",
+  "kSignAquarius": "ಸ್ವತಂತ್ರ, ವ್ಯವಸ್ಥೆ-ಮನಸ್ಸಿನ, ಅಸಾಂಪ್ರದಾಯಿಕ",
+  "kSignPisces": "ಕಲ್ಪನಾತ್ಮಕ, ಕರುಣಾಮಯ, ಮಿತಿಯಿಲ್ಲದ",
+  "kPlanetSun": "ಆತ್ಮ, ವಿಶ್ವಾಸ, ತಂದೆ, ಅಧಿಕಾರ",
+  "kPlanetMoon": "ಮನಸ್ಸು, ಭಾವನೆಗಳು, ತಾಯಿ, ಸಾಂತ್ವನ",
+  "kPlanetMars": "ಚಾಲನೆ, ಧೈರ್ಯ, ಕೋಪ, ಒಡಹುಟ್ಟಿದವರು",
+  "kPlanetMercury": "ಬುದ್ಧಿಶಕ್ತಿ, ಮಾತು, ವ್ಯಾಪಾರ, ಕೌಶಲ್ಯ",
+  "kPlanetJupiter": "ಬುದ್ಧಿವಂತಿಕೆ, ಬೆಳವಣಿಗೆ, ಅದೃಷ್ಟ, ಶಿಕ್ಷಕರು, ಮಕ್ಕಳು",
+  "kPlanetVenus": "ಪ್ರೀತಿ, ಸೌಂದರ್ಯ, ಸೌಕರ್ಯ, ಪಾಲುದಾರಿಕೆ, ಕಲೆ",
+  "kPlanetSaturn": "ಶಿಸ್ತು, ಸಮಯ, ಮಿತಿಗಳು, ಕಷ್ಟಪಟ್ಟು ಗಳಿಸಿದ ಪ್ರತಿಫಲ",
+  "kPlanetRahu": "ಮಹತ್ವಾಕಾಂಕ್ಷೆ, ಗೀಳು, ವಿದೇಶಿ ಮತ್ತು ಹೊಸದು",
+  "kPlanetKetu": "ನಿರ್ಲಿಪ್ತತೆ, ಪಾಂಡಿತ್ಯ, ಬಿಟ್ಟುಬಿಡುವುದು, ಆಧ್ಯಾತ್ಮಿಕತೆ",
+  "kHouse1": "ಆತ್ಮ, ದೇಹ, ಚೈತನ್ಯ",
+  "kHouse2": "ಸಂಪತ್ತು, ಕುಟುಂಬ, ಮಾತು, ಆಹಾರ",
+  "kHouse3": "ಧೈರ್ಯ, ಒಡಹುಟ್ಟಿದವರು, ಪ್ರಯತ್ನ, ಸಣ್ಣ ಪ್ರಯಾಣ",
+  "kHouse4": "ಮನೆ, ತಾಯಿ, ಭೂಮಿ, ಆಂತರಿಕ ಶಾಂತಿ",
+  "kHouse5": "ಮಕ್ಕಳು, ಶಿಕ್ಷಣ, ಸೃಜನಶೀಲತೆ, ಪ್ರಣಯ",
+  "kHouse6": "ಆರೋಗ್ಯ, ಸಾಲ, ಶತ್ರುಗಳು, ದೈನಂದಿನ ಕೆಲಸ",
+  "kHouse7": "ಮದುವೆ, ಪಾಲುದಾರಿಕೆ, ವ್ಯವಹಾರ",
+  "kHouse8": "ದೀರ್ಘಾಯುಷ್ಯ, ಹಠಾತ್ ಬದಲಾವಣೆ, ಗುಪ್ತ, ಆನುವಂಶಿಕತೆ",
+  "kHouse9": "ಅದೃಷ್ಟ, ಧರ್ಮ, ತಂದೆ, ಉನ್ನತ ಶಿಕ್ಷಣ, ದೀರ್ಘ ಪ್ರಯಾಣ",
+  "kHouse10": "ವೃತ್ತಿ, ಸ್ಥಾನಮಾನ, ಸಾರ್ವಜನಿಕ ಜೀವನ",
+  "kHouse11": "ಆದಾಯ, ಲಾಭಗಳು, ನೆಟ್‌ವರ್ಕ್, ಅಣ್ಣ-ತಂಗಿಯರು",
+  "kHouse12": "ನಷ್ಟ, ಖರ್ಚುಗಳು, ವಿದೇಶಿ ಭೂಮಿ, ನಿದ್ರೆ, ಮುಕ್ತಿ",
+  "kDignityExalted": "ಉದಾತ್ತ - ಬಹಳ ಬಲಶಾಲಿ",
+  "kDignityDebilitated": "ದುರ್ಬಲ — ಇಲ್ಲಿ ಒತ್ತಡದಲ್ಲಿದೆ",
+  "kDignityMoolatrikona": "ಮೂಲತ್ರಿಕೋನ — ಆರಾಮದಾಯಕ ಮತ್ತು ಬಲವಾದ",
+  "kDignityOwn": "ಸ್ವಂತ ಚಿಹ್ನೆ — ಸ್ಥಿರ ಮತ್ತು ಪರಿಣಾಮಕಾರಿ",
+  "kDignityGreatFriend": "ಉತ್ತಮ ಸ್ನೇಹಿತನ ಚಿಹ್ನೆಯಲ್ಲಿ — ಬೆಂಬಲಿತವಾಗಿದೆ",
+  "kDignityFriend": "ಸ್ನೇಹಿತನ ಚಿಹ್ನೆಯಲ್ಲಿ — ಬೆಂಬಲಿತವಾಗಿದೆ",
+  "kDignityNeutral": "ತಟಸ್ಥ ಚಿಹ್ನೆ",
+  "kDignityEnemy": "ಶತ್ರುವಿನ ಚಿಹ್ನೆಯಲ್ಲಿ — ಹೆಚ್ಚು ಶ್ರಮಿಸುತ್ತದೆ",
+  "kDignityGreatEnemy": "ದೊಡ್ಡ ಶತ್ರುವಿನ ಚಿಹ್ನೆಯಲ್ಲಿ — ಒತ್ತಡದಲ್ಲಿ",
+  "kDashaSun": "ಗುರುತು, ಅಧಿಕಾರ ಮತ್ತು ಮನ್ನಣೆಗೆ ಒಂದು ಅವಧಿ. ಕಣ್ಣುಗಳು/ಹೃದಯದ ಅಹಂ ಮತ್ತು ಆರೋಗ್ಯವು ಗಮನಕ್ಕೆ ಬರುತ್ತದೆ.",
+  "kDashaMoon": "ಮೃದುವಾದ, ಹೆಚ್ಚು ಭಾವನಾತ್ಮಕ ಅಧ್ಯಾಯ - ಮನೆ, ತಾಯಿ, ಮನಸ್ಥಿತಿಗಳು ಮತ್ತು ಸಾರ್ವಜನಿಕ ಜೀವನ.",
+  "kDashaMars": "ಶಕ್ತಿ, ಸ್ಪರ್ಧೆ ಮತ್ತು ಉಪಕ್ರಮ ಹೆಚ್ಚಾಗುತ್ತದೆ. ಕೋಪ, ಅಪಘಾತಗಳು ಮತ್ತು ಆಸ್ತಿ ವಿಷಯಗಳಲ್ಲಿ ನಿಗಾ ಇರಿಸಿ.",
+  "kDashaMercury": "ಕಲಿಕೆ, ವ್ಯಾಪಾರ, ಬರವಣಿಗೆ ಮತ್ತು ಸಂವಹನ. ಅಧ್ಯಯನ ಮತ್ತು ವ್ಯವಹಾರಕ್ಕೆ ಒಳ್ಳೆಯದು, ನಿಶ್ಚಲತೆಗೆ ಚಡಪಡಿಕೆ.",
+  "kDashaJupiter": "ಬೆಳವಣಿಗೆ, ಶಿಕ್ಷಕರು, ಕುಟುಂಬ, ಅರ್ಥ. ಆಗಾಗ್ಗೆ ಅದೃಷ್ಟದ, ವಿಸ್ತಾರವಾದ ಹಂತ.",
+  "kDashaVenus": "ಸಂಬಂಧಗಳು, ಸೌಕರ್ಯ, ಕಲೆ, ಹಣ ಮತ್ತು ಸಂತೋಷ. ಸಾಮಾನ್ಯವಾಗಿ ಋತುಚಕ್ರಗಳಲ್ಲಿ ಅತ್ಯಂತ ಸುಲಭವಾದದ್ದು.",
+  "kDashaSaturn": "ಕಠಿಣ ಪರಿಶ್ರಮ, ಜವಾಬ್ದಾರಿ ಮತ್ತು ನಿಧಾನ, ಶಾಶ್ವತ ಫಲಿತಾಂಶಗಳು. ತಾಳ್ಮೆಗೆ ಪ್ರತಿಫಲ ನೀಡುತ್ತದೆ; ಶಾರ್ಟ್‌ಕಟ್‌ಗಳನ್ನು ಶಿಕ್ಷಿಸುತ್ತದೆ.",
+  "kDashaRahu": "ಮಿತಿಯಿಲ್ಲದ ಮಹತ್ವಾಕಾಂಕ್ಷೆ - ವಿದೇಶಿ ನೆಲ, ತಂತ್ರಜ್ಞಾನ, ಹಠಾತ್ ಏರಿಕೆ ಮತ್ತು ಗೊಂದಲ.",
+  "kDashaKetu": "ನಿರ್ಲಿಪ್ತತೆ, ಅಂತ್ಯಗಳು ಮತ್ತು ಆಧ್ಯಾತ್ಮಿಕ ಒಳಮುಖ ತಿರುಗುವಿಕೆ. ಭೌತಿಕ ವಸ್ತುಗಳು ಟೊಳ್ಳಾಗಿವೆ ಎಂದು ಭಾಸವಾಗುತ್ತದೆ; ಕೌಶಲ್ಯವು ಆಳವಾಗುತ್ತದೆ.",
+  "kNakAshwini": "ತ್ವರಿತ, ಪ್ರವರ್ತಕ, ಗುಣಪಡಿಸುವುದು",
+  "kNakBharani": "ತೀವ್ರ, ಬದಲಾವಣೆಗೆ ಜಾಗವಿದೆ, ಶಿಸ್ತುಬದ್ಧ",
+  "kNakKrittika": "ತೀಕ್ಷ್ಣ, ಕತ್ತರಿಸುವ, ರಕ್ಷಣಾತ್ಮಕ",
+  "kNakRohini": "ಸೃಜನಶೀಲ, ಇಂದ್ರಿಯ, ಪೋಷಣೆ, ಕಾಂತೀಯ",
+  "kNakMrigashira": "ಹುಡುಕುವ, ಕುತೂಹಲಕಾರಿ, ಸೌಮ್ಯ",
+  "kNakArdra": "ಬಿರುಗಾಳಿ, ಪರಿವರ್ತಕ, ಒತ್ತಡದಲ್ಲಿ ಅದ್ಭುತ",
+  "kNakPunarvasu": "ನವೀಕರಿಸುವುದು, ಉದಾರ, ಸುರಕ್ಷತೆಗೆ ಮರಳುವುದು",
+  "kNakPushya": "ಪೋಷಣೆ ನೀಡುವ, ಕರ್ತವ್ಯನಿಷ್ಠ, ಆಳವಾಗಿ ಬೆಂಬಲಿಸುವ",
+  "kNakAshlesha": "ಗ್ರಹಿಸುವ, ಕಾರ್ಯತಂತ್ರದ, ಸಂಮೋಹನ",
+  "kNakMagha": "ರಾಜಮನೆತನದ, ಸಂಪ್ರದಾಯಬದ್ಧ, ಪೂರ್ವಜ",
+  "kNakPurvaPhalguni": "ತಮಾಷೆಯ, ಪ್ರಣಯಭರಿತ, ಮೌಲ್ಯಯುತ ವಿರಾಮ",
+  "kNakUttaraPhalguni": "ವಿಶ್ವಾಸಾರ್ಹ, ಒಪ್ಪಂದದ, ಸಹಾಯಕ",
+  "kNakHasta": "ಕೈಗಳಲ್ಲಿ ನೈಪುಣ್ಯ, ಚತುರ, ಗುಣಪಡಿಸುವ",
+  "kNakChitra": "ಕಲಾತ್ಮಕ, ಆಕರ್ಷಕ, ಸುಂದರವಾದ ವಸ್ತುಗಳನ್ನು ನಿರ್ಮಿಸುತ್ತದೆ",
+  "kNakSwati": "ಸ್ವತಂತ್ರ, ಹೊಂದಿಕೊಳ್ಳುವ, ಸ್ವಾತಂತ್ರ್ಯ ಪ್ರಿಯ",
+  "kNakVishakha": "ಗುರಿ-ಚಾಲಿತ, ದೃಢನಿಶ್ಚಯ, ದ್ವಂದ್ವ ಸ್ವಭಾವದ",
+  "kNakAnuradha": "ಶ್ರದ್ಧೆಯುಳ್ಳ, ಸ್ನೇಹಪರ, ವಿದೇಶದಲ್ಲಿ ಅಭಿವೃದ್ಧಿ ಹೊಂದುತ್ತಾನೆ",
+  "kNakJyeshtha": "ಹಿರಿಯ, ಜವಾಬ್ದಾರಿಯುತ, ಹೊರೆಗಳನ್ನು ಹೊತ್ತವನು",
+  "kNakMula": "ಬೇರು ಹುಡುಕುವ, ಮೂಲಭೂತ, ಮೂಲಕ್ಕೆ ಹೋಗುತ್ತದೆ",
+  "kNakPurvaAshadha": "ಅಜೇಯ ಚೈತನ್ಯ, ಮನವೊಲಿಸುವ",
+  "kNakUttaraAshadha": "ತತ್ವಬದ್ಧ, ಶಾಶ್ವತ, ನಂತರದ ಯಶಸ್ಸು",
+  "kNakShravana": "ಆಲಿಸುವುದು, ಕಲಿಯುವುದು, ಜನರನ್ನು ಸಂಪರ್ಕಿಸುವುದು",
+  "kNakDhanishta": "ಲಯಬದ್ಧ, ಶ್ರೀಮಂತ, ಸಂಗೀತಮಯ, ಹೊಂದಿಕೊಳ್ಳುವ",
+  "kNakShatabhisha": "ಖಾಸಗಿ, ಗುಣಪಡಿಸುವಿಕೆ, ವ್ಯವಸ್ಥೆ-ಮನಸ್ಸಿನ",
+  "kNakPurvaBhadrapada": "ಆದರ್ಶವಾದಿ, ತೀವ್ರ, ಪರಿವರ್ತಕ",
+  "kNakUttaraBhadrapada": "ಆಳವಾದ, ಶಾಂತ, ಬುದ್ಧಿವಂತ ಸಲಹೆ",
+  "kNakRevati": "ದಯಾಳು, ಪ್ರಯಾಣಿಕರನ್ನು ರಕ್ಷಿಸುವ, ಕಲ್ಪನಾಶೀಲ",
+  "kSadeSatiRising": "ಉದಯ ಹಂತ — ಶನಿಯು ನಿಮ್ಮ ಚಂದ್ರನಿಂದ 12 ನೇ ರಾಶಿಯಲ್ಲಿದ್ದಾನೆ. ಅಂತ್ಯಗಳು, ಆಯಾಸ ಮತ್ತು ಕೆಲಸಗಳು ಮುಗಿಯುತ್ತಿವೆ ಎಂಬ ಭಾವನೆ. ಇನ್ನು ಮುಂದೆ ಕೆಲಸ ಮಾಡದಿರುವುದನ್ನು ತೆರವುಗೊಳಿಸಲು ಪ್ರಾರಂಭಿಸಿ.",
+  "kSadeSatiPeak": "ಗರಿಷ್ಠ ಹಂತ — ಶನಿಯು ನಿಮ್ಮ ಚಂದ್ರ ರಾಶಿಯ ಮೇಲೆ ನಿಂತಿದ್ದಾನೆ. ಅತ್ಯಂತ ಭಾರವಾದ ಹಂತ: ಜವಾಬ್ದಾರಿ, ಒತ್ತಡ ಮತ್ತು ನಿಧಾನಗತಿಯ ಪ್ರಗತಿ. ದಿನಚರಿಗಳನ್ನು ಕಾಪಾಡಿಕೊಳ್ಳಿ, ನಿಮ್ಮ ಆರೋಗ್ಯವನ್ನು ರಕ್ಷಿಸಿ.",
+  "kSadeSatiSetting": "ಸೆಟ್ಟಿಂಗ್ ಹಂತ — ಶನಿಯು ನಿಮ್ಮ ಚಂದ್ರನಿಂದ ಎರಡನೇ ರಾಶಿಯಲ್ಲಿದ್ದಾನೆ. ತೂಕ ಹೆಚ್ಚಾಗುತ್ತದೆ. ಹಣ ಮತ್ತು ಕುಟುಂಬ ಸ್ಥಿರಗೊಳ್ಳುತ್ತದೆ; ಕಳೆದ ವರ್ಷಗಳ ಪಾಠಗಳು ಫಲ ನೀಡಲು ಪ್ರಾರಂಭಿಸುತ್ತವೆ.",
+  "kSadeSatiGeneric": "ಶನಿಯು ನಿಮ್ಮ ಚಂದ್ರನ ಸುತ್ತ ರಾಶಿಗಳಲ್ಲಿ ಸಾಗುತ್ತಿದೆ.",
+  "kPlanetInSignHouse": "{sign} ಯಲ್ಲಿರುವ ನಿಮ್ಮ {planet} ವು ನಿಮ್ಮನ್ನು {signTrait} ಮಾಡುತ್ತದೆ. {house} ಮನೆಯಲ್ಲಿ ಅದು {houseTheme} ಅನ್ನು ಮುಟ್ಟುತ್ತದೆ.",
+  "@kPlanetInSignHouse": {
+    "placeholders": {
+      "planet": {},
+      "sign": {},
+      "signTrait": {},
+      "house": {},
+      "houseTheme": {}
+    }
+  },
+  "kPlanetInSign": "Your {planet} in {sign} makes you {signTrait}.",
+  "@kPlanetInSign": {
+    "placeholders": {
+      "planet": {},
+      "sign": {},
+      "signTrait": {}
+    }
+  },
+  "kHouseSans1": "ತನು ಭವ",
+  "kHouseSans2": "ಧನ ಭವ",
+  "kHouseSans3": "ಸಹಜ ಭವ",
+  "kHouseSans4": "ಸುಖ ಭವ",
+  "kHouseSans5": "ಪುತ್ರ ಭವ",
+  "kHouseSans6": "ರಿಪು ಭವ",
+  "kHouseSans7": "ಯುವತಿ ಭವ",
+  "kHouseSans8": "ಆಯು / ರಂಧ್ರ ಭವ",
+  "kHouseSans9": "ಧರ್ಮ ಭವ",
+  "kHouseSans10": "ಕರ್ಮ ಭವ",
+  "kHouseSans11": "ಲಾಭ ಭವ",
+  "kHouseSans12": "ವ್ಯಯ ಭವ",
+  "kHouseTitleWithSign": "{sign} · {theme}",
+  "@kHouseTitleWithSign": {
+    "placeholders": {
+      "sign": {},
+      "theme": {}
+    }
+  },
+  "kHouseSheetTitle": "{ordinal} ಮನೆ · {sign}",
+  "@kHouseSheetTitle": {
+    "placeholders": {
+      "ordinal": {},
+      "sign": {}
+    }
+  },
+  "kHouseSheetSubtitle": "{sanskrit} — {theme}",
+  "@kHouseSheetSubtitle": {
+    "placeholders": {
+      "sanskrit": {},
+      "theme": {}
+    }
+  },
+  "kHouseChipLord": "ಮನೆಯ ಒಡೆಯ · {lord}",
+  "@kHouseChipLord": {
+    "placeholders": {
+      "lord": {}
+    }
+  },
+  "kHouseChipLordIn": "{nthHouse} ನಲ್ಲಿ ಭಗವಂತ",
+  "@kHouseChipLordIn": {
+    "placeholders": {
+      "nthHouse": {}
+    }
+  },
+  "kHouseNoPlanets": "ಈ ಮನೆಯಲ್ಲಿ ಯಾವುದೇ ಗ್ರಹಗಳು ಕುಳಿತುಕೊಳ್ಳುವುದಿಲ್ಲ. ಇದರ ಕಥೆಯನ್ನು ಮುಖ್ಯವಾಗಿ ಅದರ ಅಧಿಪತಿ, {lord} {lordWhere} ಹೇಳುತ್ತಾನೆ.",
+  "@kHouseNoPlanets": {
+    "placeholders": {
+      "lord": {},
+      "lordWhere": {}
+    }
+  },
+  "kHouseLordWhere": ", ಈಗ {nthHouse} ನಲ್ಲಿದೆ",
+  "@kHouseLordWhere": {
+    "placeholders": {
+      "nthHouse": {}
+    }
+  },
+  "kHousePlanetsHeader": "ಈ ಮನೆಯಲ್ಲಿರುವ ಗ್ರಹಗಳು",
+  "kHouseAskCta": "ನಿಮ್ಮ ಮನೆಯ ಬಗ್ಗೆ {ordinal} ಕೇಳಿ",
+  "@kHouseAskCta": {
+    "placeholders": {
+      "ordinal": {}
+    }
+  },
+  "kHouseReadingLord": "ನಿಮ್ಮ {ordinal} -ಮನೆಯ ಅಧಿಪತಿ {lord} {nthHouse} ನಲ್ಲಿ ಕುಳಿತುಕೊಳ್ಳುತ್ತಾರೆ, ಆದ್ದರಿಂದ {theme} {lordTheme} ಗೆ ಸಂಪರ್ಕಿಸುತ್ತದೆ.",
+  "@kHouseReadingLord": {
+    "placeholders": {
+      "ordinal": {},
+      "lord": {},
+      "nthHouse": {},
+      "theme": {},
+      "lordTheme": {}
+    }
+  },
+  "kHouseReadingOccupant": "{planet} ಇಲ್ಲಿ ತನ್ನ ಥೀಮ್‌ಗಳನ್ನು — {planetTheme} — {theme} ಗೆ ತರುತ್ತದೆ.",
+  "@kHouseReadingOccupant": {
+    "placeholders": {
+      "planet": {},
+      "planetTheme": {},
+      "theme": {}
+    }
+  },
+  "kHouseReadingEmpty": "ಈ ಮನೆಯನ್ನು ಅದರ ಅಧಿಪತಿ ಮತ್ತು ಅದನ್ನು ನೋಡುವ ಗ್ರಹಗಳ ಮೂಲಕ ಓದಲಾಗುತ್ತದೆ. ಒಬ್ಬ ಜ್ಯೋತಿಷಿ ನಿಮಗೆ ಅದರ ಮೂಲಕ ಮಾರ್ಗದರ್ಶನ ನೀಡಬಹುದು.",
+  "kBhavaSubheadKaraka": "ಕರಕ {karaka}",
+  "@kBhavaSubheadKaraka": {
+    "placeholders": {
+      "karaka": {}
+    }
+  },
+  "kBhavaSubheadLord": "ಲಾರ್ಡ್ {lord} , {nthHouse}",
+  "@kBhavaSubheadLord": {
+    "placeholders": {
+      "lord": {},
+      "nthHouse": {}
+    }
+  },
+  "kBhavaSubheadLordOnly": "ಪ್ರಭು {lord}",
+  "@kBhavaSubheadLordOnly": {
+    "placeholders": {
+      "lord": {}
+    }
+  },
+  "kBhavaReadingGoverns": "ಈ ಮನೆ {theme} ಅನ್ನು ನಿಯಂತ್ರಿಸುತ್ತದೆ.",
+  "@kBhavaReadingGoverns": {
+    "placeholders": {
+      "theme": {}
+    }
+  },
+  "kBhavaReadingLord": "ಇದರ ಅಧಿಪತಿ {lord} {nthHouse} ನಲ್ಲಿದ್ದಾರೆ, ಆದ್ದರಿಂದ {theme} {lordTheme} ಗೆ ಸಂಪರ್ಕಿಸುತ್ತದೆ. {dignity} {occupants}",
+  "@kBhavaReadingLord": {
+    "placeholders": {
+      "lord": {},
+      "nthHouse": {},
+      "theme": {},
+      "lordTheme": {},
+      "dignity": {},
+      "occupants": {}
+    }
+  },
+  "kBhavaReadingDignity": " ಭಗವಂತ ಎಂದರೆ {dignity} .",
+  "@kBhavaReadingDignity": {
+    "placeholders": {
+      "dignity": {}
+    }
+  },
+  "kBhavaReadingOccupants": " {planets} ಇಲ್ಲಿ ಕುಳಿತು, {themes} ಸೇರಿಸುತ್ತಿವೆ.",
+  "@kBhavaReadingOccupants": {
+    "placeholders": {
+      "planets": {},
+      "themes": {}
+    }
+  },
+  "kTransitHouseLine": "ನಿಮ್ಮ {nthHouse} · {theme}",
+  "@kTransitHouseLine": {
+    "placeholders": {
+      "nthHouse": {},
+      "theme": {}
+    }
+  },
+  "kPlanetRowMeta": "{sign} · {nthHouse} · {degree} °",
+  "@kPlanetRowMeta": {
+    "placeholders": {
+      "sign": {},
+      "nthHouse": {},
+      "degree": {}
+    }
+  },
+  "kLagnaLordIn": "{nthHouse} ನಲ್ಲಿ",
+  "@kLagnaLordIn": {
+    "placeholders": {
+      "nthHouse": {}
+    }
+  },
+  "kDignityShortExalted": "ಉನ್ನತ",
+  "kDignityShortMoolatrikona": "ಮೂಲತ್ರಿಕೋನ",
+  "kDignityShortOwn": "ಸ್ವಂತ",
+  "kDignityShortDebilitated": "ದುರ್ಬಲಗೊಂಡಿದೆ",
+  "kDignityShortEnemy": "ಶತ್ರು ಚಿಹ್ನೆ",
+  "kDignityShortGreatEnemy": "ಮಹಾ ಶತ್ರು",
+  "kCombustNote": "ದಹನ - ಸೂರ್ಯನಿಗೆ ಬಹಳ ಹತ್ತಿರದಲ್ಲಿದೆ, ಆದ್ದರಿಂದ ಅದರ ಸ್ವತಂತ್ರ ಧ್ವನಿ ಮಂದವಾಗಿರುತ್ತದೆ.",
+  "kWhatThisMeans": "ಇದು ನಿಮಗೆ ಏನು ಅರ್ಥ ನೀಡುತ್ತದೆ",
+  "ovStrengthStrong": "ಬಲವಾದ",
+  "ovStrengthSteady": "ಸ್ಥಿರ",
+  "ovStrengthStrain": "ಒತ್ತಡದಲ್ಲಿ",
+  "ovStrengthWeak": "ದುರ್ಬಲ",
+  "ovRoleSpouse": "ಸಂಗಾತಿಯ ಸೂಚಕ",
+  "ovRoleDarakaraka": "ದರಕಾರಕ (ಜೈಮಿನಿ)",
+  "ovRoleWealth": "ಸಂಪತ್ತಿನ ಸೂಚಕ",
+  "ovRoleIntellect": "ಬುದ್ಧಿಶಕ್ತಿ ಮಹತ್ವ",
+  "ovRoleWisdom": "ಬುದ್ಧಿವಂತಿಕೆಯ ಅರ್ಥಕಾರಕ",
+  "ovRoleFortune": "ಅದೃಷ್ಟ ಸೂಚಕ",
+  "ovRoleFather": "ತಂದೆಯ ಮಹತ್ವ",
+  "ovRoleMother": "ತಾಯಿ ಸೂಚಕ",
+  "ovRoleGeneric": "ಸೂಚಕ",
+  "ovfPada": "ಪದ {pada}",
+  "@ovfPada": {
+    "placeholders": {
+      "pada": {
+        "type": "int"
+      }
+    }
+  },
+  "ovfLagnaSign": "ಏರುತ್ತಿರುವ ಚಿಹ್ನೆ {sign}",
+  "@ovfLagnaSign": {
+    "placeholders": {
+      "sign": {}
+    }
+  },
+  "ovfLagnaLord": "{nthHouse} {dignity} ಯಲ್ಲಿ ಲಗ್ನ ಅಧಿಪತಿ {planet}",
+  "@ovfLagnaLord": {
+    "placeholders": {
+      "planet": {},
+      "nthHouse": {},
+      "dignity": {}
+    }
+  },
+  "ovfHouseLord": "{nthHouse} ನಲ್ಲಿ {ordinal} -ಮನೆಯ ಅಧಿಪತಿ {planet}",
+  "@ovfHouseLord": {
+    "placeholders": {
+      "ordinal": {},
+      "planet": {},
+      "nthHouse": {}
+    }
+  },
+  "ovfHouseStrength": "{ordinal} ಮನೆ — {strength}",
+  "@ovfHouseStrength": {
+    "placeholders": {
+      "ordinal": {},
+      "strength": {}
+    }
+  },
+  "ovfMoonSign": "{sign} ಯಲ್ಲಿ ಚಂದ್ರ",
+  "@ovfMoonSign": {
+    "placeholders": {
+      "sign": {}
+    }
+  },
+  "ovfMoonHouse": "{nthHouse} ನಲ್ಲಿ ಚಂದ್ರ",
+  "@ovfMoonHouse": {
+    "placeholders": {
+      "nthHouse": {}
+    }
+  },
+  "ovfMoonNakshatra": "ಚಂದ್ರ ನಕ್ಷತ್ರ {nakshatra}",
+  "@ovfMoonNakshatra": {
+    "placeholders": {
+      "nakshatra": {}
+    }
+  },
+  "ovfMoonDignity": "ಚಂದ್ರ {dignity}",
+  "@ovfMoonDignity": {
+    "placeholders": {
+      "dignity": {}
+    }
+  },
+  "ovfSunSign": "ಸೂರ್ಯ {sign} ಯಲ್ಲಿ",
+  "@ovfSunSign": {
+    "placeholders": {
+      "sign": {}
+    }
+  },
+  "ovfSeventhSign": "{sign} ಯಲ್ಲಿ 7 ನೇ ಮನೆ",
+  "@ovfSeventhSign": {
+    "placeholders": {
+      "sign": {}
+    }
+  },
+  "ovfPlanetInHouse": "{planet} in the {nthHouse}",
+  "@ovfPlanetInHouse": {
+    "placeholders": {
+      "planet": {},
+      "nthHouse": {}
+    }
+  },
+  "ovfPlanetWithMoon": "ಚಂದ್ರನೊಂದಿಗೆ {planet}",
+  "@ovfPlanetWithMoon": {
+    "placeholders": {
+      "planet": {}
+    }
+  },
+  "ovfAppearanceIn": "1 ನೇ ಮನೆಯಲ್ಲಿ {planet}",
+  "@ovfAppearanceIn": {
+    "placeholders": {
+      "planet": {}
+    }
+  },
+  "ovfAppearanceAspect": "{planet} 1 ನೇ ಮನೆಯ ದೃಷ್ಟಿಕೋನವನ್ನು ಹೊಂದಿದೆ",
+  "@ovfAppearanceAspect": {
+    "placeholders": {
+      "planet": {}
+    }
+  },
+  "ovfMaleficOnLagna": "{planet} ಆರೋಹಣ ನಕ್ಷತ್ರದ ಮೇಲೆ ಒತ್ತುತ್ತಿದೆ",
+  "@ovfMaleficOnLagna": {
+    "placeholders": {
+      "planet": {}
+    }
+  },
+  "ovfKaraka": "{role} : {planet}",
+  "@ovfKaraka": {
+    "placeholders": {
+      "role": {},
+      "planet": {}
+    }
+  },
+  "ovfYoga": "ಯೋಗ — {name}",
+  "@ovfYoga": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "ovfDosha": "ದೋಶ — {name}",
+  "@ovfDosha": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "doshaMangalName": "ಮಂಗಲ್ ದೋಷ",
+  "doshaMangalMeaning": "ಸೂಕ್ಷ್ಮ ಮನೆಯಲ್ಲಿ ಮಂಗಳ - ಸಾಂಪ್ರದಾಯಿಕವಾಗಿ ಮದುವೆಗೆ ಮೊದಲು ತೂಕ ಇಡಲಾಗುತ್ತದೆ. ಇಬ್ಬರೂ ಪಾಲುದಾರರು ಮಂಗಳ ಗ್ರಹದ ಮೇಲೆ ಪ್ರಭಾವ ಬೀರಿದಾಗ ಅಥವಾ ಗುರು ಗ್ರಹದ ಪ್ರಭಾವದಡಿಯಲ್ಲಿದ್ದಾಗ ಹೆಚ್ಚಾಗಿ ಸಮತೋಲನದಲ್ಲಿರುತ್ತಾರೆ.",
+  "doshaKaalSarpaName": "ಕಾಲ ಸರ್ಪ ದೋಷ",
+  "doshaKaalSarpaMeaning": "ರಾಹು ಮತ್ತು ಕೇತುವಿನ ನಡುವೆ ನಡೆಯುವ ಇಡೀ ನಕ್ಷೆ - ಸ್ಪಷ್ಟ ನಿರ್ದೇಶನ ದೊರೆಯುವವರೆಗೆ ಜೀವನವು ಸೀಮಿತವಾಗಿರುತ್ತದೆ, ನಂತರ ಗಮನವು ತೀವ್ರವಾಗುತ್ತದೆ.",
+  "doshaPitraName": "ಪಿತ್ರ ದೋಷ",
+  "doshaPitraMeaning": "ಸೂರ್ಯ ಮತ್ತು 9 ನೇ ಮನೆಯು ಪೂರ್ವಜರ ಕರ್ಮದ ನೆರಳನ್ನು ಹೊಂದಿರುತ್ತದೆ - ಇದನ್ನು ಹೆಚ್ಚಾಗಿ ತಂದೆಯ ಹೆಸರಿನಲ್ಲಿ ಶ್ರದ್ಧೆ ಮತ್ತು ದಾನದಿಂದ ಸಂಬೋಧಿಸಲಾಗುತ್ತದೆ.",
+  "doshaGandmoolName": "ಗಂಡಮೂಲ ದೋಸೆ",
+  "doshaGandmoolMeaning": "ಚಂದ್ರನು ಜಂಕ್ಷನ್ ನಕ್ಷತ್ರದಲ್ಲಿ ಕುಳಿತುಕೊಳ್ಳುತ್ತಾನೆ. 27 ನೇ ದಿನದಂದು ಶಾಂತಿ ಪೂಜೆ ಮಾಡುವುದು ಸಾಂಪ್ರದಾಯಿಕ ಪ್ರತಿಕ್ರಿಯೆಯಾಗಿದೆ.",
+  "doshaGrahanName": "ಗ್ರಹಣ ದೋಷ",
+  "doshaGrahanMeaning": "ಒಂದು ಜ್ಯೋತಿಷಿ (ಸೂರ್ಯ ಅಥವಾ ಚಂದ್ರ) ಒಂದು ನೋಡ್‌ನೊಂದಿಗೆ ಕುಳಿತುಕೊಳ್ಳುತ್ತಾನೆ, ಆದ್ದರಿಂದ ಆ ಗ್ರಹದ ಮಹತ್ವಗಳು ಅದರ ಮೇಲೆ ಕೆಲಸ ಮಾಡುವವರೆಗೆ ಮಂದವಾಗಿರುತ್ತವೆ.",
+  "doshaShrapitName": "ಶ್ರಪಿತ್ ದೋಷ",
+  "doshaShrapitMeaning": "ರಾಹು ಜೊತೆ ಶನಿ - ಆರಂಭದಲ್ಲಿ ವಿಳಂಬ ಮತ್ತು ಗೊಂದಲ; ಸ್ಥಿರ, ತಾಳ್ಮೆಯ ಪ್ರಯತ್ನವೇ ದಾರಿ.",
+  "doshaGuruChandalName": "ಗುರು ಚಂದಲ್ ದೋಷ",
+  "doshaGuruChandalMeaning": "ನೋಡ್ ಹೊಂದಿರುವ ಗುರು - ಅಸಾಂಪ್ರದಾಯಿಕ ವಿಚಾರಗಳೊಂದಿಗೆ ಬೆರೆತ ಬುದ್ಧಿವಂತಿಕೆ; ನಿಮ್ಮ ಶಿಕ್ಷಕರು ಮತ್ತು ನಂಬಿಕೆಗಳನ್ನು ಎಚ್ಚರಿಕೆಯಿಂದ ಆರಿಸಿ.",
+  "doshaAngarakName": "ಅಂಗಾರಕ ದೋಸೆ",
+  "doshaAngarakMeaning": "ನೋಡ್ ಹೊಂದಿರುವ ಮಂಗಳ - ಹಠಾತ್ ಪ್ರವೃತ್ತಿಯ ಆವೇಶ; ಕೋಪ, ಅಪಘಾತಗಳು ಮತ್ತು ಆಸ್ತಿ ವಿವಾದಗಳಿಗೆ ಎಚ್ಚರಿಕೆಯ ಅಗತ್ಯವಿದೆ.",
+  "doshaKemadrumaName": "ಕೇಮದ್ರುಮ ದೋಷ",
+  "doshaKemadrumaMeaning": "ಚಂದ್ರನು ತನ್ನ ಸುತ್ತಲೂ ಯಾವುದೇ ಆಧಾರವಿಲ್ಲದೆ ಏಕಾಂಗಿಯಾಗಿ ನಿಲ್ಲುತ್ತಾನೆ - ಒಂದು ಕೇಂದ್ರವು ಆಕ್ರಮಿಸಿಕೊಂಡಾಗ ಅಥವಾ ಚಂದ್ರನು ಬಲವಾಗಿದ್ದಾಗ ಅದು ಸಡಿಲಗೊಳ್ಳುತ್ತದೆ.",
+  "doshaDaridraName": "ದರಿದ್ರ ದೋಷ",
+  "doshaDaridraMeaning": "ಹಣದ ಮನೆಗಳು ಸಂಕಷ್ಟದಲ್ಲಿವೆ - ಶಿಸ್ತುಬದ್ಧ ಉಳಿತಾಯ ಮತ್ತು ಬಲವಾದ ದಶಾ ಅದನ್ನು ತಿರುಗಿಸುತ್ತದೆ.",
+  "birthDetailsCta": "ಜನನದ ಸಂಪೂರ್ಣ ವಿವರಗಳು",
+  "birthDetailsTitle": "ಜನನ ವಿವರಗಳು",
+  "birthDetailsAyanamsa": "ಅಯನಾಂಶ",
+  "birthDetailsPanchangTitle": "ಹುಟ್ಟಿದಾಗ ಪಂಚಾಂಗ",
+  "birthDetailsChakraTitle": "ಅವಕಾಹಡ ಚಕ್ರ",
+  "birthDetailsWeekday": "ವಾರದ ದಿನ",
+  "birthDetailsTithi": "ತಿಥಿ",
+  "birthDetailsNakshatra": "ನಕ್ಷತ್ರ",
+  "birthDetailsYoga": "ಯೋಗ",
+  "birthDetailsKarana": "ಕರಣ",
+  "birthDetailsMoonSign": "ಚಂದ್ರ ರಾಶಿ",
+  "birthDetailsSunSign": "ಸೂರ್ಯ ರಾಶಿ",
+  "birthDetailsSuryaNakshatra": "ಸೂರ್ಯನ ನಕ್ಷತ್ರ",
+  "birthDetailsSunrise": "ಸೂರ್ಯೋದಯ",
+  "birthDetailsSunset": "ಸೂರ್ಯಾಸ್ತ",
+  "birthDetailsIshtaKala": "ಇಷ್ಟ ಕಲಾ",
+  "birthDetailsPada": "ಪದ {count}",
+  "@birthDetailsPada": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "birthDetailsGhatiPala": "{ghati} ಘಾಟಿ {pala} ಪಲಾ {vipala} ವಿಪಾಲ",
+  "@birthDetailsGhatiPala": {
+    "placeholders": {
+      "ghati": {
+        "type": "int"
+      },
+      "pala": {
+        "type": "int"
+      },
+      "vipala": {
+        "type": "int"
+      }
+    }
+  },
+  "birthDetailsNakshatraLord": "ನಕ್ಷತ್ರ ಅಧಿಪತಿ",
+  "birthDetailsRashiLord": "ರಾಶಿ ಅಧಿಪತಿ",
+  "birthDetailsVarna": "ವರ್ಣ",
+  "birthDetailsVashya": "ವಶ್ಯ",
+  "birthDetailsYoni": "ಯೋನಿ",
+  "birthDetailsGana": "ಗಣ",
+  "birthDetailsNadi": "ನಾಡಿ",
+  "birthDetailsTara": "ತಾರಾ",
+  "birthDetailsTattva": "ತತ್ವ",
+  "birthDetailsYunja": "ಯುಂಜಾ",
+  "birthDetailsRashiPaya": "ರಾಶಿ ಪಾಯ",
+  "birthDetailsNakshatraPaya": "ನಕ್ಷತ್ರ ಪಾಯ",
+  "birthDetailsDisclaimer": "ಶಾಸ್ತ್ರೀಯ ವರ್ಗೀಕರಣದ ಗುಣಲಕ್ಷಣಗಳು - ಮುಖ್ಯವಾಗಿ ಮುಹೂರ್ತ ಮತ್ತು ಮದುವೆಯ ಸಮಯದಲ್ಲಿ ಬಳಸಲಾಗುತ್ತದೆ, ಭವಿಷ್ಯವಾಣಿಗಳಲ್ಲ.",
+  "vaaraMonday": "ಸೋಮವಾರ (ಸೋಮವಾರ)",
+  "vaaraTuesday": "ಮಂಗಳವಾರ (ಮಂಗಳವಾರ)",
+  "vaaraWednesday": "ಬುಧ್ವರ (ಬುಧವಾರ)",
+  "vaaraThursday": "ಗುರುವಾರ (ಗುರುವಾರ)",
+  "vaaraFriday": "ಶುಕ್ರವಾರ (ಶುಕ್ರವಾರ)",
+  "vaaraSaturday": "ಶನಿವಾರ (ಶನಿವಾರ)",
+  "vaaraSunday": "ರವಿವಾರ (ಭಾನುವಾರ)",
+  "tattvaFire": "ಅಗ್ನಿ (ಬೆಂಕಿ)",
+  "tattvaEarth": "ಪೃಥ್ವಿ (ಭೂಮಿ)",
+  "tattvaAir": "ವಾಯು (ಗಾಳಿ)",
+  "tattvaWater": "ಜಲ (ನೀರು)",
+  "payaGold": "ಚಿನ್ನ",
+  "payaSilver": "ಅರ್ಜೆಂಟ",
+  "payaCopper": "ತಾಮ್ರ",
+  "payaIron": "ಕಬ್ಬಿಣ",
+  "roomAppBarTitle": "ಸಮಾಲೋಚನೆ",
+  "roomOpenError": "ನಮಗೆ ಈ ಸಮಾಲೋಚನೆಯನ್ನು ತೆರೆಯಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+  "roomWaitingTitle": "{name} ಸ್ವೀಕರಿಸಲು ಕಾಯಲಾಗುತ್ತಿದೆ",
+  "@roomWaitingTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roomWaitingBody": "ಸಾಮಾನ್ಯವಾಗಿ ಒಂದು ನಿಮಿಷಕ್ಕಿಂತ ಕಡಿಮೆ ಸಮಯ ತೆಗೆದುಕೊಳ್ಳುತ್ತದೆ. ಅವರು ಸೇರಿದ ಕ್ಷಣ ನಾವು ಚಾಟ್ ತೆರೆಯುತ್ತೇವೆ.",
+  "roomCancelRequest": "ವಿನಂತಿಯನ್ನು ರದ್ದುಮಾಡಿ",
+  "roomEndConfirmTitle": "ಈ ಸಮಾಲೋಚನೆಯನ್ನು ಕೊನೆಗೊಳಿಸುವುದೇ?",
+  "roomEndConfirmBody": "ಅವಧಿ ಮುಗಿದಾಗ ಬಿಲ್ಲಿಂಗ್ ನಿಲ್ಲುತ್ತದೆ.",
+  "roomKeepTalking": "ಮಾತನಾಡುತ್ತಲೇ ಇರಿ",
+  "roomEnd": "ಅಂತ್ಯ",
+  "roomAutoTranslateOn": "ಸ್ವಯಂ-ಅನುವಾದ ಆನ್ ಆಗಿದೆ",
+  "roomAutoTranslateOff": "ಸ್ವಯಂ-ಅನುವಾದ ಆಫ್ ಆಗಿದೆ",
+  "roomEndedTitle": "ಸಮಾಲೋಚನೆ ಕೊನೆಗೊಂಡಿದೆ",
+  "roomBalanceOutTitle": "ನಿಮ್ಮ ಬ್ಯಾಲೆನ್ಸ್ ಖಾಲಿಯಾಗಿದೆ.",
+  "roomBalanceOutBody": "ನಿಮ್ಮ ವಾಲೆಟ್ ಬ್ಯಾಲೆನ್ಸ್ ಮುಗಿದ ಕಾರಣ ಚಾಟ್ ಕೊನೆಗೊಂಡಿತು. ರೀಚಾರ್ಜ್ ಮಾಡಿ ಮತ್ತು {name} ನೊಂದಿಗೆ ಮುಂದುವರಿಸಲು ಮತ್ತೆ ಪ್ರಾರಂಭಿಸಿ.",
+  "@roomBalanceOutBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roomRechargeWallet": "ರೀಚಾರ್ಜ್ ವಾಲೆಟ್",
+  "roomStartAgain": "{name} ನೊಂದಿಗೆ ಮತ್ತೆ ಪ್ರಾರಂಭಿಸಿ",
+  "@roomStartAgain": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roomRowAstrologer": "ಜ್ಯೋತಿಷಿ",
+  "roomRowDuration": "ಅವಧಿ",
+  "roomRowAmount": "ಮೊತ್ತ",
+  "roomRowRate": "ದರ",
+  "roomMinutes": "{minutes} ನಿಮಿಷ",
+  "@roomMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "roomRatePerMinute": "{currency} {amount} /ನಿಮಿಷ",
+  "@roomRatePerMinute": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "roomRateQuestion": "ನಿಮ್ಮ ಸಮಾಲೋಚನೆ ಹೇಗಿತ್ತು?",
+  "roomSubmitRating": "ರೇಟಿಂಗ್ ಸಲ್ಲಿಸಿ",
+  "roomRatingThanks": "ಪ್ರತಿಕ್ರಿಯೆಗೆ ಧನ್ಯವಾದಗಳು!",
+  "roomBackHome": "ಮನೆಗೆ ಹಿಂತಿರುಗಿ",
+  "roomStatusRejected": "ಜ್ಯೋತಿಷಿಗೆ ಈ ವಿನಂತಿಯನ್ನು ಸ್ವೀಕರಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+  "roomStatusCancelled": "ವಿನಂತಿಯನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ",
+  "roomStatusExpired": "ವಿನಂತಿಯ ಅವಧಿ ಮುಗಿದಿದೆ — ಸಮಯಕ್ಕೆ ಪ್ರತಿಕ್ರಿಯೆ ಇಲ್ಲ.",
+  "roomStatusNoShow": "ಕರೆ ಸಂಪರ್ಕಗೊಳ್ಳಲಿಲ್ಲ.",
+  "roomStatusClosed": "ಸಮಾಲೋಚನೆ ಮುಕ್ತಾಯಗೊಂಡಿದೆ",
+  "roomBalanceRunningOut": "ಬ್ಯಾಲೆನ್ಸ್ ಖಾಲಿಯಾಗುತ್ತಿದೆ",
+  "roomMinLeftRecharge": "~ {minutes} ನಿಮಿಷಗಳು ಉಳಿದಿವೆ · ಮಾತನಾಡುತ್ತಲೇ ಇರಲು ರೀಚಾರ್ಜ್ ಮಾಡಿ",
+  "@roomMinLeftRecharge": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "roomSpentMinLeft": "{currency} {amount} ಖರ್ಚು ಮಾಡಲಾಗಿದೆ · ~ {minutes} ನಿಮಿಷ ಉಳಿದಿದೆ",
+  "@roomSpentMinLeft": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "roomAddMoney": "ಹಣವನ್ನು ಸೇರಿಸಿ",
+  "roomClientBalanceLow": "ಕ್ಲೈಂಟ್‌ನ ಬ್ಯಾಲೆನ್ಸ್ ಕಡಿಮೆಯಾಗಿದೆ — ಶೀಘ್ರದಲ್ಲೇ ಮುಗಿಸಿ",
+  "navChats": "ಚಾಟ್‌ಗಳು",
+  "chatsTitle": "ಚಾಟ್‌ಗಳು",
+  "chatsLoadError": "ನಿಮ್ಮ ಚಾಟ್‌ಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ನಮಗೆ ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+  "chatsEmptyTitle": "ಇನ್ನೂ ಯಾವುದೇ ಚಾಟ್‌ಗಳಿಲ್ಲ.",
+  "chatsEmptyBody": "ಜ್ಯೋತಿಷಿ ಜೊತೆ ಸಮಾಲೋಚನೆ ಪ್ರಾರಂಭಿಸಿ ಮತ್ತು ಅದು ಇಲ್ಲಿ ತೋರಿಸುತ್ತದೆ.",
+  "chatsSectionActive": "ಸಕ್ರಿಯ",
+  "chatsSectionRecent": "ಇತ್ತೀಚಿನದು",
+  "chatsAstrologerFallback": "ಜ್ಯೋತಿಷಿ",
+  "chatsStatusWaiting": "ಜ್ಯೋತಿಷಿ ಸ್ವೀಕರಿಸಲು ಕಾಯುತ್ತಿದ್ದೇನೆ",
+  "chatsStatusLive": "ಈಗ ಲೈವ್ · ತೆರೆಯಲು ಟ್ಯಾಪ್ ಮಾಡಿ",
+  "chatsStatusEnded": "{minutes} ನಿಮಿಷ ಸಮಾಲೋಚನೆ",
+  "@chatsStatusEnded": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "chatsStatusCancelled": "ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ",
+  "chatsStatusRejected": "ಸ್ವೀಕರಿಸಲಾಗಿಲ್ಲ",
+  "chatsStatusExpired": "ವಿನಂತಿಯ ಅವಧಿ ಮುಗಿದಿದೆ",
+  "chatsStatusGeneric": "ಸಮಾಲೋಚನೆ",
+  "numerologyTitle": "ಸಂಖ್ಯಾಶಾಸ್ತ್ರ ಮತ್ತು ಲೋ ಶು ಗ್ರಿಡ್",
+  "numerologyIntro": "ನಿಮ್ಮ ಜನ್ಮ ದಿನಾಂಕ (ಮತ್ತು ಹೆಸರು) ದಿಂದ ಓದುವ ಸಾಂಪ್ರದಾಯಿಕ ಸಂಖ್ಯೆಗಳು - ಪ್ರತಿಯೊಂದು ಸಂಖ್ಯೆಯು ಒಲವು ತೋರುವ ಪ್ರವೃತ್ತಿಗಳು, ಅನುಕೂಲಕರ ದಿನಗಳು ಮತ್ತು ಬಣ್ಣಗಳು ಮತ್ತು ನಿಮ್ಮ ಲೋ ಶು ಜನ್ಮ ಗ್ರಿಡ್. ಚಿಂತನೆಗಾಗಿ, ದಿನಾಂಕದ ಮುನ್ಸೂಚನೆಯಲ್ಲ.",
+  "numMoolank": "ಮೂಲಂಕ್ · ಮಾನಸಿಕ ಸಂಖ್ಯೆ",
+  "numBhagyank": "ಭಾಗ್ಯಂಕ್ · ವಿಧಿ ಸಂಖ್ಯೆ",
+  "numNaamank": "ನಾಮಾನ್ಕ್ · ಹೆಸರು ಸಂಖ್ಯೆ",
+  "numRuledBy": "{planet} ನಿಂದ ಆಳಲ್ಪಡುತ್ತಿದೆ",
+  "@numRuledBy": {
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      }
+    }
+  },
+  "numFriendly": "ಸ್ನೇಹಪರ",
+  "numNeutral": "ತಟಸ್ಥ",
+  "numUnfriendly": "ಘರ್ಷಣೆ",
+  "numFavDays": "ಅನುಕೂಲಕರ ದಿನಗಳು",
+  "numFavColours": "ಅನುಕೂಲಕರ ಬಣ್ಣಗಳು",
+  "numDirection": "ನಿರ್ದೇಶನ",
+  "numDeity": "ದೇವತೆ",
+  "numGemstone": "ಸಾಂಪ್ರದಾಯಿಕ ರತ್ನ",
+  "numLoShuTitle": "ಲೋ ಶು ಜನನ ಜಾಲ",
+  "numLoShuMissing": "ನಿಮ್ಮ ಗ್ರಿಡ್‌ನಲ್ಲಿ ಇಲ್ಲ: {nums}",
+  "@numLoShuMissing": {
+    "placeholders": {
+      "nums": {
+        "type": "String"
+      }
+    }
+  },
+  "numLoShuRepeated": "ಒತ್ತಿಹೇಳಲಾಗಿದೆ: {nums}",
+  "@numLoShuRepeated": {
+    "placeholders": {
+      "nums": {
+        "type": "String"
+      }
+    }
+  },
+  "numArrowStrength": "ಸಂಪೂರ್ಣ ಸಾಲು",
+  "numArrowAbsence": "ಅನುಪಸ್ಥಿತಿಯ ಸಾಲು",
+  "numAskCta": "ಇದರ ಬಗ್ಗೆ ಜ್ಯೋತಿಷಿಯೊಂದಿಗೆ ಮಾತನಾಡಿ",
+  "sadeSatiTitle": "ಸಾಡೆ ಸತಿ ಮತ್ತು ಧೈಯಾ ಕ್ಯಾಲೆಂಡರ್",
+  "sadeSatiIntro": "ನಿಮ್ಮ ಚಂದ್ರ {sign} ಲೆಕ್ಕ ಹಾಕಲಾದ ದಿನಾಂಕಿತ ಶನಿಯು ನಿಮ್ಮ ಜೀವನವನ್ನು ಆವರಿಸುತ್ತದೆ. ಸಾಡೇ ಸಾತಿಯು ಚಂದ್ರನಿಂದ 12ನೇ, 1ನೇ ಮತ್ತು 2ನೇ ಗ್ರಹದವರೆಗೆ (~7½ ವರ್ಷಗಳು) ಶನಿಯಾಗಿದೆ; ಧೈಯಾ ಗ್ರಹವು 4ನೇ ಅಥವಾ 8ನೇ (~2½ ವರ್ಷಗಳು) ಆಗಿದೆ.",
+  "@sadeSatiIntro": {
+    "placeholders": {
+      "sign": {
+        "type": "String"
+      }
+    }
+  },
+  "sadeSatiRunningNow": "ಈಗ ಚಾಲನೆಯಲ್ಲಿದೆ",
+  "sadeSatiPast": "ಹಿಂದಿನದು",
+  "sadeSatiUpcoming": "ಮುಂಬರುವ",
+  "sadeSatiPhaseRising": "12ನೇ ತಾರೀಖಿನಲ್ಲಿ ಶನಿ ಉದಯ.",
+  "sadeSatiPhasePeak": "ಚಂದ್ರನ ಮೇಲೆ ಶನಿ ಗ್ರಹದ ಶಿಖರ ·",
+  "sadeSatiPhaseSetting": "ಸೆಟ್ಟಿಂಗ್ · 2 ನೇ ಮನೆಯಲ್ಲಿ ಶನಿ",
+  "sadeSatiPhaseKantaka": "ಕಂಟಕ · ೪ನೇ ಮನೆಯಲ್ಲಿ ಶನಿ",
+  "sadeSatiPhaseAshtama": "ಅಷ್ಟಮ · 8ನೇ ಮನೆಯಲ್ಲಿ ಶನಿ",
+  "sadeSatiDhaiyaHeading": "ಧೈಯಾ (ಸಣ್ಣ ಪನೋಟಿ) ಅವಧಿಗಳು",
+  "sadeSatiRange": "{start} → {end}",
+  "@sadeSatiRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "avTransitHeading": "ಇಂದಿನ ಸಂಚಾರದ ಅಷ್ಟಕವರ್ಗ ಬಲ",
+  "avTransitIntro": "ನಿಮ್ಮ ಜನ್ಮ ಬಿಂದು ಅಂಕಗಳಿಂದ, ಪ್ರತಿಯೊಂದು ಗ್ರಹದ ಸಂಚಾರವು ಎಷ್ಟು ಮುಕ್ತವಾಗಿ ಫಲಿತಾಂಶಗಳನ್ನು ನೀಡುತ್ತದೆ. 8 ರಲ್ಲಿ 5+ ಬೆಂಬಲಿತವಾಗಿದೆ, 4 ಮಿಶ್ರವಾಗಿದೆ, ಕಡಿಮೆ ದುರ್ಬಲವಾಗಿದೆ.",
+  "avTransitBindus": "{bindus} /8 ಬಿಂದುಗಳು",
+  "@avTransitBindus": {
+    "placeholders": {
+      "bindus": {
+        "type": "int"
+      }
+    }
+  },
+  "avTransitUpcoming": "ಬರುತ್ತಿದೆ",
+  "avTransitInHouse": "{planet} in your {house} house",
+  "@avTransitInHouse": {
+    "placeholders": {
+      "planet": {
+        "type": "String"
+      },
+      "house": {
+        "type": "String"
+      }
+    }
+  },
+  "homePanchangTitle": "ಇಂದಿನ ಪಂಚಾಂಗ",
+  "homeLiveNowTitle": "ಈಗ ಲೈವ್",
+  "homeFreeToolsTitle": "ಉಚಿತ ಪರಿಕರಗಳು",
+  "homeResumeBtn": "ಪುನರಾರಂಭ",
+  "homeAddBtn": "ಸೇರಿಸಿ",
+  "homeNotifyMeBtn": "ನನಗೆ ಸೂಚಿಸಿ",
+  "homeKundaliAction": "ಕುಂಡಲಿ",
+  "homeMatchingAction": "ಹೊಂದಾಣಿಕೆ",
+  "homeHoroscopeAction": "ಜಾತಕ",
+  "homeVastuAction": "ವಾಸ್ತು",
+  "homeRetryBtn": "ಮರುಪ್ರಯತ್ನಿಸಿ",
+  "homeChooseSignTitle": "ನಿಮ್ಮ ಚಿಹ್ನೆಯನ್ನು ಆರಿಸಿ",
+  "homeChooseLanguageTitle": "ಭಾಷೆಯನ್ನು ಆರಿಸಿ",
+  "homeLanguageTooltip": "ಭಾಷೆ",
+  "homeLanguageSwitchError": "ಬದಲಾಯಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ: {error}",
+  "@homeLanguageSwitchError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "homeComingSoonSnackbar": "ಶೀಘ್ರದಲ್ಲೇ ಬರಲಿದೆ!",
+  "homeTalkAgainTitle": "ಮತ್ತೆ ಮಾತನಾಡಿ",
+  "homeRechargeWalletTitle": "ನಿಮ್ಮ ವ್ಯಾಲೆಟ್ ಅನ್ನು ರೀಚಾರ್ಜ್ ಮಾಡಿ",
+  "homeTalkToAstrologerTitle": "ಜ್ಯೋತಿಷಿ ಜೊತೆ ಮಾತನಾಡಿ"
+}

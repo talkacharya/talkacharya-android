@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBUi59pTD72bADexr82Np1rwa58nc6aMB4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>51248771144</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.talkacharya.customer</string>
+	<key>PROJECT_ID</key>
+	<string>talk-acharya-ji</string>
+	<key>STORAGE_BUCKET</key>
+	<string>talk-acharya-ji.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:51248771144:ios:55ce067cd0096abf75687d</string>
+</dict>
+</plist>

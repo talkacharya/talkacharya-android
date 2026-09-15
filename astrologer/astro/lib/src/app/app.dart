@@ -21,8 +21,14 @@ import '../features/auth/presentation/bloc/auth/auth_bloc.dart';
 import '../features/notifications/presentation/bloc/notifications_cubit.dart';
 
 const _supportedLocales = <Locale>[
-  Locale('en'), Locale('hi'), Locale('bn'), Locale('mr'),
-  Locale('te'), Locale('ta'), Locale('gu'), Locale('kn'),
+  Locale('en'),
+  Locale('hi'),
+  Locale('bn'),
+  Locale('mr'),
+  Locale('te'),
+  Locale('ta'),
+  Locale('gu'),
+  Locale('kn'),
 ];
 
 class TalkAcharyaApp extends StatefulWidget {
@@ -97,7 +103,8 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
             a.user?.preferredLanguage != b.user?.preferredLanguage,
         builder: (context, state) {
           final pref = state.user?.preferredLanguage;
-          final locale = (pref != null &&
+          final locale =
+              (pref != null &&
                   _supportedLocales.any((l) => l.languageCode == pref))
               ? Locale(pref)
               : null;

@@ -28,6 +28,25 @@ class ProfileApi {
     return AstroProfile.fromJson(res.data ?? const {});
   }
 
+  /// Upload a new cover image (replaces the old one).
+  Future<AstroProfile> uploadBanner(String filePath) async {
+    final form = FormData.fromMap({
+      'banner': await MultipartFile.fromFile(filePath),
+    });
+    final res = await _dio.put<Map<String, dynamic>>(
+      ApiPaths.astroProfileBanner,
+      data: form,
+    );
+    return AstroProfile.fromJson(res.data ?? const {});
+  }
+
+  Future<AstroProfile> removeBanner() async {
+    final res = await _dio.delete<Map<String, dynamic>>(
+      ApiPaths.astroProfileBanner,
+    );
+    return AstroProfile.fromJson(res.data ?? const {});
+  }
+
   Future<List<Map<String, dynamic>>> rates() async {
     final res = await _dio.get<dynamic>(ApiPaths.astroRates);
     return (res.data as List? ?? const [])
@@ -36,11 +55,14 @@ class ProfileApi {
   }
 
   Future<void> setRate(String channel, String currency, String amount) =>
-      _dio.put(ApiPaths.astroRates, data: {
-        'channel': channel,
-        'currency': currency,
-        'per_minute_amount': amount,
-      });
+      _dio.put(
+        ApiPaths.astroRates,
+        data: {
+          'channel': channel,
+          'currency': currency,
+          'per_minute_amount': amount,
+        },
+      );
 
   Future<List<Map<String, dynamic>>> workingHours() async {
     final res = await _dio.get<dynamic>(ApiPaths.astroWorkingHours);

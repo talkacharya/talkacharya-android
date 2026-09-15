@@ -105,13 +105,48 @@ run-prod: ## Shortcut for FLAVOR=prod
 apk: ## Debug APK for $(FLAVOR)
 	$(FLUTTER) build apk --debug --flavor $(FLAVOR) -t $(TARGET) $(DEFINES)
 
+# Release builds obfuscate Dart and keep the symbol map (needed to read Crashlytics
+# stack traces) in build/symbols/<flavor>. BUILD_NAME / BUILD_NUMBER override the
+# pubspec `version:` — Play needs a strictly increasing BUILD_NUMBER per upload.
+BUILD_NAME   ?=
+BUILD_NUMBER ?=
+SYMBOLS_DIR  := build/symbols/$(FLAVOR)
+VERSION_ARGS := $(if $(BUILD_NAME),--build-name=$(BUILD_NAME),) $(if $(BUILD_NUMBER),--build-number=$(BUILD_NUMBER),)
+RELEASE_ARGS := --release --obfuscate --split-debug-info=$(SYMBOLS_DIR) $(VERSION_ARGS)
+FIREBASE_ANDROID_APP_ID := 1:51248771144:android:61d2531149bacabf75687d
+
 .PHONY: apk-release
-apk-release: ## Release APK for $(FLAVOR)
-	$(FLUTTER) build apk --release --flavor $(FLAVOR) -t $(TARGET) $(DEFINES)
+apk-release: ## Release APK for $(FLAVOR) (obfuscated; APP_CHECK_PROVIDER=debug to sideload-test prod)
+	$(FLUTTER) build apk $(RELEASE_ARGS) --flavor $(FLAVOR) -t $(TARGET) $(DEFINES) 		$(if $(APP_CHECK_PROVIDER),--dart-define=APP_CHECK_PROVIDER=$(APP_CHECK_PROVIDER),)
 
 .PHONY: appbundle
-appbundle: ## Release AAB for prod (Play upload)
-	$(FLUTTER) build appbundle --release --flavor prod -t lib/main_prod.dart
+appbundle: release-check ## Release AAB for prod (Play upload) — signed, obfuscated
+	$(FLUTTER) build appbundle --release --obfuscate --split-debug-info=build/symbols/prod $(VERSION_ARGS) --flavor prod -t lib/main_prod.dart
+	@echo "AAB: build/app/outputs/bundle/prodRelease/app-prod-release.aab"
+	@echo "Next: make symbols-upload FLAVOR=prod"
+
+.PHONY: release-check
+release-check: ## Fail fast if release signing / Firebase config is missing
+	@test -f android/key.properties || { echo "android/key.properties missing (see android/key.properties.example)"; exit 1; }
+	@test -f android/app/google-services.json || { echo "android/app/google-services.json missing"; exit 1; }
+	@echo "release config OK"
+
+.PHONY: symbols-upload
+symbols-upload: ## Upload Dart obfuscation symbols to Crashlytics (needs firebase CLI login)
+	firebase crashlytics:symbols:upload --app=$(FIREBASE_ANDROID_APP_ID) $(SYMBOLS_DIR)
+
+.PHONY: signing-report
+signing-report: ## Print SHA-1/SHA-256 of debug + release keys (add them in Firebase)
+	cd android && ./gradlew :app:signingReport
+
+.PHONY: appcheck-token
+appcheck-token: ## Print this device's App Check DEBUG token (register it in Firebase console)
+	adb logcat -d | grep -i "debug secret" | tail -1
+
+.PHONY: branding
+branding: ## Regenerate launcher icons + native splash from assets/icons/logo.png
+	$(DART) run flutter_launcher_icons
+	$(DART) run flutter_native_splash:create
 
 # --- housekeeping -------------------------------------------------
 

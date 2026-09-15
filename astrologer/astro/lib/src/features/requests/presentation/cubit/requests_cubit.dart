@@ -29,14 +29,13 @@ class RequestsState extends Equatable {
     List<Consultation>? active,
     List<Consultation>? history,
     Object? error = _s,
-  }) =>
-      RequestsState(
-        loading: loading ?? this.loading,
-        incoming: incoming ?? this.incoming,
-        active: active ?? this.active,
-        history: history ?? this.history,
-        error: error == _s ? this.error : error as String?,
-      );
+  }) => RequestsState(
+    loading: loading ?? this.loading,
+    incoming: incoming ?? this.incoming,
+    active: active ?? this.active,
+    history: history ?? this.history,
+    error: error == _s ? this.error : error as String?,
+  );
   static const _s = Object();
 
   @override
@@ -47,8 +46,8 @@ class RequestsCubit extends Cubit<RequestsState> {
   RequestsCubit({
     required ConsultationRepository repo,
     required RealtimeClient realtime,
-  })  : _repo = repo,
-        super(const RequestsState()) {
+  }) : _repo = repo,
+       super(const RequestsState()) {
     _sub = realtime.events.listen(_onEvent);
   }
 
@@ -63,12 +62,14 @@ class RequestsCubit extends Cubit<RequestsState> {
         _repo.api.list(status: 'active'),
         _repo.api.list(status: 'ended'),
       ]);
-      emit(state.copyWith(
-        loading: false,
-        incoming: results[0],
-        active: results[1],
-        history: results[2],
-      ));
+      emit(
+        state.copyWith(
+          loading: false,
+          incoming: results[0],
+          active: results[1],
+          history: results[2],
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(loading: false, error: '$e'));
     }
@@ -96,10 +97,8 @@ class RequestsCubit extends Cubit<RequestsState> {
   }
 
   void _removeIncoming(String id) => emit(
-        state.copyWith(
-          incoming: state.incoming.where((c) => c.id != id).toList(),
-        ),
-      );
+    state.copyWith(incoming: state.incoming.where((c) => c.id != id).toList()),
+  );
 
   void _onEvent(RealtimeEvent e) {
     switch (e) {
@@ -108,6 +107,9 @@ class RequestsCubit extends Cubit<RequestsState> {
       case RequestRemoved(:final consultationId):
         _removeIncoming(consultationId);
       case ConsultationEvent(kind: 'ended'):
+      case ConsultationEvent(kind: 'accepted'):
+      case ConsultationEvent(kind: 'started'):
+      case NewChatMessage():
         load();
       default:
         break;

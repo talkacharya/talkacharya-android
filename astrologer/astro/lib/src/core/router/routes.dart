@@ -20,6 +20,7 @@ class Routes {
   static String chatRoom(String id) => '/chats/$id';
   static String requestDetail(String id) => '/requests/$id';
   static String payout(String id) => '/earnings/payouts/$id';
+  static String consultationKundali(String id) => '/consultations/$id/kundali';
 
   // profile sub-pages
   static const profileEdit = '/profile/edit';

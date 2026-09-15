@@ -16,7 +16,9 @@ class OnboardingApi {
 
   Future<AstroProfile> getProfile() async {
     try {
-      final res = await _dio.get<Map<String, dynamic>>(ApiPaths.astroOnboarding);
+      final res = await _dio.get<Map<String, dynamic>>(
+        ApiPaths.astroOnboarding,
+      );
       return AstroProfile.fromJson(res.data ?? const {});
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
@@ -78,12 +80,15 @@ class OnboardingApi {
     String? bankName,
   }) async {
     try {
-      await _dio.post(ApiPaths.astroOnboardingBank, data: {
-        'account_holder_name': accountHolderName,
-        'account_number': accountNumber,
-        if (ifsc != null && ifsc.isNotEmpty) 'ifsc': ifsc,
-        if (bankName != null && bankName.isNotEmpty) 'bank_name': bankName,
-      });
+      await _dio.post(
+        ApiPaths.astroOnboardingBank,
+        data: {
+          'account_holder_name': accountHolderName,
+          'account_number': accountNumber,
+          if (ifsc != null && ifsc.isNotEmpty) 'ifsc': ifsc,
+          if (bankName != null && bankName.isNotEmpty) 'bank_name': bankName,
+        },
+      );
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
     }
@@ -100,7 +105,8 @@ class OnboardingApi {
       return const SubmitResult(ok: true);
     } on DioException catch (e) {
       final data = e.response?.data;
-      if (data is Map) return SubmitResult(ok: false, missing: _missingFrom(data));
+      if (data is Map)
+        return SubmitResult(ok: false, missing: _missingFrom(data));
       throw ApiException.fromDio(e);
     }
   }

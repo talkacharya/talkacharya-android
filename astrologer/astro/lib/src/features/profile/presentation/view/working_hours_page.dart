@@ -52,22 +52,27 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
 
   Future<void> _save() async {
     final rows = _hours.entries
-        .map((e) => {
-              'weekday': e.key,
-              'start_time': _fmt(e.value.start),
-              'end_time': _fmt(e.value.end),
-            })
+        .map(
+          (e) => {
+            'weekday': e.key,
+            'start_time': _fmt(e.value.start),
+            'end_time': _fmt(e.value.end),
+          },
+        )
         .toList();
     try {
       await getIt<ProfileApi>().setWorkingHours(rows);
       await AvailabilityCubit(getIt()).update(channels: _channels.toList());
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Saved')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Saved')));
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('$e')));
       }
     }
   }
@@ -94,34 +99,43 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
-          : ListView(padding: const EdgeInsets.all(16), children: [
-              Text('Channels you accept',
-                  style: Theme.of(context).textTheme.titleMedium),
-              Wrap(
-                spacing: 8,
-                children: ['chat', 'voice', 'video'].map((ch) {
-                  return FilterChip(
-                    label: Text(ch),
-                    selected: _channels.contains(ch),
-                    onSelected: (v) => setState(() =>
-                        v ? _channels.add(ch) : _channels.remove(ch)),
-                  );
-                }).toList(),
-              ),
-              const Divider(height: 32),
-              Text('Working hours',
-                  style: Theme.of(context).textTheme.titleMedium),
-              for (var wd = 0; wd < 7; wd++)
-                SwitchListTile(
-                  title: Text(_days[wd]),
-                  subtitle: _hours[wd] == null
-                      ? const Text('Off')
-                      : Text(
-                          '${_fmt(_hours[wd]!.start)} – ${_fmt(_hours[wd]!.end)}'),
-                  value: _hours[wd] != null,
-                  onChanged: (v) => _toggleDay(wd, v),
+          : ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                Text(
+                  'Channels you accept',
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-            ]),
+                Wrap(
+                  spacing: 8,
+                  children: ['chat', 'voice', 'video'].map((ch) {
+                    return FilterChip(
+                      label: Text(ch),
+                      selected: _channels.contains(ch),
+                      onSelected: (v) => setState(
+                        () => v ? _channels.add(ch) : _channels.remove(ch),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                const Divider(height: 32),
+                Text(
+                  'Working hours',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                for (var wd = 0; wd < 7; wd++)
+                  SwitchListTile(
+                    title: Text(_days[wd]),
+                    subtitle: _hours[wd] == null
+                        ? const Text('Off')
+                        : Text(
+                            '${_fmt(_hours[wd]!.start)} – ${_fmt(_hours[wd]!.end)}',
+                          ),
+                    value: _hours[wd] != null,
+                    onChanged: (v) => _toggleDay(wd, v),
+                  ),
+              ],
+            ),
     );
   }
 }

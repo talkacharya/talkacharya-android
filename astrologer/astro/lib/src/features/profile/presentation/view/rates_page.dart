@@ -16,31 +16,40 @@ class _RatesPageState extends State<RatesPage> {
   @override
   void initState() {
     super.initState();
-    getIt<ProfileApi>().rates().then((rows) {
-      if (!mounted) return;
-      final byChannel = {for (final r in rows) r['channel'] as String: r};
-      for (final ch in ['chat', 'voice', 'video']) {
-        _controllers[ch] = TextEditingController(
-          text: '${byChannel[ch]?['per_minute_amount'] ?? ''}',
-        );
-      }
-      setState(() => _loading = false);
-    }).catchError((Object _) {
-      if (mounted) setState(() => _loading = false);
-    });
+    getIt<ProfileApi>()
+        .rates()
+        .then((rows) {
+          if (!mounted) return;
+          final byChannel = {for (final r in rows) r['channel'] as String: r};
+          for (final ch in ['chat', 'voice', 'video']) {
+            _controllers[ch] = TextEditingController(
+              text: '${byChannel[ch]?['per_minute_amount'] ?? ''}',
+            );
+          }
+          setState(() => _loading = false);
+        })
+        .catchError((Object _) {
+          if (mounted) setState(() => _loading = false);
+        });
   }
 
   Future<void> _save(String channel) async {
     try {
-      await getIt<ProfileApi>()
-          .setRate(channel, 'INR', _controllers[channel]!.text.trim());
+      await getIt<ProfileApi>().setRate(
+        channel,
+        'INR',
+        _controllers[channel]!.text.trim(),
+      );
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('$channel rate saved')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('$channel rate saved')));
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('$e')));
       }
     }
   }
@@ -56,18 +65,22 @@ class _RatesPageState extends State<RatesPage> {
               children: ['chat', 'voice', 'video'].map((ch) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: Row(children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _controllers[ch],
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(labelText: ch),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _controllers[ch],
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(labelText: ch),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    FilledButton(
-                        onPressed: () => _save(ch), child: const Text('Save')),
-                  ]),
+                      const SizedBox(width: 8),
+                      FilledButton(
+                        onPressed: () => _save(ch),
+                        child: const Text('Save'),
+                      ),
+                    ],
+                  ),
                 );
               }).toList(),
             ),

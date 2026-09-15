@@ -6,6 +6,7 @@ class ApiPaths {
   // shared / auth
   static const otpRequest = '/auth/otp/request';
   static const otpVerify = '/auth/otp/verify';
+  static const authFirebase = '/auth/firebase';
   static const tokenRefresh = '/auth/token/refresh';
   static const logout = '/auth/logout';
   static const config = '/config';
@@ -27,6 +28,7 @@ class ApiPaths {
   static const astroOnboardingBank = '/astro/onboarding/bank-account';
   static const astroOnboardingSubmit = '/astro/onboarding/submit';
   static const astroProfile = '/astro/profile';
+  static const astroProfileBanner = '/astro/profile/banner';
   static const astroRates = '/astro/rates';
   static const astroFeaturedSlots = '/astro/featured-slots';
 
@@ -45,11 +47,30 @@ class ApiPaths {
   static String astroEnd(String id) => '/astro/consultations/$id/end';
   static String astroConsultationChart(String id) =>
       '/astro/consultations/$id/chart';
+  // in-session kundali surface (mirrors the customer /app/birth-profiles/{id}/{sub})
+  static String astroConsultationKundali(String id, String sub) =>
+      '/astro/consultations/$id/$sub';
+
+  // predictions work queue
+  static const predictionsQueue = '/astro/predictions/queue';
+  static String prediction(String id) => '/astro/predictions/$id';
+  static String predictionClaim(String id) => '/astro/predictions/$id/claim';
+  static String predictionDeliver(String id) =>
+      '/astro/predictions/$id/deliver';
+  static String predictionRelease(String id) =>
+      '/astro/predictions/$id/release';
 
   // in-session chat / call — shared mount, participant-checked
   static String messages(String id) => '/consultations/$id/messages';
   static String messagesRead(String id) => '/consultations/$id/messages/read';
+  static String messagesDelivered(String id) =>
+      '/consultations/$id/messages/delivered';
+  static String messageTranslate(String id, int seq) =>
+      '/consultations/$id/messages/$seq/translate';
+  static String messageReport(String id, int seq) =>
+      '/consultations/$id/messages/$seq/report';
   static String typing(String id) => '/consultations/$id/typing';
+  static String chatPresence(String id) => '/consultations/$id/presence';
   static String attachments(String id) => '/consultations/$id/attachments';
   static String rtcToken(String id) => '/consultations/$id/rtc-token';
 

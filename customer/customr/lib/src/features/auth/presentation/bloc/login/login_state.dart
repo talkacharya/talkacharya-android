@@ -10,6 +10,8 @@ class LoginState extends Equatable {
     this.error,
     this.challengeExpiresAt,
     this.devCode,
+    this.verificationId,
+    this.resendToken,
   });
 
   final LoginStep step;
@@ -22,6 +24,11 @@ class LoginState extends Equatable {
   /// QA can log in without SMS.
   final String? devCode;
 
+  /// Firebase phone-auth flow only: the id returned by `codeSent`, needed to
+  /// confirm the SMS code; and the resend token for a forced re-send.
+  final String? verificationId;
+  final int? resendToken;
+
   LoginState copyWith({
     LoginStep? step,
     String? phone,
@@ -30,6 +37,8 @@ class LoginState extends Equatable {
     DateTime? challengeExpiresAt,
     String? devCode,
     bool clearDevCode = false,
+    String? verificationId,
+    int? resendToken,
   }) {
     return LoginState(
       step: step ?? this.step,
@@ -38,6 +47,8 @@ class LoginState extends Equatable {
       error: error,
       challengeExpiresAt: challengeExpiresAt ?? this.challengeExpiresAt,
       devCode: clearDevCode ? null : (devCode ?? this.devCode),
+      verificationId: verificationId ?? this.verificationId,
+      resendToken: resendToken ?? this.resendToken,
     );
   }
 
@@ -49,5 +60,7 @@ class LoginState extends Equatable {
     error,
     challengeExpiresAt,
     devCode,
+    verificationId,
+    resendToken,
   ];
 }

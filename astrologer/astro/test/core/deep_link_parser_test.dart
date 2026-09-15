@@ -10,8 +10,11 @@ void main() {
       'talkacharya://payouts': '/earnings',
       'talkacharya://chats': '/chats',
       'talkacharya://chats/abc-123': '/chats/abc-123',
-      'talkacharya://consultations/abc-123': '/chats/abc-123',
-      'talkacharya://consultation/abc-123': '/chats/abc-123',
+      'talkacharya://requests/abc-123': '/requests/abc-123',
+      // a consultation link (incoming-request push) → the request screen, which
+      // accepts or bounces into the room by status
+      'talkacharya://consultations/abc-123': '/requests/abc-123',
+      'talkacharya://consultation/abc-123': '/requests/abc-123',
       'talkacharya://notifications': '/notifications',
       'talkacharya://onboarding': '/onboarding',
       'talkacharya://profile': '/profile',

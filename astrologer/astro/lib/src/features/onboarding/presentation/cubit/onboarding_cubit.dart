@@ -28,14 +28,13 @@ class OnboardingState extends Equatable {
     AstroProfile? profile,
     Object? error = _sentinel,
     List<String>? missing,
-  }) =>
-      OnboardingState(
-        loading: loading ?? this.loading,
-        saving: saving ?? this.saving,
-        profile: profile ?? this.profile,
-        error: error == _sentinel ? this.error : error as String?,
-        missing: missing ?? this.missing,
-      );
+  }) => OnboardingState(
+    loading: loading ?? this.loading,
+    saving: saving ?? this.saving,
+    profile: profile ?? this.profile,
+    error: error == _sentinel ? this.error : error as String?,
+    missing: missing ?? this.missing,
+  );
 
   static const _sentinel = Object();
 
@@ -47,9 +46,9 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   OnboardingCubit({
     required OnboardingRepository repo,
     required OnboardingStore store,
-  })  : _repo = repo,
-        _store = store,
-        super(const OnboardingState());
+  }) : _repo = repo,
+       _store = store,
+       super(const OnboardingState());
 
   final OnboardingRepository _repo;
   final OnboardingStore _store;
@@ -71,15 +70,16 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     List<String>? skillSlugs,
     String? primarySkillSlug,
     List<String>? languageCodes,
-  }) =>
-      _run(() => _repo.updateProfile(
-            headline: headline,
-            bio: bio,
-            yearsExperience: yearsExperience,
-            skillSlugs: skillSlugs,
-            primarySkillSlug: primarySkillSlug,
-            languageCodes: languageCodes,
-          ));
+  }) => _run(
+    () => _repo.updateProfile(
+      headline: headline,
+      bio: bio,
+      yearsExperience: yearsExperience,
+      skillSlugs: skillSlugs,
+      primarySkillSlug: primarySkillSlug,
+      languageCodes: languageCodes,
+    ),
+  );
 
   Future<bool> uploadKyc({
     required String docType,
@@ -93,13 +93,14 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     required String accountNumber,
     String? ifsc,
     String? bankName,
-  }) =>
-      _run(() => _repo.setBankAccount(
-            accountHolderName: holder,
-            accountNumber: accountNumber,
-            ifsc: ifsc,
-            bankName: bankName,
-          ));
+  }) => _run(
+    () => _repo.setBankAccount(
+      accountHolderName: holder,
+      accountNumber: accountNumber,
+      ifsc: ifsc,
+      bankName: bankName,
+    ),
+  );
 
   Future<bool> submit() async {
     emit(state.copyWith(saving: true, error: null, missing: const []));

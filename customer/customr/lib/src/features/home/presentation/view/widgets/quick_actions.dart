@@ -2,148 +2,137 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/l10n/l10n.dart';
 import '../../../../../core/router/routes.dart';
+import '../../../../../core/theme/astro_palette.dart';
 import '../../../../../core/theme/brand_colors.dart';
+import '../../../../../shared/widgets/pressable.dart';
 import 'home_shared.dart';
 
+/// Floating dock of the four core tools, tucked up into the hero. Each tool owns a
+/// colour family so the row reads as four distinct doors, not one brand hue.
 class QuickActionsRow extends StatelessWidget {
   const QuickActionsRow({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final actions = [
+    final l = context.l10n;
+    final brand = context.brand;
+    final actions = <_QuickAction>[
       _QuickAction(
-        label: 'Kundali',
-        icon: Icons.grid_on_rounded,
+        label: l.homeKundaliAction,
+        hue: AstroPalette.money,
+        image: 'assets/images/kundali.png',
         onTap: () => context.push(Routes.birthProfiles),
       ),
       _QuickAction(
-        label: 'Matching',
-        icon: Icons.favorite_rounded,
-        isComingSoon: true,
+        label: l.homeMatchingAction,
+        hue: AstroPalette.love,
+        svg: 'assets/svg/matching.svg',
+        onTap: () => context.push(Routes.matchmaking),
       ),
       _QuickAction(
-        label: 'Horoscope',
+        label: l.homeHoroscopeAction,
+        hue: AstroPalette.career,
         icon: Icons.auto_awesome_rounded,
-        isComingSoon: true,
+        onTap: () => context.push(Routes.horoscope),
       ),
       _QuickAction(
-        label: 'Vastu',
+        label: l.homeVastuAction,
+        hue: AstroPalette.health,
         icon: Icons.home_work_rounded,
-        isComingSoon: true,
+        onTap: () => context.go(Routes.astrologersWith(skill: 'vastu')),
       ),
     ];
 
     return Padding(
       padding: HomeGaps.sidePad,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          for (final action in actions)
-            _QuickActionButton(action: action),
-        ],
-      ),
-    );
-  }
-}
-
-class _QuickActionButton extends StatelessWidget {
-  const _QuickActionButton({required this.action});
-
-  final _QuickAction action;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final brand = context.brand;
-
-    return InkWell(
-      onTap: action.isComingSoon
-          ? () => ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Coming soon!')),
-              )
-          : action.onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: SizedBox(
-        width: 72,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(6, 14, 6, 12),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(26),
+          border: Border.all(color: brand.hairline),
+          boxShadow: [
+            BoxShadow(
+              color: brand.cosmicStart.withValues(alpha: 0.16),
+              blurRadius: 26,
+              offset: const Offset(0, 12),
+            ),
+          ],
+        ),
+        child: Row(
           children: [
-            Container(
-              width: 56,
-              height: 56,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surface,
-                shape: BoxShape.circle,
-                border: Border.all(color: brand.hairline),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.03),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: _buildIcon(context),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              action.label,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.labelSmall?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: theme.colorScheme.onSurface,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+            for (final a in actions) Expanded(child: _QuickActionTile(a)),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildIcon(BuildContext context) {
-    final brand = context.brand;
-    final color = brand.onTint;
+class _QuickActionTile extends StatelessWidget {
+  const _QuickActionTile(this.action);
+  final _QuickAction action;
 
-    if (action.svgPath != null) {
-      return SvgPicture.asset(
-        action.svgPath!,
-        width: 24,
-        height: 24,
-        colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
-      );
-    }
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final a = action;
+    final Widget glyph = a.svg != null
+        ? Padding(
+            padding: const EdgeInsets.all(4),
+            child: SvgPicture.asset(a.svg!),
+          )
+        : a.image != null
+        ? Padding(
+            padding: const EdgeInsets.all(5),
+            child: ClipOval(child: Image.asset(a.image!, fit: BoxFit.cover)),
+          )
+        : Icon(a.icon, color: Colors.white, size: 28);
 
-    if (action.imagePath != null) {
-      return Image.asset(
-        action.imagePath!,
-        width: 24,
-        height: 24,
-      );
-    }
-
-    return Icon(action.icon, size: 24, color: color);
+    return Pressable(
+      child: InkWell(
+        onTap: a.onTap,
+        borderRadius: BorderRadius.circular(18),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              HueIcon(hue: a.hue, size: 58, child: glyph),
+              const SizedBox(height: 9),
+              Text(
+                a.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
 class _QuickAction {
   const _QuickAction({
     required this.label,
+    required this.hue,
+    required this.onTap,
     this.icon,
-    this.svgPath,
-    this.imagePath,
-    this.onTap,
-    this.isComingSoon = false,
+    this.svg,
+    this.image,
   });
 
   final String label;
+  final AstroHue hue;
+  final VoidCallback onTap;
   final IconData? icon;
-  final String? svgPath;
-  final String? imagePath;
-  final VoidCallback? onTap;
-  final bool isComingSoon;
+  final String? svg;
+  final String? image;
 }

@@ -52,15 +52,21 @@ class _HomeView extends StatelessWidget {
                         ? Theme.of(context).colorScheme.primaryContainer
                         : null,
                     child: ListTile(
-                      leading: Icon(coord.enabled
-                          ? Icons.podcasts_rounded
-                          : Icons.power_settings_new_rounded),
-                      title: Text(coord.enabled
-                          ? "You're ${coord.presence}"
-                          : "You're offline"),
-                      subtitle: Text(coord.enabled
-                          ? 'Receiving consultation requests'
-                          : 'Go online to receive requests'),
+                      leading: Icon(
+                        coord.enabled
+                            ? Icons.podcasts_rounded
+                            : Icons.power_settings_new_rounded,
+                      ),
+                      title: Text(
+                        coord.enabled
+                            ? "You're ${coord.presence}"
+                            : "You're offline",
+                      ),
+                      subtitle: Text(
+                        coord.enabled
+                            ? 'Receiving consultation requests'
+                            : 'Go online to receive requests',
+                      ),
                       trailing: Switch(
                         value: coord.enabled,
                         onChanged: coord.setEnabled,
@@ -81,13 +87,23 @@ class _HomeView extends StatelessWidget {
                     ),
                   ),
                 const SizedBox(height: 12),
-                Row(children: [
-                  _Stat('This week', '${d.completed}', 'completed'),
-                  const SizedBox(width: 12),
-                  _Stat('Acceptance', '${d.acceptanceRate.toStringAsFixed(0)}%', ''),
-                  const SizedBox(width: 12),
-                  _Stat('Rating', d.ratingAvg.toStringAsFixed(1), '${d.ratingCount}'),
-                ]),
+                Row(
+                  children: [
+                    _Stat('This week', '${d.completed}', 'completed'),
+                    const SizedBox(width: 12),
+                    _Stat(
+                      'Acceptance',
+                      '${d.acceptanceRate.toStringAsFixed(0)}%',
+                      '',
+                    ),
+                    const SizedBox(width: 12),
+                    _Stat(
+                      'Rating',
+                      d.ratingAvg.toStringAsFixed(1),
+                      '${d.ratingCount}',
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 12),
                 Card(
                   child: ListTile(
@@ -96,6 +112,16 @@ class _HomeView extends StatelessWidget {
                     subtitle: Text('${d.currency} ${d.availableToPay}'),
                     trailing: const Icon(Icons.chevron_right_rounded),
                     onTap: () => context.go('/earnings'),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.insights_rounded),
+                    title: const Text('Prediction queue'),
+                    subtitle: const Text('Write forecasts customers requested'),
+                    trailing: const Icon(Icons.chevron_right_rounded),
+                    onTap: () => context.push('/predictions'),
                   ),
                 ),
               ],
@@ -116,12 +142,14 @@ class _Stat extends StatelessWidget {
       child: Card(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-          child: Column(children: [
-            Text(value, style: Theme.of(context).textTheme.titleLarge),
-            Text(label, style: Theme.of(context).textTheme.labelSmall),
-            if (sub.isNotEmpty)
-              Text(sub, style: Theme.of(context).textTheme.labelSmall),
-          ]),
+          child: Column(
+            children: [
+              Text(value, style: Theme.of(context).textTheme.titleLarge),
+              Text(label, style: Theme.of(context).textTheme.labelSmall),
+              if (sub.isNotEmpty)
+                Text(sub, style: Theme.of(context).textTheme.labelSmall),
+            ],
+          ),
         ),
       ),
     );

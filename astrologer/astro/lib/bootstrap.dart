@@ -7,6 +7,7 @@ import 'src/app/app.dart';
 import 'src/core/config/config_repository.dart';
 import 'src/core/config/flavor.dart';
 import 'src/core/di/service_locator.dart';
+import 'src/core/firebase/firebase_setup.dart';
 import 'src/core/notifications/local_notifications.dart';
 import 'src/core/notifications/push_service.dart';
 
@@ -29,6 +30,9 @@ Future<void> bootstrap(Flavor flavor) async {
     debugPrint('FlutterError: ${details.exceptionAsString()}');
   };
   Bloc.observer = const _AppBlocObserver();
+
+  // App Check must be active before the first Firebase Auth call.
+  await FirebaseSetup.init(flavor);
 
   await configureDependencies(AppConfig.fromEnvironment(flavor));
 

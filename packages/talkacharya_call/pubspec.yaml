@@ -1,0 +1,25 @@
+name: talkacharya_call
+description: "Shared 1:1 voice-call layer for the TalkAcharya customer and astrologer apps — a self-hosted WebRTC engine (peer connection, signaling over Centrifugo, ICE restart, heartbeats, quality) and the call screen. Networking, routing and DI stay in each app."
+version: 0.1.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  bloc: ^9.0.1
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.7
+  flutter_webrtc: ^1.6.2+hotfix.1
+  permission_handler: ^12.0.1
+  flutter_foreground_task: ^10.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  bloc_test: ^10.0.0
+
+flutter:
