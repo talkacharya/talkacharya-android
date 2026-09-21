@@ -6,6 +6,7 @@ import '../../../../core/l10n/l10n.dart';
 import '../../../../core/utils/haptic_service.dart';
 import '../../../follows/data/follows_repository.dart';
 import '../../../kundali/data/kundali_api.dart';
+import 'package:talkacharya_sounds/talkacharya_sounds.dart';
 
 class NotificationPrefsPage extends StatelessWidget {
   const NotificationPrefsPage({super.key});
@@ -24,6 +25,17 @@ class NotificationPrefsPage extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.symmetric(vertical: 8),
             children: [
+              SwitchListTile(
+                secondary: const Icon(Icons.volume_up_rounded),
+                title: Text(l.profileSounds),
+                subtitle: Text(l.profileSoundsDesc),
+                value: repo.soundEnabled,
+                onChanged: (v) {
+                  repo.setSoundEnabled(v);
+                  // Let people hear what they just turned on.
+                  if (v) AppSounds.effect(SoundEffect.messageIn);
+                },
+              ),
               SwitchListTile(
                 secondary: const Icon(Icons.vibration_rounded),
                 title: Text(l.profileHapticFeedback),

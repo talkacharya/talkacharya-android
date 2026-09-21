@@ -1,0 +1,767 @@
+{
+  "@@locale": "en",
+  "navHome": "Home",
+  "navRequests": "Requests",
+  "navEarnings": "Earnings",
+  "navChats": "Chats",
+  "navProfile": "Profile",
+  "commonOffline": "You are offline",
+  "commonRetry": "Retry",
+  "commonSeeAll": "See all",
+  "commonNotifications": "Notifications",
+  "dashGreeting": "Namaste,",
+  "presenceOnline": "You're online",
+  "presenceBusy": "You're in a session",
+  "presenceAway": "You're away",
+  "presenceOffline": "You're offline",
+  "presenceOnlineHint": "Customers can reach you now",
+  "presenceOfflineHint": "Go online to start receiving requests",
+  "presenceFollowersHint": "{count, plural, =1{1 follower is notified when you go online} other{{count} followers are notified when you go online}}",
+  "@presenceFollowersHint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "presenceGoOnline": "Go online",
+  "presenceGoOffline": "Go offline",
+  "dashRequestsWaiting": "{count, plural, =1{1 request waiting} other{{count} requests waiting}}",
+  "@dashRequestsWaiting": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashRequestsHint": "Respond quickly — requests expire",
+  "dashReview": "Review",
+  "channelChat": "Chat",
+  "channelCall": "Voice call",
+  "channelVideo": "Video call",
+  "dashActiveTitle": "Ongoing sessions",
+  "dashResume": "Resume",
+  "dashEarningsTitle": "Net earnings",
+  "dashLastDays": "Last {days} days",
+  "@dashLastDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "dashPeriodChip": "{days}D",
+  "@dashPeriodChip": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "dashGross": "Gross {amount}",
+  "@dashGross": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "dashFee": "Platform fee {amount}",
+  "@dashFee": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "dashAvailable": "Available to pay out",
+  "dashPending": "{amount} clearing",
+  "@dashPending": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "dashNoTrend": "Your earnings chart appears after your first sessions",
+  "dashPerformance": "Performance",
+  "dashStatSessions": "Sessions",
+  "dashStatSessionsSub": "{count} requested",
+  "@dashStatSessionsSub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashStatMinutes": "Minutes",
+  "dashStatMinutesSub": "Billed talk time",
+  "dashStatAcceptance": "Acceptance",
+  "dashStatAcceptanceSub": "Requests answered",
+  "dashStatRating": "Rating",
+  "dashStatRatingSub": "{count, plural, =1{1 review} other{{count} reviews}}",
+  "@dashStatRatingSub": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashStatRepeat": "Repeat clients",
+  "dashStatRepeatSub": "Came back for more",
+  "dashStatFollowers": "Followers",
+  "dashStatFollowersSub": "Notified when you're live",
+  "dashQuickActions": "Quick actions",
+  "dashActionGoLive": "Go live",
+  "dashActionPredictions": "Predictions",
+  "dashActionRates": "My rates",
+  "dashActionHours": "Working hours",
+  "dashActionReviews": "Reviews",
+  "dashActionPayouts": "Payouts",
+  "dashProfileTitle": "Profile strength",
+  "dashProfileHint": "Complete profiles get more consultations",
+  "dashTipHeadline": "Add a headline",
+  "dashTipBio": "Write a detailed bio",
+  "dashTipBanner": "Add a cover image",
+  "dashTipRates": "Set your per-minute rates",
+  "dashTipLanguages": "Add the languages you speak",
+  "dashTipSkills": "Add at least 3 skills",
+  "dashLoadFailed": "Couldn't load this section",
+  "dashPerMin": "{amount}/min",
+  "@dashPerMin": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "requestsSubtitle": "Respond before a request expires",
+  "requestsTabIncoming": "Incoming",
+  "requestsTabActive": "Active",
+  "requestsTabHistory": "History",
+  "requestsAccept": "Accept",
+  "requestsDecline": "Decline",
+  "requestsExpiresIn": "Expires in {seconds}s",
+  "@requestsExpiresIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "requestsExpired": "Expired",
+  "requestsEmptyOnlineTitle": "Waiting for requests",
+  "requestsEmptyOnlineBody": "You're online. New requests will appear here and pop up on your screen.",
+  "requestsActiveEmptyTitle": "No live sessions",
+  "requestsActiveEmptyBody": "Accepted requests stay here until the session ends.",
+  "requestsHistoryEmptyTitle": "No completed sessions yet",
+  "requestsHistoryEmptyBody": "Finished consultations and what you earned will show up here.",
+  "requestsEarned": "Earned {amount}",
+  "@requestsEarned": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "requestsMinutes": "{count} min",
+  "@requestsMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "requestsLiveNow": "Live now",
+  "requestsDeclineTitle": "Why are you declining?",
+  "requestsDeclineBusy": "Busy right now",
+  "requestsDeclineUnavailable": "Not available",
+  "requestsDeclineExpertise": "Outside my expertise",
+  "requestsActionFailed": "Couldn't complete that. Please try again.",
+  "requestsNewTitle": "New {channel} request",
+  "@requestsNewTitle": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
+  "requestsCustomerFallback": "A customer",
+  "requestsLoadError": "Couldn't load your requests",
+  "timeJustNow": "Just now",
+  "timeMinutesAgo": "{n}m ago",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHoursAgo": "{n}h ago",
+  "@timeHoursAgo": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "timeToday": "Today",
+  "timeYesterday": "Yesterday",
+  "statusRequested": "Waiting",
+  "statusAccepted": "Connecting",
+  "statusActive": "Live",
+  "statusEnded": "Completed",
+  "statusRejected": "Declined",
+  "statusCancelled": "Cancelled",
+  "statusExpired": "Missed",
+  "statusNoShow": "No-show",
+  "statusFailed": "Failed",
+  "detailTitle": "Consultation",
+  "detailLoadError": "Couldn't load this consultation.",
+  "detailQuestion": "Their question",
+  "detailSession": "Session",
+  "detailRequestedAt": "Requested",
+  "detailDuration": "Billed time",
+  "detailRate": "Your rate",
+  "detailCustomerPaid": "Customer paid",
+  "detailYouEarned": "You earned",
+  "detailRating": "Customer rating",
+  "detailKundali": "Customer's kundali",
+  "detailOpenChat": "Open conversation",
+  "chatsSearch": "Search by name",
+  "chatsSubtitle": "{count, plural, =0{No unread messages} =1{1 unread message} other{{count} unread messages}}",
+  "@chatsSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatsRecent": "Recent",
+  "chatsEmptyTitle": "No conversations yet",
+  "chatsEmptyBody": "Chats with your customers appear here once you accept a request.",
+  "chatsNoMatch": "No chats match “{query}”",
+  "@chatsNoMatch": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "chatsLoadError": "Couldn't load your chats",
+  "earnClearing": "Clearing",
+  "earnLifetime": "Lifetime",
+  "earnCycle": "Paid every {days} days · {fee}% platform fee",
+  "@earnCycle": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "earnTabLedger": "Ledger",
+  "earnTabPayouts": "Payouts",
+  "earnTabDocuments": "Documents",
+  "earnKindAll": "All",
+  "earnKindConsultation": "Consultations",
+  "earnKindGift": "Gifts",
+  "earnKindPrediction": "Predictions",
+  "earnKindStore": "Store sales",
+  "earnKindAffiliate": "Referral commission",
+  "earnKindBonus": "Bonus",
+  "earnKindAdjustment": "Adjustment",
+  "earnEntryFee": "{percent}% fee on {amount}",
+  "@earnEntryFee": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "earnEntryClears": "Clears {date}",
+  "@earnEntryClears": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "earnEntryReady": "Ready for payout",
+  "earnEntryPaid": "Paid out",
+  "earnLedgerEmptyTitle": "No earnings yet",
+  "earnLedgerEmptyBody": "Every consultation, gift and prediction you complete is recorded here.",
+  "earnLedgerFilteredEmpty": "Nothing in this category yet",
+  "earnPayoutsEmptyTitle": "No payouts yet",
+  "earnPayoutsEmptyBody": "Cleared earnings are sent to your bank account every payout cycle.",
+  "earnDocsEmptyTitle": "No documents yet",
+  "earnDocsEmptyBody": "Earnings statements and TDS certificates appear here after your payouts.",
+  "earnLoadError": "Couldn't load this list",
+  "payoutStatusPending": "Scheduled",
+  "payoutStatusProcessing": "Processing",
+  "payoutStatusPaid": "Paid",
+  "payoutStatusFailed": "Failed",
+  "payoutStatusOnHold": "On hold",
+  "payoutStatusCancelled": "Cancelled",
+  "payoutEntries": "{count, plural, =1{1 earning} other{{count} earnings}}",
+  "@payoutEntries": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "payoutPaidOn": "Paid {date}",
+  "@payoutPaidOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "docKindCustomerInvoice": "Customer invoice",
+  "docKindAstrologerInvoice": "Earnings statement",
+  "docKindTds": "TDS certificate",
+  "docKindGst": "GST invoice",
+  "docKindCreditNote": "Credit note",
+  "docKindStore": "Store tax invoice",
+  "docTax": "Tax {amount}",
+  "@docTax": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "docDownloadFailed": "Couldn't download this document",
+  "payoutTitle": "Payout",
+  "payoutLoadError": "Couldn't load this payout.",
+  "payoutBreakdown": "Breakdown",
+  "payoutGross": "Your earnings",
+  "payoutTds": "TDS deducted",
+  "payoutOther": "Other deductions",
+  "payoutNet": "Sent to your bank",
+  "payoutTimeline": "Status",
+  "payoutStepScheduled": "Payout scheduled",
+  "payoutStepInitiated": "Bank transfer started",
+  "payoutStepPaid": "Credited to your bank",
+  "payoutStepFailed": "Transfer failed",
+  "payoutStepOnHold": "On hold — our team is reviewing it",
+  "payoutStepCancelled": "Payout cancelled",
+  "payoutUtr": "Bank reference (UTR)",
+  "payoutCopied": "Copied",
+  "payoutIncluded": "Included earnings",
+  "payoutCopy": "Copy",
+  "commonSave": "Save",
+  "commonSaved": "Saved",
+  "commonSaveFailed": "Couldn't save. Please try again.",
+  "commonCancel": "Cancel",
+  "commonRequired": "Required",
+  "commonLoadFailed": "Couldn't load this page",
+  "verifUnverified": "Not verified",
+  "verifSubmitted": "Under review",
+  "verifVerified": "Verified",
+  "verifFeatured": "Featured",
+  "verifUnverifiedHint": "Submit your documents to earn the verified badge.",
+  "verifSubmittedHint": "Our team is reviewing your documents. This usually takes 1–2 days.",
+  "verifVerifiedHint": "Your identity is verified. Customers see a verified badge on your profile.",
+  "profileStatYears": "Years",
+  "profileChangePhoto": "Change photo",
+  "profilePhotoUpdated": "Photo updated",
+  "profilePhotoFailed": "Couldn't update your photo",
+  "profileGroupPractice": "Your practice",
+  "profileGroupGrowth": "Grow",
+  "profileGroupAccount": "Account",
+  "profileGroupSupport": "Help & legal",
+  "profileEdit": "Edit profile",
+  "profileEditSub": "Cover, bio, expertise and languages",
+  "profileRates": "Rates",
+  "profileRatesSub": "What customers pay per minute",
+  "profileHours": "Availability & hours",
+  "profileHoursSub": "Consultation types and weekly schedule",
+  "profileGoLiveSub": "Broadcast to your followers",
+  "profilePredictionsSub": "Write the forecasts customers ordered",
+  "profileFeatured": "Featured slots",
+  "profileFeaturedSub": "Get promoted in the customer app",
+  "profileKyc": "KYC & bank",
+  "profileKycSub": "Verification documents and payout account",
+  "profileLanguage": "App language",
+  "profileHelp": "Help centre",
+  "profileContact": "Contact support",
+  "profileTerms": "Terms of service",
+  "profilePrivacy": "Privacy policy",
+  "profileLogout": "Log out",
+  "profileLogoutTitle": "Log out?",
+  "profileLogoutBody": "You'll need to sign in again with your phone number.",
+  "profileVersion": "Version {version}",
+  "@profileVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "editCover": "Profile cover",
+  "editCoverHint": "Shown behind your photo on your public profile. Wide images (about 3:1) work best.",
+  "editCoverChange": "Change cover",
+  "editCoverRemove": "Remove",
+  "editCoverFailed": "Couldn't upload the cover. Use a JPG or PNG under 5 MB.",
+  "editAbout": "About you",
+  "editDisplayName": "Display name",
+  "editHeadline": "Headline",
+  "editHeadlineHint": "e.g. Vedic astrologer · Career & marriage",
+  "editBio": "Bio",
+  "editBioHint": "Tell customers about your approach and experience",
+  "editBioShort": "{count} more characters for a strong bio",
+  "@editBioShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editYears": "Years of experience",
+  "editExpertise": "Expertise",
+  "editExpertiseHint": "Tap to select. Long-press a selected skill to make it primary.",
+  "editPrimary": "Primary",
+  "editLanguages": "Languages you speak",
+  "editDiscardTitle": "Discard changes?",
+  "editDiscard": "Discard",
+  "editKeepEditing": "Keep editing",
+  "ratesSubtitle": "What customers pay per minute. Changes apply to new sessions.",
+  "ratesAllowed": "Allowed {min} – {max}",
+  "@ratesAllowed": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "ratesYouEarn": "You earn about {amount}/min after the {fee}% platform fee",
+  "@ratesYouEarn": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "ratesSuggested": "Suggested {amount}",
+  "@ratesSuggested": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "ratesNotOffered": "Not offered on the platform yet",
+  "ratesSaveCount": "{count, plural, =1{Save 1 change} other{Save {count} changes}}",
+  "@ratesSaveCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ratesUpdated": "Rates updated",
+  "hoursChannels": "Consultation types",
+  "hoursChannelsHint": "Customers can only request the types you accept.",
+  "hoursNeedChannel": "Keep at least one consultation type on",
+  "hoursConcurrent": "Chats at the same time",
+  "hoursConcurrentHint": "How many chat sessions you can handle at once",
+  "hoursSchedule": "Weekly schedule",
+  "hoursScheduleHint": "Shown to customers as your usual hours. You still go online yourself.",
+  "hoursOff": "Off",
+  "hoursCopyToAll": "Copy to all days",
+  "hoursInvalid": "End time must be after start time",
+  "reviewsBasedOn": "{count, plural, =1{Based on 1 review} other{Based on {count} reviews}}",
+  "@reviewsBasedOn": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reviewsFilterUnreplied": "Needs reply",
+  "reviewsFilterLow": "3★ and below",
+  "reviewsFilterTop": "5★",
+  "reviewsReply": "Reply",
+  "reviewsYourReply": "Your reply",
+  "reviewsReplyHint": "Thank them or respond to their feedback. Replies are public.",
+  "reviewsPost": "Post reply",
+  "reviewsReplyFailed": "Couldn't post your reply",
+  "reviewsPending": "Awaiting moderation",
+  "reviewsHidden": "Hidden",
+  "reviewsAnonymous": "Customer",
+  "reviewsEmptyTitle": "No reviews yet",
+  "reviewsEmptyBody": "Customers can rate you after each consultation.",
+  "reviewsNoMatch": "No reviews match this filter",
+  "reviewsHelpful": "{count, plural, =1{1 person found this helpful} other{{count} people found this helpful}}",
+  "@reviewsHelpful": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kycStatus": "Verification",
+  "kycPan": "PAN card",
+  "kycPanHint": "Re-submit if your PAN changed or was flagged.",
+  "kycPanLabel": "PAN number",
+  "kycPanInvalid": "Enter a valid PAN, e.g. ABCDE1234F",
+  "kycSubmit": "Submit",
+  "kycSubmitted": "Submitted for verification",
+  "kycPhoto": "Identity photo",
+  "kycPhotoHint": "A clear, recent photo of your face.",
+  "kycUploadPhoto": "Upload photo",
+  "kycCertificate": "Certificates",
+  "kycCertificateHint": "Astrology qualifications build trust and help you get featured.",
+  "kycUploadCertificate": "Upload certificate",
+  "kycBank": "Payout bank account",
+  "kycBankHint": "Your earnings are paid to this account. Changes are verified before your next payout.",
+  "kycHolder": "Account holder name",
+  "kycAccount": "Account number",
+  "kycAccountConfirm": "Re-enter account number",
+  "kycAccountMismatch": "Account numbers don't match",
+  "kycIfsc": "IFSC code",
+  "kycIfscInvalid": "Enter a valid IFSC, e.g. HDFC0001234",
+  "kycBankName": "Bank name (optional)",
+  "kycBankSave": "Update bank account",
+  "kycBankSaved": "Bank account updated",
+  "featIntro": "Appear in prime spots of the customer app. Our team reviews each request; the fee is deducted from your earnings once it's approved.",
+  "featHomeHero": "Home spotlight",
+  "featHomeHeroSub": "Top of the customer home screen",
+  "featCategoryTop": "Top of a category",
+  "featCategoryTopSub": "First in one expertise's list",
+  "featSearchBoost": "Search boost",
+  "featSearchBoostSub": "Higher in search and astrologer lists",
+  "featPerDay": "{amount}/day",
+  "@featPerDay": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "featRequest": "Request a slot",
+  "featDates": "Dates",
+  "featPickDates": "Choose dates",
+  "featMaxDays": "Up to {days} days per slot",
+  "@featMaxDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "featCategory": "Category",
+  "featTotal": "{amount} for {days, plural, =1{1 day} other{{days} days}}",
+  "@featTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "featSend": "Send request",
+  "featSent": "Request sent. We'll notify you once it's reviewed.",
+  "featMine": "Your slots",
+  "featEmpty": "You haven't requested any slots yet",
+  "featStatusRequested": "Under review",
+  "featStatusScheduled": "Scheduled",
+  "featStatusExpired": "Ended",
+  "notifMarkAll": "Mark all read",
+  "notifMarkRead": "Mark read",
+  "notifFilterUnread": "Unread",
+  "notifEmptyTitle": "You're all caught up",
+  "notifEmptyBody": "Requests, payouts and reviews will show up here.",
+  "notifUnreadEmpty": "No unread notifications",
+  "notifLoadError": "Couldn't load notifications",
+  "obTitle": "Become a TalkAcharya astrologer",
+  "obWelcome": "Welcome, {name}",
+  "@obWelcome": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "obWelcomeBody": "Complete these steps and submit your profile. Most astrologers finish in about 10 minutes.",
+  "obStepProfile": "Your profile",
+  "obStepProfileSub": "Headline, bio and experience",
+  "obStepExpertise": "Expertise & languages",
+  "obStepExpertiseSub": "What you practise and speak",
+  "obStepIdentity": "Identity verification",
+  "obStepIdentitySub": "PAN and a clear photo",
+  "obStepBank": "Payout account",
+  "obStepBankSub": "Where we send your earnings",
+  "obStepReview": "Review & submit",
+  "obStepReviewSub": "Send your profile to our team",
+  "obProgress": "{done} of {total} done",
+  "@obProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "obStart": "Get started",
+  "obContinue": "Continue",
+  "obRejectedTitle": "Your application needs changes",
+  "obRejectedHint": "Update your profile and submit again.",
+  "obReviewTitle": "Application under review",
+  "obReviewBody": "Our team is verifying your profile and documents. You'll get a notification as soon as it's approved — usually within 1–2 business days.",
+  "obReviewSubmitted": "Application submitted",
+  "obReviewChecking": "Profile & document check",
+  "obReviewLive": "Start consulting on TalkAcharya",
+  "obCheckStatus": "Check status",
+  "obSuspendedTitle": "Account suspended",
+  "obSuspendedBody": "Your astrologer account is suspended. Contact support to understand why and how to reinstate it.",
+  "obNotAstroTitle": "Not an astrologer account",
+  "obNotAstroBody": "This phone number isn't registered as an astrologer. If you think this is a mistake, contact support.",
+  "wizTitle": "Set up your profile",
+  "wizStepOf": "Step {step} of {total}",
+  "@wizStepOf": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "wizNext": "Save & continue",
+  "wizBack": "Back",
+  "wizProfileIntro": "This is what customers read before they consult you.",
+  "wizBioRequired": "Tell customers a little about yourself",
+  "wizExpertiseIntro": "Pick the areas you consult on and the languages you speak.",
+  "wizPickSkill": "Choose at least one expertise",
+  "wizPickLanguage": "Choose at least one language",
+  "wizIdentityIntro": "We verify every astrologer to keep customers safe. Your documents are never shown publicly.",
+  "wizPanDone": "PAN submitted",
+  "wizPhotoDone": "Photo submitted",
+  "wizReplace": "Replace",
+  "wizPhotoRequired": "Upload a photo to continue",
+  "wizBankIntro": "Your earnings are paid to this account after each payout cycle.",
+  "wizBankDone": "Bank account added",
+  "wizBankUpdate": "Update details",
+  "wizReviewIntro": "Check that everything is complete, then submit. Our team usually reviews within 1–2 business days.",
+  "wizSubmit": "Submit for review",
+  "wizGapBank": "Bank account",
+  "wizStillMissing": "Complete the highlighted items first",
+  "wizFix": "Fix",
+  "wizSubmitted": "Profile submitted!",
+  "roomWaiting": "Waiting for {name} to join…",
+  "@roomWaiting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roomEnd": "End",
+  "roomEndTitle": "End this consultation?",
+  "roomEndBody": "The customer stops being billed and the chat closes.",
+  "roomCallEndBody": "The customer stops being billed when the call ends.",
+  "roomEndFailed": "Couldn't end the consultation",
+  "roomLowBalance": "Customer's balance is low — wrap up soon",
+  "roomRunway": "≈{minutes} min left",
+  "@roomRunway": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "roomTranslate": "Auto-translate",
+  "roomComposerHint": "Type your reply",
+  "roomLoadError": "Couldn't open this consultation",
+  "roomEndedTitle": "Consultation complete",
+  "roomEndedBody": "Thank you for guiding {name}.",
+  "@roomEndedBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roomNotHeldBody": "This consultation didn't take place, so nothing was billed.",
+  "roomBackToRequests": "Back to requests",
+  "sharedTitle": "Shared by the customer",
+  "sharedNone": "No birth details shared",
+  "sharedNoneHint": "Ask the customer to share their birth details to read the chart.",
+  "sharedTimeUnknown": "Birth time not known",
+  "sharedViewMatch": "View match report",
+  "sharedMatchTitle": "Kundali match",
+  "sharedPoints": "{points} of {max} guna",
+  "@sharedPoints": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedNew": "The customer shared new details",
+  "sharedAvailable": "Birth details shared",
+  "matchReportTitle": "Match report",
+  "matchKootas": "Guna table",
+  "matchDoshas": "Doshas",
+  "matchDoshaNadi": "Nadi dosha",
+  "matchDoshaBhakoot": "Bhakoot dosha",
+  "matchDoshaGana": "Gana dosha",
+  "matchNoDoshas": "No major doshas",
+  "matchLoadError": "Couldn't load the match report",
+  "sessionLiveBanner": "Live with {name}",
+  "@sessionLiveBanner": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sessionReturn": "Return",
+  "liveSendPhoto": "Send a photo",
+  "livePhotoFailed": "Couldn't send the photo",
+  "livePhotoLabel": "Photo",
+  "errGeneric": "Something went wrong. Please try again.",
+  "errNetwork": "Could not reach the server. Check your connection.",
+  "errTimeout": "The server took too long to respond.",
+  "errSession": "Your session expired. Please sign in again.",
+  "errForbidden": "You don't have access to this.",
+  "errNotFound": "We couldn't find this — it may have been removed.",
+  "errServer": "Our server ran into a problem. Please try again shortly.",
+  "errRateLimited": "Too many attempts. Please wait a little and try again.",
+  "errOtpInvalid": "The code is incorrect or has expired.",
+  "errOtpMaxAttempts": "Too many wrong attempts. Request a new code.",
+  "errAuthWrongApp": "This number is registered for the other TalkAcharya app.",
+  "callMinimize": "Minimize",
+  "callTapToReturn": "Tap to return to the call",
+  "callWaiting": "Waiting…",
+  "profileSounds": "Sounds",
+  "profileSoundsDesc": "Ringtone, call and chat tones",
+  "profileHapticFeedback": "Vibration",
+  "profileHapticFeedbackDesc": "Vibrate on buttons and alerts",
+  "profileSoundVibration": "Sound & vibration",
+  "profileSoundVibrationSub": "Ringtone, tones and vibration",
+  "roomViewSummary": "Summary"
+}

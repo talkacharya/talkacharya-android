@@ -1,3 +1,5 @@
+import '../../../../core/l10n/l10n.dart';
+import '../../../consultations/presentation/view/widgets/share_with_astrologer.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -16,6 +18,7 @@ import '../../../../shared/widgets/hue_widgets.dart';
 import '../bloc/birth_profiles_cubit.dart';
 import '../../data/models/birth_profile.dart';
 import 'widgets/profile_card.dart';
+import '../../../../core/utils/haptic_service.dart';
 
 class ManageProfilesPage extends StatefulWidget {
   const ManageProfilesPage({super.key});
@@ -165,7 +168,7 @@ class _ManageProfilesPageState extends State<ManageProfilesPage> {
     final cubit = context.read<BirthProfilesCubit>();
 
     if (direction == DismissDirection.startToEnd) {
-      unawaited(HapticFeedback.lightImpact());
+      HapticService.light();
       await cubit.select(p.id);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -179,7 +182,7 @@ class _ManageProfilesPageState extends State<ManageProfilesPage> {
       return false;
     }
 
-    unawaited(HapticFeedback.mediumImpact());
+    HapticService.medium();
     final ok = await _confirmDelete(context, p);
     if (ok) {
       await cubit.remove(p.id);
@@ -190,7 +193,7 @@ class _ManageProfilesPageState extends State<ManageProfilesPage> {
   // --- Long-press context sheet ---
 
   void _showContextSheet(BuildContext context, BirthProfile p, bool isActive) {
-    unawaited(HapticFeedback.mediumImpact());
+    HapticService.medium();
     final cubit = context.read<BirthProfilesCubit>();
     final brand = context.brand;
 
@@ -207,6 +210,21 @@ class _ManageProfilesPageState extends State<ManageProfilesPage> {
             onTap: () {
               Navigator.pop(ctx);
               unawaited(context.push('/kundali/${p.id}'));
+            },
+          ),
+          _SheetAction(
+            icon: Icons.ios_share_rounded,
+            label: context.l10n.shareWithAstrologer,
+            color: brand.glowAccent,
+            onTap: () {
+              Navigator.pop(ctx);
+              unawaited(
+                shareWithAstrologer(
+                  context,
+                  birthProfileId: p.id,
+                  label: p.displayName,
+                ),
+              );
             },
           ),
           _SheetAction(

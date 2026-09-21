@@ -1,3 +1,4 @@
+import 'package:customr/src/shared/widgets/app_snack.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,8 +12,6 @@ import '../../../astrologers/data/models/astrologer.dart';
 import '../../data/follows_api.dart';
 import '../cubit/follow_cubit.dart';
 
-/// Toggles the follow edge through the app-wide [FollowCubit] and tells the
-/// user what happened (or that it failed). Shared by every follow control.
 Future<void> toggleFollow(
   BuildContext context, {
   required String astrologerId,
@@ -29,20 +28,25 @@ Future<void> toggleFollow(
     source: source,
     fallback: fallback,
   );
-  messenger
-    ?..hideCurrentSnackBar()
-    ..showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Text(
-          result == null
-              ? l.followFailed
-              : result
-              ? l.followedToast(astrologerName)
-              : l.unfollowedToast(astrologerName),
-        ),
-      ),
+  if (messenger == null) return;
+
+  if (result == null) {
+    AppSnack.showOn(messenger, l.followFailed, type: SnackType.error);
+  } else if (result) {
+    AppSnack.showOn(
+      messenger,
+      l.followedToast(astrologerName),
+      type: SnackType.success,
+      duration: const Duration(seconds: 3),
     );
+  } else {
+    AppSnack.showOn(
+      messenger,
+      l.unfollowedToast(astrologerName),
+      type: SnackType.info,
+      duration: const Duration(seconds: 3),
+    );
+  }
 }
 
 /// Human count: 950 · 1.2k · 3.4L.

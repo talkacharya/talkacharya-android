@@ -8366,11 +8366,209 @@ abstract class AppLocalizations {
   /// **'Start call · {price}/min'**
   String callBookCta(String price);
 
+  /// No description provided for @callCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get callCamera;
+
+  /// No description provided for @callFlipCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Flip'**
+  String get callFlipCamera;
+
+  /// No description provided for @callCameraOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera off'**
+  String get callCameraOff;
+
+  /// No description provided for @callPeerCameraOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Their camera is off'**
+  String get callPeerCameraOff;
+
+  /// No description provided for @callCameraBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow camera access so the astrologer can see you.'**
+  String get callCameraBody;
+
+  /// No description provided for @callCameraBlockedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is turned off for TalkAcharya. Turn it on in Settings.'**
+  String get callCameraBlockedBody;
+
+  /// No description provided for @callVideoBookTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call {name}'**
+  String callVideoBookTitle(String name);
+
+  /// No description provided for @callVideoBookBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call · billed per minute once connected'**
+  String get callVideoBookBilling;
+
+  /// No description provided for @callVideoUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This astrologer is not taking video calls right now.'**
+  String get callVideoUnavailable;
+
   /// No description provided for @callUnavailable.
   ///
   /// In en, this message translates to:
   /// **'This astrologer is not taking calls right now.'**
   String get callUnavailable;
+
+  /// No description provided for @liveTabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Live'**
+  String get liveTabTitle;
+
+  /// No description provided for @liveBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Live'**
+  String get liveBadge;
+
+  /// No description provided for @liveNowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Live now'**
+  String get liveNowTitle;
+
+  /// No description provided for @liveUpcomingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming up'**
+  String get liveUpcomingTitle;
+
+  /// No description provided for @liveWatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch'**
+  String get liveWatch;
+
+  /// No description provided for @liveLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave'**
+  String get liveLeave;
+
+  /// No description provided for @liveSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get liveSend;
+
+  /// No description provided for @liveEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No live sessions right now'**
+  String get liveEmptyTitle;
+
+  /// No description provided for @liveEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Astrologers going live will show up here to watch and join.'**
+  String get liveEmptyBody;
+
+  /// No description provided for @liveWatchingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} watching'**
+  String liveWatchingCount(int count);
+
+  /// No description provided for @liveConnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Joining the stream…'**
+  String get liveConnecting;
+
+  /// No description provided for @liveReconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting…'**
+  String get liveReconnecting;
+
+  /// No description provided for @liveHostCameraOff.
+  ///
+  /// In en, this message translates to:
+  /// **'The astrologer\'s camera is off'**
+  String get liveHostCameraOff;
+
+  /// No description provided for @liveChatHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Say something…'**
+  String get liveChatHint;
+
+  /// No description provided for @liveSlowModeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Slow mode · one message every {seconds}s'**
+  String liveSlowModeHint(int seconds);
+
+  /// No description provided for @liveGiftSent.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} sent {gift}'**
+  String liveGiftSent(String name, String gift);
+
+  /// No description provided for @liveEndedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The stream has ended'**
+  String get liveEndedTitle;
+
+  /// No description provided for @liveEndedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for watching. Catch the next one from the Live tab.'**
+  String get liveEndedBody;
+
+  /// No description provided for @liveEndedByHost.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} ended the session. Catch the next one from the Live tab.'**
+  String liveEndedByHost(String name);
+
+  /// No description provided for @liveRemovedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You were removed'**
+  String get liveRemovedTitle;
+
+  /// No description provided for @liveRemovedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The host removed you from this stream.'**
+  String get liveRemovedBody;
+
+  /// No description provided for @liveCannotJoinTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t join'**
+  String get liveCannotJoinTitle;
+
+  /// No description provided for @liveCannotJoinBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The stream may have ended. Try another one from the Live tab.'**
+  String get liveCannotJoinBody;
+
+  /// No description provided for @liveBackToList.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Live'**
+  String get liveBackToList;
 
   /// No description provided for @giftAction.
   ///
@@ -11551,6 +11749,282 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'See all'**
   String get storeSeeAll;
+
+  /// No description provided for @shareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share with your astrologer'**
+  String get shareTitle;
+
+  /// No description provided for @shareSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'They can open the kundali of anything you share.'**
+  String get shareSubtitle;
+
+  /// No description provided for @shareTabProfiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Birth details'**
+  String get shareTabProfiles;
+
+  /// No description provided for @shareTabMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'Kundali matches'**
+  String get shareTabMatches;
+
+  /// No description provided for @shareAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get shareAction;
+
+  /// No description provided for @shareShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared'**
+  String get shareShared;
+
+  /// No description provided for @shareDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared with {name}'**
+  String shareDone(String name);
+
+  /// No description provided for @shareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t share. Please try again.'**
+  String get shareFailed;
+
+  /// No description provided for @shareNoProfiles.
+  ///
+  /// In en, this message translates to:
+  /// **'No birth details saved yet'**
+  String get shareNoProfiles;
+
+  /// No description provided for @shareAddProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Add birth details'**
+  String get shareAddProfile;
+
+  /// No description provided for @shareNoMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'No kundali matches yet'**
+  String get shareNoMatches;
+
+  /// No description provided for @shareWithAstrologer.
+  ///
+  /// In en, this message translates to:
+  /// **'Share with astrologer'**
+  String get shareWithAstrologer;
+
+  /// No description provided for @shareConsultAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'Consult an astrologer'**
+  String get shareConsultAbout;
+
+  /// No description provided for @sharePickConsultation.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a consultation'**
+  String get sharePickConsultation;
+
+  /// No description provided for @shareMatchPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'{points} of {max} points'**
+  String shareMatchPoints(String points, String max);
+
+  /// No description provided for @shareTimeUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Birth time not known'**
+  String get shareTimeUnknown;
+
+  /// No description provided for @shareSharedWithAstrologer.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared with your astrologer'**
+  String get shareSharedWithAstrologer;
+
+  /// No description provided for @sessionLiveBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Live consultation with {name}'**
+  String sessionLiveBanner(String name);
+
+  /// No description provided for @sessionReturn.
+  ///
+  /// In en, this message translates to:
+  /// **'Return'**
+  String get sessionReturn;
+
+  /// No description provided for @callLeaveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave the call?'**
+  String get callLeaveTitle;
+
+  /// No description provided for @callLeaveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The call ends if you leave this screen.'**
+  String get callLeaveBody;
+
+  /// No description provided for @callLeaveStay.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay on the call'**
+  String get callLeaveStay;
+
+  /// No description provided for @callLeaveEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End call'**
+  String get callLeaveEnd;
+
+  /// No description provided for @liveSendPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a photo'**
+  String get liveSendPhoto;
+
+  /// No description provided for @livePhotoFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t send the photo'**
+  String get livePhotoFailed;
+
+  /// No description provided for @livePhotoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get livePhotoLabel;
+
+  /// No description provided for @errForbidden.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have access to this.'**
+  String get errForbidden;
+
+  /// No description provided for @errNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t find this — it may have been removed.'**
+  String get errNotFound;
+
+  /// No description provided for @errServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Our server ran into a problem. Please try again shortly.'**
+  String get errServer;
+
+  /// No description provided for @walletHeldBreakdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance {total} · {held} on hold'**
+  String walletHeldBreakdown(Object total, Object held);
+
+  /// No description provided for @walletHeldExplainerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Why is some money on hold?'**
+  String get walletHeldExplainerTitle;
+
+  /// No description provided for @walletHeldExplainerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'While a consultation is running we reserve a few minutes of balance so the session can\'t stop mid-sentence. Whatever isn\'t used comes back the moment the session ends.'**
+  String get walletHeldExplainerBody;
+
+  /// No description provided for @bookLowBalanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add money to start'**
+  String get bookLowBalanceTitle;
+
+  /// No description provided for @bookLowBalanceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This consultation needs at least {required} to begin. You have {available} to spend right now.'**
+  String bookLowBalanceBody(Object required, Object available);
+
+  /// No description provided for @bookLowBalanceHeld.
+  ///
+  /// In en, this message translates to:
+  /// **'{held} of your balance is reserved for a session that is still running.'**
+  String bookLowBalanceHeld(Object held);
+
+  /// No description provided for @commonNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get commonNotNow;
+
+  /// No description provided for @callMinimize.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimize'**
+  String get callMinimize;
+
+  /// No description provided for @callTapToReturn.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to return to the call'**
+  String get callTapToReturn;
+
+  /// No description provided for @callWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting…'**
+  String get callWaiting;
+
+  /// No description provided for @profileSounds.
+  ///
+  /// In en, this message translates to:
+  /// **'Sounds'**
+  String get profileSounds;
+
+  /// No description provided for @profileSoundsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Ringtone, call and chat tones'**
+  String get profileSoundsDesc;
+
+  /// No description provided for @profileSoundVibration.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound & vibration'**
+  String get profileSoundVibration;
+
+  /// No description provided for @profileSoundVibrationSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Ringtone, tones and vibration'**
+  String get profileSoundVibrationSub;
+
+  /// No description provided for @roomEndedSummaryLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min · {currency} {amount}'**
+  String roomEndedSummaryLine(Object minutes, Object currency, Object amount);
+
+  /// No description provided for @roomViewSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get roomViewSummary;
+
+  /// No description provided for @roomYouRated.
+  ///
+  /// In en, this message translates to:
+  /// **'You rated this session {rating}/5'**
+  String roomYouRated(Object rating);
 }
 
 class _AppLocalizationsDelegate

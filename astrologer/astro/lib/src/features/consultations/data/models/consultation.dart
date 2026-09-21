@@ -1,3 +1,5 @@
+import 'consultation_share.dart';
+
 /// Mirrors backend `ConsultationSerializer` (astrologer view).
 class Consultation {
   Consultation({
@@ -15,7 +17,9 @@ class Consultation {
     required this.unreadCount,
     required this.requestedAt,
     required this.endedAt,
+    this.startedAt,
     this.rating,
+    this.shares = const [],
   });
 
   final String id;
@@ -32,7 +36,13 @@ class Consultation {
   final int unreadCount;
   final DateTime? requestedAt;
   final DateTime? endedAt;
+
+  /// When billing started (the session went `active`).
+  final DateTime? startedAt;
   final int? rating;
+
+  /// Birth profiles / matches the customer shared for this reading.
+  final List<ConsultationShare> shares;
 
   bool get isLive => status == 'active' || status == 'accepted';
   bool get isRequested => status == 'requested';
@@ -47,6 +57,23 @@ class Consultation {
     'failed',
   }.contains(status);
   int get billedMinutes => (billedSeconds / 60).ceil();
+
+  /// People whose kundali the astrologer can open (both sides of a shared
+  /// match count).
+  List<SharedPerson> get sharedPeople => [
+    for (final s in shares) ...[
+      if (s.person != null) s.person!,
+      if (s.match?.boy != null) s.match!.boy!,
+      if (s.match?.girl != null) s.match!.girl!,
+    ],
+  ];
+
+  List<SharedMatch> get sharedMatches => [
+    for (final s in shares)
+      if (s.match != null) s.match!,
+  ];
+
+  bool get hasSharedDetails => sharedPeople.isNotEmpty;
 
   factory Consultation.fromJson(Map<String, dynamic> j) => Consultation(
     id: j['id']?.toString() ?? '',
@@ -63,6 +90,8 @@ class Consultation {
     unreadCount: (j['unread_count'] as num?)?.toInt() ?? 0,
     requestedAt: DateTime.tryParse('${j['requested_at'] ?? ''}'),
     endedAt: DateTime.tryParse('${j['ended_at'] ?? ''}'),
+    startedAt: DateTime.tryParse('${j['started_at'] ?? ''}'),
     rating: (j['rating'] as num?)?.toInt(),
+    shares: ConsultationShare.listFrom(j['shares']),
   );
 }

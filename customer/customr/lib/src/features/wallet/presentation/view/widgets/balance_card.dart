@@ -53,7 +53,7 @@ class BalanceCard extends StatelessWidget {
             _Skeleton(loading: loading)
           else
             CountUpText(
-              amount: b.available,
+              amount: b.spendable,
               currency: b.currency,
               style: theme.textTheme.displaySmall?.copyWith(
                 color: Colors.white,
@@ -67,12 +67,12 @@ class BalanceCard extends StatelessWidget {
             children: [
               if (b != null && b.hasHold)
                 Expanded(
-                  child: Text(
-                    l.walletOnHoldReason(
+                  // Balance and hold together, so the headline figure adds up in
+                  // front of the customer instead of looking like money missing.
+                  child: _HoldLine(
+                    text: l.walletHeldBreakdown(
+                      Money.format(b.cached, b.currency, locale: locale),
                       Money.format(b.held, b.currency, locale: locale),
-                    ),
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: const Color(0xFFE7C7B2),
                     ),
                   ),
                 )
@@ -86,6 +86,54 @@ class BalanceCard extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The breakdown under the headline. Tapping it says what a hold is — the
+/// question every customer asks the first time they see one.
+class _HoldLine extends StatelessWidget {
+  const _HoldLine({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l = context.l10n;
+    return InkWell(
+      onTap: () => showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(l.walletHeldExplainerTitle),
+          content: Text(l.walletHeldExplainerBody),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(l.commonOk),
+            ),
+          ],
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            child: Text(
+              text,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: const Color(0xFFE7C7B2),
+              ),
+            ),
+          ),
+          const SizedBox(width: 4),
+          const Icon(
+            Icons.info_outline_rounded,
+            size: 13,
+            color: Color(0xFFC79A80),
           ),
         ],
       ),

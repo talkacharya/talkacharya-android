@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../router/transitions.dart';
 import 'brand_colors.dart';
 
-/// Central theme. Customer brand seed is saffron; the astrologer app overrides
-/// [_seed] with indigo. Keep widget code theme-driven (no hard-coded colours) —
+/// Central theme — the customer app's theme with an indigo seed (the customer
+/// app is saffron). Keep the two files in step. Keep widget code theme-driven (no hard-coded colours) —
 /// reach for [BrandColors] (a [ThemeExtension]) when you need a role the
 /// [ColorScheme] doesn't cover (live red, online green, the warm tint surface).
 ///
@@ -32,18 +33,21 @@ class AppTheme {
 
     final textTheme = _textTheme(
       base.textTheme,
-    ).apply(bodyColor: scheme.onSurface, displayColor: scheme.onSurface);
+    ).apply(bodyColor: brand.ink, displayColor: brand.ink);
 
     return base.copyWith(
       colorScheme: scheme,
       scaffoldBackgroundColor: brand.canvas,
       extensions: [brand],
       textTheme: textTheme,
+      // Pushed routes slide in from the trailing edge + fade; tab switches
+      // cross-fade (see AnimatedBranchContainer).
+      pageTransitionsTheme: kAppPageTransitionsTheme,
       appBarTheme: AppBarTheme(
         centerTitle: false,
         backgroundColor: brand.canvas,
         surfaceTintColor: Colors.transparent,
-        foregroundColor: scheme.onSurface,
+        foregroundColor: brand.ink,
         elevation: 0,
         titleTextStyle: textTheme.titleLarge?.copyWith(
           fontWeight: FontWeight.w600,
@@ -124,4 +128,21 @@ class Gap {
   static const md = SizedBox(height: 16, width: 16);
   static const lg = SizedBox(height: 24, width: 24);
   static const xl = SizedBox(height: 40, width: 40);
+}
+
+/// Corner-radius scale — a size step between list rows and hero/feature cards.
+class Radii {
+  const Radii._();
+
+  /// Chips, inputs, small controls.
+  static const sm = 12.0;
+
+  /// List / detail cards.
+  static const md = 16.0;
+
+  /// Hero, chart and premium cards.
+  static const lg = 20.0;
+
+  /// Badges, pills, CTA buttons.
+  static const pill = 999.0;
 }

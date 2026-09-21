@@ -7,6 +7,7 @@ import '../../../../../core/utils/validators.dart';
 import '../../../data/auth_repository.dart';
 import '../../../data/firebase_phone_auth.dart';
 import '../auth/auth_bloc.dart';
+import '../../../../../core/network/friendly_error.dart';
 
 part 'login_state.dart';
 
@@ -84,7 +85,7 @@ class LoginCubit extends Cubit<LoginState> {
         ),
       );
     } on ApiException catch (e) {
-      emit(state.copyWith(submitting: false, error: e.message));
+      emit(state.copyWith(submitting: false, error: friendlyError(e)));
     }
   }
 
@@ -108,7 +109,7 @@ class LoginCubit extends Cubit<LoginState> {
         );
         await _completeWithFirebaseToken(idToken);
       } on FirebasePhoneAuthException catch (e) {
-        emit(state.copyWith(submitting: false, error: e.message));
+        emit(state.copyWith(submitting: false, error: friendlyError(e)));
       } catch (_) {
         emit(state.copyWith(submitting: false, error: _genericError));
       }
@@ -120,7 +121,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(submitting: false));
       _authBloc.add(AuthLoggedIn(user));
     } on ApiException catch (e) {
-      emit(state.copyWith(submitting: false, error: e.message));
+      emit(state.copyWith(submitting: false, error: friendlyError(e)));
     }
   }
 
@@ -130,7 +131,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(submitting: false));
       _authBloc.add(AuthLoggedIn(user));
     } on ApiException catch (e) {
-      emit(state.copyWith(submitting: false, error: e.message));
+      emit(state.copyWith(submitting: false, error: friendlyError(e)));
     } catch (_) {
       emit(state.copyWith(submitting: false, error: _genericError));
     }

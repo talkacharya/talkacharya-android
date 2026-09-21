@@ -18,6 +18,7 @@ import '../../features/consultations/data/consultation_api.dart';
 import '../../features/consultations/data/consultation_repository.dart';
 import '../../features/consultations/presentation/cubit/chats_list_cubit.dart';
 import '../../features/gifting/data/gifting_api.dart';
+import '../../features/livestream/data/livestream_api.dart';
 import '../../features/follows/data/follows_api.dart';
 import '../../features/follows/data/follows_repository.dart';
 import '../../features/follows/presentation/cubit/follow_cubit.dart';
@@ -37,6 +38,8 @@ import '../../features/predictions/data/predictions_api.dart';
 import '../../features/predictions/data/predictions_repository.dart';
 import '../../features/home/data/home_api.dart';
 import '../../features/horoscope/data/horoscope_repository.dart';
+import '../../features/consultations/data/pending_share.dart';
+import '../../features/consultations/presentation/room_presence.dart';
 import '../../features/matchmaking/data/matchmaking_repository.dart';
 import '../../features/wallet/data/wallet_api.dart';
 import '../../features/wallet/data/wallet_repository.dart';
@@ -65,6 +68,7 @@ import '../realtime/realtime_client.dart';
 import '../realtime/realtime_coordinator.dart';
 import '../router/pending_deep_link.dart';
 import '../storage/token_storage.dart';
+import 'package:talkacharya_call/talkacharya_call.dart';
 
 final getIt = GetIt.instance;
 
@@ -126,6 +130,10 @@ Future<void> configureDependencies(AppConfig config) async {
     )
     ..registerLazySingleton<PrashnaApi>(() => PrashnaApi(dio))
     ..registerLazySingleton<PrashnaRepository>(() => PrashnaRepository(getIt()))
+    ..registerLazySingleton<PendingShare>(PendingShare.new)
+    ..registerLazySingleton<RoomPresence>(RoomPresence.new)
+    // Owns the one running call, so it outlives the room screen.
+    ..registerLazySingleton<CallHub>(CallHub.new)
     ..registerLazySingleton<MatchmakingRepository>(
       () => MatchmakingRepository(dio),
     )
@@ -146,6 +154,7 @@ Future<void> configureDependencies(AppConfig config) async {
     // app-wide: every follow control reads the same edges
     ..registerLazySingleton<FollowCubit>(() => FollowCubit(getIt()))
     ..registerFactory<DiscoveryCubit>(() => DiscoveryCubit(getIt()))
+    ..registerLazySingleton<LivestreamApi>(() => LivestreamApi(dio))
     ..registerLazySingleton<ArticlesApi>(() => ArticlesApi(dio))
     ..registerLazySingleton<ArticlesRepository>(
       () => ArticlesRepository(getIt()),

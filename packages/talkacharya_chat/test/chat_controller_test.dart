@@ -147,6 +147,7 @@ ChatController _make(
   _FakeRealtime rt, {
   ChatIdentity? id,
   PickImages? pickImages,
+  ChatSounds sounds = const NoopChatSounds(),
 }) => ChatController(
   consultationId: 'c1',
   transport: t,
@@ -155,9 +156,64 @@ ChatController _make(
   pickImages: pickImages,
   tts: _NoTts(),
   stt: _NoStt(),
+  sounds: sounds,
 );
 
+class _Sounds implements ChatSounds {
+  final played = <String>[];
+  @override
+  void incoming() => played.add('in');
+  @override
+  void sent() => played.add('out');
+}
+
 void main() {
+  test(
+    'sounds: sent once, incoming only for new messages from the other side',
+    () async {
+      final t = _FakeTransport();
+      final rt = _FakeRealtime();
+      final sounds = _Sounds();
+      final c = _make(t, rt, sounds: sounds);
+      await c.start();
+
+      await c.sendText('hi');
+      expect(sounds.played, ['out']);
+
+      // the server echo of my own message is silent
+      final mine = c.state.messages.single;
+      rt.emit({
+        'type': 'message.new',
+        'data': {
+          'id': mine.id,
+          'seq': mine.seq,
+          'sender_role': 'customer',
+          'body': 'hi',
+          'client_message_id': mine.clientMessageId,
+        },
+      });
+      // a system line is silent
+      rt.emit({
+        'type': 'message.new',
+        'data': {'id': 's1', 'seq': 50, 'sender_role': 'system', 'body': 'x'},
+      });
+      final theirs = {
+        'type': 'message.new',
+        'data': {
+          'id': 'a1',
+          'seq': 51,
+          'sender_role': 'astrologer',
+          'body': 'ji',
+        },
+      };
+      rt.emit(theirs);
+      rt.emit(theirs); // redelivery of the same message is silent
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(sounds.played, ['out', 'in']);
+      await c.close();
+    },
+  );
+
   test('ChatMessage.fromMap reads the backend shape', () {
     final m = ChatMessage.fromMap({
       'id': 'm1',

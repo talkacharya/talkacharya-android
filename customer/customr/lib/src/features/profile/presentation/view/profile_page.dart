@@ -521,7 +521,7 @@ class _StatsCard extends StatelessWidget {
     final brand = context.brand;
     final locale = Localizations.localeOf(context).toLanguageTag();
     final balance = context.select(
-      (WalletCubit c) => c.state.primaryFor(currency)?.available,
+      (WalletCubit c) => c.state.primaryFor(currency)?.spendable,
     );
     final bpCount = context.select(
       (BirthProfilesCubit c) => c.state.profiles.length,

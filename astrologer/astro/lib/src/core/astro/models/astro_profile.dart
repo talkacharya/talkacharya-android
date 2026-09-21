@@ -128,7 +128,7 @@ class AstroProfile {
     verificationLevel: j['verification_level'] as String? ?? '',
     rejectionReason: j['rejection_reason'] as String? ?? '',
     isAvailable: j['is_available_flag'] as bool? ?? false,
-    ratingAvg: (j['rating_avg'] as num?)?.toDouble() ?? 0,
+    ratingAvg: _toDouble(j['rating_avg']),
     ratingCount: (j['rating_count'] as num?)?.toInt() ?? 0,
     consultationsCount: (j['consultations_count'] as num?)?.toInt() ?? 0,
     followersCount: (j['followers_count'] as num?)?.toInt() ?? 0,
@@ -151,3 +151,10 @@ class AstroProfile {
         .toList(),
   );
 }
+
+// DRF serialises DecimalFields as strings ("4.78"), so accept either shape.
+double _toDouble(Object? v) => switch (v) {
+  final num n => n.toDouble(),
+  final String s => double.tryParse(s) ?? 0,
+  _ => 0,
+};

@@ -34,7 +34,7 @@ class OnboardingApi {
     List<String>? languageCodes,
   }) async {
     try {
-      final res = await _dio.patch<Map<String, dynamic>>(
+      final res = (await _dio.patch<Map<String, dynamic>>(
         ApiPaths.astroOnboarding,
         data: {
           if (headline != null) 'headline': headline,
@@ -44,7 +44,7 @@ class OnboardingApi {
           if (primarySkillSlug != null) 'primary_skill_slug': primarySkillSlug,
           if (languageCodes != null) 'language_codes': languageCodes,
         },
-      );
+      )).ensureOk();
       return AstroProfile.fromJson(res.data ?? const {});
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
@@ -67,7 +67,10 @@ class OnboardingApi {
             contentType: DioMediaType.parse('image/jpeg'),
           ),
       });
-      await _dio.post(ApiPaths.astroOnboardingKyc, data: form);
+      (await _dio.post<void>(
+        ApiPaths.astroOnboardingKyc,
+        data: form,
+      )).ensureOk();
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
     }
@@ -80,7 +83,7 @@ class OnboardingApi {
     String? bankName,
   }) async {
     try {
-      await _dio.post(
+      (await _dio.post<void>(
         ApiPaths.astroOnboardingBank,
         data: {
           'account_holder_name': accountHolderName,
@@ -88,7 +91,7 @@ class OnboardingApi {
           if (ifsc != null && ifsc.isNotEmpty) 'ifsc': ifsc,
           if (bankName != null && bankName.isNotEmpty) 'bank_name': bankName,
         },
-      );
+      )).ensureOk();
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
     }

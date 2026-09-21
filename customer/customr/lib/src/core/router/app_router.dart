@@ -56,6 +56,8 @@ import '../../features/kundali/presentation/view/sade_sati_page.dart';
 import '../../features/kundali/presentation/view/transits_page.dart';
 import '../../features/kundali/presentation/view/varshphal_page.dart';
 import '../../features/kundali/presentation/view/yogas_doshas_page.dart';
+import '../../features/livestream/data/livestream_api.dart';
+import '../../features/livestream/presentation/cubit/live_list_cubit.dart';
 import '../../features/livestream/presentation/view/live_page.dart';
 import '../../features/livestream/presentation/view/live_room_page.dart';
 import '../../features/notifications/presentation/view/notifications_page.dart';
@@ -781,7 +783,10 @@ GoRouter buildRouter(
             routes: [
               GoRoute(
                 path: Routes.live,
-                builder: (_, _) => const LivePage(),
+                builder: (_, _) => BlocProvider(
+                  create: (_) => LiveListCubit(getIt<LivestreamApi>()),
+                  child: const LivePage(),
+                ),
                 routes: [
                   _leaf(
                     ':id',

@@ -3,6 +3,7 @@ import 'package:talkacharya_predictions/talkacharya_predictions.dart';
 
 import '../../../../core/util/async_value.dart';
 import '../../data/predictions_repository.dart';
+import '../../../../core/network/friendly_error.dart';
 
 /// The astrologer's prediction work queue — unclaimed drafting requests plus
 /// anything already assigned to them.
@@ -17,7 +18,7 @@ class PredictionsQueueCubit extends Cubit<AsyncValue<List<Prediction>>> {
     try {
       emit(AsyncValue.data(await _repo.queue()));
     } catch (e) {
-      emit(AsyncValue.error(e.toString(), state.value));
+      emit(AsyncValue.error(friendlyError(e), state.value));
     }
   }
 

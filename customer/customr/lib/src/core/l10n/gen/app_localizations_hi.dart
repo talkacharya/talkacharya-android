@@ -4867,7 +4867,121 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String get callCamera => 'कैमरा';
+
+  @override
+  String get callFlipCamera => 'पलटें';
+
+  @override
+  String get callCameraOff => 'कैमरा बंद';
+
+  @override
+  String get callPeerCameraOff => 'उनका कैमरा बंद है';
+
+  @override
+  String get callCameraBody =>
+      'कैमरा चालू करने दें ताकि ज्योतिषी आपको देख सकें।';
+
+  @override
+  String get callCameraBlockedBody =>
+      'TalkAcharya के लिए कैमरा बंद है। इसे सेटिंग्स में चालू करें।';
+
+  @override
+  String callVideoBookTitle(String name) {
+    return '$name से वीडियो कॉल';
+  }
+
+  @override
+  String get callVideoBookBilling => 'वीडियो कॉल · जुड़ते ही प्रति मिनट शुल्क';
+
+  @override
+  String get callVideoUnavailable =>
+      'यह ज्योतिषी अभी वीडियो कॉल नहीं ले रहे हैं।';
+
+  @override
   String get callUnavailable => 'यह ज्योतिषी अभी कॉल नहीं ले रहे हैं।';
+
+  @override
+  String get liveTabTitle => 'लाइव';
+
+  @override
+  String get liveBadge => 'लाइव';
+
+  @override
+  String get liveNowTitle => 'अभी लाइव';
+
+  @override
+  String get liveUpcomingTitle => 'आने वाले';
+
+  @override
+  String get liveWatch => 'देखें';
+
+  @override
+  String get liveLeave => 'बाहर निकलें';
+
+  @override
+  String get liveSend => 'भेजें';
+
+  @override
+  String get liveEmptyTitle => 'अभी कोई लाइव सत्र नहीं';
+
+  @override
+  String get liveEmptyBody => 'जब ज्योतिषी लाइव आएंगे, वे यहाँ दिखेंगे।';
+
+  @override
+  String liveWatchingCount(int count) {
+    return '$count देख रहे हैं';
+  }
+
+  @override
+  String get liveConnecting => 'लाइव से जुड़ रहे हैं…';
+
+  @override
+  String get liveReconnecting => 'फिर से जुड़ रहे हैं…';
+
+  @override
+  String get liveHostCameraOff => 'ज्योतिषी का कैमरा बंद है';
+
+  @override
+  String get liveChatHint => 'कुछ कहें…';
+
+  @override
+  String liveSlowModeHint(int seconds) {
+    return 'स्लो मोड · हर $seconds सेकंड में एक संदेश';
+  }
+
+  @override
+  String liveGiftSent(String name, String gift) {
+    return '$name ने $gift भेजा';
+  }
+
+  @override
+  String get liveEndedTitle => 'लाइव सत्र समाप्त';
+
+  @override
+  String get liveEndedBody =>
+      'देखने के लिए धन्यवाद। अगला सत्र लाइव टैब में मिलेगा।';
+
+  @override
+  String liveEndedByHost(String name) {
+    return '$name ने सत्र समाप्त कर दिया। अगला सत्र लाइव टैब में मिलेगा।';
+  }
+
+  @override
+  String get liveRemovedTitle => 'आपको हटा दिया गया';
+
+  @override
+  String get liveRemovedBody => 'होस्ट ने आपको इस लाइव से हटा दिया है।';
+
+  @override
+  String get liveCannotJoinTitle => 'जुड़ नहीं सके';
+
+  @override
+  String get liveCannotJoinBody =>
+      'हो सकता है सत्र समाप्त हो गया हो। लाइव टैब से कोई और देखें।';
+
+  @override
+  String get liveBackToList => 'लाइव पर लौटें';
 
   @override
   String get giftAction => 'उपहार भेजें';
@@ -6688,4 +6802,160 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get storeSeeAll => 'सभी देखें';
+
+  @override
+  String get shareTitle => 'अपने ज्योतिषी के साथ साझा करें';
+
+  @override
+  String get shareSubtitle => 'आप जो साझा करेंगे, उसकी कुंडली वे खोल सकते हैं।';
+
+  @override
+  String get shareTabProfiles => 'जन्म विवरण';
+
+  @override
+  String get shareTabMatches => 'कुंडली मिलान';
+
+  @override
+  String get shareAction => 'साझा करें';
+
+  @override
+  String get shareShared => 'साझा किया गया';
+
+  @override
+  String shareDone(String name) {
+    return '$name के साथ साझा किया गया';
+  }
+
+  @override
+  String get shareFailed => 'साझा नहीं हो सका। कृपया फिर कोशिश करें।';
+
+  @override
+  String get shareNoProfiles => 'अभी कोई जन्म विवरण सहेजा नहीं गया';
+
+  @override
+  String get shareAddProfile => 'जन्म विवरण जोड़ें';
+
+  @override
+  String get shareNoMatches => 'अभी कोई कुंडली मिलान नहीं';
+
+  @override
+  String get shareWithAstrologer => 'ज्योतिषी के साथ साझा करें';
+
+  @override
+  String get shareConsultAbout => 'ज्योतिषी से परामर्श करें';
+
+  @override
+  String get sharePickConsultation => 'परामर्श चुनें';
+
+  @override
+  String shareMatchPoints(String points, String max) {
+    return '$max में से $points अंक';
+  }
+
+  @override
+  String get shareTimeUnknown => 'जन्म समय ज्ञात नहीं';
+
+  @override
+  String get shareSharedWithAstrologer => 'आपके ज्योतिषी के साथ साझा किया गया';
+
+  @override
+  String sessionLiveBanner(String name) {
+    return '$name के साथ लाइव परामर्श';
+  }
+
+  @override
+  String get sessionReturn => 'वापस जाएँ';
+
+  @override
+  String get callLeaveTitle => 'कॉल छोड़ें?';
+
+  @override
+  String get callLeaveBody => 'यह स्क्रीन छोड़ने पर कॉल समाप्त हो जाएगी।';
+
+  @override
+  String get callLeaveStay => 'कॉल पर बने रहें';
+
+  @override
+  String get callLeaveEnd => 'कॉल समाप्त करें';
+
+  @override
+  String get liveSendPhoto => 'फ़ोटो भेजें';
+
+  @override
+  String get livePhotoFailed => 'फ़ोटो नहीं भेजी जा सकी';
+
+  @override
+  String get livePhotoLabel => 'फ़ोटो';
+
+  @override
+  String get errForbidden => 'आपके पास इसकी अनुमति नहीं है।';
+
+  @override
+  String get errNotFound => 'यह नहीं मिला — शायद हटा दिया गया है।';
+
+  @override
+  String get errServer =>
+      'हमारे सर्वर में समस्या आ गई। कृपया थोड़ी देर बाद कोशिश करें।';
+
+  @override
+  String walletHeldBreakdown(Object total, Object held) {
+    return 'बैलेंस $total · $held होल्ड पर';
+  }
+
+  @override
+  String get walletHeldExplainerTitle => 'कुछ पैसे होल्ड पर क्यों हैं?';
+
+  @override
+  String get walletHeldExplainerBody =>
+      'परामर्श चलने के दौरान हम कुछ मिनट का बैलेंस सुरक्षित रख लेते हैं, ताकि बातचीत बीच में न रुके। जो हिस्सा इस्तेमाल नहीं होता, सत्र खत्म होते ही वापस आ जाता है।';
+
+  @override
+  String get bookLowBalanceTitle => 'शुरू करने के लिए पैसे जोड़ें';
+
+  @override
+  String bookLowBalanceBody(Object required, Object available) {
+    return 'यह परामर्श शुरू करने के लिए कम से कम $required चाहिए। अभी आपके पास $available खर्च करने लायक हैं।';
+  }
+
+  @override
+  String bookLowBalanceHeld(Object held) {
+    return 'आपके बैलेंस में से $held एक चल रहे सत्र के लिए सुरक्षित रखे गए हैं।';
+  }
+
+  @override
+  String get commonNotNow => 'अभी नहीं';
+
+  @override
+  String get callMinimize => 'छोटा करें';
+
+  @override
+  String get callTapToReturn => 'कॉल पर लौटने के लिए टैप करें';
+
+  @override
+  String get callWaiting => 'प्रतीक्षा…';
+
+  @override
+  String get profileSounds => 'ध्वनि';
+
+  @override
+  String get profileSoundsDesc => 'रिंगटोन, कॉल और चैट की आवाज़ें';
+
+  @override
+  String get profileSoundVibration => 'ध्वनि और कंपन';
+
+  @override
+  String get profileSoundVibrationSub => 'रिंगटोन, आवाज़ें और कंपन';
+
+  @override
+  String roomEndedSummaryLine(Object minutes, Object currency, Object amount) {
+    return '$minutes मिनट · $currency $amount';
+  }
+
+  @override
+  String get roomViewSummary => 'सारांश';
+
+  @override
+  String roomYouRated(Object rating) {
+    return 'आपने इस सत्र को $rating/5 रेट किया';
+  }
 }

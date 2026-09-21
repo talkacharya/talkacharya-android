@@ -6,7 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../engine/call_controller.dart';
+import '../ports/call_ports.dart';
 import '../models/call_state.dart';
+import 'call_status.dart';
+import 'call_video_view.dart';
 
 /// All user-facing call copy. English defaults; apps pass localised values.
 class CallStrings {
@@ -19,6 +22,10 @@ class CallStrings {
     this.poorConnection = 'Weak connection',
     this.mute = 'Mute',
     this.speaker = 'Speaker',
+    this.camera = 'Camera',
+    this.flipCamera = 'Flip',
+    this.cameraOff = 'Camera off',
+    this.peerCameraOff = 'Their camera is off',
     this.endCall = 'End',
     this.encrypted = 'Encrypted call',
     this.micTitle = 'Microphone needed',
@@ -32,6 +39,9 @@ class CallStrings {
     this.endConfirmBody = 'Billing stops as soon as the call ends.',
     this.endConfirmYes = 'End call',
     this.endConfirmNo = 'Stay',
+    this.minimize = 'Minimize',
+    this.tapToReturn = 'Tap to return to call',
+    this.waiting = 'Waiting…',
   });
 
   final String calling;
@@ -42,6 +52,14 @@ class CallStrings {
   final String poorConnection;
   final String mute;
   final String speaker;
+  final String camera;
+  final String flipCamera;
+
+  /// Shown on our own tile when we turned the camera off.
+  final String cameraOff;
+
+  /// Shown over the peer's avatar when they turned theirs off.
+  final String peerCameraOff;
   final String endCall;
   final String encrypted;
   final String micTitle;
@@ -54,13 +72,28 @@ class CallStrings {
   final String endConfirmBody;
   final String endConfirmYes;
   final String endConfirmNo;
+
+  /// Collapse the call screen (the call keeps running).
+  final String minimize;
+
+  /// Hint on the minimized call bar.
+  final String tapToReturn;
+
+  /// Minimized status before the call exists (still waiting to be accepted).
+  final String waiting;
 }
 
-/// Full-screen voice call UI driven by the nearest [CallController].
+/// Full-screen call UI driven by the nearest [CallController] — the voice layout
+/// (avatar + controls) or, on a video consultation, the video layout (the peer
+/// full-bleed, our own picture in a draggable corner tile).
 ///
 /// [statusOverride] replaces the status line (e.g. "Waiting for Acharya to accept"
 /// before the call exists); [top] sits under the header (billing HUD / low-balance
 /// banner); [accent] tints the avatar halo.
+///
+/// With [onMinimize] the header gets a collapse button and the back gesture
+/// minimizes instead of asking to end — the call carries on in the app-wide
+/// [CallOverlayHost] (a bar for voice, a floating window for video).
 class CallScreen extends StatelessWidget {
   const CallScreen({
     required this.peerName,
@@ -70,6 +103,7 @@ class CallScreen extends StatelessWidget {
     this.top,
     this.accent,
     this.onEnded,
+    this.onMinimize,
     this.confirmEnd = true,
     super.key,
   });
@@ -83,6 +117,7 @@ class CallScreen extends StatelessWidget {
 
   /// Called once when the call reaches [CallPhase.ended].
   final VoidCallback? onEnded;
+  final VoidCallback? onMinimize;
   final bool confirmEnd;
 
   static const _bgTop = Color(0xFF140B2E);
@@ -98,10 +133,18 @@ class CallScreen extends StatelessWidget {
         listener: (_, _) => onEnded?.call(),
         builder: (context, state) {
           final controller = context.read<CallController>();
+          final minimize = onMinimize;
+          final canMinimize =
+              minimize != null && state.phase != CallPhase.ended;
           return PopScope(
-            canPop: !state.phase.isLive,
+            canPop: !state.phase.isLive && !canMinimize,
             onPopInvokedWithResult: (didPop, _) async {
-              if (didPop || !state.phase.isLive) return;
+              if (didPop) return;
+              if (canMinimize) {
+                minimize();
+                return;
+              }
+              if (!state.phase.isLive) return;
               if (await _confirmEnd(context)) await controller.hangUp();
             },
             child: Scaffold(
@@ -127,6 +170,22 @@ class CallScreen extends StatelessWidget {
                       message: state.error,
                       onRetry: controller.retry,
                     ),
+                    _ when state.video => _VideoView(
+                      state: state,
+                      peerName: state.peerName.isNotEmpty
+                          ? state.peerName
+                          : peerName,
+                      avatarUrl: peerAvatarUrl,
+                      strings: strings,
+                      statusOverride: statusOverride,
+                      top: top,
+                      halo: halo,
+                      onMute: controller.toggleMute,
+                      onCamera: controller.toggleCamera,
+                      onFlip: controller.switchCamera,
+                      onEnd: () => _end(context, state, controller),
+                      onMinimize: canMinimize ? minimize : null,
+                    ),
                     _ => _LiveView(
                       state: state,
                       peerName: state.peerName.isNotEmpty
@@ -139,13 +198,8 @@ class CallScreen extends StatelessWidget {
                       halo: halo,
                       onMute: controller.toggleMute,
                       onSpeaker: controller.toggleSpeaker,
-                      onEnd: () async {
-                        if (!confirmEnd ||
-                            state.phase != CallPhase.connected ||
-                            await _confirmEnd(context)) {
-                          await controller.hangUp();
-                        }
-                      },
+                      onEnd: () => _end(context, state, controller),
+                      onMinimize: canMinimize ? minimize : null,
                     ),
                   },
                 ),
@@ -155,6 +209,18 @@ class CallScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future<void> _end(
+    BuildContext context,
+    CallState state,
+    CallController controller,
+  ) async {
+    if (!confirmEnd ||
+        state.phase != CallPhase.connected ||
+        await _confirmEnd(context)) {
+      await controller.hangUp();
+    }
   }
 
   Future<bool> _confirmEnd(BuildContext context) async {
@@ -194,6 +260,7 @@ class _LiveView extends StatelessWidget {
     required this.onMute,
     required this.onSpeaker,
     required this.onEnd,
+    required this.onMinimize,
   });
 
   final CallState state;
@@ -206,6 +273,7 @@ class _LiveView extends StatelessWidget {
   final VoidCallback onMute;
   final VoidCallback onSpeaker;
   final VoidCallback onEnd;
+  final VoidCallback? onMinimize;
 
   @override
   Widget build(BuildContext context) {
@@ -214,23 +282,39 @@ class _LiveView extends StatelessWidget {
         state.phase != CallPhase.connected && state.phase != CallPhase.ended;
     return Column(
       children: [
-        const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.lock_rounded,
-              size: 14,
-              color: Colors.white.withValues(alpha: 0.6),
-            ),
-            const SizedBox(width: 6),
-            Text(
-              strings.encrypted,
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: Colors.white.withValues(alpha: 0.6),
+        const SizedBox(height: 4),
+        SizedBox(
+          height: 48,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.lock_rounded,
+                    size: 14,
+                    color: Colors.white.withValues(alpha: 0.6),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    strings.encrypted,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: Colors.white.withValues(alpha: 0.6),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+              if (onMinimize != null)
+                Positioned(
+                  left: 8,
+                  child: _MinimizeButton(
+                    tooltip: strings.minimize,
+                    onTap: onMinimize!,
+                  ),
+                ),
+            ],
+          ),
         ),
         if (top != null)
           Padding(
@@ -310,6 +394,327 @@ class _LiveView extends StatelessWidget {
   }
 }
 
+/// Video layout: the peer fills the screen, we sit in a corner tile that can be
+/// dragged to any corner, and the chrome fades away while the call is connected so
+/// the picture is not covered. A tap brings it back.
+class _VideoView extends StatefulWidget {
+  const _VideoView({
+    required this.state,
+    required this.peerName,
+    required this.avatarUrl,
+    required this.strings,
+    required this.statusOverride,
+    required this.top,
+    required this.halo,
+    required this.onMute,
+    required this.onCamera,
+    required this.onFlip,
+    required this.onEnd,
+    required this.onMinimize,
+  });
+
+  final CallState state;
+  final String peerName;
+  final String? avatarUrl;
+  final CallStrings strings;
+  final String? statusOverride;
+  final Widget? top;
+  final Color halo;
+  final VoidCallback onMute;
+  final VoidCallback onCamera;
+  final VoidCallback onFlip;
+  final VoidCallback onEnd;
+  final VoidCallback? onMinimize;
+
+  @override
+  State<_VideoView> createState() => _VideoViewState();
+}
+
+class _VideoViewState extends State<_VideoView> {
+  static const _hideAfter = Duration(seconds: 5);
+
+  bool _chromeVisible = true;
+
+  /// Which corner the self-view sits in: 0 top-right, 1 bottom-right,
+  /// 2 bottom-left, 3 top-left.
+  int _corner = 0;
+  Timer? _hideTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _scheduleHide();
+  }
+
+  @override
+  void didUpdateWidget(_VideoView old) {
+    super.didUpdateWidget(old);
+    // While anything other than a plain connected call is happening the user needs
+    // to see what is going on.
+    if (widget.state.phase != CallPhase.connected && !_chromeVisible) {
+      setState(() => _chromeVisible = true);
+    }
+    _scheduleHide();
+  }
+
+  void _scheduleHide() {
+    _hideTimer?.cancel();
+    if (widget.state.phase != CallPhase.connected) return;
+    _hideTimer = Timer(_hideAfter, () {
+      if (mounted) setState(() => _chromeVisible = false);
+    });
+  }
+
+  void _toggleChrome() {
+    setState(() => _chromeVisible = !_chromeVisible);
+    _scheduleHide();
+  }
+
+  @override
+  void dispose() {
+    _hideTimer?.cancel();
+    super.dispose();
+  }
+
+  Alignment get _cornerAlignment => switch (_corner) {
+    1 => Alignment.bottomRight,
+    2 => Alignment.bottomLeft,
+    3 => Alignment.topLeft,
+    _ => Alignment.topRight,
+  };
+
+  void _moveSelfView(DragEndDetails details, Size size) {
+    final v = details.velocity.pixelsPerSecond;
+    final right = switch (_corner) {
+      1 || 0 => true,
+      _ => false,
+    };
+    final top = _corner == 0 || _corner == 3;
+    final goRight = v.dx.abs() > 200 ? v.dx > 0 : right;
+    final goTop = v.dy.abs() > 200 ? v.dy < 0 : top;
+    setState(() => _corner = goTop ? (goRight ? 0 : 3) : (goRight ? 1 : 2));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = widget.state;
+    final strings = widget.strings;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: _toggleChrome,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // --- the peer ---------------------------------------------------
+          if (s.showRemoteVideo)
+            CallVideoView(stream: s.remoteVideo)
+          else
+            Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _Avatar(
+                    name: widget.peerName,
+                    url: widget.avatarUrl,
+                    halo: s.phase == CallPhase.reconnecting
+                        ? const Color(0xFFFFC53D)
+                        : widget.halo,
+                    pulsing: s.phase != CallPhase.connected,
+                  ),
+                  if (s.phase == CallPhase.connected && !s.peerCameraOn) ...[
+                    const SizedBox(height: 18),
+                    _Pill(
+                      icon: Icons.videocam_off_rounded,
+                      text: strings.peerCameraOff,
+                      color: Colors.white70,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+
+          // --- our own picture --------------------------------------------
+          if (s.video)
+            Align(
+              alignment: _cornerAlignment,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  12,
+                  _chromeVisible ? 96 : 24,
+                  12,
+                  _chromeVisible ? 160 : 24,
+                ),
+                child: GestureDetector(
+                  onPanEnd: (d) => _moveSelfView(d, MediaQuery.sizeOf(context)),
+                  child: _SelfView(state: s, label: strings.cameraOff),
+                ),
+              ),
+            ),
+
+          // --- chrome -------------------------------------------------------
+          AnimatedOpacity(
+            opacity: _chromeVisible ? 1 : 0,
+            duration: const Duration(milliseconds: 220),
+            child: IgnorePointer(
+              ignoring: !_chromeVisible,
+              child: Column(
+                children: [
+                  DecoratedBox(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Color(0xCC000000), Color(0x00000000)],
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 10, 16, 26),
+                      child: Column(
+                        children: [
+                          if (widget.onMinimize != null)
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: _MinimizeButton(
+                                tooltip: strings.minimize,
+                                onTap: widget.onMinimize!,
+                              ),
+                            ),
+                          Text(
+                            widget.peerName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                          ),
+                          const SizedBox(height: 4),
+                          _StatusLine(
+                            state: s,
+                            strings: strings,
+                            overrideText: widget.statusOverride,
+                          ),
+                          if (widget.top != null) ...[
+                            const SizedBox(height: 12),
+                            widget.top!,
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  DecoratedBox(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [Color(0xCC000000), Color(0x00000000)],
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 30, 16, 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          _RoundButton(
+                            icon: s.muted
+                                ? Icons.mic_off_rounded
+                                : Icons.mic_rounded,
+                            label: strings.mute,
+                            active: s.muted,
+                            size: 56,
+                            onTap: widget.onMute,
+                          ),
+                          _RoundButton(
+                            icon: s.cameraOn
+                                ? Icons.videocam_rounded
+                                : Icons.videocam_off_rounded,
+                            label: strings.camera,
+                            active: !s.cameraOn,
+                            size: 56,
+                            onTap: widget.onCamera,
+                          ),
+                          _RoundButton(
+                            icon: Icons.call_end_rounded,
+                            label: strings.endCall,
+                            background: _endRed,
+                            size: 72,
+                            onTap: widget.onEnd,
+                          ),
+                          _RoundButton(
+                            icon: Icons.flip_camera_ios_rounded,
+                            label: strings.flipCamera,
+                            size: 56,
+                            onTap: s.cameraOn ? widget.onFlip : null,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Our own picture: a rounded tile, mirrored for the front camera, replaced by a
+/// "camera off" card when we turn it off.
+class _SelfView extends StatelessWidget {
+  const _SelfView({required this.state, required this.label});
+
+  final CallState state;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: SizedBox(
+        width: 104,
+        height: 148,
+        child: ColoredBox(
+          color: const Color(0xFF241344),
+          child: state.showLocalVideo
+              ? CallVideoView(
+                  stream: state.localVideo,
+                  mirror: state.frontCamera,
+                )
+              : Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.videocam_off_rounded,
+                        color: Colors.white54,
+                        size: 22,
+                      ),
+                      const SizedBox(height: 6),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Text(
+                          label,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white54,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+        ),
+      ),
+    );
+  }
+}
+
 class _StatusLine extends StatefulWidget {
   const _StatusLine({
     required this.state,
@@ -341,32 +746,10 @@ class _StatusLineState extends State<_StatusLine> {
     super.dispose();
   }
 
-  String _clock(Duration d) {
-    final h = d.inHours;
-    final m = d.inMinutes.remainder(60).toString().padLeft(2, '0');
-    final s = d.inSeconds.remainder(60).toString().padLeft(2, '0');
-    return h > 0 ? '$h:$m:$s' : '$m:$s';
-  }
-
   @override
   Widget build(BuildContext context) {
     final s = widget.state;
-    final strings = widget.strings;
-    final text =
-        widget.overrideText ??
-        switch (s.phase) {
-          CallPhase.idle || CallPhase.preparing || CallPhase.joining =>
-            strings.calling,
-          CallPhase.waitingPeer => strings.ringing,
-          CallPhase.connecting => strings.connecting,
-          CallPhase.connected =>
-            s.connectedAt == null
-                ? strings.connecting
-                : _clock(DateTime.now().difference(s.connectedAt!)),
-          CallPhase.reconnecting => strings.reconnecting,
-          CallPhase.ended => strings.callEnded,
-          _ => '',
-        };
+    final text = widget.overrideText ?? callStatusText(s, widget.strings);
     final connected = s.phase == CallPhase.connected;
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -565,13 +948,16 @@ class _RoundButton extends StatelessWidget {
 
   final IconData icon;
   final String label;
-  final VoidCallback onTap;
+
+  /// Null disables the button (dimmed, no haptic).
+  final VoidCallback? onTap;
   final bool active;
   final Color? background;
   final double size;
 
   @override
   Widget build(BuildContext context) {
+    final enabled = onTap != null;
     final bg =
         background ??
         (active ? Colors.white : Colors.white.withValues(alpha: 0.14));
@@ -580,35 +966,41 @@ class _RoundButton extends StatelessWidget {
         : (active ? const Color(0xFF23133F) : Colors.white);
     return Semantics(
       button: true,
+      enabled: enabled,
       toggled: background == null ? active : null,
       label: label,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Material(
-            color: bg,
-            shape: const CircleBorder(),
-            child: InkWell(
-              customBorder: const CircleBorder(),
-              onTap: () {
-                HapticFeedback.selectionClick();
-                onTap();
-              },
-              child: SizedBox(
-                width: size,
-                height: size,
-                child: Icon(icon, color: fg, size: size * 0.42),
+      child: Opacity(
+        opacity: enabled ? 1 : 0.45,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Material(
+              color: bg,
+              shape: const CircleBorder(),
+              child: InkWell(
+                customBorder: const CircleBorder(),
+                onTap: enabled
+                    ? () {
+                        callHaptics.tap();
+                        onTap!();
+                      }
+                    : null,
+                child: SizedBox(
+                  width: size,
+                  height: size,
+                  child: Icon(icon, color: fg, size: size * 0.42),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: Colors.white.withValues(alpha: 0.8),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: Colors.white.withValues(alpha: 0.8),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -770,4 +1162,21 @@ class _MessageView extends StatelessWidget {
       ],
     );
   }
+}
+
+class _MinimizeButton extends StatelessWidget {
+  const _MinimizeButton({required this.tooltip, required this.onTap});
+  final String tooltip;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => IconButton(
+    tooltip: tooltip,
+    onPressed: onTap,
+    icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 30),
+    color: Colors.white,
+    style: IconButton.styleFrom(
+      backgroundColor: Colors.white.withValues(alpha: 0.12),
+    ),
+  );
 }

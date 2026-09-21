@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/router/routes.dart';
 import '../../../../core/theme/astro_palette.dart';
 import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/async_value.dart';
@@ -13,6 +11,7 @@ import '../../../../shared/widgets/fade_slide_in.dart';
 import '../../../../shared/widgets/pressable.dart';
 import '../../../../shared/widgets/score_ring.dart';
 import '../../../kundali/presentation/kundali_terms.dart';
+import '../../../consultations/presentation/view/widgets/share_with_astrologer.dart';
 import '../../data/models/match_result.dart';
 import '../cubit/matchmaking_cubit.dart';
 import 'widgets/match_widgets.dart';
@@ -97,7 +96,7 @@ class _MatchResultPageState extends State<MatchResultPage> {
                   _ChartsCompare(match: m),
                 ],
                 const SizedBox(height: 18),
-                const _AskAstrologer(),
+                _AskAstrologer(match: m),
                 const SizedBox(height: 14),
                 Text(
                   l.matchDisclaimer,
@@ -786,7 +785,9 @@ class _ChartsCompare extends StatelessWidget {
 }
 
 class _AskAstrologer extends StatelessWidget {
-  const _AskAstrologer();
+  const _AskAstrologer({required this.match});
+
+  final MatchResult match;
 
   @override
   Widget build(BuildContext context) {
@@ -830,8 +831,11 @@ class _AskAstrologer extends StatelessWidget {
                     backgroundColor: context.brand.gold,
                     foregroundColor: context.brand.cosmicStart,
                   ),
-                  onPressed: () =>
-                      context.go(Routes.astrologersWith(sort: 'recommended')),
+                  onPressed: () => shareWithAstrologer(
+                    context,
+                    matchId: match.id,
+                    label: '${match.boy.name} & ${match.girl.name}',
+                  ),
                   icon: const Icon(Icons.chat_rounded, size: 18),
                   label: Text(l.horoCtaButton),
                 ),

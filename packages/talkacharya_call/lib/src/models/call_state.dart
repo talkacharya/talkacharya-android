@@ -1,13 +1,15 @@
 import 'package:equatable/equatable.dart';
 
+import '../engine/rtc_engine.dart';
+
 enum CallPhase {
   /// Not started yet.
   idle,
 
-  /// Asking for the microphone.
+  /// Asking for the microphone (and the camera on a video call).
   preparing,
 
-  /// Microphone permission refused — the screen offers settings / retry.
+  /// Microphone or camera permission refused — the screen offers settings / retry.
   permissionDenied,
 
   /// Fetching join info + opening signaling.
@@ -19,7 +21,7 @@ enum CallPhase {
   /// Both sides present; ICE / DTLS handshake in progress.
   connecting,
 
-  /// Audio flowing.
+  /// Audio (and video) flowing.
   connected,
 
   /// Was connected, lost the path — trying to recover (ICE restart).
@@ -55,6 +57,12 @@ class CallState extends Equatable {
     this.error,
     this.peerName = '',
     this.permanentlyDenied = false,
+    this.video = false,
+    this.cameraOn = false,
+    this.frontCamera = true,
+    this.peerCameraOn = true,
+    this.localVideo,
+    this.remoteVideo,
   });
 
   final CallPhase phase;
@@ -64,17 +72,38 @@ class CallState extends Equatable {
   /// 0 = unknown, 1 = poor, 2 = fair, 3 = good.
   final int quality;
 
-  /// Audio goes through our TURN relay (vs. phone-to-phone).
+  /// Media goes through our TURN relay (vs. phone-to-phone).
   final bool relayed;
 
-  /// First time audio connected (drives the on-screen timer).
+  /// First time the call connected (drives the on-screen timer).
   final DateTime? connectedAt;
   final CallEndReason endReason;
   final String? error;
   final String peerName;
 
-  /// Microphone permission is blocked in system settings.
+  /// Microphone or camera permission is blocked in system settings.
   final bool permanentlyDenied;
+
+  /// This consultation is a video call (fixed for the whole call).
+  final bool video;
+
+  /// Our camera is on. A video call can continue with it off — that is how
+  /// someone "drops to voice" without ending the session.
+  final bool cameraOn;
+  final bool frontCamera;
+
+  /// The other side says their camera is on. Their tile shows an avatar when not.
+  final bool peerCameraOn;
+
+  /// Renderable streams, null until the track arrives (or when a camera is off).
+  final RtcVideoStream? localVideo;
+  final RtcVideoStream? remoteVideo;
+
+  /// Show the peer's video: a video call, connected, their camera on, track here.
+  bool get showRemoteVideo =>
+      video && peerCameraOn && remoteVideo != null && phase.isLive;
+
+  bool get showLocalVideo => video && cameraOn && localVideo != null;
 
   CallState copyWith({
     CallPhase? phase,
@@ -88,6 +117,14 @@ class CallState extends Equatable {
     bool clearError = false,
     String? peerName,
     bool? permanentlyDenied,
+    bool? video,
+    bool? cameraOn,
+    bool? frontCamera,
+    bool? peerCameraOn,
+    RtcVideoStream? localVideo,
+    bool clearLocalVideo = false,
+    RtcVideoStream? remoteVideo,
+    bool clearRemoteVideo = false,
   }) => CallState(
     phase: phase ?? this.phase,
     muted: muted ?? this.muted,
@@ -99,6 +136,12 @@ class CallState extends Equatable {
     error: clearError ? null : (error ?? this.error),
     peerName: peerName ?? this.peerName,
     permanentlyDenied: permanentlyDenied ?? this.permanentlyDenied,
+    video: video ?? this.video,
+    cameraOn: cameraOn ?? this.cameraOn,
+    frontCamera: frontCamera ?? this.frontCamera,
+    peerCameraOn: peerCameraOn ?? this.peerCameraOn,
+    localVideo: clearLocalVideo ? null : (localVideo ?? this.localVideo),
+    remoteVideo: clearRemoteVideo ? null : (remoteVideo ?? this.remoteVideo),
   );
 
   @override
@@ -113,5 +156,11 @@ class CallState extends Equatable {
     error,
     peerName,
     permanentlyDenied,
+    video,
+    cameraOn,
+    frontCamera,
+    peerCameraOn,
+    localVideo,
+    remoteVideo,
   ];
 }

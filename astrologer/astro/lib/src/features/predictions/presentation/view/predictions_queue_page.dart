@@ -61,7 +61,8 @@ class _View extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
                     itemCount: items.length,
                     separatorBuilder: (_, _) => const SizedBox(height: 8),
-                    itemBuilder: (context, i) => _QueueTile(prediction: items[i]),
+                    itemBuilder: (context, i) =>
+                        _QueueTile(prediction: items[i]),
                   ),
           ),
         ),
@@ -69,8 +70,7 @@ class _View extends StatelessWidget {
     );
   }
 
-  static Widget _loading() =>
-      const Center(child: CircularProgressIndicator());
+  static Widget _loading() => const Center(child: CircularProgressIndicator());
 }
 
 class _QueueTile extends StatelessWidget {
@@ -99,8 +99,7 @@ class _QueueTile extends StatelessWidget {
         subtitle: Text(
           [
             prediction.profileLabel,
-            if (prediction.language != 'en')
-              'lang: ${prediction.language}',
+            if (prediction.language != 'en') 'lang: ${prediction.language}',
             if (prediction.dueAt != null)
               'due ${prediction.dueAt!.day}/${prediction.dueAt!.month}',
           ].where((s) => s.isNotEmpty).join(' · '),

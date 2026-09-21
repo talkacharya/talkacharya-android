@@ -1,0 +1,24 @@
+name: talkacharya_sounds
+description: "Shared app sounds for the TalkAcharya customer and astrologer apps — incoming-call/request ringtone (the phone's own), outgoing ringback, notification sound and short chat/call tones. Respects silent and vibrate mode. Android only; other platforms are silent no-ops."
+version: 0.1.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.11.0
+  flutter: ">=3.29.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.talkacharya.sounds
+        pluginClass: TalkacharyaSoundsPlugin

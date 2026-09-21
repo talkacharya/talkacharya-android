@@ -284,7 +284,7 @@ class _Header extends StatelessWidget {
                             icon: Icons.videocam_rounded,
                             tooltip: l.channelVideo,
                             color: AstroPalette.love.start,
-                            onTap: () => _startVideo(context),
+                            onTap: () => _startVideo(context, a),
                           ),
                         _BarAction(
                           icon: Icons.card_giftcard_rounded,
@@ -956,10 +956,22 @@ void _startVoice(BuildContext context, Astrologer a) {
   );
 }
 
-void _startVideo(BuildContext context) {
-  ScaffoldMessenger.of(
+void _startVideo(BuildContext context, Astrologer a) {
+  final video = a.rateFor('video');
+  if (video == null || !a.isAvailable) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(context.l10n.callVideoUnavailable)));
+    return;
+  }
+  showBookConsultationSheet(
     context,
-  ).showSnackBar(SnackBar(content: Text(context.l10n.astroCallsComingSoon)));
+    astrologerId: a.id,
+    astrologerName: a.name,
+    ratePerMinute: video.perMinute,
+    currency: video.currency,
+    channel: 'video',
+  );
 }
 
 void _sendGift(BuildContext context, Astrologer a) {
@@ -1032,7 +1044,7 @@ class _HeaderCtas extends StatelessWidget {
             icon: Icons.videocam_rounded,
             color: AstroPalette.love.start,
             tooltip: l.channelVideo,
-            onTap: () => _startVideo(context),
+            onTap: () => _startVideo(context, a),
           ),
         ],
         const SizedBox(width: 8),

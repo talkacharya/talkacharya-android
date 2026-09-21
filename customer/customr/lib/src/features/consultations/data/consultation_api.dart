@@ -42,6 +42,7 @@ class ConsultationApi {
     required String astrologerId,
     required String channel,
     String? birthProfileId,
+    String? matchId,
     String question = '',
     List<String> topics = const [],
   }) async {
@@ -52,6 +53,7 @@ class ConsultationApi {
           'astrologer': astrologerId,
           'channel': channel,
           'birth_profile': ?birthProfileId,
+          'match': ?matchId,
           'question': question,
           'topics': topics,
         },
@@ -99,6 +101,24 @@ class ConsultationApi {
       return (res.data ?? const [])
           .map((e) => Consultation.fromMap(e as Map<String, dynamic>))
           .toList();
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// Share a birth profile or a match with the astrologer mid-session.
+  Future<Consultation> share(
+    String id, {
+    String? birthProfileId,
+    String? matchId,
+  }) async {
+    try {
+      final res = await _dio.post<Map<String, dynamic>>(
+        ApiPaths.consultationShares(id),
+        data: {'birth_profile': ?birthProfileId, 'match': ?matchId},
+      );
+      _raise(res);
+      return Consultation.fromMap(res.data ?? const {});
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
     }

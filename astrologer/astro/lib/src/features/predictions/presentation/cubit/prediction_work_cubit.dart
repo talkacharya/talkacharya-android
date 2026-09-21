@@ -4,6 +4,7 @@ import 'package:talkacharya_predictions/talkacharya_predictions.dart';
 
 import '../../../../core/util/async_value.dart';
 import '../../data/predictions_repository.dart';
+import '../../../../core/network/friendly_error.dart';
 
 part 'prediction_work_state.dart';
 
@@ -17,13 +18,18 @@ class PredictionWorkCubit extends Cubit<PredictionWorkState> {
   final String id;
 
   Future<void> load() async {
-    emit(state.copyWith(prediction: AsyncValue.loading(state.prediction.value)));
+    emit(
+      state.copyWith(prediction: AsyncValue.loading(state.prediction.value)),
+    );
     try {
       emit(state.copyWith(prediction: AsyncValue.data(await _repo.detail(id))));
     } catch (e) {
       emit(
         state.copyWith(
-          prediction: AsyncValue.error(e.toString(), state.prediction.value),
+          prediction: AsyncValue.error(
+            friendlyError(e),
+            state.prediction.value,
+          ),
         ),
       );
     }
@@ -33,7 +39,7 @@ class PredictionWorkCubit extends Cubit<PredictionWorkState> {
     try {
       emit(state.copyWith(prediction: AsyncValue.data(await _repo.claim(id))));
     } catch (e) {
-      emit(state.copyWith(error: e.toString()));
+      emit(state.copyWith(error: friendlyError(e)));
     }
   }
 
@@ -49,7 +55,7 @@ class PredictionWorkCubit extends Cubit<PredictionWorkState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(saving: false, error: e.toString()));
+      emit(state.copyWith(saving: false, error: friendlyError(e)));
     }
   }
 
@@ -60,16 +66,18 @@ class PredictionWorkCubit extends Cubit<PredictionWorkState> {
       emit(state.copyWith(prediction: AsyncValue.data(p), saving: false));
       return true;
     } catch (e) {
-      emit(state.copyWith(saving: false, error: e.toString()));
+      emit(state.copyWith(saving: false, error: friendlyError(e)));
       return false;
     }
   }
 
   Future<void> release() async {
     try {
-      emit(state.copyWith(prediction: AsyncValue.data(await _repo.release(id))));
+      emit(
+        state.copyWith(prediction: AsyncValue.data(await _repo.release(id))),
+      );
     } catch (e) {
-      emit(state.copyWith(error: e.toString()));
+      emit(state.copyWith(error: friendlyError(e)));
     }
   }
 }

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../core/firebase/firebase_setup.dart';
+import '../../../core/network/friendly_error.dart';
 
 /// A verification failure with a user-ready message. [code] is Firebase's error
 /// code (or a local one) so callers/tests can branch without parsing text.
@@ -23,14 +24,16 @@ class FirebasePhoneAuthException implements Exception {
 /// `signInWithCredential`, `getIdToken` — ends in exactly one error callback or a
 /// [FirebasePhoneAuthException], so the login spinner can never hang.
 class FirebasePhoneAuth {
-  FirebasePhoneAuth([FirebaseAuth? auth, this.verbose = !kReleaseMode])
-    : _auth = auth;
+  FirebasePhoneAuth([FirebaseAuth? auth, bool? verbose])
+    : _auth = auth,
+      verbose = verbose ?? showErrorDetails;
 
   FirebaseAuth? _auth;
   FirebaseAuth get _fa => _auth ??= FirebaseAuth.instance;
 
-  /// Non-release builds append the raw Firebase code to messages, so an App Check
-  /// / SHA / Play Integrity misconfiguration is visible on the device.
+  /// Development builds append the raw Firebase code to messages, so an App Check
+  /// / SHA / Play Integrity misconfiguration is visible on the device; a
+  /// production build shows the sentence alone (see [showErrorDetails]).
   final bool verbose;
 
   /// Start verification for [e164]. Exactly one of [onCodeSent] / [onAutoVerified]

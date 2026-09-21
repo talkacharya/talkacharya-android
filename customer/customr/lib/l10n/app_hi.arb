@@ -2229,7 +2229,78 @@
   "callBookTitle": "{name} को कॉल करें",
   "callBookBilling": "वॉइस कॉल · कनेक्ट होने के बाद प्रति मिनट शुल्क",
   "callBookCta": "कॉल शुरू करें · {price}/मिनट",
+  "callCamera": "कैमरा",
+  "callFlipCamera": "पलटें",
+  "callCameraOff": "कैमरा बंद",
+  "callPeerCameraOff": "उनका कैमरा बंद है",
+  "callCameraBody": "कैमरा चालू करने दें ताकि ज्योतिषी आपको देख सकें।",
+  "callCameraBlockedBody": "TalkAcharya के लिए कैमरा बंद है। इसे सेटिंग्स में चालू करें।",
+  "callVideoBookTitle": "{name} से वीडियो कॉल",
+  "@callVideoBookTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callVideoBookBilling": "वीडियो कॉल · जुड़ते ही प्रति मिनट शुल्क",
+  "callVideoUnavailable": "यह ज्योतिषी अभी वीडियो कॉल नहीं ले रहे हैं।",
   "callUnavailable": "यह ज्योतिषी अभी कॉल नहीं ले रहे हैं।",
+  "liveTabTitle": "लाइव",
+  "liveBadge": "लाइव",
+  "liveNowTitle": "अभी लाइव",
+  "liveUpcomingTitle": "आने वाले",
+  "liveWatch": "देखें",
+  "liveLeave": "बाहर निकलें",
+  "liveSend": "भेजें",
+  "liveEmptyTitle": "अभी कोई लाइव सत्र नहीं",
+  "liveEmptyBody": "जब ज्योतिषी लाइव आएंगे, वे यहाँ दिखेंगे।",
+  "liveWatchingCount": "{count} देख रहे हैं",
+  "@liveWatchingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "liveConnecting": "लाइव से जुड़ रहे हैं…",
+  "liveReconnecting": "फिर से जुड़ रहे हैं…",
+  "liveHostCameraOff": "ज्योतिषी का कैमरा बंद है",
+  "liveChatHint": "कुछ कहें…",
+  "liveSlowModeHint": "स्लो मोड · हर {seconds} सेकंड में एक संदेश",
+  "@liveSlowModeHint": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "liveGiftSent": "{name} ने {gift} भेजा",
+  "@liveGiftSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "gift": {
+        "type": "String"
+      }
+    }
+  },
+  "liveEndedTitle": "लाइव सत्र समाप्त",
+  "liveEndedBody": "देखने के लिए धन्यवाद। अगला सत्र लाइव टैब में मिलेगा।",
+  "liveEndedByHost": "{name} ने सत्र समाप्त कर दिया। अगला सत्र लाइव टैब में मिलेगा।",
+  "@liveEndedByHost": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "liveRemovedTitle": "आपको हटा दिया गया",
+  "liveRemovedBody": "होस्ट ने आपको इस लाइव से हटा दिया है।",
+  "liveCannotJoinTitle": "जुड़ नहीं सके",
+  "liveCannotJoinBody": "हो सकता है सत्र समाप्त हो गया हो। लाइव टैब से कोई और देखें।",
+  "liveBackToList": "लाइव पर लौटें",
   "giftAction": "उपहार भेजें",
   "giftSheetTitle": "{name} को उपहार भेजें",
   "giftSheetSubtitle": "आभार का एक छोटा-सा प्रतीक — उन्हें तुरंत दिखेगा।",
@@ -2759,5 +2830,51 @@
   "storeProfileAddressesSub": "डिलीवरी पते",
   "storeHomeRailTitle": "उपाय स्टोर",
   "storeHomeRailSub": "प्रमाणित रुद्राक्ष, रत्न और मंदिर पूजा",
-  "storeSeeAll": "सभी देखें"
+  "storeSeeAll": "सभी देखें",
+  "shareTitle": "अपने ज्योतिषी के साथ साझा करें",
+  "shareSubtitle": "आप जो साझा करेंगे, उसकी कुंडली वे खोल सकते हैं।",
+  "shareTabProfiles": "जन्म विवरण",
+  "shareTabMatches": "कुंडली मिलान",
+  "shareAction": "साझा करें",
+  "shareShared": "साझा किया गया",
+  "shareDone": "{name} के साथ साझा किया गया",
+  "shareFailed": "साझा नहीं हो सका। कृपया फिर कोशिश करें।",
+  "shareNoProfiles": "अभी कोई जन्म विवरण सहेजा नहीं गया",
+  "shareAddProfile": "जन्म विवरण जोड़ें",
+  "shareNoMatches": "अभी कोई कुंडली मिलान नहीं",
+  "shareWithAstrologer": "ज्योतिषी के साथ साझा करें",
+  "shareConsultAbout": "ज्योतिषी से परामर्श करें",
+  "sharePickConsultation": "परामर्श चुनें",
+  "shareMatchPoints": "{max} में से {points} अंक",
+  "shareTimeUnknown": "जन्म समय ज्ञात नहीं",
+  "shareSharedWithAstrologer": "आपके ज्योतिषी के साथ साझा किया गया",
+  "sessionLiveBanner": "{name} के साथ लाइव परामर्श",
+  "sessionReturn": "वापस जाएँ",
+  "callLeaveTitle": "कॉल छोड़ें?",
+  "callLeaveBody": "यह स्क्रीन छोड़ने पर कॉल समाप्त हो जाएगी।",
+  "callLeaveStay": "कॉल पर बने रहें",
+  "callLeaveEnd": "कॉल समाप्त करें",
+  "liveSendPhoto": "फ़ोटो भेजें",
+  "livePhotoFailed": "फ़ोटो नहीं भेजी जा सकी",
+  "livePhotoLabel": "फ़ोटो",
+  "errForbidden": "आपके पास इसकी अनुमति नहीं है।",
+  "errNotFound": "यह नहीं मिला — शायद हटा दिया गया है।",
+  "errServer": "हमारे सर्वर में समस्या आ गई। कृपया थोड़ी देर बाद कोशिश करें।",
+  "walletHeldBreakdown": "बैलेंस {total} · {held} होल्ड पर",
+  "walletHeldExplainerTitle": "कुछ पैसे होल्ड पर क्यों हैं?",
+  "walletHeldExplainerBody": "परामर्श चलने के दौरान हम कुछ मिनट का बैलेंस सुरक्षित रख लेते हैं, ताकि बातचीत बीच में न रुके। जो हिस्सा इस्तेमाल नहीं होता, सत्र खत्म होते ही वापस आ जाता है।",
+  "bookLowBalanceTitle": "शुरू करने के लिए पैसे जोड़ें",
+  "bookLowBalanceBody": "यह परामर्श शुरू करने के लिए कम से कम {required} चाहिए। अभी आपके पास {available} खर्च करने लायक हैं।",
+  "bookLowBalanceHeld": "आपके बैलेंस में से {held} एक चल रहे सत्र के लिए सुरक्षित रखे गए हैं।",
+  "commonNotNow": "अभी नहीं",
+  "callMinimize": "छोटा करें",
+  "callTapToReturn": "कॉल पर लौटने के लिए टैप करें",
+  "callWaiting": "प्रतीक्षा…",
+  "profileSounds": "ध्वनि",
+  "profileSoundsDesc": "रिंगटोन, कॉल और चैट की आवाज़ें",
+  "profileSoundVibration": "ध्वनि और कंपन",
+  "profileSoundVibrationSub": "रिंगटोन, आवाज़ें और कंपन",
+  "roomEndedSummaryLine": "{minutes} मिनट · {currency} {amount}",
+  "roomViewSummary": "सारांश",
+  "roomYouRated": "आपने इस सत्र को {rating}/5 रेट किया"
 }

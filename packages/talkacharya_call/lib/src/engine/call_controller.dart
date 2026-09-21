@@ -40,6 +40,10 @@ class CallTimings {
 ///   or as an ICE restart when a connected call drops.
 /// * `answer`, `ice` — the usual WebRTC exchange (candidates are queued until the
 ///   remote description is set).
+/// * `media` — "my camera just went on/off", so the peer can swap the frozen last
+///   frame for an avatar. Video itself never renegotiates: both sides publish their
+///   camera from the start of a video call and toggling only enables/disables the
+///   track, which keeps a flaky mobile connection from having to redo SDP mid-call.
 /// * `bye` — deliberate hang-up.
 ///
 /// A new `sid` from the peer (their app restarted / screen re-opened) replaces the old
@@ -57,20 +61,33 @@ class CallController extends Cubit<CallState> {
     CallKeepAlive keepAlive = const NoopCallKeepAlive(),
     this.keepAliveTitle = 'Call in progress',
     this.timings = const CallTimings(),
+    CallSounds sounds = const NoopCallSounds(),
+    bool ringback = false,
     String? sessionId,
   }) : _backend = backend,
+       _sounds = sounds,
+       _wantsRingback = ringback,
        _signaling = signaling,
        _engine = engine,
        _permissions = permissions,
        _keepAlive = keepAlive,
        sid = sessionId ?? _randomSid(),
-       super(const CallState());
+       super(const CallState()) {
+    _syncRingback(state.phase);
+  }
 
   final CallBackend _backend;
   final CallSignaling _signaling;
   final RtcEngine _engine;
   final CallPermissions _permissions;
   final CallKeepAlive _keepAlive;
+  final CallSounds _sounds;
+
+  /// This side placed the call: play ringback from creation (e.g. while the
+  /// consultation still waits to be accepted) until audio first flows.
+  final bool _wantsRingback;
+  bool _ringing = false;
+  bool _connectedOnce = false;
   final String keepAliveTitle;
   final CallTimings timings;
 
@@ -88,6 +105,8 @@ class CallController extends Cubit<CallState> {
   StreamSubscription<Map<String, dynamic>>? _signalSub;
   StreamSubscription<Map<String, dynamic>>? _candidateSub;
   StreamSubscription<RtcIceState>? _iceSub;
+  StreamSubscription<RtcVideoStream?>? _localVideoSub;
+  StreamSubscription<RtcVideoStream?>? _remoteVideoSub;
   Timer? _helloTimer;
   Timer? _heartbeatTimer;
   Timer? _reconnectTimer;
@@ -102,6 +121,43 @@ class CallController extends Cubit<CallState> {
     return List.generate(12, (_) => r.nextInt(36).toRadixString(36)).join();
   }
 
+  // --- sounds ------------------------------------------------------------------
+
+  static const _ringbackPhases = {
+    CallPhase.idle,
+    CallPhase.preparing,
+    CallPhase.joining,
+    CallPhase.waitingPeer,
+    CallPhase.connecting,
+  };
+
+  void _syncRingback(CallPhase phase) {
+    final want =
+        _wantsRingback && !_connectedOnce && _ringbackPhases.contains(phase);
+    if (want == _ringing) return;
+    _ringing = want;
+    want ? _sounds.startRingback() : _sounds.stopRingback();
+  }
+
+  @override
+  void onChange(Change<CallState> change) {
+    super.onChange(change);
+    final from = change.currentState.phase;
+    final to = change.nextState.phase;
+    if (from == to) return;
+    final wasRinging = _ringing;
+    if (to == CallPhase.connected && !_connectedOnce) {
+      _connectedOnce = true;
+      _syncRingback(to);
+      _sounds.connected();
+      return;
+    }
+    _syncRingback(to);
+    if (to == CallPhase.ended && (wasRinging || from != CallPhase.idle)) {
+      _sounds.ended();
+    }
+  }
+
   // --- lifecycle ---------------------------------------------------------------
 
   /// Ask for the mic, fetch join info, open signaling and start announcing.
@@ -109,12 +165,12 @@ class CallController extends Cubit<CallState> {
     if (state.phase.isLive || _closed) return;
     emit(state.copyWith(phase: CallPhase.preparing, clearError: true));
 
-    final permission = await _permissions.requestMicrophone();
-    if (permission != MicPermission.granted) {
+    final mic = await _permissions.requestMicrophone();
+    if (mic != MediaPermission.granted) {
       emit(
         state.copyWith(
           phase: CallPhase.permissionDenied,
-          permanentlyDenied: permission == MicPermission.permanentlyDenied,
+          permanentlyDenied: mic == MediaPermission.permanentlyDenied,
         ),
       );
       return;
@@ -132,21 +188,49 @@ class CallController extends Cubit<CallState> {
     if (_closed) return;
     _join = join;
 
+    // Only a video consultation asks for the camera, and only once we know that is
+    // what this call is — a voice call never triggers the camera prompt.
+    var video = join.video;
+    if (video) {
+      final camera = await _permissions.requestCamera();
+      if (camera != MediaPermission.granted) {
+        // Carry on with audio: losing the picture is better than losing a paid
+        // session the customer is already being charged for.
+        video = false;
+      }
+      if (_closed) return;
+    }
+    emit(state.copyWith(video: join.video, cameraOn: video));
+
+    // Subscribed *before* opening the camera: `localVideo` is a broadcast stream,
+    // which never replays a missed event to a late listener. `openMedia()` pushes
+    // the camera's first frame stream as its very last step, so listening only
+    // after it returns misses that one event forever — the self-view tile then
+    // stays blank until something else (toggling the camera) pushes a second one.
+    // That was a real bug, not a hypothetical: the self-view only ever appeared
+    // after switching the camera off and back on.
+    _localVideoSub = _engine.localVideo.listen(
+      (stream) => _emitIfOpen(
+        stream == null
+            ? state.copyWith(clearLocalVideo: true)
+            : state.copyWith(localVideo: stream),
+      ),
+    );
+
     try {
-      await _engine.openMicrophone();
+      await _engine.openMedia(video: video);
     } catch (e) {
       emit(state.copyWith(phase: CallPhase.failed, error: 'microphone: $e'));
       return;
     }
+    if (video) emit(state.copyWith(speakerOn: true));
 
     _signalSub = _signaling
         .frames(join.signalingChannel)
         .listen(_onSignal, onError: (_) {});
     unawaited(_keepAlive.start(title: keepAliveTitle, text: join.peerName));
 
-    emit(
-      state.copyWith(phase: CallPhase.waitingPeer, peerName: join.peerName),
-    );
+    emit(state.copyWith(phase: CallPhase.waitingPeer, peerName: join.peerName));
     _sendHello();
     _helloTimer = Timer.periodic(timings.hello, (_) {
       if (state.phase != CallPhase.connected) _sendHello();
@@ -214,6 +298,27 @@ class CallController extends Cubit<CallState> {
     emit(state.copyWith(speakerOn: on));
   }
 
+  /// Camera on/off during a video call. The track stays in place (no renegotiation);
+  /// the peer is told so their tile can fall back to an avatar.
+  Future<void> toggleCamera() async {
+    if (!state.video) return;
+    final on = !state.cameraOn;
+    try {
+      await _engine.setCameraEnabled(on);
+    } catch (_) {}
+    emit(state.copyWith(cameraOn: on));
+    await _publish({'t': 'media', 'video': on});
+  }
+
+  /// Front <-> back camera.
+  Future<void> switchCamera() async {
+    if (!state.video || !state.cameraOn) return;
+    try {
+      final front = await _engine.switchCamera();
+      emit(state.copyWith(frontCamera: front));
+    } catch (_) {}
+  }
+
   // --- signaling -------------------------------------------------------------------
 
   Future<void> _publish(Map<String, dynamic> body) async {
@@ -229,7 +334,8 @@ class CallController extends Cubit<CallState> {
     } catch (_) {}
   }
 
-  void _sendHello({String? to}) => unawaited(_publish({'t': 'hello', 'to': ?to}));
+  void _sendHello({String? to}) =>
+      unawaited(_publish({'t': 'hello', 'to': ?to}));
 
   Future<void> _onSignal(Map<String, dynamic> msg) async {
     if (_closed) return;
@@ -253,6 +359,8 @@ class CallController extends Cubit<CallState> {
           remoteSid,
           (msg['c'] as Map?)?.cast<String, dynamic>(),
         );
+      case 'media':
+        emit(state.copyWith(peerCameraOn: msg['video'] == true));
       case 'bye':
         if (remoteSid == _remoteSid || _remoteSid == null) {
           await _teardown(CallEndReason.remoteHangUp);
@@ -279,6 +387,7 @@ class CallController extends Cubit<CallState> {
     if (state.phase == CallPhase.waitingPeer) {
       emit(state.copyWith(phase: CallPhase.connecting));
     }
+    if (state.video) await _publish({'t': 'media', 'video': state.cameraOn});
   }
 
   bool get _offerCooledDown =>
@@ -349,7 +458,10 @@ class CallController extends Cubit<CallState> {
   Future<void> _newPeer(String remoteSid) async {
     await _dropPeer();
     _remoteSid = remoteSid;
-    final peer = await _engine.createPeer(_join?.iceServers ?? const []);
+    final peer = await _engine.createPeer(
+      _join?.iceServers ?? const [],
+      video: state.video,
+    );
     if (_closed) {
       await peer.close();
       return;
@@ -359,13 +471,24 @@ class CallController extends Cubit<CallState> {
       (c) => unawaited(_publish({'t': 'ice', 'to': _remoteSid, 'c': c})),
     );
     _iceSub = peer.iceStates.listen(_onIceState);
+    _remoteVideoSub = peer.remoteVideo.listen(
+      (stream) => _emitIfOpen(
+        stream == null
+            ? state.copyWith(clearRemoteVideo: true)
+            : state.copyWith(remoteVideo: stream),
+      ),
+    );
   }
 
   Future<void> _dropPeer() async {
     await _candidateSub?.cancel();
     await _iceSub?.cancel();
+    await _remoteVideoSub?.cancel();
     _candidateSub = null;
     _iceSub = null;
+    _remoteVideoSub = null;
+    if (state.remoteVideo != null)
+      _emitIfOpen(state.copyWith(clearRemoteVideo: true));
     _pendingCandidates.clear();
     final peer = _peer;
     _peer = null;
@@ -458,13 +581,14 @@ class CallController extends Cubit<CallState> {
       }
       if (!isClosed) {
         emit(
-          state.copyWith(
-            quality: quality,
-            relayed: s.relayed ?? state.relayed,
-          ),
+          state.copyWith(quality: quality, relayed: s.relayed ?? state.relayed),
         );
       }
     } catch (_) {}
+  }
+
+  void _emitIfOpen(CallState next) {
+    if (!isClosed && !_closed) emit(next);
   }
 
   // --- teardown ------------------------------------------------------------------------
@@ -477,13 +601,21 @@ class CallController extends Cubit<CallState> {
     _reconnectTimer?.cancel();
     _statsTimer?.cancel();
     await _signalSub?.cancel();
+    await _localVideoSub?.cancel();
     await _dropPeer();
     try {
       await _engine.release();
     } catch (_) {}
     unawaited(_keepAlive.stop());
     if (!isClosed) {
-      emit(state.copyWith(phase: CallPhase.ended, endReason: reason));
+      emit(
+        state.copyWith(
+          phase: CallPhase.ended,
+          endReason: reason,
+          clearLocalVideo: true,
+          clearRemoteVideo: true,
+        ),
+      );
     }
   }
 

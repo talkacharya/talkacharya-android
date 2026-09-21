@@ -21,17 +21,15 @@ class PredictionsRepository {
     String id, {
     required String title,
     required String body,
-  }) async => Prediction.fromMap(
-    await _api.saveDraft(id, title: title, body: body),
-  );
+  }) async =>
+      Prediction.fromMap(await _api.saveDraft(id, title: title, body: body));
 
   Future<Prediction> deliver(
     String id, {
     required String title,
     required String body,
-  }) async => Prediction.fromMap(
-    await _api.deliver(id, title: title, body: body),
-  );
+  }) async =>
+      Prediction.fromMap(await _api.deliver(id, title: title, body: body));
 
   Future<Prediction> release(String id) async =>
       Prediction.fromMap(await _api.release(id));

@@ -48,14 +48,20 @@ class _PredictionDetailPageState extends State<PredictionDetailPage> {
                 _Header(prediction: p, l: l),
                 const SizedBox(height: 16),
                 if (p.status.isDelivered)
-                  PredictionBodyView(prediction: p, disclaimer: l.predDisclaimer)
+                  PredictionBodyView(
+                    prediction: p,
+                    disclaimer: l.predDisclaimer,
+                  )
                 else
                   _Pending(prediction: p, l: l),
                 const SizedBox(height: 22),
                 if (p.status.isDelivered)
                   FilledButton.icon(
                     onPressed: () => context.go(Routes.astrologers),
-                    icon: const Icon(Icons.chat_bubble_outline_rounded, size: 18),
+                    icon: const Icon(
+                      Icons.chat_bubble_outline_rounded,
+                      size: 18,
+                    ),
                     label: Text(l.predAskFollowUp),
                     style: FilledButton.styleFrom(
                       minimumSize: const Size.fromHeight(50),
@@ -101,9 +107,9 @@ class _Header extends StatelessWidget {
               ),
               Text(
                 predPeriodTitle(l, prediction.period),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: scheme.onSurfaceVariant,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
               ),
             ],
           ),
@@ -131,9 +137,7 @@ class _Pending extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  refunded
-                      ? Icons.replay_rounded
-                      : Icons.edit_note_rounded,
+                  refunded ? Icons.replay_rounded : Icons.edit_note_rounded,
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 const SizedBox(width: 10),

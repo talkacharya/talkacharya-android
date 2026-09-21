@@ -4,10 +4,13 @@ import 'package:go_router/go_router.dart';
 import '../../app/view/splash_page.dart';
 import '../../features/auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../features/auth/presentation/view/login_page.dart';
+import '../../features/chats/presentation/view/chats_page.dart';
 import '../../features/consultations/presentation/view/consultation_room_page.dart';
+import '../../features/consultations/presentation/view/match_report_page.dart';
 import '../../features/earnings/presentation/view/earnings_page.dart';
 import '../../features/earnings/presentation/view/payout_detail_page.dart';
 import '../../features/home/presentation/view/home_page.dart';
+import '../../features/livestream/presentation/view/go_live_page.dart';
 import '../../features/kundali/presentation/view/chart_detail_page.dart';
 import '../../features/kundali/presentation/view/consultation_kundali_page.dart';
 import '../../features/notifications/presentation/view/notifications_page.dart';
@@ -16,6 +19,7 @@ import '../../features/onboarding/presentation/view/wizard_page.dart';
 import '../../features/predictions/presentation/view/prediction_work_page.dart';
 import '../../features/predictions/presentation/view/predictions_queue_page.dart';
 import '../../features/profile/presentation/view/edit_profile_page.dart';
+import '../../features/profile/presentation/view/featured_slots_page.dart';
 import '../../features/profile/presentation/view/kyc_page.dart';
 import '../../features/profile/presentation/view/profile_page.dart';
 import '../../features/profile/presentation/view/rates_page.dart';
@@ -27,7 +31,9 @@ import '../../features/shell/presentation/view/app_shell.dart';
 import '../astro/onboarding_store.dart';
 import 'go_router_refresh.dart';
 import 'pending_deep_link.dart';
+import 'transitions.dart';
 import 'routes.dart';
+import '../../features/profile/presentation/view/sound_settings_page.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
 
@@ -82,9 +88,19 @@ GoRouter buildRouter(
         path: Routes.onboarding,
         parentNavigatorKey: _rootKey,
         builder: (_, _) => const OnboardingGatePage(),
-        routes: [_leaf('wizard', (_) => const WizardPage())],
+        routes: [
+          _leaf(
+            'wizard',
+            (s) => WizardPage(initialStep: s.uri.queryParameters['step']),
+          ),
+        ],
       ),
 
+      GoRoute(
+        path: Routes.goLive,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const GoLivePage(),
+      ),
       GoRoute(
         path: Routes.notifications,
         parentNavigatorKey: _rootKey,
@@ -108,6 +124,15 @@ GoRouter buildRouter(
         builder: (_, s) => ConsultationKundaliPage(
           consultationId: s.pathParameters['id']!,
           clientName: s.extra is String ? s.extra as String : null,
+          profileId: s.uri.queryParameters['profile'],
+        ),
+      ),
+      GoRoute(
+        path: '/consultations/:id/matches/:matchId',
+        parentNavigatorKey: _rootKey,
+        builder: (_, s) => MatchReportPage(
+          consultationId: s.pathParameters['id']!,
+          matchId: s.pathParameters['matchId']!,
         ),
       ),
       GoRoute(
@@ -131,12 +156,17 @@ GoRouter buildRouter(
       GoRoute(
         path: '/predictions/:id',
         parentNavigatorKey: _rootKey,
-        builder: (_, s) =>
-            PredictionWorkPage(id: s.pathParameters['id']!),
+        builder: (_, s) => PredictionWorkPage(id: s.pathParameters['id']!),
       ),
 
-      StatefulShellRoute.indexedStack(
+      StatefulShellRoute(
         builder: (_, _, shell) => AppShell(navigationShell: shell),
+        // Cross-fade between tabs instead of the instant IndexedStack swap.
+        navigatorContainerBuilder: (_, shell, children) =>
+            AnimatedBranchContainer(
+              currentIndex: shell.currentIndex,
+              children: children,
+            ),
         branches: [
           StatefulShellBranch(
             routes: [_leaf(Routes.home, (_) => const HomePage())],
@@ -148,7 +178,7 @@ GoRouter buildRouter(
             routes: [_leaf(Routes.earnings, (_) => const EarningsPage())],
           ),
           StatefulShellBranch(
-            routes: [_leaf(Routes.chats, (_) => const _ChatsTab())],
+            routes: [_leaf(Routes.chats, (_) => const ChatsPage())],
           ),
           StatefulShellBranch(
             routes: [
@@ -161,7 +191,8 @@ GoRouter buildRouter(
                   _leaf('working-hours', (_) => const WorkingHoursPage()),
                   _leaf('reviews', (_) => const ReviewsPage()),
                   _leaf('kyc', (_) => const KycPage()),
-                  _leaf('featured', (_) => const _FeaturedStub()),
+                  _leaf('featured', (_) => const FeaturedSlotsPage()),
+                  _leaf('sound', (_) => const SoundSettingsPage()),
                 ],
               ),
             ],
@@ -170,26 +201,4 @@ GoRouter buildRouter(
       ),
     ],
   );
-}
-
-// Chats tab currently reuses the consultations list; a dedicated widget keeps the
-// route tree readable.
-class _ChatsTab extends StatelessWidget {
-  const _ChatsTab();
-  @override
-  Widget build(BuildContext context) => const RequestsPage(initialTab: 1);
-}
-
-class _FeaturedStub extends StatelessWidget {
-  const _FeaturedStub();
-  @override
-  Widget build(BuildContext context) => const _Stub('Featured slots');
-}
-
-class _Stub extends StatelessWidget {
-  const _Stub(this.label);
-  final String label;
-  @override
-  Widget build(BuildContext context) =>
-      Center(child: Text('$label — coming soon'));
 }

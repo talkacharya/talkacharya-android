@@ -78,9 +78,7 @@ abstract class ConfigAuth with _$ConfigAuth {
   const factory ConfigAuth({
     @Default(false) bool firebase,
     @Default(true) bool otp,
-    @JsonKey(name: 'firebase_project_id')
-    @Default('')
-    String firebaseProjectId,
+    @JsonKey(name: 'firebase_project_id') @Default('') String firebaseProjectId,
   }) = _ConfigAuth;
 
   factory ConfigAuth.fromJson(Map<String, dynamic> json) =>

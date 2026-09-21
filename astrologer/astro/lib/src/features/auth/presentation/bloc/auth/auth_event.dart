@@ -19,6 +19,15 @@ class AuthLoggedIn extends AuthEvent {
   List<Object?> get props => [user];
 }
 
+/// The signed-in user's account changed (name, photo, language) — replace the
+/// session user and refresh the offline cache.
+class AuthUserUpdated extends AuthEvent {
+  const AuthUserUpdated(this.user);
+  final AuthUser user;
+  @override
+  List<Object?> get props => [user];
+}
+
 /// User tapped log out.
 class AuthLogoutRequested extends AuthEvent {
   const AuthLogoutRequested();

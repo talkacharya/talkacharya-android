@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../../features/wallet/data/models/recharge_order.dart';
+import '../network/friendly_error.dart';
 
 sealed class RazorpayResult {
   const RazorpayResult();
@@ -76,7 +77,7 @@ class RazorpayService {
           'prefill': {'contact': ?contact, 'email': ?email},
       });
     } catch (e) {
-      done(RazorpayFailure(message: '$e'));
+      done(RazorpayFailure(message: friendlyError(e)));
     }
 
     return completer.future.whenComplete(rp.clear);

@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 
+import 'friendly_error.dart';
+
 /// Normalised error surfaced to blocs/UI. Carries the backend's machine `code`
 /// (common/exceptions.py -> `{ "code": ..., "detail": ... }`) when present.
 class ApiException implements Exception {
@@ -8,6 +10,7 @@ class ApiException implements Exception {
     this.code,
     this.statusCode,
     this.fieldErrors = const {},
+    this.fromServer = false,
   });
 
   final String message;
@@ -15,15 +18,26 @@ class ApiException implements Exception {
   final int? statusCode;
   final Map<String, List<String>> fieldErrors;
 
+  /// True when [message] came from the API body. A synthesized placeholder
+  /// ("Request failed (500).") must never be shown to a user, so anything that
+  /// renders an error checks this first — see `friendlyError`.
+  final bool fromServer;
+
   bool get isNetwork => statusCode == null;
   bool get isUnauthorized => statusCode == 401;
 
+  /// Interpolating an exception (`'$e'`) is a common way for a raw string to
+  /// reach the UI, so in production this reads as a sentence, not a dump.
   @override
-  String toString() => 'ApiException($statusCode, $code): $message';
+  String toString() => showErrorDetails
+      ? 'ApiException($statusCode, $code): $message'
+      : humanError(this);
 
   factory ApiException.fromDio(DioException e) {
     final res = e.response;
     if (res == null) {
+      // No response at all: the sentence below is ours and safe to show, and
+      // `isNetwork` short-circuits ahead of `fromServer` everywhere it matters.
       return ApiException(
         message: switch (e.type) {
           DioExceptionType.connectionTimeout ||
@@ -40,6 +54,7 @@ class ApiException implements Exception {
     final data = res.data;
     String? code;
     var message = 'Request failed (${res.statusCode}).';
+    var fromServer = false;
     final fieldErrors = <String, List<String>>{};
 
     if (data is Map) {
@@ -47,8 +62,10 @@ class ApiException implements Exception {
       final detail = data['detail'];
       if (detail is String) {
         message = detail;
-      } else if (detail is Map) {
+        fromServer = true;
+      } else if (detail is Map && detail.isNotEmpty) {
         message = detail.values.first.toString();
+        fromServer = true;
       }
       for (final entry in data.entries) {
         if (entry.key == 'code' || entry.key == 'detail') continue;
@@ -65,6 +82,7 @@ class ApiException implements Exception {
         final firstErrorList = fieldErrors.values.firstOrNull;
         if (firstErrorList != null && firstErrorList.isNotEmpty) {
           message = firstErrorList.first;
+          fromServer = true;
         }
       }
     }
@@ -74,6 +92,7 @@ class ApiException implements Exception {
       code: code,
       statusCode: res.statusCode,
       fieldErrors: fieldErrors,
+      fromServer: fromServer,
     );
   }
 }

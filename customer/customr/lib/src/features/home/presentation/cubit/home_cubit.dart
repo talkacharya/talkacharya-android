@@ -16,6 +16,7 @@ import '../../data/models/recharge_pack.dart';
 import '../../data/models/referral_overview.dart';
 import '../../data/models/wallet_balance.dart';
 import '../../data/models/zodiac.dart';
+import '../../../../core/network/friendly_error.dart';
 
 part 'home_state.dart';
 
@@ -137,7 +138,7 @@ class HomeCubit extends Cubit<HomeState> {
       final value = await fetch();
       emit(write(state, AsyncValue.data(value)));
     } catch (e) {
-      emit(write(state, AsyncValue.error('$e', read(state).value)));
+      emit(write(state, AsyncValue.error(friendlyError(e), read(state).value)));
     }
   }
 

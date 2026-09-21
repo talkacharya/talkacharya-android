@@ -6,13 +6,29 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'rtc_engine.dart';
 
 /// [RtcEngine] on `flutter_webrtc` — Google's open-source WebRTC stack, running on
-/// the phone. Opus audio with echo cancellation / noise suppression / AGC, DTLS-SRTP
-/// encryption end to end (a TURN relay forwards encrypted packets it cannot read).
+/// the phone. Opus audio with echo cancellation / noise suppression / AGC, VP8/H.264
+/// video, DTLS-SRTP encryption end to end (a TURN relay forwards encrypted packets it
+/// cannot read).
 class FlutterWebRtcEngine implements RtcEngine {
   MediaStream? _local;
+  bool _front = true;
+  final _localVideo = StreamController<RtcVideoStream?>.broadcast();
+
+  /// 480p at 24fps: good enough to read a face, ~1/4 the bandwidth of 720p — and on a
+  /// relayed call every bit crosses our own server. The camera negotiates the nearest
+  /// size it actually supports.
+  static const _videoConstraints = <String, dynamic>{
+    'facingMode': 'user',
+    'width': {'ideal': 640},
+    'height': {'ideal': 480},
+    'frameRate': {'ideal': 24, 'max': 30},
+  };
 
   @override
-  Future<void> openMicrophone() async {
+  Stream<RtcVideoStream?> get localVideo => _localVideo.stream;
+
+  @override
+  Future<void> openMedia({bool video = false}) async {
     if (_local != null) return;
     if (defaultTargetPlatform == TargetPlatform.android) {
       // voice-communication mode: earpiece routing + hardware echo cancellation
@@ -26,12 +42,22 @@ class FlutterWebRtcEngine implements RtcEngine {
         'noiseSuppression': true,
         'autoGainControl': true,
       },
-      'video': false,
+      'video': video ? _videoConstraints : false,
     });
+    if (video) {
+      // a video call starts on the loudspeaker — nobody holds a video call to their ear
+      try {
+        await Helper.setSpeakerphoneOn(true);
+      } catch (_) {}
+      _localVideo.add(_local);
+    }
   }
 
   @override
-  Future<RtcPeer> createPeer(List<Map<String, dynamic>> iceServers) async {
+  Future<RtcPeer> createPeer(
+    List<Map<String, dynamic>> iceServers, {
+    bool video = false,
+  }) async {
     final pc = await createPeerConnection({
       'iceServers': iceServers,
       'sdpSemantics': 'unified-plan',
@@ -42,11 +68,12 @@ class FlutterWebRtcEngine implements RtcEngine {
     });
     final local = _local;
     if (local != null) {
-      for (final track in local.getAudioTracks()) {
+      for (final track in local.getTracks()) {
+        if (track.kind == 'video' && !video) continue;
         await pc.addTrack(track, local);
       }
     }
-    return _WebRtcPeer(pc);
+    return _WebRtcPeer(pc, video: video);
   }
 
   @override
@@ -57,12 +84,33 @@ class FlutterWebRtcEngine implements RtcEngine {
   }
 
   @override
+  Future<void> setCameraEnabled(bool enabled) async {
+    for (final t in _local?.getVideoTracks() ?? const <MediaStreamTrack>[]) {
+      t.enabled = enabled;
+    }
+    _localVideo.add(enabled ? _local : null);
+  }
+
+  @override
+  Future<bool> switchCamera() async {
+    final tracks = _local?.getVideoTracks() ?? const <MediaStreamTrack>[];
+    if (tracks.isEmpty) return _front;
+    try {
+      await Helper.switchCamera(tracks.first);
+      _front = !_front;
+    } catch (_) {}
+    return _front;
+  }
+
+  @override
   Future<void> setSpeakerphone(bool on) => Helper.setSpeakerphoneOn(on);
 
   @override
   Future<void> release() async {
     final local = _local;
     _local = null;
+    _localVideo.add(null);
+    unawaited(_localVideo.close());
     if (local == null) return;
     for (final t in local.getTracks()) {
       await t.stop();
@@ -77,7 +125,7 @@ class FlutterWebRtcEngine implements RtcEngine {
 }
 
 class _WebRtcPeer implements RtcPeer {
-  _WebRtcPeer(this._pc) {
+  _WebRtcPeer(this._pc, {required bool video}) : _video = video {
     _pc.onIceCandidate = (c) {
       if (c.candidate == null) return;
       _candidates.add({
@@ -99,17 +147,23 @@ class _WebRtcPeer implements RtcPeer {
       };
       _states.add(mapped);
     };
+    _pc.onTrack = (event) {
+      if (event.track.kind != 'video' || event.streams.isEmpty) return;
+      _remoteVideo.add(event.streams.first);
+    };
   }
 
   final RTCPeerConnection _pc;
+  final bool _video;
   final _candidates = StreamController<Map<String, dynamic>>.broadcast();
   final _states = StreamController<RtcIceState>.broadcast();
+  final _remoteVideo = StreamController<RtcVideoStream?>.broadcast();
   bool _remoteSet = false;
   int _lastLost = 0;
   int _lastReceived = 0;
 
-  static const _audioOnly = {
-    'mandatory': {'OfferToReceiveAudio': true, 'OfferToReceiveVideo': false},
+  Map<String, dynamic> get _mediaConstraints => {
+    'mandatory': {'OfferToReceiveAudio': true, 'OfferToReceiveVideo': _video},
     'optional': <dynamic>[],
   };
 
@@ -120,12 +174,15 @@ class _WebRtcPeer implements RtcPeer {
   Stream<RtcIceState> get iceStates => _states.stream;
 
   @override
+  Stream<RtcVideoStream?> get remoteVideo => _remoteVideo.stream;
+
+  @override
   bool get hasRemoteDescription => _remoteSet;
 
   @override
   Future<String> createOffer({bool iceRestart = false}) async {
     final constraints = <String, dynamic>{
-      ..._audioOnly,
+      ..._mediaConstraints,
       if (iceRestart) 'iceRestart': true,
     };
     if (iceRestart) {
@@ -142,7 +199,7 @@ class _WebRtcPeer implements RtcPeer {
   Future<String> acceptOffer(String sdp) async {
     await _pc.setRemoteDescription(RTCSessionDescription(sdp, 'offer'));
     _remoteSet = true;
-    final answer = await _pc.createAnswer(_audioOnly);
+    final answer = await _pc.createAnswer(_mediaConstraints);
     await _pc.setLocalDescription(answer);
     return answer.sdp ?? '';
   }
@@ -197,10 +254,12 @@ class _WebRtcPeer implements RtcPeer {
   Future<void> close() async {
     _pc.onIceCandidate = null;
     _pc.onIceConnectionState = null;
+    _pc.onTrack = null;
     try {
       await _pc.close();
     } catch (_) {}
     await _candidates.close();
     await _states.close();
+    await _remoteVideo.close();
   }
 }

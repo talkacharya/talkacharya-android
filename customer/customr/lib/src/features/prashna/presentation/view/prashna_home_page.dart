@@ -9,6 +9,7 @@ import '../../../../core/l10n/l10n.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../cubit/prashna_cubit.dart';
 import 'prashna_routes.dart';
+import '../../../../core/l10n/api_error_l10n.dart';
 
 class PrashnaHomePage extends StatefulWidget {
   const PrashnaHomePage({super.key});
@@ -53,7 +54,7 @@ class _PrashnaHomePageState extends State<PrashnaHomePage> {
       _question.clear();
       if (mounted) unawaited(router.push(PrashnaRoutes.detail(p.id), extra: p));
     } catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text('$e')));
+      messenger.showSnackBar(SnackBar(content: Text(localizedErrorFor(l, e))));
     }
   }
 
@@ -152,9 +153,9 @@ class _Hero extends StatelessWidget {
         children: [
           Text(
             l.prashnaHeroTitle,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: scheme.onPrimaryContainer,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(color: scheme.onPrimaryContainer),
           ),
           const SizedBox(height: 6),
           Text(
@@ -276,10 +277,8 @@ class _HistoryTile extends StatelessWidget {
         ),
         subtitle: Text(prashnaVerdictLabel(l, prashna.verdict)),
         trailing: const Icon(Icons.chevron_right_rounded),
-        onTap: () => context.push(
-          PrashnaRoutes.detail(prashna.id),
-          extra: prashna,
-        ),
+        onTap: () =>
+            context.push(PrashnaRoutes.detail(prashna.id), extra: prashna),
       ),
     );
   }
@@ -302,9 +301,10 @@ String prashnaCategoryLabel(AppLocalizations l, String category) =>
       _ => l.prashnaCatGeneral,
     };
 
-String prashnaVerdictLabel(AppLocalizations l, String verdict) => switch (verdict) {
-  'yes' => l.prashnaVerdictYes,
-  'no' => l.prashnaVerdictNo,
-  'mixed' => l.prashnaVerdictMixed,
-  _ => l.prashnaVerdictUnclear,
-};
+String prashnaVerdictLabel(AppLocalizations l, String verdict) =>
+    switch (verdict) {
+      'yes' => l.prashnaVerdictYes,
+      'no' => l.prashnaVerdictNo,
+      'mixed' => l.prashnaVerdictMixed,
+      _ => l.prashnaVerdictUnclear,
+    };

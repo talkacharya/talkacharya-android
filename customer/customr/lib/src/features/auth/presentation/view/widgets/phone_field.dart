@@ -109,7 +109,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 disabledBorder: InputBorder.none,
-                hintText: '98765 43210',
+                hintText: '00000 00000',
                 hintStyle: TextStyle(
                   color: Colors.white24,
                   letterSpacing: 2,

@@ -38,7 +38,8 @@ class PredictionsApi {
     String id, {
     required String title,
     required String body,
-  }) => _postMap(ApiPaths.predictionDeliver(id), {'title': title, 'body': body});
+  }) =>
+      _postMap(ApiPaths.predictionDeliver(id), {'title': title, 'body': body});
 
   Future<Map<String, dynamic>> release(String id) =>
       _postMap(ApiPaths.predictionRelease(id), const {});

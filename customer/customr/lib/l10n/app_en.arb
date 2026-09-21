@@ -2325,7 +2325,78 @@
       }
     }
   },
+  "callCamera": "Camera",
+  "callFlipCamera": "Flip",
+  "callCameraOff": "Camera off",
+  "callPeerCameraOff": "Their camera is off",
+  "callCameraBody": "Allow camera access so the astrologer can see you.",
+  "callCameraBlockedBody": "Camera access is turned off for TalkAcharya. Turn it on in Settings.",
+  "callVideoBookTitle": "Video call {name}",
+  "@callVideoBookTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "callVideoBookBilling": "Video call · billed per minute once connected",
+  "callVideoUnavailable": "This astrologer is not taking video calls right now.",
   "callUnavailable": "This astrologer is not taking calls right now.",
+  "liveTabTitle": "Live",
+  "liveBadge": "Live",
+  "liveNowTitle": "Live now",
+  "liveUpcomingTitle": "Coming up",
+  "liveWatch": "Watch",
+  "liveLeave": "Leave",
+  "liveSend": "Send",
+  "liveEmptyTitle": "No live sessions right now",
+  "liveEmptyBody": "Astrologers going live will show up here to watch and join.",
+  "liveWatchingCount": "{count} watching",
+  "@liveWatchingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "liveConnecting": "Joining the stream…",
+  "liveReconnecting": "Reconnecting…",
+  "liveHostCameraOff": "The astrologer's camera is off",
+  "liveChatHint": "Say something…",
+  "liveSlowModeHint": "Slow mode · one message every {seconds}s",
+  "@liveSlowModeHint": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "liveGiftSent": "{name} sent {gift}",
+  "@liveGiftSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "gift": {
+        "type": "String"
+      }
+    }
+  },
+  "liveEndedTitle": "The stream has ended",
+  "liveEndedBody": "Thanks for watching. Catch the next one from the Live tab.",
+  "liveEndedByHost": "{name} ended the session. Catch the next one from the Live tab.",
+  "@liveEndedByHost": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "liveRemovedTitle": "You were removed",
+  "liveRemovedBody": "The host removed you from this stream.",
+  "liveCannotJoinTitle": "Couldn't join",
+  "liveCannotJoinBody": "The stream may have ended. Try another one from the Live tab.",
+  "liveBackToList": "Back to Live",
   "giftAction": "Send a gift",
   "giftSheetTitle": "Send a gift to {name}",
   "@giftSheetTitle": {
@@ -3460,5 +3531,104 @@
   "storeProfileAddressesSub": "Delivery addresses",
   "storeHomeRailTitle": "Remedies store",
   "storeHomeRailSub": "Certified rudraksha, gemstones and temple poojas",
-  "storeSeeAll": "See all"
+  "storeSeeAll": "See all",
+  "shareTitle": "Share with your astrologer",
+  "shareSubtitle": "They can open the kundali of anything you share.",
+  "shareTabProfiles": "Birth details",
+  "shareTabMatches": "Kundali matches",
+  "shareAction": "Share",
+  "shareShared": "Shared",
+  "shareDone": "Shared with {name}",
+  "@shareDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "shareFailed": "Couldn't share. Please try again.",
+  "shareNoProfiles": "No birth details saved yet",
+  "shareAddProfile": "Add birth details",
+  "shareNoMatches": "No kundali matches yet",
+  "shareWithAstrologer": "Share with astrologer",
+  "shareConsultAbout": "Consult an astrologer",
+  "sharePickConsultation": "Choose a consultation",
+  "shareMatchPoints": "{points} of {max} points",
+  "@shareMatchPoints": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "shareTimeUnknown": "Birth time not known",
+  "shareSharedWithAstrologer": "Shared with your astrologer",
+  "sessionLiveBanner": "Live consultation with {name}",
+  "@sessionLiveBanner": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sessionReturn": "Return",
+  "callLeaveTitle": "Leave the call?",
+  "callLeaveBody": "The call ends if you leave this screen.",
+  "callLeaveStay": "Stay on the call",
+  "callLeaveEnd": "End call",
+  "liveSendPhoto": "Send a photo",
+  "livePhotoFailed": "Couldn't send the photo",
+  "livePhotoLabel": "Photo",
+  "errForbidden": "You don't have access to this.",
+  "errNotFound": "We couldn't find this — it may have been removed.",
+  "errServer": "Our server ran into a problem. Please try again shortly.",
+  "walletHeldBreakdown": "Balance {total} · {held} on hold",
+  "@walletHeldBreakdown": {
+    "placeholders": {
+      "total": {},
+      "held": {}
+    }
+  },
+  "walletHeldExplainerTitle": "Why is some money on hold?",
+  "walletHeldExplainerBody": "While a consultation is running we reserve a few minutes of balance so the session can't stop mid-sentence. Whatever isn't used comes back the moment the session ends.",
+  "bookLowBalanceTitle": "Add money to start",
+  "bookLowBalanceBody": "This consultation needs at least {required} to begin. You have {available} to spend right now.",
+  "@bookLowBalanceBody": {
+    "placeholders": {
+      "required": {},
+      "available": {}
+    }
+  },
+  "bookLowBalanceHeld": "{held} of your balance is reserved for a session that is still running.",
+  "@bookLowBalanceHeld": {
+    "placeholders": {
+      "held": {}
+    }
+  },
+  "commonNotNow": "Not now",
+  "callMinimize": "Minimize",
+  "callTapToReturn": "Tap to return to the call",
+  "callWaiting": "Waiting…",
+  "profileSounds": "Sounds",
+  "profileSoundsDesc": "Ringtone, call and chat tones",
+  "profileSoundVibration": "Sound & vibration",
+  "profileSoundVibrationSub": "Ringtone, tones and vibration",
+  "roomEndedSummaryLine": "{minutes} min · {currency} {amount}",
+  "@roomEndedSummaryLine": {
+    "placeholders": {
+      "minutes": {},
+      "currency": {},
+      "amount": {}
+    }
+  },
+  "roomViewSummary": "Summary",
+  "roomYouRated": "You rated this session {rating}/5",
+  "@roomYouRated": {
+    "placeholders": {
+      "rating": {}
+    }
+  }
 }

@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../../../core/util/async_value.dart';
 import '../../data/kundali_repository.dart';
+import '../../../../core/network/friendly_error.dart';
 
 part 'kundali_state.dart';
 
@@ -164,7 +165,7 @@ class KundaliCubit extends Cubit<KundaliState> {
         AsyncValue.data(await _repo.vargaChart(consultationId, key)),
       );
     } catch (e) {
-      _writeChart(key, AsyncValue.error(e.toString(), current.value));
+      _writeChart(key, AsyncValue.error(friendlyError(e), current.value));
     }
   }
 
@@ -185,7 +186,7 @@ class KundaliCubit extends Cubit<KundaliState> {
     try {
       write(AsyncValue.data(await fetch()));
     } catch (e) {
-      write(AsyncValue.error(e.toString(), current.value));
+      write(AsyncValue.error(friendlyError(e), current.value));
     }
   }
 }

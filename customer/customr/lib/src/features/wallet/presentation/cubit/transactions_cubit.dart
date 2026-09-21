@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../data/models/wallet_transaction.dart';
 import '../../data/wallet_repository.dart';
+import '../../../../core/network/friendly_error.dart';
 
 part 'transactions_state.dart';
 
@@ -27,7 +28,7 @@ class TransactionsCubit extends Cubit<TransactionsState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: TxnStatus.error, error: '$e'));
+      emit(state.copyWith(status: TxnStatus.error, error: friendlyError(e)));
     }
   }
 

@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import '../../data/astrologers_api.dart';
 import '../../data/astrologers_repository.dart';
 import '../../data/models/astrologer.dart';
+import '../../../../core/network/friendly_error.dart';
 
 part 'discovery_state.dart';
 
@@ -119,7 +120,9 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       );
     } catch (e) {
       if (query != state.query) return;
-      emit(state.copyWith(status: DiscoveryStatus.error, error: '$e'));
+      emit(
+        state.copyWith(status: DiscoveryStatus.error, error: friendlyError(e)),
+      );
     } finally {
       _pageInFlight = false;
       if (_fetchingQuery == query) _fetchingQuery = null;

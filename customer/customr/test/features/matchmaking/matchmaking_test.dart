@@ -6,6 +6,8 @@ import 'package:customr/src/features/matchmaking/data/models/match_result.dart';
 import 'package:customr/src/features/matchmaking/presentation/cubit/matchmaking_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:customr/src/core/network/friendly_error.dart';
+import 'package:flutter/foundation.dart';
 
 class _MockRepo extends Mock implements MatchmakingRepository {}
 
@@ -142,10 +144,14 @@ void main() {
     });
 
     test('run failure surfaces a friendly error and returns null', () async {
+      showErrorDetails = false; // assert what a production build shows
+      addTearDown(() => showErrorDetails = kDebugMode);
       when(() => repo.run(boyProfileId: 'b1', girlProfileId: 'g1')).thenThrow(
         ApiException(
           message: 'Choose two different people to match.',
           statusCode: 400,
+          // as `ApiException.fromDio` marks a detail the backend wrote
+          fromServer: true,
         ),
       );
       final cubit = MatchmakingCubit(repo)

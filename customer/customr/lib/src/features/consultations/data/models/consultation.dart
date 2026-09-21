@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'consultation_share.dart';
+
 part 'consultation.freezed.dart';
 
 enum ConsultationStatus {
@@ -59,6 +61,9 @@ abstract class Consultation with _$Consultation {
     DateTime? startedAt,
     DateTime? endedAt,
     @Default('') String endReason,
+
+    /// Birth profiles / matches the customer shared for this reading.
+    @Default(<ConsultationShare>[]) List<ConsultationShare> shares,
   }) = _Consultation;
 
   const Consultation._();
@@ -82,9 +87,20 @@ abstract class Consultation with _$Consultation {
     startedAt: DateTime.tryParse('${j['started_at']}'),
     endedAt: DateTime.tryParse('${j['ended_at']}'),
     endReason: j['end_reason'] as String? ?? '',
+    shares: ConsultationShare.listFrom(j['shares']),
   );
 
   double get ratePerMinute => double.tryParse(rateSnapshot) ?? 0;
   double get gross => double.tryParse(grossAmount) ?? 0;
   int get billedMinutes => (billedSeconds / 60).ceil();
+
+  /// Ids already shared, so the share sheet can mark them.
+  Set<String> get sharedProfileIds => {
+    for (final s in shares)
+      if (s.person != null) s.person!.id,
+  };
+  Set<String> get sharedMatchIds => {
+    for (final s in shares)
+      if (s.match != null) s.match!.id,
+  };
 }

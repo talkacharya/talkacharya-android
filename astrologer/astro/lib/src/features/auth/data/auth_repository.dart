@@ -31,7 +31,7 @@ class AuthRepository {
       device: _devicePayload(),
     );
     await _persist(session);
-    await _cacheUser(session.user);
+    await cacheUser(session.user);
     return session.user;
   }
 
@@ -42,14 +42,14 @@ class AuthRepository {
       device: _devicePayload(),
     );
     await _persist(session);
-    await _cacheUser(session.user);
+    await cacheUser(session.user);
     return session.user;
   }
 
   /// Fetch `/me` and refresh the offline cache.
   Future<AuthUser> currentUser() async {
     final user = await _api.me();
-    await _cacheUser(user);
+    await cacheUser(user);
     return user;
   }
 
@@ -76,7 +76,8 @@ class AuthRepository {
   Future<void> _persist(AuthSession s) =>
       _tokens.save(access: s.access, refresh: s.refresh);
 
-  Future<void> _cacheUser(AuthUser user) =>
+  /// Persist [user] as the offline copy used at the next cold start.
+  Future<void> cacheUser(AuthUser user) =>
       _tokens.saveUserJson(jsonEncode(user.toJson()));
 
   Map<String, dynamic> _devicePayload() => {

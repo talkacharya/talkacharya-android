@@ -66,5 +66,14 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>TalkAcharya uses your microphone so your client can hear you during a call.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>TalkAcharya uses your camera for video consultations.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>voip</string>
+	</array>
 </dict>
 </plist>

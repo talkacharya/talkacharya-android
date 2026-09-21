@@ -10,7 +10,8 @@ class PredictionsApi {
 
   final Dio _dio;
 
-  Future<Map<String, dynamic>> catalog() => _getMap(ApiPaths.predictionsCatalog);
+  Future<Map<String, dynamic>> catalog() =>
+      _getMap(ApiPaths.predictionsCatalog);
 
   Future<List<dynamic>> orders() => _getList(ApiPaths.predictionsOrders);
 

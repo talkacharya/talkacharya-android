@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/consultations/presentation/room_presence.dart';
+import '../features/consultations/presentation/view/widgets/live_session_banner.dart';
 import '../core/config/flavor.dart';
 import '../core/deeplink/deep_link_parser.dart';
 import '../core/deeplink/deep_link_service.dart';
@@ -23,6 +25,9 @@ import '../features/follows/presentation/cubit/follow_cubit.dart';
 import '../features/consultations/presentation/cubit/chats_list_cubit.dart';
 import '../features/notifications/presentation/bloc/notifications_cubit.dart';
 import '../features/wallet/presentation/cubit/wallet_cubit.dart';
+import 'package:talkacharya_call/talkacharya_call.dart';
+import '../core/router/routes.dart';
+import '../features/consultations/presentation/view/consultation_room_page.dart';
 
 class TalkAcharyaApp extends StatefulWidget {
   const TalkAcharyaApp({super.key});
@@ -69,6 +74,12 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
   void _handleLocation(String? location) {
     if (location == null || location.isEmpty) return;
     if (getIt<AuthBloc>().state.status == AuthStatus.authenticated) {
+      // During a call, `go` would tear the room down and drop the call —
+      // stack the destination on top instead.
+      if (getIt<RoomPresence>().callOnScreen) {
+        _router.push(location).ignore();
+        return;
+      }
       _router.go(location);
     } else {
       getIt<PendingDeepLink>().set(location);
@@ -113,6 +124,19 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
             routerConfig: _router,
             locale: locale,
             supportedLocales: kSupportedLocales,
+            builder: (context, child) => CallOverlayHost(
+              hub: getIt<CallHub>(),
+              strings: callStrings(context.l10n),
+              // Tapping the minimized call goes back to its room — or
+              // raises the one already in the stack, rather than
+              // stacking a second copy of the same conversation.
+              onOpen: (info) => getIt<CallHub>().isRoomOpen(info.consultationId)
+                  ? _router.pop()
+                  : _router
+                        .push(Routes.consultation(info.consultationId))
+                        .ignore(),
+              child: LiveSessionBanner(child: child ?? const SizedBox.shrink()),
+            ),
             localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,

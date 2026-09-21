@@ -18,6 +18,16 @@ class AuthApi {
   ) async {
     try {
       final res = await call();
+      final status = res.statusCode ?? 0;
+      if (status >= 400) {
+        throw ApiException.fromDio(
+          DioException(
+            requestOptions: res.requestOptions,
+            response: res,
+            type: DioExceptionType.badResponse,
+          ),
+        );
+      }
       return parse(res.data ?? const {});
     } on DioException catch (e) {
       throw ApiException.fromDio(e);

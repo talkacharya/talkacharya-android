@@ -9,6 +9,7 @@ import '../../../../core/util/money.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/fade_slide_in.dart';
 import '../../data/referrals_api.dart';
+import '../../../../core/utils/haptic_service.dart';
 
 /// Deep-link target for `talkacharya://referrals`. Backed by `GET /app/referrals`.
 class ReferralsPage extends StatefulWidget {
@@ -255,7 +256,7 @@ class _CodeCard extends StatelessWidget {
 
   void _copy(BuildContext context, String value, String toast) {
     Clipboard.setData(ClipboardData(text: value));
-    HapticFeedback.selectionClick();
+    HapticService.selection();
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(content: Text(toast)));

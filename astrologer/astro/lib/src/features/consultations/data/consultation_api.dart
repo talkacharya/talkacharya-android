@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../../../core/constants/api_paths.dart';
 import '../../../core/network/api_exception.dart';
 import 'models/consultation.dart';
+import 'models/consultation_share.dart';
 
 class ConsultationApi {
   ConsultationApi(this._dio);
@@ -41,8 +42,23 @@ class ConsultationApi {
 
   Future<Consultation> _act(String path, {Map<String, dynamic>? body}) async {
     try {
-      final res = await _dio.post<Map<String, dynamic>>(path, data: body ?? {});
+      final res = (await _dio.post<Map<String, dynamic>>(
+        path,
+        data: body ?? {},
+      )).ensureOk();
       return Consultation.fromJson(res.data ?? const {});
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// Full Guna Milan report for a match the customer shared.
+  Future<MatchReport> sharedMatch(String consultationId, String matchId) async {
+    try {
+      final res = await _dio.get<Map<String, dynamic>>(
+        ApiPaths.astroConsultationMatch(consultationId, matchId),
+      );
+      return MatchReport.fromJson(res.ensureOk().data ?? const {});
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
     }

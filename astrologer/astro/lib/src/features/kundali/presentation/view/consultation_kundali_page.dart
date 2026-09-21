@@ -16,16 +16,20 @@ class ConsultationKundaliPage extends StatelessWidget {
   const ConsultationKundaliPage({
     required this.consultationId,
     this.clientName,
+    this.profileId,
     super.key,
   });
   final String consultationId;
   final String? clientName;
 
+  /// One of the people the customer shared; null = the primary profile.
+  final String? profileId;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => KundaliCubit(
-        repo: getIt<KundaliRepository>(),
+        repo: getIt<KundaliRepository>().forProfile(profileId),
         consultationId: consultationId,
       )..loadOverview(),
       child: _View(consultationId: consultationId, clientName: clientName),
@@ -741,8 +745,7 @@ class _OverviewTabState extends State<_OverviewTab> {
         onRetry: () => context.read<KundaliCubit>().loadInsights(),
         builder: (report) {
           final ordered = [
-            for (final area in KundaliInsights.areaOrder)
-              ?report.byArea(area),
+            for (final area in KundaliInsights.areaOrder) ?report.byArea(area),
           ];
           return ListView(
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
@@ -966,7 +969,10 @@ class _VarshphalBlock extends StatelessWidget {
             children: [
               Text(
                 'Varshphal — age ${v.age} (${v.starts} → ${v.ends})',
-                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                ),
               ),
               const SizedBox(height: 3),
               Text(
@@ -1007,7 +1013,10 @@ class _MuhurtaBlock extends StatelessWidget {
               Text(
                 "Today's timing — ${d.weekday} (${d.dayLord}), "
                 '${d.sunrise}/${d.sunset}',
-                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                ),
               ),
               if (d.summary.isNotEmpty) ...[
                 const SizedBox(height: 4),
@@ -1061,7 +1070,11 @@ class _AvTransitBlock extends StatelessWidget {
                   child: Text(
                     '· ${row.planet} ${row.sign} H${row.houseFromLagna} — '
                     '${row.bindus}/8${row.retrograde ? " R" : ""} · ${row.tone}',
-                    style: TextStyle(fontSize: 10.5, height: 1.35, color: muted),
+                    style: TextStyle(
+                      fontSize: 10.5,
+                      height: 1.35,
+                      color: muted,
+                    ),
                   ),
                 ),
               for (final u in r.upcomingIngresses)
@@ -1069,7 +1082,11 @@ class _AvTransitBlock extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 2),
                   child: Text(
                     '→ ${u.summary}',
-                    style: TextStyle(fontSize: 10.5, height: 1.35, color: muted),
+                    style: TextStyle(
+                      fontSize: 10.5,
+                      height: 1.35,
+                      color: muted,
+                    ),
                   ),
                 ),
             ],
@@ -1136,7 +1153,11 @@ class _NumerologyTabState extends State<_NumerologyTab> {
                       'Friendly ${n.friendly.join(", ")} · clashing '
                       '${n.unfriendly.join(", ")} · days ${n.days.join(", ")} · '
                       'colours ${n.colours.join(", ")}',
-                      style: TextStyle(fontSize: 10.5, height: 1.35, color: muted),
+                      style: TextStyle(
+                        fontSize: 10.5,
+                        height: 1.35,
+                        color: muted,
+                      ),
                     ),
                     if (n.gemstone.isNotEmpty)
                       Text(
@@ -1170,10 +1191,9 @@ class _NumerologyTabState extends State<_NumerologyTab> {
                     spacing: 6,
                     runSpacing: 6,
                     children: [
-                      for (final line
-                          in report.loShu.lines.where(
-                            (x) => x.status != 'partial',
-                          ))
+                      for (final line in report.loShu.lines.where(
+                        (x) => x.status != 'partial',
+                      ))
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 8,
@@ -1316,7 +1336,11 @@ class _LalKitabBlock extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 2),
                   child: Text(
                     '· ${m.summary} — ${m.remedy}',
-                    style: TextStyle(fontSize: 10.5, height: 1.35, color: muted),
+                    style: TextStyle(
+                      fontSize: 10.5,
+                      height: 1.35,
+                      color: muted,
+                    ),
                   ),
                 ),
             ],
@@ -1344,7 +1368,10 @@ class _UpayaBlock extends StatelessWidget {
             children: [
               Text(
                 'Upaya table — ${r.lagnaSign} lagna (${r.lagnaLord})',
-                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                ),
               ),
               const SizedBox(height: 2),
               Text(
@@ -1359,7 +1386,11 @@ class _UpayaBlock extends StatelessWidget {
                   child: Text(
                     '· ${p.planet} (${p.role}) — ${p.mantra}; gem ${p.gemstone} '
                     '(gated), rudraksha ${p.rudrakshaMukhi} (gated)',
-                    style: TextStyle(fontSize: 10.5, height: 1.35, color: muted),
+                    style: TextStyle(
+                      fontSize: 10.5,
+                      height: 1.35,
+                      color: muted,
+                    ),
                   ),
                 ),
               const SizedBox(height: 4),
@@ -1403,7 +1434,10 @@ class _RemedyRow extends StatelessWidget {
               ),
               if (remedy.gated)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 7,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFFB0691F).withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(999),

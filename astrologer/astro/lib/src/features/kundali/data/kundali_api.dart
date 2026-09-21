@@ -7,9 +7,18 @@ import '../../../core/network/api_exception.dart';
 /// (`/api/v1/astro/consultations/{id}/{sub}`). Every method returns the raw
 /// `{kind, language, payload}` envelope; the models pull what they need.
 class KundaliApi {
-  KundaliApi(this._dio);
+  KundaliApi(this._dio, {this.profileId});
 
   final Dio _dio;
+
+  /// Which shared person to read. Null = the consultation's primary profile;
+  /// set it to open another profile the customer shared (e.g. either side of a
+  /// shared kundali match).
+  final String? profileId;
+
+  /// A view of this API bound to one shared person.
+  KundaliApi forProfile(String? id) =>
+      id == null ? this : KundaliApi(_dio, profileId: id);
 
   Future<Map<String, dynamic>> _sub(
     String consultationId,
@@ -19,7 +28,7 @@ class KundaliApi {
     try {
       final res = await _dio.get<Map<String, dynamic>>(
         ApiPaths.astroConsultationKundali(consultationId, sub),
-        queryParameters: query,
+        queryParameters: {...?query, 'profile': ?profileId},
       );
       return res.data ?? const {};
     } on DioException catch (e) {

@@ -2,19 +2,24 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../ports/call_ports.dart';
 
-/// Microphone permission on `permission_handler`.
+/// Microphone + camera permission on `permission_handler`.
 class PermissionHandlerCallPermissions implements CallPermissions {
   const PermissionHandlerCallPermissions();
 
   @override
-  Future<MicPermission> requestMicrophone() async {
-    var status = await Permission.microphone.status;
-    if (!status.isGranted) status = await Permission.microphone.request();
-    if (status.isGranted || status.isLimited) return MicPermission.granted;
+  Future<MediaPermission> requestMicrophone() => _ask(Permission.microphone);
+
+  @override
+  Future<MediaPermission> requestCamera() => _ask(Permission.camera);
+
+  Future<MediaPermission> _ask(Permission permission) async {
+    var status = await permission.status;
+    if (!status.isGranted) status = await permission.request();
+    if (status.isGranted || status.isLimited) return MediaPermission.granted;
     if (status.isPermanentlyDenied || status.isRestricted) {
-      return MicPermission.permanentlyDenied;
+      return MediaPermission.permanentlyDenied;
     }
-    return MicPermission.denied;
+    return MediaPermission.denied;
   }
 
   @override

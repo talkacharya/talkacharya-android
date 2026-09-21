@@ -72,6 +72,8 @@ class ApiPaths {
   static String consultationCancel(String id) =>
       '/app/consultations/$id/cancel';
   static String consultationEnd(String id) => '/app/consultations/$id/end';
+  static String consultationShares(String id) =>
+      '/app/consultations/$id/shares';
   static String consultationReview(String id) =>
       '/app/consultations/$id/review';
   static String consultationDispute(String id) =>

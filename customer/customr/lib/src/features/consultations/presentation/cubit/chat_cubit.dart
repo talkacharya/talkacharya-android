@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/realtime/realtime_client.dart';
 import '../../data/consultation_repository.dart';
 import '../../data/models/consultation.dart';
+import '../../../../core/network/friendly_error.dart';
 
 part 'chat_state.dart';
 
@@ -35,7 +36,7 @@ class ChatCubit extends Cubit<ChatState> {
       final consultation = await _repo.detail(consultationId);
       emit(state.copyWith(loading: false, consultation: consultation));
     } catch (e) {
-      emit(state.copyWith(loading: false, error: e.toString()));
+      emit(state.copyWith(loading: false, error: friendlyError(e)));
     }
     _startPolling();
     _frames = _realtime
@@ -83,6 +84,8 @@ class ChatCubit extends Cubit<ChatState> {
           );
         }
         _refreshDetail();
+      case 'consultation.shared':
+        _refreshDetail();
       case 'consultation.ended':
       case 'consultation.rejected':
       case 'consultation.no_show':
@@ -129,12 +132,28 @@ class ChatCubit extends Cubit<ChatState> {
     );
   }
 
+  /// Shares a birth profile or a match with the astrologer. Returns the error
+  /// message on failure, or null when it worked.
+  Future<String?> share({String? birthProfileId, String? matchId}) async {
+    try {
+      final c = await _repo.share(
+        consultationId,
+        birthProfileId: birthProfileId,
+        matchId: matchId,
+      );
+      emit(state.copyWith(consultation: c));
+      return null;
+    } catch (e) {
+      return friendlyError(e);
+    }
+  }
+
   Future<void> endConsultation() async {
     try {
       emit(state.copyWith(consultation: await _repo.end(consultationId)));
       _poll?.cancel();
     } catch (e) {
-      emit(state.copyWith(error: e.toString()));
+      emit(state.copyWith(error: friendlyError(e)));
     }
   }
 
@@ -142,7 +161,7 @@ class ChatCubit extends Cubit<ChatState> {
     try {
       emit(state.copyWith(consultation: await _repo.cancel(consultationId)));
     } catch (e) {
-      emit(state.copyWith(error: e.toString()));
+      emit(state.copyWith(error: friendlyError(e)));
     }
   }
 
@@ -154,7 +173,7 @@ class ChatCubit extends Cubit<ChatState> {
         emit(state.copyWith(consultation: c.copyWith(rating: rating)));
       }
     } catch (e) {
-      emit(state.copyWith(error: e.toString()));
+      emit(state.copyWith(error: friendlyError(e)));
       rethrow;
     }
   }

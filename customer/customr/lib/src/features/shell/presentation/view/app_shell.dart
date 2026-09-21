@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:talkacharya_sounds/talkacharya_sounds.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
@@ -13,6 +14,7 @@ import '../../../../core/router/routes.dart';
 import '../../../../core/theme/brand_colors.dart';
 import '../../../consultations/presentation/cubit/chats_list_cubit.dart';
 import '../../../notifications/presentation/bloc/notifications_cubit.dart';
+import '../../../consultations/presentation/room_presence.dart';
 
 /// The signed-in container: an [IndexedStack] of the 4 tab navigators driven by
 /// go_router's [StatefulNavigationShell], a floating rounded bottom nav, an
@@ -51,10 +53,13 @@ class _AppShellState extends State<AppShell> {
       case ConsultationEvent():
         context.read<NotificationsCubit>().bump();
       case NewChatMessage(:final consultationId, :final preview):
-        final here = GoRouterState.of(
-          context,
-        ).uri.toString().contains('/consultations/$consultationId');
+        // The room is pushed on the root navigator, above this shell, so the
+        // shell's own location never names it — asking the router here always
+        // said "not in the room" and interrupted people mid-conversation with a
+        // toast (and a second tone) for the message already on their screen.
+        final here = getIt<RoomPresence>().openId == consultationId;
         if (!here) {
+          AppSounds.notify();
           _toast(
             preview.isEmpty ? 'New message' : preview,
             actionLabel: 'View',

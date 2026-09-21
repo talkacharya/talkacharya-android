@@ -68,5 +68,14 @@
 		</array>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>TalkAcharya uses your microphone so the astrologer can hear you during a call.</string>
+		<key>NSCameraUsageDescription</key>
+		<string>TalkAcharya uses your camera for video consultations.</string>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>audio</string>
+			<string>voip</string>
+		</array>
 	</dict>
 </plist>

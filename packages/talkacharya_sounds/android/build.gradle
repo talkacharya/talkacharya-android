@@ -1,0 +1,20 @@
+// Java-only on purpose: no Kotlin plugin, so the host app's AGP/Kotlin versions
+// (8.11 / 2.2 today) never have to agree with this module.
+group 'com.talkacharya.sounds'
+version '1.0'
+
+apply plugin: 'com.android.library'
+
+android {
+    namespace 'com.talkacharya.sounds'
+    compileSdk 35
+
+    defaultConfig {
+        minSdk 21
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}

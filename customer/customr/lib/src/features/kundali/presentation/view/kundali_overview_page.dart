@@ -1,3 +1,4 @@
+import '../../../consultations/presentation/view/widgets/share_with_astrologer.dart';
 import 'package:astro_kundali/astro_kundali.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -100,6 +101,15 @@ class _KundaliOverviewPageState extends State<KundaliOverviewPage> {
 
         final actions = <Widget>[
           const LanguageQuickButton(),
+          IconButton(
+            tooltip: l.shareWithAstrologer,
+            onPressed: () => shareWithAstrologer(
+              context,
+              birthProfileId: widget.profileId,
+              label: _name(l, profile),
+            ),
+            icon: const Icon(Icons.auto_awesome_rounded),
+          ),
           IconButton(
             tooltip: l.kOvDownloadPdf,
             onPressed: () => showKundaliPdfSheet(

@@ -502,7 +502,7 @@ class _WalletPill extends StatelessWidget {
     final isError = balances.isError && balance == null;
     final label = balance == null
         ? null
-        : Money.format(balance.available, currency, locale: locale);
+        : Money.format(balance.spendable, currency, locale: locale);
 
     return Center(
       child: Material(

@@ -17,6 +17,7 @@ import '../../../consultations/data/models/consultation.dart';
 import '../../data/models/dispute.dart';
 import '../cubit/report_issue_cubit.dart';
 import '../widgets/dispute_ui.dart';
+import '../../../../core/utils/haptic_service.dart';
 
 /// "Report a problem" for one session (`/consultations/:id/report`).
 class ReportIssuePage extends StatefulWidget {
@@ -48,7 +49,7 @@ class _ReportIssuePageState extends State<ReportIssuePage> {
       listenWhen: (a, b) => a.status != b.status || a.error != b.error,
       listener: (context, state) {
         if (state.status == ReportIssueStatus.submitted) {
-          HapticFeedback.mediumImpact();
+          HapticService.medium();
         } else if (state.error != null &&
             state.status == ReportIssueStatus.ready) {
           ScaffoldMessenger.of(context)

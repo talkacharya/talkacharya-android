@@ -5,6 +5,7 @@ import 'package:talkacharya_predictions/talkacharya_predictions.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../shared/widgets/app_bottom_sheet.dart';
 import '../cubit/predictions_cubit.dart';
+import '../../../../core/l10n/api_error_l10n.dart';
 
 Future<void> showBuyCreditsSheet(
   BuildContext context,
@@ -83,7 +84,7 @@ class _PackTileState extends State<_PackTile> {
         SnackBar(content: Text(l.predBuySuccess(balance))),
       );
     } catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text('$e')));
+      messenger.showSnackBar(SnackBar(content: Text(localizedErrorFor(l, e))));
     } finally {
       if (mounted) setState(() => _busy = false);
     }

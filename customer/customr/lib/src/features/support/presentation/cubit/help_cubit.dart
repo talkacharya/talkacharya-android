@@ -5,6 +5,7 @@ import '../../../../core/util/async_value.dart';
 import '../../../consultations/data/models/consultation.dart';
 import '../../data/models/dispute.dart';
 import '../../data/support_repository.dart';
+import '../../../../core/network/friendly_error.dart';
 
 /// The Help hub: the customer's reports + recent sessions they could report.
 /// Each slice loads and fails on its own (the contact + FAQ sections are static).
@@ -22,7 +23,9 @@ class HelpCubit extends Cubit<HelpState> {
       emit(state.copyWith(disputes: AsyncValue.data(list)));
     } catch (e) {
       emit(
-        state.copyWith(disputes: AsyncValue.error('$e', state.disputes.value)),
+        state.copyWith(
+          disputes: AsyncValue.error(friendlyError(e), state.disputes.value),
+        ),
       );
     }
   }
@@ -34,7 +37,9 @@ class HelpCubit extends Cubit<HelpState> {
       emit(state.copyWith(sessions: AsyncValue.data(list)));
     } catch (e) {
       emit(
-        state.copyWith(sessions: AsyncValue.error('$e', state.sessions.value)),
+        state.copyWith(
+          sessions: AsyncValue.error(friendlyError(e), state.sessions.value),
+        ),
       );
     }
   }

@@ -7,7 +7,8 @@ import 'realtime_client.dart';
 
 /// Decides *when* the realtime socket should be up: connected while the user is
 /// authenticated and the app is foregrounded; dropped on logout or after a grace
-/// period in the background.
+/// period in the background — but never while a consultation room or call is
+/// open (the screen turns off during a call; the chat must keep flowing).
 class RealtimeCoordinator {
   RealtimeCoordinator({
     required RealtimeClient client,
@@ -41,7 +42,12 @@ class RealtimeCoordinator {
     _foreground = false;
     _graceTimer?.cancel();
     _graceTimer = Timer(const Duration(seconds: 30), () {
-      if (!_foreground) _client.disconnect();
+      if (_foreground) return;
+      if (_client.hasLiveRoom) {
+        _onBackground(); // check again once the room is closed
+      } else {
+        _client.disconnect();
+      }
     });
   }
 

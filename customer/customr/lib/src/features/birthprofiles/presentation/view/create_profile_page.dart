@@ -7,6 +7,7 @@ import '../../data/models/birth_profile.dart';
 import '../../data/models/place.dart';
 import '../bloc/birth_profiles_cubit.dart';
 import 'widgets/place_search_field.dart';
+import '../../../../core/network/friendly_error.dart';
 
 const _relations = [
   ('self', 'Myself'),
@@ -205,9 +206,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     } catch (e) {
       if (mounted) {
         setState(() => _submitting = false);
-        messenger.showSnackBar(
-          SnackBar(content: Text('Could not save profile: $e')),
-        );
+        messenger.showSnackBar(SnackBar(content: Text(friendlyError(e))));
       }
     }
   }

@@ -1,0 +1,28 @@
+name: talkacharya_live
+description: "Shared live-streaming layer for the TalkAcharya customer and astrologer apps — a self-hosted LiveKit room (publish for the host, subscribe for viewers), the viewer/host cubits and the video view. Networking, routing and DI stay in each app."
+version: 0.1.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  bloc: ^9.0.1
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.7
+  # 2.5.4+ pins flutter_webrtc 1.2.1, which collides with talkacharya_call's ^1.6.
+  # Pinned deliberately. 2.5.4-2.6.1 pin flutter_webrtc 1.2.1 (talkacharya_call needs
+  # ^1.6), and 2.12+ drag in connectivity_plus 7 / json_annotation 4.12, which collide
+  # with the apps' own pins. Moving past this range means upgrading those first.
+  livekit_client: '>=2.5.0 <2.5.4'
+  permission_handler: ^12.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  bloc_test: ^10.0.0
+
+flutter:

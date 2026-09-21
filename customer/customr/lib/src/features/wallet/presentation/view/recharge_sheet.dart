@@ -16,6 +16,7 @@ import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../data/wallet_repository.dart';
 import '../cubit/recharge_cubit.dart';
 import '../cubit/wallet_cubit.dart';
+import '../../../../core/utils/haptic_service.dart';
 
 /// Opens the recharge bottom sheet. Returns when it closes.
 Future<void> showRechargeSheet(BuildContext context, {int? initialAmount}) {
@@ -101,10 +102,10 @@ class _RechargeSheetState extends State<_RechargeSheet> {
     return BlocConsumer<RechargeCubit, RechargeState>(
       listener: (context, state) {
         if (state.status == RechargeStatus.success) {
-          HapticFeedback.mediumImpact();
+          HapticService.medium();
           _confetti.play();
         } else if (state.status == RechargeStatus.failed && !state.cancelled) {
-          HapticFeedback.heavyImpact();
+          HapticService.heavy();
         }
       },
       builder: (context, state) {

@@ -1,8 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
-    <!-- voice calls (self-hosted WebRTC): mic, audio routing, bluetooth headsets,
-         and a microphone foreground service so audio survives screen-lock / app switch -->
+    <!-- voice + video calls (self-hosted WebRTC): mic, camera, audio routing,
+         bluetooth headsets, and a foreground service so a call survives screen-lock /
+         app switch. A video call needs the camera FGS type on Android 14+. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
@@ -10,8 +12,11 @@
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <!-- a consultation request rings over the lock screen, like a call -->
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
     <!-- RECORD_AUDIO below also covers on-device speech-to-text dictation -->
     <queries>
         <intent>
@@ -19,15 +24,20 @@
         </intent>
     </queries>
 
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera.front" android:required="false"/>
+
     <application
         android:label="@string/app_name"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/launcher_icon"
         android:usesCleartextTraffic="${usesCleartextTraffic}">
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
+            android:supportsPictureInPicture="true"
+            android:resizeableActivity="true"
             android:taskAffinity=""
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -78,7 +88,7 @@
         <!-- keeps the microphone + process alive during a call (talkacharya_call) -->
         <service
             android:name="com.pravera.flutter_foreground_task.service.ForegroundService"
-            android:foregroundServiceType="microphone"
+            android:foregroundServiceType="microphone|camera"
             android:exported="false"/>
     </application>
 

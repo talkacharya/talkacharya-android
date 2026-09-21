@@ -7,6 +7,7 @@ import '../../../../core/realtime/realtime_client.dart';
 import '../../../../core/realtime/realtime_event.dart';
 import '../../data/consultation_repository.dart';
 import '../../data/models/consultation.dart';
+import '../../../../core/network/friendly_error.dart';
 
 part 'chats_list_state.dart';
 
@@ -43,7 +44,7 @@ class ChatsListCubit extends Cubit<ChatsListState> {
         state.copyWith(loading: false, consultations: all, clearError: true),
       );
     } catch (e) {
-      emit(state.copyWith(loading: false, error: e.toString()));
+      emit(state.copyWith(loading: false, error: friendlyError(e)));
     }
   }
 

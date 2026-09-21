@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/util/async_value.dart';
 import '../../data/models/day_panchang.dart';
 import '../../data/panchang_repository.dart';
+import '../../../../core/network/friendly_error.dart';
 
 /// The full panchang page: a place + a date → that day's panchang.
 ///
@@ -54,7 +55,7 @@ class PanchangCubit extends Cubit<PanchangState> {
       emit(state.copyWith(day: AsyncValue.data(day)));
     } catch (e) {
       if (gen != _generation) return;
-      emit(state.copyWith(day: AsyncValue.error('$e', cached)));
+      emit(state.copyWith(day: AsyncValue.error(friendlyError(e), cached)));
     }
   }
 

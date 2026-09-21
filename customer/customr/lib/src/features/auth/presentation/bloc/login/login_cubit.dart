@@ -87,7 +87,7 @@ class LoginCubit extends Cubit<LoginState> {
         ),
       );
     } on ApiException catch (e) {
-      emit(state.copyWith(submitting: false, error: e.message));
+      emit(state.copyWith(submitting: false, error: friendlyError(e)));
     }
   }
 
@@ -111,7 +111,7 @@ class LoginCubit extends Cubit<LoginState> {
         );
         await _completeWithFirebaseToken(idToken);
       } on FirebasePhoneAuthException catch (e) {
-        emit(state.copyWith(submitting: false, error: e.message));
+        emit(state.copyWith(submitting: false, error: friendlyError(e)));
       } catch (e) {
         emit(state.copyWith(submitting: false, error: friendlyError(e)));
       }
@@ -124,7 +124,7 @@ class LoginCubit extends Cubit<LoginState> {
       _profileStore?.markLoginGatePending();
       _authBloc.add(AuthLoggedIn(user));
     } on ApiException catch (e) {
-      emit(state.copyWith(submitting: false, error: e.message));
+      emit(state.copyWith(submitting: false, error: friendlyError(e)));
     }
   }
 
@@ -135,7 +135,7 @@ class LoginCubit extends Cubit<LoginState> {
       _profileStore?.markLoginGatePending();
       _authBloc.add(AuthLoggedIn(user));
     } on ApiException catch (e) {
-      emit(state.copyWith(submitting: false, error: e.message));
+      emit(state.copyWith(submitting: false, error: friendlyError(e)));
     } catch (e) {
       emit(state.copyWith(submitting: false, error: friendlyError(e)));
     }

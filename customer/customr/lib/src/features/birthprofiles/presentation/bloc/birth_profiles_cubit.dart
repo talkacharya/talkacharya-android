@@ -5,6 +5,7 @@ import '../../../../core/profile/active_profile_store.dart';
 import '../../data/birth_profiles_api.dart';
 import '../../data/birth_profiles_repository.dart';
 import '../../data/models/birth_profile.dart';
+import '../../../../core/network/friendly_error.dart';
 
 part 'birth_profiles_state.dart';
 
@@ -46,7 +47,7 @@ class BirthProfilesCubit extends Cubit<BirthProfilesState> {
       }
       emit(state.copyWith(status: BpStatus.ready, profiles: profiles));
     } catch (e) {
-      emit(state.copyWith(status: BpStatus.error, error: e.toString()));
+      emit(state.copyWith(status: BpStatus.error, error: friendlyError(e)));
     }
   }
 

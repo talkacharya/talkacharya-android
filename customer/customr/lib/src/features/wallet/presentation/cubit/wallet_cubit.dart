@@ -11,6 +11,7 @@ import '../../data/models/recharge_pack.dart';
 import '../../data/models/wallet_balance.dart';
 import '../../data/models/wallet_transaction.dart';
 import '../../data/wallet_repository.dart';
+import '../../../../core/network/friendly_error.dart';
 
 part 'wallet_state.dart';
 
@@ -66,7 +67,7 @@ class WalletCubit extends Cubit<WalletState> {
       final value = await fetch();
       emit(write(state, AsyncValue.data(value)));
     } catch (e) {
-      emit(write(state, AsyncValue.error('$e', read(state).value)));
+      emit(write(state, AsyncValue.error(friendlyError(e), read(state).value)));
     }
   }
 

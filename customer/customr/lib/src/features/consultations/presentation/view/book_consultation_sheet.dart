@@ -10,8 +10,13 @@ import '../../../../shared/widgets/app_bottom_sheet.dart';
 import '../../../birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
 import '../../data/consultation_api.dart';
 import '../../data/consultation_repository.dart';
+import '../../data/pending_share.dart';
+import '../../../../core/network/friendly_error.dart';
+import '../../../../core/util/money.dart';
+import '../../../wallet/presentation/cubit/wallet_cubit.dart';
 
-/// Bottom sheet to start a consultation (text chat or voice call) with an astrologer.
+/// Bottom sheet to start a consultation (text chat, voice or video call) with an
+/// astrologer.
 Future<void> showBookConsultationSheet(
   BuildContext context, {
   required String astrologerId,
@@ -24,9 +29,11 @@ Future<void> showBookConsultationSheet(
   final l = context.l10n;
   return showAppSheet<void>(
     context: context,
-    title: channel == 'voice'
-        ? l.callBookTitle(astrologerName)
-        : 'Chat with $astrologerName',
+    title: switch (channel) {
+      'voice' => l.callBookTitle(astrologerName),
+      'video' => l.callVideoBookTitle(astrologerName),
+      _ => 'Chat with $astrologerName',
+    },
     builder: (context) => _BookForm(
       astrologerId: astrologerId,
       ratePerMinute: ratePerMinute,
@@ -49,6 +56,7 @@ class _BookForm extends StatefulWidget {
   final String channel;
 
   bool get isCall => channel != 'chat';
+  bool get isVideo => channel == 'video';
 
   @override
   State<_BookForm> createState() => _BookFormState();
@@ -62,7 +70,10 @@ class _BookFormState extends State<_BookForm> {
   @override
   void initState() {
     super.initState();
-    _birthProfileId = context.read<BirthProfilesCubit>().state.activeProfileId;
+    final pending = getIt<PendingShare>();
+    _birthProfileId =
+        pending.birthProfileId ??
+        context.read<BirthProfilesCubit>().state.activeProfileId;
   }
 
   @override
@@ -71,40 +82,57 @@ class _BookFormState extends State<_BookForm> {
     super.dispose();
   }
 
+  /// Shows why we stopped, with a shortcut to Settings when the answer is final.
+  bool _allowed(
+    ScaffoldMessengerState messenger,
+    MediaPermission result,
+    String body,
+  ) {
+    if (result == MediaPermission.granted) return true;
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(body),
+        action: result == MediaPermission.permanentlyDenied
+            ? SnackBarAction(
+                label: context.l10n.callOpenSettings,
+                onPressed:
+                    const PermissionHandlerCallPermissions().openSettings,
+              )
+            : null,
+      ),
+    );
+    return false;
+  }
+
   Future<void> _start() async {
     final router = GoRouter.of(context);
     final messenger = ScaffoldMessenger.of(context);
     final l = context.l10n;
     if (widget.isCall) {
-      // ask for the mic BEFORE paging the astrologer — no silent calls
-      final mic = await const PermissionHandlerCallPermissions()
-          .requestMicrophone();
+      // ask BEFORE paging the astrologer — no silent calls, no blind video ones
+      const permissions = PermissionHandlerCallPermissions();
+      final mic = await permissions.requestMicrophone();
       if (!mounted) return;
-      if (mic != MicPermission.granted) {
-        messenger.showSnackBar(
-          SnackBar(
-            content: Text(l.callMicBody),
-            action: mic == MicPermission.permanentlyDenied
-                ? SnackBarAction(
-                    label: l.callOpenSettings,
-                    onPressed:
-                        const PermissionHandlerCallPermissions().openSettings,
-                  )
-                : null,
-          ),
-        );
-        return;
+      if (!_allowed(messenger, mic, l.callMicBody)) return;
+
+      if (widget.isVideo) {
+        final camera = await permissions.requestCamera();
+        if (!mounted) return;
+        if (!_allowed(messenger, camera, l.callCameraBody)) return;
       }
     }
     setState(() => _submitting = true);
     final repo = getIt<ConsultationRepository>();
+    final pending = getIt<PendingShare>();
     try {
       final c = await repo.request(
         astrologerId: widget.astrologerId,
         channel: widget.channel,
-        birthProfileId: _birthProfileId,
+        birthProfileId: pending.matchId != null ? null : _birthProfileId,
+        matchId: pending.matchId,
         question: _question.text.trim(),
       );
+      pending.clear();
       if (!mounted) return;
       Navigator.pop(context);
       router.push('/consultations/${c.id}').ignore();
@@ -135,24 +163,55 @@ class _BookFormState extends State<_BookForm> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _submitting = false);
-      messenger.showSnackBar(SnackBar(content: Text('Could not start: $e')));
+      messenger.showSnackBar(SnackBar(content: Text(friendlyError(e))));
     }
   }
 
   void _showRecharge(InsufficientBalance e) {
+    final l = context.l10n;
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    String money(String raw) =>
+        Money.format(double.tryParse(raw) ?? 0, e.currency, locale: locale);
+
+    // The server's `available` is balance minus live reservations and can come
+    // back negative; show the floor, and name the reservation separately rather
+    // than asking someone to make sense of "you have −₹1,472".
+    final available = double.tryParse(e.available) ?? 0;
+    final held = context.read<WalletCubit>().state.primaryFor(e.currency)?.held;
+
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Low balance'),
-        content: Text(
-          'You need at least ${e.currency} ${e.required} to start '
-          '(you have ${e.currency} ${e.available}). Add money to your wallet '
-          'and try again.',
+        title: Text(l.bookLowBalanceTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l.bookLowBalanceBody(
+                money(e.required),
+                Money.format(
+                  available > 0 ? available : 0,
+                  e.currency,
+                  locale: locale,
+                ),
+              ),
+            ),
+            if (held != null && held > 0.005) ...[
+              const SizedBox(height: 8),
+              Text(
+                l.bookLowBalanceHeld(
+                  Money.format(held, e.currency, locale: locale),
+                ),
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+          ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Not now'),
+            child: Text(l.commonNotNow),
           ),
           FilledButton(
             onPressed: () {
@@ -160,7 +219,7 @@ class _BookFormState extends State<_BookForm> {
               Navigator.pop(context); // close the sheet too
               context.push('/wallet');
             },
-            child: const Text('Recharge'),
+            child: Text(l.walletAddMoney),
           ),
         ],
       ),
@@ -192,7 +251,9 @@ class _BookFormState extends State<_BookForm> {
                 Expanded(
                   child: Text(
                     widget.isCall
-                        ? context.l10n.callBookBilling
+                        ? (widget.isVideo
+                              ? context.l10n.callVideoBookBilling
+                              : context.l10n.callBookBilling)
                         : 'Text chat · billed per minute',
                     style: theme.textTheme.bodyMedium,
                   ),
@@ -205,6 +266,10 @@ class _BookFormState extends State<_BookForm> {
             ),
           ),
           const SizedBox(height: 16),
+          if (getIt<PendingShare>().label.isNotEmpty) ...[
+            _SharingHint(label: getIt<PendingShare>().label),
+            const SizedBox(height: 12),
+          ],
           Text('Birth profile', style: theme.textTheme.labelLarge),
           const SizedBox(height: 6),
           BlocBuilder<BirthProfilesCubit, BirthProfilesState>(
@@ -273,6 +338,45 @@ class _BookFormState extends State<_BookForm> {
             textAlign: TextAlign.center,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// "Sharing X with the astrologer" hint, shown when the customer came here from
+/// a birth profile or a kundali match.
+class _SharingHint extends StatelessWidget {
+  const _SharingHint({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: scheme.primaryContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.auto_awesome_rounded,
+            size: 18,
+            color: scheme.onPrimaryContainer,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              '${context.l10n.shareWithAstrologer}: $label',
+              style: TextStyle(
+                color: scheme.onPrimaryContainer,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],

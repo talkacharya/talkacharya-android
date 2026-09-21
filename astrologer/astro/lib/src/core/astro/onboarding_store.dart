@@ -72,7 +72,10 @@ class OnboardingStore extends ChangeNotifier {
       if (e.response?.statusCode == 403) {
         _stage = OnboardingStage.notAstrologer;
       }
-    } catch (_) {}
+    } catch (e, st) {
+      // A parse failure here would leave the gate on the splash forever.
+      debugPrint('OnboardingStore.refresh failed: $e\n$st');
+    }
     notifyListeners();
   }
 

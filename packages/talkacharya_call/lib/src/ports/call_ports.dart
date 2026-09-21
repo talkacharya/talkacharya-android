@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 import '../models/call_join.dart';
 import '../models/call_state.dart';
 
@@ -22,11 +24,17 @@ abstract class CallSignaling {
   Future<void> publish(String channel, Map<String, dynamic> data);
 }
 
-enum MicPermission { granted, denied, permanentlyDenied }
+enum MediaPermission { granted, denied, permanentlyDenied }
 
-/// Microphone permission — overridable for tests.
+/// The old name, from when calls were voice-only.
+typedef MicPermission = MediaPermission;
+
+/// Microphone + camera permission — overridable for tests.
 abstract class CallPermissions {
-  Future<MicPermission> requestMicrophone();
+  Future<MediaPermission> requestMicrophone();
+
+  /// Asked only for a video call, and only after the microphone was granted.
+  Future<MediaPermission> requestCamera();
   Future<void> openSettings();
 }
 
@@ -43,4 +51,57 @@ class NoopCallKeepAlive implements CallKeepAlive {
   Future<void> start({required String title, required String text}) async {}
   @override
   Future<void> stop() async {}
+}
+
+/// Call sounds. The app plugs in its sound player; the default is silent.
+abstract class CallSounds {
+  /// Start / stop the caller's ringback loop.
+  void startRingback();
+  void stopRingback();
+
+  /// Audio started flowing for the first time.
+  void connected();
+
+  /// The call (or the attempt to place it) ended.
+  void ended();
+}
+
+/// The tick a call control gives back when it is pressed.
+///
+/// A port, not a direct `HapticFeedback` call, because each app has its own
+/// "vibrate" preference and a control inside a shared widget must respect it
+/// like every other button in the app.
+abstract class CallHaptics {
+  void tap();
+}
+
+/// The platform's own selection tick — the sensible default for a host that has
+/// no preference to consult.
+class SystemCallHaptics implements CallHaptics {
+  const SystemCallHaptics();
+  @override
+  void tap() => HapticFeedback.selectionClick();
+}
+
+class NoopCallHaptics implements CallHaptics {
+  const NoopCallHaptics();
+  @override
+  void tap() {}
+}
+
+/// What the call controls buzz with. A host with a "vibrate" preference sets
+/// this once at startup — app-wide state, like the preference itself, rather
+/// than a parameter threaded through every button.
+CallHaptics callHaptics = const SystemCallHaptics();
+
+class NoopCallSounds implements CallSounds {
+  const NoopCallSounds();
+  @override
+  void startRingback() {}
+  @override
+  void stopRingback() {}
+  @override
+  void connected() {}
+  @override
+  void ended() {}
 }

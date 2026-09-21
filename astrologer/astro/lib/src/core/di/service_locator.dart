@@ -6,14 +6,18 @@ import '../../features/auth/data/auth_api.dart';
 import '../../features/auth/data/auth_repository.dart';
 import '../../features/auth/data/firebase_phone_auth.dart';
 import '../../features/auth/presentation/bloc/auth/auth_bloc.dart';
+import '../../features/chats/presentation/cubit/chats_cubit.dart';
 import '../../features/consultations/data/consultation_api.dart';
+import '../../features/consultations/presentation/room_presence.dart';
 import '../../features/consultations/data/consultation_repository.dart';
 import '../../features/earnings/data/earnings_api.dart';
 import '../../features/earnings/presentation/cubit/earnings_cubit.dart';
 import '../../features/kundali/data/kundali_api.dart';
 import '../../features/kundali/data/kundali_repository.dart';
+import '../../features/livestream/data/live_api.dart';
 import '../../features/predictions/data/predictions_api.dart';
 import '../../features/predictions/data/predictions_repository.dart';
+import '../../features/home/data/dashboard_api.dart';
 import '../../features/home/presentation/cubit/dashboard_cubit.dart';
 import '../../features/notifications/data/notifications_api.dart';
 import '../../features/notifications/data/notifications_repository.dart';
@@ -38,6 +42,7 @@ import '../realtime/realtime_client.dart';
 import '../realtime/realtime_coordinator.dart';
 import '../router/pending_deep_link.dart';
 import '../storage/token_storage.dart';
+import 'package:talkacharya_call/talkacharya_call.dart';
 
 final getIt = GetIt.instance;
 
@@ -101,7 +106,12 @@ Future<void> configureDependencies(AppConfig config) async {
 
   // --- push -------------------------------------------------------------
   final local = LocalNotifications();
-  final push = PushService(local);
+  final push = PushService(
+    local,
+    realtimeOnline: () =>
+        getIt.isRegistered<RealtimeClient>() &&
+        getIt<RealtimeClient>().isConnected,
+  );
   getIt
     ..registerSingleton<LocalNotifications>(local)
     ..registerSingleton<PushService>(push)
@@ -140,15 +150,31 @@ Future<void> configureDependencies(AppConfig config) async {
     )
     ..registerLazySingleton<KundaliApi>(() => KundaliApi(dio))
     ..registerLazySingleton<KundaliRepository>(() => KundaliRepository(getIt()))
+    ..registerLazySingleton<LiveApi>(() => LiveApi(dio))
     ..registerLazySingleton<PredictionsApi>(() => PredictionsApi(dio))
     ..registerLazySingleton<PredictionsRepository>(
       () => PredictionsRepository(getIt()),
     )
     ..registerLazySingleton<EarningsApi>(() => EarningsApi(dio))
     ..registerLazySingleton<ProfileApi>(() => ProfileApi(dio))
-    ..registerFactory<DashboardCubit>(() => DashboardCubit(dio))
-    ..registerFactory<RequestsCubit>(
+    ..registerLazySingleton<DashboardApi>(() => DashboardApi(dio, getIt()))
+    ..registerFactory<DashboardCubit>(
+      () => DashboardCubit(
+        api: getIt(),
+        consultations: getIt(),
+        onboarding: getIt(),
+        realtime: realtime,
+      ),
+    )
+    // App-level: they also feed the Requests / Chats nav badges.
+    ..registerLazySingleton<RequestsCubit>(
       () => RequestsCubit(repo: getIt(), realtime: realtime),
+    )
+    ..registerLazySingleton<RoomPresence>(RoomPresence.new)
+    // Owns the one running call, so it outlives the room screen.
+    ..registerLazySingleton<CallHub>(CallHub.new)
+    ..registerLazySingleton<ChatsCubit>(
+      () => ChatsCubit(api: getIt(), realtime: realtime),
     )
     ..registerFactory<EarningsCubit>(() => EarningsCubit(getIt()));
 }

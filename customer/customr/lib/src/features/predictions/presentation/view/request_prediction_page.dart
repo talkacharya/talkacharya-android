@@ -12,6 +12,7 @@ import '../cubit/predictions_cubit.dart';
 import 'buy_credits_sheet.dart';
 import 'prediction_routes.dart';
 import 'predictions_home_page.dart' show predAreaTitle, predPeriodTitle;
+import '../../../../core/l10n/api_error_l10n.dart';
 
 class RequestPredictionPage extends StatefulWidget {
   const RequestPredictionPage({this.initialArea, super.key});
@@ -63,7 +64,7 @@ class _RequestPredictionPageState extends State<RequestPredictionPage> {
       );
       unawaited(router.pushReplacement(PredictionRoutes.detail(p.id)));
     } catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text('$e')));
+      messenger.showSnackBar(SnackBar(content: Text(localizedErrorFor(l, e))));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -148,7 +149,9 @@ class _RequestPredictionPageState extends State<RequestPredictionPage> {
           const SizedBox(height: 10),
           FilledButton(
             onPressed: _busy ? null : _submit,
-            style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(52)),
+            style: FilledButton.styleFrom(
+              minimumSize: const Size.fromHeight(52),
+            ),
             child: _busy
                 ? const SizedBox(
                     width: 22,

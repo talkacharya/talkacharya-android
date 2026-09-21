@@ -22,6 +22,20 @@ class WalletBalance extends Equatable {
 
   bool get hasHold => held > 0.005;
 
+  /// What the app may show and the customer may spend.
+  ///
+  /// [available] is the server's arithmetic — balance minus what live sessions
+  /// have reserved — and it can come back below zero if a reservation outlived
+  /// the session that made it, or if a balance was corrected. "−₹1,472" tells a
+  /// customer nothing except that something is wrong with our books, so the
+  /// figure on screen is floored at zero and the reserved amount is shown
+  /// beside it instead.
+  double get spendable => available > 0 ? available : 0;
+
+  /// True when holds reserve more than the balance covers — a state that should
+  /// not last, since a hold is released the moment its session settles.
+  bool get overReserved => available < -0.005;
+
   factory WalletBalance.fromJson(Map<String, dynamic> json) {
     double d(dynamic v) => v == null ? 0 : double.tryParse('$v') ?? 0;
     return WalletBalance(

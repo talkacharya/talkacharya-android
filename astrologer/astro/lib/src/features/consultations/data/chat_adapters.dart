@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:talkacharya_chat/talkacharya_chat.dart';
 
+import '../../../core/network/api_exception.dart';
 import '../../../core/constants/api_paths.dart';
 import '../../../core/realtime/realtime_client.dart';
 
@@ -58,13 +59,13 @@ class DioChatTransport implements ChatTransport {
     int? beforeSeq,
     int limit = 50,
   }) async {
-    final res = await _dio.get<List<dynamic>>(
+    final res = (await _dio.get<List<dynamic>>(
       ApiPaths.messages(consultationId),
       queryParameters: {
         if (beforeSeq != null) 'before_seq': beforeSeq else 'after': afterSeq,
         'limit': limit,
       },
-    );
+    )).ensureOk();
     return (res.data ?? const [])
         .map((e) => ChatMessage.fromMap((e as Map).cast<String, dynamic>()))
         .toList();
@@ -76,14 +77,14 @@ class DioChatTransport implements ChatTransport {
     required String clientMessageId,
     List<String> attachmentIds = const [],
   }) async {
-    final res = await _dio.post<Map<String, dynamic>>(
+    final res = (await _dio.post<Map<String, dynamic>>(
       ApiPaths.messages(consultationId),
       data: {
         'body': body,
         'attachment_ids': attachmentIds,
         'client_message_id': clientMessageId,
       },
-    );
+    )).ensureOk();
     return ChatMessage.fromMap(res.data ?? const {});
   }
 
@@ -136,10 +137,10 @@ class DioChatTransport implements ChatTransport {
     final form = FormData.fromMap({
       'file': await MultipartFile.fromFile(filePath, filename: name),
     });
-    final res = await _dio.post<Map<String, dynamic>>(
+    final res = (await _dio.post<Map<String, dynamic>>(
       ApiPaths.attachments(consultationId),
       data: form,
-    );
+    )).ensureOk();
     return ChatAttachment.fromMap(res.data ?? const {});
   }
 

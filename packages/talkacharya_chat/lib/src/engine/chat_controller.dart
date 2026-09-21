@@ -28,7 +28,9 @@ class ChatController extends Cubit<ChatSessionState> {
     ChatOutbox? outbox,
     TtsEngine? tts,
     SttEngine? stt,
+    ChatSounds sounds = const NoopChatSounds(),
   }) : _t = transport,
+       _sounds = sounds,
        _rt = realtime,
        _id = identity,
        _pickImages = pickImages,
@@ -43,6 +45,7 @@ class ChatController extends Cubit<ChatSessionState> {
   final ChatIdentity _id;
   final PickImages? _pickImages;
   final ChatOutbox _outbox;
+  final ChatSounds _sounds;
   final TtsEngine tts;
   final SttEngine stt;
 
@@ -117,7 +120,13 @@ class ChatController extends Cubit<ChatSessionState> {
     final data = (frame['data'] as Map?)?.cast<String, dynamic>() ?? const {};
     switch (type) {
       case 'message.new':
-        _merge(ChatMessage.fromMap(data));
+        final m = ChatMessage.fromMap(data);
+        if (m.senderRole != _id.role &&
+            m.senderRole != ParticipantRole.system &&
+            !_has(m)) {
+          _sounds.incoming();
+        }
+        _merge(m);
         _bumpSeen();
       case 'message.receipt':
         _applyReceipt(data);
@@ -247,6 +256,7 @@ class ChatController extends Cubit<ChatSessionState> {
       _merge(
         server.copyWith(clientMessageId: cmid, sendStatus: SendStatus.sent),
       );
+      _sounds.sent();
     } catch (_) {
       _patch('c:$cmid', (m) => m.copyWith(sendStatus: SendStatus.failed));
     }
@@ -501,6 +511,13 @@ class ChatController extends Cubit<ChatSessionState> {
   Future<void> endDictation() => stt.stop();
 
   // --- message list helpers -------------------------------------------
+
+  bool _has(ChatMessage m) => state.messages.any(
+    (x) =>
+        (m.id.isNotEmpty && x.id == m.id) ||
+        (m.clientMessageId.isNotEmpty &&
+            x.clientMessageId == m.clientMessageId),
+  );
 
   void _merge(ChatMessage incoming) {
     final list = [...state.messages];

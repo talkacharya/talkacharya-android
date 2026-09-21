@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../data/models/app_notification.dart';
 import '../../data/notifications_repository.dart';
+import '../../../../core/network/friendly_error.dart';
 
 part 'notifications_state.dart';
 
@@ -27,7 +28,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: NotifStatus.error, error: e.toString()));
+      emit(state.copyWith(status: NotifStatus.error, error: friendlyError(e)));
     }
   }
 

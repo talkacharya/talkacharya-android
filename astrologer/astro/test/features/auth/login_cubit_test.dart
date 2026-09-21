@@ -114,9 +114,9 @@ void main() {
     setUp(() {
       config = _MockConfig();
       firebase = _MockFirebase();
-      when(() => config.value).thenReturn(
-        const RemoteConfig(auth: ConfigAuth(firebase: true)),
-      );
+      when(
+        () => config.value,
+      ).thenReturn(const RemoteConfig(auth: ConfigAuth(firebase: true)));
     });
 
     LoginCubit fbBuild() => LoginCubit(
@@ -163,8 +163,9 @@ void main() {
         verificationId: 'vid-123',
       ),
       setUp: () {
-        when(() => firebase.confirmCode('vid-123', '123456'))
-            .thenAnswer((_) async => 'firebase-id-token');
+        when(
+          () => firebase.confirmCode('vid-123', '123456'),
+        ).thenAnswer((_) async => 'firebase-id-token');
         when(() => repo.loginWithFirebase('firebase-id-token')).thenAnswer(
           (_) async => const AuthUser(id: 'u1', phone: '+919565901765'),
         );

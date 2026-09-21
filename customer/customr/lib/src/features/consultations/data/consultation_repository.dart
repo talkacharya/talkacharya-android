@@ -13,13 +13,22 @@ class ConsultationRepository {
     required String astrologerId,
     required String channel,
     String? birthProfileId,
+    String? matchId,
     String question = '',
   }) => _api.request(
     astrologerId: astrologerId,
     channel: channel,
     birthProfileId: birthProfileId,
+    matchId: matchId,
     question: question,
   );
+
+  /// Share a birth profile or a match with the astrologer mid-session.
+  Future<Consultation> share(
+    String id, {
+    String? birthProfileId,
+    String? matchId,
+  }) => _api.share(id, birthProfileId: birthProfileId, matchId: matchId);
 
   Future<Consultation> detail(String id) => _api.detail(id);
   Future<List<Consultation>> list({String? status}) =>

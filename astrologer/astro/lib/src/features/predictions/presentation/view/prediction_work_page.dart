@@ -62,13 +62,16 @@ class _ViewState extends State<_View> {
     });
   }
 
-  int get _words =>
-      _body.text.trim().isEmpty ? 0 : _body.text.trim().split(RegExp(r'\s+')).length;
+  int get _words => _body.text.trim().isEmpty
+      ? 0
+      : _body.text.trim().split(RegExp(r'\s+')).length;
 
   Future<void> _deliver(int minWords) async {
     if (_words < minWords) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Needs at least $minWords words ($_words so far).')),
+        SnackBar(
+          content: Text('Needs at least $minWords words ($_words so far).'),
+        ),
       );
       return;
     }
@@ -79,9 +82,9 @@ class _ViewState extends State<_View> {
     if (!mounted) return;
     if (ok) {
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Delivered.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Delivered.')));
     }
   }
 
@@ -119,8 +122,9 @@ class _ViewState extends State<_View> {
       ),
       body: BlocConsumer<PredictionWorkCubit, PredictionWorkState>(
         listenWhen: (a, b) => a.error != b.error && b.error != null,
-        listener: (context, state) => ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(state.error!))),
+        listener: (context, state) => ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(state.error!))),
         builder: (context, state) => state.prediction.when(
           idle: _loading,
           loading: _loading,
@@ -182,31 +186,31 @@ class _ViewState extends State<_View> {
           },
         ),
       ),
-      bottomNavigationBar: BlocBuilder<PredictionWorkCubit, PredictionWorkState>(
-        builder: (context, state) {
-          final p = state.prediction.value;
-          if (p == null || p.status.isDelivered || p.claimedAt == null) {
-            return const SizedBox.shrink();
-          }
-          return SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: FilledButton(
-                onPressed: state.saving ? null : () => _deliver(120),
-                style: FilledButton.styleFrom(
-                  minimumSize: const Size.fromHeight(52),
+      bottomNavigationBar:
+          BlocBuilder<PredictionWorkCubit, PredictionWorkState>(
+            builder: (context, state) {
+              final p = state.prediction.value;
+              if (p == null || p.status.isDelivered || p.claimedAt == null) {
+                return const SizedBox.shrink();
+              }
+              return SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: FilledButton(
+                    onPressed: state.saving ? null : () => _deliver(120),
+                    style: FilledButton.styleFrom(
+                      minimumSize: const Size.fromHeight(52),
+                    ),
+                    child: const Text('Deliver forecast'),
+                  ),
                 ),
-                child: const Text('Deliver forecast'),
-              ),
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
     );
   }
 
-  static Widget _loading() =>
-      const Center(child: CircularProgressIndicator());
+  static Widget _loading() => const Center(child: CircularProgressIndicator());
 }
 
 class _Meta extends StatelessWidget {

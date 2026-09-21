@@ -16,6 +16,7 @@ import '../cubit/wallet_cubit.dart';
 import 'recharge_sheet.dart';
 import 'widgets/balance_card.dart';
 import 'widgets/transaction_tile.dart';
+import '../../../../core/l10n/api_error_l10n.dart';
 
 class WalletPage extends StatefulWidget {
   const WalletPage({super.key, this.initialAmount});
@@ -391,11 +392,7 @@ class _CouponRowState extends State<_CouponRow> {
     );
   }
 
-  String _couponError(AppLocalizations l, Object e) {
-    final s = e.toString();
-    if (s.contains('promo.not_redeemable')) return l.errPromoNotRedeemable;
-    return l.errGeneric;
-  }
+  String _couponError(AppLocalizations l, Object e) => localizedErrorFor(l, e);
 }
 
 class _SectionHeader extends StatelessWidget {

@@ -42,16 +42,12 @@ class _PrashnaDetailPageState extends State<PrashnaDetailPage> {
           loading: _loading,
           error: (m) => ErrorView(
             message: m,
-            onRetry: () =>
-                context.read<PrashnaDetailCubit>().load(force: true),
+            onRetry: () => context.read<PrashnaDetailCubit>().load(force: true),
           ),
           data: (p) => ListView(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
             children: [
-              Text(
-                p.question,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
+              Text(p.question, style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 4),
               Text(
                 prashnaCategoryLabel(l, p.category),
@@ -117,7 +113,11 @@ class _VerdictCard extends StatelessWidget {
         padding: const EdgeInsets.all(18),
         child: Row(
           children: [
-            Icon(PrashnaInfo.verdictIcon(prashna.verdict), color: colour, size: 30),
+            Icon(
+              PrashnaInfo.verdictIcon(prashna.verdict),
+              color: colour,
+              size: 30,
+            ),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
@@ -159,9 +159,7 @@ class _StrengthDots extends StatelessWidget {
             height: 8,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: i < level
-                  ? colour
-                  : colour.withValues(alpha: 0.25),
+              color: i < level ? colour : colour.withValues(alpha: 0.25),
             ),
           ),
         ),

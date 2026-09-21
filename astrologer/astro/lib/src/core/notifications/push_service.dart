@@ -7,9 +7,13 @@ import 'package:flutter/foundation.dart';
 import '../../../firebase_options.dart';
 import 'local_notifications.dart';
 
-/// FCM background isolate entrypoint. The backend sends a `notification` block so
-/// the OS renders the tray item itself — nothing to do here but keep Firebase
-/// initialised for the isolate.
+/// FCM background isolate entrypoint.
+///
+/// Ordinary pushes carry a `notification` block and the OS renders them itself.
+/// A consultation request does not: it arrives as data so that *this* isolate
+/// can raise a ringing, full-screen notification even with the app killed —
+/// which is the difference between an astrologer taking the call and a customer
+/// staring at an unanswered request.
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   try {
@@ -17,15 +21,51 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   } catch (_) {}
+  if (message.data['ring'] != '1') return;
+  final local = LocalNotifications();
+  await local.init();
+  await ringForRequest(local, message.data);
+}
+
+/// Raise the ringing notification for an incoming consultation.
+///
+/// Lives outside [PushService] so the background isolate — which has no access
+/// to the app's DI or its localizations — can call it too. The action labels are
+/// English here by necessity; the app is en/hi and the notification is gone in
+/// ninety seconds.
+Future<void> ringForRequest(
+  LocalNotifications local,
+  Map<String, dynamic> data,
+) async {
+  final seconds = int.tryParse('${data['expires_in'] ?? ''}') ?? 90;
+  final who = '${data['customer_name'] ?? ''}'.trim();
+  final channel = '${data['channel'] ?? 'chat'}';
+  await local.showIncomingCall(
+    title: who.isEmpty ? 'Incoming consultation' : who,
+    body: switch (channel) {
+      'voice' => 'Voice consultation request',
+      'video' => 'Video consultation request',
+      _ => 'Chat consultation request',
+    },
+    data: Map<String, dynamic>.from(data),
+    expiresIn: Duration(seconds: seconds),
+    answerLabel: 'Accept',
+    declineLabel: 'Decline',
+  );
 }
 
 /// Wraps FCM. [init] never throws: if the app has no `google-services.json`
 /// (Firebase not configured) it logs once and every accessor becomes a no-op,
 /// so the rest of the app is unaffected.
 class PushService {
-  PushService(this._local);
+  PushService(this._local, {bool Function()? realtimeOnline})
+    : _realtimeOnline = realtimeOnline ?? _never;
 
   final LocalNotifications _local;
+
+  /// Whether the in-app realtime socket is up (it then delivers requests itself).
+  final bool Function() _realtimeOnline;
+  static bool _never() => false;
 
   bool _available = false;
   bool get isAvailable => _available;
@@ -92,6 +132,12 @@ class PushService {
   }
 
   void _onForegroundMessage(RemoteMessage message) {
+    if (message.data['ring'] == '1') {
+      // With the socket up the in-app sheet is already ringing in person; a
+      // notification on top would only double the sound.
+      if (!_realtimeOnline()) unawaited(ringForRequest(_local, message.data));
+      return;
+    }
     final n = message.notification;
     _local.show(
       title: n?.title ?? '',

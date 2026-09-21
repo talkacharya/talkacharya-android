@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import '../../../../core/util/async_value.dart';
 import '../../data/models/dispute.dart';
 import '../../data/support_repository.dart';
+import '../../../../core/network/friendly_error.dart';
 
 /// One report. A fresh [seed] (e.g. straight after submitting) renders
 /// immediately while the server copy loads behind it.
@@ -23,7 +24,7 @@ class DisputeDetailCubit extends Cubit<AsyncValue<Dispute>> {
     try {
       emit(AsyncValue.data(await _repo.dispute(_id)));
     } catch (e) {
-      emit(AsyncValue.error('$e', state.value));
+      emit(AsyncValue.error(friendlyError(e), state.value));
     }
   }
 }

@@ -30,7 +30,9 @@ class ApiPaths {
   static const astroProfile = '/astro/profile';
   static const astroProfileBanner = '/astro/profile/banner';
   static const astroRates = '/astro/rates';
+  static const astroRateBands = '/astro/rates/bands';
   static const astroFeaturedSlots = '/astro/featured-slots';
+  static const astroFeaturedPricing = '/astro/featured-slots/pricing';
 
   // availability
   static const astroAvailability = '/astro/availability';
@@ -45,11 +47,25 @@ class ApiPaths {
   static String astroAccept(String id) => '/astro/consultations/$id/accept';
   static String astroReject(String id) => '/astro/consultations/$id/reject';
   static String astroEnd(String id) => '/astro/consultations/$id/end';
+  static String astroConsultationMatch(String id, String matchId) =>
+      '/astro/consultations/$id/matches/$matchId';
   static String astroConsultationChart(String id) =>
       '/astro/consultations/$id/chart';
   // in-session kundali surface (mirrors the customer /app/birth-profiles/{id}/{sub})
   static String astroConsultationKundali(String id, String sub) =>
       '/astro/consultations/$id/$sub';
+
+  // live streaming (host side)
+  static const astroLivestreams = '/astro/livestreams';
+  static String astroLiveStart(String id) => '/astro/livestreams/$id/start';
+  static String astroLiveEnd(String id) => '/astro/livestreams/$id/end';
+  static String astroLiveChat(String id) => '/astro/livestreams/$id/chat';
+  static String astroLiveViewers(String id) => '/astro/livestreams/$id/viewers';
+  static String astroLiveRemoveViewer(String id) =>
+      '/astro/livestreams/$id/viewers/remove';
+  static String astroLiveSlowMode(String id) =>
+      '/astro/livestreams/$id/slow-mode';
+  static String astroLivePin(String id) => '/astro/livestreams/$id/chat/pin';
 
   // predictions work queue
   static const predictionsQueue = '/astro/predictions/queue';

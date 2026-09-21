@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/astro/models/astro_profile.dart';
 import '../../../../core/astro/onboarding_store.dart';
 import '../../data/onboarding_repository.dart';
+import '../../../../core/network/friendly_error.dart';
 
 class OnboardingState extends Equatable {
   const OnboardingState({
@@ -59,7 +60,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       final p = await _repo.profile();
       emit(state.copyWith(loading: false, profile: p));
     } catch (e) {
-      emit(state.copyWith(loading: false, error: '$e'));
+      emit(state.copyWith(loading: false, error: _message(e)));
     }
   }
 
@@ -114,7 +115,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       emit(state.copyWith(saving: false));
       return true;
     } catch (e) {
-      emit(state.copyWith(saving: false, error: '$e'));
+      emit(state.copyWith(saving: false, error: _message(e)));
       return false;
     }
   }
@@ -127,10 +128,12 @@ class OnboardingCubit extends Cubit<OnboardingState> {
       emit(state.copyWith(saving: false));
       return true;
     } catch (e) {
-      emit(state.copyWith(saving: false, error: '$e'));
+      emit(state.copyWith(saving: false, error: _message(e)));
       return false;
     }
   }
+
+  static String _message(Object e) => friendlyError(e);
 
   Future<void> _refresh() async {
     final p = await _repo.profile();

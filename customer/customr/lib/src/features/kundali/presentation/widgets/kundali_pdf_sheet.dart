@@ -11,6 +11,7 @@ import '../../../../shared/widgets/hue_widgets.dart';
 import '../../../../shared/widgets/pressable.dart';
 import '../../data/kundali_api.dart';
 import '../../data/kundali_repository.dart';
+import '../../../../core/utils/haptic_service.dart';
 
 /// Downloads the kundali PDF and hands it to the system share sheet (save to
 /// Files / Drive, WhatsApp, print…). Throws on failure.
@@ -89,7 +90,7 @@ class _PdfSheetState extends State<_PdfSheet> {
         style: _style,
         full: _full,
       );
-      await HapticFeedback.lightImpact();
+      HapticService.light();
       if (mounted) Navigator.pop(context);
     } catch (e) {
       if (mounted) setState(() => _error = e);

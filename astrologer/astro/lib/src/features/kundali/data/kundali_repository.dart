@@ -9,6 +9,10 @@ class KundaliRepository {
 
   final KundaliApi _api;
 
+  /// A repository bound to one shared person (see [KundaliApi.forProfile]).
+  KundaliRepository forProfile(String? id) =>
+      id == null ? this : KundaliRepository(_api.forProfile(id));
+
   Future<Kundali> overview(String id) async =>
       Kundali.fromArtifact(await _api.overview(id));
 

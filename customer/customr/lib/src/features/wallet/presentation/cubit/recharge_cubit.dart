@@ -5,6 +5,7 @@ import '../../../../core/payments/razorpay_service.dart';
 import '../../data/models/recharge_order.dart';
 import '../../data/wallet_repository.dart';
 import 'wallet_cubit.dart';
+import '../../../../core/network/friendly_error.dart';
 
 part 'recharge_state.dart';
 
@@ -76,7 +77,7 @@ class RechargeCubit extends Cubit<RechargeState> {
       emit(
         state.copyWith(
           status: RechargeStatus.failed,
-          message: e.toString(),
+          message: friendlyError(e),
           error: () => e,
         ),
       );

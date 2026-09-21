@@ -72,3 +72,20 @@ abstract class ChatIdentity {
   /// Whether this user may dictate messages by voice (astrologer = true).
   bool get canDictate;
 }
+
+/// Room sounds. The app plugs in its sound player; the default is silent.
+abstract class ChatSounds {
+  /// A new message from the other participant arrived while the room is open.
+  void incoming();
+
+  /// The server confirmed a message this user sent.
+  void sent();
+}
+
+class NoopChatSounds implements ChatSounds {
+  const NoopChatSounds();
+  @override
+  void incoming() {}
+  @override
+  void sent() {}
+}

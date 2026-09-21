@@ -19,6 +19,7 @@ import '../../data/gifting_repository.dart';
 import '../../data/models/gift.dart';
 import '../cubit/send_gift_cubit.dart';
 import '../widgets/gift_art.dart';
+import '../../../../core/utils/haptic_service.dart';
 
 /// Opens the gift picker for [target]. Resolves with the last gift sent, or
 /// `null` if the sheet was dismissed without sending.
@@ -81,11 +82,11 @@ class _GiftSheetState extends State<_GiftSheet> {
           a.status != b.status || (a.error != b.error && b.error != null),
       listener: (context, state) {
         if (state.status == SendGiftStatus.sent) {
-          HapticFeedback.mediumImpact();
+          HapticService.medium();
           _confetti.play();
         } else if (state.error != null &&
             state.status == SendGiftStatus.ready) {
-          HapticFeedback.heavyImpact();
+          HapticService.heavy();
         }
       },
       builder: (context, state) {
@@ -502,7 +503,7 @@ class _BalanceLine extends StatelessWidget {
         Text(
           l.giftWalletBalance(
             Money.format(
-              wallet?.available ?? 0,
+              wallet?.spendable ?? 0,
               wallet?.currency ?? currency,
               locale: locale,
             ),
@@ -663,7 +664,7 @@ class _SentFace extends StatelessWidget {
                   Text(
                     l.giftWalletBalance(
                       Money.format(
-                        wallet.available,
+                        wallet.spendable,
                         wallet.currency,
                         locale: locale,
                       ),
