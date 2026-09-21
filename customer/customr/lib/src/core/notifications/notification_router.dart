@@ -36,6 +36,8 @@ class NotificationRouter {
   }
 
   void _emit(String? rawDeeplink) {
+    // Harmless no-op if this tap wasn't the ringing call notification.
+    unawaited(_local.cancelIncomingCall());
     final loc = locationForRaw(rawDeeplink);
     if (loc != null) _locations.add(loc);
   }

@@ -13,7 +13,21 @@ class LocalNotifications {
 
   final FlutterLocalNotificationsPlugin _plugin;
 
+  /// For the incoming-call extension below.
+  FlutterLocalNotificationsPlugin get plugin => _plugin;
+
   static const channelId = 'talkacharya_default';
+
+  /// The astrologer accepting rings on its own channel: the phone's ringtone
+  /// instead of a notification blip, and a full-screen intent so a locked phone
+  /// shows the call rather than a line in the shade. Android freezes a
+  /// channel's sound and importance at creation, which is why this can never be
+  /// the same channel as everything else.
+  static const callChannelId = 'talkacharya_incoming_call';
+
+  /// One id, so a second push for the same call replaces the first and
+  /// opening or the call ending can take it away again.
+  static const callNotificationId = 424243;
 
   final _taps = StreamController<String>.broadcast();
   Stream<String> get taps => _taps.stream;
@@ -47,6 +61,11 @@ class LocalNotifications {
               importance: Importance.high,
             ),
           );
+      await _plugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
+          ?.createNotificationChannel(incomingCallChannel);
       _ready = true;
     } catch (e) {
       debugPrint('LocalNotifications: init failed ($e)');
@@ -116,4 +135,63 @@ class LocalNotifications {
   }
 
   Future<void> dispose() => _taps.close();
+}
+
+/// The channel a ringing call arrives on.
+const incomingCallChannel = AndroidNotificationChannel(
+  LocalNotifications.callChannelId,
+  'Incoming calls',
+  description: 'Rings when your astrologer accepts a voice/video call',
+  importance: Importance.max,
+  // The phone's own ringtone, so it sounds like the call it is.
+  sound: UriAndroidNotificationSound('content://settings/system/ringtone'),
+  audioAttributesUsage: AudioAttributesUsage.notificationRingtone,
+  enableVibration: true,
+  vibrationPattern: null,
+);
+
+extension IncomingCallNotification on LocalNotifications {
+  /// Ring for a call the app could not show in person.
+  ///
+  /// Used when the astrologer accepts with the app backgrounded or killed.
+  /// A tap opens the call the same way any other notification tap does —
+  /// through `taps`/`deeplink`, there's no separate answer/decline action:
+  /// the call is already accepted server-side, this is just the ring.
+  /// Rings until it's tapped, opened from within the app, or the call is
+  /// no longer waiting (`cancelIncomingCall`).
+  Future<void> showIncomingCall({
+    required String title,
+    required String body,
+    required Map<String, dynamic> data,
+    required Duration expiresIn,
+  }) async {
+    final details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        LocalNotifications.callChannelId,
+        'Incoming calls',
+        importance: Importance.max,
+        priority: Priority.max,
+        category: AndroidNotificationCategory.call,
+        // Shows over the lock screen instead of waiting in the shade.
+        fullScreenIntent: true,
+        // Not swipeable: it goes away by being opened or expiring.
+        ongoing: true,
+        autoCancel: false,
+        timeoutAfter: expiresIn.inMilliseconds,
+        // FLAG_INSISTENT — keep ringing rather than chiming once.
+        additionalFlags: Int32List.fromList(<int>[4]),
+      ),
+    );
+    await plugin.show(
+      LocalNotifications.callNotificationId,
+      title.isEmpty ? 'Incoming call' : title,
+      body,
+      details,
+      payload: jsonEncode(data),
+    );
+  }
+
+  /// The call was opened, ended, or expired — stop ringing.
+  Future<void> cancelIncomingCall() =>
+      plugin.cancel(LocalNotifications.callNotificationId);
 }

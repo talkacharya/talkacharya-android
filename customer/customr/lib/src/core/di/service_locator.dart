@@ -187,7 +187,12 @@ Future<void> configureDependencies(AppConfig config) async {
 
   // --- push -----------------------------------------------------------------
   final local = LocalNotifications();
-  final push = PushService(local);
+  final push = PushService(
+    local,
+    realtimeOnline: () =>
+        getIt.isRegistered<RealtimeClient>() &&
+        getIt<RealtimeClient>().isConnected,
+  );
   getIt
     ..registerSingleton<LocalNotifications>(local)
     ..registerSingleton<PushService>(push)
