@@ -16,6 +16,9 @@ val hasGoogleServices = file("google-services.json").exists() ||
     listOf("dev", "staging", "prod").any { File(projectDir, "src/$it/google-services.json").exists() }
 if (hasGoogleServices) {
     apply(plugin = "com.google.gms.google-services")
+    // Uploads R8 mapping files so release crash stacks are readable in Crashlytics.
+    // Needs the same google-services.json as above to know which Firebase project.
+    apply(plugin = "com.google.firebase.crashlytics")
 }
 
 val keystoreProperties = Properties()

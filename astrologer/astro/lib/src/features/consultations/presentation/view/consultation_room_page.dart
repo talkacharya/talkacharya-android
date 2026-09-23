@@ -469,7 +469,20 @@ class _AstroCallRoomState extends State<_AstroCallRoom> {
       backend: DioCallBackend(
         getIt(),
         widget.consultation.id,
-        onEnd: cubit.endConsultation,
+        // `cubit` is owned by this route (`BlocProvider(create:)`) and closes
+        // when it's popped — which minimizing does. The call, and this
+        // callback with it, can outlive that: hanging up from the minimized
+        // bar later must not touch a closed cubit (Cubit.emit throws after
+        // close), so it falls back to the API directly.
+        onEnd: () async {
+          if (!cubit.isClosed) {
+            await cubit.endConsultation();
+            return;
+          }
+          try {
+            await getIt<ConsultationApi>().end(_id);
+          } catch (_) {}
+        },
       ),
       signaling: RealtimeCallSignaling(getIt<RealtimeClient>()),
       engine: FlutterWebRtcEngine(),

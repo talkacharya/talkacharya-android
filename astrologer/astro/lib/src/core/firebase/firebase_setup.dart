@@ -2,16 +2,23 @@ import 'dart:async';
 
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../firebase_options.dart';
 import '../config/flavor.dart';
 
-/// Brings Firebase up before anything uses it: `initializeApp`, then **App Check**
-/// — which must be active before the first Firebase Auth call, or phone sign-in
-/// fails once App Check is enforced for Authentication in the console.
+/// Brings Firebase up before anything uses it, in the right order:
 ///
-/// Mirrors the customer app's `FirebaseSetup` (minus Crashlytics). Never throws.
+/// 1. `Firebase.initializeApp`
+/// 2. **App Check** — must be activated *before* the first Firebase Auth call, or
+///    phone sign-in goes out without an attestation and fails once App Check is
+///    enforced for Authentication in the console.
+/// 3. **Crashlytics** — Flutter + platform error hooks.
+///
+/// Mirrors the customer app's `FirebaseSetup`. Never throws: without
+/// `google-services.json` the app still runs, just without push / Firebase
+/// login / crash reports ([isAvailable] stays false).
 class FirebaseSetup {
   FirebaseSetup._();
 
@@ -33,6 +40,7 @@ class FirebaseSetup {
       return;
     }
     await _activateAppCheck(flavor);
+    await _setUpCrashlytics(flavor);
   }
 
   /// Play Integrity only for a Play-distributed release of the prod flavor; every
@@ -63,19 +71,56 @@ class FirebaseSetup {
           '`adb logcat -d | grep "debug secret"` in Firebase console → App Check.',
         );
       }
-    } catch (e) {
+    } catch (e, st) {
       debugPrint('App Check: activation failed ($e)');
+      unawaited(recordNonFatal(e, st, reason: 'app_check_activate'));
     }
   }
 
-  /// No crash reporter in this app yet — keep the call sites shared with the
-  /// customer app and just log.
+  static Future<void> _setUpCrashlytics(Flavor flavor) async {
+    final crashlytics = FirebaseCrashlytics.instance;
+    // Debug runs stay out of the dashboard; every release/profile build reports.
+    await crashlytics.setCrashlyticsCollectionEnabled(!kDebugMode);
+    await crashlytics.setCustomKey('flavor', flavor.name);
+
+    final previous = FlutterError.onError;
+    FlutterError.onError = (details) {
+      previous?.call(details);
+      crashlytics.recordFlutterFatalError(details);
+    };
+    PlatformDispatcher.instance.onError = (error, stack) {
+      crashlytics.recordError(error, stack, fatal: true);
+      return true;
+    };
+  }
+
   static Future<void> recordNonFatal(
     Object error,
     StackTrace? stack, {
     String? reason,
   }) async {
-    debugPrint('non-fatal${reason == null ? '' : ' [$reason]'}: $error');
+    if (!_available) return;
+    try {
+      await FirebaseCrashlytics.instance.recordError(
+        error,
+        stack,
+        reason: reason,
+      );
+    } catch (_) {}
+  }
+
+  static Future<void> setUser(String? id) async {
+    if (!_available) return;
+    try {
+      await FirebaseCrashlytics.instance.setUserIdentifier(id ?? '');
+    } catch (_) {}
+  }
+
+  static Future<void> log(String message) async {
+    if (!_available) return;
+    try {
+      await FirebaseCrashlytics.instance.log(message);
+    } catch (_) {}
   }
 
   static String? _token;

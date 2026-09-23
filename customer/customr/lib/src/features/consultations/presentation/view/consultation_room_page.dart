@@ -259,9 +259,26 @@ class _CallRoomState extends State<_CallRoom> {
       backend: DioCallBackend(
         getIt(),
         widget.consultation.id,
-        onEnd: () => cubit.state.status == ConsultationStatus.requested
-            ? cubit.cancelRequest()
-            : cubit.endConsultation(),
+        // `cubit` is owned by this route (`BlocProvider(create:)`) and closes
+        // when it's popped — which minimizing does. The call, and this
+        // callback with it, can outlive that: hanging up from the minimized
+        // bar later must not touch a closed cubit (Cubit.emit throws after
+        // close), so it falls back to the repository directly. `connectedAt`
+        // is read off the call itself rather than the cubit's (possibly
+        // stale) consultation status, so this doesn't depend on the cubit
+        // either way.
+        onEnd: () async {
+          final everConnected = _call.state.connectedAt != null;
+          if (!cubit.isClosed) {
+            await (everConnected
+                ? cubit.endConsultation()
+                : cubit.cancelRequest());
+            return;
+          }
+          await (everConnected
+              ? getIt<ConsultationRepository>().end(_id)
+              : getIt<ConsultationRepository>().cancel(_id));
+        },
       ),
       signaling: RealtimeCallSignaling(getIt<RealtimeClient>()),
       engine: FlutterWebRtcEngine(),
@@ -539,6 +556,11 @@ class _ChatShellState extends State<_ChatShell> {
                 ],
               ),
             ),
+            if (!ended)
+              _ChatElapsedBadge(
+                since: c.startedAt,
+                fallbackSeconds: c.billedSeconds,
+              ),
             if (!ended) _AutoTranslateToggle(),
           ],
         ),
@@ -597,20 +619,108 @@ class _ChatShellState extends State<_ChatShell> {
               lowBalance: widget.lowBalance,
               onRecharge: () => showRechargeSheet(context),
             ),
-          if (ended)
-            _RatingBlock(
-              consultation: c,
-              rating: _rating,
-              busy: _ratingBusy,
-              justRated: _justRated,
-              onRate: (r) => setState(() => _rating = r),
-              onSubmit: () => _submitRating(c),
-            ),
           Expanded(child: ChatView(composerEnabled: canChat)),
+          // Below the transcript, not above it: a chat scrolls to the newest
+          // message by default, so a rating prompt pinned above the messages
+          // sits off-screen above whatever the customer actually lands on —
+          // down here it takes the composer's old spot, so it's the first
+          // thing in view, no scrolling required.
+          if (ended)
+            SafeArea(
+              top: false,
+              child: Material(
+                elevation: 3,
+                color: Theme.of(context).colorScheme.surface,
+                child: _RatingBlock(
+                  consultation: c,
+                  rating: _rating,
+                  busy: _ratingBusy,
+                  justRated: _justRated,
+                  onRate: (r) => setState(() => _rating = r),
+                  onSubmit: () => _submitRating(c),
+                ),
+              ),
+            ),
         ],
       ),
     );
   }
+}
+
+/// How long this chat has been live, ticking every second — the astrologer's
+/// room already shows this; the customer's didn't.
+class _ChatElapsedBadge extends StatefulWidget {
+  const _ChatElapsedBadge({required this.since, required this.fallbackSeconds});
+
+  final DateTime? since;
+  final int fallbackSeconds;
+
+  @override
+  State<_ChatElapsedBadge> createState() => _ChatElapsedBadgeState();
+}
+
+class _ChatElapsedBadgeState extends State<_ChatElapsedBadge> {
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final since = widget.since;
+    final secs = since == null
+        ? widget.fallbackSeconds
+        : DateTime.now().difference(since).inSeconds.clamp(0, 1 << 30);
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      margin: const EdgeInsets.only(right: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: scheme.primaryContainer,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.timer_outlined,
+            size: 13,
+            color: scheme.onPrimaryContainer,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            _formatElapsed(secs),
+            style: TextStyle(
+              color: scheme.onPrimaryContainer,
+              fontWeight: FontWeight.w700,
+              fontSize: 12,
+              fontFeatures: const [FontFeature.tabularFigures()],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 75 → "01:15", 3725 → "1:02:05".
+String _formatElapsed(int seconds) {
+  final h = seconds ~/ 3600;
+  final m = (seconds % 3600) ~/ 60;
+  final s = seconds % 60;
+  String two(int v) => v.toString().padLeft(2, '0');
+  return h > 0 ? '$h:${two(m)}:${two(s)}' : '${two(m)}:${two(s)}';
 }
 
 /// Same 72h post-session window the gift prompt already respects — the

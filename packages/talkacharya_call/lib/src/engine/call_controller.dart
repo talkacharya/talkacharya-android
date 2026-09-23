@@ -286,7 +286,9 @@ class CallController extends Cubit<CallState> {
 
   Future<void> toggleMute() async {
     final muted = !state.muted;
-    await _engine.setMicrophoneEnabled(!muted);
+    try {
+      await _engine.setMicrophoneEnabled(!muted);
+    } catch (_) {}
     emit(state.copyWith(muted: muted));
   }
 

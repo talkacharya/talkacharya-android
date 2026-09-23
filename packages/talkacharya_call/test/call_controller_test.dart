@@ -163,8 +163,16 @@ class _Engine implements RtcEngine {
     return p;
   }
 
+  /// A disposed/invalid native audio track throws instead of just failing
+  /// quietly — see the regression test below for why `toggleMute` must not
+  /// let that propagate.
+  bool micThrows = false;
+
   @override
-  Future<void> setMicrophoneEnabled(bool enabled) async => micEnabled = enabled;
+  Future<void> setMicrophoneEnabled(bool enabled) async {
+    if (micThrows) throw StateError('native track disposed');
+    micEnabled = enabled;
+  }
   @override
   Future<void> setCameraEnabled(bool enabled) async => cameraEnabled = enabled;
   @override
@@ -428,6 +436,18 @@ void main() {
     await s.c.toggleSpeaker();
     expect(s.c.state.speakerOn, isTrue);
     expect(s.engine.speaker, isTrue);
+    await s.c.close();
+  });
+
+  test('a mute tap that hits a disposed track does not crash', () async {
+    final hub = _Hub();
+    final s = _side('customer', hub);
+    await s.c.start();
+    s.engine.micThrows = true;
+    // Must not throw out of the tap handler — the call's own state still
+    // flips so the UI reflects what the user asked for.
+    await s.c.toggleMute();
+    expect(s.c.state.muted, isTrue);
     await s.c.close();
   });
 
