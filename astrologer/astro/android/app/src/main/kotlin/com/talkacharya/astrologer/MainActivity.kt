@@ -12,8 +12,9 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 /**
- * Native call bits that only an Activity can do: picture-in-picture for video
- * consultations, and the proximity screen-off every dialer has on a voice call.
+ * Native call bits Dart can't do for itself: picture-in-picture for video
+ * consultations, the proximity screen-off every dialer has on a voice call, and
+ * the bridge to [CallTelecom].
  *
  * Entering PiP is an Activity call and the moment that matters — the user
  * pressing home or swiping up mid-call — only exists here, in
@@ -24,6 +25,7 @@ class MainActivity : FlutterActivity() {
 
     private var channel: MethodChannel? = null
     private var proximityChannel: MethodChannel? = null
+    private var telecomChannel: MethodChannel? = null
 
     /** Set from Dart while a video call is up. */
     private var videoCallActive = false
@@ -58,6 +60,32 @@ class MainActivity : FlutterActivity() {
                     else -> result.notImplemented()
                 }
             }
+        }
+        telecomChannel = MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            TELECOM_CHANNEL,
+        ).apply {
+            setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "isSupported" -> result.success(CallTelecom.supported)
+                    "start" -> result.success(
+                        CallTelecom.start(
+                            applicationContext,
+                            call.argument<String>("peerName").orEmpty(),
+                            call.argument<String>("callId").orEmpty(),
+                        )
+                    )
+                    "end" -> {
+                        CallTelecom.end()
+                        result.success(null)
+                    }
+                    else -> result.notImplemented()
+                }
+            }
+        }
+        // Telecom callbacks arrive on a binder thread; channels are main-thread only.
+        CallTelecom.listener = { event, data ->
+            runOnUiThread { telecomChannel?.invokeMethod(event, data) }
         }
     }
 
@@ -119,6 +147,9 @@ class MainActivity : FlutterActivity() {
         channel = null
         proximityChannel?.setMethodCallHandler(null)
         proximityChannel = null
+        telecomChannel?.setMethodCallHandler(null)
+        telecomChannel = null
+        CallTelecom.listener = null
         releaseProximity()
         super.onDestroy()
     }
@@ -149,6 +180,7 @@ class MainActivity : FlutterActivity() {
     private companion object {
         const val CHANNEL = "talkacharya/pip"
         const val PROXIMITY_CHANNEL = "talkacharya/proximity"
+        const val TELECOM_CHANNEL = "talkacharya/telecom"
         const val PROXIMITY_TAG = "talkacharya:call-proximity"
 
         /** Longer than any consultation; the real release comes from Dart. */

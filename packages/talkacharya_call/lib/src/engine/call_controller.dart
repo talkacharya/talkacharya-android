@@ -7,6 +7,7 @@ import '../models/call_join.dart';
 import '../models/call_state.dart';
 import '../ports/call_ports.dart';
 import 'call_proximity.dart';
+import 'call_telecom.dart';
 import 'rtc_engine.dart';
 
 /// Timings, overridable in tests.
@@ -72,7 +73,9 @@ class CallController extends Cubit<CallState> {
     CallSounds sounds = const NoopCallSounds(),
     bool ringback = false,
     String? sessionId,
+    Stream<CallTelecomEvent>? telecomEvents,
   }) : _backend = backend,
+       _telecomEvents = telecomEvents,
        _sounds = sounds,
        _wantsRingback = ringback,
        _signaling = signaling,
@@ -92,6 +95,9 @@ class CallController extends Cubit<CallState> {
   final CallKeepAlive _keepAlive;
   final CallConnectivity _connectivity;
   final CallSounds _sounds;
+
+  /// Overridable so tests can drive Telecom without a platform channel.
+  final Stream<CallTelecomEvent>? _telecomEvents;
 
   /// This side placed the call: play ringback from creation (e.g. while the
   /// consultation still waits to be accepted) until audio first flows.
@@ -118,6 +124,7 @@ class CallController extends Cubit<CallState> {
   StreamSubscription<RtcVideoStream?>? _localVideoSub;
   StreamSubscription<RtcVideoStream?>? _remoteVideoSub;
   StreamSubscription<void>? _networkSub;
+  StreamSubscription<CallTelecomEvent>? _telecomSub;
   Timer? _helloTimer;
   Timer? _heartbeatTimer;
   Timer? _reconnectTimer;
@@ -258,6 +265,15 @@ class CallController extends Cubit<CallState> {
     _networkSub = _connectivity.changes.listen(
       (_) => _onNetworkChanged(),
       onError: (_) {},
+    );
+    _telecomSub = (_telecomEvents ?? CallTelecom.events).listen(
+      _onTelecom,
+      onError: (_) {},
+    );
+    // Tell Android this phone is in a call. Best-effort: if Telecom declines,
+    // the consultation runs exactly as it did before.
+    unawaited(
+      CallTelecom.start(callId: sid, peerName: join.peerName),
     );
     unawaited(
       _keepAlive.start(
@@ -580,6 +596,25 @@ class CallController extends Cubit<CallState> {
     }
   }
 
+  /// Android's telecom stack acted on the call it is managing for us.
+  ///
+  /// A hold is what happens when a cellular call takes the line: the
+  /// consultation stays up and billed, but our microphone goes quiet so the
+  /// astrologer isn't listening in on the other conversation. A disconnect is
+  /// Telecom taking the call away — a headset hang-up button, or the system
+  /// making room — and is as final as pressing End.
+  Future<void> _onTelecom(CallTelecomEvent event) async {
+    if (_closed) return;
+    switch (event) {
+      case CallTelecomEvent.hold:
+        if (!state.muted) await toggleMute();
+      case CallTelecomEvent.unhold:
+        if (state.muted) await toggleMute();
+      case CallTelecomEvent.disconnect:
+        await hangUp();
+    }
+  }
+
   /// The phone moved to another network (Wi-Fi <-> mobile, or came back from a
   /// dead spot). Whatever path the call was on is gone, so restart ICE now:
   /// waiting for ICE to work that out itself costs seconds of silence, and on
@@ -672,11 +707,15 @@ class CallController extends Cubit<CallState> {
     await _signalSub?.cancel();
     await _localVideoSub?.cancel();
     await _networkSub?.cancel();
+    await _telecomSub?.cancel();
     await _dropPeer();
     try {
       await _engine.release();
     } catch (_) {}
     unawaited(_keepAlive.stop());
+    // Or the OS goes on believing this phone is in a call — blocking the next
+    // one and holding the audio route.
+    unawaited(CallTelecom.end());
     // Never leave the proximity lock behind: the screen would stay dark and
     // the phone would look broken long after the call is over.
     if (_proximityHeld) {

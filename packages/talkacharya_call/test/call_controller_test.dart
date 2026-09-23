@@ -253,6 +253,7 @@ _Side _side(
   CallConnectivity connectivity = const NoopCallConnectivity(),
   CallKeepAlive keepAlive = const NoopCallKeepAlive(),
   CallTimings timings = _fast,
+  Stream<CallTelecomEvent>? telecomEvents,
 }) {
   final backend = _Backend(role, video: video);
   final engine = _Engine();
@@ -267,6 +268,7 @@ _Side _side(
     sessionId: '$role-sid',
     sounds: sounds,
     ringback: ringback,
+    telecomEvents: telecomEvents,
   );
   return (c: c, backend: backend, engine: engine);
 }
@@ -469,6 +471,58 @@ void main() {
 
     await cust.c.close();
     await net.dispose();
+  });
+
+  test('a cellular call holds the consultation, and releasing it resumes', () async {
+    final hub = _Hub();
+    final telecom = StreamController<CallTelecomEvent>.broadcast();
+    final cust = _side('customer', hub, telecomEvents: telecom.stream);
+    final astro = _side('astrologer', hub);
+    await cust.c.start();
+    await astro.c.start();
+    await _settle();
+    cust.engine.last.ice.add(RtcIceState.connected);
+    await _settle(20);
+    expect(cust.c.state.muted, isFalse);
+
+    // Someone rings the phone: Telecom takes the line for the cellular call.
+    telecom.add(CallTelecomEvent.hold);
+    await _settle(20);
+    expect(cust.c.state.muted, isTrue);
+    expect(cust.engine.micEnabled, isFalse);
+    // Held, not ended — the consultation is still up and still billed.
+    expect(cust.c.state.phase, CallPhase.connected);
+
+    telecom.add(CallTelecomEvent.unhold);
+    await _settle(20);
+    expect(cust.c.state.muted, isFalse);
+    expect(cust.engine.micEnabled, isTrue);
+
+    await cust.c.close();
+    await astro.c.close();
+    await telecom.close();
+  });
+
+  test('a telecom disconnect ends the consultation', () async {
+    final hub = _Hub();
+    final telecom = StreamController<CallTelecomEvent>.broadcast();
+    final cust = _side('customer', hub, telecomEvents: telecom.stream);
+    final astro = _side('astrologer', hub);
+    await cust.c.start();
+    await astro.c.start();
+    await _settle();
+    cust.engine.last.ice.add(RtcIceState.connected);
+    await _settle(20);
+
+    // The headset's hang-up button, or the system making room for a call.
+    telecom.add(CallTelecomEvent.disconnect);
+    await _settle(30);
+
+    expect(cust.c.state.phase, CallPhase.ended);
+    expect(cust.backend.ended, 1); // the consultation really was ended
+    await cust.c.close();
+    await astro.c.close();
+    await telecom.close();
   });
 
   test('the keep-alive service claims the camera on a video call', () async {

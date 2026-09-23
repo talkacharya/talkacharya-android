@@ -17,6 +17,9 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <!-- the astrologer accepting a voice/video call rings over the lock screen, like a call -->
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
+    <!-- self-managed telecom: a consultation is a real call as far as the OS is
+         concerned, so cellular calls and headset buttons behave -->
+    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS"/>
 
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
     <uses-feature android:name="android.hardware.camera.front" android:required="false"/>
@@ -95,6 +98,16 @@
             android:name="com.pravera.flutter_foreground_task.service.ForegroundService"
             android:foregroundServiceType="microphone|camera"
             android:exported="false"/>
+        <!-- registers a consultation as a self-managed call, so a cellular call
+             holds it instead of fighting it for the microphone (CallTelecom) -->
+        <service
+            android:name=".CallConnectionService"
+            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.telecom.ConnectionService"/>
+            </intent-filter>
+        </service>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
