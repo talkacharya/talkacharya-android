@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:talkacharya_call/talkacharya_call.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/realtime/realtime_client.dart';
+import '../../../core/firebase/firebase_setup.dart';
 
 /// [CallBackend] over the shared Dio client (`/consultations/{id}/call/*`).
 class DioCallBackend implements CallBackend {
@@ -32,10 +34,22 @@ class DioCallBackend implements CallBackend {
   }
 
   @override
-  Future<void> reportState(CallNetState state, {bool? relayed}) async {
+  Future<void> reportState(
+    CallNetState state, {
+    bool? relayed,
+    int? quality,
+    int? rttMs,
+    int? lossPct,
+  }) async {
     await _dio.post<void>(
       '/consultations/$consultationId/call/state',
-      data: {'state': state.name, 'relayed': ?relayed},
+      data: {
+        'state': state.name,
+        'relayed': ?relayed,
+        'quality': ?quality,
+        'rtt_ms': ?rttMs,
+        'loss_pct': ?lossPct,
+      },
     );
   }
 
@@ -55,4 +69,16 @@ class RealtimeCallSignaling implements CallSignaling {
   @override
   Future<void> publish(String channel, Map<String, dynamic> data) =>
       _rt.publishToChannel(channel, data);
+}
+
+/// [CallDiagnostics] onto Crashlytics breadcrumbs.
+///
+/// These ride along with whatever is reported next — a crash, or a non-fatal
+/// we record ourselves — so a call that went wrong in the field arrives with
+/// its own history attached instead of just a stack trace.
+class CrashlyticsCallDiagnostics implements CallDiagnostics {
+  const CrashlyticsCallDiagnostics();
+
+  @override
+  void log(String message) => unawaited(FirebaseSetup.log('call: $message'));
 }

@@ -285,6 +285,7 @@ class _CallRoomState extends State<_CallRoom> {
       permissions: const PermissionHandlerCallPermissions(),
       keepAlive: ForegroundServiceCallKeepAlive(),
       connectivity: const ConnectivityPlusCallConnectivity(),
+      diagnostics: const CrashlyticsCallDiagnostics(),
       keepAliveTitle: 'TalkAcharya',
       sounds: const AppCallSounds(),
       // The customer placed this call: ring back until the astrologer's audio

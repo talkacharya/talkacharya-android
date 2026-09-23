@@ -489,6 +489,7 @@ class _AstroCallRoomState extends State<_AstroCallRoom> {
       permissions: const PermissionHandlerCallPermissions(),
       keepAlive: ForegroundServiceCallKeepAlive(),
       connectivity: const ConnectivityPlusCallConnectivity(),
+      diagnostics: const CrashlyticsCallDiagnostics(),
       keepAliveTitle: 'TalkAcharya Astrologer',
       sounds: const AppCallSounds(),
     );

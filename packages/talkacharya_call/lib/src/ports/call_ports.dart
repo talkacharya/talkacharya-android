@@ -9,7 +9,17 @@ abstract class CallBackend {
   Future<CallJoin> join();
 
   /// `POST /consultations/{id}/call/state` — on change and as the heartbeat.
-  Future<void> reportState(CallNetState state, {bool? relayed});
+  ///
+  /// The heartbeat carries the last transport sample with it, so the server
+  /// ends up with a picture of how the call actually went for nothing: no
+  /// extra request, and no need to ask the customer what "bad" meant.
+  Future<void> reportState(
+    CallNetState state, {
+    bool? relayed,
+    int? quality,
+    int? rttMs,
+    int? lossPct,
+  });
 
   /// End the consultation (`POST /app|astro/consultations/{id}/end`).
   Future<void> endConsultation();
@@ -62,6 +72,23 @@ class NoopCallKeepAlive implements CallKeepAlive {
   }) async {}
   @override
   Future<void> stop() async {}
+}
+
+/// A breadcrumb trail for one call, for whatever the app reports crashes and
+/// problems with.
+///
+/// Calls fail in the field, on networks and handsets nobody here owns, and a
+/// customer's account of it is "it didn't work". Without a trail the only way
+/// to find out why is to guess — which is exactly what a silent `/call/state`
+/// failure once cost days of. Breadcrumbs are cheap; the next mystery is not.
+abstract class CallDiagnostics {
+  void log(String message);
+}
+
+class NoopCallDiagnostics implements CallDiagnostics {
+  const NoopCallDiagnostics();
+  @override
+  void log(String message) {}
 }
 
 /// Changes of the phone's active network (Wi-Fi <-> mobile, or a drop and

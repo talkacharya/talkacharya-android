@@ -68,6 +68,7 @@ class CallController extends Cubit<CallState> {
     required CallPermissions permissions,
     CallKeepAlive keepAlive = const NoopCallKeepAlive(),
     CallConnectivity connectivity = const NoopCallConnectivity(),
+    CallDiagnostics diagnostics = const NoopCallDiagnostics(),
     this.keepAliveTitle = 'Call in progress',
     this.timings = const CallTimings(),
     CallSounds sounds = const NoopCallSounds(),
@@ -83,6 +84,7 @@ class CallController extends Cubit<CallState> {
        _permissions = permissions,
        _keepAlive = keepAlive,
        _connectivity = connectivity,
+       _diagnostics = diagnostics,
        sid = sessionId ?? _randomSid(),
        super(const CallState()) {
     _syncRingback(state.phase);
@@ -94,6 +96,7 @@ class CallController extends Cubit<CallState> {
   final CallPermissions _permissions;
   final CallKeepAlive _keepAlive;
   final CallConnectivity _connectivity;
+  final CallDiagnostics _diagnostics;
   final CallSounds _sounds;
 
   /// Overridable so tests can drive Telecom without a platform channel.
@@ -131,6 +134,14 @@ class CallController extends Cubit<CallState> {
   Timer? _statsTimer;
   Timer? _networkDebounce;
   bool _proximityHeld = false;
+
+  /// Latest transport sample, sent along with the next heartbeat.
+  int? _lastRttMs;
+  int? _lastLossPct;
+
+  /// Hello is announced quickly at first and backs off: a peer that opens its
+  /// screen a moment later shouldn't wait a full interval in silence.
+  int _helloAttempt = 0;
 
   CallJoin? get joinInfo => _join;
   bool get _initiator => _join?.initiator ?? false;
@@ -199,6 +210,16 @@ class CallController extends Cubit<CallState> {
     if (state.phase.isLive || _closed) return;
     emit(state.copyWith(phase: CallPhase.preparing, clearError: true));
 
+    // The join is a network round-trip and the permission check is local, so
+    // they overlap: on a mobile connection that is a few hundred milliseconds
+    // off the front of every call. The future is started here and awaited
+    // below; if the microphone is refused it is left to fail on its own.
+    final joining = _joinWithRetry();
+    // It is awaited below, but not on the path where the microphone is
+    // refused — and a future that completes with an error and no listener at
+    // all is an unhandled rejection, which the app reports as a crash.
+    unawaited(joining.then((_) {}, onError: (_) {}));
+
     final mic = await _permissions.requestMicrophone();
     if (mic != MediaPermission.granted) {
       emit(
@@ -213,14 +234,19 @@ class CallController extends Cubit<CallState> {
     emit(state.copyWith(phase: CallPhase.joining));
     final CallJoin join;
     try {
-      join = await _joinWithRetry();
+      join = await joining;
     } catch (e) {
       if (_closed) return;
+      _diagnostics.log('join failed: $e');
       emit(state.copyWith(phase: CallPhase.failed, error: '$e'));
       return;
     }
     if (_closed) return;
     _join = join;
+    _diagnostics.log(
+      'joined as ${join.role}${join.initiator ? ' (initiator)' : ''}, '
+      '${join.iceServers.length} ice servers, video=${join.video}',
+    );
 
     // Only a video consultation asks for the camera, and only once we know that is
     // what this call is — a voice call never triggers the camera prompt.
@@ -285,13 +311,35 @@ class CallController extends Cubit<CallState> {
 
     emit(state.copyWith(phase: CallPhase.waitingPeer, peerName: join.peerName));
     _sendHello();
-    _helloTimer = Timer.periodic(timings.hello, (_) {
-      if (state.phase != CallPhase.connected) _sendHello();
-    });
+    _scheduleHello();
     _heartbeatTimer = Timer.periodic(
       Duration(seconds: max(3, join.heartbeatSeconds)),
       (_) => _heartbeat(),
     );
+  }
+
+  /// Re-announce presence until the peer answers, quickly at first.
+  ///
+  /// A flat interval means the side that opens its call screen a moment later
+  /// waits a whole one in silence before it hears from us. The first few
+  /// retries are fractions of [CallTimings.hello] so the common case — both
+  /// screens opening within a second or two of each other — connects almost at
+  /// once, then it settles down to the steady interval.
+  void _scheduleHello() {
+    _helloTimer?.cancel();
+    final base = timings.hello.inMilliseconds;
+    final ms = switch (_helloAttempt) {
+      0 => base ~/ 10,
+      1 => base ~/ 4,
+      2 => base ~/ 2,
+      _ => base,
+    };
+    _helloAttempt++;
+    _helloTimer = Timer(Duration(milliseconds: max(ms, 1)), () {
+      if (_closed || state.phase == CallPhase.connected) return;
+      _sendHello();
+      _scheduleHello();
+    });
   }
 
   Future<CallJoin> _joinWithRetry() async {
@@ -555,6 +603,9 @@ class CallController extends Cubit<CallState> {
     switch (ice) {
       case RtcIceState.connected:
         _reconnectTimer?.cancel();
+        _diagnostics.log(
+          _everConnected ? 'ice: recovered' : 'ice: connected',
+        );
         _everConnected = true;
         emit(
           state.copyWith(
@@ -567,6 +618,11 @@ class CallController extends Cubit<CallState> {
       case RtcIceState.disconnected:
       case RtcIceState.failed:
         if (!_everConnected) return; // still negotiating — hellos keep retrying
+        _diagnostics.log(
+          'ice: ${ice.name}'
+          '${state.relayed ? ' (relayed)' : ''} rtt=${_lastRttMs}ms '
+          'loss=$_lastLossPct%',
+        );
         if (state.phase != CallPhase.reconnecting) {
           emit(state.copyWith(phase: CallPhase.reconnecting));
           unawaited(_report(CallNetState.reconnecting));
@@ -606,12 +662,27 @@ class CallController extends Cubit<CallState> {
   Future<void> _onTelecom(CallTelecomEvent event) async {
     if (_closed) return;
     switch (event) {
-      case CallTelecomEvent.hold:
+      case TelecomHold():
+        _diagnostics.log('telecom: held (cellular call)');
         if (!state.muted) await toggleMute();
-      case CallTelecomEvent.unhold:
+      case TelecomUnhold():
+        _diagnostics.log('telecom: released');
         if (state.muted) await toggleMute();
-      case CallTelecomEvent.disconnect:
+      case TelecomDisconnect():
+        _diagnostics.log('telecom: disconnect');
         await hangUp();
+      case TelecomAudioRoute(speaker: final speaker, bluetooth: final bluetooth):
+        // Telecom owns the route, so this corrects our own idea of it — a
+        // headset connecting mid-call used to leave the speaker button
+        // claiming something that was no longer true.
+        if (speaker != state.speakerOn || bluetooth != state.bluetooth) {
+          _diagnostics.log(
+            'audio route: ${bluetooth ? 'bluetooth' : (speaker ? 'speaker' : 'earpiece')}',
+          );
+          _emitIfOpen(
+            state.copyWith(speakerOn: speaker, bluetooth: bluetooth),
+          );
+        }
     }
   }
 
@@ -624,6 +695,7 @@ class CallController extends Cubit<CallState> {
   /// network the phone settles on is worth renegotiating against.
   void _onNetworkChanged() {
     if (_closed || !_everConnected) return;
+    _diagnostics.log('network changed');
     _networkDebounce?.cancel();
     _networkDebounce = Timer(timings.networkSettle, () {
       if (_closed || !_everConnected) return;
@@ -645,7 +717,13 @@ class CallController extends Cubit<CallState> {
   Future<void> _report(CallNetState s) async {
     if (!_everConnected && s != CallNetState.disconnected) return;
     try {
-      await _backend.reportState(s, relayed: state.relayed ? true : null);
+      await _backend.reportState(
+        s,
+        relayed: state.relayed ? true : null,
+        quality: state.quality > 0 ? state.quality : null,
+        rttMs: _lastRttMs,
+        lossPct: _lastLossPct,
+      );
     } catch (_) {}
   }
 
@@ -672,6 +750,8 @@ class CallController extends Cubit<CallState> {
       final s = await peer.stats();
       final rtt = s.roundTripSeconds;
       final loss = s.lossRatio;
+      if (rtt != null) _lastRttMs = (rtt * 1000).round().clamp(0, 60000);
+      if (loss != null) _lastLossPct = (loss * 100).round().clamp(0, 100);
       var quality = state.quality;
       if (rtt != null || loss != null) {
         final r = rtt ?? 0;
@@ -699,6 +779,12 @@ class CallController extends Cubit<CallState> {
   Future<void> _teardown(CallEndReason reason) async {
     if (_closed) return;
     _closed = true;
+    // The last breadcrumb, and the one that says how the call actually went.
+    _diagnostics.log(
+      'call ended: ${reason.name}, connected=$_everConnected '
+      'relayed=${state.relayed} quality=${state.quality} '
+      'rtt=${_lastRttMs}ms loss=$_lastLossPct%',
+    );
     _helloTimer?.cancel();
     _heartbeatTimer?.cancel();
     _reconnectTimer?.cancel();

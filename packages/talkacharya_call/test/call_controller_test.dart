@@ -34,6 +34,7 @@ class _Backend implements CallBackend {
   final String role;
   final bool video;
   final reports = <CallNetState>[];
+  final qualityReports = <Map<String, int?>>[];
   var ended = 0;
 
   @override
@@ -49,8 +50,16 @@ class _Backend implements CallBackend {
   );
 
   @override
-  Future<void> reportState(CallNetState state, {bool? relayed}) async =>
-      reports.add(state);
+  Future<void> reportState(
+    CallNetState state, {
+    bool? relayed,
+    int? quality,
+    int? rttMs,
+    int? lossPct,
+  }) async {
+    reports.add(state);
+    qualityReports.add({'quality': quality, 'rtt': rttMs, 'loss': lossPct});
+  }
 
   @override
   Future<void> endConsultation() async => ended++;
@@ -486,14 +495,14 @@ void main() {
     expect(cust.c.state.muted, isFalse);
 
     // Someone rings the phone: Telecom takes the line for the cellular call.
-    telecom.add(CallTelecomEvent.hold);
+    telecom.add(const TelecomHold());
     await _settle(20);
     expect(cust.c.state.muted, isTrue);
     expect(cust.engine.micEnabled, isFalse);
     // Held, not ended — the consultation is still up and still billed.
     expect(cust.c.state.phase, CallPhase.connected);
 
-    telecom.add(CallTelecomEvent.unhold);
+    telecom.add(const TelecomUnhold());
     await _settle(20);
     expect(cust.c.state.muted, isFalse);
     expect(cust.engine.micEnabled, isTrue);
@@ -515,7 +524,7 @@ void main() {
     await _settle(20);
 
     // The headset's hang-up button, or the system making room for a call.
-    telecom.add(CallTelecomEvent.disconnect);
+    telecom.add(const TelecomDisconnect());
     await _settle(30);
 
     expect(cust.c.state.phase, CallPhase.ended);
@@ -523,6 +532,73 @@ void main() {
     await cust.c.close();
     await astro.c.close();
     await telecom.close();
+  });
+
+  test('a state report carries transport health to the server', () async {
+    final hub = _Hub();
+    final cust = _side('customer', hub);
+    final astro = _side('astrologer', hub);
+    await cust.c.start();
+    await astro.c.start();
+    await _settle();
+    cust.engine.last.ice.add(RtcIceState.connected);
+    // Long enough for a stats sample (50ms) to land.
+    await _settle(120);
+
+    // The heartbeat itself is floored at 3s, so drive a report the way a real
+    // problem would: the call drops, and the report that goes out about it is
+    // the one worth having the numbers on.
+    cust.engine.last.ice.add(RtcIceState.disconnected);
+    await _settle(30);
+
+    final sampled = cust.backend.qualityReports.where(
+      (r) => r['quality'] != null,
+    );
+    expect(sampled, isNotEmpty, reason: 'quality never reached the server');
+    // The fake peer reports 50ms RTT and no loss — good, and carried as such.
+    expect(sampled.last['quality'], 3);
+    expect(sampled.last['rtt'], 50);
+    expect(sampled.last['loss'], 0);
+
+    await cust.c.close();
+    await astro.c.close();
+  });
+
+  test('a telecom audio route correction reaches the state', () async {
+    final hub = _Hub();
+    final telecom = StreamController<CallTelecomEvent>.broadcast();
+    final cust = _side('customer', hub, telecomEvents: telecom.stream);
+    await cust.c.start();
+    await _settle();
+    expect(cust.c.state.speakerOn, isFalse);
+
+    // A headset connects: Telecom owns the route, so our idea of it follows.
+    telecom.add(const TelecomAudioRoute(speaker: false, bluetooth: true));
+    await _settle(20);
+    expect(cust.c.state.bluetooth, isTrue);
+    expect(cust.c.state.speakerOn, isFalse);
+
+    telecom.add(const TelecomAudioRoute(speaker: true, bluetooth: false));
+    await _settle(20);
+    expect(cust.c.state.speakerOn, isTrue);
+    expect(cust.c.state.bluetooth, isFalse);
+
+    await cust.c.close();
+    await telecom.close();
+  });
+
+  test('hellos start fast and then back off', () async {
+    final hub = _Hub();
+    // No peer answers, so the hellos just keep going.
+    final cust = _side('customer', hub);
+    await cust.c.start();
+    // Within one steady interval (40ms) the old flat timer would have sent
+    // one hello; the backoff gets several out while nobody has answered.
+    await _settle(45);
+    final early = hub.typesFrom('customer').where((t) => t == 'hello').length;
+    expect(early, greaterThan(2));
+
+    await cust.c.close();
   });
 
   test('the keep-alive service claims the camera on a video call', () async {

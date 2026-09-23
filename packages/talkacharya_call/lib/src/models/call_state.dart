@@ -50,6 +50,7 @@ class CallState extends Equatable {
     this.phase = CallPhase.idle,
     this.muted = false,
     this.speakerOn = false,
+    this.bluetooth = false,
     this.quality = 0,
     this.relayed = false,
     this.connectedAt,
@@ -68,6 +69,10 @@ class CallState extends Equatable {
   final CallPhase phase;
   final bool muted;
   final bool speakerOn;
+
+  /// Audio is on a Bluetooth headset. Reported by Telecom, which owns the
+  /// route — the UI shows a headset rather than claiming "speaker".
+  final bool bluetooth;
 
   /// 0 = unknown, 1 = poor, 2 = fair, 3 = good.
   final int quality;
@@ -109,6 +114,7 @@ class CallState extends Equatable {
     CallPhase? phase,
     bool? muted,
     bool? speakerOn,
+    bool? bluetooth,
     int? quality,
     bool? relayed,
     DateTime? connectedAt,
@@ -129,6 +135,7 @@ class CallState extends Equatable {
     phase: phase ?? this.phase,
     muted: muted ?? this.muted,
     speakerOn: speakerOn ?? this.speakerOn,
+    bluetooth: bluetooth ?? this.bluetooth,
     quality: quality ?? this.quality,
     relayed: relayed ?? this.relayed,
     connectedAt: connectedAt ?? this.connectedAt,
@@ -149,6 +156,7 @@ class CallState extends Equatable {
     phase,
     muted,
     speakerOn,
+    bluetooth,
     quality,
     relayed,
     connectedAt,

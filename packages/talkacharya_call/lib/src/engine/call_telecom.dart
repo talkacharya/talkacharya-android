@@ -4,16 +4,34 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 /// What Android's telecom stack tells us about a call it is managing.
-enum CallTelecomEvent {
-  /// Telecom wants the call gone — the headset hang-up button, or room being
-  /// made for an incoming cellular call.
-  disconnect,
+sealed class CallTelecomEvent {
+  const CallTelecomEvent();
+}
 
-  /// A cellular call took the line; ours should go quiet but stay up.
-  hold,
+/// Telecom wants the call gone — the headset hang-up button, or room being
+/// made for an incoming cellular call.
+class TelecomDisconnect extends CallTelecomEvent {
+  const TelecomDisconnect();
+}
 
-  /// The other call ended; ours can be heard again.
-  unhold,
+/// A cellular call took the line; ours should go quiet but stay up.
+class TelecomHold extends CallTelecomEvent {
+  const TelecomHold();
+}
+
+/// The other call ended; ours can be heard again.
+class TelecomUnhold extends CallTelecomEvent {
+  const TelecomUnhold();
+}
+
+/// Telecom moved the audio somewhere — the loudspeaker, a Bluetooth headset,
+/// back to the earpiece. It owns the route, so this is the truth and whatever
+/// the speaker button currently shows is only a belief.
+class TelecomAudioRoute extends CallTelecomEvent {
+  const TelecomAudioRoute({required this.speaker, required this.bluetooth});
+
+  final bool speaker;
+  final bool bluetooth;
 }
 
 /// Registers a live consultation with Android as a **self-managed call**.
@@ -51,11 +69,19 @@ class CallTelecom {
       _channel.setMethodCallHandler((call) async {
         switch (call.method) {
           case 'disconnect':
-            _events.add(CallTelecomEvent.disconnect);
+            _events.add(const TelecomDisconnect());
           case 'hold':
-            _events.add(CallTelecomEvent.hold);
+            _events.add(const TelecomHold());
           case 'unhold':
-            _events.add(CallTelecomEvent.unhold);
+            _events.add(const TelecomUnhold());
+          case 'audio':
+            final args = (call.arguments as Map?)?.cast<String, dynamic>();
+            _events.add(
+              TelecomAudioRoute(
+                speaker: args?['speaker'] == true,
+                bluetooth: args?['bluetooth'] == true,
+              ),
+            );
         }
         return null;
       });

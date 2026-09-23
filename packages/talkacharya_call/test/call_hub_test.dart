@@ -35,7 +35,13 @@ class _Backend implements CallBackend {
   );
 
   @override
-  Future<void> reportState(CallNetState state, {bool? relayed}) async {}
+  Future<void> reportState(
+    CallNetState state, {
+    bool? relayed,
+    int? quality,
+    int? rttMs,
+    int? lossPct,
+  }) async {}
 
   @override
   Future<void> endConsultation() async => ended++;
