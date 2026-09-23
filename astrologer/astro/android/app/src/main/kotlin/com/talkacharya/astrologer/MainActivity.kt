@@ -1,16 +1,19 @@
 package com.talkacharya.astrologer
 
 import android.app.PictureInPictureParams
+import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
+import android.os.PowerManager
 import android.util.Rational
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 /**
- * Picture-in-picture for video consultations.
+ * Native call bits that only an Activity can do: picture-in-picture for video
+ * consultations, and the proximity screen-off every dialer has on a voice call.
  *
  * Entering PiP is an Activity call and the moment that matters — the user
  * pressing home or swiping up mid-call — only exists here, in
@@ -20,9 +23,12 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
 
     private var channel: MethodChannel? = null
+    private var proximityChannel: MethodChannel? = null
 
     /** Set from Dart while a video call is up. */
     private var videoCallActive = false
+
+    private var proximityLock: PowerManager.WakeLock? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -38,6 +44,58 @@ class MainActivity : FlutterActivity() {
                     else -> result.notImplemented()
                 }
             }
+        }
+        proximityChannel = MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            PROXIMITY_CHANNEL,
+        ).apply {
+            setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "setActive" -> {
+                        setProximityActive(call.argument<Boolean>("active") ?: false)
+                        result.success(null)
+                    }
+                    else -> result.notImplemented()
+                }
+            }
+        }
+    }
+
+    /**
+     * Blank the screen while the phone is held to the ear, the way the system
+     * dialer does — otherwise a voice call is a lit screen against a cheek,
+     * muting itself and hanging up by accident.
+     *
+     * Released with RELEASE_FLAG_WAIT_FOR_NO_PROXIMITY so ending a call with
+     * the phone still at the ear doesn't flash the screen on in between.
+     */
+    private fun setProximityActive(active: Boolean) {
+        val power = getSystemService(Context.POWER_SERVICE) as? PowerManager ?: return
+        if (!active) {
+            releaseProximity()
+            return
+        }
+        if (proximityLock?.isHeld == true) return
+        if (!power.isWakeLockLevelSupported(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK)) return
+        val lock = proximityLock
+            ?: power.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, PROXIMITY_TAG)
+                .also { proximityLock = it }
+        try {
+            // Timeout is a backstop only: Dart releases this when the call ends.
+            lock.acquire(PROXIMITY_TIMEOUT_MS)
+        } catch (e: RuntimeException) {
+            // Unsupported or refused — the call carries on with the screen lit.
+        }
+    }
+
+    private fun releaseProximity() {
+        val lock = proximityLock ?: return
+        proximityLock = null
+        if (!lock.isHeld) return
+        try {
+            lock.release(PowerManager.RELEASE_FLAG_WAIT_FOR_NO_PROXIMITY)
+        } catch (e: RuntimeException) {
+            // already released
         }
     }
 
@@ -59,6 +117,9 @@ class MainActivity : FlutterActivity() {
     override fun onDestroy() {
         channel?.setMethodCallHandler(null)
         channel = null
+        proximityChannel?.setMethodCallHandler(null)
+        proximityChannel = null
+        releaseProximity()
         super.onDestroy()
     }
 
@@ -87,5 +148,10 @@ class MainActivity : FlutterActivity() {
 
     private companion object {
         const val CHANNEL = "talkacharya/pip"
+        const val PROXIMITY_CHANNEL = "talkacharya/proximity"
+        const val PROXIMITY_TAG = "talkacharya:call-proximity"
+
+        /** Longer than any consultation; the real release comes from Dart. */
+        const val PROXIMITY_TIMEOUT_MS = 4L * 60L * 60L * 1000L
     }
 }

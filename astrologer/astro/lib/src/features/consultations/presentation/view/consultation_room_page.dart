@@ -488,6 +488,7 @@ class _AstroCallRoomState extends State<_AstroCallRoom> {
       engine: FlutterWebRtcEngine(),
       permissions: const PermissionHandlerCallPermissions(),
       keepAlive: ForegroundServiceCallKeepAlive(),
+      connectivity: const ConnectivityPlusCallConnectivity(),
       keepAliveTitle: 'TalkAcharya Astrologer',
       sounds: const AppCallSounds(),
     );

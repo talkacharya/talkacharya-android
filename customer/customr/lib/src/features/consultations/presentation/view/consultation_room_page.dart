@@ -284,6 +284,7 @@ class _CallRoomState extends State<_CallRoom> {
       engine: FlutterWebRtcEngine(),
       permissions: const PermissionHandlerCallPermissions(),
       keepAlive: ForegroundServiceCallKeepAlive(),
+      connectivity: const ConnectivityPlusCallConnectivity(),
       keepAliveTitle: 'TalkAcharya',
       sounds: const AppCallSounds(),
       // The customer placed this call: ring back until the astrologer's audio

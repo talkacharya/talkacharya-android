@@ -187,11 +187,54 @@ class _Engine implements RtcEngine {
   Future<void> release() async => released = true;
 }
 
+/// A network the test can move the phone between.
+class _Network implements CallConnectivity {
+  final _controller = StreamController<void>.broadcast();
+
+  /// The phone switched Wi-Fi <-> mobile (or came back from a dead spot).
+  void change() => _controller.add(null);
+
+  @override
+  Stream<void> get changes => _controller.stream;
+
+  Future<void> dispose() => _controller.close();
+}
+
+class _KeepAlive implements CallKeepAlive {
+  var started = 0;
+  var stopped = 0;
+  bool? startedWithVideo;
+
+  @override
+  Future<void> start({
+    required String title,
+    required String text,
+    bool video = false,
+  }) async {
+    started++;
+    startedWithVideo = video;
+  }
+
+  @override
+  Future<void> stop() async => stopped++;
+}
+
 const _fast = CallTimings(
   hello: Duration(milliseconds: 40),
   reconnectAfter: Duration(milliseconds: 30),
   reofferCooldown: Duration(milliseconds: 10),
   stats: Duration(milliseconds: 50),
+  networkSettle: Duration(milliseconds: 10),
+);
+
+/// Long enough that nothing in a test reaches it by waiting — so a recovery
+/// that happens must have come from the network change, not the timeout.
+const _slowReconnect = CallTimings(
+  hello: Duration(milliseconds: 40),
+  reconnectAfter: Duration(seconds: 30),
+  reofferCooldown: Duration(seconds: 30),
+  stats: Duration(milliseconds: 50),
+  networkSettle: Duration(milliseconds: 10),
 );
 
 Future<void> _settle([int ms = 120]) =>
@@ -207,6 +250,9 @@ _Side _side(
   bool video = false,
   CallSounds sounds = const NoopCallSounds(),
   bool ringback = false,
+  CallConnectivity connectivity = const NoopCallConnectivity(),
+  CallKeepAlive keepAlive = const NoopCallKeepAlive(),
+  CallTimings timings = _fast,
 }) {
   final backend = _Backend(role, video: video);
   final engine = _Engine();
@@ -215,7 +261,9 @@ _Side _side(
     signaling: hub,
     engine: engine,
     permissions: _Perms(perm, cameraPerm),
-    timings: _fast,
+    keepAlive: keepAlive,
+    connectivity: connectivity,
+    timings: timings,
     sessionId: '$role-sid',
     sounds: sounds,
     ringback: ringback,
@@ -366,6 +414,86 @@ void main() {
 
     await cust.c.close();
     await astro.c.close();
+  });
+
+  test('a network switch restarts ICE without waiting for the timeout', () async {
+    final hub = _Hub();
+    final net = _Network();
+    // Both the reconnect timeout and the re-offer cooldown are 30s here, so an
+    // ICE restart inside a few ms can only have come from the network change.
+    final cust = _side(
+      'customer',
+      hub,
+      connectivity: net,
+      timings: _slowReconnect,
+    );
+    final astro = _side('astrologer', hub, timings: _slowReconnect);
+    await cust.c.start();
+    await astro.c.start();
+    await _settle();
+    cust.engine.last.ice.add(RtcIceState.connected);
+    await _settle(20);
+    expect(cust.c.state.phase, CallPhase.connected);
+    final offersBefore = cust.engine.last.offers.length;
+
+    net.change(); // walked out of Wi-Fi onto mobile data
+    await _settle(40);
+
+    expect(cust.c.state.phase, CallPhase.reconnecting);
+    expect(cust.backend.reports.last, CallNetState.reconnecting);
+    expect(cust.engine.last.offers.length, greaterThan(offersBefore));
+    expect(cust.engine.last.offers.last, isTrue); // an ICE-restart offer
+
+    cust.engine.last.ice.add(RtcIceState.connected);
+    await _settle(20);
+    expect(cust.c.state.phase, CallPhase.connected);
+
+    await cust.c.close();
+    await astro.c.close();
+    await net.dispose();
+  });
+
+  test('a network blip before the call connects is ignored', () async {
+    final hub = _Hub();
+    final net = _Network();
+    final cust = _side('customer', hub, connectivity: net);
+    await cust.c.start();
+    await _settle();
+
+    net.change();
+    await _settle(40);
+
+    // Nothing has connected yet — the hellos are still doing their job and a
+    // "reconnecting" here would be a lie to the user.
+    expect(cust.c.state.phase, isNot(CallPhase.reconnecting));
+
+    await cust.c.close();
+    await net.dispose();
+  });
+
+  test('the keep-alive service claims the camera on a video call', () async {
+    final hub = _Hub();
+    final voiceKeepAlive = _KeepAlive();
+    final videoKeepAlive = _KeepAlive();
+
+    final voice = _side('customer', hub, keepAlive: voiceKeepAlive);
+    await voice.c.start();
+    await _settle(20);
+    expect(voiceKeepAlive.startedWithVideo, isFalse);
+    await voice.c.close();
+
+    final video = _side(
+      'astrologer',
+      _Hub(),
+      video: true,
+      keepAlive: videoKeepAlive,
+    );
+    await video.c.start();
+    await _settle(20);
+    // Android 14+ cuts the camera off in the background otherwise.
+    expect(videoKeepAlive.startedWithVideo, isTrue);
+    await video.c.close();
+    expect(videoKeepAlive.stopped, 1);
   });
 
   test('peer app restart (new sid) replaces the peer connection', () async {

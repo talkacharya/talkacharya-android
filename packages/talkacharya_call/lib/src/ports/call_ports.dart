@@ -41,16 +41,46 @@ abstract class CallPermissions {
 /// Keeps the process + microphone alive while the app is backgrounded during a
 /// call (an Android foreground service). Apps without one use [NoopCallKeepAlive].
 abstract class CallKeepAlive {
-  Future<void> start({required String title, required String text});
+  /// [video] adds the camera to the service's declared types — without it
+  /// Android 14+ cuts the camera off as soon as the app leaves the foreground,
+  /// because a running service may only use what it started with.
+  Future<void> start({
+    required String title,
+    required String text,
+    bool video = false,
+  });
   Future<void> stop();
 }
 
 class NoopCallKeepAlive implements CallKeepAlive {
   const NoopCallKeepAlive();
   @override
-  Future<void> start({required String title, required String text}) async {}
+  Future<void> start({
+    required String title,
+    required String text,
+    bool video = false,
+  }) async {}
   @override
   Future<void> stop() async {}
+}
+
+/// Changes of the phone's active network (Wi-Fi <-> mobile, or a drop and
+/// return).
+///
+/// A call restarts ICE the moment this fires instead of waiting for the dead
+/// path to time out on its own, which takes seconds — that gap is the
+/// difference between a call that survives walking out of the house and one
+/// that goes silent. Hosts without a source of these use
+/// [NoopCallConnectivity] and fall back to ICE's own timeout.
+abstract class CallConnectivity {
+  /// One event per actual change of the active network.
+  Stream<void> get changes;
+}
+
+class NoopCallConnectivity implements CallConnectivity {
+  const NoopCallConnectivity();
+  @override
+  Stream<void> get changes => const Stream<void>.empty();
 }
 
 /// Call sounds. The app plugs in its sound player; the default is silent.

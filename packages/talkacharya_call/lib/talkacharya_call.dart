@@ -7,6 +7,8 @@ library;
 
 export 'src/engine/call_controller.dart';
 export 'src/engine/call_pip.dart';
+export 'src/engine/call_proximity.dart';
+export 'src/engine/connectivity_plus_connectivity.dart';
 export 'src/engine/flutter_webrtc_engine.dart';
 export 'src/engine/foreground_keep_alive.dart';
 export 'src/engine/permission_handler_permissions.dart';

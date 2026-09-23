@@ -6,6 +6,7 @@ import 'package:bloc/bloc.dart';
 import '../models/call_join.dart';
 import '../models/call_state.dart';
 import '../ports/call_ports.dart';
+import 'call_proximity.dart';
 import 'rtc_engine.dart';
 
 /// Timings, overridable in tests.
@@ -15,6 +16,7 @@ class CallTimings {
     this.reconnectAfter = const Duration(seconds: 4),
     this.reofferCooldown = const Duration(seconds: 5),
     this.stats = const Duration(seconds: 2),
+    this.networkSettle = const Duration(milliseconds: 400),
   });
 
   /// Re-announce presence while not connected.
@@ -26,6 +28,11 @@ class CallTimings {
   /// Minimum gap between offers to the same peer (no offer storms).
   final Duration reofferCooldown;
   final Duration stats;
+
+  /// How long to let the network settle after a change before restarting ICE.
+  /// Mobile hand-offs arrive as a burst of events; this collapses them into
+  /// one restart on the network the phone actually ended up on.
+  final Duration networkSettle;
 }
 
 /// Runs one 1:1 voice call over self-hosted WebRTC.
@@ -59,6 +66,7 @@ class CallController extends Cubit<CallState> {
     required RtcEngine engine,
     required CallPermissions permissions,
     CallKeepAlive keepAlive = const NoopCallKeepAlive(),
+    CallConnectivity connectivity = const NoopCallConnectivity(),
     this.keepAliveTitle = 'Call in progress',
     this.timings = const CallTimings(),
     CallSounds sounds = const NoopCallSounds(),
@@ -71,6 +79,7 @@ class CallController extends Cubit<CallState> {
        _engine = engine,
        _permissions = permissions,
        _keepAlive = keepAlive,
+       _connectivity = connectivity,
        sid = sessionId ?? _randomSid(),
        super(const CallState()) {
     _syncRingback(state.phase);
@@ -81,6 +90,7 @@ class CallController extends Cubit<CallState> {
   final RtcEngine _engine;
   final CallPermissions _permissions;
   final CallKeepAlive _keepAlive;
+  final CallConnectivity _connectivity;
   final CallSounds _sounds;
 
   /// This side placed the call: play ringback from creation (e.g. while the
@@ -107,10 +117,13 @@ class CallController extends Cubit<CallState> {
   StreamSubscription<RtcIceState>? _iceSub;
   StreamSubscription<RtcVideoStream?>? _localVideoSub;
   StreamSubscription<RtcVideoStream?>? _remoteVideoSub;
+  StreamSubscription<void>? _networkSub;
   Timer? _helloTimer;
   Timer? _heartbeatTimer;
   Timer? _reconnectTimer;
   Timer? _statsTimer;
+  Timer? _networkDebounce;
+  bool _proximityHeld = false;
 
   CallJoin? get joinInfo => _join;
   bool get _initiator => _join?.initiator ?? false;
@@ -139,9 +152,23 @@ class CallController extends Cubit<CallState> {
     want ? _sounds.startRingback() : _sounds.stopRingback();
   }
 
+  // --- proximity ---------------------------------------------------------------
+
+  /// Screen off while the phone is at the ear — only on a voice call that is
+  /// actually live and on the earpiece. On speaker, or on video, the phone is
+  /// in front of the user's face and blanking it would be wrong.
+  void _syncProximity(CallState s) {
+    final want =
+        !s.video && !s.speakerOn && s.phase == CallPhase.connected && !_closed;
+    if (want == _proximityHeld) return;
+    _proximityHeld = want;
+    unawaited(CallProximity.setActive(active: want));
+  }
+
   @override
   void onChange(Change<CallState> change) {
     super.onChange(change);
+    _syncProximity(change.nextState);
     final from = change.currentState.phase;
     final to = change.nextState.phase;
     if (from == to) return;
@@ -228,7 +255,17 @@ class CallController extends Cubit<CallState> {
     _signalSub = _signaling
         .frames(join.signalingChannel)
         .listen(_onSignal, onError: (_) {});
-    unawaited(_keepAlive.start(title: keepAliveTitle, text: join.peerName));
+    _networkSub = _connectivity.changes.listen(
+      (_) => _onNetworkChanged(),
+      onError: (_) {},
+    );
+    unawaited(
+      _keepAlive.start(
+        title: keepAliveTitle,
+        text: join.peerName,
+        video: video,
+      ),
+    );
 
     emit(state.copyWith(phase: CallPhase.waitingPeer, peerName: join.peerName));
     _sendHello();
@@ -530,13 +567,42 @@ class CallController extends Cubit<CallState> {
   }
 
   /// ICE restart from the initiator; the other side asks for one with a hello.
-  Future<void> _recover() async {
+  ///
+  /// [force] skips the re-offer cooldown, for a recovery we already know is
+  /// needed (the network changed underneath us) rather than one ICE is merely
+  /// suspicious about.
+  Future<void> _recover({bool force = false}) async {
     if (_closed || state.phase == CallPhase.connected) return;
     if (_initiator) {
-      if (_offerCooledDown) await _offer(iceRestart: true);
+      if (force || _offerCooledDown) await _offer(iceRestart: true);
     } else {
       _sendHello();
     }
+  }
+
+  /// The phone moved to another network (Wi-Fi <-> mobile, or came back from a
+  /// dead spot). Whatever path the call was on is gone, so restart ICE now:
+  /// waiting for ICE to work that out itself costs seconds of silence, and on
+  /// a paid call that silence is the customer's money.
+  ///
+  /// Debounced, because a hand-off arrives as a burst of events and only the
+  /// network the phone settles on is worth renegotiating against.
+  void _onNetworkChanged() {
+    if (_closed || !_everConnected) return;
+    _networkDebounce?.cancel();
+    _networkDebounce = Timer(timings.networkSettle, () {
+      if (_closed || !_everConnected) return;
+      if (state.phase != CallPhase.connected &&
+          state.phase != CallPhase.reconnecting) {
+        return; // ended, failed — nothing to recover
+      }
+      if (state.phase != CallPhase.reconnecting) {
+        emit(state.copyWith(phase: CallPhase.reconnecting));
+        unawaited(_report(CallNetState.reconnecting));
+      }
+      _reconnectTimer?.cancel();
+      unawaited(_recover(force: true));
+    });
   }
 
   // --- backend + stats ----------------------------------------------------------------
@@ -602,13 +668,21 @@ class CallController extends Cubit<CallState> {
     _heartbeatTimer?.cancel();
     _reconnectTimer?.cancel();
     _statsTimer?.cancel();
+    _networkDebounce?.cancel();
     await _signalSub?.cancel();
     await _localVideoSub?.cancel();
+    await _networkSub?.cancel();
     await _dropPeer();
     try {
       await _engine.release();
     } catch (_) {}
     unawaited(_keepAlive.stop());
+    // Never leave the proximity lock behind: the screen would stay dark and
+    // the phone would look broken long after the call is over.
+    if (_proximityHeld) {
+      _proximityHeld = false;
+      unawaited(CallProximity.setActive(active: false));
+    }
     if (!isClosed) {
       emit(
         state.copyWith(

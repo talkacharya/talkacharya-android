@@ -28,8 +28,9 @@ class _IdleCallTask extends TaskHandler {
 /// ```xml
 /// <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 /// <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+/// <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
 /// <service android:name="com.pravera.flutter_foreground_task.service.ForegroundService"
-///     android:foregroundServiceType="microphone" android:exported="false" />
+///     android:foregroundServiceType="microphone|camera" android:exported="false" />
 /// ```
 ///
 /// No-op on other platforms (iOS keeps audio alive via the `audio` background mode).
@@ -46,7 +47,11 @@ class ForegroundServiceCallKeepAlive implements CallKeepAlive {
       !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
   @override
-  Future<void> start({required String title, required String text}) async {
+  Future<void> start({
+    required String title,
+    required String text,
+    bool video = false,
+  }) async {
     if (!_supported) return;
     try {
       FlutterForegroundTask.init(
@@ -73,7 +78,16 @@ class ForegroundServiceCallKeepAlive implements CallKeepAlive {
       }
       await FlutterForegroundTask.startService(
         serviceId: 4711,
-        serviceTypes: const [ForegroundServiceTypes.microphone],
+        // A video call must claim the camera here too: from Android 14 a
+        // foreground service may only use the types it started with, so a
+        // microphone-only service loses the camera the moment the call is
+        // backgrounded.
+        serviceTypes: video
+            ? const [
+                ForegroundServiceTypes.microphone,
+                ForegroundServiceTypes.camera,
+              ]
+            : const [ForegroundServiceTypes.microphone],
         notificationTitle: title,
         notificationText: text,
         callback: _callServiceEntry,
