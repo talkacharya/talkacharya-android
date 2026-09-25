@@ -6,6 +6,7 @@ import '../engine/chat_controller.dart';
 import '../models/chat_message.dart';
 import 'chat_composer.dart';
 import 'connection_banner.dart';
+import 'pinned_bar.dart';
 import 'message_bubble.dart';
 import 'typing_indicator.dart';
 
@@ -80,6 +81,12 @@ class _ChatViewState extends State<ChatView> {
         return Column(
           children: [
             ConnectionBanner(status: state.connection),
+            if (state.pins.isNotEmpty)
+              PinnedBar(
+                pins: state.pins,
+                onUnpin: c.unpin,
+                onTap: (seq) => _scrollToSeq(seq, state),
+              ),
             Expanded(
               child: ListView.builder(
                 controller: _scroll,
@@ -112,6 +119,12 @@ class _ChatViewState extends State<ChatView> {
                 },
               ),
             ),
+            if (state.replyingTo != null)
+              ReplyBar(
+                quoted: state.replyingTo!,
+                mine: state.replyingTo!.senderRole == c.identity.role,
+                onCancel: () => c.replyTo(null),
+              ),
             ChatComposer(
               controller: c,
               enabled: widget.composerEnabled,
@@ -124,6 +137,25 @@ class _ChatViewState extends State<ChatView> {
   }
 
   /// Newest-first rows (list is reverse:true) with day separators + a typing row.
+  /// Bring the message at [seq] into view, if it is in the loaded window.
+  ///
+  /// The list is `reverse: true` and mixes messages with day separators, so the
+  /// index has to be counted off the same rows the builder draws. A pin that
+  /// points further back than what is loaded simply doesn't move — better than
+  /// jumping somewhere arbitrary.
+  void _scrollToSeq(int seq, ChatSessionState state) {
+    final rows = _rows(state);
+    final index = rows.indexWhere(
+      (r) => r is _MsgRow && r.message.seq == seq,
+    );
+    if (index < 0 || !_scroll.hasClients) return;
+    _scroll.animateTo(
+      (index * 72.0).clamp(0.0, _scroll.position.maxScrollExtent),
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
   List<_Row> _rows(ChatSessionState state) {
     final out = <_Row>[];
     if (state.otherTyping) out.add(const _TypingRow());

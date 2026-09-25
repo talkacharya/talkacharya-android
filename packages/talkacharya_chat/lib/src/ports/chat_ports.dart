@@ -1,5 +1,6 @@
 import '../models/chat_message.dart';
 import '../models/chat_enums.dart';
+import '../models/chat_pin.dart';
 import '../models/chat_presence.dart';
 
 /// REST transport for one consultation's chat. Each app implements this against
@@ -17,6 +18,7 @@ abstract class ChatTransport {
     String body = '',
     required String clientMessageId,
     List<String> attachmentIds = const [],
+    int? replyToSeq,
   });
 
   Future<void> markRead(int upToSeq);
@@ -37,6 +39,11 @@ abstract class ChatTransport {
   /// Report a message for moderation. [reason] is one of
   /// `abuse` | `spam` | `inappropriate` | `other`.
   Future<void> reportMessage(int seq, String reason);
+
+  /// Pinned messages, shared by both participants.
+  Future<List<ChatPin>> pins();
+  Future<void> pin(int seq);
+  Future<void> unpin(int seq);
 }
 
 /// Where the app should source images from.

@@ -8,6 +8,7 @@ library;
 export 'src/engine/chat_controller.dart';
 export 'src/models/chat_enums.dart';
 export 'src/models/chat_message.dart';
+export 'src/models/chat_pin.dart';
 export 'src/models/chat_presence.dart';
 export 'src/ports/chat_outbox.dart';
 export 'src/ports/chat_ports.dart';

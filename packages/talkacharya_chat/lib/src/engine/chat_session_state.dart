@@ -10,6 +10,8 @@ class ChatSessionState extends Equatable {
     this.loadingOlder = false,
     this.hasMoreOlder = true,
     this.autoTranslate = false,
+    this.pins = const [],
+    this.replyingTo,
     this.error,
   });
 
@@ -21,6 +23,12 @@ class ChatSessionState extends Equatable {
   final bool loadingOlder;
   final bool hasMoreOlder;
   final bool autoTranslate;
+
+  /// Pinned messages, newest first. Shared by both participants.
+  final List<ChatPin> pins;
+
+  /// The message the composer is currently replying to, if any.
+  final ChatMessage? replyingTo;
   final String? error;
 
   int get lastSeq =>
@@ -38,6 +46,8 @@ class ChatSessionState extends Equatable {
     bool? loadingOlder,
     bool? hasMoreOlder,
     bool? autoTranslate,
+    List<ChatPin>? pins,
+    Object? replyingTo = _unset,
     Object? error = _unset,
   }) {
     return ChatSessionState(
@@ -49,6 +59,10 @@ class ChatSessionState extends Equatable {
       loadingOlder: loadingOlder ?? this.loadingOlder,
       hasMoreOlder: hasMoreOlder ?? this.hasMoreOlder,
       autoTranslate: autoTranslate ?? this.autoTranslate,
+      pins: pins ?? this.pins,
+      replyingTo: replyingTo == _unset
+          ? this.replyingTo
+          : replyingTo as ChatMessage?,
       error: error == _unset ? this.error : error as String?,
     );
   }
@@ -65,6 +79,8 @@ class ChatSessionState extends Equatable {
     loadingOlder,
     hasMoreOlder,
     autoTranslate,
+    pins,
+    replyingTo,
     error,
   ];
 }

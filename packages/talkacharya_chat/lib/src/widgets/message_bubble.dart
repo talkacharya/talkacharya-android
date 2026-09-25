@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../engine/chat_controller.dart';
 import '../models/chat_enums.dart';
 import '../models/chat_message.dart';
+import 'quoted_and_share.dart';
 import 'receipt_ticks.dart';
 
 /// One chat message. System events render as a centered chip; everyone else as a
@@ -30,9 +32,15 @@ class _MessageBubbleState extends State<MessageBubble> {
   ChatMessage get m => widget.message;
   ChatController get c => widget.controller;
 
+  bool get _pinned => c.state.pins.any((p) => p.seq == m.seq);
+
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+
+    if (m.isKundaliRef) {
+      return KundaliCard(message: m, controller: c);
+    }
 
     if (m.isSystem) {
       return _SystemChip(text: _systemText(m));
@@ -72,6 +80,11 @@ class _MessageBubbleState extends State<MessageBubble> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (m.replyTo != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: QuotedHeader(quote: m.replyTo!, mine: mine),
+                ),
               for (final a in m.attachments)
                 if (a.kind == 'image' &&
                     (a.url.isNotEmpty || a.localPath.isNotEmpty))
@@ -202,6 +215,39 @@ class _MessageBubbleState extends State<MessageBubble> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (m.seq > 0)
+              ListTile(
+                leading: const Icon(Icons.reply_rounded),
+                title: const Text('Reply'),
+                onTap: () {
+                  Navigator.pop(context);
+                  c.replyTo(m);
+                },
+              ),
+            if (m.seq > 0)
+              ListTile(
+                leading: Icon(
+                  _pinned ? Icons.push_pin : Icons.push_pin_outlined,
+                ),
+                title: Text(_pinned ? 'Unpin' : 'Pin'),
+                onTap: () {
+                  Navigator.pop(context);
+                  if (_pinned) {
+                    c.unpin(m.seq);
+                  } else {
+                    c.pin(m);
+                  }
+                },
+              ),
+            if (m.body.isNotEmpty)
+              ListTile(
+                leading: const Icon(Icons.copy_rounded),
+                title: const Text('Copy'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Clipboard.setData(ClipboardData(text: m.body));
+                },
+              ),
             if (m.body.isNotEmpty)
               ListTile(
                 leading: const Icon(Icons.volume_up_rounded),

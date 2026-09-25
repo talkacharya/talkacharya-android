@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 
 import '../models/chat_enums.dart';
 import '../models/chat_message.dart';
+import '../models/chat_pin.dart';
 import '../models/chat_presence.dart';
 import '../ports/chat_outbox.dart';
 import '../ports/chat_ports.dart';
@@ -87,6 +88,7 @@ class ChatController extends Cubit<ChatSessionState> {
         state.copyWith(loading: false, error: '$e', messages: _sorted(pending)),
       );
     }
+    unawaited(loadPins());
     for (final m in pending) {
       final path = _localPathOf(m);
       if (path.isNotEmpty) {
@@ -128,6 +130,9 @@ class ChatController extends Cubit<ChatSessionState> {
         }
         _merge(m);
         _bumpSeen();
+      case 'message.pinned':
+      case 'message.unpinned':
+        unawaited(loadPins());
       case 'message.receipt':
         _applyReceipt(data);
       case 'typing':
@@ -216,6 +221,7 @@ class ChatController extends Cubit<ChatSessionState> {
     final body = text.trim();
     if (body.isEmpty) return;
     final cmid = _clientId();
+    final quoted = state.replyingTo;
     _merge(
       ChatMessage(
         id: cmid,
@@ -224,13 +230,57 @@ class ChatController extends Cubit<ChatSessionState> {
         senderRole: _id.role,
         body: body,
         sourceLanguage: _id.language.split('-').first,
+        // Shown on the optimistic bubble too, so the quote doesn't appear only
+        // once the server answers.
+        replyTo: quoted == null
+            ? null
+            : ChatReplyTo(
+                seq: quoted.seq,
+                senderRole: quoted.senderRole,
+                type: quoted.type,
+                body: quoted.body,
+              ),
         createdAt: DateTime.now(),
         sendStatus: SendStatus.sending,
       ),
     );
+    if (quoted != null) emit(state.copyWith(replyingTo: null));
     _persistOutbox();
     _stopTypingNow();
-    await _dispatch(cmid, body: body);
+    await _dispatch(cmid, body: body, replyToSeq: quoted?.seq);
+  }
+
+  // --- replies + pins -------------------------------------------------
+
+  /// Quote [message] in the composer. Null clears it.
+  void replyTo(ChatMessage? message) =>
+      emit(state.copyWith(replyingTo: message));
+
+  Future<void> loadPins() async {
+    try {
+      // Fetch first, *then* read state: `state.copyWith(pins: await …)` would
+      // capture the receiver before suspending and emit a snapshot from before
+      // the request, throwing away anything sent while it was in flight.
+      final pins = await _t.pins();
+      emit(state.copyWith(pins: pins));
+    } catch (_) {
+      // a pin list that won't load is not worth an error in the room
+    }
+  }
+
+  Future<void> pin(ChatMessage message) async {
+    if (message.seq <= 0) return;
+    try {
+      await _t.pin(message.seq);
+      await loadPins();
+    } catch (_) {}
+  }
+
+  Future<void> unpin(int seq) async {
+    try {
+      await _t.unpin(seq);
+      await loadPins();
+    } catch (_) {}
   }
 
   Future<void> retry(ChatMessage failed) async {
@@ -250,9 +300,17 @@ class ChatController extends Cubit<ChatSessionState> {
     await _dispatch(failed.clientMessageId, body: failed.body);
   }
 
-  Future<void> _dispatch(String cmid, {required String body}) async {
+  Future<void> _dispatch(
+    String cmid, {
+    required String body,
+    int? replyToSeq,
+  }) async {
     try {
-      final server = await _t.send(body: body, clientMessageId: cmid);
+      final server = await _t.send(
+        body: body,
+        clientMessageId: cmid,
+        replyToSeq: replyToSeq,
+      );
       _merge(
         server.copyWith(clientMessageId: cmid, sendStatus: SendStatus.sent),
       );

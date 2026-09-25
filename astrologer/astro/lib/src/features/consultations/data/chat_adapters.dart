@@ -76,6 +76,7 @@ class DioChatTransport implements ChatTransport {
     String body = '',
     required String clientMessageId,
     List<String> attachmentIds = const [],
+    int? replyToSeq,
   }) async {
     final res = (await _dio.post<Map<String, dynamic>>(
       ApiPaths.messages(consultationId),
@@ -83,6 +84,7 @@ class DioChatTransport implements ChatTransport {
         'body': body,
         'attachment_ids': attachmentIds,
         'client_message_id': clientMessageId,
+        'reply_to_seq': ?replyToSeq,
       },
     )).ensureOk();
     return ChatMessage.fromMap(res.data ?? const {});
@@ -148,6 +150,29 @@ class DioChatTransport implements ChatTransport {
   Future<void> reportMessage(int seq, String reason) => _dio.post<void>(
     ApiPaths.messageReport(consultationId, seq),
     data: {'reason': reason},
+  );
+
+  @override
+  Future<List<ChatPin>> pins() async {
+    final res = await _dio.get<List<dynamic>>(
+      ApiPaths.messagePins(consultationId),
+    );
+    return (res.data ?? const [])
+        .whereType<Map<String, dynamic>>()
+        .map(ChatPin.fromMap)
+        .toList();
+  }
+
+  @override
+  Future<void> pin(int seq) => _dio.post<void>(
+    ApiPaths.messagePins(consultationId),
+    data: {'seq': seq},
+  );
+
+  @override
+  Future<void> unpin(int seq) => _dio.delete<void>(
+    ApiPaths.messagePins(consultationId),
+    data: {'seq': seq},
   );
 }
 

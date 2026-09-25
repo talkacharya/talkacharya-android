@@ -83,6 +83,9 @@ class ApiPaths {
       '/consultations/$id/messages/delivered';
   static String messageTranslate(String id, int seq) =>
       '/consultations/$id/messages/$seq/translate';
+  static String messagePins(String id) =>
+      '/consultations/$id/messages/pins';
+
   static String messageReport(String id, int seq) =>
       '/consultations/$id/messages/$seq/report';
   static String typing(String id) => '/consultations/$id/typing';

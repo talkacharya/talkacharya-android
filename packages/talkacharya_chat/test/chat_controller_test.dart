@@ -12,6 +12,8 @@ class _FakeTransport implements ChatTransport {
   final translated = <int>[];
   final uploaded = <String>[];
   final reported = <(int, String)>[];
+  final pinned = <int>[];
+  int? lastReplyToSeq;
 
   @override
   Future<List<ChatMessage>> history({
@@ -28,9 +30,11 @@ class _FakeTransport implements ChatTransport {
     String body = '',
     required String clientMessageId,
     List<String> attachmentIds = const [],
+    int? replyToSeq,
   }) async {
     if (failSend) throw Exception('offline');
     sent.add(body);
+    lastReplyToSeq = replyToSeq;
     return ChatMessage(
       id: 'srv-$clientMessageId',
       seq: 10 + sent.length,
@@ -38,12 +42,26 @@ class _FakeTransport implements ChatTransport {
       type: attachmentIds.isEmpty ? 'text' : 'image',
       body: body,
       clientMessageId: clientMessageId,
+      replyTo: replyToSeq == null
+          ? null
+          : ChatReplyTo(seq: replyToSeq, body: 'quoted $replyToSeq'),
       attachments: [
         for (final id in attachmentIds)
           ChatAttachment(id: id, kind: 'image', url: 'https://cdn/$id'),
       ],
     );
   }
+
+  @override
+  Future<List<ChatPin>> pins() async => [
+    for (final seq in pinned) ChatPin(id: 'p$seq', seq: seq, body: 'pinned $seq'),
+  ];
+
+  @override
+  Future<void> pin(int seq) async => pinned.add(seq);
+
+  @override
+  Future<void> unpin(int seq) async => pinned.remove(seq);
 
   @override
   Future<void> markRead(int upToSeq) async {}
@@ -449,6 +467,60 @@ void main() {
     );
     await c2.close();
   });
+
+  test('a reply carries the quote optimistically and clears the composer', () async {
+    final t = _FakeTransport();
+    final c = _make(t, _FakeRealtime());
+    await c.start();
+    await c.sendText('what about marriage?');
+    final quoted = c.state.messages.last;
+
+    c.replyTo(quoted);
+    expect(c.state.replyingTo, quoted);
+
+    await c.sendText('let me look');
+    expect(t.lastReplyToSeq, quoted.seq);
+    expect(c.state.messages.last.replyTo?.seq, quoted.seq);
+    // ...and the composer stops quoting once it has been sent.
+    expect(c.state.replyingTo, isNull);
+
+    // The quote is on the bubble straight away, not only once the server
+    // answers: with the send failing there is no echo to supply it, and it is
+    // still there. Otherwise a reply looks unanchored until the round-trip.
+    t.failSend = true;
+    c.replyTo(quoted);
+    await c.sendText('and one more thing');
+    final optimistic = c.state.messages.last;
+    expect(optimistic.sendStatus, SendStatus.failed);
+    expect(optimistic.replyTo?.body, 'what about marriage?');
+  });
+
+  test('pins load on start and follow the other side pinning', () async {
+    final t = _FakeTransport()..pinned.add(7);
+    final rt = _FakeRealtime();
+    final c = _make(t, rt);
+    await c.start();
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+    expect(c.state.pins.single.seq, 7);
+
+    // The astrologer pins something; the customer's room follows without a
+    // reload, because a pin is shared between the two of them.
+    t.pinned.add(9);
+    rt.emit({'type': 'message.pinned', 'data': {'seq': 9}});
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+    expect(c.state.pins.map((p) => p.seq), containsAll([7, 9]));
+  });
+
+  test('unpinning removes it', () async {
+    final t = _FakeTransport()..pinned.addAll([3, 4]);
+    final c = _make(t, _FakeRealtime());
+    await c.start();
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+
+    await c.unpin(3);
+    expect(c.state.pins.map((p) => p.seq), [4]);
+  });
+
 }
 
 class _MemOutbox extends ChatOutbox {

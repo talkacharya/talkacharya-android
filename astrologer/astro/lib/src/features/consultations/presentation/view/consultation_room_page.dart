@@ -28,7 +28,6 @@ import '../../data/models/consultation.dart';
 import '../cubit/chat_cubit.dart';
 import '../room_presence.dart';
 import '../widgets/consultation_style.dart';
-import '../widgets/shared_details.dart';
 
 /// The astrologer's consultation room: the shared chat engine (or the shared
 /// call screen) inside an astrologer shell — live session bar, the customer's
@@ -287,14 +286,10 @@ class _ChatRoom extends StatelessWidget {
             _WaitingBar(name: c.customerName),
           if (!ended && c.question.isNotEmpty)
             _QuestionBanner(question: c.question),
-          if (!ended && c.shares.isNotEmpty)
-            SingleChildScrollView(
-              child: SharedDetailsSection(
-                consultation: c,
-                canOpen: c.isLive,
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
-              ),
-            ),
+          // Birth details are cards in the thread now (kundali_ref messages),
+          // sitting where they were actually shared. The old panel above the
+          // conversation said nothing about when that was, and pushed the
+          // messages down the screen on every session that had one.
           Expanded(
             child: ChatView(
               composerEnabled: !ended && c.isLive,
