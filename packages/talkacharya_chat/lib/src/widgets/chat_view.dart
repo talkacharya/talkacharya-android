@@ -8,6 +8,7 @@ import 'chat_composer.dart';
 import 'connection_banner.dart';
 import 'pinned_bar.dart';
 import 'message_bubble.dart';
+import 'message_grouping.dart';
 import 'typing_indicator.dart';
 
 /// The full chat surface: connection banner + message list (with day separators,
@@ -19,11 +20,17 @@ class ChatView extends StatefulWidget {
   const ChatView({
     this.composerEnabled = true,
     this.composerHint = 'Message',
+    this.aboveComposer,
     super.key,
   });
 
   final bool composerEnabled;
   final String composerHint;
+
+  /// An app-supplied strip above the composer — the astrologer's quick
+  /// replies. `insert` puts text into the field for editing.
+  final Widget Function(BuildContext context, void Function(String) insert)?
+  aboveComposer;
 
   @override
   State<ChatView> createState() => _ChatViewState();
@@ -110,11 +117,21 @@ class _ChatViewState extends State<ChatView> {
                   return switch (row) {
                     _TypingRow() => const TypingIndicator(),
                     _DateRow(:final label) => _DaySeparator(label: label),
-                    _MsgRow(:final message) => _SeenReporter(
-                      seq: message.seq,
-                      controller: c,
-                      child: MessageBubble(message: message, controller: c),
-                    ),
+                    _MsgRow(
+                      :final message,
+                      :final continuesAbove,
+                      :final continuesBelow,
+                    ) =>
+                      _SeenReporter(
+                        seq: message.seq,
+                        controller: c,
+                        child: MessageBubble(
+                          message: message,
+                          controller: c,
+                          continuesAbove: continuesAbove,
+                          continuesBelow: continuesBelow,
+                        ),
+                      ),
                   };
                 },
               ),
@@ -129,6 +146,7 @@ class _ChatViewState extends State<ChatView> {
               controller: c,
               enabled: widget.composerEnabled,
               hint: widget.composerHint,
+              above: widget.aboveComposer,
             ),
           ],
         );
@@ -162,8 +180,15 @@ class _ChatViewState extends State<ChatView> {
     final msgs = state.messages;
     for (var i = msgs.length - 1; i >= 0; i--) {
       final m = msgs[i];
-      out.add(_MsgRow(m));
       final prev = i > 0 ? msgs[i - 1] : null;
+      final next = i < msgs.length - 1 ? msgs[i + 1] : null;
+      out.add(
+        _MsgRow(
+          m,
+          continuesAbove: continuesTurn(prev, m),
+          continuesBelow: continuesTurn(m, next),
+        ),
+      );
       final day = _day(m.createdAt);
       if (prev == null || _day(prev.createdAt) != day) {
         out.add(_DateRow(_dayLabel(m.createdAt)));
@@ -196,8 +221,19 @@ sealed class _Row {
 }
 
 class _MsgRow extends _Row {
-  const _MsgRow(this.message);
+  const _MsgRow(
+    this.message, {
+    this.continuesAbove = false,
+    this.continuesBelow = false,
+  });
+
   final ChatMessage message;
+
+  /// The message directly above is the same sender's, moments earlier.
+  final bool continuesAbove;
+
+  /// The message directly below is too — so this one carries no tail.
+  final bool continuesBelow;
 }
 
 class _DateRow extends _Row {

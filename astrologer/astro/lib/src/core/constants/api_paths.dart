@@ -97,6 +97,10 @@ class ApiPaths {
   static String chatPresence(String id) => '/conversations/$id/presence';
   static String attachments(String id) => '/conversations/$id/attachments';
 
+  // quick replies — the astrologer's, not any one thread's
+  static const savedReplies = '/astro/saved-replies';
+  static String savedReply(String id) => '/astro/saved-replies/$id';
+
   static String rtcToken(String id) => '/consultations/$id/rtc-token';
 
   // earnings & payouts

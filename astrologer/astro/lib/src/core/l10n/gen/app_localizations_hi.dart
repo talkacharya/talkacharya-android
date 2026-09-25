@@ -1532,4 +1532,25 @@ class AppLocalizationsHi extends AppLocalizations {
   String chatsYouPrefix(String body) {
     return 'आप: $body';
   }
+
+  @override
+  String get quickReplies => 'त्वरित उत्तर';
+
+  @override
+  String get quickRepliesHint => 'टैप करें, संदेश बॉक्स में आ जाएगा';
+
+  @override
+  String get quickRepliesAdd => 'नया त्वरित उत्तर';
+
+  @override
+  String get quickRepliesNewHint => 'जो आप अक्सर लिखते हैं';
+
+  @override
+  String get quickRepliesDelete => 'हटाएं';
+
+  @override
+  String get quickRepliesSaveFailed => 'उत्तर सहेजा नहीं जा सका।';
+
+  @override
+  String get commonClose => 'बंद करें';
 }

@@ -1536,4 +1536,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String chatsYouPrefix(String body) {
     return 'You: $body';
   }
+
+  @override
+  String get quickReplies => 'Quick replies';
+
+  @override
+  String get quickRepliesHint => 'Tap to put one in the box';
+
+  @override
+  String get quickRepliesAdd => 'New quick reply';
+
+  @override
+  String get quickRepliesNewHint => 'Something you type often';
+
+  @override
+  String get quickRepliesDelete => 'Delete';
+
+  @override
+  String get quickRepliesSaveFailed => 'Could not save that reply.';
+
+  @override
+  String get commonClose => 'Close';
 }

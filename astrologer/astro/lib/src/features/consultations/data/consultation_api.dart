@@ -4,6 +4,7 @@ import '../../../core/constants/api_paths.dart';
 import '../../../core/network/api_exception.dart';
 import 'models/consultation.dart';
 import 'models/conversation.dart';
+import 'models/saved_reply.dart';
 import 'models/consultation_share.dart';
 
 class ConsultationApi {
@@ -47,6 +48,34 @@ class ConsultationApi {
         .map((e) => Consultation.fromJson((e as Map).cast<String, dynamic>()))
         .toList();
   }
+
+  /// Quick replies, most-used first. The server seeds a starter set the
+  /// first time, so this is never empty on a new account.
+  Future<List<SavedReply>> savedReplies() async {
+    final res = await _dio.get<dynamic>(ApiPaths.savedReplies);
+    return (res.data as List? ?? const [])
+        .map((e) => SavedReply.fromJson((e as Map).cast<String, dynamic>()))
+        .toList();
+  }
+
+  Future<SavedReply> createSavedReply(String body) async {
+    try {
+      final res = (await _dio.post<Map<String, dynamic>>(
+        ApiPaths.savedReplies,
+        data: {'body': body},
+      )).ensureOk();
+      return SavedReply.fromJson(res.data ?? const {});
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  Future<void> deleteSavedReply(String id) =>
+      _dio.delete<void>(ApiPaths.savedReply(id));
+
+  /// Records that one was used; the list orders itself from this.
+  Future<void> useSavedReply(String id) =>
+      _dio.post<void>(ApiPaths.savedReply(id));
 
   Future<Consultation> detail(String id) async {
     final res = await _dio.get<Map<String, dynamic>>(

@@ -448,5 +448,12 @@
   "roomFollowUpMinutes": "निःशुल्क फ़ॉलो-अप और {minutes} मिनट खुला",
   "roomFollowUpHint": "उत्तर दें (निःशुल्क फ़ॉलो-अप)",
   "chatsFollowUpOpen": "निःशुल्क फ़ॉलो-अप खुला",
-  "chatsYouPrefix": "आप: {body}"
+  "chatsYouPrefix": "आप: {body}",
+  "quickReplies": "त्वरित उत्तर",
+  "quickRepliesHint": "टैप करें, संदेश बॉक्स में आ जाएगा",
+  "quickRepliesAdd": "नया त्वरित उत्तर",
+  "quickRepliesNewHint": "जो आप अक्सर लिखते हैं",
+  "quickRepliesDelete": "हटाएं",
+  "quickRepliesSaveFailed": "उत्तर सहेजा नहीं जा सका।",
+  "commonClose": "बंद करें"
 }

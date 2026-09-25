@@ -29,6 +29,7 @@ import '../../data/models/conversation.dart';
 import '../cubit/chat_cubit.dart';
 import '../room_presence.dart';
 import '../widgets/consultation_style.dart';
+import '../widgets/quick_replies.dart';
 
 /// The astrologer's consultation room: the shared chat engine (or the shared
 /// call screen) inside an astrologer shell — live session bar, the customer's
@@ -352,6 +353,8 @@ class _ChatRoom extends StatelessWidget {
               composerHint: state.window.isFollowUp
                   ? l.roomFollowUpHint
                   : l.roomComposerHint,
+              aboveComposer: (context, insert) =>
+                  QuickReplies(onPick: insert),
             ),
           ),
         ],

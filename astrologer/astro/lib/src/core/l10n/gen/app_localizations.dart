@@ -2773,6 +2773,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You: {body}'**
   String chatsYouPrefix(String body);
+
+  /// Astrologer quick replies
+  ///
+  /// In en, this message translates to:
+  /// **'Quick replies'**
+  String get quickReplies;
+
+  /// Astrologer quick replies
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to put one in the box'**
+  String get quickRepliesHint;
+
+  /// Astrologer quick replies
+  ///
+  /// In en, this message translates to:
+  /// **'New quick reply'**
+  String get quickRepliesAdd;
+
+  /// Astrologer quick replies
+  ///
+  /// In en, this message translates to:
+  /// **'Something you type often'**
+  String get quickRepliesNewHint;
+
+  /// Astrologer quick replies
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get quickRepliesDelete;
+
+  /// Astrologer quick replies
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save that reply.'**
+  String get quickRepliesSaveFailed;
+
+  /// Dismiss a panel
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get commonClose;
 }
 
 class _AppLocalizationsDelegate

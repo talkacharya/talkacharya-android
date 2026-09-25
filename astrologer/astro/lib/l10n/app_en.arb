@@ -806,5 +806,33 @@
         "type": "String"
       }
     }
+  },
+  "quickReplies": "Quick replies",
+  "@quickReplies": {
+    "description": "Astrologer quick replies"
+  },
+  "quickRepliesHint": "Tap to put one in the box",
+  "@quickRepliesHint": {
+    "description": "Astrologer quick replies"
+  },
+  "quickRepliesAdd": "New quick reply",
+  "@quickRepliesAdd": {
+    "description": "Astrologer quick replies"
+  },
+  "quickRepliesNewHint": "Something you type often",
+  "@quickRepliesNewHint": {
+    "description": "Astrologer quick replies"
+  },
+  "quickRepliesDelete": "Delete",
+  "@quickRepliesDelete": {
+    "description": "Astrologer quick replies"
+  },
+  "quickRepliesSaveFailed": "Could not save that reply.",
+  "@quickRepliesSaveFailed": {
+    "description": "Astrologer quick replies"
+  },
+  "commonClose": "Close",
+  "@commonClose": {
+    "description": "Dismiss a panel"
   }
 }

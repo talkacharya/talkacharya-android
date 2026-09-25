@@ -167,7 +167,7 @@ ChatController _make(
   PickImages? pickImages,
   ChatSounds sounds = const NoopChatSounds(),
 }) => ChatController(
-  consultationId: 'c1',
+  threadId: 'c1',
   transport: t,
   realtime: rt,
   identity: id ?? _Identity(),
@@ -432,7 +432,7 @@ void main() {
     // first session: send fails, message is persisted as failed
     final t1 = _FakeTransport()..failSend = true;
     final c1 = ChatController(
-      consultationId: 'c1',
+      threadId: 'c1',
       transport: t1,
       realtime: _FakeRealtime(),
       identity: _Identity(),
@@ -450,7 +450,7 @@ void main() {
     // second session: outbox restores it, and the socket is fine now → it sends
     final t2 = _FakeTransport();
     final c2 = ChatController(
-      consultationId: 'c1',
+      threadId: 'c1',
       transport: t2,
       realtime: _FakeRealtime(),
       identity: _Identity(),

@@ -16,11 +16,21 @@ class MessageBubble extends StatefulWidget {
   const MessageBubble({
     required this.message,
     required this.controller,
+    this.continuesAbove = false,
+    this.continuesBelow = false,
     super.key,
   });
 
   final ChatMessage message;
   final ChatController controller;
+
+  /// Part of a run from the same sender: tighten the gap above, and square the
+  /// corner that faces it.
+  final bool continuesAbove;
+
+  /// Another message from the same sender follows, so the tail belongs to that
+  /// one and not to this.
+  final bool continuesBelow;
 
   @override
   State<MessageBubble> createState() => _MessageBubbleState();
@@ -65,16 +75,33 @@ class _MessageBubbleState extends State<MessageBubble> {
       child: GestureDetector(
         onLongPress: () => _menu(context, mine: mine),
         child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 3, horizontal: 2),
+          margin: EdgeInsets.fromLTRB(
+            2,
+            widget.continuesAbove ? 1 : 3,
+            2,
+            widget.continuesBelow ? 1 : 3,
+          ),
           padding: const EdgeInsets.fromLTRB(12, 8, 10, 6),
           constraints: BoxConstraints(
             maxWidth: MediaQuery.sizeOf(context).width * 0.78,
           ),
           decoration: BoxDecoration(
             color: bg,
+            // The tail sits on the last bubble of a run; the ones above it
+            // square off against the message they belong with.
             borderRadius: BorderRadius.circular(14).copyWith(
-              bottomRight: mine ? const Radius.circular(3) : null,
-              bottomLeft: mine ? null : const Radius.circular(3),
+              topRight: mine && widget.continuesAbove
+                  ? const Radius.circular(4)
+                  : null,
+              topLeft: !mine && widget.continuesAbove
+                  ? const Radius.circular(4)
+                  : null,
+              bottomRight: mine && !widget.continuesBelow
+                  ? const Radius.circular(3)
+                  : null,
+              bottomLeft: !mine && !widget.continuesBelow
+                  ? const Radius.circular(3)
+                  : null,
             ),
           ),
           child: Column(
