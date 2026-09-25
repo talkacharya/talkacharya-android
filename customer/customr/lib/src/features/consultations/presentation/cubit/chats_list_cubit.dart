@@ -6,14 +6,15 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/realtime/realtime_client.dart';
 import '../../../../core/realtime/realtime_event.dart';
 import '../../data/consultation_repository.dart';
-import '../../data/models/consultation.dart';
+import '../../data/models/conversation.dart';
 import '../../../../core/network/friendly_error.dart';
 
 part 'chats_list_state.dart';
 
-/// Backs the Chats tab: the customer's consultations split into live + past,
-/// refreshed on realtime nudges (a new message, an accept, an end) and a slow
-/// foreground poll. Also the source of the bottom-nav unread badge.
+/// Backs the Chats tab: the customer's threads — one per astrologer — split
+/// into live + past, refreshed on realtime nudges (a new message, an accept,
+/// an end) and a slow foreground poll. Also the source of the bottom-nav
+/// unread badge.
 class ChatsListCubit extends Cubit<ChatsListState> {
   ChatsListCubit({
     required ConsultationRepository repo,
@@ -35,13 +36,13 @@ class ChatsListCubit extends Cubit<ChatsListState> {
       return;
     }
     _lastLoad = DateTime.now();
-    if (state.consultations.isEmpty) {
+    if (state.conversations.isEmpty) {
       emit(state.copyWith(loading: true, clearError: true));
     }
     try {
-      final all = await _repo.list();
+      final all = await _repo.conversations();
       emit(
-        state.copyWith(loading: false, consultations: all, clearError: true),
+        state.copyWith(loading: false, conversations: all, clearError: true),
       );
     } catch (e) {
       emit(state.copyWith(loading: false, error: friendlyError(e)));

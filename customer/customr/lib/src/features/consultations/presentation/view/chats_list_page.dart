@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../shared/widgets/empty_state.dart';
 import '../../../../shared/widgets/error_view.dart';
-import '../../data/models/consultation.dart';
+import '../../data/models/conversation.dart';
 import '../cubit/chats_list_cubit.dart';
 
 /// The "Chats" tab: live consultations first, then recent ones. Tap to open the
@@ -43,16 +43,16 @@ class _ChatsListPageState extends State<ChatsListPage> {
       appBar: AppBar(title: Text(l10n.chatsTitle)),
       body: BlocBuilder<ChatsListCubit, ChatsListState>(
         builder: (context, state) {
-          if (state.loading && state.consultations.isEmpty) {
+          if (state.loading && state.conversations.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (state.error != null && state.consultations.isEmpty) {
+          if (state.error != null && state.conversations.isEmpty) {
             return ErrorView(
               message: l10n.chatsLoadError,
               onRetry: () => context.read<ChatsListCubit>().load(force: true),
             );
           }
-          if (state.consultations.isEmpty) {
+          if (state.conversations.isEmpty) {
             return EmptyState(
               icon: Icons.chat_bubble_outline_rounded,
               title: l10n.chatsEmptyTitle,
@@ -100,13 +100,13 @@ class _Header extends StatelessWidget {
 
 class _ChatTile extends StatelessWidget {
   const _ChatTile({required this.c});
-  final Consultation c;
+  final Conversation c;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final l10n = context.l10n;
-    final avatar = c.astrologerAvatar;
+    final avatar = c.peerAvatar;
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: scheme.primaryContainer,
@@ -118,9 +118,7 @@ class _ChatTile extends StatelessWidget {
             : null,
       ),
       title: Text(
-        c.astrologerName.isEmpty
-            ? l10n.chatsAstrologerFallback
-            : c.astrologerName,
+        c.peerName.isEmpty ? l10n.chatsAstrologerFallback : c.peerName,
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
       subtitle: Text(
@@ -128,29 +126,29 @@ class _ChatTile extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
-      trailing: c.unreadCount > 0
-          ? Badge(label: Text('${c.unreadCount}'))
-          : (c.status.isLive
+      trailing: c.unread > 0
+          ? Badge(label: Text('${c.unread}'))
+          : (c.window.isLive
                 ? Icon(Icons.circle, size: 10, color: scheme.tertiary)
-                : (c.status == ConsultationStatus.ended
-                      ? Text(
-                          '${c.currency} ${c.gross.toStringAsFixed(0)}',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        )
-                      : const Icon(Icons.chevron_right_rounded))),
+                : const Icon(Icons.chevron_right_rounded)),
+      // The thread's own id: the room is the conversation now, and it opens
+      // whether or not a consultation is running inside it.
       onTap: () => context.push('/consultations/${c.id}'),
     );
   }
 
-  static String _subtitle(AppLocalizations l10n, Consultation c) =>
-      switch (c.status) {
-        ConsultationStatus.requested => l10n.chatsStatusWaiting,
-        ConsultationStatus.accepted ||
-        ConsultationStatus.active => l10n.chatsStatusLive,
-        ConsultationStatus.ended => l10n.chatsStatusEnded(c.billedMinutes),
-        ConsultationStatus.cancelled => l10n.chatsStatusCancelled,
-        ConsultationStatus.rejected => l10n.chatsStatusRejected,
-        ConsultationStatus.expired => l10n.chatsStatusExpired,
+  /// The last thing said, the way every other chat app does it — a status
+  /// line told you about a session, which is not what someone scanning their
+  /// chats is looking for.
+  static String _subtitle(AppLocalizations l10n, Conversation c) {
+    final last = c.lastMessage;
+    if (last == null || last.body.isEmpty) {
+      return switch (c.window.reason) {
+        'consultation' => l10n.chatsStatusLive,
+        'follow_up' => l10n.chatsStatusEnded(0),
         _ => l10n.chatsStatusGeneric,
       };
+    }
+    return last.isMine ? 'You: ${last.body}' : last.body;
+  }
 }

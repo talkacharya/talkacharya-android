@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../../../core/constants/api_paths.dart';
 import '../../../core/network/api_exception.dart';
 import 'models/consultation.dart';
+import 'models/conversation.dart';
 
 /// Raised on `402` — the wallet needs a top-up before the consultation starts.
 class InsufficientBalance implements Exception {
@@ -86,6 +87,33 @@ class ConsultationApi {
       );
       _raise(res);
       return Consultation.fromMap(res.data ?? const {});
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// The chats list: one row per astrologer, newest activity first.
+  Future<List<Conversation>> conversations() async {
+    try {
+      final res = await _dio.get<List<dynamic>>(ApiPaths.conversations);
+      _raise(res);
+      return (res.data ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(Conversation.fromMap)
+          .toList();
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// One thread: peer, unread count and whether it takes messages right now.
+  Future<Conversation> conversation(String id) async {
+    try {
+      final res = await _dio.get<Map<String, dynamic>>(
+        ApiPaths.conversation(id),
+      );
+      _raise(res);
+      return Conversation.fromMap(res.data ?? const {});
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
     }

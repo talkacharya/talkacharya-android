@@ -4,7 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:customr/src/core/realtime/realtime_client.dart';
 import 'package:customr/src/core/realtime/realtime_event.dart';
 import 'package:customr/src/features/consultations/data/consultation_repository.dart';
-import 'package:customr/src/features/consultations/data/models/consultation.dart';
+import 'package:customr/src/features/consultations/data/models/conversation.dart';
 import 'package:customr/src/features/consultations/presentation/cubit/chats_list_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -18,13 +18,20 @@ class _FakeRealtime extends Fake implements RealtimeClient {
   void fire(RealtimeEvent e) => _ctl.add(e);
 }
 
-Consultation _c(String id, {int unread = 0, ConsultationStatus status = ConsultationStatus.active}) =>
-    Consultation(
+/// A thread. `live` means a paid session is running inside it right now;
+/// anything else — including one still inside its free follow-up window —
+/// belongs under "recent".
+Conversation _c(String id, {int unread = 0, String reason = 'consultation'}) =>
+    Conversation(
       id: id,
-      status: status,
-      astrologerName: 'Ravi',
-      unreadCount: unread,
-      currency: 'INR',
+      astrologerId: 'astro-$id',
+      peerName: 'Ravi',
+      unread: unread,
+      window: SendingWindow(
+        canSend: reason != 'closed',
+        reason: reason,
+        consultationId: reason == 'consultation' ? 'c-$id' : null,
+      ),
     );
 
 void main() {
@@ -41,10 +48,10 @@ void main() {
   blocTest<ChatsListCubit, ChatsListState>(
     'load splits live vs past and sums unread',
     build: () {
-      when(() => repo.list()).thenAnswer(
+      when(() => repo.conversations()).thenAnswer(
         (_) async => [
           _c('a', unread: 2),
-          _c('b', status: ConsultationStatus.ended),
+          _c('b', reason: 'follow_up'),
         ],
       );
       return build();
@@ -60,12 +67,16 @@ void main() {
   blocTest<ChatsListCubit, ChatsListState>(
     'a NewChatMessage realtime event triggers a reload',
     build: () {
-      when(() => repo.list()).thenAnswer((_) async => [_c('a', unread: 1)]);
+      when(() => repo.conversations()).thenAnswer(
+        (_) async => [_c('a', unread: 1)],
+      );
       return build();
     },
     act: (c) async {
       await c.load();
-      when(() => repo.list()).thenAnswer((_) async => [_c('a', unread: 3)]);
+      when(() => repo.conversations()).thenAnswer(
+        (_) async => [_c('a', unread: 3)],
+      );
       rt.fire(
         const NewChatMessage(consultationId: 'a', preview: 'hi', senderRole: 'astrologer'),
       );

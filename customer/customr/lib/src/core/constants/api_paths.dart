@@ -88,6 +88,11 @@ class ApiPaths {
       '/consultations/$id/messages/delivered';
   static String messageTranslate(String id, int seq) =>
       '/consultations/$id/messages/$seq/translate';
+  /// The chats list: one thread per astrologer.
+  static const conversations = '/conversations';
+
+  static String conversation(String id) => '/conversations/\$id';
+
   static String messagePins(String id) =>
       '/consultations/$id/messages/pins';
 

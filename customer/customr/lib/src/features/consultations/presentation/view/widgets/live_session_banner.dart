@@ -29,14 +29,21 @@ class LiveSessionBanner extends StatelessWidget {
           builder: (context, state) {
             // Not for the room on screen, and not for a call already riding
             // above the app on its own mini bar — one "return here" at a time.
+            // A thread is matched by its own id and by the consultation running
+            // inside it, since either can be what the open room was opened by.
             final hub = getIt<CallHub>();
-            final live = state.live
-                .where((c) => c.id != presence.openId && !hub.isFor(c.id))
-                .toList();
+            final live = state.live.where((c) {
+              final consultationId = c.window.consultationId;
+              final open =
+                  c.id == presence.openId || consultationId == presence.openId;
+              return !open &&
+                  !hub.isFor(c.id) &&
+                  !(consultationId != null && hub.isFor(consultationId));
+            }).toList();
             return Column(
               children: [
                 if (live.isNotEmpty)
-                  _Bar(name: live.first.astrologerName, id: live.first.id),
+                  _Bar(name: live.first.peerName, id: live.first.id),
                 Expanded(child: child),
               ],
             );

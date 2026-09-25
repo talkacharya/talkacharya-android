@@ -1,5 +1,6 @@
 import 'consultation_api.dart';
 import 'models/consultation.dart';
+import 'models/conversation.dart';
 
 /// Consultation lifecycle (request / detail / list / cancel / end / review).
 /// The live chat stream is owned by `talkacharya_chat`'s `ChatController` via
@@ -33,6 +34,10 @@ class ConsultationRepository {
   Future<Consultation> detail(String id) => _api.detail(id);
   Future<List<Consultation>> list({String? status}) =>
       _api.list(status: status);
+
+  /// The chats list — one thread per astrologer, not one per consultation.
+  Future<List<Conversation>> conversations() => _api.conversations();
+  Future<Conversation> conversation(String id) => _api.conversation(id);
   Future<Consultation> cancel(String id) => _api.cancel(id);
   Future<Consultation> end(String id) => _api.end(id);
   Future<void> review(String id, {required int rating, String text = ''}) =>
