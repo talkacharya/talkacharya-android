@@ -112,6 +112,17 @@ class CallTelecom {
         false;
   }
 
+  /// Ask Telecom to move the audio. Returns false when it isn't managing this
+  /// call, in which case the caller falls back to setting the route itself.
+  ///
+  /// Worth going through Telecom where we can: it owns the route now, so
+  /// setting the speaker behind its back leaves the two disagreeing — and it
+  /// is the only one that knows about a connected Bluetooth headset.
+  static Future<bool> setSpeaker({required bool on}) async {
+    if (!_android) return false;
+    return await _invoke('setSpeaker', {'on': on}) ?? false;
+  }
+
   /// The consultation ended — release the Telecom side too, or the OS goes on
   /// believing this phone is in a call.
   static Future<void> end() async {

@@ -438,5 +438,9 @@
   "profileHapticFeedbackDesc": "बटन और अलर्ट पर कंपन",
   "profileSoundVibration": "ध्वनि और कंपन",
   "profileSoundVibrationSub": "रिंगटोन, आवाज़ें और कंपन",
-  "roomViewSummary": "सारांश"
+  "roomViewSummary": "सारांश",
+  "callVideoPausedWeak": "वीडियो रुका — नेटवर्क कमज़ोर है",
+  "@callVideoPausedWeak": {
+    "description": "Self-view label when the network, not the user, paused the camera"
+  }
 }

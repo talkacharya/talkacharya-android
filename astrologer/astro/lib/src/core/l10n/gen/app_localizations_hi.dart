@@ -1505,4 +1505,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get roomViewSummary => 'सारांश';
+
+  @override
+  String get callVideoPausedWeak => 'वीडियो रुका — नेटवर्क कमज़ोर है';
 }

@@ -51,6 +51,7 @@ class CallState extends Equatable {
     this.muted = false,
     this.speakerOn = false,
     this.bluetooth = false,
+    this.videoPausedForNetwork = false,
     this.quality = 0,
     this.relayed = false,
     this.connectedAt,
@@ -73,6 +74,11 @@ class CallState extends Equatable {
   /// Audio is on a Bluetooth headset. Reported by Telecom, which owns the
   /// route — the UI shows a headset rather than claiming "speaker".
   final bool bluetooth;
+
+  /// The camera was turned off because the connection couldn't carry it, not
+  /// because the user turned it off — so the UI can say so, and say it will
+  /// come back, instead of looking like the camera button broke.
+  final bool videoPausedForNetwork;
 
   /// 0 = unknown, 1 = poor, 2 = fair, 3 = good.
   final int quality;
@@ -115,6 +121,7 @@ class CallState extends Equatable {
     bool? muted,
     bool? speakerOn,
     bool? bluetooth,
+    bool? videoPausedForNetwork,
     int? quality,
     bool? relayed,
     DateTime? connectedAt,
@@ -136,6 +143,7 @@ class CallState extends Equatable {
     muted: muted ?? this.muted,
     speakerOn: speakerOn ?? this.speakerOn,
     bluetooth: bluetooth ?? this.bluetooth,
+    videoPausedForNetwork: videoPausedForNetwork ?? this.videoPausedForNetwork,
     quality: quality ?? this.quality,
     relayed: relayed ?? this.relayed,
     connectedAt: connectedAt ?? this.connectedAt,
@@ -157,6 +165,7 @@ class CallState extends Equatable {
     muted,
     speakerOn,
     bluetooth,
+    videoPausedForNetwork,
     quality,
     relayed,
     connectedAt,

@@ -4801,6 +4801,9 @@ class AppLocalizationsTa extends AppLocalizations {
   String get callCameraOff => 'Camera off';
 
   @override
+  String get callVideoPausedWeak => 'Video paused — weak connection';
+
+  @override
   String get callPeerCameraOff => 'Their camera is off';
 
   @override

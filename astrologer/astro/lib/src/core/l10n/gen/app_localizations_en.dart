@@ -1509,4 +1509,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get roomViewSummary => 'Summary';
+
+  @override
+  String get callVideoPausedWeak => 'Video paused — weak connection';
 }

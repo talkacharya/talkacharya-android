@@ -763,5 +763,9 @@
   "profileHapticFeedbackDesc": "Vibrate on buttons and alerts",
   "profileSoundVibration": "Sound & vibration",
   "profileSoundVibrationSub": "Ringtone, tones and vibration",
-  "roomViewSummary": "Summary"
+  "roomViewSummary": "Summary",
+  "callVideoPausedWeak": "Video paused — weak connection",
+  "@callVideoPausedWeak": {
+    "description": "Self-view label when the network, not the user, paused the camera"
+  }
 }

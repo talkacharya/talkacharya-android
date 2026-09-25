@@ -4876,6 +4876,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get callCameraOff => 'कैमरा बंद';
 
   @override
+  String get callVideoPausedWeak => 'वीडियो रुका — नेटवर्क कमज़ोर है';
+
+  @override
   String get callPeerCameraOff => 'उनका कैमरा बंद है';
 
   @override

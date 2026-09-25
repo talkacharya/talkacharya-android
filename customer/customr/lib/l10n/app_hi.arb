@@ -2232,6 +2232,10 @@
   "callCamera": "कैमरा",
   "callFlipCamera": "पलटें",
   "callCameraOff": "कैमरा बंद",
+  "callVideoPausedWeak": "वीडियो रुका — नेटवर्क कमज़ोर है",
+  "@callVideoPausedWeak": {
+    "description": "Self-view label when the network, not the user, paused the camera"
+  },
   "callPeerCameraOff": "उनका कैमरा बंद है",
   "callCameraBody": "कैमरा चालू करने दें ताकि ज्योतिषी आपको देख सकें।",
   "callCameraBlockedBody": "TalkAcharya के लिए कैमरा बंद है। इसे सेटिंग्स में चालू करें।",

@@ -1093,6 +1093,7 @@ class _Stat extends StatelessWidget {
 /// The call screen's words, in the astrologer's language.
 CallStrings astroCallStrings(AppLocalizations l) => CallStrings(
   endConfirmBody: l.roomCallEndBody,
+  videoPausedWeakConnection: l.callVideoPausedWeak,
   minimize: l.callMinimize,
   tapToReturn: l.callTapToReturn,
   waiting: l.callWaiting,

@@ -127,9 +127,14 @@ class _Peer implements RtcPeer {
   Future<void> addRemoteCandidate(Map<String, dynamic> c) async =>
       remote.add('ice:${c['candidate']}');
 
+  /// What the next `stats()` call reports. Good by default; a test that cares
+  /// about a weak link sets these.
+  double rtt = 0.05;
+  double loss = 0;
+
   @override
   Future<RtcStats> stats() async =>
-      const RtcStats(roundTripSeconds: 0.05, lossRatio: 0, relayed: false);
+      RtcStats(roundTripSeconds: rtt, lossRatio: loss, relayed: false);
 
   @override
   Future<void> close() async => closed = true;
@@ -639,6 +644,83 @@ void main() {
     expect(early, greaterThan(2));
 
     await cust.c.close();
+  });
+
+  test('a weak connection drops the picture and brings it back', () async {
+    final hub = _Hub();
+    final cust = _side('customer', hub, video: true);
+    final astro = _side('astrologer', hub, video: true);
+    await cust.c.start();
+    await astro.c.start();
+    await _settle();
+    cust.engine.last.ice.add(RtcIceState.connected);
+    await _settle(20);
+    expect(cust.c.state.cameraOn, isTrue);
+
+    // The link goes bad: high round-trip and heavy loss.
+    cust.engine.last.rtt = 1.2;
+    cust.engine.last.loss = 0.3;
+    await _settle(220); // several stats samples at 50ms
+
+    expect(cust.c.state.cameraOn, isFalse);
+    expect(cust.c.state.videoPausedForNetwork, isTrue);
+    // The far side is told, so it shows an avatar instead of a frozen frame.
+    expect(hub.typesFrom('customer'), contains('media'));
+    // Audio is untouched — that is the whole point of giving up the picture.
+    expect(cust.c.state.muted, isFalse);
+    expect(cust.c.state.phase, CallPhase.connected);
+
+    cust.engine.last.rtt = 0.05;
+    cust.engine.last.loss = 0;
+    await _settle(350); // recovery is deliberately slower than the drop
+
+    expect(cust.c.state.cameraOn, isTrue);
+    expect(cust.c.state.videoPausedForNetwork, isFalse);
+
+    await cust.c.close();
+    await astro.c.close();
+  });
+
+  test('a camera the user turned off is never turned back on for them', () async {
+    final hub = _Hub();
+    final cust = _side('customer', hub, video: true);
+    final astro = _side('astrologer', hub, video: true);
+    await cust.c.start();
+    await astro.c.start();
+    await _settle();
+    cust.engine.last.ice.add(RtcIceState.connected);
+    await _settle(20);
+
+    await cust.c.toggleCamera(); // the user's own choice
+    expect(cust.c.state.cameraOn, isFalse);
+
+    // A long stretch of a perfectly good connection must not undo it.
+    await _settle(400);
+    expect(cust.c.state.cameraOn, isFalse);
+    expect(cust.c.state.videoPausedForNetwork, isFalse);
+
+    await cust.c.close();
+    await astro.c.close();
+  });
+
+  test('a voice call is never touched by video adaptation', () async {
+    final hub = _Hub();
+    final cust = _side('customer', hub);
+    final astro = _side('astrologer', hub);
+    await cust.c.start();
+    await astro.c.start();
+    await _settle();
+    cust.engine.last.ice.add(RtcIceState.connected);
+    cust.engine.last.rtt = 1.5;
+    cust.engine.last.loss = 0.4;
+    await _settle(250);
+
+    expect(cust.c.state.quality, 1); // it noticed
+    expect(cust.c.state.videoPausedForNetwork, isFalse); // but had nothing to do
+    expect(cust.c.state.phase, CallPhase.connected);
+
+    await cust.c.close();
+    await astro.c.close();
   });
 
   test('the keep-alive service claims the camera on a video call', () async {

@@ -134,6 +134,30 @@ object CallTelecom {
         }
     }
 
+    /**
+     * Move the audio to the loudspeaker or back to the earpiece.
+     *
+     * False when Telecom isn't managing this call, so the caller can fall back
+     * to setting the route itself rather than silently doing nothing.
+     */
+    fun setSpeaker(on: Boolean): Boolean {
+        if (!supported) return false
+        return setSpeakerOnO(on)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setSpeakerOnO(on: Boolean): Boolean {
+        val active = connection ?: return false
+        return try {
+            active.setAudioRoute(
+                if (on) CallAudioState.ROUTE_SPEAKER else CallAudioState.ROUTE_EARPIECE
+            )
+            true
+        } catch (e: RuntimeException) {
+            false
+        }
+    }
+
     /** The call ended in our own stack — release the Telecom connection. */
     fun end() {
         if (!supported) return

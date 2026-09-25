@@ -2328,6 +2328,10 @@
   "callCamera": "Camera",
   "callFlipCamera": "Flip",
   "callCameraOff": "Camera off",
+  "callVideoPausedWeak": "Video paused — weak connection",
+  "@callVideoPausedWeak": {
+    "description": "Self-view label when the network, not the user, paused the camera"
+  },
   "callPeerCameraOff": "Their camera is off",
   "callCameraBody": "Allow camera access so the astrologer can see you.",
   "callCameraBlockedBody": "Camera access is turned off for TalkAcharya. Turn it on in Settings.",

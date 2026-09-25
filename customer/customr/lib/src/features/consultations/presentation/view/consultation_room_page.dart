@@ -423,6 +423,7 @@ CallStrings callStrings(AppLocalizations l) => CallStrings(
   camera: l.callCamera,
   flipCamera: l.callFlipCamera,
   cameraOff: l.callCameraOff,
+  videoPausedWeakConnection: l.callVideoPausedWeak,
   peerCameraOff: l.callPeerCameraOff,
   endCall: l.callEnd,
   encrypted: l.callEncrypted,

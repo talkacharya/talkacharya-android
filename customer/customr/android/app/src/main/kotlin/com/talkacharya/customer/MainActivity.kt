@@ -75,6 +75,9 @@ class MainActivity : FlutterActivity() {
                             call.argument<String>("callId").orEmpty(),
                         )
                     )
+                    "setSpeaker" -> result.success(
+                        CallTelecom.setSpeaker(call.argument<Boolean>("on") ?: false)
+                    )
                     "end" -> {
                         CallTelecom.end()
                         result.success(null)

@@ -2731,6 +2731,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Summary'**
   String get roomViewSummary;
+
+  /// Self-view label when the network, not the user, paused the camera
+  ///
+  /// In en, this message translates to:
+  /// **'Video paused — weak connection'**
+  String get callVideoPausedWeak;
 }
 
 class _AppLocalizationsDelegate

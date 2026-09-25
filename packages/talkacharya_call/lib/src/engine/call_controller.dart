@@ -143,6 +143,17 @@ class CallController extends Cubit<CallState> {
   /// screen a moment later shouldn't wait a full interval in silence.
   int _helloAttempt = 0;
 
+  /// Consecutive stats samples at either end of the scale, for [_adaptVideo].
+  int _poorSamples = 0;
+  int _goodSamples = 0;
+
+  /// The camera is off because the network couldn't carry it — as opposed to
+  /// because the user turned it off, which we must never quietly undo.
+  bool _cameraOffForNetwork = false;
+
+  static const _poorSamplesBeforeVideoOff = 3;
+  static const _goodSamplesBeforeVideoOn = 5;
+
   CallJoin? get joinInfo => _join;
   bool get _initiator => _join?.initiator ?? false;
   String get _role => _join?.role ?? '';
@@ -404,21 +415,39 @@ class CallController extends Cubit<CallState> {
 
   Future<void> toggleSpeaker() async {
     final on = !state.speakerOn;
-    try {
-      await _engine.setSpeakerphone(on);
-    } catch (_) {}
-    emit(state.copyWith(speakerOn: on));
+    // Telecom owns the route when it is managing the call, and it is the only
+    // one aware of a connected headset — going around it leaves the two
+    // disagreeing about where the audio is. It answers false when it isn't
+    // managing this call, and then the engine sets the route itself.
+    if (!await CallTelecom.setSpeaker(on: on)) {
+      try {
+        await _engine.setSpeakerphone(on);
+      } catch (_) {}
+    }
+    _emitIfOpen(state.copyWith(speakerOn: on, bluetooth: false));
   }
 
   /// Camera on/off during a video call. The track stays in place (no renegotiation);
   /// the peer is told so their tile can fall back to an avatar.
+  ///
+  /// Pressing this hands control back to the user: if the network had paused
+  /// the picture ([_adaptVideo]), it stops trying to manage it from here on.
   Future<void> toggleCamera() async {
     if (!state.video) return;
-    final on = !state.cameraOn;
+    _cameraOffForNetwork = false;
+    _poorSamples = 0;
+    _goodSamples = 0;
+    await _setCamera(!state.cameraOn, pausedForNetwork: false);
+  }
+
+  Future<void> _setCamera(bool on, {required bool pausedForNetwork}) async {
+    if (!state.video) return;
     try {
       await _engine.setCameraEnabled(on);
     } catch (_) {}
-    emit(state.copyWith(cameraOn: on));
+    _emitIfOpen(
+      state.copyWith(cameraOn: on, videoPausedForNetwork: pausedForNetwork),
+    );
     await _publish({'t': 'media', 'video': on});
   }
 
@@ -776,7 +805,45 @@ class CallController extends Cubit<CallState> {
           state.copyWith(quality: quality, relayed: s.relayed ?? state.relayed),
         );
       }
+      await _adaptVideo(quality);
     } catch (_) {}
+  }
+
+  /// Drop the picture when the connection can't carry it, and bring it back
+  /// when it can.
+  ///
+  /// Video is what saturates a weak link, and when it does the audio goes with
+  /// it — which on a paid consultation is the part that actually matters.
+  /// Rather than let both freeze, the camera goes off and the call carries on
+  /// as voice.
+  ///
+  /// The thresholds are deliberately asymmetric: quick to give the picture up
+  /// (~3 samples of poor), slow to take it back (~5 of good). A link that is
+  /// borderline should settle on audio rather than flap between the two.
+  Future<void> _adaptVideo(int quality) async {
+    if (_closed || !state.video || state.phase != CallPhase.connected) return;
+
+    if (quality == 1) {
+      _goodSamples = 0;
+      _poorSamples++;
+      if (state.cameraOn && _poorSamples >= _poorSamplesBeforeVideoOff) {
+        _poorSamples = 0;
+        _cameraOffForNetwork = true;
+        _diagnostics.log('video paused: weak connection');
+        await _setCamera(false, pausedForNetwork: true);
+      }
+      return;
+    }
+
+    _poorSamples = 0;
+    // Only ever undo our own doing — a camera the user turned off stays off.
+    if (!_cameraOffForNetwork || quality < 3) return;
+    _goodSamples++;
+    if (_goodSamples < _goodSamplesBeforeVideoOn) return;
+    _goodSamples = 0;
+    _cameraOffForNetwork = false;
+    _diagnostics.log('video resumed: connection recovered');
+    await _setCamera(true, pausedForNetwork: false);
   }
 
   void _emitIfOpen(CallState next) {

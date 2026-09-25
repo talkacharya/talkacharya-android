@@ -8384,6 +8384,12 @@ abstract class AppLocalizations {
   /// **'Camera off'**
   String get callCameraOff;
 
+  /// Self-view label when the network, not the user, paused the camera
+  ///
+  /// In en, this message translates to:
+  /// **'Video paused — weak connection'**
+  String get callVideoPausedWeak;
+
   /// No description provided for @callPeerCameraOff.
   ///
   /// In en, this message translates to:

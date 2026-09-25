@@ -25,6 +25,7 @@ class CallStrings {
     this.camera = 'Camera',
     this.flipCamera = 'Flip',
     this.cameraOff = 'Camera off',
+    this.videoPausedWeakConnection = 'Video paused — weak connection',
     this.peerCameraOff = 'Their camera is off',
     this.endCall = 'End',
     this.encrypted = 'Encrypted call',
@@ -57,6 +58,11 @@ class CallStrings {
 
   /// Shown on our own tile when we turned the camera off.
   final String cameraOff;
+
+  /// Shown on our own tile when the *network*, not the user, put the camera
+  /// away — so it reads as the call protecting the audio rather than the
+  /// camera button having broken.
+  final String videoPausedWeakConnection;
 
   /// Shown over the peer's avatar when they turned theirs off.
   final String peerCameraOff;
@@ -546,7 +552,12 @@ class _VideoViewState extends State<_VideoView> {
                 ),
                 child: GestureDetector(
                   onPanEnd: (d) => _moveSelfView(d, MediaQuery.sizeOf(context)),
-                  child: _SelfView(state: s, label: strings.cameraOff),
+                  child: _SelfView(
+                    state: s,
+                    label: s.videoPausedForNetwork
+                        ? strings.videoPausedWeakConnection
+                        : strings.cameraOff,
+                  ),
                 ),
               ),
             ),
