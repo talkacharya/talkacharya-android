@@ -4,12 +4,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 import 'rtc_engine.dart';
+import 'sdp.dart';
 
 /// [RtcEngine] on `flutter_webrtc` — Google's open-source WebRTC stack, running on
 /// the phone. Opus audio with echo cancellation / noise suppression / AGC, VP8/H.264
 /// video, DTLS-SRTP encryption end to end (a TURN relay forwards encrypted packets it
 /// cannot read).
 class FlutterWebRtcEngine implements RtcEngine {
+  FlutterWebRtcEngine({this.maxAudioBitrate});
+
+  /// Optional ceiling on the Opus average bitrate — see [tuneOpus]. Unset by
+  /// default, which leaves libwebrtc's own adaptive rate alone.
+  final int? maxAudioBitrate;
+
   MediaStream? _local;
   bool _front = true;
   final _localVideo = StreamController<RtcVideoStream?>.broadcast();
@@ -73,7 +80,7 @@ class FlutterWebRtcEngine implements RtcEngine {
         await pc.addTrack(track, local);
       }
     }
-    return _WebRtcPeer(pc, video: video);
+    return _WebRtcPeer(pc, video: video, maxAudioBitrate: maxAudioBitrate);
   }
 
   @override
@@ -125,7 +132,9 @@ class FlutterWebRtcEngine implements RtcEngine {
 }
 
 class _WebRtcPeer implements RtcPeer {
-  _WebRtcPeer(this._pc, {required bool video}) : _video = video {
+  _WebRtcPeer(this._pc, {required bool video, int? maxAudioBitrate})
+    : _video = video,
+      _maxAudioBitrate = maxAudioBitrate {
     _pc.onIceCandidate = (c) {
       if (c.candidate == null) return;
       _candidates.add({
@@ -155,6 +164,7 @@ class _WebRtcPeer implements RtcPeer {
 
   final RTCPeerConnection _pc;
   final bool _video;
+  final int? _maxAudioBitrate;
   final _candidates = StreamController<Map<String, dynamic>>.broadcast();
   final _states = StreamController<RtcIceState>.broadcast();
   final _remoteVideo = StreamController<RtcVideoStream?>.broadcast();
@@ -191,8 +201,9 @@ class _WebRtcPeer implements RtcPeer {
       } catch (_) {}
     }
     final offer = await _pc.createOffer(constraints);
-    await _pc.setLocalDescription(offer);
-    return offer.sdp ?? '';
+    final sdp = tuneOpus(offer.sdp ?? '', maxAverageBitrate: _maxAudioBitrate);
+    await _pc.setLocalDescription(RTCSessionDescription(sdp, offer.type));
+    return sdp;
   }
 
   @override
@@ -200,8 +211,9 @@ class _WebRtcPeer implements RtcPeer {
     await _pc.setRemoteDescription(RTCSessionDescription(sdp, 'offer'));
     _remoteSet = true;
     final answer = await _pc.createAnswer(_mediaConstraints);
-    await _pc.setLocalDescription(answer);
-    return answer.sdp ?? '';
+    final tuned = tuneOpus(answer.sdp ?? '', maxAverageBitrate: _maxAudioBitrate);
+    await _pc.setLocalDescription(RTCSessionDescription(tuned, answer.type));
+    return tuned;
   }
 
   @override

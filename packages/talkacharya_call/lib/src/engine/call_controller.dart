@@ -197,6 +197,15 @@ class CallController extends Cubit<CallState> {
       _sounds.connected();
       return;
     }
+    // A call that drops and returns gets its own pair of tones — the first
+    // connect tone only ever plays once, so without these a recovery mid-call
+    // is silent and indistinguishable from the call having died.
+    if (to == CallPhase.reconnecting) {
+      _sounds.reconnecting();
+    } else if (to == CallPhase.connected &&
+        from == CallPhase.reconnecting) {
+      _sounds.reconnected();
+    }
     _syncRingback(to);
     if (to == CallPhase.ended && (wasRinging || from != CallPhase.idle)) {
       _sounds.ended();

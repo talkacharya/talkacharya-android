@@ -291,6 +291,10 @@ class _Sounds implements CallSounds {
   @override
   void connected() => played.add('connected');
   @override
+  void reconnecting() => played.add('reconnecting');
+  @override
+  void reconnected() => played.add('reconnected');
+  @override
   void ended() => played.add('ended');
 }
 
@@ -317,12 +321,22 @@ void main() {
       expect(custSounds.played, ['ring', 'stop', 'connected']);
       expect(astroSounds.played, ['connected']);
 
-      // a drop and recovery does not ring again or replay the connect tone
+      // A drop and recovery has its own pair of tones, but must not start the
+      // ringback again or replay the connect tone — the call never went back
+      // to being placed.
       cust.engine.last.ice.add(RtcIceState.disconnected);
       await _settle(20);
       cust.engine.last.ice.add(RtcIceState.connected);
       await _settle(20);
-      expect(custSounds.played, ['ring', 'stop', 'connected']);
+      expect(custSounds.played, [
+        'ring',
+        'stop',
+        'connected',
+        'reconnecting',
+        'reconnected',
+      ]);
+      expect(custSounds.played.where((x) => x == 'ring'), hasLength(1));
+      expect(custSounds.played.where((x) => x == 'connected'), hasLength(1));
 
       await cust.c.hangUp();
       await _settle();
@@ -532,6 +546,32 @@ void main() {
     await cust.c.close();
     await astro.c.close();
     await telecom.close();
+  });
+
+  test('sounds: dropping and recovering get their own tones', () async {
+    final hub = _Hub();
+    final sounds = _Sounds();
+    final cust = _side('customer', hub, sounds: sounds);
+    final astro = _side('astrologer', hub);
+    await cust.c.start();
+    await astro.c.start();
+    await _settle();
+    cust.engine.last.ice.add(RtcIceState.connected);
+    await _settle(20);
+    expect(sounds.played, contains('connected'));
+
+    cust.engine.last.ice.add(RtcIceState.disconnected);
+    await _settle(20);
+    expect(sounds.played.last, 'reconnecting');
+
+    cust.engine.last.ice.add(RtcIceState.connected);
+    await _settle(20);
+    // Not 'connected' again: that one only ever plays once, which is why a
+    // recovery used to be silent.
+    expect(sounds.played.last, 'reconnected');
+
+    await cust.c.close();
+    await astro.c.close();
   });
 
   test('a state report carries transport health to the server', () async {

@@ -119,6 +119,15 @@ abstract class CallSounds {
   /// Audio started flowing for the first time.
   void connected();
 
+  /// The call dropped and is being recovered. Distinct from every other tone
+  /// on purpose: on a call charged by the minute, someone who has just stopped
+  /// hearing the astrologer needs to know whether the call is coming back
+  /// without taking the phone from their ear to look.
+  void reconnecting();
+
+  /// ...and it came back.
+  void reconnected();
+
   /// The call (or the attempt to place it) ended.
   void ended();
 }
@@ -159,6 +168,10 @@ class NoopCallSounds implements CallSounds {
   void stopRingback() {}
   @override
   void connected() {}
+  @override
+  void reconnecting() {}
+  @override
+  void reconnected() {}
   @override
   void ended() {}
 }

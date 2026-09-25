@@ -13,7 +13,13 @@ enum SoundEffect {
   messageIn('message_in'),
   messageOut('message_out'),
   callConnected('call_connected'),
-  callEnded('call_ended');
+  callEnded('call_ended'),
+
+  /// The call dropped, and the call came back — deliberately unlike the
+  /// connect/end pair, so someone on a paid call can tell without looking
+  /// whether they have just lost the astrologer or got them back.
+  callReconnecting('call_reconnecting'),
+  callReconnected('call_reconnected');
 
   const SoundEffect(this.wireName);
   final String wireName;

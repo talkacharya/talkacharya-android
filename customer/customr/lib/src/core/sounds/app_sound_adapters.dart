@@ -23,6 +23,10 @@ class AppCallSounds implements CallSounds {
   @override
   void connected() => AppSounds.effect(SoundEffect.callConnected);
   @override
+  void reconnecting() => AppSounds.effect(SoundEffect.callReconnecting);
+  @override
+  void reconnected() => AppSounds.effect(SoundEffect.callReconnected);
+  @override
   void ended() => AppSounds.effect(SoundEffect.callEnded);
 }
 

@@ -36,7 +36,8 @@ import io.flutter.plugin.common.MethodChannel;
  *       caller is looking at the call screen).
  *   <li>{@code stop} — ends either loop.
  *   <li>{@code notify} — the default notification sound once (or a short buzz).
- *   <li>{@code effect} — short bundled tones: message in/out, call connected/ended.
+ *   <li>{@code effect} — short bundled tones: message in/out, call
+ *       connected/ended, and the pair that mark a call dropping and coming back.
  * </ul>
  */
 public class TalkacharyaSoundsPlugin implements FlutterPlugin, MethodChannel.MethodCallHandler {
@@ -196,6 +197,8 @@ public class TalkacharyaSoundsPlugin implements FlutterPlugin, MethodChannel.Met
         effects.put("message_out", pool.load(context, R.raw.ta_msg_out, 1));
         effects.put("call_connected", pool.load(context, R.raw.ta_call_connected, 1));
         effects.put("call_ended", pool.load(context, R.raw.ta_call_ended, 1));
+        effects.put("call_reconnecting", pool.load(context, R.raw.ta_call_reconnecting, 1));
+        effects.put("call_reconnected", pool.load(context, R.raw.ta_call_reconnected, 1));
     }
 
     // --- vibration --------------------------------------------------------
