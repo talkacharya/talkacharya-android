@@ -15,13 +15,15 @@ import '../ports/tts_engine.dart';
 
 part 'chat_session_state.dart';
 
-/// The chat engine for one consultation. Realtime-primary: the `conv:` socket
+/// The chat engine for one *thread* — the permanent conversation with an
+/// astrologer, which outlives the consultations inside it. Realtime-primary:
+/// the `conv:` socket
 /// drives updates; a slow poll runs only while the socket is down; REST is the
 /// authoritative backfill on reconnect. Optimistic sends reconcile by
 /// `clientMessageId`. Shared verbatim between the customer and astrologer apps.
 class ChatController extends Cubit<ChatSessionState> {
   ChatController({
-    required this.consultationId,
+    required this.threadId,
     required ChatTransport transport,
     required ChatRealtime realtime,
     required ChatIdentity identity,
@@ -40,7 +42,10 @@ class ChatController extends Cubit<ChatSessionState> {
        stt = stt ?? DeviceSttEngine(),
        super(const ChatSessionState());
 
-  final String consultationId;
+  /// The conversation's id. A consultation id also resolves server-side, but
+  /// the realtime channels are keyed on the thread, so passing one here would
+  /// subscribe to a channel nothing publishes to.
+  final String threadId;
   final ChatTransport _t;
   final ChatRealtime _rt;
   final ChatIdentity _id;
@@ -50,8 +55,8 @@ class ChatController extends Cubit<ChatSessionState> {
   final TtsEngine tts;
   final SttEngine stt;
 
-  String get _channel => 'conv:$consultationId';
-  String get _typingChannel => 'chattyping:$consultationId';
+  String get _channel => 'conv:$threadId';
+  String get _typingChannel => 'chattyping:$threadId';
   ChatIdentity get identity => _id;
 
   /// Whether the composer should show an image-attach button.
@@ -638,7 +643,7 @@ class ChatController extends Cubit<ChatSessionState> {
 
   Future<List<ChatMessage>> _loadOutbox() async {
     try {
-      return await _outbox.load(consultationId);
+      return await _outbox.load(threadId);
     } catch (_) {
       return const [];
     }
@@ -653,7 +658,7 @@ class ChatController extends Cubit<ChatSessionState> {
                   m.sendStatus == SendStatus.failed),
         )
         .toList();
-    unawaited(_outbox.save(consultationId, unsent));
+    unawaited(_outbox.save(threadId, unsent));
   }
 
   @override

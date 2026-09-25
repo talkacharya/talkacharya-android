@@ -35,7 +35,7 @@ class LiveSessionBanner extends StatelessWidget {
             final live = state.live.where((c) {
               final consultationId = c.window.consultationId;
               final open =
-                  c.id == presence.openId || consultationId == presence.openId;
+                  presence.isOpen(c.id) || presence.isOpen(consultationId);
               return !open &&
                   !hub.isFor(c.id) &&
                   !(consultationId != null && hub.isFor(consultationId));

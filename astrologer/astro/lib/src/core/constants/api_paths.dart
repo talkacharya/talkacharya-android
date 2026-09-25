@@ -77,20 +77,26 @@ class ApiPaths {
       '/astro/predictions/$id/release';
 
   // in-session chat / call — shared mount, participant-checked
-  static String messages(String id) => '/consultations/$id/messages';
-  static String messagesRead(String id) => '/consultations/$id/messages/read';
-  static String messagesDelivered(String id) =>
-      '/consultations/$id/messages/delivered';
-  static String messageTranslate(String id, int seq) =>
-      '/consultations/$id/messages/$seq/translate';
-  static String messagePins(String id) =>
-      '/consultations/$id/messages/pins';
 
+  /// The chats list: one thread per peer.
+  static const conversations = '/conversations';
+  static String conversation(String id) => '/conversations/$id';
+
+  // Everything inside a thread is keyed on the thread, not on the session
+  // running in it — a room outlives its consultation.
+  static String messages(String id) => '/conversations/$id/messages';
+  static String messagesRead(String id) => '/conversations/$id/messages/read';
+  static String messagesDelivered(String id) =>
+      '/conversations/$id/messages/delivered';
+  static String messageTranslate(String id, int seq) =>
+      '/conversations/$id/messages/$seq/translate';
+  static String messagePins(String id) => '/conversations/$id/messages/pins';
   static String messageReport(String id, int seq) =>
-      '/consultations/$id/messages/$seq/report';
-  static String typing(String id) => '/consultations/$id/typing';
-  static String chatPresence(String id) => '/consultations/$id/presence';
-  static String attachments(String id) => '/consultations/$id/attachments';
+      '/conversations/$id/messages/$seq/report';
+  static String typing(String id) => '/conversations/$id/typing';
+  static String chatPresence(String id) => '/conversations/$id/presence';
+  static String attachments(String id) => '/conversations/$id/attachments';
+
   static String rtcToken(String id) => '/consultations/$id/rtc-token';
 
   // earnings & payouts

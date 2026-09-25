@@ -8,8 +8,8 @@ import '../models/chat_message.dart';
 abstract class ChatOutbox {
   const ChatOutbox();
 
-  Future<List<ChatMessage>> load(String consultationId);
-  Future<void> save(String consultationId, List<ChatMessage> unsent);
+  Future<List<ChatMessage>> load(String threadId);
+  Future<void> save(String threadId, List<ChatMessage> unsent);
 
   /// Serialise the minimum needed to re-send a message.
   static Map<String, dynamic> encode(ChatMessage m) => {
@@ -51,8 +51,8 @@ class NoopChatOutbox extends ChatOutbox {
   const NoopChatOutbox();
 
   @override
-  Future<List<ChatMessage>> load(String consultationId) async => const [];
+  Future<List<ChatMessage>> load(String threadId) async => const [];
 
   @override
-  Future<void> save(String consultationId, List<ChatMessage> unsent) async {}
+  Future<void> save(String threadId, List<ChatMessage> unsent) async {}
 }

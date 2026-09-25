@@ -5,17 +5,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/realtime/realtime_client.dart';
 import '../../data/consultation_api.dart';
 import '../../data/models/consultation.dart';
+import '../../data/models/conversation.dart';
 import '../../../../core/network/friendly_error.dart';
 
 class ChatState {
   const ChatState({
     this.loading = true,
+    this.conversation,
     this.consultation,
     this.clientLowBalance = false,
     this.clientRunwaySeconds,
     this.error,
   });
   final bool loading;
+
+  /// The permanent thread. The room exists even when no session runs in it.
+  final Conversation? conversation;
+
+  /// The session this room is about: the live one, else the most recent — the
+  /// wrap-up and the earnings line still belong to it after it ends.
   final Consultation? consultation;
 
   /// The customer's wallet is running low (from a `billing.low_balance` frame on
@@ -27,14 +35,26 @@ class ChatState {
   final int? clientRunwaySeconds;
   final String? error;
 
+  SendingWindow get window => conversation?.window ?? const SendingWindow();
+
+  /// Whether the composer is live: during a paid session, and through the
+  /// free follow-up window after one ends.
+  bool get canSend => window.canSend;
+
+  /// History only — nothing more can be written in this thread until the
+  /// customer starts another consultation.
+  bool get isClosed => conversation != null && window.isClosed;
+
   ChatState copyWith({
     bool? loading,
+    Conversation? conversation,
     Consultation? consultation,
     bool? clientLowBalance,
     int? clientRunwaySeconds,
     Object? error = _s,
   }) => ChatState(
     loading: loading ?? this.loading,
+    conversation: conversation ?? this.conversation,
     consultation: consultation ?? this.consultation,
     clientLowBalance: clientLowBalance ?? this.clientLowBalance,
     clientRunwaySeconds: clientRunwaySeconds ?? this.clientRunwaySeconds,
@@ -50,14 +70,17 @@ class ChatCubit extends Cubit<ChatState> {
   ChatCubit({
     required ConsultationApi api,
     required RealtimeClient realtime,
-    required this.consultationId,
+    required this.threadId,
   }) : _api = api,
        _realtime = realtime,
        super(const ChatState());
 
   final ConsultationApi _api;
   final RealtimeClient _realtime;
-  final String consultationId;
+
+  /// Either id resolves — the server accepts a consultation's too — but the
+  /// realtime channel is keyed on the thread.
+  final String threadId;
 
   Timer? _poll;
   StreamSubscription<Map<String, dynamic>>? _frames;
@@ -69,19 +92,27 @@ class ChatCubit extends Cubit<ChatState> {
     await _frames?.cancel();
     if (!state.loading) emit(state.copyWith(loading: true, error: null));
     try {
-      emit(
-        state.copyWith(
-          loading: false,
-          consultation: await _api.detail(consultationId),
-        ),
-      );
+      final conversation = await _api.conversation(threadId);
+      emit(state.copyWith(loading: false, conversation: conversation));
+      await _loadSession(conversation);
+      _frames = _realtime
+          .channelFrames('conv:${conversation.id}')
+          .listen(_onFrame, onError: (_) {});
     } catch (e) {
       emit(state.copyWith(loading: false, error: friendlyError(e)));
     }
     _poll = Timer.periodic(const Duration(seconds: 8), (_) => _refreshDetail());
-    _frames = _realtime
-        .channelFrames('conv:$consultationId')
-        .listen(_onFrame, onError: (_) {});
+  }
+
+  Future<void> _loadSession(Conversation conversation) async {
+    final id =
+        conversation.window.consultationId ?? conversation.lastConsultationId;
+    if (id == null) return;
+    try {
+      emit(state.copyWith(consultation: await _api.detail(id)));
+    } catch (_) {
+      // the thread still opens; only the session chrome is missing
+    }
   }
 
   void _onFrame(Map<String, dynamic> frame) {
@@ -107,24 +138,30 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
-  /// Re-read the consultation (e.g. after the call ended on the other side).
+  /// Re-read the thread and its session (e.g. after the call ended on the
+  /// other side).
   Future<void> refresh() => _refreshDetail();
 
   Future<void> _refreshDetail() async {
-    final c = state.consultation;
-    if (c != null && c.isTerminal) {
+    // Keep polling past the end of a session: the window still moves from
+    // follow-up to closed, and the composer follows it.
+    if (state.isClosed) {
       _poll?.cancel();
       return;
     }
     try {
-      emit(state.copyWith(consultation: await _api.detail(consultationId)));
+      final conversation = await _api.conversation(threadId);
+      emit(state.copyWith(conversation: conversation));
+      await _loadSession(conversation);
     } catch (_) {}
   }
 
   /// Ends the session; returns whether the backend accepted it.
   Future<bool> endConsultation() async {
+    final id = state.window.consultationId ?? state.consultation?.id;
+    if (id == null) return false;
     try {
-      await _api.end(consultationId);
+      await _api.end(id);
       await _refreshDetail();
       return true;
     } catch (e) {

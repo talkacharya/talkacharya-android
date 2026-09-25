@@ -25,7 +25,7 @@ class LiveSessionBanner extends StatelessWidget {
         buildWhen: (a, b) => a.active != b.active,
         builder: (context, state) {
           final live = state.active
-              .where((c) => c.id != presence.openId)
+              .where((c) => !presence.isOpen(c.id))
               .toList();
           return Column(
             children: [

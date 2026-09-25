@@ -1508,4 +1508,28 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get callVideoPausedWeak => 'वीडियो रुका — नेटवर्क कमज़ोर है';
+
+  @override
+  String get roomFollowUpOpen => 'निःशुल्क फ़ॉलो-अप — उत्तर के लिए शुल्क नहीं';
+
+  @override
+  String roomFollowUpHours(int hours) {
+    return 'निःशुल्क फ़ॉलो-अप और $hours घंटे खुला';
+  }
+
+  @override
+  String roomFollowUpMinutes(int minutes) {
+    return 'निःशुल्क फ़ॉलो-अप और $minutes मिनट खुला';
+  }
+
+  @override
+  String get roomFollowUpHint => 'उत्तर दें (निःशुल्क फ़ॉलो-अप)';
+
+  @override
+  String get chatsFollowUpOpen => 'निःशुल्क फ़ॉलो-अप खुला';
+
+  @override
+  String chatsYouPrefix(String body) {
+    return 'आप: $body';
+  }
 }

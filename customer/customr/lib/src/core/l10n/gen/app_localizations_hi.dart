@@ -6961,4 +6961,23 @@ class AppLocalizationsHi extends AppLocalizations {
   String roomYouRated(Object rating) {
     return 'आपने इस सत्र को $rating/5 रेट किया';
   }
+
+  @override
+  String get roomFollowUpOpen => 'निःशुल्क फ़ॉलो-अप — कुछ और पूछें';
+
+  @override
+  String roomFollowUpHours(int hours) {
+    return 'और $hours घंटे निःशुल्क फ़ॉलो-अप';
+  }
+
+  @override
+  String roomFollowUpMinutes(int minutes) {
+    return 'और $minutes मिनट निःशुल्क फ़ॉलो-अप';
+  }
+
+  @override
+  String get roomClosedHint => 'फ़ॉलो-अप का समय समाप्त।';
+
+  @override
+  String get roomStartConsultation => 'परामर्श शुरू करें';
 }

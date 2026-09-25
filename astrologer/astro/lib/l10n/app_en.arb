@@ -767,5 +767,44 @@
   "callVideoPausedWeak": "Video paused — weak connection",
   "@callVideoPausedWeak": {
     "description": "Self-view label when the network, not the user, paused the camera"
+  },
+  "roomFollowUpOpen": "Free follow-up — replies are not charged",
+  "@roomFollowUpOpen": {
+    "description": "Free follow-up window after a session ends"
+  },
+  "roomFollowUpHours": "Free follow-up open for {hours}h more",
+  "@roomFollowUpHours": {
+    "description": "Free follow-up window after a session ends",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "roomFollowUpMinutes": "Free follow-up open for {minutes} min more",
+  "@roomFollowUpMinutes": {
+    "description": "Free follow-up window after a session ends",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "roomFollowUpHint": "Reply (free follow-up)",
+  "@roomFollowUpHint": {
+    "description": "Free follow-up window after a session ends"
+  },
+  "chatsFollowUpOpen": "Free follow-up open",
+  "@chatsFollowUpOpen": {
+    "description": "Chats tab thread rows"
+  },
+  "chatsYouPrefix": "You: {body}",
+  "@chatsYouPrefix": {
+    "description": "Chats tab thread rows",
+    "placeholders": {
+      "body": {
+        "type": "String"
+      }
+    }
   }
 }

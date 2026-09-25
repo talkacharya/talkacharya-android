@@ -1512,4 +1512,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get callVideoPausedWeak => 'Video paused — weak connection';
+
+  @override
+  String get roomFollowUpOpen => 'Free follow-up — replies are not charged';
+
+  @override
+  String roomFollowUpHours(int hours) {
+    return 'Free follow-up open for ${hours}h more';
+  }
+
+  @override
+  String roomFollowUpMinutes(int minutes) {
+    return 'Free follow-up open for $minutes min more';
+  }
+
+  @override
+  String get roomFollowUpHint => 'Reply (free follow-up)';
+
+  @override
+  String get chatsFollowUpOpen => 'Free follow-up open';
+
+  @override
+  String chatsYouPrefix(String body) {
+    return 'You: $body';
+  }
 }

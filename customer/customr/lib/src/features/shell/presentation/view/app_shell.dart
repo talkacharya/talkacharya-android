@@ -57,7 +57,7 @@ class _AppShellState extends State<AppShell> {
         // shell's own location never names it — asking the router here always
         // said "not in the room" and interrupted people mid-conversation with a
         // toast (and a second tone) for the message already on their screen.
-        final here = getIt<RoomPresence>().openId == consultationId;
+        final here = getIt<RoomPresence>().isOpen(consultationId);
         if (!here) {
           AppSounds.notify();
           _toast(

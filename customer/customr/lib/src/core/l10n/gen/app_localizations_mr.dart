@@ -6865,4 +6865,23 @@ class AppLocalizationsMr extends AppLocalizations {
   String roomYouRated(Object rating) {
     return 'You rated this session $rating/5';
   }
+
+  @override
+  String get roomFollowUpOpen => 'Free follow-up — ask anything else';
+
+  @override
+  String roomFollowUpHours(int hours) {
+    return 'Free follow-up for ${hours}h more';
+  }
+
+  @override
+  String roomFollowUpMinutes(int minutes) {
+    return 'Free follow-up for $minutes min more';
+  }
+
+  @override
+  String get roomClosedHint => 'Follow-up time is over.';
+
+  @override
+  String get roomStartConsultation => 'Start consultation';
 }

@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import '../../../../core/realtime/realtime_client.dart';
 import '../../data/consultation_repository.dart';
 import '../../data/models/consultation.dart';
+import '../../data/models/conversation.dart';
 import '../../../../core/network/friendly_error.dart';
 
 part 'chat_state.dart';
@@ -33,15 +34,36 @@ class ChatCubit extends Cubit<ChatState> {
   Future<void> init() async {
     emit(state.copyWith(loading: true, clearError: true));
     try {
-      final consultation = await _repo.detail(consultationId);
-      emit(state.copyWith(loading: false, consultation: consultation));
+      // `consultationId` may be either id — the server resolves both — but the
+      // realtime channel is keyed on the thread, so subscribe only once we
+      // know which thread this is.
+      final conversation = await _repo.conversation(consultationId);
+      emit(state.copyWith(loading: false, conversation: conversation));
+      await _loadLiveConsultation(conversation);
+      _frames = _realtime
+          .channelFrames('conv:${conversation.id}')
+          .listen(_onFrame, onError: (_) {});
     } catch (e) {
       emit(state.copyWith(loading: false, error: friendlyError(e)));
     }
     _startPolling();
-    _frames = _realtime
-        .channelFrames('conv:$consultationId')
-        .listen(_onFrame, onError: (_) {});
+  }
+
+  /// The session this room is about: the live one when there is one, else the
+  /// most recent — the wrap-up and the rating still belong to it after it
+  /// ends, and the thread outlives both.
+  Future<void> _loadLiveConsultation(Conversation conversation) async {
+    final id =
+        conversation.window.consultationId ?? conversation.lastConsultationId;
+    if (id == null) {
+      emit(state.copyWith(clearConsultation: true));
+      return;
+    }
+    try {
+      emit(state.copyWith(consultation: await _repo.detail(id)));
+    } catch (_) {
+      // the thread still opens; only the session chrome is missing
+    }
   }
 
   void _onFrame(Map<String, dynamic> frame) {
@@ -111,13 +133,23 @@ class ChatCubit extends Cubit<ChatState> {
   /// Re-read the consultation (e.g. after the call ended on the other side).
   Future<void> refresh() => _refreshDetail();
 
-  Future<void> _refreshDetail() async {
+  /// Re-read the thread (its window may have moved from live to follow-up to
+  /// closed) and whatever session is in it.
+  Future<void> _refreshThread() async {
     try {
-      final c = await _repo.detail(consultationId);
-      emit(state.copyWith(consultation: c));
-      if (c.status.isTerminal) _poll?.cancel();
+      final conversation = await _repo.conversation(consultationId);
+      emit(state.copyWith(conversation: conversation));
+      await _loadLiveConsultation(conversation);
+      // Nothing left to poll for once the thread stops taking messages; a new
+      // consultation re-opens the room through its own realtime frame.
+      if (conversation.window.isClosed) _poll?.cancel();
     } catch (_) {}
   }
+
+  /// Everything that used to ask "what is this consultation doing?" now asks
+  /// the thread, because the answer may be "nothing — it ended, and we are in
+  /// the follow-up window".
+  Future<void> _refreshDetail() => _refreshThread();
 
   void _applyBilling({int? runway, String? gross}) {
     final c = state.consultation;

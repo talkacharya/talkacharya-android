@@ -12031,6 +12031,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You rated this session {rating}/5'**
   String roomYouRated(Object rating);
+
+  /// Room follow-up window / closed-thread affordances
+  ///
+  /// In en, this message translates to:
+  /// **'Free follow-up — ask anything else'**
+  String get roomFollowUpOpen;
+
+  /// Room follow-up window / closed-thread affordances
+  ///
+  /// In en, this message translates to:
+  /// **'Free follow-up for {hours}h more'**
+  String roomFollowUpHours(int hours);
+
+  /// Room follow-up window / closed-thread affordances
+  ///
+  /// In en, this message translates to:
+  /// **'Free follow-up for {minutes} min more'**
+  String roomFollowUpMinutes(int minutes);
+
+  /// Room follow-up window / closed-thread affordances
+  ///
+  /// In en, this message translates to:
+  /// **'Follow-up time is over.'**
+  String get roomClosedHint;
+
+  /// Room follow-up window / closed-thread affordances
+  ///
+  /// In en, this message translates to:
+  /// **'Start consultation'**
+  String get roomStartConsultation;
 }
 
 class _AppLocalizationsDelegate

@@ -5,6 +5,7 @@ import 'package:astro/src/core/realtime/realtime_client.dart';
 import 'package:astro/src/core/theme/astro_palette.dart';
 import 'package:astro/src/features/consultations/data/consultation_api.dart';
 import 'package:astro/src/features/consultations/data/models/consultation.dart';
+import 'package:astro/src/features/consultations/data/models/conversation.dart';
 import 'package:astro/src/features/consultations/presentation/cubit/chat_cubit.dart';
 import 'package:astro/src/features/consultations/presentation/view/consultation_room_page.dart';
 import 'package:astro/src/features/notifications/presentation/view/notifications_page.dart';
@@ -22,6 +23,23 @@ Consultation _c({String status = 'active'}) => Consultation.fromJson({
   'status': status,
   'customer_name': 'Asha',
   'started_at': '2026-09-16T10:00:00Z',
+});
+
+/// A thread with a live session inside it — what `/conversations/<id>` returns
+/// while a consultation is running.
+Conversation _thread({
+  String reason = 'consultation',
+  bool canSend = true,
+  String? consultationId = 'c1',
+}) => Conversation.fromJson({
+  'id': 't1',
+  'peer': {'id': 'u1', 'name': 'Asha'},
+  'last_consultation': 'c1',
+  'window': {
+    'can_send': canSend,
+    'reason': reason,
+    'consultation': consultationId,
+  },
 });
 
 void main() {
@@ -85,14 +103,16 @@ void main() {
       api = _MockApi();
       rt = _MockRealtime();
       frames = StreamController.broadcast();
-      when(() => rt.channelFrames('conv:c1')).thenAnswer((_) => frames.stream);
+      // The channel is the thread's, not the session's — a session-keyed
+      // channel is dead the moment the consultation ends.
+      when(() => rt.channelFrames('conv:t1')).thenAnswer((_) => frames.stream);
+      when(() => api.conversation('c1')).thenAnswer((_) async => _thread());
       when(() => api.detail('c1')).thenAnswer((_) async => _c());
     });
 
     tearDown(() => frames.close());
 
-    ChatCubit build() =>
-        ChatCubit(api: api, realtime: rt, consultationId: 'c1');
+    ChatCubit build() => ChatCubit(api: api, realtime: rt, threadId: 'c1');
 
     test('parses started_at and tracks the customer runway', () async {
       final cubit = build();
@@ -135,15 +155,44 @@ void main() {
     });
 
     test('init can be retried after a failure', () async {
-      when(() => api.detail('c1')).thenThrow(Exception('offline'));
+      when(() => api.conversation('c1')).thenThrow(Exception('offline'));
       final cubit = build();
       await cubit.init();
-      expect(cubit.state.consultation, isNull);
+      expect(cubit.state.conversation, isNull);
       expect(cubit.state.loading, isFalse);
 
-      when(() => api.detail('c1')).thenAnswer((_) async => _c());
+      when(() => api.conversation('c1')).thenAnswer((_) async => _thread());
       await cubit.init();
+      expect(cubit.state.conversation?.id, 't1');
       expect(cubit.state.consultation?.id, 'c1');
+      await cubit.close();
+    });
+
+    test('the composer follows the thread, not the ended session', () async {
+      when(() => api.conversation('c1')).thenAnswer(
+        (_) async => _thread(reason: 'follow_up', consultationId: null),
+      );
+      when(() => api.detail('c1')).thenAnswer((_) async => _c(status: 'ended'));
+      final cubit = build();
+      await cubit.init();
+      // The session is over and unbilled, but the astrologer can still answer.
+      expect(cubit.state.consultation?.isEnded, isTrue);
+      expect(cubit.state.canSend, isTrue);
+      expect(cubit.state.window.isFollowUp, isTrue);
+      expect(cubit.state.isClosed, isFalse);
+      await cubit.close();
+    });
+
+    test('a closed thread closes the composer', () async {
+      when(() => api.conversation('c1')).thenAnswer(
+        (_) async =>
+            _thread(reason: 'closed', canSend: false, consultationId: null),
+      );
+      when(() => api.detail('c1')).thenAnswer((_) async => _c(status: 'ended'));
+      final cubit = build();
+      await cubit.init();
+      expect(cubit.state.canSend, isFalse);
+      expect(cubit.state.isClosed, isTrue);
       await cubit.close();
     });
   });

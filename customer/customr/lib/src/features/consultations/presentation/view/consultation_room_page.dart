@@ -11,6 +11,7 @@ import '../../../../core/l10n/l10n.dart';
 import '../../../../core/realtime/realtime_client.dart';
 import '../../../../core/router/routes.dart';
 import '../../../../features/auth/presentation/bloc/auth/auth_bloc.dart';
+import '../../../../core/network/friendly_error.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../follows/presentation/widgets/follow_widgets.dart';
 import '../../../gifting/data/models/gift.dart';
@@ -21,6 +22,7 @@ import '../../data/call_adapters.dart';
 import '../../data/chat_adapters.dart';
 import '../../data/consultation_repository.dart';
 import '../../data/models/consultation.dart';
+import '../../data/models/conversation.dart';
 import '../cubit/chat_cubit.dart';
 import '../room_presence.dart';
 import 'book_consultation_sheet.dart';
@@ -34,13 +36,67 @@ import '../../../store/presentation/view/consults_pages.dart';
 /// is in: waiting for accept → live chat → ended summary. The live chat surface
 /// is the shared `talkacharya_chat` engine; this page owns the shell (billing,
 /// status, end/review).
-class ConsultationRoomPage extends StatelessWidget {
+/// Resolves whatever id the route carried — a thread's, or one of its
+/// consultations' — into the thread, before anything else is built.
+///
+/// It has to happen first: the realtime channels are keyed on the conversation,
+/// so a room built with a consultation id would subscribe to a channel nothing
+/// publishes to and sit there silent.
+class ConsultationRoomPage extends StatefulWidget {
   const ConsultationRoomPage({required this.consultationId, super.key});
   final String consultationId;
 
   @override
+  State<ConsultationRoomPage> createState() => _ConsultationRoomPageState();
+}
+
+class _ConsultationRoomPageState extends State<ConsultationRoomPage> {
+  late final Future<Conversation> _thread;
+
+  @override
+  void initState() {
+    super.initState();
+    _thread = getIt<ConsultationRepository>().conversation(
+      widget.consultationId,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Conversation>(
+      future: _thread,
+      builder: (context, snap) {
+        if (snap.connectionState != ConnectionState.done) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        final thread = snap.data;
+        if (thread == null) {
+          return Scaffold(
+            appBar: AppBar(),
+            body: ErrorView(
+              message: snap.error == null
+                  ? context.l10n.roomOpenError
+                  : friendlyError(snap.error!),
+              onRetry: () => setState(() {}),
+            ),
+          );
+        }
+        return _RoomScope(threadId: thread.id);
+      },
+    );
+  }
+}
+
+class _RoomScope extends StatelessWidget {
+  const _RoomScope({required this.threadId});
+  final String threadId;
+
+  @override
   Widget build(BuildContext context) {
     final user = getIt<AuthBloc>().state.user;
+    final consultationId = threadId;
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -52,7 +108,7 @@ class ConsultationRoomPage extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => ChatController(
-            consultationId: consultationId,
+            threadId: consultationId,
             transport: DioChatTransport(getIt(), consultationId),
             realtime: RealtimeChatAdapter(getIt<RealtimeClient>()),
             identity: CustomerChatIdentity(
@@ -102,10 +158,13 @@ class _PresenceScopeState extends State<_PresenceScope> {
 
   @override
   Widget build(BuildContext context) {
-    final isCall = context.select(
-      (ChatCubit c) => c.state.consultation?.channel != 'chat',
+    final session = context.select((ChatCubit c) => c.state.consultation);
+    final live = context.select((ChatCubit c) => c.state.window).consultationId;
+    _presence.opened(
+      widget.consultationId,
+      isCall: session != null && session.channel != 'chat',
+      consultationId: live ?? session?.id,
     );
-    _presence.opened(widget.consultationId, isCall: isCall);
     return widget.child;
   }
 }
@@ -149,7 +208,11 @@ class _RoomView extends StatelessWidget {
         // Every other terminal case (rejected/cancelled/expired/no-show, or a
         // call) never had a chat worth preserving, so it keeps the summary.
         if (c.status.isTerminal) {
-          if (c.channel == 'chat' && c.status == ConsultationStatus.ended) {
+          // A call that ended is a receipt only once the thread has closed
+          // too — while the free follow-up window is open the room is where
+          // the customer asks the rest of their question.
+          if (c.status == ConsultationStatus.ended &&
+              (c.channel == 'chat' || state.canSend)) {
             return _ChatShell(consultation: c, lowBalance: state.lowBalance);
           }
           return _SummaryView(consultation: c);
@@ -505,7 +568,10 @@ class _ChatShellState extends State<_ChatShell> {
   Widget build(BuildContext context) {
     final c = widget.consultation;
     final ended = c.status == ConsultationStatus.ended;
-    final canChat = c.status.canChat;
+    // The thread decides whether the composer is live, not the session: it
+    // stays open, unbilled, through the free follow-up window after one ends.
+    final window = context.select((ChatCubit cubit) => cubit.state.window);
+    final canChat = window.canSend;
     final scheme = Theme.of(context).colorScheme;
     final l10n = context.l10n;
 
@@ -622,12 +688,14 @@ class _ChatShellState extends State<_ChatShell> {
               lowBalance: widget.lowBalance,
               onRecharge: () => showRechargeSheet(context),
             ),
+          if (window.isFollowUp) _FollowUpBar(until: window.followUpUntil),
           Expanded(child: ChatView(composerEnabled: canChat)),
           // Below the transcript, not above it: a chat scrolls to the newest
           // message by default, so a rating prompt pinned above the messages
           // sits off-screen above whatever the customer actually lands on —
           // down here it takes the composer's old spot, so it's the first
           // thing in view, no scrolling required.
+          if (window.isClosed) _StartConsultationBar(consultation: c),
           if (ended)
             SafeArea(
               top: false,
@@ -1251,4 +1319,95 @@ class _SummaryViewState extends State<_SummaryView> {
         ConsultationStatus.noShow => l10n.roomStatusNoShow,
         _ => l10n.roomStatusClosed,
       };
+}
+
+/// The free follow-up window: the session is over and nothing is being
+/// charged, but the astrologer is still answering.
+class _FollowUpBar extends StatelessWidget {
+  const _FollowUpBar({required this.until});
+  final DateTime? until;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final l10n = context.l10n;
+    final left = until?.difference(DateTime.now());
+    final label = left == null || left.isNegative
+        ? l10n.roomFollowUpOpen
+        : (left.inHours >= 1
+              ? l10n.roomFollowUpHours(left.inHours)
+              : l10n.roomFollowUpMinutes(left.inMinutes.clamp(1, 59)));
+    return Material(
+      color: scheme.tertiaryContainer,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(
+          children: [
+            Icon(
+              Icons.chat_bubble_outline_rounded,
+              size: 15,
+              color: scheme.onTertiaryContainer,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: scheme.onTertiaryContainer,
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Where the composer would be once the thread has closed: the history stays
+/// readable, and starting another consultation is one tap rather than a trip
+/// back through search.
+class _StartConsultationBar extends StatelessWidget {
+  const _StartConsultationBar({required this.consultation});
+  final Consultation consultation;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final l10n = context.l10n;
+    return SafeArea(
+      top: false,
+      child: Material(
+        elevation: 3,
+        color: scheme.surface,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  l10n.roomClosedHint,
+                  style: TextStyle(
+                    color: scheme.onSurfaceVariant,
+                    fontSize: 12.5,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              FilledButton(
+                // Their profile rather than a booking sheet: rates and which
+                // channels they are taking change between sessions, and the
+                // ones on a finished consultation are whatever they were then.
+                onPressed: () =>
+                    context.push(Routes.astrologer(consultation.astrologerId)),
+                child: Text(l10n.roomStartConsultation),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

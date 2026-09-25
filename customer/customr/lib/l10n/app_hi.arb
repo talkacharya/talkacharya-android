@@ -2880,5 +2880,10 @@
   "profileSoundVibrationSub": "रिंगटोन, आवाज़ें और कंपन",
   "roomEndedSummaryLine": "{minutes} मिनट · {currency} {amount}",
   "roomViewSummary": "सारांश",
-  "roomYouRated": "आपने इस सत्र को {rating}/5 रेट किया"
+  "roomYouRated": "आपने इस सत्र को {rating}/5 रेट किया",
+  "roomFollowUpOpen": "निःशुल्क फ़ॉलो-अप — कुछ और पूछें",
+  "roomFollowUpHours": "और {hours} घंटे निःशुल्क फ़ॉलो-अप",
+  "roomFollowUpMinutes": "और {minutes} मिनट निःशुल्क फ़ॉलो-अप",
+  "roomClosedHint": "फ़ॉलो-अप का समय समाप्त।",
+  "roomStartConsultation": "परामर्श शुरू करें"
 }

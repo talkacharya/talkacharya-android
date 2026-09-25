@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/realtime/realtime_client.dart';
 import '../../../../core/realtime/realtime_event.dart';
 import '../../../consultations/data/consultation_api.dart';
-import '../../../consultations/data/models/consultation.dart';
+import '../../../consultations/data/models/conversation.dart';
 import '../../../../core/network/friendly_error.dart';
 
 class ChatsState extends Equatable {
@@ -19,27 +19,28 @@ class ChatsState extends Equatable {
 
   final bool loading;
 
-  /// Every conversation that got past the request stage, newest first.
-  final List<Consultation> all;
+  /// One permanent thread per customer, newest activity first.
+  final List<Conversation> all;
   final String query;
   final String? error;
 
-  List<Consultation> get _filtered {
+  List<Conversation> get _filtered {
     final q = query.trim().toLowerCase();
     if (q.isEmpty) return all;
     return all.where((c) => c.customerName.toLowerCase().contains(q)).toList();
   }
 
-  List<Consultation> get live => _filtered.where((c) => c.isLive).toList();
-  List<Consultation> get recent => _filtered.where((c) => !c.isLive).toList();
+  List<Conversation> get live => _filtered.where((c) => c.isLive).toList();
+  List<Conversation> get recent => _filtered.where((c) => !c.isLive).toList();
 
-  /// Unread messages across live conversations — the Chats nav badge.
-  int get totalUnread =>
-      all.where((c) => c.isLive).fold(0, (sum, c) => sum + c.unreadCount);
+  /// Unread messages across every thread — the Chats nav badge. Not just the
+  /// live ones: a message can arrive in the free follow-up window too, and a
+  /// badge that ignored it would be the one that loses the customer.
+  int get totalUnread => all.fold(0, (sum, c) => sum + c.unread);
 
   ChatsState copyWith({
     bool? loading,
-    List<Consultation>? all,
+    List<Conversation>? all,
     String? query,
     Object? error = _s,
   }) => ChatsState(
@@ -68,12 +69,10 @@ class ChatsCubit extends Cubit<ChatsState> {
   Timer? _poll;
   Timer? _coalesce;
 
-  static const statuses = 'accepted,active,ended,no_show';
-
   Future<void> load() async {
     emit(state.copyWith(loading: state.all.isEmpty, error: null));
     try {
-      final all = await _api.list(status: statuses);
+      final all = await _api.conversations();
       if (!isClosed) emit(state.copyWith(loading: false, all: all));
     } catch (e) {
       if (!isClosed) {

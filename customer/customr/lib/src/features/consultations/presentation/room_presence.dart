@@ -7,25 +7,43 @@ import 'package:flutter/foundation.dart';
 /// call are *pushed* on top instead of replacing the stack — replacing it would
 /// dispose the call controller and drop the call.
 class RoomPresence extends ChangeNotifier {
-  String? _openId;
+  String? _threadId;
+  String? _consultationId;
   bool _isCall = false;
 
-  /// Consultation whose room is mounted, or null.
-  String? get openId => _openId;
+  /// The thread whose room is mounted, or null. Realtime frames and the chats
+  /// list are keyed on this.
+  String? get openId => _threadId;
+
+  /// The paid session running inside that room, when there is one. The
+  /// "live consultation" banner is about sessions, not threads, so it needs
+  /// this one — a thread id would never match and the banner would sit there
+  /// telling you to return to the room you are already in.
+  String? get openConsultationId => _consultationId;
 
   /// True while the open room is a voice/video call.
-  bool get callOnScreen => _openId != null && _isCall;
+  bool get callOnScreen => _threadId != null && _isCall;
 
-  void opened(String consultationId, {required bool isCall}) {
-    if (_openId == consultationId && _isCall == isCall) return;
-    _openId = consultationId;
+  /// Whether [id] names the open room, by either id.
+  bool isOpen(String? id) =>
+      id != null && (id == _threadId || id == _consultationId);
+
+  void opened(String threadId, {required bool isCall, String? consultationId}) {
+    if (_threadId == threadId &&
+        _isCall == isCall &&
+        _consultationId == consultationId) {
+      return;
+    }
+    _threadId = threadId;
+    _consultationId = consultationId;
     _isCall = isCall;
     notifyListeners();
   }
 
-  void closed(String consultationId) {
-    if (_openId != consultationId) return;
-    _openId = null;
+  void closed(String threadId) {
+    if (_threadId != threadId) return;
+    _threadId = null;
+    _consultationId = null;
     _isCall = false;
     notifyListeners();
   }

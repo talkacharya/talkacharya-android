@@ -25,6 +25,7 @@ import '../../data/call_adapters.dart';
 import '../../data/chat_adapters.dart';
 import '../../data/consultation_api.dart';
 import '../../data/models/consultation.dart';
+import '../../data/models/conversation.dart';
 import '../cubit/chat_cubit.dart';
 import '../room_presence.dart';
 import '../widgets/consultation_style.dart';
@@ -32,9 +33,54 @@ import '../widgets/consultation_style.dart';
 /// The astrologer's consultation room: the shared chat engine (or the shared
 /// call screen) inside an astrologer shell — live session bar, the customer's
 /// question, kundali, and ending the session.
-class ConsultationRoomPage extends StatelessWidget {
+class ConsultationRoomPage extends StatefulWidget {
   const ConsultationRoomPage({required this.consultationId, super.key});
+
+  /// Either id: a push or a deep link carries a consultation's, the Chats tab
+  /// carries the thread's.
   final String consultationId;
+
+  @override
+  State<ConsultationRoomPage> createState() => _ConsultationRoomPageState();
+}
+
+class _ConsultationRoomPageState extends State<ConsultationRoomPage> {
+  late Future<Conversation> _thread = _resolve();
+
+  Future<Conversation> _resolve() =>
+      getIt<ConsultationApi>().conversation(widget.consultationId);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Conversation>(
+      future: _thread,
+      builder: (context, snap) {
+        if (snap.connectionState != ConnectionState.done) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        final thread = snap.data;
+        if (thread == null) {
+          return Scaffold(
+            appBar: AppBar(),
+            body: ErrorView(
+              message: context.l10n.roomLoadError,
+              onRetry: () => setState(() => _thread = _resolve()),
+            ),
+          );
+        }
+        return _RoomScope(threadId: thread.id);
+      },
+    );
+  }
+}
+
+/// Everything below is keyed on the thread: the chat engine, its realtime
+/// channel and the outbox all outlive the session running inside it.
+class _RoomScope extends StatelessWidget {
+  const _RoomScope({required this.threadId});
+  final String threadId;
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +91,13 @@ class ConsultationRoomPage extends StatelessWidget {
           create: (_) => ChatCubit(
             api: getIt<ConsultationApi>(),
             realtime: getIt<RealtimeClient>(),
-            consultationId: consultationId,
+            threadId: threadId,
           )..init(),
         ),
         BlocProvider(
           create: (_) => ChatController(
-            consultationId: consultationId,
-            transport: DioChatTransport(getIt(), consultationId),
+            threadId: threadId,
+            transport: DioChatTransport(getIt(), threadId),
             realtime: RealtimeChatAdapter(getIt<RealtimeClient>()),
             identity: AstrologerChatIdentity(
               userId: user?.id ?? '',
@@ -64,7 +110,7 @@ class ConsultationRoomPage extends StatelessWidget {
         ),
       ],
       child: _PresenceScope(
-        consultationId: consultationId,
+        consultationId: threadId,
         child: const _RoomView(),
       ),
     );
@@ -100,10 +146,13 @@ class _PresenceScopeState extends State<_PresenceScope> {
 
   @override
   Widget build(BuildContext context) {
-    final isCall = context.select(
-      (ChatCubit c) => c.state.consultation?.isCall ?? false,
+    final session = context.select((ChatCubit c) => c.state.consultation);
+    final live = context.select((ChatCubit c) => c.state.window).consultationId;
+    _presence.opened(
+      widget.consultationId,
+      isCall: session?.isCall ?? false,
+      consultationId: live ?? session?.id,
     );
-    _presence.opened(widget.consultationId, isCall: isCall);
     return widget.child;
   }
 }
@@ -168,7 +217,10 @@ class _RoomView extends StatelessWidget {
         // them. Every other terminal case (rejected/no answer, or a call)
         // never had a chat worth preserving, so it keeps the summary.
         if (c.isTerminal) {
-          if (!c.isCall && c.isEnded) {
+          // A call that ended is a receipt only once the thread has closed
+          // too — while the follow-up window is open the room is where the
+          // astrologer answers, with the wrap-up a tap away in the app bar.
+          if (c.isEnded && (!c.isCall || state.canSend)) {
             return _ChatRoom(consultation: c, state: state, ended: true);
           }
           return _Summary(consultation: c);
@@ -278,7 +330,9 @@ class _ChatRoom extends StatelessWidget {
       ),
       body: Column(
         children: [
-          if (ended)
+          if (ended && state.window.isFollowUp)
+            _FollowUpBar(until: state.window.followUpUntil)
+          else if (ended)
             _EndedBar(consultation: c)
           else if (c.status == 'active')
             _SessionBar(consultation: c, state: state)
@@ -292,8 +346,12 @@ class _ChatRoom extends StatelessWidget {
           // messages down the screen on every session that had one.
           Expanded(
             child: ChatView(
-              composerEnabled: !ended && c.isLive,
-              composerHint: l.roomComposerHint,
+              // Not the session's status: the thread stays open, unbilled,
+              // through the follow-up window after one ends.
+              composerEnabled: state.canSend,
+              composerHint: state.window.isFollowUp
+                  ? l.roomFollowUpHint
+                  : l.roomComposerHint,
             ),
           ),
         ],
@@ -1093,3 +1151,48 @@ CallStrings astroCallStrings(AppLocalizations l) => CallStrings(
   tapToReturn: l.callTapToReturn,
   waiting: l.callWaiting,
 );
+
+/// The free follow-up window: the session is over, nothing is being charged,
+/// and the astrologer is still answering. Saying so plainly is the point —
+/// otherwise an unbilled reply looks like unpaid work.
+class _FollowUpBar extends StatelessWidget {
+  const _FollowUpBar({required this.until});
+  final DateTime? until;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    final left = until?.difference(DateTime.now());
+    final label = left == null || left.isNegative
+        ? l.roomFollowUpOpen
+        : (left.inHours >= 1
+              ? l.roomFollowUpHours(left.inHours)
+              : l.roomFollowUpMinutes(left.inMinutes.clamp(1, 59)));
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+      color: theme.colorScheme.tertiaryContainer,
+      child: Row(
+        children: [
+          Icon(
+            Icons.chat_bubble_outline_rounded,
+            size: 15,
+            color: theme.colorScheme.onTertiaryContainer,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: theme.colorScheme.onTertiaryContainer,
+                fontSize: 12.5,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

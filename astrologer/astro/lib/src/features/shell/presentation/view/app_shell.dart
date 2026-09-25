@@ -66,7 +66,7 @@ class _AppShellState extends State<AppShell> {
         // The room sits on the root navigator, above this shell, so the shell's
         // own location never names it: the router check always said "elsewhere"
         // and played a notification tone over the open conversation.
-        final here = getIt<RoomPresence>().openId == consultationId;
+        final here = getIt<RoomPresence>().isOpen(consultationId);
         if (!here) AppSounds.notify();
       case InboxPing():
       case ConsultationEvent():

@@ -2737,6 +2737,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Video paused — weak connection'**
   String get callVideoPausedWeak;
+
+  /// Free follow-up window after a session ends
+  ///
+  /// In en, this message translates to:
+  /// **'Free follow-up — replies are not charged'**
+  String get roomFollowUpOpen;
+
+  /// Free follow-up window after a session ends
+  ///
+  /// In en, this message translates to:
+  /// **'Free follow-up open for {hours}h more'**
+  String roomFollowUpHours(int hours);
+
+  /// Free follow-up window after a session ends
+  ///
+  /// In en, this message translates to:
+  /// **'Free follow-up open for {minutes} min more'**
+  String roomFollowUpMinutes(int minutes);
+
+  /// Free follow-up window after a session ends
+  ///
+  /// In en, this message translates to:
+  /// **'Reply (free follow-up)'**
+  String get roomFollowUpHint;
+
+  /// Chats tab thread rows
+  ///
+  /// In en, this message translates to:
+  /// **'Free follow-up open'**
+  String get chatsFollowUpOpen;
+
+  /// Chats tab thread rows
+  ///
+  /// In en, this message translates to:
+  /// **'You: {body}'**
+  String chatsYouPrefix(String body);
 }
 
 class _AppLocalizationsDelegate

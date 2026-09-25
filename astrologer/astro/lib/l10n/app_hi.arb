@@ -442,5 +442,11 @@
   "callVideoPausedWeak": "वीडियो रुका — नेटवर्क कमज़ोर है",
   "@callVideoPausedWeak": {
     "description": "Self-view label when the network, not the user, paused the camera"
-  }
+  },
+  "roomFollowUpOpen": "निःशुल्क फ़ॉलो-अप — उत्तर के लिए शुल्क नहीं",
+  "roomFollowUpHours": "निःशुल्क फ़ॉलो-अप और {hours} घंटे खुला",
+  "roomFollowUpMinutes": "निःशुल्क फ़ॉलो-अप और {minutes} मिनट खुला",
+  "roomFollowUpHint": "उत्तर दें (निःशुल्क फ़ॉलो-अप)",
+  "chatsFollowUpOpen": "निःशुल्क फ़ॉलो-अप खुला",
+  "chatsYouPrefix": "आप: {body}"
 }

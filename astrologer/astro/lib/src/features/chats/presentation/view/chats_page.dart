@@ -9,13 +9,13 @@ import '../../../../core/theme/brand_colors.dart';
 import '../../../../shared/widgets/cosmic_header.dart';
 import '../../../../shared/widgets/empty_state.dart';
 import '../../../../shared/widgets/error_view.dart';
-import '../../../consultations/data/models/consultation.dart';
+import '../../../consultations/data/models/conversation.dart';
 import '../../../consultations/presentation/widgets/consultation_style.dart';
 import '../../../notifications/presentation/view/notification_bell.dart';
 import '../cubit/chats_cubit.dart';
 
-/// Chats tab: live conversations first, then recent ones, searchable by
-/// customer name. Backed by the app-level [ChatsCubit]; polls while visible.
+/// Chats tab: one permanent thread per customer — live sessions first, then
+/// the rest, searchable by name. Backed by the app-level [ChatsCubit].
 class ChatsPage extends StatefulWidget {
   const ChatsPage({super.key});
 
@@ -116,7 +116,7 @@ class _Section extends StatelessWidget {
   const _Section({required this.title, required this.items, this.live = false});
 
   final String title;
-  final List<Consultation> items;
+  final List<Conversation> items;
   final bool live;
 
   @override
@@ -160,8 +160,8 @@ class _Section extends StatelessWidget {
                 for (var i = 0; i < items.length; i++) ...[
                   if (i > 0)
                     Divider(height: 1, indent: 76, color: brand.hairline),
-                  ConsultationTile(
-                    consultation: items[i],
+                  ConversationTile(
+                    conversation: items[i],
                     onTap: () => context.push(Routes.chatRoom(items[i].id)),
                   ),
                 ],

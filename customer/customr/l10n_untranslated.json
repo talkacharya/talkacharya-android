@@ -261,7 +261,12 @@
     "profileSoundVibrationSub",
     "roomEndedSummaryLine",
     "roomViewSummary",
-    "roomYouRated"
+    "roomYouRated",
+    "roomFollowUpOpen",
+    "roomFollowUpHours",
+    "roomFollowUpMinutes",
+    "roomClosedHint",
+    "roomStartConsultation"
   ],
 
   "gu": [
@@ -526,7 +531,12 @@
     "profileSoundVibrationSub",
     "roomEndedSummaryLine",
     "roomViewSummary",
-    "roomYouRated"
+    "roomYouRated",
+    "roomFollowUpOpen",
+    "roomFollowUpHours",
+    "roomFollowUpMinutes",
+    "roomClosedHint",
+    "roomStartConsultation"
   ],
 
   "kn": [
@@ -791,7 +801,12 @@
     "profileSoundVibrationSub",
     "roomEndedSummaryLine",
     "roomViewSummary",
-    "roomYouRated"
+    "roomYouRated",
+    "roomFollowUpOpen",
+    "roomFollowUpHours",
+    "roomFollowUpMinutes",
+    "roomClosedHint",
+    "roomStartConsultation"
   ],
 
   "mr": [
@@ -1056,7 +1071,12 @@
     "profileSoundVibrationSub",
     "roomEndedSummaryLine",
     "roomViewSummary",
-    "roomYouRated"
+    "roomYouRated",
+    "roomFollowUpOpen",
+    "roomFollowUpHours",
+    "roomFollowUpMinutes",
+    "roomClosedHint",
+    "roomStartConsultation"
   ],
 
   "ta": [
@@ -1321,7 +1341,12 @@
     "profileSoundVibrationSub",
     "roomEndedSummaryLine",
     "roomViewSummary",
-    "roomYouRated"
+    "roomYouRated",
+    "roomFollowUpOpen",
+    "roomFollowUpHours",
+    "roomFollowUpMinutes",
+    "roomClosedHint",
+    "roomStartConsultation"
   ],
 
   "te": [
@@ -1586,6 +1611,11 @@
     "profileSoundVibrationSub",
     "roomEndedSummaryLine",
     "roomViewSummary",
-    "roomYouRated"
+    "roomYouRated",
+    "roomFollowUpOpen",
+    "roomFollowUpHours",
+    "roomFollowUpMinutes",
+    "roomClosedHint",
+    "roomStartConsultation"
   ]
 }

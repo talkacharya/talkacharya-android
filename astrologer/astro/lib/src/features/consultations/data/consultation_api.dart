@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../../../core/constants/api_paths.dart';
 import '../../../core/network/api_exception.dart';
 import 'models/consultation.dart';
+import 'models/conversation.dart';
 import 'models/consultation_share.dart';
 
 class ConsultationApi {
@@ -17,6 +18,27 @@ class ConsultationApi {
     return (res.data as List? ?? const [])
         .map((e) => Consultation.fromJson((e as Map).cast<String, dynamic>()))
         .toList();
+  }
+
+  /// The Chats tab: one permanent thread per customer, newest activity first.
+  Future<List<Conversation>> conversations() async {
+    final res = await _dio.get<dynamic>(ApiPaths.conversations);
+    return (res.data as List? ?? const [])
+        .map((e) => Conversation.fromJson((e as Map).cast<String, dynamic>()))
+        .toList();
+  }
+
+  /// Resolves a thread. Takes either id — the server accepts a consultation's
+  /// too, which is what a push or a deep link carries.
+  Future<Conversation> conversation(String id) async {
+    try {
+      final res = (await _dio.get<Map<String, dynamic>>(
+        ApiPaths.conversation(id),
+      )).ensureOk();
+      return Conversation.fromJson(res.data ?? const {});
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
   }
 
   Future<List<Consultation>> incoming() async {

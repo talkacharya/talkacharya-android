@@ -9,6 +9,7 @@ import '../../../../shared/widgets/cosmic.dart';
 import '../../../../shared/widgets/hue_widgets.dart';
 import '../../../../shared/widgets/pressable.dart';
 import '../../data/models/consultation.dart';
+import '../../data/models/conversation.dart';
 
 /// Icon + label + hue for a consultation channel (`chat|call|video`).
 ({IconData icon, String label, AstroHue hue}) channelStyle(
@@ -253,6 +254,145 @@ class ConsultationTile extends StatelessWidget {
                     )
                   else
                     const SizedBox(height: 14),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// One thread in the Chats tab: a customer, not a session. The last message
+/// is the subtitle — which is what tells the astrologer whether it is their
+/// turn, where a channel label told them nothing.
+class ConversationTile extends StatelessWidget {
+  const ConversationTile({
+    required this.conversation,
+    required this.onTap,
+    super.key,
+  });
+
+  final Conversation conversation;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = conversation;
+    final l = context.l10n;
+    final brand = context.brand;
+    final theme = Theme.of(context);
+    final unread = c.unread > 0;
+    final last = c.lastMessage;
+
+    final String meta;
+    if (c.window.isLive) {
+      meta = l.requestsLiveNow;
+    } else if (last == null) {
+      meta = c.window.isFollowUp ? l.chatsFollowUpOpen : '';
+    } else {
+      final body = last.body.trim();
+      meta = last.isMine ? l.chatsYouPrefix(body) : body;
+    }
+
+    return Pressable(
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          child: Row(
+            children: [
+              SizedBox.square(
+                dimension: 52,
+                child: Stack(
+                  children: [
+                    HueAvatar(
+                      name: c.customerName,
+                      hue: AstroPalette.forId(c.customerName),
+                      size: 48,
+                    ),
+                    if (c.window.isLive)
+                      const Positioned(top: 2, right: 2, child: LiveDot()),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            c.customerName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.titleSmall?.copyWith(
+                              fontWeight: unread
+                                  ? FontWeight.w800
+                                  : FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        if (c.window.isFollowUp) ...[
+                          const SizedBox(width: 6),
+                          Icon(
+                            Icons.schedule_rounded,
+                            size: 13,
+                            color: brand.inkMuted,
+                          ),
+                        ],
+                      ],
+                    ),
+                    if (meta.isNotEmpty) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        meta,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: c.window.isLive ? brand.online : brand.inkMuted,
+                          fontWeight: c.window.isLive || unread
+                              ? FontWeight.w700
+                              : null,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    TimeFormat.relative(l, c.lastActivity),
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: unread ? theme.colorScheme.primary : brand.inkMuted,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  if (unread)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 1,
+                      ),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primary,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        '${c.unread}',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                          color: theme.colorScheme.onPrimary,
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ],

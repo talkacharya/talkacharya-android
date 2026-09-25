@@ -9,6 +9,7 @@ import 'package:astro/src/features/chats/presentation/cubit/chats_cubit.dart';
 import 'package:astro/src/features/consultations/data/consultation_api.dart';
 import 'package:astro/src/features/consultations/data/consultation_repository.dart';
 import 'package:astro/src/features/consultations/data/models/consultation.dart';
+import 'package:astro/src/features/consultations/data/models/conversation.dart';
 import 'package:astro/src/features/requests/presentation/cubit/requests_cubit.dart';
 import 'package:astro/src/features/requests/presentation/view/widgets/request_card.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,19 @@ Consultation _c(
   'unread_count': unread,
   'rate_snapshot': '25.00',
   'requested_at': requestedAt?.toIso8601String(),
+});
+
+/// One thread as the Chats tab sees it.
+Conversation _t(
+  String id, {
+  String name = 'Asha',
+  int unread = 0,
+  String reason = 'closed',
+}) => Conversation.fromJson({
+  'id': id,
+  'peer': {'id': 'u1', 'name': name},
+  'unread': unread,
+  'window': {'can_send': reason != 'closed', 'reason': reason},
 });
 
 void main() {
@@ -117,21 +131,23 @@ void main() {
     ChatsCubit build() => ChatsCubit(api: api, realtime: realtime);
 
     setUp(() {
-      when(() => api.list(status: ChatsCubit.statuses)).thenAnswer(
+      when(() => api.conversations()).thenAnswer(
         (_) async => [
-          _c('a', status: 'active', name: 'Ravi', unread: 2),
-          _c('b', status: 'accepted', name: 'Meena', unread: 1),
-          _c('c', status: 'ended', name: 'Ravi Kumar', unread: 5),
+          _t('a', name: 'Ravi', unread: 2, reason: 'consultation'),
+          _t('b', name: 'Meena', unread: 1, reason: 'consultation'),
+          _t('c', name: 'Ravi Kumar', unread: 5, reason: 'follow_up'),
         ],
       );
     });
 
-    test('splits live / recent and counts unread on live only', () async {
+    test('splits live / the rest and counts every unread', () async {
       final cubit = build();
       await cubit.load();
       expect(cubit.state.live.map((c) => c.id), ['a', 'b']);
       expect(cubit.state.recent.map((c) => c.id), ['c']);
-      expect(cubit.state.totalUnread, 3);
+      // Including the follow-up window: a message that lands there is the one
+      // worth answering, so the badge counts it.
+      expect(cubit.state.totalUnread, 8);
       await cubit.close();
     });
 
@@ -142,7 +158,7 @@ void main() {
       expect(cubit.state.live.map((c) => c.id), ['a']);
       expect(cubit.state.recent.map((c) => c.id), ['c']);
       // The badge ignores the search filter.
-      expect(cubit.state.totalUnread, 3);
+      expect(cubit.state.totalUnread, 8);
       await cubit.close();
     });
 
@@ -154,7 +170,7 @@ void main() {
         ..add(const NewChatMessage(consultationId: 'a', preview: 'hi'))
         ..add(const NewChatMessage(consultationId: 'a', preview: 'there'));
       await Future<void>.delayed(const Duration(milliseconds: 700));
-      verify(() => api.list(status: ChatsCubit.statuses)).called(1);
+      verify(() => api.conversations()).called(1);
       await cubit.close();
     });
   });

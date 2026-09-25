@@ -3634,5 +3634,35 @@
     "placeholders": {
       "rating": {}
     }
+  },
+  "roomFollowUpOpen": "Free follow-up — ask anything else",
+  "@roomFollowUpOpen": {
+    "description": "Room follow-up window / closed-thread affordances"
+  },
+  "roomFollowUpHours": "Free follow-up for {hours}h more",
+  "@roomFollowUpHours": {
+    "description": "Room follow-up window / closed-thread affordances",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "roomFollowUpMinutes": "Free follow-up for {minutes} min more",
+  "@roomFollowUpMinutes": {
+    "description": "Room follow-up window / closed-thread affordances",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "roomClosedHint": "Follow-up time is over.",
+  "@roomClosedHint": {
+    "description": "Room follow-up window / closed-thread affordances"
+  },
+  "roomStartConsultation": "Start consultation",
+  "@roomStartConsultation": {
+    "description": "Room follow-up window / closed-thread affordances"
   }
 }
