@@ -6878,4 +6878,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get roomStartConsultation => 'Start consultation';
+
+  @override
+  String roomHeldForPayment(String time) {
+    return 'Waiting for your payment — call continues for $time';
+  }
+
+  @override
+  String roomTopUpOption(String currency, int amount, int minutes) {
+    return '$currency$amount · $minutes min';
+  }
+
+  @override
+  String get roomTopUpMore => 'Other';
 }

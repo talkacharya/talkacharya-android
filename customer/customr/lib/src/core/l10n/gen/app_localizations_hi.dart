@@ -6980,4 +6980,17 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get roomStartConsultation => 'परामर्श शुरू करें';
+
+  @override
+  String roomHeldForPayment(String time) {
+    return 'भुगतान की प्रतीक्षा — कॉल $time तक जारी';
+  }
+
+  @override
+  String roomTopUpOption(String currency, int amount, int minutes) {
+    return '$currency$amount · $minutes मिनट';
+  }
+
+  @override
+  String get roomTopUpMore => 'अन्य';
 }

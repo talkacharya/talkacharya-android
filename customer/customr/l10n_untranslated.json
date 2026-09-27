@@ -266,7 +266,10 @@
     "roomFollowUpHours",
     "roomFollowUpMinutes",
     "roomClosedHint",
-    "roomStartConsultation"
+    "roomStartConsultation",
+    "roomHeldForPayment",
+    "roomTopUpOption",
+    "roomTopUpMore"
   ],
 
   "gu": [
@@ -536,7 +539,10 @@
     "roomFollowUpHours",
     "roomFollowUpMinutes",
     "roomClosedHint",
-    "roomStartConsultation"
+    "roomStartConsultation",
+    "roomHeldForPayment",
+    "roomTopUpOption",
+    "roomTopUpMore"
   ],
 
   "kn": [
@@ -806,7 +812,10 @@
     "roomFollowUpHours",
     "roomFollowUpMinutes",
     "roomClosedHint",
-    "roomStartConsultation"
+    "roomStartConsultation",
+    "roomHeldForPayment",
+    "roomTopUpOption",
+    "roomTopUpMore"
   ],
 
   "mr": [
@@ -1076,7 +1085,10 @@
     "roomFollowUpHours",
     "roomFollowUpMinutes",
     "roomClosedHint",
-    "roomStartConsultation"
+    "roomStartConsultation",
+    "roomHeldForPayment",
+    "roomTopUpOption",
+    "roomTopUpMore"
   ],
 
   "ta": [
@@ -1346,7 +1358,10 @@
     "roomFollowUpHours",
     "roomFollowUpMinutes",
     "roomClosedHint",
-    "roomStartConsultation"
+    "roomStartConsultation",
+    "roomHeldForPayment",
+    "roomTopUpOption",
+    "roomTopUpMore"
   ],
 
   "te": [
@@ -1616,6 +1631,9 @@
     "roomFollowUpHours",
     "roomFollowUpMinutes",
     "roomClosedHint",
-    "roomStartConsultation"
+    "roomStartConsultation",
+    "roomHeldForPayment",
+    "roomTopUpOption",
+    "roomTopUpMore"
   ]
 }

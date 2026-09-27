@@ -83,6 +83,21 @@ class ChatCubit extends Cubit<ChatState> {
       case 'billing.low_balance':
         emit(state.copyWith(lowBalance: true));
         _applyBilling(runway: (data['runway_seconds'] as num?)?.toInt());
+      case 'billing.awaiting_payment':
+        // Out of money with a recharge in flight: the consultation is being
+        // held open. Saying so is the whole point — silence here looks like a
+        // call that has already dropped.
+        emit(
+          state.copyWith(
+            awaitingPaymentUntil:
+                DateTime.tryParse('${data['until']}') ??
+                DateTime.now().add(const Duration(seconds: 120)),
+          ),
+        );
+      case 'billing.resumed':
+        emit(state.copyWith(clearAwaitingPayment: true, lowBalance: false));
+      case 'billing.payment_grace_expired':
+        emit(state.copyWith(clearAwaitingPayment: true));
       case 'call.ringing':
         // voice/video: the astrologer accepted — the room starts the call
         final c = state.consultation;

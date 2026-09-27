@@ -6,6 +6,7 @@ class ChatState extends Equatable {
     this.conversation,
     this.consultation,
     this.lowBalance = false,
+    this.awaitingPaymentUntil,
     this.error,
   });
 
@@ -19,6 +20,12 @@ class ChatState extends Equatable {
   /// sessions, including through the free follow-up window.
   final Consultation? consultation;
   final bool lowBalance;
+
+  /// The balance ran out while a recharge was open, so the consultation is
+  /// being held rather than ended. Null when nothing is being held.
+  final DateTime? awaitingPaymentUntil;
+
+  bool get awaitingPayment => awaitingPaymentUntil != null;
   final String? error;
 
   ConsultationStatus get status =>
@@ -42,6 +49,8 @@ class ChatState extends Equatable {
     Consultation? consultation,
     bool clearConsultation = false,
     bool? lowBalance,
+    DateTime? awaitingPaymentUntil,
+    bool clearAwaitingPayment = false,
     String? error,
     bool clearError = false,
   }) {
@@ -52,6 +61,9 @@ class ChatState extends Equatable {
           ? null
           : (consultation ?? this.consultation),
       lowBalance: lowBalance ?? this.lowBalance,
+      awaitingPaymentUntil: clearAwaitingPayment
+          ? null
+          : (awaitingPaymentUntil ?? this.awaitingPaymentUntil),
       error: clearError ? null : (error ?? this.error),
     );
   }
@@ -62,6 +74,7 @@ class ChatState extends Equatable {
     conversation,
     consultation,
     lowBalance,
+    awaitingPaymentUntil,
     error,
   ];
 }

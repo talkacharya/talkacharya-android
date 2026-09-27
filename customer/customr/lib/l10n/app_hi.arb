@@ -2885,5 +2885,8 @@
   "roomFollowUpHours": "और {hours} घंटे निःशुल्क फ़ॉलो-अप",
   "roomFollowUpMinutes": "और {minutes} मिनट निःशुल्क फ़ॉलो-अप",
   "roomClosedHint": "फ़ॉलो-अप का समय समाप्त।",
-  "roomStartConsultation": "परामर्श शुरू करें"
+  "roomStartConsultation": "परामर्श शुरू करें",
+  "roomHeldForPayment": "भुगतान की प्रतीक्षा — कॉल {time} तक जारी",
+  "roomTopUpOption": "{currency}{amount} · {minutes} मिनट",
+  "roomTopUpMore": "अन्य"
 }

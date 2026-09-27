@@ -27,6 +27,7 @@ import '../cubit/chat_cubit.dart';
 import '../room_presence.dart';
 import 'book_consultation_sheet.dart';
 import 'widgets/billing_hud.dart';
+import 'widgets/quick_top_up.dart';
 import 'widgets/share_details_sheet.dart';
 import '../../../../core/config/config_repository.dart';
 import '../../../../core/sounds/app_sound_adapters.dart';
@@ -418,7 +419,16 @@ class _CallRoomState extends State<_CallRoom> {
                     child: BillingHud(
                       consultation: c,
                       lowBalance: widget.lowBalance,
-                      onRecharge: () => showRechargeSheet(context),
+                      awaitingPaymentUntil: context.select(
+                        (ChatCubit cubit) => cubit.state.awaitingPaymentUntil,
+                      ),
+                      onRecharge: () => showRechargeSheet(
+                        context,
+                        initialAmount: QuickTopUp.amountFor(
+                          double.tryParse(c.rateSnapshot) ?? 0,
+                          10,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -572,6 +582,9 @@ class _ChatShellState extends State<_ChatShell> {
     // stays open, unbilled, through the free follow-up window after one ends.
     final window = context.select((ChatCubit cubit) => cubit.state.window);
     final canChat = window.canSend;
+    final awaitingPaymentUntil = context.select(
+      (ChatCubit cubit) => cubit.state.awaitingPaymentUntil,
+    );
     final scheme = Theme.of(context).colorScheme;
     final l10n = context.l10n;
 
@@ -682,12 +695,27 @@ class _ChatShellState extends State<_ChatShell> {
         children: [
           if (ended)
             _EndedBanner(consultation: c)
-          else
+          else ...[
             BillingHud(
               consultation: c,
               lowBalance: widget.lowBalance,
-              onRecharge: () => showRechargeSheet(context),
+              awaitingPaymentUntil: awaitingPaymentUntil,
+              onRecharge: () => showRechargeSheet(
+                context,
+                initialAmount: QuickTopUp.amountFor(
+                  double.tryParse(c.rateSnapshot) ?? 0,
+                  10,
+                ),
+              ),
             ),
+            // The amounts themselves, once the warning is up or the call is
+            // already being held: at that point every extra tap is billed
+            // time, or worse, the reason the call ends.
+            if (widget.lowBalance ||
+                awaitingPaymentUntil != null ||
+                c.runwaySeconds <= 180)
+              QuickTopUp(consultation: c),
+          ],
           if (window.isFollowUp) _FollowUpBar(until: window.followUpUntil),
           Expanded(child: ChatView(composerEnabled: canChat)),
           // Below the transcript, not above it: a chat scrolls to the newest

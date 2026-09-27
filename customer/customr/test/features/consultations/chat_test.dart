@@ -1,18 +1,22 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:customr/src/core/realtime/realtime_client.dart';
 import 'package:customr/src/features/consultations/data/consultation_repository.dart';
 import 'package:customr/src/features/consultations/data/models/consultation.dart';
 import 'package:customr/src/features/consultations/data/models/conversation.dart';
 import 'package:customr/src/features/consultations/presentation/cubit/chat_cubit.dart';
+import 'package:customr/src/features/consultations/presentation/view/widgets/quick_top_up.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class _MockRepo extends Mock implements ConsultationRepository {}
 
 class _FakeRealtime extends Fake implements RealtimeClient {
+  final frames = StreamController<Map<String, dynamic>>.broadcast();
+
   @override
-  Stream<Map<String, dynamic>> channelFrames(String name) =>
-      const Stream.empty();
+  Stream<Map<String, dynamic>> channelFrames(String name) => frames.stream;
 }
 
 Consultation _active() => const Consultation(
@@ -26,9 +30,11 @@ Consultation _active() => const Consultation(
 
 void main() {
   late _MockRepo repo;
+  late _FakeRealtime realtime;
 
   setUp(() {
     repo = _MockRepo();
+    realtime = _FakeRealtime();
     // The room resolves its thread first; the live session inside it is what
     // carries the rate and the end button.
     when(() => repo.conversation('c1')).thenAnswer(
@@ -48,7 +54,7 @@ void main() {
   });
 
   ChatCubit build() =>
-      ChatCubit(repo: repo, realtime: _FakeRealtime(), consultationId: 'c1');
+      ChatCubit(repo: repo, realtime: realtime, consultationId: 'c1');
 
   test('Consultation.fromMap parses the room fields', () {
     final c = Consultation.fromMap({
@@ -140,4 +146,56 @@ void main() {
     verify: (c) =>
         expect(c.state.consultation?.status, ConsultationStatus.ended),
   );
+
+  test('a held consultation is shown as held, not as a dead call', () async {
+    final cubit = build();
+    await cubit.init();
+    expect(cubit.state.awaitingPayment, isFalse);
+
+    // Out of money with a recharge in flight: the server holds the line and
+    // says until when. Without this the room just goes quiet and the customer
+    // hangs up on a call they have already paid to continue.
+    realtime.frames.add({
+      'type': 'billing.awaiting_payment',
+      'data': {
+        'until': DateTime.now()
+            .add(const Duration(seconds: 120))
+            .toIso8601String(),
+      },
+    });
+    await Future<void>.delayed(Duration.zero);
+    expect(cubit.state.awaitingPayment, isTrue);
+
+    realtime.frames.add({'type': 'billing.resumed', 'data': {}});
+    await Future<void>.delayed(Duration.zero);
+    expect(cubit.state.awaitingPayment, isFalse);
+    expect(cubit.state.lowBalance, isFalse);
+    await cubit.close();
+  });
+
+  test('a hold that ran out clears too, so nothing counts down forever', () async {
+    final cubit = build();
+    await cubit.init();
+    realtime.frames.add({
+      'type': 'billing.awaiting_payment',
+      'data': {'until': DateTime.now().toIso8601String()},
+    });
+    await Future<void>.delayed(Duration.zero);
+    expect(cubit.state.awaitingPayment, isTrue);
+
+    realtime.frames.add({'type': 'billing.payment_grace_expired', 'data': {}});
+    await Future<void>.delayed(Duration.zero);
+    expect(cubit.state.awaitingPayment, isFalse);
+    await cubit.close();
+  });
+
+  group('QuickTopUp.amountFor', () {
+    test('rounds to an amount a person would pick, never below the minimum', () {
+      // ₹25/min for 10 minutes = 250 -> a round 300, not 250.
+      expect(QuickTopUp.amountFor(25, 10), 300);
+      expect(QuickTopUp.amountFor(25, 25), 700);
+      // A cheap astrologer must not produce a sub-minimum top-up.
+      expect(QuickTopUp.amountFor(2, 10, minimum: 100), 100);
+    });
+  });
 }

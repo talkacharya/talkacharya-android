@@ -3664,5 +3664,33 @@
   "roomStartConsultation": "Start consultation",
   "@roomStartConsultation": {
     "description": "Room follow-up window / closed-thread affordances"
+  },
+  "roomHeldForPayment": "Waiting for your payment — call continues for {time}",
+  "@roomHeldForPayment": {
+    "description": "Mid-consultation top-up",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "roomTopUpOption": "{currency}{amount} · {minutes} min",
+  "@roomTopUpOption": {
+    "description": "Mid-consultation top-up",
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "roomTopUpMore": "Other",
+  "@roomTopUpMore": {
+    "description": "Mid-consultation top-up"
   }
 }

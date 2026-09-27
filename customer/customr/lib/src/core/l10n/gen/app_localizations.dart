@@ -12061,6 +12061,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start consultation'**
   String get roomStartConsultation;
+
+  /// Mid-consultation top-up
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for your payment — call continues for {time}'**
+  String roomHeldForPayment(String time);
+
+  /// Mid-consultation top-up
+  ///
+  /// In en, this message translates to:
+  /// **'{currency}{amount} · {minutes} min'**
+  String roomTopUpOption(String currency, int amount, int minutes);
+
+  /// Mid-consultation top-up
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get roomTopUpMore;
 }
 
 class _AppLocalizationsDelegate
