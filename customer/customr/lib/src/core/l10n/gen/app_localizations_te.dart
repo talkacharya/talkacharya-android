@@ -6912,4 +6912,28 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get roomTopUpMore => 'Other';
+
+  @override
+  String get roomSwitchToCall => 'Switch to a call';
+
+  @override
+  String get roomSwitchVoice => 'Voice call';
+
+  @override
+  String get roomSwitchVideo => 'Video call';
+
+  @override
+  String roomSwitchBody(String name) {
+    return 'This chat ends and $name is asked to join you on a call. Your conversation stays here.';
+  }
+
+  @override
+  String roomSwitchRate(String currency, String rate) {
+    return '$currency$rate/min';
+  }
+
+  @override
+  String roomSwitchRinging(String name) {
+    return 'Asking $name to join…';
+  }
 }

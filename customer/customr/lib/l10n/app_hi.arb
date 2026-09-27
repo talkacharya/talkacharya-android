@@ -2888,5 +2888,11 @@
   "roomStartConsultation": "परामर्श शुरू करें",
   "roomHeldForPayment": "भुगतान की प्रतीक्षा — कॉल {time} तक जारी",
   "roomTopUpOption": "{currency}{amount} · {minutes} मिनट",
-  "roomTopUpMore": "अन्य"
+  "roomTopUpMore": "अन्य",
+  "roomSwitchToCall": "कॉल पर जाएं",
+  "roomSwitchVoice": "वॉइस कॉल",
+  "roomSwitchVideo": "वीडियो कॉल",
+  "roomSwitchBody": "यह चैट समाप्त होगी और {name} को कॉल पर आने का अनुरोध जाएगा। आपकी बातचीत यहीं रहेगी।",
+  "roomSwitchRate": "{currency}{rate}/मिनट",
+  "roomSwitchRinging": "{name} को जोड़ा जा रहा है…"
 }

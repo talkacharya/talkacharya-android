@@ -66,6 +66,28 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
+  /// Move this consultation onto [channel]. The chat ends and a new session
+  /// is requested with the same astrologer, in the same thread — so the room
+  /// the customer is looking at does not change, only what is running in it.
+  ///
+  /// Returns the new consultation's id, or null if it could not be done.
+  Future<String?> upgradeChannel(String channel) async {
+    final id = state.window.consultationId ?? state.consultation?.id;
+    if (id == null) return null;
+    try {
+      final upgraded = await _repo.upgradeChannel(id, channel);
+      // Deliberately no thread refresh here. The new session is `requested`,
+      // which the window does not count as live, so a re-read would point the
+      // room back at the chat that was just ended. The caller navigates to the
+      // new consultation, which resolves the same thread on the way in.
+      emit(state.copyWith(consultation: upgraded, clearError: true));
+      return upgraded.id;
+    } catch (e) {
+      emit(state.copyWith(error: friendlyError(e)));
+      return null;
+    }
+  }
+
   void _onFrame(Map<String, dynamic> frame) {
     final type = frame['type'] as String? ?? '';
     final data = (frame['data'] as Map?)?.cast<String, dynamic>() ?? const {};

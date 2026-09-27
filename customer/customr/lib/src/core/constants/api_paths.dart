@@ -102,6 +102,10 @@ class ApiPaths {
   static String chatPresence(String id) => '/conversations/$id/presence';
   static String attachments(String id) => '/conversations/$id/attachments';
 
+  /// Move a live consultation onto voice or video without re-booking.
+  static String consultationUpgrade(String id) =>
+      '/app/consultations/$id/upgrade';
+
   static const referrals = '/app/referrals';
   // editorial — public, no /app prefix
   static const articles = '/content/articles';

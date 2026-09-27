@@ -107,6 +107,16 @@ class ConsultationApi {
   }
 
   /// One thread: peer, unread count and whether it takes messages right now.
+  /// Switch a live consultation to another channel. Returns the **new**
+  /// consultation — the old one ends, priced as what it was.
+  Future<Consultation> upgradeChannel(String id, String channel) async {
+    final res = await _dio.post<Map<String, dynamic>>(
+      ApiPaths.consultationUpgrade(id),
+      data: {'channel': channel},
+    );
+    return Consultation.fromMap(res.data ?? const {});
+  }
+
   Future<Conversation> conversation(String id) async {
     try {
       final res = await _dio.get<Map<String, dynamic>>(

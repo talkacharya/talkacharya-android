@@ -561,6 +561,60 @@ class _ChatShellState extends State<_ChatShell> {
     }
   }
 
+  /// "Can we talk instead?" — the commonest thing that happens in a reading,
+  /// and it used to mean ending the chat and finding the astrologer again.
+  Future<void> _switchToCall(BuildContext context, Consultation c) async {
+    final cubit = context.read<ChatCubit>();
+    final l10n = context.l10n;
+    final messenger = ScaffoldMessenger.of(context);
+
+    final channel = await showModalBottomSheet<String>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
+              child: Text(
+                l10n.roomSwitchBody(c.astrologerName),
+                style: Theme.of(sheetContext).textTheme.bodyMedium,
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.call_rounded),
+              title: Text(l10n.roomSwitchVoice),
+              onTap: () => Navigator.pop(sheetContext, 'voice'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.videocam_rounded),
+              title: Text(l10n.roomSwitchVideo),
+              onTap: () => Navigator.pop(sheetContext, 'video'),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+    if (channel == null) return;
+
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(l10n.roomSwitchRinging(c.astrologerName)),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    final id = await cubit.upgradeChannel(channel);
+    if (id == null || !context.mounted) return;
+    // Straight into the new session's room; the thread underneath is the same
+    // one, so the conversation is still there behind the call.
+    context.pushReplacement(Routes.consultation(id));
+  }
+
   Future<void> _submitRating(Consultation c) async {
     if (_rating == 0 || _ratingBusy) return;
     setState(() => _ratingBusy = true);
@@ -673,6 +727,12 @@ class _ChatShellState extends State<_ChatShell> {
                   icon: const Icon(Icons.auto_awesome_rounded),
                   onPressed: () => showShareDetailsSheet(context),
                 ),
+                if (c.channel == 'chat')
+                  IconButton(
+                    tooltip: l10n.roomSwitchToCall,
+                    icon: const Icon(Icons.phone_in_talk_rounded),
+                    onPressed: () => _switchToCall(context, c),
+                  ),
                 IconButton(
                   tooltip: l10n.giftAction,
                   icon: const Icon(Icons.card_giftcard_rounded),

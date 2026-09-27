@@ -198,4 +198,44 @@ void main() {
       expect(QuickTopUp.amountFor(2, 10, minimum: 100), 100);
     });
   });
+
+  test('switching to a call hands back the new session', () async {
+    when(() => repo.upgradeChannel('c1', 'voice')).thenAnswer(
+      (_) async => const Consultation(
+        id: 'c2',
+        channel: 'voice',
+        status: ConsultationStatus.requested,
+        astrologerName: 'Ravi',
+        rateSnapshot: '30',
+        currency: 'INR',
+      ),
+    );
+    final cubit = build();
+    await cubit.init();
+
+    final id = await cubit.upgradeChannel('voice');
+
+    // The new consultation, not the old one: a voice minute is priced as a
+    // voice minute, so the room has to follow the new session.
+    expect(id, 'c2');
+    expect(cubit.state.consultation?.id, 'c2');
+    expect(cubit.state.consultation?.channel, 'voice');
+    await cubit.close();
+  });
+
+  test('a refused switch leaves the chat alone and says why', () async {
+    when(
+      () => repo.upgradeChannel('c1', 'video'),
+    ).thenThrow(Exception('astrologer unavailable'));
+    final cubit = build();
+    await cubit.init();
+
+    final id = await cubit.upgradeChannel('video');
+
+    expect(id, isNull);
+    // Still the chat: the customer must never be left between two sessions.
+    expect(cubit.state.consultation?.id, 'c1');
+    expect(cubit.state.error, isNotNull);
+    await cubit.close();
+  });
 }

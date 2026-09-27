@@ -3692,5 +3692,47 @@
   "roomTopUpMore": "Other",
   "@roomTopUpMore": {
     "description": "Mid-consultation top-up"
+  },
+  "roomSwitchToCall": "Switch to a call",
+  "@roomSwitchToCall": {
+    "description": "Switching a live chat onto a call"
+  },
+  "roomSwitchVoice": "Voice call",
+  "@roomSwitchVoice": {
+    "description": "Switching a live chat onto a call"
+  },
+  "roomSwitchVideo": "Video call",
+  "@roomSwitchVideo": {
+    "description": "Switching a live chat onto a call"
+  },
+  "roomSwitchBody": "This chat ends and {name} is asked to join you on a call. Your conversation stays here.",
+  "@roomSwitchBody": {
+    "description": "Switching a live chat onto a call",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roomSwitchRate": "{currency}{rate}/min",
+  "@roomSwitchRate": {
+    "description": "Switching a live chat onto a call",
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      },
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "roomSwitchRinging": "Asking {name} to join…",
+  "@roomSwitchRinging": {
+    "description": "Switching a live chat onto a call",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   }
 }

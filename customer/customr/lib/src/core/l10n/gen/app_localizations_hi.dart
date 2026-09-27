@@ -6993,4 +6993,28 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get roomTopUpMore => 'अन्य';
+
+  @override
+  String get roomSwitchToCall => 'कॉल पर जाएं';
+
+  @override
+  String get roomSwitchVoice => 'वॉइस कॉल';
+
+  @override
+  String get roomSwitchVideo => 'वीडियो कॉल';
+
+  @override
+  String roomSwitchBody(String name) {
+    return 'यह चैट समाप्त होगी और $name को कॉल पर आने का अनुरोध जाएगा। आपकी बातचीत यहीं रहेगी।';
+  }
+
+  @override
+  String roomSwitchRate(String currency, String rate) {
+    return '$currency$rate/मिनट';
+  }
+
+  @override
+  String roomSwitchRinging(String name) {
+    return '$name को जोड़ा जा रहा है…';
+  }
 }

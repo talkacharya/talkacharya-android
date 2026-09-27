@@ -12079,6 +12079,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Other'**
   String get roomTopUpMore;
+
+  /// Switching a live chat onto a call
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to a call'**
+  String get roomSwitchToCall;
+
+  /// Switching a live chat onto a call
+  ///
+  /// In en, this message translates to:
+  /// **'Voice call'**
+  String get roomSwitchVoice;
+
+  /// Switching a live chat onto a call
+  ///
+  /// In en, this message translates to:
+  /// **'Video call'**
+  String get roomSwitchVideo;
+
+  /// Switching a live chat onto a call
+  ///
+  /// In en, this message translates to:
+  /// **'This chat ends and {name} is asked to join you on a call. Your conversation stays here.'**
+  String roomSwitchBody(String name);
+
+  /// Switching a live chat onto a call
+  ///
+  /// In en, this message translates to:
+  /// **'{currency}{rate}/min'**
+  String roomSwitchRate(String currency, String rate);
+
+  /// Switching a live chat onto a call
+  ///
+  /// In en, this message translates to:
+  /// **'Asking {name} to join…'**
+  String roomSwitchRinging(String name);
 }
 
 class _AppLocalizationsDelegate
