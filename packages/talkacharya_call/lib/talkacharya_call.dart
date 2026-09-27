@@ -15,6 +15,7 @@ export 'src/engine/foreground_keep_alive.dart';
 export 'src/engine/permission_handler_permissions.dart';
 export 'src/engine/rtc_engine.dart';
 export 'src/models/call_join.dart';
+export 'src/models/video_rung.dart';
 export 'src/models/call_state.dart';
 export 'src/ports/call_ports.dart';
 export 'src/widgets/call_overlay.dart';

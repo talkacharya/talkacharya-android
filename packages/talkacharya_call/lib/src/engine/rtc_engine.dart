@@ -41,6 +41,19 @@ abstract class RtcPeer {
   Future<void> addRemoteCandidate(Map<String, dynamic> candidate);
   bool get hasRemoteDescription;
   Future<RtcStats> stats();
+
+  /// Constrain what the camera actually sends.
+  ///
+  /// [scaleDownBy] divides the captured resolution (2.0 → half width and
+  /// height), [maxBitrateBps] caps the encoder and [maxFramerate] the frame
+  /// rate. A no-op on engines that cannot express it, because a call must never
+  /// fall over for want of a bitrate cap.
+  Future<void> setVideoSendQuality({
+    double scaleDownBy = 1.0,
+    int? maxBitrateBps,
+    int? maxFramerate,
+  });
+
   Future<void> close();
 }
 

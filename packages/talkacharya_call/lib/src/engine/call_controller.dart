@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 
 import '../models/call_join.dart';
+import '../models/video_rung.dart';
 import '../models/call_state.dart';
 import '../ports/call_ports.dart';
 import 'call_proximity.dart';
@@ -146,6 +147,9 @@ class CallController extends Cubit<CallState> {
   /// Consecutive stats samples at either end of the scale, for [_adaptVideo].
   int _poorSamples = 0;
   int _goodSamples = 0;
+
+  /// Where we are on [kVideoLadder]. 0 is the best picture.
+  int _videoRung = 0;
 
   /// The camera is off because the network couldn't carry it — as opposed to
   /// because the user turned it off, which we must never quietly undo.
@@ -652,6 +656,10 @@ class CallController extends Cubit<CallState> {
           ),
         );
         _startStats();
+        // Cap the sender the moment there is one. Unconstrained video will
+        // happily take the bandwidth the voice needs, and the voice is what is
+        // being paid for.
+        if (state.video) unawaited(_applyVideoRung(kVideoLadder[_videoRung]));
         unawaited(_report(CallNetState.connected));
       case RtcIceState.disconnected:
       case RtcIceState.failed:
@@ -809,25 +817,58 @@ class CallController extends Cubit<CallState> {
     } catch (_) {}
   }
 
-  /// Drop the picture when the connection can't carry it, and bring it back
-  /// when it can.
+  /// Give the picture up a step at a time, and take it back the same way.
   ///
   /// Video is what saturates a weak link, and when it does the audio goes with
-  /// it — which on a paid consultation is the part that actually matters.
-  /// Rather than let both freeze, the camera goes off and the call carries on
-  /// as voice.
+  /// it — which on a paid consultation is the part that actually matters. But
+  /// going straight from full resolution to no camera throws away the whole
+  /// middle of the range, which is where most mobile connections actually sit:
+  /// a smaller, softer picture is worth far more to both sides than none.
   ///
-  /// The thresholds are deliberately asymmetric: quick to give the picture up
-  /// (~3 samples of poor), slow to take it back (~5 of good). A link that is
-  /// borderline should settle on audio rather than flap between the two.
+  /// Only the bottom rung turns the camera off, and only after the rungs above
+  /// it have failed to hold.
+  ///
+  /// The thresholds stay deliberately asymmetric: quick to step down (~3 poor
+  /// samples), slow to step back up (~5 good). A borderline link should settle
+  /// rather than flap.
   Future<void> _adaptVideo(int quality) async {
     if (_closed || !state.video || state.phase != CallPhase.connected) return;
 
-    if (quality == 1) {
+    if (quality >= 3) {
+      _poorSamples = 0;
+      _goodSamples++;
+      if (_goodSamples < _goodSamplesBeforeVideoOn) return;
+      _goodSamples = 0;
+      await _stepVideo(-1);
+      return;
+    }
+
+    if (quality <= 1) {
       _goodSamples = 0;
       _poorSamples++;
-      if (state.cameraOn && _poorSamples >= _poorSamplesBeforeVideoOff) {
-        _poorSamples = 0;
+      if (_poorSamples < _poorSamplesBeforeVideoOff) return;
+      _poorSamples = 0;
+      await _stepVideo(1);
+      return;
+    }
+    // quality 2: good enough to hold where we are, not good enough to climb.
+    _poorSamples = 0;
+    _goodSamples = 0;
+  }
+
+  /// Move [by] rungs down (+1, worse) or up (-1, better) the ladder.
+  Future<void> _stepVideo(int by) async {
+    final target = (_videoRung + by).clamp(0, kVideoLadder.length - 1);
+    if (target == _videoRung) return;
+    // A camera the user turned off themselves stays off; we only ever undo our
+    // own doing.
+    if (!state.cameraOn && !_cameraOffForNetwork) return;
+
+    _videoRung = target;
+    final rung = kVideoLadder[target];
+
+    if (rung.cameraOff) {
+      if (state.cameraOn) {
         _cameraOffForNetwork = true;
         _diagnostics.log('video paused: weak connection');
         await _setCamera(false, pausedForNetwork: true);
@@ -835,15 +876,28 @@ class CallController extends Cubit<CallState> {
       return;
     }
 
-    _poorSamples = 0;
-    // Only ever undo our own doing — a camera the user turned off stays off.
-    if (!_cameraOffForNetwork || quality < 3) return;
-    _goodSamples++;
-    if (_goodSamples < _goodSamplesBeforeVideoOn) return;
-    _goodSamples = 0;
-    _cameraOffForNetwork = false;
-    _diagnostics.log('video resumed: connection recovered');
-    await _setCamera(true, pausedForNetwork: false);
+    await _applyVideoRung(rung);
+    if (!state.cameraOn && _cameraOffForNetwork) {
+      _cameraOffForNetwork = false;
+      _diagnostics.log('video resumed at ${rung.label}');
+      await _setCamera(true, pausedForNetwork: false);
+    } else {
+      _diagnostics.log('video ${rung.label}');
+    }
+  }
+
+  Future<void> _applyVideoRung(VideoRung rung) async {
+    final peer = _peer;
+    if (peer == null || rung.cameraOff) return;
+    try {
+      await peer.setVideoSendQuality(
+        scaleDownBy: rung.scaleDownBy,
+        maxBitrateBps: rung.maxBitrateBps,
+        maxFramerate: rung.maxFramerate,
+      );
+    } catch (_) {
+      // Never a reason to drop a call.
+    }
   }
 
   void _emitIfOpen(CallState next) {

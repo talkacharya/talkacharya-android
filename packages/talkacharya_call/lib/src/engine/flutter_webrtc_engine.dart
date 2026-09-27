@@ -24,10 +24,13 @@ class FlutterWebRtcEngine implements RtcEngine {
   /// 480p at 24fps: good enough to read a face, ~1/4 the bandwidth of 720p — and on a
   /// relayed call every bit crosses our own server. The camera negotiates the nearest
   /// size it actually supports.
+  // Capture higher than we intend to send: the ladder scales down from here,
+  // and a good wifi call gets a face worth looking at. Sending is capped
+  // separately — see [RtcPeer.setVideoSendQuality].
   static const _videoConstraints = <String, dynamic>{
     'facingMode': 'user',
-    'width': {'ideal': 640},
-    'height': {'ideal': 480},
+    'width': {'ideal': 960},
+    'height': {'ideal': 540},
     'frameRate': {'ideal': 24, 'max': 30},
   };
 
@@ -230,6 +233,45 @@ class _WebRtcPeer implements RtcPeer {
       (c['sdpMLineIndex'] as num?)?.toInt(),
     ),
   );
+
+  @override
+  Future<void> setVideoSendQuality({
+    double scaleDownBy = 1.0,
+    int? maxBitrateBps,
+    int? maxFramerate,
+  }) async {
+    try {
+      final senders = await _pc.getSenders();
+      for (final sender in senders) {
+        if (sender.track?.kind != 'video') continue;
+        final params = sender.parameters;
+        // Dropping resolution beats a slideshow: a consultation is two faces
+        // talking, and motion is what makes a face readable.
+        params.degradationPreference =
+            RTCDegradationPreference.MAINTAIN_FRAMERATE;
+        final encodings = params.encodings;
+        if (encodings == null || encodings.isEmpty) {
+          params.encodings = [
+            RTCRtpEncoding(
+              scaleResolutionDownBy: scaleDownBy,
+              maxBitrate: maxBitrateBps,
+              maxFramerate: maxFramerate,
+            ),
+          ];
+        } else {
+          for (final e in encodings) {
+            e.scaleResolutionDownBy = scaleDownBy;
+            e.maxBitrate = maxBitrateBps;
+            e.maxFramerate = maxFramerate;
+          }
+        }
+        await sender.setParameters(params);
+      }
+    } catch (_) {
+      // Some platforms refuse setParameters before the first frame. The call is
+      // worth more than the cap.
+    }
+  }
 
   @override
   Future<RtcStats> stats() async {

@@ -132,6 +132,16 @@ class _Peer implements RtcPeer {
   double rtt = 0.05;
   double loss = 0;
 
+  /// Every send-quality change, in order, as (scaleDownBy, maxBitrateBps).
+  final sendQuality = <(double, int?)>[];
+
+  @override
+  Future<void> setVideoSendQuality({
+    double scaleDownBy = 1.0,
+    int? maxBitrateBps,
+    int? maxFramerate,
+  }) async => sendQuality.add((scaleDownBy, maxBitrateBps));
+
   @override
   Future<RtcStats> stats() async =>
       RtcStats(roundTripSeconds: rtt, lossRatio: loss, relayed: false);
@@ -662,6 +672,17 @@ void main() {
     cust.engine.last.loss = 0.3;
     await _settle(220); // several stats samples at 50ms
 
+    // First it sends less, rather than nothing: a smaller picture is worth
+    // more to both sides than an avatar.
+    expect(cust.c.state.cameraOn, isTrue);
+    expect(cust.c.state.videoPausedForNetwork, isFalse);
+    final stepped = cust.engine.last.sendQuality;
+    expect(stepped.length, greaterThan(1), reason: 'never stepped down');
+    expect(stepped.last.$1, greaterThan(1.0), reason: 'resolution not scaled');
+    expect(stepped.last.$2, lessThan(stepped.first.$2!));
+
+    // Only once the smaller picture has also failed to hold does the camera go.
+    await _settle(700);
     expect(cust.c.state.cameraOn, isFalse);
     expect(cust.c.state.videoPausedForNetwork, isTrue);
     // The far side is told, so it shows an avatar instead of a frozen frame.
@@ -672,10 +693,56 @@ void main() {
 
     cust.engine.last.rtt = 0.05;
     cust.engine.last.loss = 0;
-    await _settle(350); // recovery is deliberately slower than the drop
+    await _settle(900); // recovery is deliberately slower than the drop
 
     expect(cust.c.state.cameraOn, isTrue);
     expect(cust.c.state.videoPausedForNetwork, isFalse);
+
+    await cust.c.close();
+    await astro.c.close();
+  });
+
+  test('a video call caps what it sends the moment it connects', () async {
+    // Unconstrained video takes the bandwidth the voice needs, and the voice is
+    // what the customer is paying by the minute for.
+    final hub = _Hub();
+    final cust = _side('customer', hub, video: true);
+    final astro = _side('astrologer', hub, video: true);
+    await cust.c.start();
+    await astro.c.start();
+    await _settle();
+    cust.engine.last.ice.add(RtcIceState.connected);
+    await _settle(40);
+
+    expect(cust.engine.last.sendQuality, isNotEmpty);
+    expect(cust.engine.last.sendQuality.first.$2, isNotNull);
+    expect(cust.engine.last.sendQuality.first.$1, 1.0);
+
+    await cust.c.close();
+    await astro.c.close();
+  });
+
+  test('a middling link holds its rung instead of flapping', () async {
+    // Quality 2 is most of the day on mobile. Stepping on it would mean the
+    // picture changing size every few seconds, which is worse than either end
+    // of the ladder.
+    final hub = _Hub();
+    final cust = _side('customer', hub, video: true);
+    final astro = _side('astrologer', hub, video: true);
+    await cust.c.start();
+    await astro.c.start();
+    await _settle();
+    cust.engine.last.ice.add(RtcIceState.connected);
+    await _settle(40);
+    final settledAt = cust.engine.last.sendQuality.length;
+
+    cust.engine.last.rtt = 0.45; // not good, not bad
+    cust.engine.last.loss = 0.04;
+    await _settle(600);
+
+    expect(cust.c.state.quality, 2);
+    expect(cust.engine.last.sendQuality.length, settledAt);
+    expect(cust.c.state.cameraOn, isTrue);
 
     await cust.c.close();
     await astro.c.close();
