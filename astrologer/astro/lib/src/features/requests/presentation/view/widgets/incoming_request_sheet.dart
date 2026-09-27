@@ -26,14 +26,39 @@ import '../../../../../core/utils/haptic_service.dart';
 /// Full-width sheet shown when an `astro:` `consultation.requested` frame
 /// arrives: countdown ring, who's asking, and Accept / Decline. Accept opens
 /// the consultation room.
+/// Which request is already ringing, so a redelivered frame and its push
+/// don't stack two sheets on top of each other.
+String? _ringingFor;
+
 Future<void> showIncomingRequestSheet(
   BuildContext context, {
   required String consultationId,
   required String channel,
   required String question,
-}) {
+}) async {
+  if (_ringingFor == consultationId) return;
+  _ringingFor = consultationId;
+  try {
+    await _show(context, consultationId, channel, question);
+  } finally {
+    _ringingFor = null;
+  }
+}
+
+Future<void> _show(
+  BuildContext context,
+  String consultationId,
+  String channel,
+  String question,
+) {
   return showModalBottomSheet<void>(
     context: context,
+    // The consultation room lives on the root navigator, above the shell this
+    // is called from. Without this the sheet is inserted *below* the room: an
+    // astrologer sitting in a chat never sees the request, it times out as a
+    // no-show, and the customer who was trying to move onto a call has lost
+    // the chat they were in.
+    useRootNavigator: true,
     isDismissible: false,
     enableDrag: false,
     isScrollControlled: true,
