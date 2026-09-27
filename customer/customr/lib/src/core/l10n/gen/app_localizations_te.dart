@@ -6936,4 +6936,20 @@ class AppLocalizationsTe extends AppLocalizations {
   String roomSwitchRinging(String name) {
     return 'Asking $name to join…';
   }
+
+  @override
+  String get liveConsultPrivately => 'Talk privately';
+
+  @override
+  String liveConsultBody(String name) {
+    return 'Ask $name for a private reading. You\'ll join their queue and they\'ll come to you after the stream.';
+  }
+
+  @override
+  String liveConsultQueued(int position) {
+    return 'You\'re number $position in the queue';
+  }
+
+  @override
+  String get roomSwitchToChat => 'Chat';
 }

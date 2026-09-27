@@ -3734,5 +3734,31 @@
         "type": "String"
       }
     }
+  },
+  "liveConsultPrivately": "Talk privately",
+  "@liveConsultPrivately": {
+    "description": "Asking a live host for a private reading"
+  },
+  "liveConsultBody": "Ask {name} for a private reading. You'll join their queue and they'll come to you after the stream.",
+  "@liveConsultBody": {
+    "description": "Asking a live host for a private reading",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "liveConsultQueued": "You're number {position} in the queue",
+  "@liveConsultQueued": {
+    "description": "Asking a live host for a private reading",
+    "placeholders": {
+      "position": {
+        "type": "int"
+      }
+    }
+  },
+  "roomSwitchToChat": "Chat",
+  "@roomSwitchToChat": {
+    "description": "Asking a live host for a private reading"
   }
 }

@@ -7017,4 +7017,20 @@ class AppLocalizationsHi extends AppLocalizations {
   String roomSwitchRinging(String name) {
     return '$name को जोड़ा जा रहा है…';
   }
+
+  @override
+  String get liveConsultPrivately => 'निजी बातचीत';
+
+  @override
+  String liveConsultBody(String name) {
+    return '$name से निजी परामर्श का अनुरोध करें। आप उनकी कतार में जुड़ जाएंगे और स्ट्रीम के बाद वे आपसे बात करेंगे।';
+  }
+
+  @override
+  String liveConsultQueued(int position) {
+    return 'कतार में आपका नंबर $position है';
+  }
+
+  @override
+  String get roomSwitchToChat => 'चैट';
 }

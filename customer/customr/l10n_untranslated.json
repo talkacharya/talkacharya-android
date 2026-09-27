@@ -275,7 +275,11 @@
     "roomSwitchVideo",
     "roomSwitchBody",
     "roomSwitchRate",
-    "roomSwitchRinging"
+    "roomSwitchRinging",
+    "liveConsultPrivately",
+    "liveConsultBody",
+    "liveConsultQueued",
+    "roomSwitchToChat"
   ],
 
   "gu": [
@@ -554,7 +558,11 @@
     "roomSwitchVideo",
     "roomSwitchBody",
     "roomSwitchRate",
-    "roomSwitchRinging"
+    "roomSwitchRinging",
+    "liveConsultPrivately",
+    "liveConsultBody",
+    "liveConsultQueued",
+    "roomSwitchToChat"
   ],
 
   "kn": [
@@ -833,7 +841,11 @@
     "roomSwitchVideo",
     "roomSwitchBody",
     "roomSwitchRate",
-    "roomSwitchRinging"
+    "roomSwitchRinging",
+    "liveConsultPrivately",
+    "liveConsultBody",
+    "liveConsultQueued",
+    "roomSwitchToChat"
   ],
 
   "mr": [
@@ -1112,7 +1124,11 @@
     "roomSwitchVideo",
     "roomSwitchBody",
     "roomSwitchRate",
-    "roomSwitchRinging"
+    "roomSwitchRinging",
+    "liveConsultPrivately",
+    "liveConsultBody",
+    "liveConsultQueued",
+    "roomSwitchToChat"
   ],
 
   "ta": [
@@ -1391,7 +1407,11 @@
     "roomSwitchVideo",
     "roomSwitchBody",
     "roomSwitchRate",
-    "roomSwitchRinging"
+    "roomSwitchRinging",
+    "liveConsultPrivately",
+    "liveConsultBody",
+    "liveConsultQueued",
+    "roomSwitchToChat"
   ],
 
   "te": [
@@ -1670,6 +1690,10 @@
     "roomSwitchVideo",
     "roomSwitchBody",
     "roomSwitchRate",
-    "roomSwitchRinging"
+    "roomSwitchRinging",
+    "liveConsultPrivately",
+    "liveConsultBody",
+    "liveConsultQueued",
+    "roomSwitchToChat"
   ]
 }

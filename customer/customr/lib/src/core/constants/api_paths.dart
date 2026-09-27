@@ -121,6 +121,10 @@ class ApiPaths {
   static const livestreams = '/app/livestreams';
   static String livestream(String id) => '/app/livestreams/$id';
 
+  /// Ask a live host for a private reading — joins their consultation queue.
+  static String livestreamConsult(String id) =>
+      '/app/livestreams/$id/consult';
+
   // store — /app/store/... (products, poojas, orders, consult before buying)
   static const storeHome = '/app/store/home';
   static const storeCategories = '/app/store/categories';

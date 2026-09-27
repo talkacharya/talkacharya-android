@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:talkacharya_live/talkacharya_live.dart';
 
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/network/friendly_error.dart';
 import '../../../../core/l10n/api_error_l10n.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/realtime/realtime_client.dart';
@@ -514,6 +515,74 @@ class _ComposerState extends State<_Composer> {
     }
   }
 
+  Future<void> _consultPrivately() async {
+    final stream = widget.stream;
+    if (stream == null) return;
+    final l = context.l10n;
+    final messenger = ScaffoldMessenger.of(context);
+
+    final channel = await showModalBottomSheet<String>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
+              child: Text(
+                l.liveConsultBody(stream.hostName),
+                style: Theme.of(sheetContext).textTheme.bodyMedium,
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.chat_bubble_outline_rounded),
+              title: Text(l.roomSwitchToChat),
+              onTap: () => Navigator.pop(sheetContext, 'chat'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.call_rounded),
+              title: Text(l.roomSwitchVoice),
+              onTap: () => Navigator.pop(sheetContext, 'voice'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.videocam_rounded),
+              title: Text(l.roomSwitchVideo),
+              onTap: () => Navigator.pop(sheetContext, 'video'),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+    if (channel == null) return;
+
+    try {
+      final position = await getIt<LivestreamApi>().consultPrivately(
+        stream.id,
+        channel,
+      );
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(l.liveConsultQueued(position)),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+    } catch (e) {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(friendlyError(e)),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+    }
+  }
+
   void _gift() {
     final stream = widget.stream;
     if (stream == null) return;
@@ -554,6 +623,15 @@ class _ComposerState extends State<_Composer> {
                 tooltip: l.liveSendPhoto,
                 background: Colors.white.withValues(alpha: 0.18),
                 onTap: state.phase.isOn ? _pickImage : null,
+              ),
+              const SizedBox(width: 8),
+              // Ten minutes of watching someone is the strongest buying signal
+              // in the product, and there was nowhere to act on it.
+              _CircleButton(
+                icon: Icons.record_voice_over_rounded,
+                tooltip: l.liveConsultPrivately,
+                background: Colors.white.withValues(alpha: 0.18),
+                onTap: state.phase.isOn ? _consultPrivately : null,
               ),
               const SizedBox(width: 8),
               Expanded(

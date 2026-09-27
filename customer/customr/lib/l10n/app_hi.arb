@@ -2894,5 +2894,9 @@
   "roomSwitchVideo": "वीडियो कॉल",
   "roomSwitchBody": "यह चैट समाप्त होगी और {name} को कॉल पर आने का अनुरोध जाएगा। आपकी बातचीत यहीं रहेगी।",
   "roomSwitchRate": "{currency}{rate}/मिनट",
-  "roomSwitchRinging": "{name} को जोड़ा जा रहा है…"
+  "roomSwitchRinging": "{name} को जोड़ा जा रहा है…",
+  "liveConsultPrivately": "निजी बातचीत",
+  "liveConsultBody": "{name} से निजी परामर्श का अनुरोध करें। आप उनकी कतार में जुड़ जाएंगे और स्ट्रीम के बाद वे आपसे बात करेंगे।",
+  "liveConsultQueued": "कतार में आपका नंबर {position} है",
+  "roomSwitchToChat": "चैट"
 }

@@ -12115,6 +12115,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Asking {name} to join…'**
   String roomSwitchRinging(String name);
+
+  /// Asking a live host for a private reading
+  ///
+  /// In en, this message translates to:
+  /// **'Talk privately'**
+  String get liveConsultPrivately;
+
+  /// Asking a live host for a private reading
+  ///
+  /// In en, this message translates to:
+  /// **'Ask {name} for a private reading. You\'ll join their queue and they\'ll come to you after the stream.'**
+  String liveConsultBody(String name);
+
+  /// Asking a live host for a private reading
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re number {position} in the queue'**
+  String liveConsultQueued(int position);
+
+  /// Asking a live host for a private reading
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get roomSwitchToChat;
 }
 
 class _AppLocalizationsDelegate

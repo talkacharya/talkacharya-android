@@ -64,6 +64,15 @@ class LivestreamApi {
     }
   }
 
+  /// Ask the host for a private consultation. Returns the queue position.
+  Future<int> consultPrivately(String id, String channel) async {
+    final res = await _dio.post<Map<String, dynamic>>(
+      ApiPaths.livestreamConsult(id),
+      data: {'channel': channel},
+    );
+    return (res.data?['position'] as num?)?.toInt() ?? 0;
+  }
+
   Future<void> leave(String id) async {
     try {
       await _dio.post<void>('${ApiPaths.livestream(id)}/leave');
