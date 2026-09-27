@@ -54,6 +54,16 @@ class LiveHostCubit extends LiveCubitBase {
     }
     if (closed) return;
 
+    // Both counts come back with the token. Waiting for the first frame would
+    // show a host who reopened the app zero viewers and an empty queue when
+    // neither is true.
+    emitIfOpen(
+      state.copyWith(
+        viewerCount: join.viewerCount,
+        waitingCount: join.waitingCount,
+      ),
+    );
+
     listenToRoom();
     listenToChannel(join.chatChannel);
 

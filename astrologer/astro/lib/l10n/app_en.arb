@@ -834,5 +834,22 @@
   "commonClose": "Close",
   "@commonClose": {
     "description": "Dismiss a panel"
+  },
+  "roomCustomerToppingUp": "Customer is adding money — session held, not billing",
+  "@roomCustomerToppingUp": {
+    "description": "Customer is mid-recharge; the session is held"
+  },
+  "liveWaitingCount": "{count} waiting",
+  "@liveWaitingCount": {
+    "description": "Private-reading queue while live",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "liveWaitingTooltip": "Viewers who want a private reading — they're in your queue",
+  "@liveWaitingTooltip": {
+    "description": "Private-reading queue while live"
   }
 }

@@ -455,5 +455,8 @@
   "quickRepliesNewHint": "जो आप अक्सर लिखते हैं",
   "quickRepliesDelete": "हटाएं",
   "quickRepliesSaveFailed": "उत्तर सहेजा नहीं जा सका।",
-  "commonClose": "बंद करें"
+  "commonClose": "बंद करें",
+  "roomCustomerToppingUp": "ग्राहक पैसे जोड़ रहे हैं — सत्र रुका है, शुल्क नहीं लग रहा",
+  "liveWaitingCount": "{count} प्रतीक्षा में",
+  "liveWaitingTooltip": "निजी परामर्श चाहने वाले दर्शक — वे आपकी कतार में हैं"
 }

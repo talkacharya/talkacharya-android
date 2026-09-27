@@ -15,6 +15,7 @@ class LiveJoin extends Equatable {
     required this.canPublish,
     required this.chatChannel,
     this.viewerCount = 0,
+    this.waitingCount = 0,
   });
 
   /// Our media server, e.g. `wss://media.talkacharya.com`.
@@ -33,6 +34,9 @@ class LiveJoin extends Equatable {
   final String chatChannel;
   final int viewerCount;
 
+  /// Host only: viewers already queued for a private reading.
+  final int waitingCount;
+
   bool get isHost => role == 'host';
 
   factory LiveJoin.fromJson(Map<String, dynamic> j) => LiveJoin(
@@ -44,6 +48,7 @@ class LiveJoin extends Equatable {
     canPublish: j['can_publish'] == true,
     chatChannel: '${j['chat_channel'] ?? ''}',
     viewerCount: (j['viewer_count'] as num?)?.toInt() ?? 0,
+    waitingCount: (j['waiting_count'] as num?)?.toInt() ?? 0,
   );
 
   @override

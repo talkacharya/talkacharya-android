@@ -1557,4 +1557,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonClose => 'Close';
+
+  @override
+  String get roomCustomerToppingUp =>
+      'Customer is adding money — session held, not billing';
+
+  @override
+  String liveWaitingCount(int count) {
+    return '$count waiting';
+  }
+
+  @override
+  String get liveWaitingTooltip =>
+      'Viewers who want a private reading — they\'re in your queue';
 }

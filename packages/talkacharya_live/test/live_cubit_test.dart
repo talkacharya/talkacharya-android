@@ -130,6 +130,8 @@ class _HostBackend implements LiveHostBackend {
       role: 'host',
       canPublish: true,
       chatChannel: 'live:1',
+      viewerCount: 4,
+      waitingCount: 2,
     );
   }
 
@@ -521,5 +523,55 @@ void main() {
     expect(m.hasImage, isTrue);
     expect(m.imageUrl, 'https://cdn.test/a.png');
     expect(LiveChatMessage.fromJson({'id': 'm2'}).hasImage, isFalse);
+  });
+
+  group('private-reading queue', () {
+    test('going live seeds both counts from the token response', () async {
+      // A host reopening the app mid-stream must not see zero viewers and an
+      // empty queue when neither is true.
+      final backend = _HostBackend();
+      final cubit = LiveHostCubit(
+        backend: backend,
+        permissions: _Perms(),
+        engine: _Engine(),
+        signaling: _Hub(),
+        userId: 'astro',
+      );
+      await cubit.goLive();
+
+      expect(cubit.state.viewerCount, 4);
+      expect(cubit.state.waitingCount, 2);
+      await cubit.close();
+    });
+
+    test('a private request while live updates the count', () async {
+      final hub = _Hub();
+      final cubit = LiveHostCubit(
+        backend: _HostBackend(),
+        permissions: _Perms(),
+        engine: _Engine(),
+        signaling: hub,
+        userId: 'astro',
+      );
+      await cubit.goLive();
+
+      hub.push('live:1', 'live.private_request', {
+        'viewer_name': 'Asha',
+        'channel': 'voice',
+        'waiting': 3,
+      });
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state.waitingCount, 3);
+
+      // A frame without the total still moves the number, rather than leaving
+      // the host looking at a stale one.
+      hub.push('live:1', 'live.private_request', {
+        'viewer_name': 'Ravi',
+        'channel': 'chat',
+      });
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state.waitingCount, 4);
+      await cubit.close();
+    });
   });
 }

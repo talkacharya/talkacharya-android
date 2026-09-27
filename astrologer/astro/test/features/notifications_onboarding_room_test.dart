@@ -183,6 +183,36 @@ void main() {
       await cubit.close();
     });
 
+    test('a customer paying mid-session is not a customer who left', () async {
+      final cubit = build();
+      await cubit.init();
+      expect(cubit.state.customerToppingUp, isFalse);
+
+      // The room goes quiet because the meter stopped, not because anyone
+      // walked off. An astrologer who is told nothing ends the session.
+      frames.add({'type': 'billing.awaiting_payment', 'data': {}});
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state.customerToppingUp, isTrue);
+
+      frames.add({'type': 'billing.resumed', 'data': {}});
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state.customerToppingUp, isFalse);
+      expect(cubit.state.clientLowBalance, isFalse);
+      await cubit.close();
+    });
+
+    test('a hold that ran out clears the indicator too', () async {
+      final cubit = build();
+      await cubit.init();
+      frames.add({'type': 'billing.awaiting_payment', 'data': {}});
+      await Future<void>.delayed(Duration.zero);
+
+      frames.add({'type': 'billing.payment_grace_expired', 'data': {}});
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state.customerToppingUp, isFalse);
+      await cubit.close();
+    });
+
     test('a closed thread closes the composer', () async {
       when(() => api.conversation('c1')).thenAnswer(
         (_) async =>

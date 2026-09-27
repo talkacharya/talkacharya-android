@@ -110,6 +110,15 @@ abstract class LiveCubitBase extends Cubit<LiveState> {
             slowModeSeconds: (data['seconds'] as num?)?.toInt() ?? 0,
           ),
         );
+      case 'live.private_request':
+        // Someone in the audience wants a paid reading. The host is looking at
+        // their camera, not at a queue screen, so this has to show up here.
+        emit(
+          state.copyWith(
+            waitingCount:
+                (data['waiting'] as num?)?.toInt() ?? state.waitingCount + 1,
+          ),
+        );
       case 'viewer.count':
         emitIfOpen(
           state.copyWith(viewerCount: (data['count'] as num?)?.toInt() ?? 0),

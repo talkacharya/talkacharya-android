@@ -2815,6 +2815,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get commonClose;
+
+  /// Customer is mid-recharge; the session is held
+  ///
+  /// In en, this message translates to:
+  /// **'Customer is adding money — session held, not billing'**
+  String get roomCustomerToppingUp;
+
+  /// Private-reading queue while live
+  ///
+  /// In en, this message translates to:
+  /// **'{count} waiting'**
+  String liveWaitingCount(int count);
+
+  /// Private-reading queue while live
+  ///
+  /// In en, this message translates to:
+  /// **'Viewers who want a private reading — they\'re in your queue'**
+  String get liveWaitingTooltip;
 }
 
 class _AppLocalizationsDelegate

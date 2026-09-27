@@ -38,6 +38,7 @@ class LiveState extends Equatable {
     this.phase = LivePhase.idle,
     this.isHost = false,
     this.viewerCount = 0,
+    this.waitingCount = 0,
     this.messages = const [],
     this.gifts = const [],
     this.pinned,
@@ -58,6 +59,11 @@ class LiveState extends Equatable {
   final LivePhase phase;
   final bool isHost;
   final int viewerCount;
+
+  /// Viewers who have asked this host for a private reading. Host-side only:
+  /// it is the number that decides whether wrapping the stream up is worth
+  /// more than carrying on.
+  final int waitingCount;
 
   /// Oldest first — the list a chat panel renders bottom-anchored.
   final List<LiveChatMessage> messages;
@@ -93,6 +99,7 @@ class LiveState extends Equatable {
     LivePhase? phase,
     bool? isHost,
     int? viewerCount,
+    int? waitingCount,
     List<LiveChatMessage>? messages,
     List<LiveGiftEvent>? gifts,
     LiveChatMessage? pinned,
@@ -116,6 +123,7 @@ class LiveState extends Equatable {
     phase: phase ?? this.phase,
     isHost: isHost ?? this.isHost,
     viewerCount: viewerCount ?? this.viewerCount,
+      waitingCount: waitingCount ?? this.waitingCount,
     messages: messages ?? this.messages,
     gifts: gifts ?? this.gifts,
     pinned: clearPinned ? null : (pinned ?? this.pinned),
@@ -138,6 +146,7 @@ class LiveState extends Equatable {
     phase,
     isHost,
     viewerCount,
+    waitingCount,
     messages,
     gifts,
     pinned,

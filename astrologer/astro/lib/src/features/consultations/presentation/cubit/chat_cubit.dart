@@ -15,6 +15,7 @@ class ChatState {
     this.consultation,
     this.clientLowBalance = false,
     this.clientRunwaySeconds,
+    this.customerToppingUp = false,
     this.error,
   });
   final bool loading;
@@ -33,6 +34,12 @@ class ChatState {
   /// Seconds of talk time the customer's wallet still covers (from
   /// `billing.tick`); `null` until the first tick.
   final int? clientRunwaySeconds;
+
+  /// The customer ran out mid-session and is paying right now, so the
+  /// consultation is being held rather than ended. Nothing is being billed —
+  /// which the astrologer has to be told, or the quiet looks like a customer
+  /// who has walked off and they end a session that is about to resume.
+  final bool customerToppingUp;
   final String? error;
 
   SendingWindow get window => conversation?.window ?? const SendingWindow();
@@ -51,6 +58,7 @@ class ChatState {
     Consultation? consultation,
     bool? clientLowBalance,
     int? clientRunwaySeconds,
+    bool? customerToppingUp,
     Object? error = _s,
   }) => ChatState(
     loading: loading ?? this.loading,
@@ -58,6 +66,7 @@ class ChatState {
     consultation: consultation ?? this.consultation,
     clientLowBalance: clientLowBalance ?? this.clientLowBalance,
     clientRunwaySeconds: clientRunwaySeconds ?? this.clientRunwaySeconds,
+    customerToppingUp: customerToppingUp ?? this.customerToppingUp,
     error: error == _s ? this.error : error as String?,
   );
   static const _s = Object();
@@ -128,6 +137,13 @@ class ChatCubit extends Cubit<ChatState> {
             clientLowBalance: state.clientLowBalance && runway <= 180,
           ),
         );
+      case 'billing.awaiting_payment':
+        // Out of money, payment in flight: the session is held, not over.
+        emit(state.copyWith(customerToppingUp: true));
+      case 'billing.resumed':
+        emit(state.copyWith(customerToppingUp: false, clientLowBalance: false));
+      case 'billing.payment_grace_expired':
+        emit(state.copyWith(customerToppingUp: false));
       case 'consultation.shared':
       case 'consultation.started':
       case 'consultation.accepted':

@@ -650,6 +650,7 @@ class _SessionBar extends StatelessWidget {
     final earned = double.tryParse(c.astrologerAmount) ?? 0;
     final runway = state.clientRunwaySeconds ?? c.runwaySeconds;
     final low = state.clientLowBalance;
+    final toppingUp = state.customerToppingUp;
 
     return Column(
       children: [
@@ -705,7 +706,46 @@ class _SessionBar extends StatelessWidget {
         ),
         AnimatedSize(
           duration: const Duration(milliseconds: 250),
-          child: low
+          // The hold takes precedence over the warning: by this point the
+          // customer is past warning and actually paying.
+          child: toppingUp
+              ? Container(
+                  width: double.infinity,
+                  color: Theme.of(context).colorScheme.tertiaryContainer,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 6,
+                    horizontal: 16,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 13,
+                        height: 13,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onTertiaryContainer,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: Text(
+                          l.roomCustomerToppingUp,
+                          style: TextStyle(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onTertiaryContainer,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : low
               ? Container(
                   width: double.infinity,
                   color: brand.live,

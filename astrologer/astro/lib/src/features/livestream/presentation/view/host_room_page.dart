@@ -9,6 +9,7 @@ import 'package:talkacharya_live/talkacharya_live.dart';
 import 'go_live_page.dart';
 import 'widgets/live_chat_image.dart';
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/theme/brand_colors.dart';
 
 /// The broadcast screen: our own camera full-bleed, the chat and viewer count
 /// over it, and the controls that matter while on air.
@@ -244,6 +245,12 @@ class _HostHeader extends StatelessWidget {
             '${state.viewerCount}',
             style: const TextStyle(color: Colors.white70, fontSize: 13),
           ),
+          // Paying intent, sitting in the audience. Worth more than the view
+          // count and the host could not see it at all.
+          if (state.waitingCount > 0) ...[
+            const SizedBox(width: 10),
+            _WaitingPill(count: state.waitingCount),
+          ],
           const SizedBox(width: 6),
           TextButton(
             onPressed: onEnd,
@@ -822,6 +829,49 @@ class _Message extends StatelessWidget {
                   style: TextStyle(color: Colors.white70),
                 ),
               ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// How many viewers have asked this host for a private reading.
+///
+/// Deliberately loud: it is the one number that should change what the host
+/// does next, and they are looking at a camera, not a dashboard.
+class _WaitingPill extends StatelessWidget {
+  const _WaitingPill({required this.count});
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    return Tooltip(
+      message: l.liveWaitingTooltip,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: BrandColors.goldGradient),
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.record_voice_over_rounded,
+              size: 13,
+              color: Colors.black87,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              l.liveWaitingCount(count),
+              style: const TextStyle(
+                color: Colors.black87,
+                fontSize: 11.5,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
           ],
         ),
       ),

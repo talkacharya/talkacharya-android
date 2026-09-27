@@ -1553,4 +1553,17 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get commonClose => 'बंद करें';
+
+  @override
+  String get roomCustomerToppingUp =>
+      'ग्राहक पैसे जोड़ रहे हैं — सत्र रुका है, शुल्क नहीं लग रहा';
+
+  @override
+  String liveWaitingCount(int count) {
+    return '$count प्रतीक्षा में';
+  }
+
+  @override
+  String get liveWaitingTooltip =>
+      'निजी परामर्श चाहने वाले दर्शक — वे आपकी कतार में हैं';
 }

@@ -9,6 +9,7 @@ class HostStream extends Equatable {
     this.language = 'en',
     this.status = 'scheduled',
     this.viewerCount = 0,
+    this.waitingCount = 0,
     this.peakViewers = 0,
     this.totalJoins = 0,
     this.totalGiftValue = 0,
@@ -27,6 +28,9 @@ class HostStream extends Equatable {
   /// `scheduled` | `live` | `ended` | `cancelled`.
   final String status;
   final int viewerCount;
+
+  /// Viewers waiting for a private reading with this host.
+  final int waitingCount;
   final int peakViewers;
   final int totalJoins;
   final double totalGiftValue;
@@ -46,6 +50,7 @@ class HostStream extends Equatable {
     language: '${j['language'] ?? 'en'}',
     status: '${j['status'] ?? 'scheduled'}',
     viewerCount: (j['viewer_count'] as num?)?.toInt() ?? 0,
+    waitingCount: (j['waiting_count'] as num?)?.toInt() ?? 0,
     peakViewers: (j['peak_viewers'] as num?)?.toInt() ?? 0,
     totalJoins: (j['total_joins'] as num?)?.toInt() ?? 0,
     totalGiftValue: double.tryParse('${j['total_gift_value'] ?? 0}') ?? 0,
@@ -57,7 +62,7 @@ class HostStream extends Equatable {
   );
 
   @override
-  List<Object?> get props => [id, status, viewerCount, title];
+  List<Object?> get props => [id, status, viewerCount, waitingCount, title];
 }
 
 /// A viewer in the host's roster (`ViewerSerializer`).
