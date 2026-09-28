@@ -1590,4 +1590,23 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get roomSearchEmpty => 'कुछ नहीं मिला';
+
+  @override
+  String get earnTabGifts => 'उपहार';
+
+  @override
+  String get earnGiftsEmptyTitle => 'अभी कोई उपहार नहीं';
+
+  @override
+  String get earnGiftsEmptyBody =>
+      'आपके लाइव सत्र और परामर्श में मिले उपहार यहाँ दिखेंगे।';
+
+  @override
+  String get earnGiftFromLive => 'लाइव सत्र';
+
+  @override
+  String get earnGiftFromConsultation => 'परामर्श';
+
+  @override
+  String get roomDownloadTranscript => 'यह बातचीत सहेजें';
 }

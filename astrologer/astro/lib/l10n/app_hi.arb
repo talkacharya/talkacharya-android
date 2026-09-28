@@ -466,5 +466,11 @@
   "callHideChart": "कुंडली छिपाएं",
   "roomSearch": "खोजें",
   "roomSearchHint": "इस बातचीत में खोजें",
-  "roomSearchEmpty": "कुछ नहीं मिला"
+  "roomSearchEmpty": "कुछ नहीं मिला",
+  "earnTabGifts": "उपहार",
+  "earnGiftsEmptyTitle": "अभी कोई उपहार नहीं",
+  "earnGiftsEmptyBody": "आपके लाइव सत्र और परामर्श में मिले उपहार यहाँ दिखेंगे।",
+  "earnGiftFromLive": "लाइव सत्र",
+  "earnGiftFromConsultation": "परामर्श",
+  "roomDownloadTranscript": "यह बातचीत सहेजें"
 }

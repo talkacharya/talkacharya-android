@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/util/async_value.dart';
 import '../../../home/data/dashboard_models.dart';
 import '../../data/earnings_api.dart';
+import '../../data/received_gift.dart';
 import '../../data/earnings_models.dart';
 import '../../../../core/network/friendly_error.dart';
 
@@ -50,6 +51,7 @@ class EarningsState extends Equatable {
     this.kind,
     this.ledger = const Paged(),
     this.payouts = const Paged(),
+    this.gifts = const Paged(),
     this.documents = const AsyncValue.idle(),
   });
 
@@ -59,6 +61,7 @@ class EarningsState extends Equatable {
   final String? kind;
   final Paged<EarningEntry> ledger;
   final Paged<Payout> payouts;
+  final Paged<ReceivedGift> gifts;
   final AsyncValue<List<TaxDocument>> documents;
 
   EarningsState copyWith({
@@ -66,18 +69,20 @@ class EarningsState extends Equatable {
     Object? kind = _s,
     Paged<EarningEntry>? ledger,
     Paged<Payout>? payouts,
+    Paged<ReceivedGift>? gifts,
     AsyncValue<List<TaxDocument>>? documents,
   }) => EarningsState(
     summary: summary ?? this.summary,
     kind: kind == _s ? this.kind : kind as String?,
     ledger: ledger ?? this.ledger,
     payouts: payouts ?? this.payouts,
+    gifts: gifts ?? this.gifts,
     documents: documents ?? this.documents,
   );
   static const _s = Object();
 
   @override
-  List<Object?> get props => [summary, kind, ledger, payouts, documents];
+  List<Object?> get props => [summary, kind, ledger, payouts, gifts, documents];
 }
 
 /// Earnings tab: balance summary, the earnings ledger (filterable, paged),
@@ -90,6 +95,7 @@ class EarningsCubit extends Cubit<EarningsState> {
     _loadSummary(),
     _loadLedger(),
     _loadPayouts(),
+    _loadGifts(),
     _loadDocuments(),
   ]);
 
@@ -198,6 +204,53 @@ class EarningsCubit extends Cubit<EarningsState> {
             payouts: state.payouts.copyWith(loading: false, error: true),
           ),
         );
+      }
+    }
+  }
+
+  Future<void> _loadGifts() async {
+    emit(state.copyWith(gifts: state.gifts.copyWith(loading: true, error: false)));
+    try {
+      final page = await _api.giftsReceived();
+      if (isClosed) return;
+      emit(
+        state.copyWith(
+          gifts: Paged(
+            items: page.items,
+            cursor: page.nextCursor,
+            loading: false,
+          ),
+        ),
+      );
+    } catch (_) {
+      if (!isClosed) {
+        emit(
+          state.copyWith(
+            gifts: state.gifts.copyWith(loading: false, error: true),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> loadMoreGifts() async {
+    final p = state.gifts;
+    if (!p.hasMore || p.loadingMore || p.loading) return;
+    emit(state.copyWith(gifts: p.copyWith(loadingMore: true)));
+    try {
+      final page = await _api.giftsReceived(cursor: p.cursor);
+      if (isClosed) return;
+      emit(
+        state.copyWith(
+          gifts: Paged(
+            items: [...p.items, ...page.items],
+            cursor: page.nextCursor,
+          ),
+        ),
+      );
+    } catch (_) {
+      if (!isClosed) {
+        emit(state.copyWith(gifts: p.copyWith(loadingMore: false)));
       }
     }
   }

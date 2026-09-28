@@ -77,6 +77,17 @@ class ConsultationApi {
   Future<void> useSavedReply(String id) =>
       _dio.post<void>(ApiPaths.savedReply(id));
 
+  /// A PDF (or plain text, where the server cannot make one) of the thread,
+  /// or of one session in it.
+  Future<List<int>> transcript(String threadId, {String? consultationId}) async {
+    final res = await _dio.get<List<int>>(
+      ApiPaths.transcript(threadId),
+      queryParameters: {'consultation': ?consultationId},
+      options: Options(responseType: ResponseType.bytes),
+    );
+    return res.data ?? const [];
+  }
+
   Future<Consultation> detail(String id) async {
     final res = await _dio.get<Map<String, dynamic>>(
       ApiPaths.astroConsultation(id),

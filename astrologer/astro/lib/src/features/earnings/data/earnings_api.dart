@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../../../core/constants/api_paths.dart';
 import '../../../core/network/api_exception.dart';
 import 'earnings_models.dart';
+import 'received_gift.dart';
 
 class EarningsApi {
   EarningsApi(this._dio);
@@ -28,6 +29,18 @@ class EarningsApi {
       ),
     );
     return CursorPage.parse(res.data, EarningEntry.fromJson);
+  }
+
+  /// `GET /astro/gifts/received` — gifts sent during a live stream or a
+  /// consultation. Refunded ones are included: they still happened.
+  Future<CursorPage<ReceivedGift>> giftsReceived({String? cursor}) async {
+    final res = await _ok(
+      _dio.get<dynamic>(
+        ApiPaths.astroGiftsReceived,
+        queryParameters: {'cursor': ?cursor},
+      ),
+    );
+    return CursorPage.parse(res.data, ReceivedGift.fromJson);
   }
 
   Future<CursorPage<Payout>> payouts({String? cursor}) async {

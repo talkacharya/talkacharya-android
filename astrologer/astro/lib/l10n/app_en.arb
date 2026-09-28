@@ -883,5 +883,29 @@
   "roomSearchEmpty": "Nothing found",
   "@roomSearchEmpty": {
     "description": "Search within a conversation"
+  },
+  "earnTabGifts": "Gifts",
+  "@earnTabGifts": {
+    "description": "Gifts an astrologer received"
+  },
+  "earnGiftsEmptyTitle": "No gifts yet",
+  "@earnGiftsEmptyTitle": {
+    "description": "Gifts an astrologer received"
+  },
+  "earnGiftsEmptyBody": "Gifts sent during your live streams and consultations show up here.",
+  "@earnGiftsEmptyBody": {
+    "description": "Gifts an astrologer received"
+  },
+  "earnGiftFromLive": "Live stream",
+  "@earnGiftFromLive": {
+    "description": "Gifts an astrologer received"
+  },
+  "earnGiftFromConsultation": "Consultation",
+  "@earnGiftFromConsultation": {
+    "description": "Gifts an astrologer received"
+  },
+  "roomDownloadTranscript": "Save this conversation",
+  "@roomDownloadTranscript": {
+    "description": "Download a transcript of the session"
   }
 }

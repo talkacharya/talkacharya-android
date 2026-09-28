@@ -1594,4 +1594,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get roomSearchEmpty => 'Nothing found';
+
+  @override
+  String get earnTabGifts => 'Gifts';
+
+  @override
+  String get earnGiftsEmptyTitle => 'No gifts yet';
+
+  @override
+  String get earnGiftsEmptyBody =>
+      'Gifts sent during your live streams and consultations show up here.';
+
+  @override
+  String get earnGiftFromLive => 'Live stream';
+
+  @override
+  String get earnGiftFromConsultation => 'Consultation';
+
+  @override
+  String get roomDownloadTranscript => 'Save this conversation';
 }

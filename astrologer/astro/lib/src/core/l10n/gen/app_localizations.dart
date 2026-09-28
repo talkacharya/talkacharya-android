@@ -2881,6 +2881,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Nothing found'**
   String get roomSearchEmpty;
+
+  /// Gifts an astrologer received
+  ///
+  /// In en, this message translates to:
+  /// **'Gifts'**
+  String get earnTabGifts;
+
+  /// Gifts an astrologer received
+  ///
+  /// In en, this message translates to:
+  /// **'No gifts yet'**
+  String get earnGiftsEmptyTitle;
+
+  /// Gifts an astrologer received
+  ///
+  /// In en, this message translates to:
+  /// **'Gifts sent during your live streams and consultations show up here.'**
+  String get earnGiftsEmptyBody;
+
+  /// Gifts an astrologer received
+  ///
+  /// In en, this message translates to:
+  /// **'Live stream'**
+  String get earnGiftFromLive;
+
+  /// Gifts an astrologer received
+  ///
+  /// In en, this message translates to:
+  /// **'Consultation'**
+  String get earnGiftFromConsultation;
+
+  /// Download a transcript of the session
+  ///
+  /// In en, this message translates to:
+  /// **'Save this conversation'**
+  String get roomDownloadTranscript;
 }
 
 class _AppLocalizationsDelegate

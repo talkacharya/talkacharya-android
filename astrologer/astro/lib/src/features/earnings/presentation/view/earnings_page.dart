@@ -17,6 +17,7 @@ import '../../../../shared/widgets/skeleton.dart';
 import '../../../home/data/dashboard_models.dart';
 import '../../../notifications/presentation/view/notification_bell.dart';
 import '../../data/earnings_models.dart';
+import '../../data/received_gift.dart';
 import '../cubit/earnings_cubit.dart';
 import '../widgets/earnings_widgets.dart';
 
@@ -41,7 +42,7 @@ class _EarningsView extends StatefulWidget {
 
 class _EarningsViewState extends State<_EarningsView>
     with SingleTickerProviderStateMixin {
-  late final TabController _tabs = TabController(length: 3, vsync: this);
+  late final TabController _tabs = TabController(length: 4, vsync: this);
 
   @override
   void dispose() {
@@ -70,6 +71,7 @@ class _EarningsViewState extends State<_EarningsView>
                   labels: [
                     l.earnTabLedger,
                     l.earnTabPayouts,
+                    l.earnTabGifts,
                     l.earnTabDocuments,
                   ],
                 ),
@@ -79,7 +81,12 @@ class _EarningsViewState extends State<_EarningsView>
           Expanded(
             child: TabBarView(
               controller: _tabs,
-              children: const [_LedgerTab(), _PayoutsTab(), _DocumentsTab()],
+              children: const [
+                _LedgerTab(),
+                _PayoutsTab(),
+                _GiftsTab(),
+                _DocumentsTab(),
+              ],
             ),
           ),
         ],
@@ -548,6 +555,133 @@ class _PayoutsTab extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _GiftsTab extends StatelessWidget {
+  const _GiftsTab();
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final cubit = context.read<EarningsCubit>();
+    final gifts = context.select((EarningsCubit c) => c.state.gifts);
+
+    Widget? placeholder;
+    if (gifts.items.isEmpty) {
+      placeholder = gifts.loading
+          ? const _ListSkeleton()
+          : gifts.error
+          ? ErrorView(message: l.earnLoadError, onRetry: cubit.load)
+          : EmptyState(
+              icon: Icons.card_giftcard_rounded,
+              hue: AstroPalette.fire,
+              title: l.earnGiftsEmptyTitle,
+              message: l.earnGiftsEmptyBody,
+            );
+    }
+
+    return _TabList(
+      placeholder: placeholder,
+      onNearEnd: cubit.loadMoreGifts,
+      footerLoading: gifts.loadingMore,
+      children: [
+        for (final g in gifts.items)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+            child: _GiftCard(gift: g),
+          ),
+      ],
+    );
+  }
+}
+
+/// One gift. Who sent it, from where, and what it was worth.
+class _GiftCard extends StatelessWidget {
+  const _GiftCard({required this.gift});
+  final ReceivedGift gift;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    final brand = context.brand;
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: AstroPalette.fire.tint(0.18),
+              child: const Icon(Icons.card_giftcard_rounded, size: 20),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    gift.giftName.isEmpty ? gift.giftSlug : gift.giftName,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    [
+                      if (gift.senderName.isNotEmpty) gift.senderName,
+                      if (gift.context == 'livestream')
+                        l.earnGiftFromLive
+                      else if (gift.context == 'consultation')
+                        l.earnGiftFromConsultation,
+                      TimeFormat.relative(l, gift.createdAt),
+                    ].where((t) => t.isNotEmpty).join(' · '),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: brand.inkMuted,
+                    ),
+                  ),
+                  if (gift.message.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      gift.message,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  Money.format(gift.grossAmount, gift.currency),
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    // A refunded gift still happened, but it is not money.
+                    decoration: gift.isRefunded
+                        ? TextDecoration.lineThrough
+                        : null,
+                    color: gift.isRefunded ? brand.inkMuted : null,
+                  ),
+                ),
+                if (gift.quantity > 1)
+                  Text(
+                    '×${gift.quantity}',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: brand.inkMuted,
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
