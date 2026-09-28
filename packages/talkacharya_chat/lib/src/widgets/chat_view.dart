@@ -9,6 +9,7 @@ import 'connection_banner.dart';
 import 'pinned_bar.dart';
 import 'message_bubble.dart';
 import 'message_grouping.dart';
+import 'swipe_to_reply.dart';
 import 'typing_indicator.dart';
 
 /// The full chat surface: connection banner + message list (with day separators,
@@ -40,6 +41,16 @@ class _ChatViewState extends State<ChatView> {
   final _scroll = ScrollController();
   int _lastCount = 0;
 
+  /// How far up the list counts as "not at the bottom". Generous, so the
+  /// button does not flicker in and out while someone reads the last screen.
+  static const _awayFromBottom = 240.0;
+
+  bool _away = false;
+
+  /// Messages that arrived while the reader was scrolled up. Reset when they
+  /// come back down, because that is when they have actually seen them.
+  int _missed = 0;
+
   @override
   void initState() {
     super.initState();
@@ -57,6 +68,24 @@ class _ChatViewState extends State<ChatView> {
     if (_scroll.position.pixels >= _scroll.position.maxScrollExtent - 200) {
       context.read<ChatController>().loadOlder();
     }
+    // ...and offset 0 is the newest message.
+    final away = _scroll.position.pixels > _awayFromBottom;
+    if (away != _away) {
+      setState(() {
+        _away = away;
+        if (!away) _missed = 0;
+      });
+    }
+  }
+
+  void _toBottom() {
+    if (!_scroll.hasClients) return;
+    setState(() => _missed = 0);
+    _scroll.animateTo(
+      0,
+      duration: const Duration(milliseconds: 260),
+      curve: Curves.easeOut,
+    );
   }
 
   @override
@@ -65,17 +94,24 @@ class _ChatViewState extends State<ChatView> {
     return BlocConsumer<ChatController, ChatSessionState>(
       listenWhen: (a, b) => a.messages.length != b.messages.length,
       listener: (_, state) {
-        // stick to bottom when a new message arrives (reverse list => offset 0)
-        if (state.messages.length > _lastCount && _scroll.hasClients) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (_scroll.hasClients) {
-              _scroll.animateTo(
-                0,
-                duration: const Duration(milliseconds: 220),
-                curve: Curves.easeOut,
-              );
-            }
-          });
+        final arrived = state.messages.length - _lastCount;
+        if (arrived > 0 && _scroll.hasClients) {
+          if (_away) {
+            // Someone reading back through the conversation must not be
+            // dragged to the bottom by a message they have not asked for.
+            setState(() => _missed += arrived);
+          } else {
+            // stick to bottom (reverse list => offset 0)
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (_scroll.hasClients) {
+                _scroll.animateTo(
+                  0,
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeOut,
+                );
+              }
+            });
+          }
         }
         _lastCount = state.messages.length;
       },
@@ -95,45 +131,66 @@ class _ChatViewState extends State<ChatView> {
                 onTap: (seq) => _scrollToSeq(seq, state),
               ),
             Expanded(
-              child: ListView.builder(
-                controller: _scroll,
-                reverse: true,
-                padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
-                itemCount: rows.length + (state.loadingOlder ? 1 : 0),
-                itemBuilder: (context, i) {
-                  if (i >= rows.length) {
-                    return const Padding(
-                      padding: EdgeInsets.all(12),
-                      child: Center(
-                        child: SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      ),
-                    );
-                  }
-                  final row = rows[i];
-                  return switch (row) {
-                    _TypingRow() => const TypingIndicator(),
-                    _DateRow(:final label) => _DaySeparator(label: label),
-                    _MsgRow(
-                      :final message,
-                      :final continuesAbove,
-                      :final continuesBelow,
-                    ) =>
-                      _SeenReporter(
-                        seq: message.seq,
-                        controller: c,
-                        child: MessageBubble(
-                          message: message,
-                          controller: c,
-                          continuesAbove: continuesAbove,
-                          continuesBelow: continuesBelow,
-                        ),
-                      ),
-                  };
-                },
+              child: Stack(
+                children: [
+                  ListView.builder(
+                    controller: _scroll,
+                    reverse: true,
+                    padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+                    itemCount: rows.length + (state.loadingOlder ? 1 : 0),
+                    itemBuilder: (context, i) {
+                      if (i >= rows.length) {
+                        return const Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Center(
+                            child: SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            ),
+                          ),
+                        );
+                      }
+                      final row = rows[i];
+                      return switch (row) {
+                        _TypingRow() => const TypingIndicator(),
+                        _DateRow(:final label) => _DaySeparator(label: label),
+                        _MsgRow(
+                          :final message,
+                          :final continuesAbove,
+                          :final continuesBelow,
+                        ) =>
+                          _SeenReporter(
+                            seq: message.seq,
+                            controller: c,
+                            child: SwipeToReply(
+                              // Nothing to quote on a system line, and a card is
+                              // its own thing.
+                              enabled:
+                                  widget.composerEnabled &&
+                                  !message.isSystem &&
+                                  !message.isKundaliRef,
+                              onReply: () => c.replyTo(message),
+                              child: MessageBubble(
+                                message: message,
+                                controller: c,
+                                continuesAbove: continuesAbove,
+                                continuesBelow: continuesBelow,
+                              ),
+                            ),
+                          ),
+                      };
+                    },
+                  ),
+                  // A way back to the newest message, and a count of what
+                  // arrived while the reader was elsewhere in the history.
+                  if (_away)
+                    Positioned(
+                      right: 12,
+                      bottom: 12,
+                      child: _ToBottomButton(missed: _missed, onTap: _toBottom),
+                    ),
+                ],
               ),
             ),
             if (state.replyingTo != null)
@@ -163,9 +220,7 @@ class _ChatViewState extends State<ChatView> {
   /// jumping somewhere arbitrary.
   void _scrollToSeq(int seq, ChatSessionState state) {
     final rows = _rows(state);
-    final index = rows.indexWhere(
-      (r) => r is _MsgRow && r.message.seq == seq,
-    );
+    final index = rows.indexWhere((r) => r is _MsgRow && r.message.seq == seq);
     if (index < 0 || !_scroll.hasClients) return;
     _scroll.animateTo(
       (index * 72.0).clamp(0.0, _scroll.position.maxScrollExtent),
@@ -342,5 +397,55 @@ class ChatHeaderStatus extends StatelessWidget {
     if (d.inMinutes < 60) return '${d.inMinutes}m ago';
     if (d.inHours < 24) return '${d.inHours}h ago';
     return DateFormat('d MMM').format(t.toLocal());
+  }
+}
+
+/// Back to the newest message, with what was missed on the way.
+///
+/// Reading back through a long conversation used to be a one-way trip: the
+/// only way down was to keep flicking. The count matters as much as the
+/// button — it is the difference between "nothing happened" and "answer them".
+class _ToBottomButton extends StatelessWidget {
+  const _ToBottomButton({required this.missed, required this.onTap});
+
+  final int missed;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Material(
+      elevation: 3,
+      color: scheme.surface,
+      shape: const StadiumBorder(),
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const StadiumBorder(),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(missed > 0 ? 12 : 8, 8, 8, 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (missed > 0) ...[
+                Text(
+                  '$missed',
+                  style: TextStyle(
+                    color: scheme.primary,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 12.5,
+                  ),
+                ),
+                const SizedBox(width: 6),
+              ],
+              Icon(
+                Icons.keyboard_double_arrow_down_rounded,
+                size: 18,
+                color: scheme.primary,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

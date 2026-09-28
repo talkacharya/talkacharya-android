@@ -19,5 +19,6 @@ export 'src/widgets/chat_view.dart';
 export 'src/widgets/connection_banner.dart';
 export 'src/widgets/message_bubble.dart';
 export 'src/widgets/message_grouping.dart';
+export 'src/widgets/swipe_to_reply.dart';
 export 'src/widgets/receipt_ticks.dart';
 export 'src/widgets/typing_indicator.dart';
