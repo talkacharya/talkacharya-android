@@ -1,5 +1,6 @@
 import '../../../core/config/config_repository.dart';
 import 'models/recharge_order.dart';
+import 'models/auto_recharge.dart';
 import 'models/recharge_pack.dart';
 import 'models/wallet_balance.dart';
 import 'wallet_api.dart';
@@ -31,6 +32,30 @@ class WalletRepository {
 
   Future<TransactionsPage> transactions({String? cursor, String? currency}) =>
       _api.transactions(cursor: cursor, currency: currency);
+
+  Future<AutoRecharge> autoRecharge() => _api.autoRecharge();
+
+  Future<AutoRecharge> setAutoRecharge({
+    required num amount,
+    required num thresholdAmount,
+    num? dailyCap,
+    String? currency,
+  }) => _api.setAutoRecharge(
+    amount: amount,
+    thresholdAmount: thresholdAmount,
+    dailyCap: dailyCap,
+    currency: currency,
+  );
+
+  Future<void> disableAutoRecharge() => _api.disableAutoRecharge();
+
+  Future<RechargeOrder> beginAutoRechargeMandate({String? currency}) =>
+      _api.beginAutoRechargeMandate(currency: currency);
+
+  Future<AutoRecharge> completeAutoRechargeMandate({
+    required String token,
+    String? currency,
+  }) => _api.completeAutoRechargeMandate(token: token, currency: currency);
 
   Future<RechargeOrder> createRecharge({
     required num amount,

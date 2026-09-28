@@ -14,6 +14,7 @@ import '../../data/models/recharge_pack.dart';
 import '../../data/models/wallet_transaction.dart';
 import '../cubit/wallet_cubit.dart';
 import 'recharge_sheet.dart';
+import 'auto_recharge_sheet.dart';
 import 'widgets/balance_card.dart';
 import 'widgets/transaction_tile.dart';
 import '../../../../core/l10n/api_error_l10n.dart';
@@ -92,6 +93,15 @@ class _WalletPageState extends State<WalletPage> {
                           onPressed: () => _recharge(),
                           icon: const Icon(Icons.add_rounded),
                           label: Text(l.walletAddMoney),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      FadeSlideIn(
+                        delay: const Duration(milliseconds: 80),
+                        child: TextButton.icon(
+                          onPressed: () => showAutoRechargeSheet(context),
+                          icon: const Icon(Icons.autorenew_rounded, size: 18),
+                          label: Text(l.walletAutoRechargeAction),
                         ),
                       ),
                       if (packs != null && packs.packs.isNotEmpty) ...[

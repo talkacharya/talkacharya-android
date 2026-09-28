@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../../../core/constants/api_paths.dart';
 import '../../../core/network/api_exception.dart';
 import 'models/invoice.dart';
+import 'models/auto_recharge.dart';
 import 'models/recharge_order.dart';
 import 'models/recharge_pack.dart';
 import 'models/wallet_balance.dart';
@@ -71,6 +72,53 @@ class WalletApi {
       body: {'amount': amount.toString(), 'currency': ?currency},
     );
     return RechargeOrder.fromJson(json);
+  }
+
+  Future<AutoRecharge> autoRecharge() async =>
+      AutoRecharge.fromMap(await _getMap(ApiPaths.autoRecharge));
+
+  /// Sets the amounts. Does not switch anything on — that needs a mandate.
+  Future<AutoRecharge> setAutoRecharge({
+    required num amount,
+    required num thresholdAmount,
+    num? dailyCap,
+    String? currency,
+  }) async {
+    final res = await _dio.put<Map<String, dynamic>>(
+      ApiPaths.autoRecharge,
+      data: {
+        'amount': amount.toString(),
+        'threshold_amount': thresholdAmount.toString(),
+        'daily_cap': dailyCap?.toString(),
+        'currency': ?currency,
+      },
+    );
+    return AutoRecharge.fromMap(res.data ?? const {});
+  }
+
+  Future<void> disableAutoRecharge() =>
+      _dio.delete<void>(ApiPaths.autoRecharge);
+
+  /// Opens the authorisation payment. It is a real top-up that also registers
+  /// the mandate, so it goes through checkout like any other.
+  Future<RechargeOrder> beginAutoRechargeMandate({String? currency}) async {
+    final json = await _postMap(
+      ApiPaths.autoRechargeAuthorize,
+      body: {'currency': ?currency},
+    );
+    return RechargeOrder.fromJson(json);
+  }
+
+  /// Hands back the token checkout returned — the moment it becomes live.
+  Future<AutoRecharge> completeAutoRechargeMandate({
+    required String token,
+    String? currency,
+  }) async {
+    final res = await _dio.put<Map<String, dynamic>>(
+      ApiPaths.autoRechargeAuthorize,
+      data: {'token': token, 'currency': ?currency},
+    );
+    return AutoRecharge.fromMap(res.data ?? const {});
   }
 
   Future<PaymentStatus> rechargeStatus(String paymentId) async {

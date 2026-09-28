@@ -289,7 +289,17 @@
     "kDashaDays",
     "kDashaHours",
     "kDashaOpenLevel",
-    "kDashaFullTimeline"
+    "kDashaFullTimeline",
+    "walletAutoRechargeTitle",
+    "walletAutoRechargeBody",
+    "walletAutoRechargeAmount",
+    "walletAutoRechargeWhen",
+    "walletAutoRechargeSummary",
+    "walletAutoRechargeTurnOn",
+    "walletAutoRechargeTurnOff",
+    "walletAutoRechargeOn",
+    "walletAutoRechargeBankStopped",
+    "walletAutoRechargeAction"
   ],
 
   "gu": [
@@ -582,7 +592,17 @@
     "kDashaDays",
     "kDashaHours",
     "kDashaOpenLevel",
-    "kDashaFullTimeline"
+    "kDashaFullTimeline",
+    "walletAutoRechargeTitle",
+    "walletAutoRechargeBody",
+    "walletAutoRechargeAmount",
+    "walletAutoRechargeWhen",
+    "walletAutoRechargeSummary",
+    "walletAutoRechargeTurnOn",
+    "walletAutoRechargeTurnOff",
+    "walletAutoRechargeOn",
+    "walletAutoRechargeBankStopped",
+    "walletAutoRechargeAction"
   ],
 
   "kn": [
@@ -875,7 +895,17 @@
     "kDashaDays",
     "kDashaHours",
     "kDashaOpenLevel",
-    "kDashaFullTimeline"
+    "kDashaFullTimeline",
+    "walletAutoRechargeTitle",
+    "walletAutoRechargeBody",
+    "walletAutoRechargeAmount",
+    "walletAutoRechargeWhen",
+    "walletAutoRechargeSummary",
+    "walletAutoRechargeTurnOn",
+    "walletAutoRechargeTurnOff",
+    "walletAutoRechargeOn",
+    "walletAutoRechargeBankStopped",
+    "walletAutoRechargeAction"
   ],
 
   "mr": [
@@ -1168,7 +1198,17 @@
     "kDashaDays",
     "kDashaHours",
     "kDashaOpenLevel",
-    "kDashaFullTimeline"
+    "kDashaFullTimeline",
+    "walletAutoRechargeTitle",
+    "walletAutoRechargeBody",
+    "walletAutoRechargeAmount",
+    "walletAutoRechargeWhen",
+    "walletAutoRechargeSummary",
+    "walletAutoRechargeTurnOn",
+    "walletAutoRechargeTurnOff",
+    "walletAutoRechargeOn",
+    "walletAutoRechargeBankStopped",
+    "walletAutoRechargeAction"
   ],
 
   "ta": [
@@ -1461,7 +1501,17 @@
     "kDashaDays",
     "kDashaHours",
     "kDashaOpenLevel",
-    "kDashaFullTimeline"
+    "kDashaFullTimeline",
+    "walletAutoRechargeTitle",
+    "walletAutoRechargeBody",
+    "walletAutoRechargeAmount",
+    "walletAutoRechargeWhen",
+    "walletAutoRechargeSummary",
+    "walletAutoRechargeTurnOn",
+    "walletAutoRechargeTurnOff",
+    "walletAutoRechargeOn",
+    "walletAutoRechargeBankStopped",
+    "walletAutoRechargeAction"
   ],
 
   "te": [
@@ -1754,6 +1804,16 @@
     "kDashaDays",
     "kDashaHours",
     "kDashaOpenLevel",
-    "kDashaFullTimeline"
+    "kDashaFullTimeline",
+    "walletAutoRechargeTitle",
+    "walletAutoRechargeBody",
+    "walletAutoRechargeAmount",
+    "walletAutoRechargeWhen",
+    "walletAutoRechargeSummary",
+    "walletAutoRechargeTurnOn",
+    "walletAutoRechargeTurnOff",
+    "walletAutoRechargeOn",
+    "walletAutoRechargeBankStopped",
+    "walletAutoRechargeAction"
   ]
 }

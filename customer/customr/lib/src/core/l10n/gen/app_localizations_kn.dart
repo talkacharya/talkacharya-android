@@ -6996,4 +6996,44 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get kDashaFullTimeline => 'Full antardasha timeline';
+
+  @override
+  String get walletAutoRechargeTitle => 'Automatic top-up';
+
+  @override
+  String get walletAutoRechargeBody =>
+      'Never lose a consultation to an empty wallet. We\'ll add money when it runs low, so your call keeps going.';
+
+  @override
+  String get walletAutoRechargeAmount => 'Add each time';
+
+  @override
+  String get walletAutoRechargeWhen => 'When balance falls below';
+
+  @override
+  String walletAutoRechargeSummary(
+    String amount,
+    String threshold,
+    String cap,
+  ) {
+    return 'We’ll add $amount whenever your balance drops below $threshold, up to $cap a day. You can turn this off any time.';
+  }
+
+  @override
+  String get walletAutoRechargeTurnOn => 'Turn on';
+
+  @override
+  String get walletAutoRechargeTurnOff => 'Turn off automatic top-up';
+
+  @override
+  String walletAutoRechargeOn(String amount, String threshold) {
+    return 'On — $amount whenever you drop below $threshold';
+  }
+
+  @override
+  String get walletAutoRechargeBankStopped =>
+      'Your bank declined the last few top-ups, so we switched this off. Turning it on again will ask them afresh.';
+
+  @override
+  String get walletAutoRechargeAction => 'Auto top-up';
 }

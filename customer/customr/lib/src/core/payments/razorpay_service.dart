@@ -38,6 +38,7 @@ class RazorpayService {
     required String description,
     String? contact,
     String? email,
+    bool recurring = false,
   }) {
     final rp = Razorpay();
     final completer = Completer<RazorpayResult>();
@@ -71,6 +72,10 @@ class RazorpayService {
         'name': appName,
         'description': description,
         'timeout': 300,
+        // A mandate registration. The payment is real — the customer gets the
+        // money — and it also asks their bank to allow later charges up to the
+        // ceiling the order carries.
+        if (recurring) 'recurring': 1,
         'retry': {'enabled': true, 'max_count': 2},
         'theme': {'color': '#EA6A1E'},
         if (contact != null && contact.isNotEmpty || email != null)

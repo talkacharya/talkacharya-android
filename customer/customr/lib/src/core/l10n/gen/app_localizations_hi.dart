@@ -7071,4 +7071,44 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get kDashaFullTimeline => 'पूरी अंतर्दशा समयरेखा';
+
+  @override
+  String get walletAutoRechargeTitle => 'स्वचालित टॉप-अप';
+
+  @override
+  String get walletAutoRechargeBody =>
+      'खाली वॉलेट की वजह से परामर्श न रुके। बैलेंस कम होते ही हम पैसे जोड़ देंगे, आपकी कॉल चलती रहेगी।';
+
+  @override
+  String get walletAutoRechargeAmount => 'हर बार जोड़ें';
+
+  @override
+  String get walletAutoRechargeWhen => 'जब बैलेंस इससे कम हो';
+
+  @override
+  String walletAutoRechargeSummary(
+    String amount,
+    String threshold,
+    String cap,
+  ) {
+    return 'जब भी आपका बैलेंस $threshold से कम होगा, हम $amount जोड़ देंगे — एक दिन में अधिकतम $cap। आप इसे कभी भी बंद कर सकते हैं।';
+  }
+
+  @override
+  String get walletAutoRechargeTurnOn => 'चालू करें';
+
+  @override
+  String get walletAutoRechargeTurnOff => 'स्वचालित टॉप-अप बंद करें';
+
+  @override
+  String walletAutoRechargeOn(String amount, String threshold) {
+    return 'चालू — $threshold से कम होने पर $amount';
+  }
+
+  @override
+  String get walletAutoRechargeBankStopped =>
+      'आपके बैंक ने पिछले कुछ टॉप-अप अस्वीकार किए, इसलिए हमने इसे बंद कर दिया। दोबारा चालू करने पर नई अनुमति ली जाएगी।';
+
+  @override
+  String get walletAutoRechargeAction => 'ऑटो टॉप-अप';
 }

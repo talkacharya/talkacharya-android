@@ -106,6 +106,11 @@ class ApiPaths {
   static String consultationUpgrade(String id) =>
       '/app/consultations/$id/upgrade';
 
+  /// A standing instruction to top up mid-consultation, and the mandate
+  /// registration that makes it live.
+  static const autoRecharge = '/app/wallet/auto-recharge';
+  static const autoRechargeAuthorize = '/app/wallet/auto-recharge/authorize';
+
   static const referrals = '/app/referrals';
   // editorial — public, no /app prefix
   static const articles = '/content/articles';

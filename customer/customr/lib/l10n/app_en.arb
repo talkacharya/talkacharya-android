@@ -3823,5 +3823,64 @@
   "kDashaFullTimeline": "Full antardasha timeline",
   "@kDashaFullTimeline": {
     "description": "Open the antardasha level as its own page"
+  },
+  "walletAutoRechargeTitle": "Automatic top-up",
+  "@walletAutoRechargeTitle": {
+    "description": "Automatic wallet top-up"
+  },
+  "walletAutoRechargeBody": "Never lose a consultation to an empty wallet. We'll add money when it runs low, so your call keeps going.",
+  "@walletAutoRechargeBody": {
+    "description": "Automatic wallet top-up"
+  },
+  "walletAutoRechargeAmount": "Add each time",
+  "@walletAutoRechargeAmount": {
+    "description": "Automatic wallet top-up"
+  },
+  "walletAutoRechargeWhen": "When balance falls below",
+  "@walletAutoRechargeWhen": {
+    "description": "Automatic wallet top-up"
+  },
+  "walletAutoRechargeSummary": "We’ll add {amount} whenever your balance drops below {threshold}, up to {cap} a day. You can turn this off any time.",
+  "@walletAutoRechargeSummary": {
+    "description": "Automatic wallet top-up",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "threshold": {
+        "type": "String"
+      },
+      "cap": {
+        "type": "String"
+      }
+    }
+  },
+  "walletAutoRechargeTurnOn": "Turn on",
+  "@walletAutoRechargeTurnOn": {
+    "description": "Automatic wallet top-up"
+  },
+  "walletAutoRechargeTurnOff": "Turn off automatic top-up",
+  "@walletAutoRechargeTurnOff": {
+    "description": "Automatic wallet top-up"
+  },
+  "walletAutoRechargeOn": "On — {amount} whenever you drop below {threshold}",
+  "@walletAutoRechargeOn": {
+    "description": "Automatic wallet top-up",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "threshold": {
+        "type": "String"
+      }
+    }
+  },
+  "walletAutoRechargeBankStopped": "Your bank declined the last few top-ups, so we switched this off. Turning it on again will ask them afresh.",
+  "@walletAutoRechargeBankStopped": {
+    "description": "Automatic wallet top-up"
+  },
+  "walletAutoRechargeAction": "Auto top-up",
+  "@walletAutoRechargeAction": {
+    "description": "Automatic wallet top-up"
   }
 }

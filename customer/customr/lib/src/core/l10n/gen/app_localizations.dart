@@ -12199,6 +12199,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Full antardasha timeline'**
   String get kDashaFullTimeline;
+
+  /// Automatic wallet top-up
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic top-up'**
+  String get walletAutoRechargeTitle;
+
+  /// Automatic wallet top-up
+  ///
+  /// In en, this message translates to:
+  /// **'Never lose a consultation to an empty wallet. We\'ll add money when it runs low, so your call keeps going.'**
+  String get walletAutoRechargeBody;
+
+  /// Automatic wallet top-up
+  ///
+  /// In en, this message translates to:
+  /// **'Add each time'**
+  String get walletAutoRechargeAmount;
+
+  /// Automatic wallet top-up
+  ///
+  /// In en, this message translates to:
+  /// **'When balance falls below'**
+  String get walletAutoRechargeWhen;
+
+  /// Automatic wallet top-up
+  ///
+  /// In en, this message translates to:
+  /// **'We’ll add {amount} whenever your balance drops below {threshold}, up to {cap} a day. You can turn this off any time.'**
+  String walletAutoRechargeSummary(String amount, String threshold, String cap);
+
+  /// Automatic wallet top-up
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get walletAutoRechargeTurnOn;
+
+  /// Automatic wallet top-up
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off automatic top-up'**
+  String get walletAutoRechargeTurnOff;
+
+  /// Automatic wallet top-up
+  ///
+  /// In en, this message translates to:
+  /// **'On — {amount} whenever you drop below {threshold}'**
+  String walletAutoRechargeOn(String amount, String threshold);
+
+  /// Automatic wallet top-up
+  ///
+  /// In en, this message translates to:
+  /// **'Your bank declined the last few top-ups, so we switched this off. Turning it on again will ask them afresh.'**
+  String get walletAutoRechargeBankStopped;
+
+  /// Automatic wallet top-up
+  ///
+  /// In en, this message translates to:
+  /// **'Auto top-up'**
+  String get walletAutoRechargeAction;
 }
 
 class _AppLocalizationsDelegate
