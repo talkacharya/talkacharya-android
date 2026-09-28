@@ -305,7 +305,10 @@
     "roomSearch",
     "roomSearchHint",
     "roomSearchEmpty",
-    "roomDownloadTranscript"
+    "roomDownloadTranscript",
+    "liveFeedEmpty",
+    "liveFeedError",
+    "liveFeedTitle"
   ],
 
   "gu": [
@@ -614,7 +617,10 @@
     "roomSearch",
     "roomSearchHint",
     "roomSearchEmpty",
-    "roomDownloadTranscript"
+    "roomDownloadTranscript",
+    "liveFeedEmpty",
+    "liveFeedError",
+    "liveFeedTitle"
   ],
 
   "kn": [
@@ -923,7 +929,10 @@
     "roomSearch",
     "roomSearchHint",
     "roomSearchEmpty",
-    "roomDownloadTranscript"
+    "roomDownloadTranscript",
+    "liveFeedEmpty",
+    "liveFeedError",
+    "liveFeedTitle"
   ],
 
   "mr": [
@@ -1232,7 +1241,10 @@
     "roomSearch",
     "roomSearchHint",
     "roomSearchEmpty",
-    "roomDownloadTranscript"
+    "roomDownloadTranscript",
+    "liveFeedEmpty",
+    "liveFeedError",
+    "liveFeedTitle"
   ],
 
   "ta": [
@@ -1541,7 +1553,10 @@
     "roomSearch",
     "roomSearchHint",
     "roomSearchEmpty",
-    "roomDownloadTranscript"
+    "roomDownloadTranscript",
+    "liveFeedEmpty",
+    "liveFeedError",
+    "liveFeedTitle"
   ],
 
   "te": [
@@ -1850,6 +1865,9 @@
     "roomSearch",
     "roomSearchHint",
     "roomSearchEmpty",
-    "roomDownloadTranscript"
+    "roomDownloadTranscript",
+    "liveFeedEmpty",
+    "liveFeedError",
+    "liveFeedTitle"
   ]
 }

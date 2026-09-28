@@ -23,11 +23,11 @@ class LivestreamApi {
 
   final Dio _dio;
 
-  Future<List<LiveStreamSummary>> list({String? status}) async {
+  Future<List<LiveStreamSummary>> list({String? status, String? order}) async {
     try {
       final res = await _dio.get<dynamic>(
         ApiPaths.livestreams,
-        queryParameters: {'status': ?status},
+        queryParameters: {'status': ?status, 'order': ?order},
       );
       final data = res.data;
       final items = data is List

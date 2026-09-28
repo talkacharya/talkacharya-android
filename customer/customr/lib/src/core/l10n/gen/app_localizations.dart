@@ -12295,6 +12295,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save this conversation'**
   String get roomDownloadTranscript;
+
+  /// Swipeable live feed
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody is live right now'**
+  String get liveFeedEmpty;
+
+  /// Swipeable live feed
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load live sessions'**
+  String get liveFeedError;
+
+  /// Swipeable live feed
+  ///
+  /// In en, this message translates to:
+  /// **'Live now'**
+  String get liveFeedTitle;
 }
 
 class _AppLocalizationsDelegate

@@ -7033,4 +7033,13 @@ class AppLocalizationsMr extends AppLocalizations {
 
   @override
   String get roomDownloadTranscript => 'Save this conversation';
+
+  @override
+  String get liveFeedEmpty => 'Nobody is live right now';
+
+  @override
+  String get liveFeedError => 'Couldn\'t load live sessions';
+
+  @override
+  String get liveFeedTitle => 'Live now';
 }

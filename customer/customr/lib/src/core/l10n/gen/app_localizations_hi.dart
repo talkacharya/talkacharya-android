@@ -7129,4 +7129,13 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get roomDownloadTranscript => 'यह बातचीत सहेजें';
+
+  @override
+  String get liveFeedEmpty => 'अभी कोई लाइव नहीं है';
+
+  @override
+  String get liveFeedError => 'लाइव सत्र लोड नहीं हो सके';
+
+  @override
+  String get liveFeedTitle => 'अभी लाइव';
 }

@@ -60,6 +60,7 @@ import '../../features/livestream/data/livestream_api.dart';
 import '../../features/livestream/presentation/cubit/live_list_cubit.dart';
 import '../../features/livestream/presentation/view/live_page.dart';
 import '../../features/livestream/presentation/view/live_room_page.dart';
+import '../../features/livestream/presentation/view/live_feed_page.dart';
 import '../../features/notifications/presentation/view/notifications_page.dart';
 import '../../features/panchang/data/models/day_panchang.dart';
 import '../../features/panchang/data/panchang_repository.dart';
@@ -788,6 +789,11 @@ GoRouter buildRouter(
                   child: const LivePage(),
                 ),
                 routes: [
+                  // Before `:id`, or the feed reads as a stream called "feed".
+                  _leaf(
+                    'feed',
+                    (s) => LiveFeedPage(startAt: s.uri.queryParameters['at']),
+                  ),
                   _leaf(
                     ':id',
                     (s) => LiveRoomPage(streamId: s.pathParameters['id']!),

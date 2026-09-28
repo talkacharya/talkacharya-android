@@ -75,54 +75,70 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
       value: SystemUiOverlayStyle.light,
       child: BlocProvider.value(
         value: _cubit,
-        child: BlocBuilder<LiveViewerCubit, LiveState>(
-          builder: (context, state) {
-            return PopScope(
-              canPop: !state.phase.isOn,
-              onPopInvokedWithResult: (didPop, _) async {
-                if (didPop) return;
-                await _cubit.leave();
-                if (context.mounted) context.pop();
-              },
-              child: Scaffold(
-                backgroundColor: const Color(0xFF120A26),
-                body: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    _Stage(state: state, hostName: _hostName),
-                    SafeArea(
-                      child: switch (state.phase) {
-                        LivePhase.ended => _EndedOverlay(
-                          state: state,
-                          hostName: _hostName,
-                          onClose: () => context.pop(),
-                        ),
-                        LivePhase.failed => _FailedOverlay(
-                          error: state.error,
-                          onClose: () => context.pop(),
-                        ),
-                        _ => _WatchingOverlay(
-                          state: state,
-                          stream: _stream,
-                          hostName: _hostName,
-                          onLeave: () async {
-                            await _cubit.leave();
-                            if (context.mounted) context.pop();
-                          },
-                        ),
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
+        child: LiveRoomBody(streamId: widget.streamId, stream: _stream),
       ),
     );
   }
+}
 
-  String get _hostName => _stream?.hostName ?? '';
+/// The room itself, driven by whatever [LiveViewerCubit] is above it.
+///
+/// Separate from the page so a feed can swap which stream is connected as the
+/// reader swipes, without rebuilding the chrome around it.
+class LiveRoomBody extends StatelessWidget {
+  const LiveRoomBody({required this.streamId, this.stream, super.key});
+
+  final String streamId;
+  final LiveStreamSummary? stream;
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<LiveViewerCubit>();
+    final hostName = stream?.hostName ?? '';
+    return BlocBuilder<LiveViewerCubit, LiveState>(
+      builder: (context, state) {
+        return PopScope(
+          canPop: !state.phase.isOn,
+          onPopInvokedWithResult: (didPop, _) async {
+            if (didPop) return;
+            await cubit.leave();
+            if (context.mounted) context.pop();
+          },
+          child: Scaffold(
+            backgroundColor: const Color(0xFF120A26),
+            body: Stack(
+              fit: StackFit.expand,
+              children: [
+                _Stage(state: state, hostName: hostName),
+                SafeArea(
+                  child: switch (state.phase) {
+                    LivePhase.ended => _EndedOverlay(
+                      state: state,
+                      hostName: hostName,
+                      onClose: () => context.pop(),
+                    ),
+                    LivePhase.failed => _FailedOverlay(
+                      error: state.error,
+                      onClose: () => context.pop(),
+                    ),
+                    _ => _WatchingOverlay(
+                      state: state,
+                      stream: stream,
+                      hostName: hostName,
+                      onLeave: () async {
+                        await cubit.leave();
+                        if (context.mounted) context.pop();
+                      },
+                    ),
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
 
 /// The video itself, or something to look at while it is not there.

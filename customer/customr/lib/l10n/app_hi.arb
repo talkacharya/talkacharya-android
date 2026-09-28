@@ -2924,5 +2924,8 @@
   "roomSearch": "खोजें",
   "roomSearchHint": "इस बातचीत में खोजें",
   "roomSearchEmpty": "कुछ नहीं मिला",
-  "roomDownloadTranscript": "यह बातचीत सहेजें"
+  "roomDownloadTranscript": "यह बातचीत सहेजें",
+  "liveFeedEmpty": "अभी कोई लाइव नहीं है",
+  "liveFeedError": "लाइव सत्र लोड नहीं हो सके",
+  "liveFeedTitle": "अभी लाइव"
 }

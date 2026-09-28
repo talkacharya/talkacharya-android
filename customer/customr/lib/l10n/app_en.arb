@@ -3906,5 +3906,17 @@
   "roomDownloadTranscript": "Save this conversation",
   "@roomDownloadTranscript": {
     "description": "Download a transcript of the session"
+  },
+  "liveFeedEmpty": "Nobody is live right now",
+  "@liveFeedEmpty": {
+    "description": "Swipeable live feed"
+  },
+  "liveFeedError": "Couldn't load live sessions",
+  "@liveFeedError": {
+    "description": "Swipeable live feed"
+  },
+  "liveFeedTitle": "Live now",
+  "@liveFeedTitle": {
+    "description": "Swipeable live feed"
   }
 }

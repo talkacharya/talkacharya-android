@@ -48,7 +48,18 @@ class _LivePageState extends State<LivePage> with WidgetsBindingObserver {
     final l = context.l10n;
     return Scaffold(
       backgroundColor: context.brand.canvas,
-      appBar: AppBar(title: Text(l.liveTabTitle)),
+      appBar: AppBar(
+        title: Text(l.liveTabTitle),
+        actions: [
+          // The list is for choosing; the feed is for watching. Both, because
+          // people arrive in both moods.
+          IconButton(
+            tooltip: l.liveFeedTitle,
+            icon: const Icon(Icons.swipe_vertical_rounded),
+            onPressed: () => context.push(Routes.liveFeed()),
+          ),
+        ],
+      ),
       body: BlocBuilder<LiveListCubit, LiveListState>(
         builder: (context, state) {
           final cubit = context.read<LiveListCubit>();
@@ -170,7 +181,7 @@ class _LiveCard extends StatelessWidget {
             border: Border.all(color: context.brand.hairline),
           ),
           child: InkWell(
-            onTap: () => context.push(Routes.liveRoom(stream.id)),
+            onTap: () => context.push(Routes.liveFeed(stream.id)),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Row(
@@ -220,7 +231,7 @@ class _LiveCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   FilledButton(
-                    onPressed: () => context.push(Routes.liveRoom(stream.id)),
+                    onPressed: () => context.push(Routes.liveFeed(stream.id)),
                     child: Text(l.liveWatch),
                   ),
                 ],

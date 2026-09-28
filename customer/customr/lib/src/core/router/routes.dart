@@ -42,6 +42,10 @@ class Routes {
   static String astrologer(String id) => '/astrologers/$id';
   static String liveRoom(String id) => '/live/$id';
 
+  /// Swipe through every live astrologer, optionally opening on one.
+  static String liveFeed([String? startAt]) =>
+      startAt == null ? '/live/feed' : '/live/feed?at=$startAt';
+
   /// Discovery tab, optionally pre-filtered. Unknown params are ignored by the
   /// page today but kept so deep-links/rails stay forward-compatible.
   static String astrologersWith({
