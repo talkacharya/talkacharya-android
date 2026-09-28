@@ -74,6 +74,17 @@ class KundaliApi {
   Future<Map<String, dynamic>> allDashas(String profileId) =>
       _sub(profileId, 'dashas');
 
+  /// The periods directly under [path] (dot-separated lords, empty for the
+  /// mahadashas). One level per call — the full tree is 9^4 periods.
+  Future<Map<String, dynamic>> dashaPeriods(
+    String profileId,
+    List<String> path,
+  ) => _sub(
+    profileId,
+    'dasha/periods',
+    query: {if (path.isNotEmpty) 'path': path.join('.')},
+  );
+
   /// Plain-language "what to expect" per maha / antar period.
   Future<Map<String, dynamic>> dashaNarrative(String profileId) =>
       _sub(profileId, 'dasha-narrative');

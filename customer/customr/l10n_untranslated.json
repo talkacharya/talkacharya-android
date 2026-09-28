@@ -279,7 +279,17 @@
     "liveConsultPrivately",
     "liveConsultBody",
     "liveConsultQueued",
-    "roomSwitchToChat"
+    "roomSwitchToChat",
+    "kDashaMaha",
+    "kDashaAntar",
+    "kDashaPratyantar",
+    "kDashaSookshma",
+    "kDashaInside",
+    "kDashaMonths",
+    "kDashaDays",
+    "kDashaHours",
+    "kDashaOpenLevel",
+    "kDashaFullTimeline"
   ],
 
   "gu": [
@@ -562,7 +572,17 @@
     "liveConsultPrivately",
     "liveConsultBody",
     "liveConsultQueued",
-    "roomSwitchToChat"
+    "roomSwitchToChat",
+    "kDashaMaha",
+    "kDashaAntar",
+    "kDashaPratyantar",
+    "kDashaSookshma",
+    "kDashaInside",
+    "kDashaMonths",
+    "kDashaDays",
+    "kDashaHours",
+    "kDashaOpenLevel",
+    "kDashaFullTimeline"
   ],
 
   "kn": [
@@ -845,7 +865,17 @@
     "liveConsultPrivately",
     "liveConsultBody",
     "liveConsultQueued",
-    "roomSwitchToChat"
+    "roomSwitchToChat",
+    "kDashaMaha",
+    "kDashaAntar",
+    "kDashaPratyantar",
+    "kDashaSookshma",
+    "kDashaInside",
+    "kDashaMonths",
+    "kDashaDays",
+    "kDashaHours",
+    "kDashaOpenLevel",
+    "kDashaFullTimeline"
   ],
 
   "mr": [
@@ -1128,7 +1158,17 @@
     "liveConsultPrivately",
     "liveConsultBody",
     "liveConsultQueued",
-    "roomSwitchToChat"
+    "roomSwitchToChat",
+    "kDashaMaha",
+    "kDashaAntar",
+    "kDashaPratyantar",
+    "kDashaSookshma",
+    "kDashaInside",
+    "kDashaMonths",
+    "kDashaDays",
+    "kDashaHours",
+    "kDashaOpenLevel",
+    "kDashaFullTimeline"
   ],
 
   "ta": [
@@ -1411,7 +1451,17 @@
     "liveConsultPrivately",
     "liveConsultBody",
     "liveConsultQueued",
-    "roomSwitchToChat"
+    "roomSwitchToChat",
+    "kDashaMaha",
+    "kDashaAntar",
+    "kDashaPratyantar",
+    "kDashaSookshma",
+    "kDashaInside",
+    "kDashaMonths",
+    "kDashaDays",
+    "kDashaHours",
+    "kDashaOpenLevel",
+    "kDashaFullTimeline"
   ],
 
   "te": [
@@ -1694,6 +1744,16 @@
     "liveConsultPrivately",
     "liveConsultBody",
     "liveConsultQueued",
-    "roomSwitchToChat"
+    "roomSwitchToChat",
+    "kDashaMaha",
+    "kDashaAntar",
+    "kDashaPratyantar",
+    "kDashaSookshma",
+    "kDashaInside",
+    "kDashaMonths",
+    "kDashaDays",
+    "kDashaHours",
+    "kDashaOpenLevel",
+    "kDashaFullTimeline"
   ]
 }

@@ -6931,4 +6931,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get roomSwitchToChat => 'Chat';
+
+  @override
+  String get kDashaMaha => 'Mahadasha';
+
+  @override
+  String get kDashaAntar => 'Antardasha';
+
+  @override
+  String get kDashaPratyantar => 'Pratyantardasha';
+
+  @override
+  String get kDashaSookshma => 'Sookshma dasha';
+
+  @override
+  String kDashaInside(String lord, String level) {
+    return '$lord · $level';
+  }
+
+  @override
+  String kDashaMonths(int months) {
+    return '$months months';
+  }
+
+  @override
+  String kDashaDays(int days) {
+    return '$days days';
+  }
+
+  @override
+  String kDashaHours(int hours) {
+    return '$hours hours';
+  }
+
+  @override
+  String get kDashaOpenLevel => 'View all';
+
+  @override
+  String get kDashaFullTimeline => 'Full antardasha timeline';
 }

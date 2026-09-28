@@ -19,6 +19,10 @@ class KundaliRepository {
   Future<DashaTimeline> dasha(String id) async =>
       DashaTimeline.fromArtifact(await _api.dasha(id));
 
+  /// One rung of the Vimshottari tree: the periods under [path].
+  Future<DashaLevel> dashaPeriods(String id, List<String> path) async =>
+      DashaLevel.fromMap(await _api.dashaPeriods(id, path));
+
   /// All three nakshatra-dasha systems in one call.
   Future<Map<String, DashaTimeline>> allDashas(String id) async {
     final env = await _api.allDashas(id);

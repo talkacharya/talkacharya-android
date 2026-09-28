@@ -2,6 +2,7 @@ import 'package:astro_kundali/astro_kundali.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  _dashaLevelTests();
   test('Kundali.fromArtifact reads the /kundli envelope', () {
     final k = Kundali.fromArtifact({
       'kind': 'kundli',
@@ -1041,6 +1042,71 @@ void main() {
     test('legacy payload without status falls back to has_dosha', () {
       expect(MangalDosha.fromMap({'has_dosha': true}).isManglik, isTrue);
       expect(MangalDosha.fromMap({'has_dosha': false}).isManglik, isFalse);
+    });
+  });
+}
+
+void _dashaLevelTests() {
+  group('DashaLevel', () {
+    Map<String, dynamic> payload({bool expandable = true}) => {
+      'level': 'pratyantar',
+      'path': ['Venus', 'Sun'],
+      'parent': {
+        'lord': 'Sun',
+        'start': '2026-01-01T00:00:00+00:00',
+        'end': '2026-04-11T00:00:00+00:00',
+        'years': 0.2777,
+        'days': 100.0,
+        'is_current': true,
+      },
+      'periods': [
+        {
+          'lord': 'Sun',
+          'start': '2026-01-01T00:00:00+00:00',
+          'end': '2026-01-06T00:00:00+00:00',
+          'years': 0.0138,
+          'days': 5.0,
+          'is_current': false,
+        },
+        {
+          'lord': 'Moon',
+          'start': '2026-01-06T00:00:00+00:00',
+          'end': '2026-01-14T00:00:00+00:00',
+          'years': 0.0231,
+          'days': 8.0,
+          'is_current': true,
+        },
+      ],
+      'expandable': expandable,
+    };
+
+    test('parses a level with its parent and path', () {
+      final level = DashaLevel.fromMap(payload());
+      expect(level.level, 'pratyantar');
+      expect(level.path, ['Venus', 'Sun']);
+      expect(level.parent?.lord, 'Sun');
+      expect(level.periods.length, 2);
+      expect(level.expandable, isTrue);
+    });
+
+    test('finds the running period', () {
+      expect(DashaLevel.fromMap(payload()).current?.lord, 'Moon');
+    });
+
+    test('keeps the time of day, which short periods need', () {
+      // A sookshma runs for hours. Parsing to a bare date would put its
+      // boundary up to a day away from the truth.
+      final node = DashaLevel.fromMap(payload()).periods.first;
+      expect(node.start.toUtc().hour, 0);
+      expect(node.end.difference(node.start).inDays, 5);
+    });
+
+    test('an empty payload does not throw', () {
+      // The screen has to render something even when the call half-failed.
+      final level = DashaLevel.fromMap(const {});
+      expect(level.periods, isEmpty);
+      expect(level.parent, isNull);
+      expect(level.expandable, isFalse);
     });
   });
 }

@@ -12139,6 +12139,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Chat'**
   String get roomSwitchToChat;
+
+  /// Dasha level drill-down
+  ///
+  /// In en, this message translates to:
+  /// **'Mahadasha'**
+  String get kDashaMaha;
+
+  /// Dasha level drill-down
+  ///
+  /// In en, this message translates to:
+  /// **'Antardasha'**
+  String get kDashaAntar;
+
+  /// Dasha level drill-down
+  ///
+  /// In en, this message translates to:
+  /// **'Pratyantardasha'**
+  String get kDashaPratyantar;
+
+  /// Dasha level drill-down
+  ///
+  /// In en, this message translates to:
+  /// **'Sookshma dasha'**
+  String get kDashaSookshma;
+
+  /// Dasha level drill-down
+  ///
+  /// In en, this message translates to:
+  /// **'{lord} · {level}'**
+  String kDashaInside(String lord, String level);
+
+  /// Dasha level drill-down
+  ///
+  /// In en, this message translates to:
+  /// **'{months} months'**
+  String kDashaMonths(int months);
+
+  /// Dasha level drill-down
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days'**
+  String kDashaDays(int days);
+
+  /// Dasha level drill-down
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} hours'**
+  String kDashaHours(int hours);
+
+  /// Dasha level drill-down
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get kDashaOpenLevel;
+
+  /// Open the antardasha level as its own page
+  ///
+  /// In en, this message translates to:
+  /// **'Full antardasha timeline'**
+  String get kDashaFullTimeline;
 }
 
 class _AppLocalizationsDelegate

@@ -10,6 +10,7 @@ import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
 import '../widgets/k_chart.dart';
 import '../widgets/kundali_ui.dart';
+import 'dasha_level_page.dart';
 
 /// Planetary periods: what's running now and the whole life timeline, in the
 /// Vimshottari, Yogini or Ashtottari system.
@@ -135,7 +136,11 @@ class _DashaPageState extends State<DashaPage> {
                             d.balanceYears.toStringAsFixed(1),
                           ),
                     hue: hue,
-                    child: _Timeline(timeline: d, narrative: narrative),
+                    child: _Timeline(
+                      timeline: d,
+                      narrative: narrative,
+                      profileId: widget.profileId,
+                    ),
                   ),
                   if (narrative != null && narrative.disclaimer.isNotEmpty)
                     KFootnote(narrative.disclaimer),
@@ -269,9 +274,14 @@ class _NowRunning extends StatelessWidget {
 }
 
 class _Timeline extends StatelessWidget {
-  const _Timeline({required this.timeline, required this.narrative});
+  const _Timeline({
+    required this.timeline,
+    required this.narrative,
+    required this.profileId,
+  });
   final DashaTimeline timeline;
   final DashaNarrative? narrative;
+  final String profileId;
 
   @override
   Widget build(BuildContext context) {
@@ -283,6 +293,7 @@ class _Timeline extends StatelessWidget {
           _MahaNode(
             key: ValueKey('${periods[i].lord}-${periods[i].start}'),
             span: periods[i],
+            profileId: profileId,
             note: narrative?.mahaFor(periods[i].lord),
             isCurrent: periods[i].contains(now),
             isPast: periods[i].end.isBefore(now),
@@ -299,6 +310,7 @@ class _MahaNode extends StatefulWidget {
   const _MahaNode({
     required this.span,
     super.key,
+    required this.profileId,
     required this.note,
     required this.isCurrent,
     required this.isPast,
@@ -307,6 +319,7 @@ class _MahaNode extends StatefulWidget {
   });
 
   final DashaSpan span;
+  final String profileId;
   final DashaPeriodNote? note;
   final bool isCurrent;
   final bool isPast;
@@ -452,8 +465,37 @@ class _MahaNodeState extends State<_MahaNode> {
                                       ),
                                     if (widget.span.children.isNotEmpty) ...[
                                       const SizedBox(height: 10),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: TextButton.icon(
+                                          onPressed: () =>
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute<void>(
+                                                  builder: (_) =>
+                                                      DashaLevelPage(
+                                                        profileId:
+                                                            widget.profileId,
+                                                        path: [
+                                                          widget.span.lord,
+                                                        ],
+                                                      ),
+                                                ),
+                                              ),
+                                          style: TextButton.styleFrom(
+                                            visualDensity:
+                                                VisualDensity.compact,
+                                            padding: EdgeInsets.zero,
+                                          ),
+                                          icon: const Icon(
+                                            Icons.timeline_rounded,
+                                            size: 16,
+                                          ),
+                                          label: Text(l.kDashaFullTimeline),
+                                        ),
+                                      ),
                                       for (final antar in widget.span.children)
                                         _AntarRow(
+                                          profileId: widget.profileId,
                                           maha: widget.span.lord,
                                           antar: antar,
                                           note: _antarNote(antar.lord),
@@ -478,11 +520,13 @@ class _MahaNodeState extends State<_MahaNode> {
 
 class _AntarRow extends StatefulWidget {
   const _AntarRow({
+    required this.profileId,
     required this.maha,
     required this.antar,
     required this.note,
     required this.isCurrent,
   });
+  final String profileId;
   final String maha;
   final DashaSpan antar;
   final DashaPeriodNote? note;
@@ -543,6 +587,27 @@ class _AntarRowState extends State<_AntarRow> {
                     size: 16,
                     color: context.brand.inkMuted,
                   ),
+                // Its own target, separate from the note: tapping the row
+                // reads, tapping this goes a level deeper.
+                IconButton(
+                  tooltip: l.kDashaOpenLevel,
+                  visualDensity: VisualDensity.compact,
+                  constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                  padding: EdgeInsets.zero,
+                  icon: Icon(
+                    Icons.chevron_right_rounded,
+                    size: 20,
+                    color: context.brand.inkMuted,
+                  ),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => DashaLevelPage(
+                        profileId: widget.profileId,
+                        path: [widget.maha, widget.antar.lord],
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
             if (_open && summary.isNotEmpty)

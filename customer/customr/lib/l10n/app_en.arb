@@ -3760,5 +3760,68 @@
   "roomSwitchToChat": "Chat",
   "@roomSwitchToChat": {
     "description": "Asking a live host for a private reading"
+  },
+  "kDashaMaha": "Mahadasha",
+  "@kDashaMaha": {
+    "description": "Dasha level drill-down"
+  },
+  "kDashaAntar": "Antardasha",
+  "@kDashaAntar": {
+    "description": "Dasha level drill-down"
+  },
+  "kDashaPratyantar": "Pratyantardasha",
+  "@kDashaPratyantar": {
+    "description": "Dasha level drill-down"
+  },
+  "kDashaSookshma": "Sookshma dasha",
+  "@kDashaSookshma": {
+    "description": "Dasha level drill-down"
+  },
+  "kDashaInside": "{lord} · {level}",
+  "@kDashaInside": {
+    "description": "Dasha level drill-down",
+    "placeholders": {
+      "lord": {
+        "type": "String"
+      },
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "kDashaMonths": "{months} months",
+  "@kDashaMonths": {
+    "description": "Dasha level drill-down",
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "kDashaDays": "{days} days",
+  "@kDashaDays": {
+    "description": "Dasha level drill-down",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "kDashaHours": "{hours} hours",
+  "@kDashaHours": {
+    "description": "Dasha level drill-down",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "kDashaOpenLevel": "View all",
+  "@kDashaOpenLevel": {
+    "description": "Dasha level drill-down"
+  },
+  "kDashaFullTimeline": "Full antardasha timeline",
+  "@kDashaFullTimeline": {
+    "description": "Open the antardasha level as its own page"
   }
 }

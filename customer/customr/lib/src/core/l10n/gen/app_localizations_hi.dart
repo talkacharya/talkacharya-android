@@ -7033,4 +7033,42 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get roomSwitchToChat => 'चैट';
+
+  @override
+  String get kDashaMaha => 'महादशा';
+
+  @override
+  String get kDashaAntar => 'अंतर्दशा';
+
+  @override
+  String get kDashaPratyantar => 'प्रत्यंतर्दशा';
+
+  @override
+  String get kDashaSookshma => 'सूक्ष्म दशा';
+
+  @override
+  String kDashaInside(String lord, String level) {
+    return '$lord · $level';
+  }
+
+  @override
+  String kDashaMonths(int months) {
+    return '$months माह';
+  }
+
+  @override
+  String kDashaDays(int days) {
+    return '$days दिन';
+  }
+
+  @override
+  String kDashaHours(int hours) {
+    return '$hours घंटे';
+  }
+
+  @override
+  String get kDashaOpenLevel => 'सभी देखें';
+
+  @override
+  String get kDashaFullTimeline => 'पूरी अंतर्दशा समयरेखा';
 }
