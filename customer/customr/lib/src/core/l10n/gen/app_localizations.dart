@@ -12289,6 +12289,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Nothing found'**
   String get roomSearchEmpty;
+
+  /// Download a transcript of the session
+  ///
+  /// In en, this message translates to:
+  /// **'Save this conversation'**
+  String get roomDownloadTranscript;
 }
 
 class _AppLocalizationsDelegate

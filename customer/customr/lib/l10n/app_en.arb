@@ -3902,5 +3902,9 @@
   "roomSearchEmpty": "Nothing found",
   "@roomSearchEmpty": {
     "description": "Search within a conversation"
+  },
+  "roomDownloadTranscript": "Save this conversation",
+  "@roomDownloadTranscript": {
+    "description": "Download a transcript of the session"
   }
 }

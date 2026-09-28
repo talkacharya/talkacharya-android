@@ -92,6 +92,7 @@ class ApiPaths {
   static String messages(String id) => '/conversations/$id/messages';
   static String messageSearch(String id) =>
       '/conversations/$id/messages/search';
+  static String transcript(String id) => '/conversations/$id/transcript';
   static String messagesRead(String id) => '/conversations/$id/messages/read';
   static String messagesDelivered(String id) =>
       '/conversations/$id/messages/delivered';

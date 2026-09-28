@@ -7126,4 +7126,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get roomSearchEmpty => 'कुछ नहीं मिला';
+
+  @override
+  String get roomDownloadTranscript => 'यह बातचीत सहेजें';
 }

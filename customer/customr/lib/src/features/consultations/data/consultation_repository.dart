@@ -38,6 +38,8 @@ class ConsultationRepository {
   /// The chats list — one thread per astrologer, not one per consultation.
   Future<List<Conversation>> conversations() => _api.conversations();
   Future<Conversation> conversation(String id) => _api.conversation(id);
+  Future<List<int>> transcript(String threadId, {String? consultationId}) =>
+      _api.transcript(threadId, consultationId: consultationId);
   Future<Consultation> upgradeChannel(String id, String channel) =>
       _api.upgradeChannel(id, channel);
   Future<Consultation> cancel(String id) => _api.cancel(id);

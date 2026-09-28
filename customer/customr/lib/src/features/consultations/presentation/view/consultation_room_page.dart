@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:talkacharya_call/talkacharya_call.dart';
@@ -1148,6 +1151,9 @@ void _showSummarySheet(BuildContext context, Consultation c) {
               ),
             ],
             const SizedBox(height: 16),
+            // What was actually said, in something they can keep. People pay
+            // for advice and forget the specifics of it within a week.
+            _TranscriptButton(consultation: c),
             if (c.billedSeconds > 0)
               TextButton.icon(
                 onPressed: () {
@@ -1515,6 +1521,67 @@ class _StartConsultationBar extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Saves or shares a transcript of the session.
+class _TranscriptButton extends StatefulWidget {
+  const _TranscriptButton({required this.consultation});
+  final Consultation consultation;
+
+  @override
+  State<_TranscriptButton> createState() => _TranscriptButtonState();
+}
+
+class _TranscriptButtonState extends State<_TranscriptButton> {
+  bool _busy = false;
+
+  Future<void> _download() async {
+    setState(() => _busy = true);
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
+    try {
+      final bytes = await getIt<ConsultationRepository>().transcript(
+        widget.consultation.id,
+        consultationId: widget.consultation.id,
+      );
+      // The server decides the format — plain text where it cannot build a
+      // PDF — so sniff rather than assume.
+      final isPdf =
+          bytes.length > 4 &&
+          bytes[0] == 0x25 &&
+          bytes[1] == 0x50 &&
+          bytes[2] == 0x44 &&
+          bytes[3] == 0x46;
+      await Share.shareXFiles([
+        XFile.fromData(
+          Uint8List.fromList(bytes),
+          mimeType: isPdf ? 'application/pdf' : 'text/plain',
+          name: 'consultation.${isPdf ? 'pdf' : 'txt'}',
+        ),
+      ]);
+    } catch (_) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.commonSomethingWentWrong)),
+      );
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton.icon(
+      onPressed: _busy ? null : _download,
+      icon: _busy
+          ? const SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            )
+          : const Icon(Icons.download_rounded, size: 18),
+      label: Text(context.l10n.roomDownloadTranscript),
     );
   }
 }

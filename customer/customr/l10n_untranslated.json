@@ -304,7 +304,8 @@
     "callBothPoorConnection",
     "roomSearch",
     "roomSearchHint",
-    "roomSearchEmpty"
+    "roomSearchEmpty",
+    "roomDownloadTranscript"
   ],
 
   "gu": [
@@ -612,7 +613,8 @@
     "callBothPoorConnection",
     "roomSearch",
     "roomSearchHint",
-    "roomSearchEmpty"
+    "roomSearchEmpty",
+    "roomDownloadTranscript"
   ],
 
   "kn": [
@@ -920,7 +922,8 @@
     "callBothPoorConnection",
     "roomSearch",
     "roomSearchHint",
-    "roomSearchEmpty"
+    "roomSearchEmpty",
+    "roomDownloadTranscript"
   ],
 
   "mr": [
@@ -1228,7 +1231,8 @@
     "callBothPoorConnection",
     "roomSearch",
     "roomSearchHint",
-    "roomSearchEmpty"
+    "roomSearchEmpty",
+    "roomDownloadTranscript"
   ],
 
   "ta": [
@@ -1536,7 +1540,8 @@
     "callBothPoorConnection",
     "roomSearch",
     "roomSearchHint",
-    "roomSearchEmpty"
+    "roomSearchEmpty",
+    "roomDownloadTranscript"
   ],
 
   "te": [
@@ -1844,6 +1849,7 @@
     "callBothPoorConnection",
     "roomSearch",
     "roomSearchHint",
-    "roomSearchEmpty"
+    "roomSearchEmpty",
+    "roomDownloadTranscript"
   ]
 }

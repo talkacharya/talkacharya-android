@@ -7030,4 +7030,7 @@ class AppLocalizationsMr extends AppLocalizations {
 
   @override
   String get roomSearchEmpty => 'Nothing found';
+
+  @override
+  String get roomDownloadTranscript => 'Save this conversation';
 }
