@@ -20,6 +20,8 @@ class CallStrings {
     this.reconnecting = 'Reconnecting…',
     this.callEnded = 'Call ended',
     this.poorConnection = 'Weak connection',
+    this.peerPoorConnection = 'Their connection is weak',
+    this.bothPoorConnection = 'Weak connection on both sides',
     this.mute = 'Mute',
     this.speaker = 'Speaker',
     this.camera = 'Camera',
@@ -63,6 +65,12 @@ class CallStrings {
   /// away — so it reads as the call protecting the audio rather than the
   /// camera button having broken.
   final String videoPausedWeakConnection;
+
+  /// Said from the reader's side: "their connection is weak". Naming whose
+  /// line it is saves the person whose line is fine from restarting things
+  /// that were never the problem.
+  final String peerPoorConnection;
+  final String bothPoorConnection;
 
   /// Shown over the peer's avatar when they turned theirs off.
   final String peerCameraOff;
@@ -356,11 +364,16 @@ class _LiveView extends StatelessWidget {
           strings: strings,
           overrideText: statusOverride,
         ),
-        if (state.phase == CallPhase.connected && state.quality == 1) ...[
+        if (state.phase == CallPhase.connected &&
+            state.weakSide != CallWeakSide.none) ...[
           const SizedBox(height: 10),
           _Pill(
             icon: Icons.signal_cellular_alt_1_bar_rounded,
-            text: strings.poorConnection,
+            text: switch (state.weakSide) {
+              CallWeakSide.theirs => strings.peerPoorConnection,
+              CallWeakSide.both => strings.bothPoorConnection,
+              _ => strings.poorConnection,
+            },
             color: const Color(0xFFFFC53D),
           ),
         ],

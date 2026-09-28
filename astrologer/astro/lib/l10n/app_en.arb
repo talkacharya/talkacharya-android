@@ -851,5 +851,17 @@
   "liveWaitingTooltip": "Viewers who want a private reading — they're in your queue",
   "@liveWaitingTooltip": {
     "description": "Private-reading queue while live"
+  },
+  "callPoorConnection": "Weak connection",
+  "@callPoorConnection": {
+    "description": "Whose line is weak during a call"
+  },
+  "callPeerPoorConnection": "Customer's connection is weak",
+  "@callPeerPoorConnection": {
+    "description": "Whose line is weak during a call"
+  },
+  "callBothPoorConnection": "Weak connection on both sides",
+  "@callBothPoorConnection": {
+    "description": "Whose line is weak during a call"
   }
 }

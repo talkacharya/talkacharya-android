@@ -7111,4 +7111,10 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get walletAutoRechargeAction => 'ऑटो टॉप-अप';
+
+  @override
+  String get callPeerPoorConnection => 'उनका नेटवर्क कमज़ोर है';
+
+  @override
+  String get callBothPoorConnection => 'दोनों ओर नेटवर्क कमज़ोर है';
 }

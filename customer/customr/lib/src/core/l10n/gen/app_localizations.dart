@@ -12259,6 +12259,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Auto top-up'**
   String get walletAutoRechargeAction;
+
+  /// Whose line is weak during a call
+  ///
+  /// In en, this message translates to:
+  /// **'Their connection is weak'**
+  String get callPeerPoorConnection;
+
+  /// Whose line is weak during a call
+  ///
+  /// In en, this message translates to:
+  /// **'Weak connection on both sides'**
+  String get callBothPoorConnection;
 }
 
 class _AppLocalizationsDelegate

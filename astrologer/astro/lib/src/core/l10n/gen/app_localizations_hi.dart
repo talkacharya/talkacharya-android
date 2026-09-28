@@ -1566,4 +1566,13 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get liveWaitingTooltip =>
       'निजी परामर्श चाहने वाले दर्शक — वे आपकी कतार में हैं';
+
+  @override
+  String get callPoorConnection => 'नेटवर्क कमज़ोर है';
+
+  @override
+  String get callPeerPoorConnection => 'ग्राहक का नेटवर्क कमज़ोर है';
+
+  @override
+  String get callBothPoorConnection => 'दोनों ओर नेटवर्क कमज़ोर है';
 }

@@ -1570,4 +1570,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get liveWaitingTooltip =>
       'Viewers who want a private reading — they\'re in your queue';
+
+  @override
+  String get callPoorConnection => 'Weak connection';
+
+  @override
+  String get callPeerPoorConnection => 'Customer\'s connection is weak';
+
+  @override
+  String get callBothPoorConnection => 'Weak connection on both sides';
 }

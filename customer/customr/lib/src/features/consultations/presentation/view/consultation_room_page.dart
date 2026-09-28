@@ -491,6 +491,8 @@ CallStrings callStrings(AppLocalizations l) => CallStrings(
   reconnecting: l.callReconnecting,
   callEnded: l.callEnded,
   poorConnection: l.callPoorConnection,
+  peerPoorConnection: l.callPeerPoorConnection,
+  bothPoorConnection: l.callBothPoorConnection,
   mute: l.callMute,
   speaker: l.callSpeaker,
   camera: l.callCamera,

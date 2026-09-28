@@ -2918,5 +2918,7 @@
   "walletAutoRechargeTurnOff": "स्वचालित टॉप-अप बंद करें",
   "walletAutoRechargeOn": "चालू — {threshold} से कम होने पर {amount}",
   "walletAutoRechargeBankStopped": "आपके बैंक ने पिछले कुछ टॉप-अप अस्वीकार किए, इसलिए हमने इसे बंद कर दिया। दोबारा चालू करने पर नई अनुमति ली जाएगी।",
-  "walletAutoRechargeAction": "ऑटो टॉप-अप"
+  "walletAutoRechargeAction": "ऑटो टॉप-अप",
+  "callPeerPoorConnection": "उनका नेटवर्क कमज़ोर है",
+  "callBothPoorConnection": "दोनों ओर नेटवर्क कमज़ोर है"
 }

@@ -2833,6 +2833,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Viewers who want a private reading — they\'re in your queue'**
   String get liveWaitingTooltip;
+
+  /// Whose line is weak during a call
+  ///
+  /// In en, this message translates to:
+  /// **'Weak connection'**
+  String get callPoorConnection;
+
+  /// Whose line is weak during a call
+  ///
+  /// In en, this message translates to:
+  /// **'Customer\'s connection is weak'**
+  String get callPeerPoorConnection;
+
+  /// Whose line is weak during a call
+  ///
+  /// In en, this message translates to:
+  /// **'Weak connection on both sides'**
+  String get callBothPoorConnection;
 }
 
 class _AppLocalizationsDelegate

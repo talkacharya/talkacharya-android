@@ -458,5 +458,8 @@
   "commonClose": "बंद करें",
   "roomCustomerToppingUp": "ग्राहक पैसे जोड़ रहे हैं — सत्र रुका है, शुल्क नहीं लग रहा",
   "liveWaitingCount": "{count} प्रतीक्षा में",
-  "liveWaitingTooltip": "निजी परामर्श चाहने वाले दर्शक — वे आपकी कतार में हैं"
+  "liveWaitingTooltip": "निजी परामर्श चाहने वाले दर्शक — वे आपकी कतार में हैं",
+  "callPoorConnection": "नेटवर्क कमज़ोर है",
+  "callPeerPoorConnection": "ग्राहक का नेटवर्क कमज़ोर है",
+  "callBothPoorConnection": "दोनों ओर नेटवर्क कमज़ोर है"
 }

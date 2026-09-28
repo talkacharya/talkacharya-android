@@ -7036,4 +7036,10 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get walletAutoRechargeAction => 'Auto top-up';
+
+  @override
+  String get callPeerPoorConnection => 'Their connection is weak';
+
+  @override
+  String get callBothPoorConnection => 'Weak connection on both sides';
 }

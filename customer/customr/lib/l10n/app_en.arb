@@ -3882,5 +3882,13 @@
   "walletAutoRechargeAction": "Auto top-up",
   "@walletAutoRechargeAction": {
     "description": "Automatic wallet top-up"
+  },
+  "callPeerPoorConnection": "Their connection is weak",
+  "@callPeerPoorConnection": {
+    "description": "Whose line is weak during a call"
+  },
+  "callBothPoorConnection": "Weak connection on both sides",
+  "@callBothPoorConnection": {
+    "description": "Whose line is weak during a call"
   }
 }

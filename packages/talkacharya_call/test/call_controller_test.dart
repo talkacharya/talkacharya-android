@@ -1032,4 +1032,78 @@ void main() {
     expect(s.engine.cameraEnabled, isNull);
     await s.c.close();
   });
+
+  group('whose line is weak', () {
+    test('each side learns the peer quality', () async {
+      // Both ends measure only themselves, so without this a rough call looks
+      // identical from either side and the one whose line is fine spends it
+      // restarting things that were never the problem.
+      final hub = _Hub();
+      final cust = _side('customer', hub);
+      final astro = _side('astrologer', hub);
+      await cust.c.start();
+      await astro.c.start();
+      await _settle();
+      cust.engine.last.ice.add(RtcIceState.connected);
+      astro.engine.last.ice.add(RtcIceState.connected);
+
+      cust.engine.last.rtt = 1.4;
+      cust.engine.last.loss = 0.35;
+      await _settle(300);
+
+      expect(cust.c.state.quality, 1);
+      expect(astro.c.state.peerQuality, 1, reason: 'never reached the peer');
+      expect(astro.c.state.weakSide, CallWeakSide.theirs);
+      expect(cust.c.state.weakSide, CallWeakSide.mine);
+
+      await cust.c.close();
+      await astro.c.close();
+    });
+
+    test('an unheard-from peer is unknown, not good', () {
+      // Our line is bad and theirs has said nothing. That is "mine", not
+      // "both" — claiming a problem at their end on no evidence sends someone
+      // off restarting a router for nothing.
+      const mineBad = CallState(phase: CallPhase.connected, quality: 1);
+      expect(mineBad.peerQuality, 0);
+      expect(mineBad.weakSide, CallWeakSide.mine);
+
+      // And the reverse: a silent peer must not make our own fine line look
+      // like the problem.
+      const theirsBad = CallState(
+        phase: CallPhase.connected,
+        quality: 3,
+        peerQuality: 1,
+      );
+      expect(theirsBad.weakSide, CallWeakSide.theirs);
+
+      const bothBad = CallState(
+        phase: CallPhase.connected,
+        quality: 1,
+        peerQuality: 1,
+      );
+      expect(bothBad.weakSide, CallWeakSide.both);
+
+      // Nothing measured anywhere yet.
+      const unknown = CallState(phase: CallPhase.connected);
+      expect(unknown.weakSide, CallWeakSide.none);
+    });
+
+    test('a healthy call blames nobody', () async {
+      final hub = _Hub();
+      final cust = _side('customer', hub);
+      final astro = _side('astrologer', hub);
+      await cust.c.start();
+      await astro.c.start();
+      await _settle();
+      cust.engine.last.ice.add(RtcIceState.connected);
+      astro.engine.last.ice.add(RtcIceState.connected);
+      await _settle(200);
+
+      expect(cust.c.state.weakSide, CallWeakSide.none);
+      expect(astro.c.state.weakSide, CallWeakSide.none);
+      await cust.c.close();
+      await astro.c.close();
+    });
+  });
 }

@@ -53,6 +53,7 @@ class CallState extends Equatable {
     this.bluetooth = false,
     this.videoPausedForNetwork = false,
     this.quality = 0,
+    this.peerQuality = 0,
     this.relayed = false,
     this.connectedAt,
     this.endReason = CallEndReason.none,
@@ -82,6 +83,13 @@ class CallState extends Equatable {
 
   /// 0 = unknown, 1 = poor, 2 = fair, 3 = good.
   final int quality;
+
+  /// The same, as the *other* side measured it and told us. 0 until they say.
+  ///
+  /// Worth the extra round of signalling: without it a rough call looks
+  /// identical from both ends, and whoever's line is fine spends it
+  /// apologising and restarting things.
+  final int peerQuality;
 
   /// Media goes through our TURN relay (vs. phone-to-phone).
   final bool relayed;
@@ -123,6 +131,7 @@ class CallState extends Equatable {
     bool? bluetooth,
     bool? videoPausedForNetwork,
     int? quality,
+    int? peerQuality,
     bool? relayed,
     DateTime? connectedAt,
     CallEndReason? endReason,
@@ -145,6 +154,7 @@ class CallState extends Equatable {
     bluetooth: bluetooth ?? this.bluetooth,
     videoPausedForNetwork: videoPausedForNetwork ?? this.videoPausedForNetwork,
     quality: quality ?? this.quality,
+      peerQuality: peerQuality ?? this.peerQuality,
     relayed: relayed ?? this.relayed,
     connectedAt: connectedAt ?? this.connectedAt,
     endReason: endReason ?? this.endReason,
@@ -167,6 +177,7 @@ class CallState extends Equatable {
     bluetooth,
     videoPausedForNetwork,
     quality,
+    peerQuality,
     relayed,
     connectedAt,
     endReason,
@@ -180,4 +191,20 @@ class CallState extends Equatable {
     localVideo,
     remoteVideo,
   ];
+}
+
+/// Whose line is the problem, when there is one.
+enum CallWeakSide { none, mine, theirs, both }
+
+extension CallQualityView on CallState {
+  /// Only meaningful once both sides have reported; an unknown peer quality
+  /// must not be read as a good one.
+  CallWeakSide get weakSide {
+    final mine = quality > 0 && quality == 1;
+    final theirs = peerQuality > 0 && peerQuality == 1;
+    if (mine && theirs) return CallWeakSide.both;
+    if (mine) return CallWeakSide.mine;
+    if (theirs) return CallWeakSide.theirs;
+    return CallWeakSide.none;
+  }
 }

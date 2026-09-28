@@ -1190,6 +1190,11 @@ class _Stat extends StatelessWidget {
 CallStrings astroCallStrings(AppLocalizations l) => CallStrings(
   endConfirmBody: l.roomCallEndBody,
   videoPausedWeakConnection: l.callVideoPausedWeak,
+  // Named, not generic: an astrologer whose own line is fine used to spend a
+  // rough call apologising and restarting things that were never the problem.
+  poorConnection: l.callPoorConnection,
+  peerPoorConnection: l.callPeerPoorConnection,
+  bothPoorConnection: l.callBothPoorConnection,
   minimize: l.callMinimize,
   tapToReturn: l.callTapToReturn,
   waiting: l.callWaiting,

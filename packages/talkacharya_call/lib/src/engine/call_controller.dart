@@ -506,6 +506,9 @@ class CallController extends Cubit<CallState> {
         );
       case 'media':
         emit(state.copyWith(peerCameraOn: msg['video'] == true));
+      case 'quality':
+        final q = (msg['q'] as num?)?.toInt() ?? 0;
+        if (q > 0) _emitIfOpen(state.copyWith(peerQuality: q));
       case 'bye':
         if (remoteSid == _remoteSid || _remoteSid == null) {
           await _teardown(CallEndReason.remoteHangUp);
@@ -533,6 +536,9 @@ class CallController extends Cubit<CallState> {
       emit(state.copyWith(phase: CallPhase.connecting));
     }
     if (state.video) await _publish({'t': 'media', 'video': state.cameraOn});
+    // Re-announce on a hello: whoever just arrived has no idea how our line is
+    // doing, and 0 has to read as unknown rather than as good.
+    if (state.quality > 0) await _publish({'t': 'quality', 'q': state.quality});
   }
 
   bool get _offerCooledDown =>
@@ -809,9 +815,15 @@ class CallController extends Cubit<CallState> {
             : 1;
       }
       if (!isClosed) {
+        final changed = quality != state.quality;
         emit(
           state.copyWith(quality: quality, relayed: s.relayed ?? state.relayed),
         );
+        // Only on a change: the sampler runs every few seconds and the other
+        // side does not need a frame per sample to know the line is fine.
+        if (changed && quality > 0) {
+          unawaited(_publish({'t': 'quality', 'q': quality}));
+        }
       }
       await _adaptVideo(quality);
     } catch (_) {}
