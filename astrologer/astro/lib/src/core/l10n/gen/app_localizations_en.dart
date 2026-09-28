@@ -1585,4 +1585,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get callHideChart => 'Hide chart';
+
+  @override
+  String get roomSearch => 'Search';
+
+  @override
+  String get roomSearchHint => 'Search this conversation';
+
+  @override
+  String get roomSearchEmpty => 'Nothing found';
 }

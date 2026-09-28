@@ -243,7 +243,7 @@ class _RoomView extends StatelessWidget {
 /// switched off: the conversation stays visible — the astrologer can always
 /// read back what was discussed — with the wrap-up (earnings, duration, the
 /// customer's rating if given) one tap away instead of replacing the thread.
-class _ChatRoom extends StatelessWidget {
+class _ChatRoom extends StatefulWidget {
   const _ChatRoom({
     required this.consultation,
     required this.state,
@@ -255,8 +255,18 @@ class _ChatRoom extends StatelessWidget {
   final bool ended;
 
   @override
+  State<_ChatRoom> createState() => _ChatRoomState();
+}
+
+class _ChatRoomState extends State<_ChatRoom> {
+  /// The in-thread search bar, opened from the app bar.
+  bool _searching = false;
+
+  @override
   Widget build(BuildContext context) {
-    final c = consultation;
+    final c = widget.consultation;
+    final state = widget.state;
+    final ended = widget.ended;
     final l = context.l10n;
     final brand = context.brand;
     final ch = channelStyle(context, c.channel);
@@ -305,6 +315,11 @@ class _ChatRoom extends StatelessWidget {
                 ),
               ]
             : [
+                IconButton(
+                  tooltip: l.roomSearch,
+                  icon: const Icon(Icons.search_rounded),
+                  onPressed: () => setState(() => _searching = !_searching),
+                ),
                 const _AutoTranslateToggle(),
                 if (c.sharedPeople.isNotEmpty)
                   IconButton(
@@ -334,6 +349,15 @@ class _ChatRoom extends StatelessWidget {
       ),
       body: Column(
         children: [
+          if (_searching)
+            ChatSearchBar(
+              hint: l.roomSearchHint,
+              emptyText: l.roomSearchEmpty,
+              onJumpTo: (seq) {
+                context.read<ChatController>().jumpTo(seq);
+                setState(() => _searching = false);
+              },
+            ),
           if (ended && state.window.isFollowUp)
             _FollowUpBar(until: state.window.followUpUntil)
           else if (ended)

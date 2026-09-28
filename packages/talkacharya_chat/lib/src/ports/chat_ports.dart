@@ -14,6 +14,13 @@ abstract class ChatTransport {
     int limit = 50,
   });
 
+  /// Messages in this thread containing [query], newest first.
+  ///
+  /// Server-side on purpose: a thread outlives every consultation in it, so
+  /// the answer someone is looking for is usually far above whatever happens
+  /// to be loaded.
+  Future<List<ChatMessage>> search(String query) async => const [];
+
   Future<ChatMessage> send({
     String body = '',
     required String clientMessageId,

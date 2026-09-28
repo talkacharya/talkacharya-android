@@ -1581,4 +1581,13 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get callHideChart => 'कुंडली छिपाएं';
+
+  @override
+  String get roomSearch => 'खोजें';
+
+  @override
+  String get roomSearchHint => 'इस बातचीत में खोजें';
+
+  @override
+  String get roomSearchEmpty => 'कुछ नहीं मिला';
 }

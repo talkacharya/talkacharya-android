@@ -73,6 +73,17 @@ class DioChatTransport implements ChatTransport {
   }
 
   @override
+  Future<List<ChatMessage>> search(String query) async {
+    final res = await _dio.get<List<dynamic>>(
+      ApiPaths.messageSearch(consultationId),
+      queryParameters: {'q': query},
+    );
+    return (res.data ?? const [])
+        .map((e) => ChatMessage.fromMap((e as Map).cast<String, dynamic>()))
+        .toList();
+  }
+
+  @override
   Future<ChatMessage> send({
     String body = '',
     required String clientMessageId,

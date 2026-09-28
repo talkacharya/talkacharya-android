@@ -11,6 +11,10 @@ class ChatSessionState extends Equatable {
     this.hasMoreOlder = true,
     this.autoTranslate = false,
     this.pins = const [],
+    this.searchQuery = '',
+    this.searchResults = const [],
+    this.searching = false,
+    this.jumpToSeq,
     this.replyingTo,
     this.error,
   });
@@ -26,6 +30,17 @@ class ChatSessionState extends Equatable {
 
   /// Pinned messages, newest first. Shared by both participants.
   final List<ChatPin> pins;
+
+  /// What is being looked for in this thread, and what came back.
+  final String searchQuery;
+  final List<ChatMessage> searchResults;
+  final bool searching;
+
+  bool get isSearching => searchQuery.length >= 2;
+
+  /// A message the transcript should scroll to, set when a search result is
+  /// picked and cleared once the list has moved. Null the rest of the time.
+  final int? jumpToSeq;
 
   /// The message the composer is currently replying to, if any.
   final ChatMessage? replyingTo;
@@ -47,6 +62,11 @@ class ChatSessionState extends Equatable {
     bool? hasMoreOlder,
     bool? autoTranslate,
     List<ChatPin>? pins,
+    String? searchQuery,
+    List<ChatMessage>? searchResults,
+    bool? searching,
+    int? jumpToSeq,
+    bool clearJump = false,
     Object? replyingTo = _unset,
     Object? error = _unset,
   }) {
@@ -60,6 +80,10 @@ class ChatSessionState extends Equatable {
       hasMoreOlder: hasMoreOlder ?? this.hasMoreOlder,
       autoTranslate: autoTranslate ?? this.autoTranslate,
       pins: pins ?? this.pins,
+      searchQuery: searchQuery ?? this.searchQuery,
+      searchResults: searchResults ?? this.searchResults,
+      searching: searching ?? this.searching,
+      jumpToSeq: clearJump ? null : (jumpToSeq ?? this.jumpToSeq),
       replyingTo: replyingTo == _unset
           ? this.replyingTo
           : replyingTo as ChatMessage?,
@@ -80,6 +104,10 @@ class ChatSessionState extends Equatable {
     hasMoreOlder,
     autoTranslate,
     pins,
+    searchQuery,
+    searchResults,
+    searching,
+    jumpToSeq,
     replyingTo,
     error,
   ];

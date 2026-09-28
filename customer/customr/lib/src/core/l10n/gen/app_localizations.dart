@@ -12271,6 +12271,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Weak connection on both sides'**
   String get callBothPoorConnection;
+
+  /// Search within a conversation
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get roomSearch;
+
+  /// Search within a conversation
+  ///
+  /// In en, this message translates to:
+  /// **'Search this conversation'**
+  String get roomSearchHint;
+
+  /// Search within a conversation
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing found'**
+  String get roomSearchEmpty;
 }
 
 class _AppLocalizationsDelegate

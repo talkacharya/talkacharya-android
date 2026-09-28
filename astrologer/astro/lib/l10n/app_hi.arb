@@ -463,5 +463,8 @@
   "callPeerPoorConnection": "ग्राहक का नेटवर्क कमज़ोर है",
   "callBothPoorConnection": "दोनों ओर नेटवर्क कमज़ोर है",
   "callShowChart": "कुंडली",
-  "callHideChart": "कुंडली छिपाएं"
+  "callHideChart": "कुंडली छिपाएं",
+  "roomSearch": "खोजें",
+  "roomSearchHint": "इस बातचीत में खोजें",
+  "roomSearchEmpty": "कुछ नहीं मिला"
 }

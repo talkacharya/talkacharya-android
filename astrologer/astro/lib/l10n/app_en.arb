@@ -871,5 +871,17 @@
   "callHideChart": "Hide chart",
   "@callHideChart": {
     "description": "Chart overlay during a video call"
+  },
+  "roomSearch": "Search",
+  "@roomSearch": {
+    "description": "Search within a conversation"
+  },
+  "roomSearchHint": "Search this conversation",
+  "@roomSearchHint": {
+    "description": "Search within a conversation"
+  },
+  "roomSearchEmpty": "Nothing found",
+  "@roomSearchEmpty": {
+    "description": "Search within a conversation"
   }
 }

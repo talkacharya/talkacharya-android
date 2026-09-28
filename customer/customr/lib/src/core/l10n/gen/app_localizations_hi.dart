@@ -7117,4 +7117,13 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get callBothPoorConnection => 'दोनों ओर नेटवर्क कमज़ोर है';
+
+  @override
+  String get roomSearch => 'खोजें';
+
+  @override
+  String get roomSearchHint => 'इस बातचीत में खोजें';
+
+  @override
+  String get roomSearchEmpty => 'कुछ नहीं मिला';
 }

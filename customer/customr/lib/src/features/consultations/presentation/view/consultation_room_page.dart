@@ -539,6 +539,9 @@ class _ChatShellState extends State<_ChatShell> {
   bool _ratingBusy = false;
   bool _justRated = false;
 
+  /// The in-thread search bar, opened from the app bar.
+  bool _searching = false;
+
   Future<void> _confirmEnd(BuildContext context) async {
     final l10n = context.l10n;
     final ok = await showDialog<bool>(
@@ -729,6 +732,11 @@ class _ChatShellState extends State<_ChatShell> {
                   icon: const Icon(Icons.auto_awesome_rounded),
                   onPressed: () => showShareDetailsSheet(context),
                 ),
+                IconButton(
+                  tooltip: l10n.roomSearch,
+                  icon: const Icon(Icons.search_rounded),
+                  onPressed: () => setState(() => _searching = !_searching),
+                ),
                 if (c.channel == 'chat')
                   IconButton(
                     tooltip: l10n.roomSwitchToCall,
@@ -778,6 +786,15 @@ class _ChatShellState extends State<_ChatShell> {
                 c.runwaySeconds <= 180)
               QuickTopUp(consultation: c),
           ],
+          if (_searching)
+            ChatSearchBar(
+              hint: l10n.roomSearchHint,
+              emptyText: l10n.roomSearchEmpty,
+              onJumpTo: (seq) {
+                context.read<ChatController>().jumpTo(seq);
+                setState(() => _searching = false);
+              },
+            ),
           if (window.isFollowUp) _FollowUpBar(until: window.followUpUntil),
           Expanded(child: ChatView(composerEnabled: canChat)),
           // Below the transcript, not above it: a chat scrolls to the newest

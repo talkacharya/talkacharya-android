@@ -25,6 +25,18 @@ class _FakeTransport implements ChatTransport {
     return initial.where((m) => m.seq > afterSeq).toList();
   }
 
+  /// What the next search returns, and every query that was asked.
+  List<ChatMessage> searchHits = const [];
+  final searched = <String>[];
+  Duration searchDelay = Duration.zero;
+
+  @override
+  Future<List<ChatMessage>> search(String query) async {
+    searched.add(query);
+    if (searchDelay != Duration.zero) await Future<void>.delayed(searchDelay);
+    return searchHits;
+  }
+
   @override
   Future<ChatMessage> send({
     String body = '',
@@ -54,7 +66,8 @@ class _FakeTransport implements ChatTransport {
 
   @override
   Future<List<ChatPin>> pins() async => [
-    for (final seq in pinned) ChatPin(id: 'p$seq', seq: seq, body: 'pinned $seq'),
+    for (final seq in pinned)
+      ChatPin(id: 'p$seq', seq: seq, body: 'pinned $seq'),
   ];
 
   @override
@@ -468,32 +481,35 @@ void main() {
     await c2.close();
   });
 
-  test('a reply carries the quote optimistically and clears the composer', () async {
-    final t = _FakeTransport();
-    final c = _make(t, _FakeRealtime());
-    await c.start();
-    await c.sendText('what about marriage?');
-    final quoted = c.state.messages.last;
+  test(
+    'a reply carries the quote optimistically and clears the composer',
+    () async {
+      final t = _FakeTransport();
+      final c = _make(t, _FakeRealtime());
+      await c.start();
+      await c.sendText('what about marriage?');
+      final quoted = c.state.messages.last;
 
-    c.replyTo(quoted);
-    expect(c.state.replyingTo, quoted);
+      c.replyTo(quoted);
+      expect(c.state.replyingTo, quoted);
 
-    await c.sendText('let me look');
-    expect(t.lastReplyToSeq, quoted.seq);
-    expect(c.state.messages.last.replyTo?.seq, quoted.seq);
-    // ...and the composer stops quoting once it has been sent.
-    expect(c.state.replyingTo, isNull);
+      await c.sendText('let me look');
+      expect(t.lastReplyToSeq, quoted.seq);
+      expect(c.state.messages.last.replyTo?.seq, quoted.seq);
+      // ...and the composer stops quoting once it has been sent.
+      expect(c.state.replyingTo, isNull);
 
-    // The quote is on the bubble straight away, not only once the server
-    // answers: with the send failing there is no echo to supply it, and it is
-    // still there. Otherwise a reply looks unanchored until the round-trip.
-    t.failSend = true;
-    c.replyTo(quoted);
-    await c.sendText('and one more thing');
-    final optimistic = c.state.messages.last;
-    expect(optimistic.sendStatus, SendStatus.failed);
-    expect(optimistic.replyTo?.body, 'what about marriage?');
-  });
+      // The quote is on the bubble straight away, not only once the server
+      // answers: with the send failing there is no echo to supply it, and it is
+      // still there. Otherwise a reply looks unanchored until the round-trip.
+      t.failSend = true;
+      c.replyTo(quoted);
+      await c.sendText('and one more thing');
+      final optimistic = c.state.messages.last;
+      expect(optimistic.sendStatus, SendStatus.failed);
+      expect(optimistic.replyTo?.body, 'what about marriage?');
+    },
+  );
 
   test('pins load on start and follow the other side pinning', () async {
     final t = _FakeTransport()..pinned.add(7);
@@ -506,7 +522,10 @@ void main() {
     // The astrologer pins something; the customer's room follows without a
     // reload, because a pin is shared between the two of them.
     t.pinned.add(9);
-    rt.emit({'type': 'message.pinned', 'data': {'seq': 9}});
+    rt.emit({
+      'type': 'message.pinned',
+      'data': {'seq': 9},
+    });
     await Future<void>.delayed(const Duration(milliseconds: 10));
     expect(c.state.pins.map((p) => p.seq), containsAll([7, 9]));
   });
@@ -521,6 +540,83 @@ void main() {
     expect(c.state.pins.map((p) => p.seq), [4]);
   });
 
+  group('searching a thread', () {
+    test('a short query asks the server nothing', () async {
+      final t = _FakeTransport();
+      final c = _make(t, _FakeRealtime());
+      await c.start();
+
+      await c.searchMessages('a');
+
+      // One letter would match half the conversation and read as broken.
+      expect(t.searched, isEmpty);
+      expect(c.state.isSearching, isFalse);
+      await c.close();
+    });
+
+    test('results come back against the query that asked for them', () async {
+      final t = _FakeTransport();
+      t.searchHits = [const ChatMessage(id: 'x', seq: 4, body: 'wear a pearl')];
+      final c = _make(t, _FakeRealtime());
+      await c.start();
+
+      await c.searchMessages('pearl');
+
+      expect(t.searched.last, 'pearl');
+      expect(c.state.searchResults.single.seq, 4);
+      expect(c.state.searching, isFalse);
+      await c.close();
+    });
+
+    test('a slow answer never overwrites a newer question', () async {
+      // People type faster than a round trip. Without the guard the results
+      // for "pea" land after "pearl" and the reader sees the wrong list.
+      final t = _FakeTransport();
+      t.searchDelay = const Duration(milliseconds: 60);
+      t.searchHits = [const ChatMessage(id: 'stale', seq: 1, body: 'stale')];
+      final c = _make(t, _FakeRealtime());
+      await c.start();
+
+      final slow = c.searchMessages('pea');
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      t.searchDelay = Duration.zero;
+      t.searchHits = [const ChatMessage(id: 'fresh', seq: 2, body: 'fresh')];
+      await c.searchMessages('pearl');
+      await slow;
+
+      expect(c.state.searchQuery, 'pearl');
+      expect(c.state.searchResults.single.id, 'fresh');
+      await c.close();
+    });
+
+    test('clearing puts the transcript back', () async {
+      final t = _FakeTransport();
+      t.searchHits = [const ChatMessage(id: 'x', seq: 4, body: 'pearl')];
+      final c = _make(t, _FakeRealtime());
+      await c.start();
+      await c.searchMessages('pearl');
+
+      c.clearSearch();
+
+      expect(c.state.isSearching, isFalse);
+      expect(c.state.searchResults, isEmpty);
+      await c.close();
+    });
+
+    test('a jump is raised once and then let go', () async {
+      final t = _FakeTransport();
+      final c = _make(t, _FakeRealtime());
+      await c.start();
+
+      c.jumpTo(7);
+      expect(c.state.jumpToSeq, 7);
+
+      // The view clears it, so re-entering the screen does not scroll again.
+      c.jumpHandled();
+      expect(c.state.jumpToSeq, isNull);
+      await c.close();
+    });
+  });
 }
 
 class _MemOutbox extends ChatOutbox {

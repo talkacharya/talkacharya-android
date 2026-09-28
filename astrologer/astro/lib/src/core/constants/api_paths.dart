@@ -85,6 +85,8 @@ class ApiPaths {
   // Everything inside a thread is keyed on the thread, not on the session
   // running in it — a room outlives its consultation.
   static String messages(String id) => '/conversations/$id/messages';
+  static String messageSearch(String id) =>
+      '/conversations/$id/messages/search';
   static String messagesRead(String id) => '/conversations/$id/messages/read';
   static String messagesDelivered(String id) =>
       '/conversations/$id/messages/delivered';

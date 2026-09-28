@@ -7066,4 +7066,13 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get callBothPoorConnection => 'Weak connection on both sides';
+
+  @override
+  String get roomSearch => 'Search';
+
+  @override
+  String get roomSearchHint => 'Search this conversation';
+
+  @override
+  String get roomSearchEmpty => 'Nothing found';
 }

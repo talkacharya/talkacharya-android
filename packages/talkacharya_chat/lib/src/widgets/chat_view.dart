@@ -92,8 +92,15 @@ class _ChatViewState extends State<ChatView> {
   Widget build(BuildContext context) {
     final c = context.read<ChatController>();
     return BlocConsumer<ChatController, ChatSessionState>(
-      listenWhen: (a, b) => a.messages.length != b.messages.length,
-      listener: (_, state) {
+      listenWhen: (a, b) =>
+          a.messages.length != b.messages.length ||
+          a.jumpToSeq != b.jumpToSeq,
+      listener: (context, state) {
+        final jump = state.jumpToSeq;
+        if (jump != null) {
+          _scrollToSeq(jump, state);
+          context.read<ChatController>().jumpHandled();
+        }
         final arrived = state.messages.length - _lastCount;
         if (arrived > 0 && _scroll.hasClients) {
           if (_away) {

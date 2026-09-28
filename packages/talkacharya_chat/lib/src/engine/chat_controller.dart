@@ -398,6 +398,40 @@ class ChatController extends Cubit<ChatSessionState> {
 
   // --- older-message pagination --------------------------------------
 
+  void _safeEmit(ChatSessionState next) {
+    if (!isClosed) emit(next);
+  }
+
+  /// Find something said earlier. Empty query clears the results.
+  Future<void> searchMessages(String query) async {
+    final q = query.trim();
+    if (q.length < 2) {
+      _safeEmit(state.copyWith(searchQuery: q, searchResults: const []));
+      return;
+    }
+    _safeEmit(state.copyWith(searchQuery: q, searching: true));
+    try {
+      final hits = await _t.search(q);
+      // Guard against a stale response overwriting a newer query: people type
+      // faster than a round trip.
+      if (state.searchQuery != q) return;
+      _safeEmit(state.copyWith(searchResults: hits, searching: false));
+    } catch (_) {
+      if (state.searchQuery == q) {
+        _safeEmit(state.copyWith(searching: false, searchResults: const []));
+      }
+    }
+  }
+
+  /// Ask the transcript to scroll to [seq] — picked from a search result.
+  void jumpTo(int seq) => _safeEmit(state.copyWith(jumpToSeq: seq));
+
+  void jumpHandled() => _safeEmit(state.copyWith(clearJump: true));
+
+  void clearSearch() => _safeEmit(
+    state.copyWith(searchQuery: '', searchResults: const [], searching: false),
+  );
+
   Future<void> loadOlder() async {
     if (state.loadingOlder || !state.hasMoreOlder) return;
     final oldest = state.firstSeq;
