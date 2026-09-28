@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talkacharya_predictions/talkacharya_predictions.dart';
 
+import '../../../../shared/widgets/settings_widgets.dart';
+import '../../../../core/l10n/l10n.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../data/predictions_repository.dart';
@@ -70,7 +72,7 @@ class _ViewState extends State<_View> {
     if (_words < minWords) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Needs at least $minWords words ($_words so far).'),
+          content: Text(context.l10n.predWorkTooShort(minWords, _words)),
         ),
       );
       return;
@@ -90,54 +92,29 @@ class _ViewState extends State<_View> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Write forecast'),
-        actions: [
-          BlocBuilder<PredictionWorkCubit, PredictionWorkState>(
-            builder: (context, state) {
-              final p = state.prediction.value;
-              if (p == null) return const SizedBox.shrink();
-              if (p.status.isDelivered) {
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 16),
-                    child: Text('Delivered'),
-                  ),
-                );
-              }
-              if (p.claimedAt == null) {
-                return TextButton(
-                  onPressed: () => context.read<PredictionWorkCubit>().claim(),
-                  child: const Text('Claim'),
-                );
-              }
-              return TextButton(
-                onPressed: () => context.read<PredictionWorkCubit>().release(),
-                child: const Text('Release'),
-              );
-            },
-          ),
-        ],
-      ),
-      body: BlocConsumer<PredictionWorkCubit, PredictionWorkState>(
+    final l = context.l10n;
+    return BlocConsumer<PredictionWorkCubit, PredictionWorkState>(
         listenWhen: (a, b) => a.error != b.error && b.error != null,
-        listener: (context, state) => ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(state.error!))),
-        builder: (context, state) => state.prediction.when(
+      listener: (context, state) => ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(state.error!))),
+      builder: (context, state) => SubPageScaffold(
+        title: l.predWorkTitle,
+        actions: [_ClaimAction(state: state)],
+        bottomBar: _DeliverBar(state: state, onDeliver: () => _deliver(120)),
+        children: state.prediction.when(
           idle: _loading,
           loading: _loading,
-          error: (m) => ErrorView(
-            message: m,
-            onRetry: () => context.read<PredictionWorkCubit>().load(),
-          ),
+          error: (m) => [
+            ErrorView(
+              message: m,
+              onRetry: () => context.read<PredictionWorkCubit>().load(),
+            ),
+          ],
           data: (p) {
             _hydrate(p);
             final canEdit = p.claimedAt != null && !p.status.isDelivered;
-            return ListView(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
-              children: [
+            return [
                 _Meta(prediction: p),
                 const SizedBox(height: 12),
                 _BriefCard(brief: p.factorBrief),
@@ -145,9 +122,9 @@ class _ViewState extends State<_View> {
                 TextField(
                   controller: _title,
                   enabled: canEdit,
-                  decoration: const InputDecoration(
-                    labelText: 'Title',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: l.predWorkTitleField,
+                    border: const OutlineInputBorder(),
                   ),
                   onChanged: (_) => _autosave(),
                 ),
@@ -157,10 +134,10 @@ class _ViewState extends State<_View> {
                   enabled: canEdit,
                   minLines: 10,
                   maxLines: null,
-                  decoration: const InputDecoration(
-                    labelText: 'Forecast',
+                  decoration: InputDecoration(
+                    labelText: l.predWorkBodyField,
                     alignLabelWithHint: true,
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                   ),
                   onChanged: (_) {
                     setState(() {});
@@ -171,46 +148,81 @@ class _ViewState extends State<_View> {
                 Row(
                   children: [
                     Text(
-                      '$_words words',
+                      l.predWorkWords(_words),
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                     const Spacer(),
                     if (state.saving)
-                      const Text('Saving…')
+                      Text(l.predWorkSaving)
                     else if (state.savedAt != null)
-                      const Text('Saved'),
+                      Text(l.predWorkSaved),
                   ],
                 ),
-              ],
-            );
+            ];
           },
         ),
       ),
-      bottomNavigationBar:
-          BlocBuilder<PredictionWorkCubit, PredictionWorkState>(
-            builder: (context, state) {
-              final p = state.prediction.value;
-              if (p == null || p.status.isDelivered || p.claimedAt == null) {
-                return const SizedBox.shrink();
-              }
-              return SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: FilledButton(
-                    onPressed: state.saving ? null : () => _deliver(120),
-                    style: FilledButton.styleFrom(
-                      minimumSize: const Size.fromHeight(52),
-                    ),
-                    child: const Text('Deliver forecast'),
-                  ),
-                ),
-              );
-            },
-          ),
     );
   }
 
-  static Widget _loading() => const Center(child: CircularProgressIndicator());
+  static List<Widget> _loading() => const [
+    SizedBox(height: 60),
+    Center(child: CircularProgressIndicator()),
+  ];
+}
+
+/// Claim the forecast, release it, or say it has already gone out.
+class _ClaimAction extends StatelessWidget {
+  const _ClaimAction({required this.state});
+  final PredictionWorkState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final p = state.prediction.value;
+    if (p == null) return const SizedBox.shrink();
+    if (p.status.isDelivered) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: Text(l.predWorkDelivered),
+        ),
+      );
+    }
+    return TextButton(
+      onPressed: p.claimedAt == null
+          ? () => context.read<PredictionWorkCubit>().claim()
+          : () => context.read<PredictionWorkCubit>().release(),
+      child: Text(p.claimedAt == null ? l.predWorkClaim : l.predWorkRelease),
+    );
+  }
+}
+
+/// Only shown once the forecast is theirs to send.
+class _DeliverBar extends StatelessWidget {
+  const _DeliverBar({required this.state, required this.onDeliver});
+  final PredictionWorkState state;
+  final VoidCallback onDeliver;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = state.prediction.value;
+    if (p == null || p.status.isDelivered || p.claimedAt == null) {
+      return const SizedBox.shrink();
+    }
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: FilledButton(
+          onPressed: state.saving ? null : onDeliver,
+          style: FilledButton.styleFrom(
+            minimumSize: const Size.fromHeight(52),
+          ),
+          child: Text(context.l10n.predWorkDeliver),
+        ),
+      ),
+    );
+  }
 }
 
 class _Meta extends StatelessWidget {

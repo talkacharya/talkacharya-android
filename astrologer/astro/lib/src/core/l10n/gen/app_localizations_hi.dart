@@ -1609,4 +1609,192 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get roomDownloadTranscript => 'यह बातचीत सहेजें';
+
+  @override
+  String get predQueueTitle => 'भविष्यवाणी कतार';
+
+  @override
+  String get predQueueSubtitle => 'लिखे जाने की प्रतीक्षा में';
+
+  @override
+  String get predQueueEmptyTitle => 'कुछ भी प्रतीक्षा में नहीं';
+
+  @override
+  String get predQueueEmptyBody => 'नई भविष्यवाणी के अनुरोध यहाँ दिखेंगे।';
+
+  @override
+  String get predWorkTitle => 'भविष्यवाणी लिखें';
+
+  @override
+  String get predWorkTitleField => 'शीर्षक';
+
+  @override
+  String get predWorkBodyField => 'भविष्यवाणी';
+
+  @override
+  String predWorkWords(int count) {
+    return '$count शब्द';
+  }
+
+  @override
+  String get predWorkSaving => 'सहेजा जा रहा है…';
+
+  @override
+  String get predWorkSaved => 'सहेजा गया';
+
+  @override
+  String get predWorkClaim => 'लें';
+
+  @override
+  String get predWorkRelease => 'छोड़ें';
+
+  @override
+  String get predWorkDelivered => 'भेजा गया';
+
+  @override
+  String get predWorkDeliver => 'भविष्यवाणी भेजें';
+
+  @override
+  String get goLiveTitle => 'लाइव जाएं';
+
+  @override
+  String get goLiveSubtitle => 'लाइव टैब देख रहे सभी लोगों तक प्रसारण करें';
+
+  @override
+  String get goLiveStillLive => 'अभी भी लाइव — जारी रखने के लिए दोबारा जुड़ें';
+
+  @override
+  String get goLiveScheduled => 'निर्धारित — तैयार हों तो शुरू करें';
+
+  @override
+  String get goLiveRejoin => 'दोबारा जुड़ें';
+
+  @override
+  String get goLiveStart => 'शुरू करें';
+
+  @override
+  String get goLiveNewSession => 'नया सत्र शुरू करें';
+
+  @override
+  String get goLiveTitleField => 'यह सत्र किस बारे में है?';
+
+  @override
+  String get goLiveTitleHint => 'जैसे शाम का प्रश्नोत्तर — करियर';
+
+  @override
+  String get goLiveHelp =>
+      'दर्शकों को यही शीर्षक दिखेगा। लाइव जाते ही आपका कैमरा और माइक चालू हो जाएंगे।';
+
+  @override
+  String get goLiveStarting => 'शुरू हो रहा है…';
+
+  @override
+  String get goLivePast => 'पिछले सत्र';
+
+  @override
+  String goLivePeak(int count) {
+    return 'अधिकतम $count';
+  }
+
+  @override
+  String goLiveJoined(int count) {
+    return '$count जुड़े';
+  }
+
+  @override
+  String goLiveGifts(String currency, String amount) {
+    return '$currency $amount उपहार';
+  }
+
+  @override
+  String get kundaliTitle => 'कुंडली';
+
+  @override
+  String kundaliTitleFor(String name) {
+    return '$name की कुंडली';
+  }
+
+  @override
+  String get kundaliTabCharts => 'चार्ट';
+
+  @override
+  String get kundaliTabPlanets => 'ग्रह';
+
+  @override
+  String get kundaliTabDasha => 'दशा';
+
+  @override
+  String get kundaliTabYogas => 'योग';
+
+  @override
+  String get kundaliTabDoshas => 'दोष';
+
+  @override
+  String get kundaliTabOverview => 'सारांश';
+
+  @override
+  String get kundaliTabRemedies => 'उपाय';
+
+  @override
+  String get kundaliTabBhava => 'भाव';
+
+  @override
+  String get kundaliTabGochar => 'गोचर';
+
+  @override
+  String get kundaliTabNumbers => 'अंक';
+
+  @override
+  String get kundaliTabAdvanced => 'विस्तृत';
+
+  @override
+  String get hostEndTitle => 'सत्र समाप्त करें?';
+
+  @override
+  String get hostStayLive => 'लाइव रहें';
+
+  @override
+  String get hostEndSession => 'सत्र समाप्त करें';
+
+  @override
+  String get hostEnd => 'समाप्त';
+
+  @override
+  String get hostChatHint => 'दर्शकों को उत्तर दें…';
+
+  @override
+  String get hostSlowMode => 'धीमा मोड';
+
+  @override
+  String get hostSlowModeBody =>
+      'दो संदेशों के बीच दर्शक को कितनी देर रुकना होगा';
+
+  @override
+  String get hostPin => 'इस संदेश को पिन करें';
+
+  @override
+  String get hostHide => 'इस संदेश को छिपाएं';
+
+  @override
+  String get hostRemove => 'इस दर्शक को हटाएं';
+
+  @override
+  String get hostRemoveBody => 'वे इस स्ट्रीम में दोबारा नहीं जुड़ पाएंगे';
+
+  @override
+  String get otpResend => 'कोड दोबारा भेजें';
+
+  @override
+  String get kundaliAllCharts => 'सभी चार्ट — D1 से D60';
+
+  @override
+  String get kundaliNoYogas => 'कोई उल्लेखनीय योग नहीं मिला।';
+
+  @override
+  String get kundaliNoData => 'कोई डेटा नहीं';
+
+  @override
+  String predWorkTooShort(int min, int count) {
+    return 'कम से कम $min शब्द चाहिए (अभी $count)।';
+  }
 }

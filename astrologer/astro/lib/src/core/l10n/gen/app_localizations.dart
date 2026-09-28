@@ -2917,6 +2917,354 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save this conversation'**
   String get roomDownloadTranscript;
+
+  /// Prediction work queue
+  ///
+  /// In en, this message translates to:
+  /// **'Prediction queue'**
+  String get predQueueTitle;
+
+  /// Prediction work queue
+  ///
+  /// In en, this message translates to:
+  /// **'Forecasts waiting to be written'**
+  String get predQueueSubtitle;
+
+  /// Prediction work queue
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing waiting'**
+  String get predQueueEmptyTitle;
+
+  /// Prediction work queue
+  ///
+  /// In en, this message translates to:
+  /// **'New prediction requests will show up here.'**
+  String get predQueueEmptyBody;
+
+  /// Prediction editor
+  ///
+  /// In en, this message translates to:
+  /// **'Write forecast'**
+  String get predWorkTitle;
+
+  /// Prediction editor
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get predWorkTitleField;
+
+  /// Prediction editor
+  ///
+  /// In en, this message translates to:
+  /// **'Forecast'**
+  String get predWorkBodyField;
+
+  /// Prediction editor
+  ///
+  /// In en, this message translates to:
+  /// **'{count} words'**
+  String predWorkWords(int count);
+
+  /// Prediction editor
+  ///
+  /// In en, this message translates to:
+  /// **'Saving…'**
+  String get predWorkSaving;
+
+  /// Prediction editor
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get predWorkSaved;
+
+  /// Prediction editor
+  ///
+  /// In en, this message translates to:
+  /// **'Claim'**
+  String get predWorkClaim;
+
+  /// Prediction editor
+  ///
+  /// In en, this message translates to:
+  /// **'Release'**
+  String get predWorkRelease;
+
+  /// Prediction editor
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get predWorkDelivered;
+
+  /// Prediction editor
+  ///
+  /// In en, this message translates to:
+  /// **'Deliver forecast'**
+  String get predWorkDeliver;
+
+  /// Going live
+  ///
+  /// In en, this message translates to:
+  /// **'Go live'**
+  String get goLiveTitle;
+
+  /// Going live
+  ///
+  /// In en, this message translates to:
+  /// **'Broadcast to anyone browsing the Live tab'**
+  String get goLiveSubtitle;
+
+  /// Going live
+  ///
+  /// In en, this message translates to:
+  /// **'Still live — rejoin to keep broadcasting'**
+  String get goLiveStillLive;
+
+  /// Going live
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled — start when you are ready'**
+  String get goLiveScheduled;
+
+  /// Going live
+  ///
+  /// In en, this message translates to:
+  /// **'Rejoin'**
+  String get goLiveRejoin;
+
+  /// Going live
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get goLiveStart;
+
+  /// Going live
+  ///
+  /// In en, this message translates to:
+  /// **'Start a new session'**
+  String get goLiveNewSession;
+
+  /// Going live
+  ///
+  /// In en, this message translates to:
+  /// **'What is this session about?'**
+  String get goLiveTitleField;
+
+  /// Going live
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Evening Q&A — career questions'**
+  String get goLiveTitleHint;
+
+  /// Going live
+  ///
+  /// In en, this message translates to:
+  /// **'Viewers see this title in the app. Your camera and microphone turn on as soon as you go live.'**
+  String get goLiveHelp;
+
+  /// Going live
+  ///
+  /// In en, this message translates to:
+  /// **'Starting…'**
+  String get goLiveStarting;
+
+  /// Going live
+  ///
+  /// In en, this message translates to:
+  /// **'Past sessions'**
+  String get goLivePast;
+
+  /// Going live
+  ///
+  /// In en, this message translates to:
+  /// **'{count} peak'**
+  String goLivePeak(int count);
+
+  /// Going live
+  ///
+  /// In en, this message translates to:
+  /// **'{count} joined'**
+  String goLiveJoined(int count);
+
+  /// Going live
+  ///
+  /// In en, this message translates to:
+  /// **'{currency} {amount} in gifts'**
+  String goLiveGifts(String currency, String amount);
+
+  /// The client's kundali screen
+  ///
+  /// In en, this message translates to:
+  /// **'Kundali'**
+  String get kundaliTitle;
+
+  /// The client's kundali screen
+  ///
+  /// In en, this message translates to:
+  /// **'{name}\'s kundali'**
+  String kundaliTitleFor(String name);
+
+  /// The client's kundali screen
+  ///
+  /// In en, this message translates to:
+  /// **'Charts'**
+  String get kundaliTabCharts;
+
+  /// The client's kundali screen
+  ///
+  /// In en, this message translates to:
+  /// **'Planets'**
+  String get kundaliTabPlanets;
+
+  /// The client's kundali screen
+  ///
+  /// In en, this message translates to:
+  /// **'Dasha'**
+  String get kundaliTabDasha;
+
+  /// The client's kundali screen
+  ///
+  /// In en, this message translates to:
+  /// **'Yogas'**
+  String get kundaliTabYogas;
+
+  /// The client's kundali screen
+  ///
+  /// In en, this message translates to:
+  /// **'Doshas'**
+  String get kundaliTabDoshas;
+
+  /// The client's kundali screen
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get kundaliTabOverview;
+
+  /// The client's kundali screen
+  ///
+  /// In en, this message translates to:
+  /// **'Remedies'**
+  String get kundaliTabRemedies;
+
+  /// The client's kundali screen
+  ///
+  /// In en, this message translates to:
+  /// **'Bhava'**
+  String get kundaliTabBhava;
+
+  /// The client's kundali screen
+  ///
+  /// In en, this message translates to:
+  /// **'Gochar'**
+  String get kundaliTabGochar;
+
+  /// The client's kundali screen
+  ///
+  /// In en, this message translates to:
+  /// **'Numbers'**
+  String get kundaliTabNumbers;
+
+  /// The client's kundali screen
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get kundaliTabAdvanced;
+
+  /// Hosting a live stream
+  ///
+  /// In en, this message translates to:
+  /// **'End the session?'**
+  String get hostEndTitle;
+
+  /// Hosting a live stream
+  ///
+  /// In en, this message translates to:
+  /// **'Stay live'**
+  String get hostStayLive;
+
+  /// Hosting a live stream
+  ///
+  /// In en, this message translates to:
+  /// **'End session'**
+  String get hostEndSession;
+
+  /// Hosting a live stream
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get hostEnd;
+
+  /// Hosting a live stream
+  ///
+  /// In en, this message translates to:
+  /// **'Answer your viewers…'**
+  String get hostChatHint;
+
+  /// Hosting a live stream
+  ///
+  /// In en, this message translates to:
+  /// **'Slow mode'**
+  String get hostSlowMode;
+
+  /// Hosting a live stream
+  ///
+  /// In en, this message translates to:
+  /// **'How long a viewer must wait between messages'**
+  String get hostSlowModeBody;
+
+  /// Hosting a live stream
+  ///
+  /// In en, this message translates to:
+  /// **'Pin this message'**
+  String get hostPin;
+
+  /// Hosting a live stream
+  ///
+  /// In en, this message translates to:
+  /// **'Hide this message'**
+  String get hostHide;
+
+  /// Hosting a live stream
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this viewer'**
+  String get hostRemove;
+
+  /// Hosting a live stream
+  ///
+  /// In en, this message translates to:
+  /// **'They cannot rejoin or chat on this stream'**
+  String get hostRemoveBody;
+
+  /// Astrologer app strings
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code'**
+  String get otpResend;
+
+  /// Astrologer app strings
+  ///
+  /// In en, this message translates to:
+  /// **'All charts — D1 to D60'**
+  String get kundaliAllCharts;
+
+  /// Astrologer app strings
+  ///
+  /// In en, this message translates to:
+  /// **'No notable yogas found.'**
+  String get kundaliNoYogas;
+
+  /// Astrologer app strings
+  ///
+  /// In en, this message translates to:
+  /// **'No data'**
+  String get kundaliNoData;
+
+  /// Astrologer app strings
+  ///
+  /// In en, this message translates to:
+  /// **'Needs at least {min} words ({count} so far).'**
+  String predWorkTooShort(int min, int count);
 }
 
 class _AppLocalizationsDelegate

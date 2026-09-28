@@ -3,6 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:talkacharya_predictions/talkacharya_predictions.dart';
 
+import '../../../../shared/widgets/settings_widgets.dart';
+import '../../../../shared/widgets/fade_slide_in.dart';
+import '../../../../core/theme/astro_palette.dart';
+import '../../../../core/l10n/l10n.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/util/async_value.dart';
 import '../../../../shared/widgets/empty_state.dart';
@@ -28,49 +32,48 @@ class _View extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Prediction queue')),
-      body: RefreshIndicator(
-        onRefresh: () =>
-            context.read<PredictionsQueueCubit>().load(force: true),
-        child: BlocBuilder<PredictionsQueueCubit, AsyncValue<List<Prediction>>>(
-          builder: (context, state) => state.when(
-            idle: _loading,
-            loading: _loading,
-            error: (m) => ListView(
-              children: [
-                ErrorView(
-                  message: m,
-                  onRetry: () =>
-                      context.read<PredictionsQueueCubit>().load(force: true),
-                ),
-              ],
-            ),
-            data: (items) => items.isEmpty
-                ? ListView(
-                    children: const [
-                      SizedBox(height: 80),
-                      EmptyState(
-                        icon: Icons.inbox_outlined,
-                        title: 'Nothing waiting',
-                        message: 'New prediction requests will show up here.',
-                      ),
-                    ],
-                  )
-                : ListView.separated(
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
-                    itemCount: items.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 8),
-                    itemBuilder: (context, i) =>
-                        _QueueTile(prediction: items[i]),
+    final l = context.l10n;
+    final cubit = context.read<PredictionsQueueCubit>();
+    return BlocBuilder<PredictionsQueueCubit, AsyncValue<List<Prediction>>>(
+      builder: (context, state) => SubPageScaffold(
+        title: l.predQueueTitle,
+        subtitle: l.predQueueSubtitle,
+        onRefresh: () => cubit.load(force: true),
+        children: state.when(
+          idle: _loading,
+          loading: _loading,
+          error: (m) => [
+            ErrorView(message: m, onRetry: () => cubit.load(force: true)),
+          ],
+          data: (items) => items.isEmpty
+              ? [
+                  const SizedBox(height: 60),
+                  EmptyState(
+                    icon: Icons.inbox_outlined,
+                    hue: AstroPalette.air,
+                    title: l.predQueueEmptyTitle,
+                    message: l.predQueueEmptyBody,
                   ),
-          ),
+                ]
+              : [
+                  for (var i = 0; i < items.length; i++)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: FadeSlideIn(
+                        delay: Duration(milliseconds: 50 * i),
+                        child: _QueueTile(prediction: items[i]),
+                      ),
+                    ),
+                ],
         ),
       ),
     );
   }
 
-  static Widget _loading() => const Center(child: CircularProgressIndicator());
+  static List<Widget> _loading() => const [
+    SizedBox(height: 60),
+    Center(child: CircularProgressIndicator()),
+  ];
 }
 
 class _QueueTile extends StatelessWidget {

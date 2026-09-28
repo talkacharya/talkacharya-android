@@ -43,21 +43,22 @@ class _HostRoomPageState extends State<HostRoomPage> {
   }
 
   Future<bool> _confirmEnd() async {
+    final l = context.l10n;
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('End the session?'),
+        title: Text(l.hostEndTitle),
         content: const Text(
           'Everyone watching will be disconnected and the stream closes.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Stay live'),
+            child: Text(l.hostStayLive),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('End session'),
+            child: Text(l.hostEndSession),
           ),
         ],
       ),
@@ -193,6 +194,7 @@ class _HostHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     final live = state.phase == LivePhase.live;
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -257,7 +259,7 @@ class _HostHeader extends StatelessWidget {
             style: TextButton.styleFrom(
               foregroundColor: const Color(0xFFFF8A8A),
             ),
-            child: const Text('End'),
+            child: Text(l.hostEnd),
           ),
         ],
       ),
@@ -476,6 +478,7 @@ class _HostControlsState extends State<_HostControls> {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     final s = widget.state;
     return Padding(
       padding: EdgeInsets.fromLTRB(
@@ -506,7 +509,7 @@ class _HostControlsState extends State<_HostControls> {
                   textInputAction: TextInputAction.send,
                   onSubmitted: (_) => _send(),
                   decoration: InputDecoration(
-                    hintText: 'Answer your viewers…',
+                    hintText: l.hostChatHint,
                     hintStyle: const TextStyle(color: Colors.white54),
                     filled: true,
                     fillColor: Colors.white.withValues(alpha: 0.12),
@@ -618,15 +621,16 @@ Future<void> _showModerationSheet(
   LiveHostCubit cubit,
   LiveState state,
 ) async {
+  final l = context.l10n;
   await showModalBottomSheet<void>(
     context: context,
     builder: (ctx) => SafeArea(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const ListTile(
-            title: Text('Slow mode'),
-            subtitle: Text('How long a viewer must wait between messages'),
+          ListTile(
+            title: Text(l.hostSlowMode),
+            subtitle: Text(l.hostSlowModeBody),
           ),
           Wrap(
             spacing: 8,
@@ -662,6 +666,7 @@ Future<void> _showMessageActions(
   LiveChatMessage message,
 ) async {
   final cubit = context.read<LiveHostCubit>();
+  final l = context.l10n;
   await showModalBottomSheet<void>(
     context: context,
     builder: (ctx) => SafeArea(
@@ -672,7 +677,7 @@ Future<void> _showMessageActions(
           const Divider(height: 1),
           ListTile(
             leading: const Icon(Icons.push_pin_rounded),
-            title: const Text('Pin this message'),
+            title: Text(l.hostPin),
             onTap: () {
               cubit.pinMessage(message.id);
               Navigator.pop(ctx);
@@ -680,7 +685,7 @@ Future<void> _showMessageActions(
           ),
           ListTile(
             leading: const Icon(Icons.visibility_off_rounded),
-            title: const Text('Hide this message'),
+            title: Text(l.hostHide),
             onTap: () {
               cubit.hideMessage(message.id);
               Navigator.pop(ctx);
@@ -688,8 +693,8 @@ Future<void> _showMessageActions(
           ),
           ListTile(
             leading: const Icon(Icons.block_rounded, color: Color(0xFFE5484D)),
-            title: const Text('Remove this viewer'),
-            subtitle: const Text('They cannot rejoin or chat on this stream'),
+            title: Text(l.hostRemove),
+            subtitle: Text(l.hostRemoveBody),
             onTap: () {
               cubit.removeViewer(message.userId);
               Navigator.pop(ctx);

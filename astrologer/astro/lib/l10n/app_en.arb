@@ -907,5 +907,273 @@
   "roomDownloadTranscript": "Save this conversation",
   "@roomDownloadTranscript": {
     "description": "Download a transcript of the session"
+  },
+  "predQueueTitle": "Prediction queue",
+  "@predQueueTitle": {
+    "description": "Prediction work queue"
+  },
+  "predQueueSubtitle": "Forecasts waiting to be written",
+  "@predQueueSubtitle": {
+    "description": "Prediction work queue"
+  },
+  "predQueueEmptyTitle": "Nothing waiting",
+  "@predQueueEmptyTitle": {
+    "description": "Prediction work queue"
+  },
+  "predQueueEmptyBody": "New prediction requests will show up here.",
+  "@predQueueEmptyBody": {
+    "description": "Prediction work queue"
+  },
+  "predWorkTitle": "Write forecast",
+  "@predWorkTitle": {
+    "description": "Prediction editor"
+  },
+  "predWorkTitleField": "Title",
+  "@predWorkTitleField": {
+    "description": "Prediction editor"
+  },
+  "predWorkBodyField": "Forecast",
+  "@predWorkBodyField": {
+    "description": "Prediction editor"
+  },
+  "predWorkWords": "{count} words",
+  "@predWorkWords": {
+    "description": "Prediction editor",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "predWorkSaving": "Saving…",
+  "@predWorkSaving": {
+    "description": "Prediction editor"
+  },
+  "predWorkSaved": "Saved",
+  "@predWorkSaved": {
+    "description": "Prediction editor"
+  },
+  "predWorkClaim": "Claim",
+  "@predWorkClaim": {
+    "description": "Prediction editor"
+  },
+  "predWorkRelease": "Release",
+  "@predWorkRelease": {
+    "description": "Prediction editor"
+  },
+  "predWorkDelivered": "Delivered",
+  "@predWorkDelivered": {
+    "description": "Prediction editor"
+  },
+  "predWorkDeliver": "Deliver forecast",
+  "@predWorkDeliver": {
+    "description": "Prediction editor"
+  },
+  "goLiveTitle": "Go live",
+  "@goLiveTitle": {
+    "description": "Going live"
+  },
+  "goLiveSubtitle": "Broadcast to anyone browsing the Live tab",
+  "@goLiveSubtitle": {
+    "description": "Going live"
+  },
+  "goLiveStillLive": "Still live — rejoin to keep broadcasting",
+  "@goLiveStillLive": {
+    "description": "Going live"
+  },
+  "goLiveScheduled": "Scheduled — start when you are ready",
+  "@goLiveScheduled": {
+    "description": "Going live"
+  },
+  "goLiveRejoin": "Rejoin",
+  "@goLiveRejoin": {
+    "description": "Going live"
+  },
+  "goLiveStart": "Start",
+  "@goLiveStart": {
+    "description": "Going live"
+  },
+  "goLiveNewSession": "Start a new session",
+  "@goLiveNewSession": {
+    "description": "Going live"
+  },
+  "goLiveTitleField": "What is this session about?",
+  "@goLiveTitleField": {
+    "description": "Going live"
+  },
+  "goLiveTitleHint": "e.g. Evening Q&A — career questions",
+  "@goLiveTitleHint": {
+    "description": "Going live"
+  },
+  "goLiveHelp": "Viewers see this title in the app. Your camera and microphone turn on as soon as you go live.",
+  "@goLiveHelp": {
+    "description": "Going live"
+  },
+  "goLiveStarting": "Starting…",
+  "@goLiveStarting": {
+    "description": "Going live"
+  },
+  "goLivePast": "Past sessions",
+  "@goLivePast": {
+    "description": "Going live"
+  },
+  "goLivePeak": "{count} peak",
+  "@goLivePeak": {
+    "description": "Going live",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "goLiveJoined": "{count} joined",
+  "@goLiveJoined": {
+    "description": "Going live",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "goLiveGifts": "{currency} {amount} in gifts",
+  "@goLiveGifts": {
+    "description": "Going live",
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "kundaliTitle": "Kundali",
+  "@kundaliTitle": {
+    "description": "The client's kundali screen"
+  },
+  "kundaliTitleFor": "{name}'s kundali",
+  "@kundaliTitleFor": {
+    "description": "The client's kundali screen",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "kundaliTabCharts": "Charts",
+  "@kundaliTabCharts": {
+    "description": "The client's kundali screen"
+  },
+  "kundaliTabPlanets": "Planets",
+  "@kundaliTabPlanets": {
+    "description": "The client's kundali screen"
+  },
+  "kundaliTabDasha": "Dasha",
+  "@kundaliTabDasha": {
+    "description": "The client's kundali screen"
+  },
+  "kundaliTabYogas": "Yogas",
+  "@kundaliTabYogas": {
+    "description": "The client's kundali screen"
+  },
+  "kundaliTabDoshas": "Doshas",
+  "@kundaliTabDoshas": {
+    "description": "The client's kundali screen"
+  },
+  "kundaliTabOverview": "Overview",
+  "@kundaliTabOverview": {
+    "description": "The client's kundali screen"
+  },
+  "kundaliTabRemedies": "Remedies",
+  "@kundaliTabRemedies": {
+    "description": "The client's kundali screen"
+  },
+  "kundaliTabBhava": "Bhava",
+  "@kundaliTabBhava": {
+    "description": "The client's kundali screen"
+  },
+  "kundaliTabGochar": "Gochar",
+  "@kundaliTabGochar": {
+    "description": "The client's kundali screen"
+  },
+  "kundaliTabNumbers": "Numbers",
+  "@kundaliTabNumbers": {
+    "description": "The client's kundali screen"
+  },
+  "kundaliTabAdvanced": "Advanced",
+  "@kundaliTabAdvanced": {
+    "description": "The client's kundali screen"
+  },
+  "hostEndTitle": "End the session?",
+  "@hostEndTitle": {
+    "description": "Hosting a live stream"
+  },
+  "hostStayLive": "Stay live",
+  "@hostStayLive": {
+    "description": "Hosting a live stream"
+  },
+  "hostEndSession": "End session",
+  "@hostEndSession": {
+    "description": "Hosting a live stream"
+  },
+  "hostEnd": "End",
+  "@hostEnd": {
+    "description": "Hosting a live stream"
+  },
+  "hostChatHint": "Answer your viewers…",
+  "@hostChatHint": {
+    "description": "Hosting a live stream"
+  },
+  "hostSlowMode": "Slow mode",
+  "@hostSlowMode": {
+    "description": "Hosting a live stream"
+  },
+  "hostSlowModeBody": "How long a viewer must wait between messages",
+  "@hostSlowModeBody": {
+    "description": "Hosting a live stream"
+  },
+  "hostPin": "Pin this message",
+  "@hostPin": {
+    "description": "Hosting a live stream"
+  },
+  "hostHide": "Hide this message",
+  "@hostHide": {
+    "description": "Hosting a live stream"
+  },
+  "hostRemove": "Remove this viewer",
+  "@hostRemove": {
+    "description": "Hosting a live stream"
+  },
+  "hostRemoveBody": "They cannot rejoin or chat on this stream",
+  "@hostRemoveBody": {
+    "description": "Hosting a live stream"
+  },
+  "otpResend": "Resend code",
+  "@otpResend": {
+    "description": "Astrologer app strings"
+  },
+  "kundaliAllCharts": "All charts — D1 to D60",
+  "@kundaliAllCharts": {
+    "description": "Astrologer app strings"
+  },
+  "kundaliNoYogas": "No notable yogas found.",
+  "@kundaliNoYogas": {
+    "description": "Astrologer app strings"
+  },
+  "kundaliNoData": "No data",
+  "@kundaliNoData": {
+    "description": "Astrologer app strings"
+  },
+  "predWorkTooShort": "Needs at least {min} words ({count} so far).",
+  "@predWorkTooShort": {
+    "description": "Astrologer app strings",
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

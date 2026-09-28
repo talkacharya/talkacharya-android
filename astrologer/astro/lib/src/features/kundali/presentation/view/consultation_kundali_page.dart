@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/l10n/l10n.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/util/async_value.dart';
 import '../../../../shared/widgets/error_view.dart';
@@ -54,26 +55,31 @@ class _View extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     return DefaultTabController(
       length: 11,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(clientName == null ? 'Kundali' : "$clientName's kundali"),
-          bottom: const TabBar(
+          title: Text(
+            clientName == null
+                ? l.kundaliTitle
+                : l.kundaliTitleFor(clientName!),
+          ),
+          bottom: TabBar(
             isScrollable: true,
             tabAlignment: TabAlignment.start,
             tabs: [
-              Tab(text: 'Charts'),
-              Tab(text: 'Planets'),
-              Tab(text: 'Dasha'),
-              Tab(text: 'Yogas'),
-              Tab(text: 'Doshas'),
-              Tab(text: 'Overview'),
-              Tab(text: 'Remedies'),
-              Tab(text: 'Bhava'),
-              Tab(text: 'Gochar'),
-              Tab(text: 'Numbers'),
-              Tab(text: 'Advanced'),
+              Tab(text: l.kundaliTabCharts),
+              Tab(text: l.kundaliTabPlanets),
+              Tab(text: l.kundaliTabDasha),
+              Tab(text: l.kundaliTabYogas),
+              Tab(text: l.kundaliTabDoshas),
+              Tab(text: l.kundaliTabOverview),
+              Tab(text: l.kundaliTabRemedies),
+              Tab(text: l.kundaliTabBhava),
+              Tab(text: l.kundaliTabGochar),
+              Tab(text: l.kundaliTabNumbers),
+              Tab(text: l.kundaliTabAdvanced),
             ],
           ),
         ),
@@ -254,7 +260,7 @@ class _ChartsTabState extends State<_ChartsTab>
             FilledButton.tonalIcon(
               onPressed: menu.isEmpty ? null : () => _openPicker(menu),
               icon: const Icon(Icons.grid_view_rounded, size: 18),
-              label: const Text('All charts — D1 to D60'),
+              label: Text(context.l10n.kundaliAllCharts),
               style: FilledButton.styleFrom(
                 minimumSize: const Size.fromHeight(48),
               ),
@@ -531,7 +537,7 @@ class _YogasTabState extends State<_YogasTab> {
         onRetry: () => context.read<KundaliCubit>().loadYogas(),
         builder: (yogas) {
           if (yogas.isEmpty) {
-            return const Center(child: Text('No notable yogas found.'));
+            return Center(child: Text(context.l10n.kundaliNoYogas));
           }
           return ListView(
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
@@ -1714,7 +1720,7 @@ class _KeyValues extends StatelessWidget {
 
     final entries = data.entries.where((e) => e.key != 'engine').toList();
     if (entries.isEmpty) {
-      return const Text('No data', style: TextStyle(fontSize: 12.5));
+      return Text(context.l10n.kundaliNoData, style: const TextStyle(fontSize: 12.5));
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

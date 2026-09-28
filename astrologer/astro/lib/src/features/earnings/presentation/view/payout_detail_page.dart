@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
@@ -40,12 +41,15 @@ class _PayoutDetailPageState extends State<PayoutDetailPage> {
           );
         }
         if (snap.hasError || !snap.hasData) {
-          return Scaffold(
-            appBar: AppBar(title: Text(l.payoutTitle)),
-            body: ErrorView(
-              message: l.payoutLoadError,
-              onRetry: () => setState(() => _future = _fetch()),
-            ),
+          return SubPageScaffold(
+            title: l.payoutTitle,
+            children: [
+              const SizedBox(height: 40),
+              ErrorView(
+                message: l.payoutLoadError,
+                onRetry: () => setState(() => _future = _fetch()),
+              ),
+            ],
           );
         }
         return _PayoutView(

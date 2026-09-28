@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talkacharya_live/talkacharya_live.dart';
 
+import '../../../../shared/widgets/settings_widgets.dart';
+import '../../../../core/l10n/l10n.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/realtime/realtime_client.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
@@ -99,13 +101,13 @@ class _GoLivePageState extends State<GoLivePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(title: const Text('Go live')),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
-              children: [
+    final l = context.l10n;
+    return SubPageScaffold(
+      title: l.goLiveTitle,
+      subtitle: l.goLiveSubtitle,
+      children: _loading
+          ? const [SizedBox(height: 60), Center(child: CircularProgressIndicator())]
+          : [
                 if (_resumable != null) ...[
                   Card(
                     child: ListTile(
@@ -113,21 +115,21 @@ class _GoLivePageState extends State<GoLivePage> {
                       title: Text(_resumable!.title),
                       subtitle: Text(
                         _resumable!.isLive
-                            ? 'Still live — rejoin to keep broadcasting'
-                            : 'Scheduled — start when you are ready',
+                            ? l.goLiveStillLive
+                            : l.goLiveScheduled,
                       ),
                       trailing: FilledButton(
                         onPressed: _starting
                             ? null
                             : () => _start(existing: _resumable),
-                        child: Text(_resumable!.isLive ? 'Rejoin' : 'Start'),
+                        child: Text(_resumable!.isLive ? l.goLiveRejoin : l.goLiveStart),
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
                 ],
                 Text(
-                  'Start a new session',
+                  l.goLiveNewSession,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
@@ -137,16 +139,15 @@ class _GoLivePageState extends State<GoLivePage> {
                   controller: _title,
                   maxLength: 140,
                   textCapitalization: TextCapitalization.sentences,
-                  decoration: const InputDecoration(
-                    labelText: 'What is this session about?',
-                    hintText: 'e.g. Evening Q&A — career questions',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: l.goLiveTitleField,
+                    hintText: l.goLiveTitleHint,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Viewers see this title in the app. Your camera and microphone '
-                  'turn on as soon as you go live.',
+                  l.goLiveHelp,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
@@ -168,12 +169,12 @@ class _GoLivePageState extends State<GoLivePage> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(Icons.videocam_rounded),
-                  label: Text(_starting ? 'Starting…' : 'Go live'),
+                  label: Text(_starting ? l.goLiveStarting : l.goLiveTitle),
                 ),
                 if (_past.isNotEmpty) ...[
                   const SizedBox(height: 32),
                   Text(
-                    'Past sessions',
+                    l.goLivePast,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
@@ -184,13 +185,19 @@ class _GoLivePageState extends State<GoLivePage> {
                       contentPadding: EdgeInsets.zero,
                       title: Text(s.title),
                       subtitle: Text(
-                        '${s.peakViewers} peak · ${s.totalJoins} joined'
-                        '${s.totalGiftValue > 0 ? ' · ${s.giftCurrency} ${s.totalGiftValue.toStringAsFixed(0)} in gifts' : ''}',
+                        [
+                          l.goLivePeak(s.peakViewers),
+                          l.goLiveJoined(s.totalJoins),
+                          if (s.totalGiftValue > 0)
+                            l.goLiveGifts(
+                              s.giftCurrency,
+                              s.totalGiftValue.toStringAsFixed(0),
+                            ),
+                        ].join(' · '),
                       ),
                     ),
-                ],
-              ],
-            ),
+          ],
+        ],
     );
   }
 }

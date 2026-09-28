@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/l10n/l10n.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/app_button.dart';
 import '../bloc/login/login_cubit.dart';
@@ -95,7 +96,7 @@ class _OtpPageState extends State<OtpPage> {
                       onPressed: state.submitting
                           ? null
                           : () => context.read<LoginCubit>().resendOtp(),
-                      child: const Text('Resend code'),
+                      child: Text(context.l10n.otpResend),
                     ),
                   ),
                 ],
