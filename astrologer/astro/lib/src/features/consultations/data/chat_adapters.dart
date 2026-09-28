@@ -145,10 +145,14 @@ class DioChatTransport implements ChatTransport {
   }
 
   @override
-  Future<ChatAttachment> uploadAttachment(String filePath) async {
+  Future<ChatAttachment> uploadAttachment(
+    String filePath, {
+    int durationSeconds = 0,
+  }) async {
     final name = filePath.split(RegExp(r'[/\\]')).last;
     final form = FormData.fromMap({
       'file': await MultipartFile.fromFile(filePath, filename: name),
+          if (durationSeconds > 0) 'duration_seconds': durationSeconds,
     });
     final res = (await _dio.post<Map<String, dynamic>>(
       ApiPaths.attachments(consultationId),

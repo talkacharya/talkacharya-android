@@ -41,7 +41,13 @@ abstract class ChatTransport {
 
   /// Upload one local file (image) and return the server [ChatAttachment]
   /// (its `id` is then passed to [send] as an `attachmentId`).
-  Future<ChatAttachment> uploadAttachment(String filePath);
+  /// [durationSeconds] matters for audio: the bubble shows a length before
+  /// anything is downloaded, and a voice note with no duration reads as
+  /// broken.
+  Future<ChatAttachment> uploadAttachment(
+    String filePath, {
+    int durationSeconds = 0,
+  });
 
   /// Report a message for moderation. [reason] is one of
   /// `abuse` | `spam` | `inappropriate` | `other`.

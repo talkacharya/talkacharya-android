@@ -9,6 +9,7 @@ import '../models/chat_enums.dart';
 import '../models/chat_message.dart';
 import 'quoted_and_share.dart';
 import 'receipt_ticks.dart';
+import 'voice_note_bubble.dart';
 
 /// One chat message. System events render as a centered chip; everyone else as a
 /// left/right bubble with translation toggle, speak button, ticks and retry.
@@ -113,7 +114,16 @@ class _MessageBubbleState extends State<MessageBubble> {
                   child: QuotedHeader(quote: m.replyTo!, mine: mine),
                 ),
               for (final a in m.attachments)
-                if (a.kind == 'image' &&
+                if (a.kind == 'audio')
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: VoiceNoteBubble(
+                      attachment: a,
+                      player: c.voicePlayer,
+                      tint: fg,
+                    ),
+                  )
+                else if (a.kind == 'image' &&
                     (a.url.isNotEmpty || a.localPath.isNotEmpty))
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6),

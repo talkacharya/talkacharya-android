@@ -23,6 +23,7 @@ import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../data/call_adapters.dart';
 import '../../data/chat_adapters.dart';
+import '../../data/voice_note_adapters.dart';
 import '../../data/consultation_api.dart';
 import '../../data/models/consultation.dart';
 import '../../data/models/conversation.dart';
@@ -110,6 +111,8 @@ class _RoomScope extends StatelessWidget {
             pickImages: pickChatImages,
             outbox: SecureStorageChatOutbox(getIt()),
             sounds: const AppChatSounds(),
+            recorder: DeviceVoiceRecorder(),
+            voicePlayer: DeviceVoicePlayer(),
           )..start(),
         ),
       ],

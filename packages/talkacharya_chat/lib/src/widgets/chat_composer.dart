@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../engine/chat_controller.dart';
@@ -12,6 +14,8 @@ class ChatComposer extends StatefulWidget {
     this.enabled = true,
     this.hint = 'Message',
     this.above,
+    this.holdToTalkText = 'Hold to record a voice message',
+    this.micDeniedText = 'Microphone permission is needed for voice messages',
     super.key,
   });
 
@@ -24,6 +28,9 @@ class ChatComposer extends StatefulWidget {
   /// field, ready to edit, rather than sending it.
   final Widget Function(BuildContext context, void Function(String) insert)?
   above;
+
+  final String holdToTalkText;
+  final String micDeniedText;
 
   @override
   State<ChatComposer> createState() => _ChatComposerState();
@@ -87,6 +94,32 @@ class _ChatComposerState extends State<ChatComposer> {
     setState(() {});
   }
 
+  Future<void> _startVoice() async {
+    if (!widget.enabled) return;
+    final ok = await c.startVoiceNote();
+    if (!ok && mounted) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(widget.micDeniedText)));
+    }
+  }
+
+  Future<void> _endVoice({required bool send}) async {
+    if (!c.state.recording) return;
+    if (send) {
+      await c.sendVoiceNote();
+    } else {
+      await c.cancelVoiceNote();
+    }
+  }
+
+  /// A tap, not a hold. Says what to do instead of silently doing nothing.
+  void _voiceHint() {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(widget.holdToTalkText)));
+  }
+
   Future<void> _toggleDictation() async {
     if (_dictating) {
       await c.endDictation();
@@ -115,6 +148,7 @@ class _ChatComposerState extends State<ChatComposer> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (c.state.recording) _RecordingStrip(controller: c),
             if (widget.above != null && widget.enabled)
               widget.above!(context, _insert),
             Row(
@@ -168,14 +202,94 @@ class _ChatComposerState extends State<ChatComposer> {
                   ),
                 ],
                 const SizedBox(width: 2),
-                IconButton.filled(
-                  onPressed: widget.enabled ? _send : null,
-                  icon: const Icon(Icons.send_rounded, size: 20),
-                ),
+                // Hold to talk. Typing Hindi on a phone keyboard is slow enough
+                // that a voice note is often the difference between a question
+                // asked and one abandoned.
+                if (c.canRecordVoice && _field.text.trim().isEmpty)
+                  GestureDetector(
+                    onLongPressStart: (_) => _startVoice(),
+                    onLongPressEnd: (_) => _endVoice(send: true),
+                    onLongPressCancel: () => _endVoice(send: false),
+                    child: IconButton.filled(
+                      onPressed: widget.enabled ? _voiceHint : null,
+                      icon: Icon(
+                        c.state.recording
+                            ? Icons.stop_rounded
+                            : Icons.graphic_eq_rounded,
+                        size: 20,
+                      ),
+                    ),
+                  )
+                else
+                  IconButton.filled(
+                    onPressed: widget.enabled ? _send : null,
+                    icon: const Icon(Icons.send_rounded, size: 20),
+                  ),
               ],
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Shown while the microphone is open: how long, and how to stop.
+class _RecordingStrip extends StatefulWidget {
+  const _RecordingStrip({required this.controller});
+  final ChatController controller;
+
+  @override
+  State<_RecordingStrip> createState() => _RecordingStripState();
+}
+
+class _RecordingStripState extends State<_RecordingStrip> {
+  late final DateTime _since = DateTime.now();
+  Timer? _tick;
+
+  @override
+  void initState() {
+    super.initState();
+    _tick = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _tick?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final secs = DateTime.now().difference(_since).inSeconds;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 2, 12, 8),
+      child: Row(
+        children: [
+          Icon(
+            Icons.fiber_manual_record_rounded,
+            size: 12,
+            color: scheme.error,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            '${(secs ~/ 60).toString().padLeft(2, '0')}:'
+            '${(secs % 60).toString().padLeft(2, '0')}',
+            style: TextStyle(
+              color: scheme.error,
+              fontWeight: FontWeight.w700,
+              fontSize: 13,
+            ),
+          ),
+          const Spacer(),
+          TextButton(
+            onPressed: () => widget.controller.cancelVoiceNote(),
+            child: const Text('Cancel'),
+          ),
+        ],
       ),
     );
   }

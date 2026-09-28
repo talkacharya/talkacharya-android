@@ -14,6 +14,7 @@ class ChatSessionState extends Equatable {
     this.searchQuery = '',
     this.searchResults = const [],
     this.searching = false,
+    this.recording = false,
     this.jumpToSeq,
     this.replyingTo,
     this.error,
@@ -37,6 +38,9 @@ class ChatSessionState extends Equatable {
   final bool searching;
 
   bool get isSearching => searchQuery.length >= 2;
+
+  /// The microphone is open for a voice note.
+  final bool recording;
 
   /// A message the transcript should scroll to, set when a search result is
   /// picked and cleared once the list has moved. Null the rest of the time.
@@ -65,6 +69,7 @@ class ChatSessionState extends Equatable {
     String? searchQuery,
     List<ChatMessage>? searchResults,
     bool? searching,
+    bool? recording,
     int? jumpToSeq,
     bool clearJump = false,
     Object? replyingTo = _unset,
@@ -83,6 +88,7 @@ class ChatSessionState extends Equatable {
       searchQuery: searchQuery ?? this.searchQuery,
       searchResults: searchResults ?? this.searchResults,
       searching: searching ?? this.searching,
+      recording: recording ?? this.recording,
       jumpToSeq: clearJump ? null : (jumpToSeq ?? this.jumpToSeq),
       replyingTo: replyingTo == _unset
           ? this.replyingTo
@@ -107,6 +113,7 @@ class ChatSessionState extends Equatable {
     searchQuery,
     searchResults,
     searching,
+    recording,
     jumpToSeq,
     replyingTo,
     error,

@@ -9,6 +9,7 @@ import '../models/chat_message.dart';
 import '../models/chat_pin.dart';
 import '../models/chat_presence.dart';
 import '../ports/chat_outbox.dart';
+import '../ports/voice_note.dart';
 import '../ports/chat_ports.dart';
 import '../ports/stt_engine.dart';
 import '../ports/tts_engine.dart';
@@ -32,7 +33,11 @@ class ChatController extends Cubit<ChatSessionState> {
     TtsEngine? tts,
     SttEngine? stt,
     ChatSounds sounds = const NoopChatSounds(),
-  }) : _t = transport,
+    VoiceRecorder? recorder,
+    VoicePlayer? voicePlayer,
+  }) : _recorder = recorder,
+       _voicePlayer = voicePlayer,
+       _t = transport,
        _sounds = sounds,
        _rt = realtime,
        _id = identity,
@@ -47,6 +52,16 @@ class ChatController extends Cubit<ChatSessionState> {
   /// subscribe to a channel nothing publishes to.
   final String threadId;
   final ChatTransport _t;
+
+  /// Null where the app has not wired recording up; the composer then simply
+  /// does not offer it, rather than offering a button that fails.
+  final VoiceRecorder? _recorder;
+  final VoicePlayer? _voicePlayer;
+
+  VoicePlayer? get voicePlayer => _voicePlayer;
+  bool get canRecordVoice => _recorder != null;
+
+  DateTime? _recordingSince;
   final ChatRealtime _rt;
   final ChatIdentity _id;
   final PickImages? _pickImages;
@@ -327,6 +342,81 @@ class ChatController extends Cubit<ChatSessionState> {
   }
 
   // --- image attachments ---------------------------------------------
+
+  /// Begin a voice note. False when the microphone was refused, so the
+  /// composer can say why rather than looking broken.
+  Future<bool> startVoiceNote() async {
+    final recorder = _recorder;
+    if (recorder == null || state.recording) return false;
+    final ok = await recorder.start();
+    if (!ok) return false;
+    _recordingSince = DateTime.now();
+    _safeEmit(state.copyWith(recording: true));
+    return true;
+  }
+
+  /// Stop and send. A recording too short to be speech is thrown away rather
+  /// than sent — that is a slipped finger, not a message.
+  Future<void> sendVoiceNote({Duration minimum = const Duration(seconds: 1)}) async {
+    final recorder = _recorder;
+    if (recorder == null || !state.recording) return;
+    final since = _recordingSince;
+    _recordingSince = null;
+    _safeEmit(state.copyWith(recording: false));
+
+    final path = await recorder.stop();
+    if (path == null || path.isEmpty) return;
+    final held = since == null ? Duration.zero : DateTime.now().difference(since);
+    if (held < minimum) return;
+
+    final cmid = _clientId();
+    _merge(
+      ChatMessage(
+        id: cmid,
+        clientMessageId: cmid,
+        seq: state.lastSeq + 1,
+        senderRole: _id.role,
+        type: 'audio',
+        createdAt: DateTime.now(),
+        sendStatus: SendStatus.sending,
+        attachments: [
+          ChatAttachment(
+            id: '',
+            kind: 'audio',
+            localPath: path,
+            durationSeconds: held.inSeconds,
+          ),
+        ],
+      ),
+    );
+    unawaited(_dispatchVoice(cmid, path, held.inSeconds));
+    _persistOutbox();
+  }
+
+  /// Throw the recording away.
+  Future<void> cancelVoiceNote() async {
+    final recorder = _recorder;
+    if (recorder == null) return;
+    _recordingSince = null;
+    _safeEmit(state.copyWith(recording: false));
+    await recorder.cancel();
+  }
+
+  Future<void> _dispatchVoice(String cmid, String path, int seconds) async {
+    try {
+      final uploaded = await _t.uploadAttachment(path, durationSeconds: seconds);
+      final server = await _t.send(
+        attachmentIds: [uploaded.id],
+        clientMessageId: cmid,
+      );
+      _merge(
+        server.copyWith(clientMessageId: cmid, sendStatus: SendStatus.sent),
+      );
+    } catch (_) {
+      _patch('c:$cmid', (m) => m.copyWith(sendStatus: SendStatus.failed));
+    }
+    _persistOutbox();
+  }
 
   Future<void> attachImages(PickSource source) async {
     final pick = _pickImages;

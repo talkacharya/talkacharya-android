@@ -11,6 +11,7 @@ class _FakeTransport implements ChatTransport {
   final sent = <String>[];
   final translated = <int>[];
   final uploaded = <String>[];
+  final uploadedDurations = <int>[];
   final reported = <(int, String)>[];
   final pinned = <int>[];
   int? lastReplyToSeq;
@@ -94,12 +95,16 @@ class _FakeTransport implements ChatTransport {
       const ChatPresence(otherOnline: true);
 
   @override
-  Future<ChatAttachment> uploadAttachment(String filePath) async {
+  Future<ChatAttachment> uploadAttachment(
+    String filePath, {
+    int durationSeconds = 0,
+  }) async {
     if (failUpload) throw Exception('upload failed');
     uploaded.add(filePath);
+    uploadedDurations.add(durationSeconds);
     return ChatAttachment(
       id: 'att-${uploaded.length}',
-      kind: 'image',
+      kind: durationSeconds > 0 ? 'audio' : 'image',
       url: 'https://cdn/$filePath',
     );
   }
@@ -540,6 +545,90 @@ void main() {
     expect(c.state.pins.map((p) => p.seq), [4]);
   });
 
+  group('voice notes', () {
+    ChatController build(_FakeTransport t, _FakeRecorder r) => ChatController(
+      threadId: 'c1',
+      transport: t,
+      realtime: _FakeRealtime(),
+      identity: _Identity(),
+      recorder: r,
+      tts: _NoTts(),
+      stt: _NoStt(),
+    );
+
+    test('a note is recorded, uploaded and sent', () async {
+      final t = _FakeTransport();
+      final r = _FakeRecorder();
+      final c = build(t, r);
+      await c.start();
+
+      expect(c.canRecordVoice, isTrue);
+      expect(await c.startVoiceNote(), isTrue);
+      expect(c.state.recording, isTrue);
+
+      // Long enough to be speech.
+      await Future<void>.delayed(const Duration(milliseconds: 1100));
+      await c.sendVoiceNote();
+
+      expect(c.state.recording, isFalse);
+      expect(t.uploaded, ['/tmp/note.m4a']);
+      // The duration has to reach the server: a voice note with no length
+      // gives the reader nothing to decide on.
+      expect(t.uploadedDurations.single, greaterThanOrEqualTo(1));
+      await c.close();
+    });
+
+    test('a slipped finger is not a message', () async {
+      final t = _FakeTransport();
+      final r = _FakeRecorder();
+      final c = build(t, r);
+      await c.start();
+
+      await c.startVoiceNote();
+      await c.sendVoiceNote(); // released immediately
+
+      expect(t.uploaded, isEmpty);
+      expect(c.state.recording, isFalse);
+      await c.close();
+    });
+
+    test('cancelling throws the recording away', () async {
+      final t = _FakeTransport();
+      final r = _FakeRecorder();
+      final c = build(t, r);
+      await c.start();
+
+      await c.startVoiceNote();
+      await c.cancelVoiceNote();
+
+      expect(r.cancels, 1);
+      expect(t.uploaded, isEmpty);
+      expect(c.state.recording, isFalse);
+      await c.close();
+    });
+
+    test('a refused microphone says so instead of half-starting', () async {
+      final t = _FakeTransport();
+      final r = _FakeRecorder()..allow = false;
+      final c = build(t, r);
+      await c.start();
+
+      expect(await c.startVoiceNote(), isFalse);
+      expect(c.state.recording, isFalse);
+      await c.close();
+    });
+
+    test('an app with no recorder simply does not offer it', () async {
+      final t = _FakeTransport();
+      final c = _make(t, _FakeRealtime());
+      await c.start();
+
+      expect(c.canRecordVoice, isFalse);
+      expect(await c.startVoiceNote(), isFalse);
+      await c.close();
+    });
+  });
+
   group('searching a thread', () {
     test('a short query asks the server nothing', () async {
       final t = _FakeTransport();
@@ -617,6 +706,38 @@ void main() {
       await c.close();
     });
   });
+}
+
+class _FakeRecorder implements VoiceRecorder {
+  bool allow = true;
+  bool started = false;
+  int cancels = 0;
+  String? file = '/tmp/note.m4a';
+
+  @override
+  Future<bool> available() async => allow;
+
+  @override
+  Future<bool> start() async {
+    if (!allow) return false;
+    started = true;
+    return true;
+  }
+
+  @override
+  Future<String?> stop() async {
+    started = false;
+    return file;
+  }
+
+  @override
+  Future<void> cancel() async {
+    started = false;
+    cancels++;
+  }
+
+  @override
+  Stream<double> get amplitude => const Stream.empty();
 }
 
 class _MemOutbox extends ChatOutbox {
