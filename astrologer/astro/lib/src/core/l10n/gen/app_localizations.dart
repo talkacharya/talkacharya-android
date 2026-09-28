@@ -2851,6 +2851,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Weak connection on both sides'**
   String get callBothPoorConnection;
+
+  /// Chart overlay during a video call
+  ///
+  /// In en, this message translates to:
+  /// **'Chart'**
+  String get callShowChart;
+
+  /// Chart overlay during a video call
+  ///
+  /// In en, this message translates to:
+  /// **'Hide chart'**
+  String get callHideChart;
 }
 
 class _AppLocalizationsDelegate

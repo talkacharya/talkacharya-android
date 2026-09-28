@@ -461,5 +461,7 @@
   "liveWaitingTooltip": "निजी परामर्श चाहने वाले दर्शक — वे आपकी कतार में हैं",
   "callPoorConnection": "नेटवर्क कमज़ोर है",
   "callPeerPoorConnection": "ग्राहक का नेटवर्क कमज़ोर है",
-  "callBothPoorConnection": "दोनों ओर नेटवर्क कमज़ोर है"
+  "callBothPoorConnection": "दोनों ओर नेटवर्क कमज़ोर है",
+  "callShowChart": "कुंडली",
+  "callHideChart": "कुंडली छिपाएं"
 }

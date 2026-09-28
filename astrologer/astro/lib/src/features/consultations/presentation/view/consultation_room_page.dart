@@ -29,6 +29,9 @@ import '../../data/models/conversation.dart';
 import '../cubit/chat_cubit.dart';
 import '../room_presence.dart';
 import '../widgets/consultation_style.dart';
+import '../../../kundali/data/kundali_repository.dart';
+import '../../../kundali/presentation/cubit/kundali_cubit.dart';
+import '../widgets/call_chart_panel.dart';
 import '../widgets/quick_replies.dart';
 
 /// The astrologer's consultation room: the shared chat engine (or the shared
@@ -602,6 +605,20 @@ class _AstroCallRoomState extends State<_AstroCallRoom> {
             ? ClipRRect(
                 borderRadius: BorderRadius.circular(Radii.md),
                 child: _SessionBar(consultation: c, state: widget.state),
+              )
+            : null,
+        // A reading is two people looking at the same diagram. On a video call
+        // the astrologer had nowhere to put it and either worked from memory
+        // or left the call to look.
+        overlay: c.isCall && c.sharedPeople.isNotEmpty
+            ? BlocProvider(
+                create: (_) => KundaliCubit(
+                  repo: getIt<KundaliRepository>().forProfile(
+                    c.sharedPeople.first.id,
+                  ),
+                  consultationId: c.id,
+                ),
+                child: CallChartPanel(consultationId: c.id),
               )
             : null,
         onEnded: () => context.read<ChatCubit>().refresh(),

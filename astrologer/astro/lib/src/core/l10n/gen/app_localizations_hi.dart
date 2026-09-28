@@ -1575,4 +1575,10 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get callBothPoorConnection => 'दोनों ओर नेटवर्क कमज़ोर है';
+
+  @override
+  String get callShowChart => 'कुंडली';
+
+  @override
+  String get callHideChart => 'कुंडली छिपाएं';
 }

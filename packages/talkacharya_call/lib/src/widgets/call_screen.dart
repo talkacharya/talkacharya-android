@@ -115,6 +115,7 @@ class CallScreen extends StatelessWidget {
     this.strings = const CallStrings(),
     this.statusOverride,
     this.top,
+    this.overlay,
     this.accent,
     this.onEnded,
     this.onMinimize,
@@ -127,6 +128,11 @@ class CallScreen extends StatelessWidget {
   final CallStrings strings;
   final String? statusOverride;
   final Widget? top;
+
+  /// App-supplied content over the video, between the status area and the
+  /// controls — the astrologer's chart panel. Given the room it asks for, so
+  /// it can take most of the screen while it is open.
+  final Widget? overlay;
   final Color? accent;
 
   /// Called once when the call reaches [CallPhase.ended].
@@ -193,6 +199,7 @@ class CallScreen extends StatelessWidget {
                       strings: strings,
                       statusOverride: statusOverride,
                       top: top,
+                      overlay: overlay,
                       halo: halo,
                       onMute: controller.toggleMute,
                       onCamera: controller.toggleCamera,
@@ -209,6 +216,7 @@ class CallScreen extends StatelessWidget {
                       strings: strings,
                       statusOverride: statusOverride,
                       top: top,
+                      overlay: overlay,
                       halo: halo,
                       onMute: controller.toggleMute,
                       onSpeaker: controller.toggleSpeaker,
@@ -270,6 +278,7 @@ class _LiveView extends StatelessWidget {
     required this.strings,
     required this.statusOverride,
     required this.top,
+    required this.overlay,
     required this.halo,
     required this.onMute,
     required this.onSpeaker,
@@ -282,6 +291,7 @@ class _LiveView extends StatelessWidget {
   final String? avatarUrl;
   final CallStrings strings;
   final String? statusOverride;
+  final Widget? overlay;
   final Widget? top;
   final Color halo;
   final VoidCallback onMute;
@@ -377,7 +387,16 @@ class _LiveView extends StatelessWidget {
             color: const Color(0xFFFFC53D),
           ),
         ],
-        const Spacer(flex: 3),
+        if (overlay != null)
+          Flexible(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(8, 12, 8, 0),
+              child: overlay!,
+            ),
+          )
+        else
+          const Spacer(flex: 3),
         Padding(
           padding: const EdgeInsets.fromLTRB(28, 0, 28, 28),
           child: Row(
@@ -424,6 +443,7 @@ class _VideoView extends StatefulWidget {
     required this.strings,
     required this.statusOverride,
     required this.top,
+    required this.overlay,
     required this.halo,
     required this.onMute,
     required this.onCamera,
@@ -438,6 +458,7 @@ class _VideoView extends StatefulWidget {
   final CallStrings strings;
   final String? statusOverride;
   final Widget? top;
+  final Widget? overlay;
   final Color halo;
   final VoidCallback onMute;
   final VoidCallback onCamera;
@@ -627,7 +648,16 @@ class _VideoViewState extends State<_VideoView> {
                       ),
                     ),
                   ),
-                  const Spacer(),
+                  if (widget.overlay != null)
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                        child: widget.overlay!,
+                      ),
+                    )
+                  else
+                    const Spacer(),
+                  if (widget.overlay != null) const Spacer(),
                   DecoratedBox(
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(

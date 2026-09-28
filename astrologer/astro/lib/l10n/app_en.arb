@@ -863,5 +863,13 @@
   "callBothPoorConnection": "Weak connection on both sides",
   "@callBothPoorConnection": {
     "description": "Whose line is weak during a call"
+  },
+  "callShowChart": "Chart",
+  "@callShowChart": {
+    "description": "Chart overlay during a video call"
+  },
+  "callHideChart": "Hide chart",
+  "@callHideChart": {
+    "description": "Chart overlay during a video call"
   }
 }

@@ -1579,4 +1579,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get callBothPoorConnection => 'Weak connection on both sides';
+
+  @override
+  String get callShowChart => 'Chart';
+
+  @override
+  String get callHideChart => 'Hide chart';
 }
