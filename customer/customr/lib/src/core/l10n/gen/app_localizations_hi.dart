@@ -7077,7 +7077,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get walletAutoRechargeBody =>
-      'खाली वॉलेट की वजह से परामर्श न रुके। बैलेंस कम होते ही हम पैसे जोड़ देंगे, आपकी कॉल चलती रहेगी।';
+      'वॉलेट भरा रखें ताकि परामर्श बीच में न रुके। आपका बैंक हर भुगतान से 24 घंटे पहले सूचना अनिवार्य करता है, इसलिए हम एक दिन पहले बता देंगे।';
 
   @override
   String get walletAutoRechargeAmount => 'हर बार जोड़ें';
@@ -7091,7 +7091,7 @@ class AppLocalizationsHi extends AppLocalizations {
     String threshold,
     String cap,
   ) {
-    return 'जब भी आपका बैलेंस $threshold से कम होगा, हम $amount जोड़ देंगे — एक दिन में अधिकतम $cap। आप इसे कभी भी बंद कर सकते हैं।';
+    return 'जब बैलेंस $threshold से कम होगा, हम आपको बताएंगे और अगले दिन $amount जोड़ेंगे — एक दिन में अधिकतम $cap। कभी भी बंद कर सकते हैं।';
   }
 
   @override
@@ -7102,7 +7102,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String walletAutoRechargeOn(String amount, String threshold) {
-    return 'चालू — $threshold से कम होने पर $amount';
+    return 'चालू — $threshold से कम होने पर $amount, एक दिन की सूचना के साथ';
   }
 
   @override

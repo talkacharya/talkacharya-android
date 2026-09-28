@@ -7002,7 +7002,7 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get walletAutoRechargeBody =>
-      'Never lose a consultation to an empty wallet. We\'ll add money when it runs low, so your call keeps going.';
+      'Keep your wallet topped up, so a consultation never stops for an empty balance. Your bank requires 24 hours\' notice before each payment, so we\'ll tell you the day before.';
 
   @override
   String get walletAutoRechargeAmount => 'Add each time';
@@ -7016,7 +7016,7 @@ class AppLocalizationsKn extends AppLocalizations {
     String threshold,
     String cap,
   ) {
-    return 'We’ll add $amount whenever your balance drops below $threshold, up to $cap a day. You can turn this off any time.';
+    return 'When your balance drops below $threshold we\'ll let you know, then add $amount the next day — up to $cap a day. You can turn this off any time.';
   }
 
   @override
@@ -7027,7 +7027,7 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String walletAutoRechargeOn(String amount, String threshold) {
-    return 'On — $amount whenever you drop below $threshold';
+    return 'On — $amount when you drop below $threshold, with a day’s notice';
   }
 
   @override
