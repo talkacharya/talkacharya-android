@@ -12313,6 +12313,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Live now'**
   String get liveFeedTitle;
+
+  /// Seconds of balance left
+  ///
+  /// In en, this message translates to:
+  /// **'{time} left — add money to keep going'**
+  String roomTimeLeftRecharge(String time);
 }
 
 class _AppLocalizationsDelegate

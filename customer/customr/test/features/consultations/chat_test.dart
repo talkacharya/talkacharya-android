@@ -238,4 +238,66 @@ void main() {
     expect(cubit.state.error, isNotNull);
     await cubit.close();
   });
+
+  test('the runway counts down between server ticks', () async {
+    // The server speaks once a minute. A number that only moves then is a
+    // receipt, not a warning — by the time it changes it is already too late
+    // to do anything about it.
+    when(() => repo.detail('c1')).thenAnswer(
+      (_) async => const Consultation(
+        id: 'c1',
+        status: ConsultationStatus.active,
+        astrologerName: 'Ravi',
+        rateSnapshot: '20',
+        currency: 'INR',
+        runwaySeconds: 300,
+      ),
+    );
+    final cubit = build();
+    await cubit.init();
+
+    realtime.frames.add({
+      'type': 'billing.tick',
+      'data': {'runway_seconds': 120},
+    });
+    await Future<void>.delayed(Duration.zero);
+    expect(cubit.state.consultation?.runwaySeconds, 120);
+
+    await Future<void>.delayed(const Duration(milliseconds: 2100));
+    final now = cubit.state.consultation!.runwaySeconds;
+    expect(now, lessThan(120), reason: 'the countdown never started');
+    expect(now, greaterThanOrEqualTo(117));
+
+    // A server figure is the truth and overrides whatever we counted to.
+    realtime.frames.add({
+      'type': 'billing.tick',
+      'data': {'runway_seconds': 240},
+    });
+    await Future<void>.delayed(Duration.zero);
+    expect(cubit.state.consultation?.runwaySeconds, 240);
+    await cubit.close();
+  });
+
+  test('a held consultation does not count down', () async {
+    // The meter is off during a payment hold. Counting through it would tell
+    // the customer the opposite of the truth.
+    final cubit = build();
+    await cubit.init();
+    realtime.frames.add({
+      'type': 'billing.tick',
+      'data': {'runway_seconds': 60},
+    });
+    await Future<void>.delayed(Duration.zero);
+
+    realtime.frames.add({
+      'type': 'billing.awaiting_payment',
+      'data': {
+        'until': DateTime.now().add(const Duration(minutes: 2)).toIso8601String(),
+      },
+    });
+    await Future<void>.delayed(const Duration(milliseconds: 2100));
+
+    expect(cubit.state.consultation?.runwaySeconds, 60);
+    await cubit.close();
+  });
 }

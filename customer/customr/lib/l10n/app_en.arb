@@ -3918,5 +3918,14 @@
   "liveFeedTitle": "Live now",
   "@liveFeedTitle": {
     "description": "Swipeable live feed"
+  },
+  "roomTimeLeftRecharge": "{time} left — add money to keep going",
+  "@roomTimeLeftRecharge": {
+    "description": "Seconds of balance left",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   }
 }

@@ -7138,4 +7138,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get liveFeedTitle => 'अभी लाइव';
+
+  @override
+  String roomTimeLeftRecharge(String time) {
+    return '$time शेष — जारी रखने के लिए पैसे जोड़ें';
+  }
 }

@@ -31,6 +31,9 @@ class ChatCubit extends Cubit<ChatState> {
   StreamSubscription<Map<String, dynamic>>? _frames;
   int _tick = 0;
 
+  /// Counts the runway down between server ticks, which arrive once a minute.
+  Timer? _runway;
+
   Future<void> init() async {
     emit(state.copyWith(loading: true, clearError: true));
     try {
@@ -199,6 +202,30 @@ class ChatCubit extends Cubit<ChatState> {
         ),
       ),
     );
+    // A server figure resets the local count: it is the one that is right.
+    if (runway != null) _startRunwayCountdown();
+  }
+
+  /// Tick the runway down locally, one second at a time.
+  ///
+  /// Purely cosmetic — nothing bills off this, and every server frame
+  /// overwrites it. What it buys is a number that visibly moves, so someone
+  /// watching their balance run out can act while there is still time to.
+  void _startRunwayCountdown() {
+    _runway?.cancel();
+    _runway = Timer.periodic(const Duration(seconds: 1), (_) {
+      final c = state.consultation;
+      if (c == null || isClosed) return;
+      // The meter is off while a payment is being waited for; counting down
+      // through a hold would tell the customer the opposite of the truth.
+      if (state.awaitingPayment || !c.status.canChat) return;
+      if (c.runwaySeconds <= 0) return;
+      emit(
+        state.copyWith(
+          consultation: c.copyWith(runwaySeconds: c.runwaySeconds - 1),
+        ),
+      );
+    });
   }
 
   /// Shares a birth profile or a match with the astrologer. Returns the error
@@ -250,6 +277,7 @@ class ChatCubit extends Cubit<ChatState> {
   @override
   Future<void> close() {
     _poll?.cancel();
+    _runway?.cancel();
     _frames?.cancel();
     return super.close();
   }

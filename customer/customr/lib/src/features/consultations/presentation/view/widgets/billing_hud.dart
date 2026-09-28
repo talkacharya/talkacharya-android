@@ -55,6 +55,14 @@ class BillingHud extends StatelessWidget {
                 warn
                     ? (runway <= 0
                           ? l10n.roomBalanceRunningOut
+                          // Under two minutes, whole minutes stop being
+                          // useful: "1 min left" held for sixty seconds tells
+                          // nobody how long they really have.
+                          : runway < 120
+                          ? l10n.roomTimeLeftRecharge(
+                              '${(runway ~/ 60).toString().padLeft(2, '0')}:'
+                              '${(runway % 60).toString().padLeft(2, '0')}',
+                            )
                           : l10n.roomMinLeftRecharge(mins))
                     : l10n.roomSpentMinLeft(
                         consultation.currency,

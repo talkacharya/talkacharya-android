@@ -7057,4 +7057,9 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get liveFeedTitle => 'Live now';
+
+  @override
+  String roomTimeLeftRecharge(String time) {
+    return '$time left — add money to keep going';
+  }
 }

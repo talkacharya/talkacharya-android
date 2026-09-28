@@ -2927,5 +2927,6 @@
   "roomDownloadTranscript": "यह बातचीत सहेजें",
   "liveFeedEmpty": "अभी कोई लाइव नहीं है",
   "liveFeedError": "लाइव सत्र लोड नहीं हो सके",
-  "liveFeedTitle": "अभी लाइव"
+  "liveFeedTitle": "अभी लाइव",
+  "roomTimeLeftRecharge": "{time} शेष — जारी रखने के लिए पैसे जोड़ें"
 }
