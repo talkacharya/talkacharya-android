@@ -530,5 +530,22 @@
   "kundaliAllCharts": "सभी चार्ट — D1 से D60",
   "kundaliNoYogas": "कोई उल्लेखनीय योग नहीं मिला।",
   "kundaliNoData": "कोई डेटा नहीं",
-  "predWorkTooShort": "कम से कम {min} शब्द चाहिए (अभी {count})।"
+  "predWorkTooShort": "कम से कम {min} शब्द चाहिए (अभी {count})।",
+  "authTitle": "स्वागत है, आचार्य जी",
+  "authSubtitle": "अपने मोबाइल नंबर से साइन इन करें और उन लोगों तक पहुँचें जो आपके मार्गदर्शन की प्रतीक्षा कर रहे हैं।",
+  "authPhoneLabel": "मोबाइल नंबर",
+  "authPhoneHint": "10 अंकों का नंबर",
+  "authContinue": "आगे बढ़ें",
+  "authLegalBefore": "मैं ",
+  "authLegalTerms": "सेवा की शर्तों",
+  "authLegalBetween": " और ",
+  "authLegalPrivacy": "गोपनीयता नीति",
+  "authLegalAfter": " से सहमत हूँ।",
+  "authLegalUnavailable": "यह पेज अभी नहीं खुल पाया।",
+  "otpTitle": "कोड दर्ज करें",
+  "otpSentTo": "{phone} पर भेजा गया",
+  "otpChangeNumber": "बदलें",
+  "otpVerify": "सत्यापित करें",
+  "otpResendIn": "{seconds} सेकंड में दोबारा भेजें",
+  "otpDevMode": "डेव मोड — कोड है {code}"
 }

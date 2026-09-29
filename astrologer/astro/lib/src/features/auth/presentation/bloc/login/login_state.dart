@@ -12,6 +12,7 @@ class LoginState extends Equatable {
     this.devCode,
     this.verificationId,
     this.resendToken,
+    this.termsAccepted = false,
   });
 
   final LoginStep step;
@@ -29,6 +30,13 @@ class LoginState extends Equatable {
   final String? verificationId;
   final int? resendToken;
 
+  /// Whether the terms and the privacy policy have been agreed to.
+  ///
+  /// Here rather than in the phone screen because the two steps swap places:
+  /// going back to fix a typo would otherwise clear an agreement that was
+  /// already given, and ask for it twice.
+  final bool termsAccepted;
+
   LoginState copyWith({
     LoginStep? step,
     String? phone,
@@ -39,6 +47,7 @@ class LoginState extends Equatable {
     bool clearDevCode = false,
     String? verificationId,
     int? resendToken,
+    bool? termsAccepted,
   }) {
     return LoginState(
       step: step ?? this.step,
@@ -49,6 +58,7 @@ class LoginState extends Equatable {
       devCode: clearDevCode ? null : (devCode ?? this.devCode),
       verificationId: verificationId ?? this.verificationId,
       resendToken: resendToken ?? this.resendToken,
+      termsAccepted: termsAccepted ?? this.termsAccepted,
     );
   }
 
@@ -62,5 +72,6 @@ class LoginState extends Equatable {
     devCode,
     verificationId,
     resendToken,
+    termsAccepted,
   ];
 }

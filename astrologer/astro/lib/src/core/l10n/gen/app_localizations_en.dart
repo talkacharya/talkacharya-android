@@ -1800,4 +1800,62 @@ class AppLocalizationsEn extends AppLocalizations {
   String predWorkTooShort(int min, int count) {
     return 'Needs at least $min words ($count so far).';
   }
+
+  @override
+  String get authTitle => 'Welcome, Acharya';
+
+  @override
+  String get authSubtitle =>
+      'Sign in with your mobile number to reach the people waiting for your guidance.';
+
+  @override
+  String get authPhoneLabel => 'MOBILE NUMBER';
+
+  @override
+  String get authPhoneHint => '10-digit number';
+
+  @override
+  String get authContinue => 'Continue';
+
+  @override
+  String get authLegalBefore => 'I agree to the ';
+
+  @override
+  String get authLegalTerms => 'Terms of Service';
+
+  @override
+  String get authLegalBetween => ' and the ';
+
+  @override
+  String get authLegalPrivacy => 'Privacy Policy';
+
+  @override
+  String get authLegalAfter => '.';
+
+  @override
+  String get authLegalUnavailable => 'Could not open that page right now.';
+
+  @override
+  String get otpTitle => 'Enter the code';
+
+  @override
+  String otpSentTo(String phone) {
+    return 'Sent to $phone';
+  }
+
+  @override
+  String get otpChangeNumber => 'Change';
+
+  @override
+  String get otpVerify => 'Verify';
+
+  @override
+  String otpResendIn(int seconds) {
+    return 'Resend in ${seconds}s';
+  }
+
+  @override
+  String otpDevMode(String code) {
+    return 'Dev mode — the code is $code';
+  }
 }

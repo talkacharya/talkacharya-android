@@ -1797,4 +1797,62 @@ class AppLocalizationsHi extends AppLocalizations {
   String predWorkTooShort(int min, int count) {
     return 'कम से कम $min शब्द चाहिए (अभी $count)।';
   }
+
+  @override
+  String get authTitle => 'स्वागत है, आचार्य जी';
+
+  @override
+  String get authSubtitle =>
+      'अपने मोबाइल नंबर से साइन इन करें और उन लोगों तक पहुँचें जो आपके मार्गदर्शन की प्रतीक्षा कर रहे हैं।';
+
+  @override
+  String get authPhoneLabel => 'मोबाइल नंबर';
+
+  @override
+  String get authPhoneHint => '10 अंकों का नंबर';
+
+  @override
+  String get authContinue => 'आगे बढ़ें';
+
+  @override
+  String get authLegalBefore => 'मैं ';
+
+  @override
+  String get authLegalTerms => 'सेवा की शर्तों';
+
+  @override
+  String get authLegalBetween => ' और ';
+
+  @override
+  String get authLegalPrivacy => 'गोपनीयता नीति';
+
+  @override
+  String get authLegalAfter => ' से सहमत हूँ।';
+
+  @override
+  String get authLegalUnavailable => 'यह पेज अभी नहीं खुल पाया।';
+
+  @override
+  String get otpTitle => 'कोड दर्ज करें';
+
+  @override
+  String otpSentTo(String phone) {
+    return '$phone पर भेजा गया';
+  }
+
+  @override
+  String get otpChangeNumber => 'बदलें';
+
+  @override
+  String get otpVerify => 'सत्यापित करें';
+
+  @override
+  String otpResendIn(int seconds) {
+    return '$seconds सेकंड में दोबारा भेजें';
+  }
+
+  @override
+  String otpDevMode(String code) {
+    return 'डेव मोड — कोड है $code';
+  }
 }

@@ -3265,6 +3265,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Needs at least {min} words ({count} so far).'**
   String predWorkTooShort(int min, int count);
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome, Acharya'**
+  String get authTitle;
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with your mobile number to reach the people waiting for your guidance.'**
+  String get authSubtitle;
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'MOBILE NUMBER'**
+  String get authPhoneLabel;
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'10-digit number'**
+  String get authPhoneHint;
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get authContinue;
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the '**
+  String get authLegalBefore;
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get authLegalTerms;
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **' and the '**
+  String get authLegalBetween;
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get authLegalPrivacy;
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'.'**
+  String get authLegalAfter;
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open that page right now.'**
+  String get authLegalUnavailable;
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the code'**
+  String get otpTitle;
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'Sent to {phone}'**
+  String otpSentTo(String phone);
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get otpChangeNumber;
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get otpVerify;
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'Resend in {seconds}s'**
+  String otpResendIn(int seconds);
+
+  /// Signing in
+  ///
+  /// In en, this message translates to:
+  /// **'Dev mode — the code is {code}'**
+  String otpDevMode(String code);
 }
 
 class _AppLocalizationsDelegate

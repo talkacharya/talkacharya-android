@@ -1175,5 +1175,88 @@
         "type": "int"
       }
     }
+  },
+  "authTitle": "Welcome, Acharya",
+  "@authTitle": {
+    "description": "Signing in"
+  },
+  "authSubtitle": "Sign in with your mobile number to reach the people waiting for your guidance.",
+  "@authSubtitle": {
+    "description": "Signing in"
+  },
+  "authPhoneLabel": "MOBILE NUMBER",
+  "@authPhoneLabel": {
+    "description": "Signing in"
+  },
+  "authPhoneHint": "10-digit number",
+  "@authPhoneHint": {
+    "description": "Signing in"
+  },
+  "authContinue": "Continue",
+  "@authContinue": {
+    "description": "Signing in"
+  },
+  "authLegalBefore": "I agree to the ",
+  "@authLegalBefore": {
+    "description": "Signing in"
+  },
+  "authLegalTerms": "Terms of Service",
+  "@authLegalTerms": {
+    "description": "Signing in"
+  },
+  "authLegalBetween": " and the ",
+  "@authLegalBetween": {
+    "description": "Signing in"
+  },
+  "authLegalPrivacy": "Privacy Policy",
+  "@authLegalPrivacy": {
+    "description": "Signing in"
+  },
+  "authLegalAfter": ".",
+  "@authLegalAfter": {
+    "description": "Signing in"
+  },
+  "authLegalUnavailable": "Could not open that page right now.",
+  "@authLegalUnavailable": {
+    "description": "Signing in"
+  },
+  "otpTitle": "Enter the code",
+  "@otpTitle": {
+    "description": "Signing in"
+  },
+  "otpSentTo": "Sent to {phone}",
+  "@otpSentTo": {
+    "description": "Signing in",
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "otpChangeNumber": "Change",
+  "@otpChangeNumber": {
+    "description": "Signing in"
+  },
+  "otpVerify": "Verify",
+  "@otpVerify": {
+    "description": "Signing in"
+  },
+  "otpResendIn": "Resend in {seconds}s",
+  "@otpResendIn": {
+    "description": "Signing in",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "otpDevMode": "Dev mode — the code is {code}",
+  "@otpDevMode": {
+    "description": "Signing in",
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
   }
 }

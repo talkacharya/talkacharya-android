@@ -137,6 +137,11 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
+  /// Record the agreement. Until this is true there is nothing to send: the
+  /// number is only asked for in order to open an account.
+  void acceptTerms(bool accepted) =>
+      emit(state.copyWith(termsAccepted: accepted));
+
   void editPhone() =>
       emit(state.copyWith(step: LoginStep.enterPhone, error: null));
 
