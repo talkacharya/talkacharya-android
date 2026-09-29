@@ -117,10 +117,7 @@ class _RoomScope extends StatelessWidget {
           )..start(),
         ),
       ],
-      child: _PresenceScope(
-        consultationId: threadId,
-        child: const _RoomView(),
-      ),
+      child: _PresenceScope(consultationId: threadId, child: const _RoomView()),
     );
   }
 }
@@ -140,15 +137,27 @@ class _PresenceScope extends StatefulWidget {
 class _PresenceScopeState extends State<_PresenceScope> {
   RoomPresence get _presence => getIt<RoomPresence>();
 
+  // `opened` and `closed` notify their listeners, and both of these run
+  // inside a build phase — initState during the parent's, dispose during the
+  // unmount. The live-session banner listens from above, so notifying here
+  // marks an already-built ancestor dirty and Flutter drops the rebuild.
   @override
   void initState() {
     super.initState();
-    _presence.opened(widget.consultationId, isCall: false);
+    final id = widget.consultationId;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _presence.opened(id, isCall: false);
+    });
   }
 
   @override
   void dispose() {
-    _presence.closed(widget.consultationId);
+    final id = widget.consultationId;
+    final presence = _presence;
+    // Not guarded on `mounted` — this one has to happen precisely because the
+    // room is going away. `closed` ignores an id that is no longer the open
+    // one, so a room opened in the meantime is safe.
+    WidgetsBinding.instance.addPostFrameCallback((_) => presence.closed(id));
     super.dispose();
   }
 
@@ -156,11 +165,18 @@ class _PresenceScopeState extends State<_PresenceScope> {
   Widget build(BuildContext context) {
     final session = context.select((ChatCubit c) => c.state.consultation);
     final live = context.select((ChatCubit c) => c.state.window).consultationId;
-    _presence.opened(
-      widget.consultationId,
-      isCall: session?.isCall ?? false,
-      consultationId: live ?? session?.id,
-    );
+    // After the frame, never during it: `opened` notifies its listeners, and
+    // the live-session banner listening from above would be marked dirty
+    // mid-build. Flutter logs that and skips the rebuild, so the banner keeps
+    // showing a session you are already looking at.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _presence.opened(
+        widget.consultationId,
+        isCall: session?.isCall ?? false,
+        consultationId: live ?? session?.id,
+      );
+    });
     return widget.child;
   }
 }
@@ -384,8 +400,7 @@ class _ChatRoomState extends State<_ChatRoom> {
               composerHint: state.window.isFollowUp
                   ? l.roomFollowUpHint
                   : l.roomComposerHint,
-              aboveComposer: (context, insert) =>
-                  QuickReplies(onPick: insert),
+              aboveComposer: (context, insert) => QuickReplies(onPick: insert),
             ),
           ),
         ],
