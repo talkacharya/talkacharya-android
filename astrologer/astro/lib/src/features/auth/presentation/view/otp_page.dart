@@ -248,14 +248,21 @@ class _OtpBoxesState extends State<_OtpBoxes> {
     return Stack(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             for (var i = 0; i < widget.length; i++)
-              _Cell(
-                digit: i < code.length ? code[i] : '',
-                // The cell the next digit lands in, so there is always one
-                // obvious place to look while typing.
-                active: i == code.length && _focus.hasFocus,
+              // Shared out rather than six fixed widths: at 46px each they
+              // overflowed the card by two pixels on a 1080-wide phone, and
+              // the next screen size would have been its own number.
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: _Cell(
+                    digit: i < code.length ? code[i] : '',
+                    // The cell the next digit lands in, so there is always
+                    // one obvious place to look while typing.
+                    active: i == code.length && _focus.hasFocus,
+                  ),
+                ),
               ),
           ],
         ),
@@ -300,7 +307,6 @@ class _Cell extends StatelessWidget {
     final filled = digit.isNotEmpty;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 140),
-      width: 46,
       height: 56,
       alignment: Alignment.center,
       decoration: BoxDecoration(
