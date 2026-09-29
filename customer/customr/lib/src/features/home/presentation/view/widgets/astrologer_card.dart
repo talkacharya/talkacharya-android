@@ -34,7 +34,7 @@ class AstrologerCard extends StatelessWidget {
     final rate = a.cheapestRate;
     final available = a.isAvailable;
     final surface = theme.colorScheme.surface;
-    void open() => context.go(Routes.astrologer(a.id));
+    void open() => context.push(Routes.astrologer(a.id));
 
     return Pressable(
       child: Container(

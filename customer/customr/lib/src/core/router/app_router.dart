@@ -745,6 +745,16 @@ GoRouter buildRouter(
         ],
       ),
 
+      // Deliberately not a child of the Astrologers tab. A route inside the
+      // shell can only be reached with `go`, and pushing one from a page above
+      // the shell duplicates the shell's page key.
+      GoRoute(
+        parentNavigatorKey: _rootKey,
+        path: '/astrologers/:id',
+        builder: (_, s) =>
+            AstrologerDetailPage(astrologerId: s.pathParameters['id']!),
+      ),
+
       StatefulShellRoute(
         builder: (_, _, shell) => AppShell(navigationShell: shell),
         // Cross-fade between tabs instead of the instant IndexedStack swap.
@@ -769,14 +779,6 @@ GoRouter buildRouter(
                   s.uri.queryParameters,
                   key: ValueKey('discovery:${s.uri.query}'),
                 ),
-                routes: [
-                  _leaf(
-                    ':id',
-                    (s) => AstrologerDetailPage(
-                      astrologerId: s.pathParameters['id']!,
-                    ),
-                  ),
-                ],
               ),
             ],
           ),

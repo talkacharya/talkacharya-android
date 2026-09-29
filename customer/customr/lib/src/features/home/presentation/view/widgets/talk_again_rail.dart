@@ -61,7 +61,7 @@ class _Tile extends StatelessWidget {
     final theme = Theme.of(context);
     final c = consultation;
     final hue = HomeHues.forId(c.astrologerId);
-    void open() => context.go(Routes.astrologer(c.astrologerId));
+    void open() => context.push(Routes.astrologer(c.astrologerId));
 
     return Pressable(
       child: SizedBox(

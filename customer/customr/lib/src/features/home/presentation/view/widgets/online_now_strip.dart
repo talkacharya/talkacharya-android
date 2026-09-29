@@ -69,7 +69,7 @@ class _Story extends StatelessWidget {
 
     return Pressable(
       child: InkWell(
-        onTap: () => context.go(Routes.astrologer(a.id)),
+        onTap: () => context.push(Routes.astrologer(a.id)),
         borderRadius: BorderRadius.circular(16),
         child: SizedBox(
           width: 68,

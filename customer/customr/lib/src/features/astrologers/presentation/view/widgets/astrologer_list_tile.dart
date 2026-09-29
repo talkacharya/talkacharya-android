@@ -39,7 +39,7 @@ class AstrologerListTile extends StatelessWidget {
         )
         .join(', ');
     final muted = theme.textTheme.labelMedium?.copyWith(color: brand.inkMuted);
-    void open() => context.go(Routes.astrologer(a.id));
+    void open() => context.push(Routes.astrologer(a.id));
 
     // compact "₹16/m" so it fits beside the rating on the photo
     final priceText = rate == null
