@@ -4,9 +4,13 @@ import 'dart:io';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
-import 'package:talkacharya_chat/talkacharya_chat.dart';
+import 'voice_note.dart';
 
 /// `record`-backed [VoiceRecorder].
+///
+/// Lives beside the port, like [DeviceSttEngine] and [DeviceTtsEngine]: both
+/// apps want exactly this, and two byte-identical copies in two app trees is
+/// two places to fix the next plugin quirk.
 ///
 /// AAC in an m4a container: the one format every Android and iOS device both
 /// records and plays without a codec argument, and which the server already

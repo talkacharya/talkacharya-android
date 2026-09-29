@@ -23,7 +23,6 @@ import '../../../gifting/presentation/widgets/gift_prompt_card.dart';
 import '../../../wallet/presentation/view/recharge_sheet.dart';
 import '../../data/call_adapters.dart';
 import '../../data/chat_adapters.dart';
-import '../../data/voice_note_adapters.dart';
 import '../../data/consultation_repository.dart';
 import '../../data/models/consultation.dart';
 import '../../data/models/conversation.dart';

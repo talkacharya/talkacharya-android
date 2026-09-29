@@ -925,7 +925,7 @@ packages:
     source: hosted
     version: "6.13.0"
   just_audio:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: just_audio
       sha256: f978d5b4ccea08f267dae0232ec5405c1b05d3f3cd63f82097ea46c015d5c09e
@@ -1117,7 +1117,7 @@ packages:
     source: hosted
     version: "1.9.1"
   path_provider:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: path_provider
       sha256: a7f4874f987173da295a61c181b8ee71dab59b332a486b391babf26a1b884825
@@ -1301,7 +1301,7 @@ packages:
     source: hosted
     version: "1.6.0"
   record:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: record
       sha256: "10911465138fafacef459a780564e883e01bd48eabf87ab20543684884492870"
