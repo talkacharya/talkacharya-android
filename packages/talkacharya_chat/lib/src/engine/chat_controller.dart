@@ -9,6 +9,7 @@ import '../models/chat_message.dart';
 import '../models/chat_pin.dart';
 import '../models/chat_presence.dart';
 import '../ports/chat_outbox.dart';
+import '../ports/chat_store.dart';
 import '../ports/voice_note.dart';
 import '../ports/chat_ports.dart';
 import '../ports/stt_engine.dart';
@@ -30,6 +31,7 @@ class ChatController extends Cubit<ChatSessionState> {
     required ChatIdentity identity,
     PickImages? pickImages,
     ChatOutbox? outbox,
+    ChatStore? store,
     TtsEngine? tts,
     SttEngine? stt,
     ChatSounds sounds = const NoopChatSounds(),
@@ -43,6 +45,7 @@ class ChatController extends Cubit<ChatSessionState> {
        _id = identity,
        _pickImages = pickImages,
        _outbox = outbox ?? const NoopChatOutbox(),
+       _store = store ?? const NoopChatStore(),
        tts = tts ?? DeviceTtsEngine(),
        stt = stt ?? DeviceSttEngine(),
        super(const ChatSessionState());
@@ -66,6 +69,7 @@ class ChatController extends Cubit<ChatSessionState> {
   final ChatIdentity _id;
   final PickImages? _pickImages;
   final ChatOutbox _outbox;
+  final ChatStore _store;
   final ChatSounds _sounds;
   final TtsEngine tts;
   final SttEngine stt;
@@ -76,6 +80,11 @@ class ChatController extends Cubit<ChatSessionState> {
 
   /// Whether the composer should show an image-attach button.
   bool get canAttachImages => _pickImages != null;
+
+  /// What the room opens with, and what one scroll-up fetches. Both are page
+  /// sizes the server honours directly.
+  static const _kOpenPage = 60;
+  static const _kOlderPage = 40;
 
   final _rng = Random();
   StreamSubscription<Map<String, dynamic>>? _frames;
@@ -94,19 +103,56 @@ class ChatController extends Cubit<ChatSessionState> {
   Future<void> start() async {
     emit(state.copyWith(loading: true, error: null));
     final pending = await _loadOutbox();
-    try {
-      final history = await _t.history(limit: 60);
+
+    // What the customer read last time, straight off the device. Older
+    // messages never change, so this is the whole room for all but the tail —
+    // and it is on screen before the request below has left the phone.
+    final cached = await _cached(_kOpenPage);
+    if (cached.isNotEmpty) {
       emit(
         state.copyWith(
           loading: false,
-          messages: _sorted([...history, ...pending]),
-          hasMoreOlder: history.length >= 60,
+          messages: _sorted([...cached, ...pending]),
+          // Assume there is more until the server says otherwise; a short
+          // cached page usually means a trimmed cache, not a short thread.
+          hasMoreOlder: true,
+        ),
+      );
+    }
+    try {
+      final history = await _t.history(limit: _kOpenPage);
+      unawaited(_remember(history));
+      final merged = [...state.messages];
+      for (final m in history) {
+        _mergeInto(merged, m);
+      }
+      for (final m in pending) {
+        _mergeInto(merged, m);
+      }
+      emit(
+        state.copyWith(
+          loading: false,
+          error: null,
+          messages: _sorted(merged),
+          // The server's newest page is short: this is the entire thread, and
+          // the cache cannot be hiding anything above it.
+          hasMoreOlder: history.length >= _kOpenPage,
         ),
       );
     } catch (e) {
-      emit(
-        state.copyWith(loading: false, error: '$e', messages: _sorted(pending)),
-      );
+      // Offline with a cache is a readable room, not an error — the composer
+      // and the connection banner already say the socket is down.
+      if (cached.isNotEmpty) {
+        emit(state.copyWith(loading: false));
+      } else {
+        emit(
+          state.copyWith(
+            loading: false,
+            error: '$e',
+            messages: _sorted(pending),
+          ),
+        );
+      }
     }
     unawaited(loadPins());
     for (final m in pending) {
@@ -530,13 +576,32 @@ class ChatController extends Cubit<ChatSessionState> {
       return;
     }
     emit(state.copyWith(loadingOlder: true));
+
+    // The cache answers only when it can do so without a hole — see
+    // [ChatStore.before]. An empty page from it is the top of the thread.
+    final local = await _cachedBefore(oldest, _kOlderPage);
+    if (local != null) {
+      for (final m in local) {
+        _merge(m);
+      }
+      emit(
+        state.copyWith(
+          loadingOlder: false,
+          hasMoreOlder: local.length >= _kOlderPage,
+        ),
+      );
+      return;
+    }
     try {
-      final page = await _t.history(beforeSeq: oldest, limit: 40);
+      final page = await _t.history(beforeSeq: oldest, limit: _kOlderPage);
       for (final m in page) {
         _merge(m);
       }
       emit(
-        state.copyWith(loadingOlder: false, hasMoreOlder: page.length >= 40),
+        state.copyWith(
+          loadingOlder: false,
+          hasMoreOlder: page.length >= _kOlderPage,
+        ),
       );
     } catch (_) {
       emit(state.copyWith(loadingOlder: false));
@@ -706,8 +771,9 @@ class ChatController extends Cubit<ChatSessionState> {
             x.clientMessageId == m.clientMessageId),
   );
 
-  void _merge(ChatMessage incoming) {
-    final list = [...state.messages];
+  /// [_merge] against a caller's list, so a batch can be reconciled before any
+  /// of it is emitted. Returns the merged message.
+  ChatMessage _mergeInto(List<ChatMessage> list, ChatMessage incoming) {
     int i = -1;
     if (incoming.clientMessageId.isNotEmpty) {
       i = list.indexWhere((x) => x.clientMessageId == incoming.clientMessageId);
@@ -717,7 +783,7 @@ class ChatController extends Cubit<ChatSessionState> {
     }
     if (i >= 0) {
       final prev = list[i];
-      list[i] = incoming.copyWith(
+      return list[i] = incoming.copyWith(
         sendStatus: incoming.sendStatus == SendStatus.sending
             ? prev.sendStatus
             : SendStatus.sent,
@@ -726,9 +792,17 @@ class ChatController extends Cubit<ChatSessionState> {
         deliveredAt: incoming.deliveredAt ?? prev.deliveredAt,
         readAt: incoming.readAt ?? prev.readAt,
       );
-    } else {
-      list.add(incoming);
     }
+    list.add(incoming);
+    return incoming;
+  }
+
+  void _merge(ChatMessage incoming) {
+    final list = [...state.messages];
+    final merged = _mergeInto(list, incoming);
+    // Realtime arrivals and send confirmations land here too, so this is where
+    // the cache stays current between one room visit and the next.
+    unawaited(_remember([merged]));
     emit(state.copyWith(messages: _sorted(list)));
     if (state.autoTranslate && incoming.senderRole != _id.role) {
       unawaited(_fetchTranslation(incoming));
@@ -770,6 +844,40 @@ class ChatController extends Cubit<ChatSessionState> {
       return await _outbox.load(threadId);
     } catch (_) {
       return const [];
+    }
+  }
+
+  // --- local history cache -------------------------------------------
+
+  /// Only what the server has confirmed. An optimistic or failed send is the
+  /// outbox's business; caching one would bring a message that never arrived
+  /// back as though it had.
+  bool _isCacheable(ChatMessage m) =>
+      m.seq > 0 && m.sendStatus == SendStatus.sent;
+
+  Future<void> _remember(List<ChatMessage> messages) async {
+    final keep = messages.where(_isCacheable).toList();
+    if (keep.isEmpty) return;
+    try {
+      await _store.save(threadId, keep);
+    } catch (_) {
+      // A cache that cannot write is a slow room, not a broken one.
+    }
+  }
+
+  Future<List<ChatMessage>> _cached(int limit) async {
+    try {
+      return await _store.newest(threadId, limit: limit);
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  Future<List<ChatMessage>?> _cachedBefore(int beforeSeq, int limit) async {
+    try {
+      return await _store.before(threadId, beforeSeq, limit: limit);
+    } catch (_) {
+      return null;
     }
   }
 

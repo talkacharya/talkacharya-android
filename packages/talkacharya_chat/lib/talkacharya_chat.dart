@@ -12,6 +12,7 @@ export 'src/models/chat_pin.dart';
 export 'src/models/chat_presence.dart';
 export 'src/ports/chat_outbox.dart';
 export 'src/ports/chat_ports.dart';
+export 'src/ports/chat_store.dart';
 export 'src/ports/stt_engine.dart';
 export 'src/ports/voice_note.dart';
 export 'src/ports/voice_note_device.dart';

@@ -56,6 +56,96 @@ void main() {
   ChatCubit build() =>
       ChatCubit(repo: repo, realtime: realtime, consultationId: 'c1');
 
+  group('a session asked for from inside the room', () {
+    Consultation pending() => const Consultation(
+      id: 'c2',
+      status: ConsultationStatus.requested,
+      astrologerId: 'a1',
+      astrologerName: 'Ravi',
+      rateSnapshot: '20',
+      currency: 'INR',
+    );
+
+    /// The thread as it reads between sessions: nothing live, so the sending
+    /// window knows nothing about a request that has only been made.
+    Conversation closed() => const Conversation(
+      id: 't1',
+      astrologerId: 'a1',
+      peerName: 'Ravi',
+      window: SendingWindow(reason: 'closed'),
+      lastConsultationId: 'c1',
+    );
+
+    blocTest<ChatCubit, ChatState>(
+      'is taken on in place rather than opening a second room',
+      build: build,
+      act: (c) async {
+        await c.init();
+        c.adopt(pending());
+      },
+      verify: (c) {
+        expect(c.state.consultation?.id, 'c2');
+        expect(c.state.status, ConsultationStatus.requested);
+        // The thread is untouched — the room is still the same room.
+        expect(c.state.conversation?.id, 't1');
+      },
+    );
+
+    blocTest<ChatCubit, ChatState>(
+      'is picked up from the thread channel when it started elsewhere',
+      build: build,
+      act: (c) async {
+        await c.init();
+        when(() => repo.detail('c2')).thenAnswer((_) async => pending());
+        realtime.frames.add({
+          'type': 'consultation.requested',
+          'data': {'consultation': 'c2'},
+        });
+        await Future<void>.delayed(Duration.zero);
+      },
+      verify: (c) => expect(c.state.consultation?.id, 'c2'),
+    );
+
+    blocTest<ChatCubit, ChatState>(
+      'cancels the pending session, not the id the room was opened with',
+      build: build,
+      act: (c) async {
+        await c.init();
+        c.adopt(pending());
+        when(() => repo.cancel(any())).thenAnswer(
+          (_) async => pending().copyWith(status: ConsultationStatus.cancelled),
+        );
+        when(() => repo.conversation('c1')).thenAnswer((_) async => closed());
+        await c.cancelRequest();
+      },
+      verify: (_) {
+        // 'c1' is the room's route id and the previous session; cancelling it
+        // would withdraw the wrong thing, or nothing at all.
+        verify(() => repo.cancel('c2')).called(1);
+        verifyNever(() => repo.cancel('c1'));
+      },
+    );
+
+    blocTest<ChatCubit, ChatState>(
+      'puts the room back on the thread once the request is withdrawn',
+      build: build,
+      act: (c) async {
+        await c.init();
+        c.adopt(pending());
+        when(() => repo.cancel('c2')).thenAnswer(
+          (_) async => pending().copyWith(status: ConsultationStatus.cancelled),
+        );
+        when(() => repo.conversation('c1')).thenAnswer((_) async => closed());
+        await c.cancelRequest();
+        await Future<void>.delayed(Duration.zero);
+      },
+      verify: (c) {
+        expect(c.state.conversation?.window.isClosed, isTrue);
+        expect(c.state.consultation?.id, 'c1', reason: 'the last real session');
+      },
+    );
+  });
+
   test('Consultation.fromMap parses the room fields', () {
     final c = Consultation.fromMap({
       'id': 'x',

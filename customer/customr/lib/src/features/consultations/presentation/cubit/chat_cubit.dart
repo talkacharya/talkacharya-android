@@ -78,6 +78,17 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
 
+  /// Take on a session that was just started from inside this room.
+  ///
+  /// The thread's sending window only knows about *live* sessions, so a
+  /// request nobody has accepted yet is invisible to it — re-reading the
+  /// thread here would quietly put the room back on the last ended chat. The
+  /// caller has the new session in hand; this is how it arrives.
+  void adopt(Consultation started) {
+    emit(state.copyWith(consultation: started, clearError: true));
+    _startPolling();
+  }
+
   /// Move this consultation onto [channel]. The chat ends and a new session
   /// is requested with the same astrologer, in the same thread — so the room
   /// the customer is looking at does not change, only what is running in it.
@@ -155,12 +166,29 @@ class ChatCubit extends Cubit<ChatState> {
           );
         }
         _refreshDetail();
+      case 'consultation.requested':
+        // Someone in this thread asked for a session — usually this device a
+        // moment ago, but it also covers a request made from the astrologer's
+        // profile in another tab, or a room reopened while one is pending.
+        final id = data['consultation']?.toString() ?? '';
+        if (id.isNotEmpty && id != state.consultation?.id) {
+          unawaited(_adoptById(id));
+        }
       case 'consultation.shared':
         _refreshDetail();
       case 'consultation.ended':
       case 'consultation.rejected':
       case 'consultation.no_show':
         _refreshDetail();
+    }
+  }
+
+  Future<void> _adoptById(String id) async {
+    try {
+      adopt(await _repo.detail(id));
+    } catch (_) {
+      // The frame told us there is one; failing to read it just means the
+      // room keeps showing the session it already had.
     }
   }
 
@@ -262,11 +290,34 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
+  /// Withdraw the request the room is waiting on.
+  ///
+  /// Aimed at the pending session rather than at [consultationId], which is
+  /// the thread's id whenever the room was opened from the chats list — and,
+  /// once a second session has been requested inside the thread, is the wrong
+  /// session even when it is a consultation id.
   Future<void> cancelRequest() async {
+    final id = state.consultation?.id ?? consultationId;
     try {
-      emit(state.copyWith(consultation: await _repo.cancel(consultationId)));
+      final cancelled = await _repo.cancel(id);
+      emit(state.copyWith(consultation: cancelled));
+      // Nothing is running now, so the room goes back to being the thread:
+      // history, the follow-up window if one is open, and the way to start
+      // again. Re-reading is safe here precisely because the pending session
+      // that made it unsafe is the one just cancelled.
+      unawaited(_reloadThread());
     } catch (e) {
       emit(state.copyWith(error: friendlyError(e)));
+    }
+  }
+
+  Future<void> _reloadThread() async {
+    try {
+      final fresh = await _repo.conversation(consultationId);
+      emit(state.copyWith(conversation: fresh));
+      await _loadLiveConsultation(fresh);
+    } catch (_) {
+      // The room is still readable on what it already has.
     }
   }
 

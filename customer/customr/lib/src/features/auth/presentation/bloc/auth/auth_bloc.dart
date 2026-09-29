@@ -1,3 +1,5 @@
+import '../../../../../core/di/service_locator.dart';
+import 'package:talkacharya_chat_store/talkacharya_chat_store.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -55,6 +57,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     await _repo.logout();
+    // The chat cache is this account's conversations, kept on the device.
+    // Best-effort: a cache that will not clear must not trap someone in a
+    // session they are trying to leave.
+    try {
+      await getIt<FloorChatStore>().clearEverything();
+    } catch (_) {}
     emit(const AuthState.unauthenticated());
   }
 }

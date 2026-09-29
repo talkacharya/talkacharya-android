@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:talkacharya_call/talkacharya_call.dart';
 import 'package:talkacharya_chat/talkacharya_chat.dart';
+import 'package:talkacharya_chat_store/talkacharya_chat_store.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
@@ -121,6 +122,7 @@ class _RoomScope extends StatelessWidget {
             ),
             pickImages: pickChatImages,
             outbox: SecureStorageChatOutbox(getIt()),
+            store: getIt<FloorChatStore>(),
             sounds: const AppChatSounds(),
             recorder: DeviceVoiceRecorder(),
             voicePlayer: DeviceVoicePlayer(),
@@ -247,64 +249,8 @@ class _RoomView extends StatelessWidget {
         if (c.channel != 'chat') {
           return _CallRoom(consultation: c, lowBalance: state.lowBalance);
         }
-        if (c.status == ConsultationStatus.requested) {
-          return _WaitingView(consultation: c);
-        }
         return _ChatShell(consultation: c, lowBalance: state.lowBalance);
       },
-    );
-  }
-}
-
-// --- waiting -------------------------------------------------------------
-
-class _WaitingView extends StatelessWidget {
-  const _WaitingView({required this.consultation});
-  final Consultation consultation;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = context.l10n;
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(
-                width: 46,
-                height: 46,
-                child: CircularProgressIndicator(strokeWidth: 3),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                l10n.roomWaitingTitle(consultation.astrologerName),
-                textAlign: TextAlign.center,
-                style: theme.textTheme.titleMedium,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                l10n.roomWaitingBody,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(height: 28),
-              OutlinedButton(
-                onPressed: () async {
-                  await context.read<ChatCubit>().cancelRequest();
-                  if (context.mounted) context.pop();
-                },
-                child: Text(l10n.roomCancelRequest),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
@@ -663,6 +609,9 @@ class _ChatShellState extends State<_ChatShell> {
   Widget build(BuildContext context) {
     final c = widget.consultation;
     final ended = c.status == ConsultationStatus.ended;
+    // Asked for, not yet accepted. Nothing is being billed, so the billing bar
+    // would be reading zero, and there is nothing to end.
+    final pending = c.status == ConsultationStatus.requested;
     // The thread decides whether the composer is live, not the session: it
     // stays open, unbilled, through the free follow-up window after one ends.
     final window = context.select((ChatCubit cubit) => cubit.state.window);
@@ -763,33 +712,37 @@ class _ChatShellState extends State<_ChatShell> {
                   icon: const Icon(Icons.search_rounded),
                   onPressed: () => setState(() => _searching = !_searching),
                 ),
-                if (c.channel == 'chat')
+                if (c.channel == 'chat' && !pending)
                   IconButton(
                     tooltip: l10n.roomSwitchToCall,
                     icon: const Icon(Icons.phone_in_talk_rounded),
                     onPressed: () => _switchToCall(context, c),
                   ),
-                IconButton(
-                  tooltip: l10n.giftAction,
-                  icon: const Icon(Icons.card_giftcard_rounded),
-                  onPressed: () => showGiftSheet(
-                    context,
-                    target: ConsultationGiftTarget(
-                      consultationId: c.id,
-                      astrologerName: c.astrologerName,
-                      currency: c.currency,
+                if (!pending)
+                  IconButton(
+                    tooltip: l10n.giftAction,
+                    icon: const Icon(Icons.card_giftcard_rounded),
+                    onPressed: () => showGiftSheet(
+                      context,
+                      target: ConsultationGiftTarget(
+                        consultationId: c.id,
+                        astrologerName: c.astrologerName,
+                        currency: c.currency,
+                      ),
                     ),
                   ),
-                ),
-                TextButton(
-                  onPressed: () => _confirmEnd(context),
-                  child: Text(l10n.roomEnd),
-                ),
+                if (!pending)
+                  TextButton(
+                    onPressed: () => _confirmEnd(context),
+                    child: Text(l10n.roomEnd),
+                  ),
               ],
       ),
       body: Column(
         children: [
-          if (ended)
+          if (pending)
+            _WaitingBar(consultation: c)
+          else if (ended)
             _EndedBanner(consultation: c)
           else ...[
             BillingHud(
@@ -828,7 +781,7 @@ class _ChatShellState extends State<_ChatShell> {
           // sits off-screen above whatever the customer actually lands on —
           // down here it takes the composer's old spot, so it's the first
           // thing in view, no scrolling required.
-          if (window.isClosed) _StartConsultationBar(consultation: c),
+          if (window.isClosed && !pending) _StartConsultationBar(consultation: c),
           if (ended)
             SafeArea(
               top: false,
@@ -939,6 +892,125 @@ bool _canThankFrom(Consultation c) =>
 /// if the session stopped because the balance ran out, how to pick it back
 /// up — kept prominent and inline since it's the one thing worth acting on
 /// immediately, not tucked into the summary sheet with everything else.
+/// Waiting for the astrologer, without taking the room away.
+///
+/// A strip where the billing bar goes, so the thread underneath stays readable
+/// and scrollable the whole time. When the astrologer accepts, the session
+/// becomes live and this is replaced in place by the billing bar — the
+/// customer never leaves the conversation they were already reading.
+class _WaitingBar extends StatefulWidget {
+  const _WaitingBar({required this.consultation});
+  final Consultation consultation;
+
+  @override
+  State<_WaitingBar> createState() => _WaitingBarState();
+}
+
+class _WaitingBarState extends State<_WaitingBar> {
+  /// The server gives an astrologer about a minute and a half to pick up, then
+  /// expires the request. Counting it down beats an indefinite spinner: the
+  /// customer can see it is bounded, and decide to wait or to cancel.
+  static const _acceptWindow = Duration(seconds: 90);
+
+  Timer? _tick;
+  bool _cancelling = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _tick = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _tick?.cancel();
+    super.dispose();
+  }
+
+  Duration? get _left {
+    final since = widget.consultation.requestedAt;
+    if (since == null) return null;
+    final gone = DateTime.now().difference(since);
+    final left = _acceptWindow - gone;
+    return left.isNegative ? Duration.zero : left;
+  }
+
+  Future<void> _cancel() async {
+    setState(() => _cancelling = true);
+    await context.read<ChatCubit>().cancelRequest();
+    if (mounted) setState(() => _cancelling = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final l10n = context.l10n;
+    final left = _left;
+
+    return Material(
+      color: scheme.secondaryContainer,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 10, 8, 10),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 18,
+              height: 18,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: scheme.onSecondaryContainer,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    l10n.roomWaitingTitle(widget.consultation.astrologerName),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: scheme.onSecondaryContainer,
+                    ),
+                  ),
+                  Text(
+                    left == null
+                        ? l10n.roomWaitingBody
+                        : l10n.roomWaitingCountdown(_mmss(left)),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: scheme.onSecondaryContainer.withValues(alpha: .8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            TextButton(
+              // Bounded height for the same reason the start bar needs one:
+              // the app-wide button theme asks for an infinite width, and a
+              // Row hands its non-flex children unbounded constraints.
+              style: TextButton.styleFrom(
+                minimumSize: const Size(0, 40),
+                foregroundColor: scheme.onSecondaryContainer,
+              ),
+              onPressed: _cancelling ? null : _cancel,
+              child: Text(l10n.roomCancelRequest),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static String _mmss(Duration d) {
+    final s = d.inSeconds.remainder(60).toString().padLeft(2, '0');
+    return '${d.inMinutes}:$s';
+  }
+}
+
 class _EndedBanner extends StatelessWidget {
   const _EndedBanner({required this.consultation});
   final Consultation consultation;
@@ -1019,6 +1091,7 @@ class _EndedBanner extends StatelessWidget {
                     astrologerName: c.astrologerName,
                     ratePerMinute: c.ratePerMinute,
                     currency: c.currency,
+                    onStarted: context.read<ChatCubit>().adopt,
                   ),
                   child: Text(l10n.roomStartAgain(c.astrologerName)),
                 ),
@@ -1308,6 +1381,7 @@ class _SummaryViewState extends State<_SummaryView> {
                 astrologerName: c.astrologerName,
                 ratePerMinute: c.ratePerMinute,
                 currency: c.currency,
+                onStarted: context.read<ChatCubit>().adopt,
               ),
               child: Text(l10n.roomStartAgain(c.astrologerName)),
             ),

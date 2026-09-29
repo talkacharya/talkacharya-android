@@ -71,6 +71,11 @@ dependencies:
   talkacharya_chat:
     path: ../../packages/talkacharya_chat
 
+  # the disk half of the chat layer: a thread's history, kept locally so the
+  # room opens on it instead of on a spinner
+  talkacharya_chat_store:
+    path: ../../packages/talkacharya_chat_store
+
   # shared 1:1 voice calls (self-hosted WebRTC engine + call screen)
   talkacharya_call:
     path: ../../packages/talkacharya_call

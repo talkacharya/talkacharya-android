@@ -1,0 +1,30 @@
+name: talkacharya_chat_store
+description: "Floor-backed local history for TalkAcharya's consultation threads — the disk half of talkacharya_chat's ChatStore, so a room opens on what was already read instead of on a spinner."
+version: 0.1.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.11.0
+
+# Its own package on purpose, not a folder inside talkacharya_chat.
+# `floor_generator` is pinned to source_gen 1.x, which cannot resolve alongside
+# the freezed 3.x that generates the chat models. Dev dependencies do not carry
+# across packages, so splitting the codegen apart is what lets both exist.
+dependencies:
+  flutter:
+    sdk: flutter
+  floor: ^1.5.0
+  sqflite: ^2.4.1
+  talkacharya_chat:
+    path: ../talkacharya_chat
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.13
+  floor_generator: ^1.5.0
+  # runs the real schema on the host, so the paging queries are tested
+  sqflite_common_ffi: ^2.3.4
+
+flutter:

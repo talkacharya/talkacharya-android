@@ -3927,5 +3927,14 @@
         "type": "String"
       }
     }
+  },
+  "roomWaitingCountdown": "Usually under a minute · {time} left",
+  "@roomWaitingCountdown": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    },
+    "description": "How long the astrologer still has to accept"
   }
 }

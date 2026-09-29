@@ -309,7 +309,8 @@
     "liveFeedEmpty",
     "liveFeedError",
     "liveFeedTitle",
-    "roomTimeLeftRecharge"
+    "roomTimeLeftRecharge",
+    "roomWaitingCountdown"
   ],
 
   "gu": [
@@ -622,7 +623,8 @@
     "liveFeedEmpty",
     "liveFeedError",
     "liveFeedTitle",
-    "roomTimeLeftRecharge"
+    "roomTimeLeftRecharge",
+    "roomWaitingCountdown"
   ],
 
   "kn": [
@@ -935,7 +937,8 @@
     "liveFeedEmpty",
     "liveFeedError",
     "liveFeedTitle",
-    "roomTimeLeftRecharge"
+    "roomTimeLeftRecharge",
+    "roomWaitingCountdown"
   ],
 
   "mr": [
@@ -1248,7 +1251,8 @@
     "liveFeedEmpty",
     "liveFeedError",
     "liveFeedTitle",
-    "roomTimeLeftRecharge"
+    "roomTimeLeftRecharge",
+    "roomWaitingCountdown"
   ],
 
   "ta": [
@@ -1561,7 +1565,8 @@
     "liveFeedEmpty",
     "liveFeedError",
     "liveFeedTitle",
-    "roomTimeLeftRecharge"
+    "roomTimeLeftRecharge",
+    "roomWaitingCountdown"
   ],
 
   "te": [
@@ -1874,6 +1879,7 @@
     "liveFeedEmpty",
     "liveFeedError",
     "liveFeedTitle",
-    "roomTimeLeftRecharge"
+    "roomTimeLeftRecharge",
+    "roomWaitingCountdown"
   ]
 }

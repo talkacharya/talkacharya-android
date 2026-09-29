@@ -7143,4 +7143,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String roomTimeLeftRecharge(String time) {
     return '$time शेष — जारी रखने के लिए पैसे जोड़ें';
   }
+
+  @override
+  String roomWaitingCountdown(String time) {
+    return 'आमतौर पर एक मिनट से कम · $time बचे';
+  }
 }

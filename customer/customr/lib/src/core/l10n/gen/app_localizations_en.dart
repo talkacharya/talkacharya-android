@@ -7041,4 +7041,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String roomTimeLeftRecharge(String time) {
     return '$time left — add money to keep going';
   }
+
+  @override
+  String roomWaitingCountdown(String time) {
+    return 'Usually under a minute · $time left';
+  }
 }

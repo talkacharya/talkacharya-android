@@ -18,6 +18,8 @@ abstract class ChatAttachment with _$ChatAttachment {
     @Default('') String localPath,
   }) = _ChatAttachment;
 
+  const ChatAttachment._();
+
   factory ChatAttachment.fromMap(Map<String, dynamic> j) => ChatAttachment(
     id: j['id'] as String? ?? '',
     kind: j['kind'] as String? ?? 'image',
@@ -27,6 +29,18 @@ abstract class ChatAttachment with _$ChatAttachment {
     durationSeconds: (j['duration_seconds'] as num?)?.toInt() ?? 0,
     url: j['url'] as String? ?? '',
   );
+
+  /// `localPath` is left out on purpose: it names a file in this install's
+  /// sandbox, which is meaningless to anything reading this back later.
+  Map<String, dynamic> toMap() => {
+    'id': id,
+    'kind': kind,
+    'name': name,
+    'content_type': contentType,
+    'size_bytes': sizeBytes,
+    'duration_seconds': durationSeconds,
+    'url': url,
+  };
 }
 
 /// Just enough of a quoted message to draw the header above a reply.
@@ -43,6 +57,8 @@ abstract class ChatReplyTo with _$ChatReplyTo {
     @Default(false) bool redacted,
   }) = _ChatReplyTo;
 
+  const ChatReplyTo._();
+
   factory ChatReplyTo.fromMap(Map<String, dynamic> j) => ChatReplyTo(
     seq: (j['seq'] as num?)?.toInt() ?? 0,
     senderRole: roleFromString(j['sender_role'] as String?),
@@ -50,6 +66,14 @@ abstract class ChatReplyTo with _$ChatReplyTo {
     body: j['body'] as String? ?? '',
     redacted: j['redacted'] == true,
   );
+
+  Map<String, dynamic> toMap() => {
+    'seq': seq,
+    'sender_role': senderRole.name,
+    'type': type,
+    'body': body,
+    'redacted': redacted,
+  };
 }
 
 /// One message in a consultation. Unified across both apps — the reader decides
@@ -102,6 +126,26 @@ abstract class ChatMessage with _$ChatMessage {
     deliveredAt: DateTime.tryParse('${j['delivered_at']}'),
     readAt: DateTime.tryParse('${j['read_at']}'),
   );
+
+  /// The wire shape, which is also the storage shape — see [ChatMessage.fromMap].
+  /// `sendStatus` is not here: it describes this device's attempt to send, and
+  /// anything with a `seq` has already arrived.
+  Map<String, dynamic> toMap() => {
+    'id': id,
+    'seq': seq,
+    'sender_role': senderRole.name,
+    'type': type,
+    'body': body,
+    'source_language': sourceLanguage,
+    'translations': translations,
+    'meta': meta,
+    'attachments': [for (final a in attachments) a.toMap()],
+    'client_message_id': clientMessageId,
+    'reply_to': replyTo?.toMap(),
+    'created_at': createdAt?.toIso8601String(),
+    'delivered_at': deliveredAt?.toIso8601String(),
+    'read_at': readAt?.toIso8601String(),
+  };
 
   bool get isSystem =>
       senderRole == ParticipantRole.system || type == 'system_event';

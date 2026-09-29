@@ -1,3 +1,4 @@
+import 'package:talkacharya_chat_store/talkacharya_chat_store.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -83,6 +84,9 @@ Future<void> configureDependencies(AppConfig config) async {
       ),
     )
     ..registerLazySingleton<TokenStorage>(() => TokenStorage(getIt()))
+    // One database for every room. Lazy: an install that never opens a chat
+    // never creates the file.
+    ..registerLazySingleton<FloorChatStore>(FloorChatStore.new)
     ..registerLazySingleton<DioClientFactory>(
       () => DioClientFactory(getIt(), getIt()),
     );

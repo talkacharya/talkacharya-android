@@ -1,3 +1,4 @@
+import '../../data/models/consultation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -24,6 +25,7 @@ Future<void> showBookConsultationSheet(
   required double ratePerMinute,
   required String currency,
   String channel = 'chat',
+  ValueChanged<Consultation>? onStarted,
 }) {
   context.read<BirthProfilesCubit>().load();
   final l = context.l10n;
@@ -39,6 +41,7 @@ Future<void> showBookConsultationSheet(
       ratePerMinute: ratePerMinute,
       currency: currency,
       channel: channel,
+      onStarted: onStarted,
     ),
   );
 }
@@ -49,11 +52,17 @@ class _BookForm extends StatefulWidget {
     required this.ratePerMinute,
     required this.currency,
     required this.channel,
+    this.onStarted,
   });
   final String astrologerId;
   final double ratePerMinute;
   final String currency;
   final String channel;
+
+  /// Where the new session goes. Null means open the room for it; a room that
+  /// is already showing this thread passes a handler instead and takes the
+  /// session on in place.
+  final ValueChanged<Consultation>? onStarted;
 
   bool get isCall => channel != 'chat';
   bool get isVideo => channel == 'video';
@@ -135,7 +144,12 @@ class _BookFormState extends State<_BookForm> {
       pending.clear();
       if (!mounted) return;
       Navigator.pop(context);
-      router.push('/consultations/${c.id}').ignore();
+      final started = widget.onStarted;
+      if (started != null) {
+        started(c);
+      } else {
+        router.push('/consultations/${c.id}').ignore();
+      }
     } on InsufficientBalance catch (e) {
       if (!mounted) return;
       setState(() => _submitting = false);

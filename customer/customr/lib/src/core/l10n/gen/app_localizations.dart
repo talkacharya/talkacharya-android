@@ -12319,6 +12319,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{time} left — add money to keep going'**
   String roomTimeLeftRecharge(String time);
+
+  /// How long the astrologer still has to accept
+  ///
+  /// In en, this message translates to:
+  /// **'Usually under a minute · {time} left'**
+  String roomWaitingCountdown(String time);
 }
 
 class _AppLocalizationsDelegate
