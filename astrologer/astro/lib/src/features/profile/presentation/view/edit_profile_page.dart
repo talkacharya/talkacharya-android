@@ -63,19 +63,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   void _changed() => setState(() {});
 
+  /// A picker with nothing in it, rather than a screen with nothing on it.
+  /// Whatever the astrologer already has stays selected either way: those come
+  /// from the profile, not from this list.
+  static List<RefOption> _noOptions(Object _) => const [];
+
   Future<void> _load() async {
     setState(() {
       _loading = true;
       _failed = false;
     });
     try {
-      final results = await Future.wait([
-        _api.profile(),
-        _api.skillOptions(),
-        _api.languageOptions(),
-      ]);
+      // Started together, but only the profile is allowed to fail the screen.
+      final profile = _api.profile();
+      final skills = _api.skillOptions().catchError(_noOptions);
+      final langs = _api.languageOptions().catchError(_noOptions);
+
+      final p = await profile;
+      final skillOptions = await skills;
+      final langOptions = await langs;
       if (!mounted) return;
-      final p = results[0] as AstroProfile;
       final user = context.read<AuthBloc>().state.user;
       setState(() {
         _initial = p;
@@ -88,8 +95,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
         _primary = p.skills.where((s) => s.isPrimary).firstOrNull?.slug;
         _langs = {...p.languages};
         _banner = p.banner;
-        _skillOptions = results[1] as List<RefOption>;
-        _langOptions = results[2] as List<RefOption>;
+        _skillOptions = skillOptions;
+        _langOptions = langOptions;
         _loading = false;
       });
     } catch (_) {

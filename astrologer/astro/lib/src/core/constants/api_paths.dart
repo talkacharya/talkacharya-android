@@ -14,8 +14,11 @@ class ApiPaths {
   static const meDevices = '/me/devices';
   static String meDevice(String id) => '/me/devices/$id';
   static const realtimeToken = '/realtime/token';
-  static const referenceSkills = '/reference/skills';
-  static const referenceLanguages = '/reference/languages';
+  // Served from the shared app mount, not a `/reference/` namespace — which
+  // does not exist, and answered both of these with a 404 that took the whole
+  // Edit profile screen down with it.
+  static const referenceSkills = '/app/skills';
+  static const referenceLanguages = '/app/languages';
 
   // per-user inbox — shared mount
   static const notifications = '/notifications';
