@@ -193,6 +193,8 @@ class _RoomView extends StatelessWidget {
           );
       },
       builder: (context, state) {
+        // Loading covers both requests now — the thread and the session in
+        // it — so the room never renders its failure while one is in flight.
         if (state.loading && state.consultation == null) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),

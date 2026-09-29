@@ -41,8 +41,12 @@ class ChatCubit extends Cubit<ChatState> {
       // realtime channel is keyed on the thread, so subscribe only once we
       // know which thread this is.
       final conversation = await _repo.conversation(consultationId);
-      emit(state.copyWith(loading: false, conversation: conversation));
+      // Deliberately still loading: the room draws from the session inside the
+      // thread, so clearing it here shows the empty-state as a failure for the
+      // whole of the next request.
+      emit(state.copyWith(conversation: conversation));
       await _loadLiveConsultation(conversation);
+      emit(state.copyWith(loading: false));
       _frames = _realtime
           .channelFrames('conv:${conversation.id}')
           .listen(_onFrame, onError: (_) {});
@@ -59,15 +63,20 @@ class ChatCubit extends Cubit<ChatState> {
     final id =
         conversation.window.consultationId ?? conversation.lastConsultationId;
     if (id == null) {
+      // A thread nobody has ever consulted in. Rare — threads are created by
+      // consultations — and not an error, so nothing is said about it.
       emit(state.copyWith(clearConsultation: true));
       return;
     }
     try {
-      emit(state.copyWith(consultation: await _repo.detail(id)));
-    } catch (_) {
-      // the thread still opens; only the session chrome is missing
+      emit(state.copyWith(consultation: await _repo.detail(id), clearError: true));
+    } catch (e) {
+      // Surfaced, not swallowed: the room cannot draw without this, so the
+      // customer is about to see a failure either way and deserves the reason.
+      emit(state.copyWith(error: friendlyError(e)));
     }
   }
+
 
   /// Move this consultation onto [channel]. The chat ends and a new session
   /// is requested with the same astrologer, in the same thread — so the room

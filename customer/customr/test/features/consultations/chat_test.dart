@@ -300,4 +300,44 @@ void main() {
     expect(cubit.state.consultation?.runwaySeconds, 60);
     await cubit.close();
   });
+
+  test('the room never reports a failure while it is still loading', () async {
+    // `loading` used to clear as soon as the thread resolved, so for the whole
+    // of the second request the state read "not loading, no consultation" —
+    // which the room renders as an error screen, complaining about a request
+    // that is still in flight.
+    when(() => repo.detail('c1')).thenAnswer((_) async {
+      await Future<void>.delayed(const Duration(milliseconds: 60));
+      return _active();
+    });
+    final cubit = build();
+
+    final states = <ChatState>[];
+    final sub = cubit.stream.listen(states.add);
+    await cubit.init();
+    await sub.cancel();
+
+    for (final s in states) {
+      if (!s.loading && s.consultation == null && s.error == null) {
+        fail('room would have shown a blank failure mid-load');
+      }
+    }
+    expect(cubit.state.consultation?.id, 'c1');
+    expect(cubit.state.loading, isFalse);
+    await cubit.close();
+  });
+
+  test('a session that fails to load says why', () async {
+    // It used to be swallowed with a comment claiming the thread still opens.
+    // The view has no branch for that, so the customer got a blank failure
+    // with nothing to act on.
+    when(() => repo.detail('c1')).thenThrow(Exception('offline'));
+    final cubit = build();
+    await cubit.init();
+
+    expect(cubit.state.consultation, isNull);
+    expect(cubit.state.error, isNotNull);
+    expect(cubit.state.loading, isFalse);
+    await cubit.close();
+  });
 }
