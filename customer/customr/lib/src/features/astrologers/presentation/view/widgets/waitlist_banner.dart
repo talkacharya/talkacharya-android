@@ -36,7 +36,12 @@ class WaitlistBanner extends StatefulWidget {
 
 class _WaitlistBannerState extends State<WaitlistBanner>
     with WidgetsBindingObserver {
-  final _repo = getIt<ConsultationRepository>();
+  /// Null where the app's services are not set up (a screen shown on its
+  /// own); the banner then stays empty.
+  final ConsultationRepository? _repo =
+      getIt.isRegistered<ConsultationRepository>()
+      ? getIt<ConsultationRepository>()
+      : null;
   StreamSubscription<RealtimeEvent>? _realtime;
   Timer? _tick;
   QueueEntry? _entry;
@@ -47,9 +52,11 @@ class _WaitlistBannerState extends State<WaitlistBanner>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     waitlistChanges.addListener(_load);
-    _realtime = getIt<RealtimeClient>().events.listen((event) {
-      if (event is QueueOffer || event is QueueRemoved) _load();
-    });
+    if (getIt.isRegistered<RealtimeClient>()) {
+      _realtime = getIt<RealtimeClient>().events.listen((event) {
+        if (event is QueueOffer || event is QueueRemoved) _load();
+      });
+    }
     _load();
   }
 
@@ -69,8 +76,10 @@ class _WaitlistBannerState extends State<WaitlistBanner>
   }
 
   Future<void> _load() async {
+    final repo = _repo;
+    if (repo == null) return;
     try {
-      final entries = await _repo.myQueue();
+      final entries = await repo.myQueue();
       if (!mounted) return;
       final now = DateTime.now();
       final mine = entries
@@ -105,7 +114,7 @@ class _WaitlistBannerState extends State<WaitlistBanner>
     if (entry == null) return;
     setState(() => _leaving = true);
     try {
-      await _repo.leaveQueue(entry.id);
+      await _repo?.leaveQueue(entry.id);
       if (!mounted) return;
       _show(null);
     } catch (e) {

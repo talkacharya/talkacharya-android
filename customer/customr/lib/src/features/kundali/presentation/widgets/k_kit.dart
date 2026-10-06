@@ -176,7 +176,10 @@ class KHeroAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final brand = context.brand;
     final theme = Theme.of(context);
-    final canPop = ModalRoute.of(context)?.canPop == true || context.canPop();
+    // `maybeOf`: the bar is also drawn where there is no router above it.
+    final router = GoRouter.maybeOf(context);
+    final canPop =
+        ModalRoute.of(context)?.canPop == true || (router?.canPop() ?? false);
     final showBackButton =
         leading != null || (automaticallyImplyLeading && canPop);
     final height =
@@ -218,8 +221,8 @@ class KHeroAppBar extends StatelessWidget {
                       tooltip:
                           MaterialLocalizations.of(context).backButtonTooltip,
                       onPressed: () {
-                        if (context.canPop()) {
-                          context.pop();
+                        if (router?.canPop() ?? false) {
+                          router!.pop();
                         } else {
                           Navigator.of(context).maybePop();
                         }
