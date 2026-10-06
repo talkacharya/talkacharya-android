@@ -37,6 +37,21 @@ class LoginCubit extends Cubit<LoginState> {
   final ConfigRepository? _config;
   final FirebasePhoneAuth? _firebase;
 
+  /// The Terms and the Privacy Policy were accepted on the phone step.
+  bool _acceptedTerms = false;
+
+  /// What is sent with the sign-in so the server can record the acceptance:
+  /// that it was given, and which versions of the documents were on offer.
+  Map<String, dynamic>? get _consent {
+    if (!_acceptedTerms) return null;
+    final support = _config?.value.support;
+    return {
+      'accepted': true,
+      'terms_version': support?.termsVersion ?? '',
+      'privacy_version': support?.privacyVersion ?? '',
+    };
+  }
+
   /// Firebase callbacks can land after the login screen is gone (e.g. a late
   /// auto-retrieval) — drop those instead of throwing on a closed cubit.
   @override
@@ -47,7 +62,9 @@ class LoginCubit extends Cubit<LoginState> {
   bool get _firebaseMode =>
       _firebase != null && (_config?.value.auth.firebase ?? false);
 
-  Future<void> requestOtp(String rawPhone) async {
+  Future<void> requestOtp(String rawPhone, {bool? acceptedTerms}) async {
+    // A resend comes without the flag and keeps the answer already given.
+    _acceptedTerms = acceptedTerms ?? _acceptedTerms;
     final e164 = Validators.toE164(rawPhone);
     if (e164 == null) {
       emit(state.copyWith(error: 'Enter a valid mobile number.'));
@@ -119,7 +136,11 @@ class LoginCubit extends Cubit<LoginState> {
     }
 
     try {
-      final user = await _repo.verifyOtp(phone: state.phone, code: code.trim());
+      final user = await _repo.verifyOtp(
+        phone: state.phone,
+        code: code.trim(),
+        consent: _consent,
+      );
       emit(state.copyWith(submitting: false));
       _profileStore?.markLoginGatePending();
       _authBloc.add(AuthLoggedIn(user));
@@ -130,7 +151,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   Future<void> _completeWithFirebaseToken(String idToken) async {
     try {
-      final user = await _repo.loginWithFirebase(idToken);
+      final user = await _repo.loginWithFirebase(idToken, consent: _consent);
       emit(state.copyWith(submitting: false));
       _profileStore?.markLoginGatePending();
       _authBloc.add(AuthLoggedIn(user));

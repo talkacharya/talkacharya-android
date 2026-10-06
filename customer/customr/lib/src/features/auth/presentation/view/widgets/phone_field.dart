@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 
-const _gold = Color(0xFFC5A358);
-
-/// Clean phone-number field for the dark auth theme: a fixed 🇮🇳 +91 prefix and
-/// a 10-digit entry. Fully self-styled so it never inherits the app's light
-/// input theme. The [controller] holds the raw digits.
+/// Phone-number field for the sign-in screen: a fixed 🇮🇳 +91 prefix and a
+/// 10-digit entry, drawn in the app's theme. The [controller] holds the raw
+/// digits.
 class PhoneNumberField extends StatefulWidget {
   const PhoneNumberField({
     required this.controller,
@@ -48,6 +47,8 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final brand = context.brand;
     final complete = widget.controller.text.length == 10;
 
     return AnimatedContainer(
@@ -55,24 +56,29 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       curve: Curves.easeOut,
       padding: const EdgeInsets.only(left: 16, right: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.04),
+        color: scheme.surfaceContainerHighest.withValues(alpha: 0.45),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: _focused ? _gold : Colors.white.withValues(alpha: 0.12),
+          color: _focused ? scheme.primary : brand.hairline,
           width: _focused ? 1.5 : 1,
         ),
         boxShadow: _focused
-            ? [BoxShadow(color: _gold.withValues(alpha: 0.15), blurRadius: 14)]
+            ? [
+                BoxShadow(
+                  color: scheme.primary.withValues(alpha: 0.14),
+                  blurRadius: 14,
+                ),
+              ]
             : null,
       ),
       child: Row(
         children: [
           const Text('🇮🇳', style: TextStyle(fontSize: 22)),
           const SizedBox(width: 8),
-          const Text(
+          Text(
             '+91',
             style: TextStyle(
-              color: Colors.white,
+              color: brand.ink,
               fontSize: 17,
               fontWeight: FontWeight.w700,
             ),
@@ -81,7 +87,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
             width: 1,
             height: 24,
             margin: const EdgeInsets.symmetric(horizontal: 14),
-            color: Colors.white.withValues(alpha: 0.12),
+            color: brand.hairline,
           ),
           Expanded(
             child: TextField(
@@ -92,26 +98,26 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
               keyboardType: TextInputType.phone,
               textInputAction: TextInputAction.done,
               maxLength: 10,
-              cursorColor: _gold,
-              style: const TextStyle(
-                color: Colors.white,
+              cursorColor: scheme.primary,
+              style: TextStyle(
+                color: brand.ink,
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 2,
               ),
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 counterText: '',
                 filled: false,
                 isCollapsed: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 18),
+                contentPadding: const EdgeInsets.symmetric(vertical: 18),
                 border: InputBorder.none,
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 disabledBorder: InputBorder.none,
                 hintText: '00000 00000',
                 hintStyle: TextStyle(
-                  color: Colors.white24,
+                  color: brand.inkMuted.withValues(alpha: 0.5),
                   letterSpacing: 2,
                   fontWeight: FontWeight.w500,
                 ),
@@ -123,9 +129,13 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
             scale: complete ? 1 : 0,
             duration: const Duration(milliseconds: 200),
             curve: Curves.easeOutBack,
-            child: const Padding(
-              padding: EdgeInsets.only(left: 4),
-              child: Icon(Icons.check_circle_rounded, color: _gold, size: 22),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 4),
+              child: Icon(
+                Icons.check_circle_rounded,
+                color: scheme.primary,
+                size: 22,
+              ),
             ),
           ),
         ],

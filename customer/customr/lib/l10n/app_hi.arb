@@ -2996,5 +2996,14 @@
   "astroOfferEnds": "{date}, {time} तक",
   "bookOfferApplied": "इस कीमत में {percent}% का ऑफ़र लगा है",
   "bookWelcomeTitle": "{minutes, plural, =1{आपका पहला मिनट हमारी ओर से} other{आपके पहले {minutes} मिनट हमारी ओर से}}",
-  "bookWelcomeBody": "वेलकम ऑफ़र: सेशन खत्म होते ही इनका पैसा आपके वॉलेट में वापस आ जाएगा।"
+  "bookWelcomeBody": "वेलकम ऑफ़र: सेशन खत्म होते ही इनका पैसा आपके वॉलेट में वापस आ जाएगा।",
+  "authNewHere": "पहली बार आए हैं? बस अपना नंबर डालें — आपका अकाउंट अपने आप बन जाएगा।",
+  "authAgreeLead": "मैं ",
+  "authTermsLink": "उपयोग की शर्तों",
+  "authAgreeAnd": " और ",
+  "authPrivacyLink": "गोपनीयता नीति",
+  "authAgreeTrail": " से सहमत हूँ।",
+  "authAgreeRequired": "आगे बढ़ने के लिए उपयोग की शर्तें और गोपनीयता नीति स्वीकार करें।",
+  "authResendIn": "कोड नहीं मिला? {time} में दोबारा भेजें",
+  "authResendCode": "कोड दोबारा भेजें"
 }

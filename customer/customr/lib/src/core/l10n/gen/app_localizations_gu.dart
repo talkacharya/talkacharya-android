@@ -7307,4 +7307,35 @@ class AppLocalizationsGu extends AppLocalizations {
   @override
   String get bookWelcomeBody =>
       'Welcome offer: we credit them back to your wallet when the session ends.';
+
+  @override
+  String get authNewHere =>
+      'New here? Just enter your number — we\'ll set up your account automatically.';
+
+  @override
+  String get authAgreeLead => 'I agree to the ';
+
+  @override
+  String get authTermsLink => 'Terms of Use';
+
+  @override
+  String get authAgreeAnd => ' and the ';
+
+  @override
+  String get authPrivacyLink => 'Privacy Policy';
+
+  @override
+  String get authAgreeTrail => '.';
+
+  @override
+  String get authAgreeRequired =>
+      'Please accept the Terms of Use and Privacy Policy to continue.';
+
+  @override
+  String authResendIn(String time) {
+    return 'Didn\'t get it? Resend in $time';
+  }
+
+  @override
+  String get authResendCode => 'Resend code';
 }

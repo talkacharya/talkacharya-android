@@ -62,6 +62,49 @@ void main() {
     ],
   );
 
+  test('accepting the terms on the phone step is sent with the sign-in', () async {
+    final config = _MockConfig();
+    when(() => config.value).thenReturn(
+      const RemoteConfig(
+        support: ConfigSupport(
+          termsVersion: '2026-10-07',
+          privacyVersion: '2026-09-01',
+        ),
+      ),
+    );
+    when(() => repo.requestOtp(any())).thenAnswer(
+      (_) async => OtpRequestResult(
+        challengeId: 'c1',
+        expiresAt: DateTime.now().add(const Duration(minutes: 5)),
+      ),
+    );
+    when(
+      () => repo.verifyOtp(
+        phone: any(named: 'phone'),
+        code: any(named: 'code'),
+        consent: any(named: 'consent'),
+      ),
+    ).thenAnswer((_) async => const AuthUser(id: 'u1', phone: '+919565901765'));
+    final cubit = LoginCubit(repo: repo, authBloc: authBloc, config: config);
+
+    await cubit.requestOtp('9565901765', acceptedTerms: true);
+    await cubit.requestOtp('9565901765'); // a resend keeps the answer
+    await cubit.verifyOtp('901765');
+
+    verify(
+      () => repo.verifyOtp(
+        phone: '+919565901765',
+        code: '901765',
+        consent: {
+          'accepted': true,
+          'terms_version': '2026-10-07',
+          'privacy_version': '2026-09-01',
+        },
+      ),
+    ).called(1);
+    await cubit.close();
+  });
+
   blocTest<LoginCubit, LoginState>(
     'verify success pushes AuthLoggedIn',
     build: build,

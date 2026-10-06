@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../bloc/login/login_cubit.dart';
 import 'widgets/auth_scaffold.dart';
+import 'widgets/legal_consent.dart';
 import 'widgets/phone_field.dart';
 import 'widgets/primary_button.dart';
 
@@ -16,6 +18,13 @@ class PhonePage extends StatefulWidget {
 
 class _PhonePageState extends State<PhonePage> {
   final _controller = TextEditingController();
+
+  /// The Terms and the Privacy Policy have been accepted. Asked for on every
+  /// sign-in: nobody gets a code without it.
+  bool _accepted = false;
+
+  /// They tried to continue without accepting — point at the tick box.
+  bool _nudge = false;
 
   @override
   void initState() {
@@ -32,21 +41,13 @@ class _PhonePageState extends State<PhonePage> {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
+    final theme = Theme.of(context);
     return AuthScaffold(
       title: l.authPhoneTitle,
       subtitle: l.authPhoneSubtitle,
       child: BlocConsumer<LoginCubit, LoginState>(
         listenWhen: (a, b) => a.error != b.error && b.error != null,
-        listener: (context, state) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text(state.error!),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-        },
+        listener: (context, state) => _say(context, state.error!),
         builder: (context, state) {
           final valid = _controller.text.length == 10;
 
@@ -55,9 +56,8 @@ class _PhonePageState extends State<PhonePage> {
             children: [
               Text(
                 l.authPhoneHint,
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 13,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: context.brand.inkMuted,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -67,21 +67,21 @@ class _PhonePageState extends State<PhonePage> {
                 enabled: !state.submitting,
                 onSubmit: valid ? () => _submit(context) : null,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
+              LegalConsent(
+                accepted: _accepted,
+                enabled: !state.submitting,
+                highlight: _nudge,
+                onChanged: (v) => setState(() {
+                  _accepted = v;
+                  _nudge = false;
+                }),
+              ),
+              const SizedBox(height: 20),
               PrimaryButton(
                 label: l.authGetOtp,
                 loading: state.submitting,
                 onPressed: valid ? () => _submit(context) : null,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                l.authTermsNotice,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.4),
-                  fontSize: 12,
-                  height: 1.5,
-                ),
               ),
             ],
           );
@@ -90,8 +90,24 @@ class _PhonePageState extends State<PhonePage> {
     );
   }
 
+  void _say(BuildContext context, String message) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(content: Text(message), behavior: SnackBarBehavior.floating),
+      );
+  }
+
   void _submit(BuildContext context) {
     FocusScope.of(context).unfocus();
-    context.read<LoginCubit>().requestOtp(_controller.text);
+    if (!_accepted) {
+      setState(() => _nudge = true);
+      _say(context, context.l10n.authAgreeRequired);
+      return;
+    }
+    context.read<LoginCubit>().requestOtp(
+      _controller.text,
+      acceptedTerms: true,
+    );
   }
 }

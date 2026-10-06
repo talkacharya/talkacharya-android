@@ -12685,6 +12685,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Welcome offer: we credit them back to your wallet when the session ends.'**
   String get bookWelcomeBody;
+
+  /// No description provided for @authNewHere.
+  ///
+  /// In en, this message translates to:
+  /// **'New here? Just enter your number — we\'ll set up your account automatically.'**
+  String get authNewHere;
+
+  /// No description provided for @authAgreeLead.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the '**
+  String get authAgreeLead;
+
+  /// No description provided for @authTermsLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get authTermsLink;
+
+  /// No description provided for @authAgreeAnd.
+  ///
+  /// In en, this message translates to:
+  /// **' and the '**
+  String get authAgreeAnd;
+
+  /// No description provided for @authPrivacyLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get authPrivacyLink;
+
+  /// No description provided for @authAgreeTrail.
+  ///
+  /// In en, this message translates to:
+  /// **'.'**
+  String get authAgreeTrail;
+
+  /// No description provided for @authAgreeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please accept the Terms of Use and Privacy Policy to continue.'**
+  String get authAgreeRequired;
+
+  /// No description provided for @authResendIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Didn\'t get it? Resend in {time}'**
+  String authResendIn(String time);
+
+  /// No description provided for @authResendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code'**
+  String get authResendCode;
 }
 
 class _AppLocalizationsDelegate

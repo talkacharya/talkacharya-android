@@ -8,7 +8,7 @@ import 'widgets/auth_scaffold.dart';
 import 'widgets/primary_button.dart';
 import 'widgets/resend_timer.dart';
 
-const _gold = Color(0xFFC5A358);
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 class OtpPage extends StatefulWidget {
   const OtpPage({super.key});
@@ -28,31 +28,36 @@ class _OtpPageState extends State<OtpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final brand = context.brand;
     final defaultPin = PinTheme(
       width: 48,
       height: 54,
-      textStyle: const TextStyle(
+      textStyle: TextStyle(
         fontSize: 22,
-        color: Colors.white,
+        color: brand.ink,
         fontWeight: FontWeight.w700,
       ),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.04),
+        color: scheme.surfaceContainerHighest.withValues(alpha: 0.45),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        border: Border.all(color: brand.hairline),
       ),
     );
     final focusedPin = defaultPin.copyWith(
       decoration: defaultPin.decoration!.copyWith(
-        border: Border.all(color: _gold, width: 1.5),
+        border: Border.all(color: scheme.primary, width: 1.5),
         boxShadow: [
-          BoxShadow(color: _gold.withValues(alpha: 0.2), blurRadius: 10),
+          BoxShadow(
+            color: scheme.primary.withValues(alpha: 0.18),
+            blurRadius: 10,
+          ),
         ],
       ),
     );
     final submittedPin = defaultPin.copyWith(
       decoration: defaultPin.decoration!.copyWith(
-        border: Border.all(color: _gold.withValues(alpha: 0.5)),
+        border: Border.all(color: scheme.primary.withValues(alpha: 0.5)),
       ),
     );
 
@@ -92,7 +97,11 @@ class _OtpPageState extends State<OtpPage> {
                   separatorBuilder: (_) => const SizedBox(width: 8),
                   hapticFeedbackType: HapticFeedbackType.lightImpact,
                   onCompleted: (_) => _submit(context, state),
-                  cursor: Container(width: 2, height: 22, color: _gold),
+                  cursor: Container(
+                    width: 2,
+                    height: 22,
+                    color: scheme.primary,
+                  ),
                 ),
               ),
               if (state.devCode != null) ...[
@@ -146,21 +155,22 @@ class _DevCodeHint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: _gold.withValues(alpha: 0.12),
+        color: scheme.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: _gold.withValues(alpha: 0.3)),
+        border: Border.all(color: scheme.primary.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
-          const Icon(Icons.info_outline_rounded, size: 16, color: _gold),
+          Icon(Icons.info_outline_rounded, size: 16, color: scheme.primary),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               context.l10n.authTestModeCode(code),
-              style: const TextStyle(color: Colors.white70, fontSize: 12.5),
+              style: TextStyle(color: context.brand.inkMuted, fontSize: 12.5),
             ),
           ),
         ],

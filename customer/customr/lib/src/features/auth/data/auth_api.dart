@@ -48,6 +48,7 @@ class AuthApi {
     required String code,
     String purpose = 'login',
     Map<String, dynamic>? device,
+    Map<String, dynamic>? consent,
   }) {
     return _guard(
       () => _dio.post<Map<String, dynamic>>(
@@ -57,6 +58,7 @@ class AuthApi {
           'code': code,
           'purpose': purpose,
           'device': ?device,
+          'consent': ?consent,
         },
       ),
       AuthSession.fromJson,
@@ -67,11 +69,12 @@ class AuthApi {
   Future<AuthSession> loginWithFirebase({
     required String idToken,
     Map<String, dynamic>? device,
+    Map<String, dynamic>? consent,
   }) {
     return _guard(
       () => _dio.post<Map<String, dynamic>>(
         ApiPaths.authFirebase,
-        data: {'id_token': idToken, 'device': ?device},
+        data: {'id_token': idToken, 'device': ?device, 'consent': ?consent},
       ),
       AuthSession.fromJson,
     );

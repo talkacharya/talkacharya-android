@@ -7401,4 +7401,35 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get bookWelcomeBody =>
       'वेलकम ऑफ़र: सेशन खत्म होते ही इनका पैसा आपके वॉलेट में वापस आ जाएगा।';
+
+  @override
+  String get authNewHere =>
+      'पहली बार आए हैं? बस अपना नंबर डालें — आपका अकाउंट अपने आप बन जाएगा।';
+
+  @override
+  String get authAgreeLead => 'मैं ';
+
+  @override
+  String get authTermsLink => 'उपयोग की शर्तों';
+
+  @override
+  String get authAgreeAnd => ' और ';
+
+  @override
+  String get authPrivacyLink => 'गोपनीयता नीति';
+
+  @override
+  String get authAgreeTrail => ' से सहमत हूँ।';
+
+  @override
+  String get authAgreeRequired =>
+      'आगे बढ़ने के लिए उपयोग की शर्तें और गोपनीयता नीति स्वीकार करें।';
+
+  @override
+  String authResendIn(String time) {
+    return 'कोड नहीं मिला? $time में दोबारा भेजें';
+  }
+
+  @override
+  String get authResendCode => 'कोड दोबारा भेजें';
 }

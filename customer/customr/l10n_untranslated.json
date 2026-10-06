@@ -369,7 +369,16 @@
     "astroOfferEnds",
     "bookOfferApplied",
     "bookWelcomeTitle",
-    "bookWelcomeBody"
+    "bookWelcomeBody",
+    "authNewHere",
+    "authAgreeLead",
+    "authTermsLink",
+    "authAgreeAnd",
+    "authPrivacyLink",
+    "authAgreeTrail",
+    "authAgreeRequired",
+    "authResendIn",
+    "authResendCode"
   ],
 
   "gu": [
@@ -742,7 +751,16 @@
     "astroOfferEnds",
     "bookOfferApplied",
     "bookWelcomeTitle",
-    "bookWelcomeBody"
+    "bookWelcomeBody",
+    "authNewHere",
+    "authAgreeLead",
+    "authTermsLink",
+    "authAgreeAnd",
+    "authPrivacyLink",
+    "authAgreeTrail",
+    "authAgreeRequired",
+    "authResendIn",
+    "authResendCode"
   ],
 
   "kn": [
@@ -1115,7 +1133,16 @@
     "astroOfferEnds",
     "bookOfferApplied",
     "bookWelcomeTitle",
-    "bookWelcomeBody"
+    "bookWelcomeBody",
+    "authNewHere",
+    "authAgreeLead",
+    "authTermsLink",
+    "authAgreeAnd",
+    "authPrivacyLink",
+    "authAgreeTrail",
+    "authAgreeRequired",
+    "authResendIn",
+    "authResendCode"
   ],
 
   "mr": [
@@ -1488,7 +1515,16 @@
     "astroOfferEnds",
     "bookOfferApplied",
     "bookWelcomeTitle",
-    "bookWelcomeBody"
+    "bookWelcomeBody",
+    "authNewHere",
+    "authAgreeLead",
+    "authTermsLink",
+    "authAgreeAnd",
+    "authPrivacyLink",
+    "authAgreeTrail",
+    "authAgreeRequired",
+    "authResendIn",
+    "authResendCode"
   ],
 
   "ta": [
@@ -1861,7 +1897,16 @@
     "astroOfferEnds",
     "bookOfferApplied",
     "bookWelcomeTitle",
-    "bookWelcomeBody"
+    "bookWelcomeBody",
+    "authNewHere",
+    "authAgreeLead",
+    "authTermsLink",
+    "authAgreeAnd",
+    "authPrivacyLink",
+    "authAgreeTrail",
+    "authAgreeRequired",
+    "authResendIn",
+    "authResendCode"
   ],
 
   "te": [
@@ -2234,6 +2279,15 @@
     "astroOfferEnds",
     "bookOfferApplied",
     "bookWelcomeTitle",
-    "bookWelcomeBody"
+    "bookWelcomeBody",
+    "authNewHere",
+    "authAgreeLead",
+    "authTermsLink",
+    "authAgreeAnd",
+    "authPrivacyLink",
+    "authAgreeTrail",
+    "authAgreeRequired",
+    "authResendIn",
+    "authResendCode"
   ]
 }

@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 
-const _gold = Color(0xFFC5A358);
+import '../../../../../core/l10n/l10n.dart';
 
 /// "Resend code" control with a cooldown. Pass a new [resetToken] (e.g. the
 /// challenge expiry) to restart the countdown after a fresh code is sent.
@@ -58,24 +59,14 @@ class _ResendTimerState extends State<ResendTimer> {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
+    final scheme = Theme.of(context).colorScheme;
+    final brand = context.brand;
+
     if (_remaining > 0) {
-      return Text.rich(
-        TextSpan(
-          text: "Didn't get it? Resend in ",
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.45),
-            fontSize: 13,
-          ),
-          children: [
-            TextSpan(
-              text: '0:${_remaining.toString().padLeft(2, '0')}',
-              style: const TextStyle(
-                fontWeight: FontWeight.w700,
-                color: Colors.white70,
-              ),
-            ),
-          ],
-        ),
+      return Text(
+        l.authResendIn('0:${_remaining.toString().padLeft(2, '0')}'),
+        style: TextStyle(color: brand.inkMuted, fontSize: 13),
       );
     }
 
@@ -86,10 +77,10 @@ class _ResendTimerState extends State<ResendTimer> {
               _start();
             }
           : null,
-      child: const Text(
-        'Resend code',
+      child: Text(
+        l.authResendCode,
         style: TextStyle(
-          color: _gold,
+          color: scheme.primary,
           fontWeight: FontWeight.w700,
           fontSize: 13,
         ),

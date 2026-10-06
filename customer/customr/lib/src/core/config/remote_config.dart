@@ -94,6 +94,11 @@ abstract class ConfigSupport with _$ConfigSupport {
     @JsonKey(name: 'help_url') @Default('') String helpUrl,
     @JsonKey(name: 'terms_url') @Default('') String termsUrl,
     @JsonKey(name: 'privacy_url') @Default('') String privacyUrl,
+
+    /// Which version of each document is in force; sent back with a sign-in
+    /// so the server records what was accepted.
+    @JsonKey(name: 'terms_version') @Default('') String termsVersion,
+    @JsonKey(name: 'privacy_version') @Default('') String privacyVersion,
   }) = _ConfigSupport;
 
   factory ConfigSupport.fromJson(Map<String, dynamic> json) =>

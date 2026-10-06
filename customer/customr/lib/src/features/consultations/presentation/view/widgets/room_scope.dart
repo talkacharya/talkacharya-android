@@ -52,7 +52,9 @@ class RoomScope extends StatelessWidget {
             outbox: SecureStorageChatOutbox(getIt()),
             store: getIt<FloorChatStore>(),
             sounds: const AppChatSounds(),
-            recorder: DeviceVoiceRecorder(),
+            // No recorder: a customer writes and sends photos, but does not
+            // send voice messages. The player stays, so the astrologer's
+            // voice messages can still be heard.
             voicePlayer: DeviceVoicePlayer(),
             media: getIt<ChatMediaStore>(),
           )..start(),

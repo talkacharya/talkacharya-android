@@ -21,14 +21,18 @@ class AuthRepository {
   Future<OtpRequestResult> requestOtp(String phone) =>
       _api.requestOtp(phone: phone);
 
+  /// [consent] is the acceptance of the Terms and the Privacy Policy given on
+  /// the sign-in screen; the server keeps it as the compliance record.
   Future<AuthUser> verifyOtp({
     required String phone,
     required String code,
+    Map<String, dynamic>? consent,
   }) async {
     final session = await _api.verifyOtp(
       phone: phone,
       code: code,
       device: _devicePayload(),
+      consent: consent,
     );
     await _persist(session);
     await _cacheUser(session.user);
@@ -36,10 +40,14 @@ class AuthRepository {
   }
 
   /// Exchange a verified Firebase ID token for our session.
-  Future<AuthUser> loginWithFirebase(String idToken) async {
+  Future<AuthUser> loginWithFirebase(
+    String idToken, {
+    Map<String, dynamic>? consent,
+  }) async {
     final session = await _api.loginWithFirebase(
       idToken: idToken,
       device: _devicePayload(),
+      consent: consent,
     );
     await _persist(session);
     await _cacheUser(session.user);

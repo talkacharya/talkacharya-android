@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-
-import 'auth_background.dart';
 import 'package:talkacharya_ui/talkacharya_ui.dart';
-const _gold = Color(0xFFC5A358);
 
-/// Dark, celestial chrome shared by the phone and OTP steps: a starfield
-/// backdrop, the app mark, a headline, and a frosted card holding [child].
+import '../../../../../core/l10n/l10n.dart';
+import 'auth_background.dart';
+
+/// Chrome shared by the phone and OTP steps, in the app's theme: the backdrop,
+/// the app's logo and name, a headline, and a card holding [child].
 class AuthScaffold extends StatelessWidget {
   const AuthScaffold({
     required this.child,
-    this.title = 'Welcome',
+    required this.title,
     this.subtitle,
     this.onBack,
     super.key,
@@ -22,8 +22,12 @@ class AuthScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final brand = context.brand;
+
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: brand.canvas,
       body: AuthBackground(
         child: SafeArea(
           child: Center(
@@ -34,46 +38,15 @@ class AuthScaffold extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    const FadeSlideIn(child: _Logo()),
+                    const SizedBox(height: 16),
                     FadeSlideIn(
-                      child: Container(
-                        width: 76,
-                        height: 76,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: _gold.withValues(alpha: 0.4),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: _gold.withValues(alpha: 0.12),
-                              blurRadius: 20,
-                            ),
-                          ],
-                        ),
-                        child: ClipOval(
-                          child: Image.asset(
-                            'assets/images/logo.png',
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, _, _) => const Center(
-                              child: Icon(
-                                Icons.nightlight_round,
-                                color: _gold,
-                                size: 34,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    const FadeSlideIn(
-                      delay: Duration(milliseconds: 90),
+                      delay: const Duration(milliseconds: 90),
                       child: Text(
                         'TALKACHARYA',
-                        style: TextStyle(
-                          color: _gold,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          color: scheme.primary,
+                          fontWeight: FontWeight.w800,
                           letterSpacing: 3,
                         ),
                       ),
@@ -84,24 +57,22 @@ class AuthScaffold extends StatelessWidget {
                       child: Text(
                         title,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 28,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          color: brand.ink,
                           fontWeight: FontWeight.w700,
                           height: 1.2,
                         ),
                       ),
                     ),
                     if (subtitle != null) ...[
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 8),
                       FadeSlideIn(
                         delay: const Duration(milliseconds: 220),
                         child: Text(
                           subtitle!,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.65),
-                            fontSize: 14,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: brand.inkMuted,
                             height: 1.5,
                           ),
                         ),
@@ -110,18 +81,16 @@ class AuthScaffold extends StatelessWidget {
                     const SizedBox(height: 24),
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 280),
-                      child: _GlassCard(onBack: onBack, child: child),
+                      child: _Card(onBack: onBack, child: child),
                     ),
                     const SizedBox(height: 20),
                     FadeSlideIn(
                       delay: const Duration(milliseconds: 360),
                       child: Text(
-                        'New here? Just enter your number — '
-                        'we\'ll set up your account automatically.',
+                        context.l10n.authNewHere,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.4),
-                          fontSize: 12.5,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: brand.inkMuted,
                           height: 1.5,
                         ),
                       ),
@@ -137,25 +106,67 @@ class AuthScaffold extends StatelessWidget {
   }
 }
 
-class _GlassCard extends StatelessWidget {
-  const _GlassCard({required this.child, this.onBack});
+/// The app's logo — the same mark as the launcher icon and the splash.
+class _Logo extends StatelessWidget {
+  const _Logo();
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      width: 104,
+      height: 104,
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        // The logo is drawn on this cream; keeping it in dark mode too lets
+        // the mark read as one badge instead of a pale square.
+        color: const Color(0xFFFFF8F4),
+        border: Border.all(color: scheme.primary.withValues(alpha: 0.35)),
+        boxShadow: [
+          BoxShadow(
+            color: scheme.primary.withValues(alpha: 0.22),
+            blurRadius: 26,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: ClipOval(
+        child: Image.asset(
+          'assets/icons/logo.jpeg',
+          fit: BoxFit.cover,
+          errorBuilder: (_, _, _) => Icon(
+            Icons.auto_awesome_rounded,
+            color: scheme.primary,
+            size: 40,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Card extends StatelessWidget {
+  const _Card({required this.child, this.onBack});
 
   final Widget child;
   final VoidCallback? onBack;
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final brand = context.brand;
     return Container(
-      padding: EdgeInsets.fromLTRB(24, onBack != null ? 16 : 28, 24, 28),
+      padding: EdgeInsets.fromLTRB(20, onBack != null ? 12 : 24, 20, 24),
       decoration: BoxDecoration(
-        color: const Color(0xFF161622).withValues(alpha: 0.92),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        color: scheme.surface,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: brand.hairline),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.4),
-            blurRadius: 36,
-            offset: const Offset(0, 18),
+            color: scheme.primary.withValues(alpha: 0.08),
+            blurRadius: 30,
+            offset: const Offset(0, 14),
           ),
         ],
       ),
@@ -165,15 +176,15 @@ class _GlassCard extends StatelessWidget {
         children: [
           if (onBack != null)
             Align(
-              alignment: Alignment.centerLeft,
+              alignment: AlignmentDirectional.centerStart,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: IconButton(
                   onPressed: onBack,
                   icon: const Icon(Icons.arrow_back_rounded, size: 20),
-                  color: _gold,
+                  color: scheme.primary,
                   style: IconButton.styleFrom(
-                    backgroundColor: Colors.white.withValues(alpha: 0.05),
+                    backgroundColor: scheme.primary.withValues(alpha: 0.08),
                   ),
                 ),
               ),

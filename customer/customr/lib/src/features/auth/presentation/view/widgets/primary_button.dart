@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/utils/haptic_service.dart';
-
 import 'package:talkacharya_ui/talkacharya_ui.dart';
-const _gold = Color(0xFFC5A358);
 
-/// Gold gradient CTA for the auth screens. Disabled + loading states dim it.
+
+/// The sign-in screens' main button, filled with the app's primary colour.
+/// Disabled and loading states dim it.
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
     required this.label,
@@ -19,22 +18,22 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final active = onPressed != null && !loading;
+    final idle = scheme.onSurface.withValues(alpha: 0.10);
 
     return Pressable(
       haptic: active ? HapticLevel.medium : HapticLevel.none,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
-        height: 56,
+        height: 54,
         decoration: BoxDecoration(
-          gradient: active
-              ? const LinearGradient(colors: [Color(0xFFF6D695), _gold])
-              : const LinearGradient(colors: [Colors.white10, Colors.white10]),
-          borderRadius: BorderRadius.circular(28),
+          color: active || loading ? scheme.primary : idle,
+          borderRadius: BorderRadius.circular(27),
           boxShadow: active
               ? [
                   BoxShadow(
-                    color: _gold.withValues(alpha: 0.3),
+                    color: scheme.primary.withValues(alpha: 0.30),
                     blurRadius: 16,
                     offset: const Offset(0, 6),
                   ),
@@ -45,21 +44,23 @@ class PrimaryButton extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: loading ? null : onPressed,
-            borderRadius: BorderRadius.circular(28),
+            borderRadius: BorderRadius.circular(27),
             child: Center(
               child: loading
-                  ? const SizedBox(
+                  ? SizedBox(
                       height: 22,
                       width: 22,
                       child: CircularProgressIndicator(
                         strokeWidth: 2.5,
-                        color: Colors.black87,
+                        color: scheme.onPrimary,
                       ),
                     )
                   : Text(
                       label,
                       style: TextStyle(
-                        color: active ? Colors.black87 : Colors.white38,
+                        color: active
+                            ? scheme.onPrimary
+                            : scheme.onSurface.withValues(alpha: 0.38),
                         fontWeight: FontWeight.w700,
                         fontSize: 16,
                         letterSpacing: 0.3,

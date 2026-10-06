@@ -4294,5 +4294,21 @@
       }
     }
   },
-  "bookWelcomeBody": "Welcome offer: we credit them back to your wallet when the session ends."
+  "bookWelcomeBody": "Welcome offer: we credit them back to your wallet when the session ends.",
+  "authNewHere": "New here? Just enter your number — we'll set up your account automatically.",
+  "authAgreeLead": "I agree to the ",
+  "authTermsLink": "Terms of Use",
+  "authAgreeAnd": " and the ",
+  "authPrivacyLink": "Privacy Policy",
+  "authAgreeTrail": ".",
+  "authAgreeRequired": "Please accept the Terms of Use and Privacy Policy to continue.",
+  "authResendIn": "Didn't get it? Resend in {time}",
+  "@authResendIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "authResendCode": "Resend code"
 }
