@@ -2858,4 +2858,94 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get wsGalleryReviewed =>
       'नई फ़ोटो ग्राहकों को दिखने से पहले जाँची जाती हैं। इसमें आमतौर पर एक दिन लगता है।';
+
+  @override
+  String get ccTool => 'कुंडली';
+
+  @override
+  String get ccTitle => 'कुंडली';
+
+  @override
+  String get ccSubtitle =>
+      'वे कुंडलियाँ जो आप खुद बनाते हैं — कोई मिलने आया, फ़ोन का ग्राहक, परिवार। ये सिर्फ़ आपको दिखती हैं।';
+
+  @override
+  String get ccNew => 'नई कुंडली';
+
+  @override
+  String get ccEmpty => 'अभी कोई कुंडली नहीं';
+
+  @override
+  String get ccEmptyBody =>
+      'किसी के जन्म का विवरण जोड़ें और उनकी पूरी कुंडली देखें: चार्ट, दशा, योग, दोष और बहुत कुछ।';
+
+  @override
+  String ccMoonSign(String sign) {
+    return 'चंद्र राशि $sign';
+  }
+
+  @override
+  String ccDeleteTitle(String name) {
+    return '$name को हटाएँ?';
+  }
+
+  @override
+  String get ccDeleteBody =>
+      'उनकी कुंडली आपकी सूची से हट जाएगी। इससे किए गए मिलान भी हट जाएँगे।';
+
+  @override
+  String get ccName => 'नाम';
+
+  @override
+  String get ccMale => 'पुरुष';
+
+  @override
+  String get ccFemale => 'महिला';
+
+  @override
+  String get ccOther => 'अन्य';
+
+  @override
+  String get ccBirthDate => 'जन्म तिथि';
+
+  @override
+  String get ccBirthTime => 'जन्म समय';
+
+  @override
+  String get ccTimeUnknown => 'जन्म समय पता नहीं';
+
+  @override
+  String get ccTimeUnknownHint =>
+      'इसके बिना लग्न और भावों पर भरोसा नहीं किया जा सकता; ग्रह और चंद्र राशि फिर भी सही रहते हैं।';
+
+  @override
+  String get ccBirthPlace => 'जन्म स्थान';
+
+  @override
+  String get ccSave => 'कुंडली बनाएँ';
+
+  @override
+  String get mmTitle => 'कुंडली मिलान';
+
+  @override
+  String get mmSubtitle => 'आपकी सहेजी हुई दो कुंडलियों के बीच गुण मिलान।';
+
+  @override
+  String get mmBoy => 'वर';
+
+  @override
+  String get mmGirl => 'कन्या';
+
+  @override
+  String get mmRun => 'कुंडली मिलाएँ';
+
+  @override
+  String get mmRecent => 'हाल के मिलान';
+
+  @override
+  String get mmNeedTwo => 'पहले दो कुंडलियाँ जोड़ें';
+
+  @override
+  String get mmNeedTwoBody =>
+      'मिलान दो सहेजी हुई कुंडलियों की तुलना करता है। शुरू करने के लिए वर और कन्या का जन्म विवरण जोड़ें।';
 }

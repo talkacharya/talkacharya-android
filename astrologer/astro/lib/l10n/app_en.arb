@@ -2079,5 +2079,46 @@
   "wsHelpNone": "Support contact details aren't available right now.",
   "wsPhotoPending": "In review",
   "wsPhotoRejected": "Not approved\nTap for why",
-  "wsGalleryReviewed": "New photos are reviewed before customers see them. This usually takes a day."
+  "wsGalleryReviewed": "New photos are reviewed before customers see them. This usually takes a day.",
+  "ccTool": "Kundli",
+  "ccTitle": "Kundli",
+  "ccSubtitle": "Charts you cast yourself — a walk-in, a phone client, family. Only you see them.",
+  "ccNew": "New chart",
+  "ccEmpty": "No charts yet",
+  "ccEmptyBody": "Add someone's birth details to see their full kundali: charts, dasha, yogas, doshas and more.",
+  "ccMoonSign": "Moon in {sign}",
+  "@ccMoonSign": {
+    "placeholders": {
+      "sign": {
+        "type": "String"
+      }
+    }
+  },
+  "ccDeleteTitle": "Remove {name}?",
+  "@ccDeleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ccDeleteBody": "Their chart is removed from your list. Matches you ran with it go too.",
+  "ccName": "Name",
+  "ccMale": "Male",
+  "ccFemale": "Female",
+  "ccOther": "Other",
+  "ccBirthDate": "Date of birth",
+  "ccBirthTime": "Time of birth",
+  "ccTimeUnknown": "Time of birth not known",
+  "ccTimeUnknownHint": "The lagna and houses can't be trusted without it; planets and the Moon sign still can.",
+  "ccBirthPlace": "Place of birth",
+  "ccSave": "Cast chart",
+  "mmTitle": "Matchmaking",
+  "mmSubtitle": "Guna Milan between two of your saved charts.",
+  "mmBoy": "Boy",
+  "mmGirl": "Girl",
+  "mmRun": "Match kundlis",
+  "mmRecent": "Recent matches",
+  "mmNeedTwo": "Add two charts first",
+  "mmNeedTwoBody": "Matchmaking compares two saved charts. Add the boy's and the girl's birth details to begin."
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/di/service_locator.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/router/routes.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../data/consultation_api.dart';
@@ -9,6 +12,7 @@ import '../../data/models/consultation_share.dart';
 import '../widgets/shared_details.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// The Guna Milan report the customer shared: score, the two people, the koota
 /// table and doshas.
 class MatchReportPage extends StatefulWidget {
@@ -16,10 +20,19 @@ class MatchReportPage extends StatefulWidget {
     required this.consultationId,
     required this.matchId,
     super.key,
-  });
+  }) : report = null;
+
+  /// A match the astrologer ran between two of their own saved charts: the
+  /// report is already in hand, and each person opens as a saved chart.
+  const MatchReportPage.standalone({
+    required MatchReport this.report,
+    super.key,
+  }) : consultationId = '',
+       matchId = '';
 
   final String consultationId;
   final String matchId;
+  final MatchReport? report;
 
   @override
   State<MatchReportPage> createState() => _MatchReportPageState();
@@ -28,10 +41,14 @@ class MatchReportPage extends StatefulWidget {
 class _MatchReportPageState extends State<MatchReportPage> {
   late Future<MatchReport> _future = _load();
 
-  Future<MatchReport> _load() => getIt<ConsultationApi>().sharedMatch(
-    widget.consultationId,
-    widget.matchId,
-  );
+  Future<MatchReport> _load() {
+    final ready = widget.report;
+    if (ready != null) return Future.value(ready);
+    return getIt<ConsultationApi>().sharedMatch(
+      widget.consultationId,
+      widget.matchId,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,16 +76,30 @@ class _MatchReportPageState extends State<MatchReportPage> {
           title: l.matchReportTitle,
           children: [
             _Score(report: r),
-            if (r.summary.boy != null)
-              SharedPersonCard(
-                consultationId: widget.consultationId,
-                person: r.summary.boy!,
-              ),
-            if (r.summary.girl != null)
-              SharedPersonCard(
-                consultationId: widget.consultationId,
-                person: r.summary.girl!,
-              ),
+            for (final person in [r.summary.boy, r.summary.girl])
+              if (person != null)
+                if (widget.report == null)
+                  SharedPersonCard(
+                    consultationId: widget.consultationId,
+                    person: person,
+                  )
+                else
+                  SettingsCard(
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: HueAvatar(
+                        name: person.name,
+                        hue: AstroPalette.forId(person.name),
+                        size: 40,
+                      ),
+                      title: Text(person.name),
+                      trailing: const Icon(Icons.chevron_right_rounded),
+                      onTap: () => context.push(
+                        Routes.clientKundali(person.id),
+                        extra: person.name,
+                      ),
+                    ),
+                  ),
             if (r.kootas.isNotEmpty)
               SettingsCard(
                 title: l.matchKootas,

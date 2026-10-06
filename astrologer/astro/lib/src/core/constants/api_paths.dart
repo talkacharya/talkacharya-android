@@ -47,6 +47,17 @@ class ApiPaths {
   static const astroQueue = '/astro/queue';
   static String astroQueueEntry(String id) => '/astro/queue/$id';
 
+  // charts the astrologer casts on their own. The chart engine's
+  // birth-profile endpoints sit on the shared `/app` mount and are open to
+  // any signed-in user, each seeing only their own profiles.
+  static const birthProfiles = '/app/birth-profiles';
+  static String birthProfile(String id) => '/app/birth-profiles/$id';
+  static String birthProfileKundali(String id, String sub) =>
+      '/app/birth-profiles/$id/$sub';
+  static const chartTypes = '/app/astrology/chart-types';
+  static const placesSearch = '/app/places/search';
+  static const matchmaking = '/app/matchmaking';
+
   // the astrologer's own corner
   static const astroAnnouncements = '/astro/announcements';
   static const astroTrainingVideos = '/astro/training-videos';

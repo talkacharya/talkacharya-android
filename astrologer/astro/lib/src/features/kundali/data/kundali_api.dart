@@ -7,7 +7,7 @@ import '../../../core/network/api_exception.dart';
 /// (`/api/v1/astro/consultations/{id}/{sub}`). Every method returns the raw
 /// `{kind, language, payload}` envelope; the models pull what they need.
 class KundaliApi {
-  KundaliApi(this._dio, {this.profileId});
+  KundaliApi(this._dio, {this.profileId, this.standalone = false});
 
   final Dio _dio;
 
@@ -16,9 +16,16 @@ class KundaliApi {
   /// shared kundali match).
   final String? profileId;
 
+  /// True when the id passed to each call is one of the astrologer's own
+  /// saved charts (a birth profile) rather than a consultation.
+  final bool standalone;
+
   /// A view of this API bound to one shared person.
   KundaliApi forProfile(String? id) =>
       id == null ? this : KundaliApi(_dio, profileId: id);
+
+  /// A view of this API that reads the astrologer's own saved charts.
+  KundaliApi forOwnCharts() => KundaliApi(_dio, standalone: true);
 
   Future<Map<String, dynamic>> _sub(
     String consultationId,
@@ -27,7 +34,12 @@ class KundaliApi {
   }) async {
     try {
       final res = await _dio.get<Map<String, dynamic>>(
-        ApiPaths.astroConsultationKundali(consultationId, sub),
+        !standalone
+            ? ApiPaths.astroConsultationKundali(consultationId, sub)
+            // The list of chart types is the same for everyone there.
+            : sub == 'chart-types'
+            ? ApiPaths.chartTypes
+            : ApiPaths.birthProfileKundali(consultationId, sub),
         queryParameters: {...?query, 'profile': ?profileId},
       );
       return res.data ?? const {};

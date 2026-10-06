@@ -108,6 +108,18 @@ List<ToolGroup> buildToolGroups(BuildContext context) {
         () => context.push(Routes.performance),
       ),
       ToolAction(
+        AstroPalette.career,
+        Icons.auto_awesome_rounded,
+        l.ccTool,
+        () => context.push(Routes.clientCharts),
+      ),
+      ToolAction(
+        AstroPalette.love,
+        Icons.favorite_border_rounded,
+        l.mmTitle,
+        () => context.push(Routes.matchmaking),
+      ),
+      ToolAction(
         AstroPalette.air,
         Icons.quickreply_rounded,
         l.wsReplies,

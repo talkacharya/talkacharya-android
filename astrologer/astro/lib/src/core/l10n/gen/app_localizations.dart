@@ -5005,6 +5005,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'New photos are reviewed before customers see them. This usually takes a day.'**
   String get wsGalleryReviewed;
+
+  /// No description provided for @ccTool.
+  ///
+  /// In en, this message translates to:
+  /// **'Kundli'**
+  String get ccTool;
+
+  /// No description provided for @ccTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Kundli'**
+  String get ccTitle;
+
+  /// No description provided for @ccSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Charts you cast yourself — a walk-in, a phone client, family. Only you see them.'**
+  String get ccSubtitle;
+
+  /// No description provided for @ccNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New chart'**
+  String get ccNew;
+
+  /// No description provided for @ccEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No charts yet'**
+  String get ccEmpty;
+
+  /// No description provided for @ccEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add someone\'s birth details to see their full kundali: charts, dasha, yogas, doshas and more.'**
+  String get ccEmptyBody;
+
+  /// No description provided for @ccMoonSign.
+  ///
+  /// In en, this message translates to:
+  /// **'Moon in {sign}'**
+  String ccMoonSign(String sign);
+
+  /// No description provided for @ccDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name}?'**
+  String ccDeleteTitle(String name);
+
+  /// No description provided for @ccDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Their chart is removed from your list. Matches you ran with it go too.'**
+  String get ccDeleteBody;
+
+  /// No description provided for @ccName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get ccName;
+
+  /// No description provided for @ccMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get ccMale;
+
+  /// No description provided for @ccFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get ccFemale;
+
+  /// No description provided for @ccOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get ccOther;
+
+  /// No description provided for @ccBirthDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth'**
+  String get ccBirthDate;
+
+  /// No description provided for @ccBirthTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Time of birth'**
+  String get ccBirthTime;
+
+  /// No description provided for @ccTimeUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Time of birth not known'**
+  String get ccTimeUnknown;
+
+  /// No description provided for @ccTimeUnknownHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The lagna and houses can\'t be trusted without it; planets and the Moon sign still can.'**
+  String get ccTimeUnknownHint;
+
+  /// No description provided for @ccBirthPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Place of birth'**
+  String get ccBirthPlace;
+
+  /// No description provided for @ccSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Cast chart'**
+  String get ccSave;
+
+  /// No description provided for @mmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Matchmaking'**
+  String get mmTitle;
+
+  /// No description provided for @mmSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Guna Milan between two of your saved charts.'**
+  String get mmSubtitle;
+
+  /// No description provided for @mmBoy.
+  ///
+  /// In en, this message translates to:
+  /// **'Boy'**
+  String get mmBoy;
+
+  /// No description provided for @mmGirl.
+  ///
+  /// In en, this message translates to:
+  /// **'Girl'**
+  String get mmGirl;
+
+  /// No description provided for @mmRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Match kundlis'**
+  String get mmRun;
+
+  /// No description provided for @mmRecent.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent matches'**
+  String get mmRecent;
+
+  /// No description provided for @mmNeedTwo.
+  ///
+  /// In en, this message translates to:
+  /// **'Add two charts first'**
+  String get mmNeedTwo;
+
+  /// No description provided for @mmNeedTwoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Matchmaking compares two saved charts. Add the boy\'s and the girl\'s birth details to begin.'**
+  String get mmNeedTwoBody;
 }
 
 class _AppLocalizationsDelegate

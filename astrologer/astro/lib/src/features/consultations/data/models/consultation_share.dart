@@ -38,7 +38,8 @@ class SharedPerson {
     return SharedPerson(
       id: '${j['id'] ?? ''}',
       label: j['label'] as String? ?? '',
-      fullName: j['full_name'] as String? ?? '',
+      // A match the astrologer ran themselves names its people with `name`.
+      fullName: j['full_name'] as String? ?? j['name'] as String? ?? '',
       relation: j['relation'] as String? ?? '',
       gender: j['gender'] as String? ?? '',
       birthDate: '${j['birth_date'] ?? ''}',

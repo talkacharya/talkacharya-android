@@ -1,6 +1,5 @@
 part of '../consultation_kundali_page.dart';
 
-
 class _BhavaTab extends StatefulWidget {
   const _BhavaTab();
   @override

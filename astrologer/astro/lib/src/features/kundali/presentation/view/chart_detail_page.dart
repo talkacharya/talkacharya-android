@@ -8,15 +8,20 @@ import '../../data/kundali_repository.dart';
 import '../cubit/kundali_cubit.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// One chart in full, reached from the "All charts" picker. Creates its own
 /// [KundaliCubit] for the consultation (charts cache per type).
 class ChartDetailPage extends StatelessWidget {
   const ChartDetailPage({
     required this.consultationId,
     required this.type,
+    this.standalone = false,
     super.key,
   });
   final String consultationId;
+
+  /// [consultationId] is one of the astrologer's own saved charts.
+  final bool standalone;
   final String type;
 
   @override
@@ -24,7 +29,9 @@ class ChartDetailPage extends StatelessWidget {
     return BlocProvider(
       create: (_) =>
           KundaliCubit(
-              repo: getIt<KundaliRepository>(),
+              repo: standalone
+                  ? getIt<KundaliRepository>().forOwnCharts()
+                  : getIt<KundaliRepository>(),
               consultationId: consultationId,
             )
             ..loadChartTypes()

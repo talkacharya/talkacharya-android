@@ -57,6 +57,12 @@ class Routes {
   static const quickReplies = '/quick-replies';
   static const calendar = '/calendar';
 
+  /// Charts cast outside any consultation, and Guna Milan between them.
+  static const clientCharts = '/client-charts';
+  static const clientChartNew = '/client-charts/new';
+  static String clientKundali(String id) => '/client-charts/$id/kundali';
+  static const matchmaking = '/matchmaking';
+
   static const waitlist = '/waitlist';
   static const callHistory = '/call-history';
   static const remedies = '/remedies';

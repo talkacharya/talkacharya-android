@@ -1,6 +1,5 @@
 part of '../consultation_kundali_page.dart';
 
-
 class _AdvancedTab extends StatefulWidget {
   const _AdvancedTab();
   @override
@@ -150,7 +149,10 @@ class _KeyValues extends StatelessWidget {
 
     final entries = data.entries.where((e) => e.key != 'engine').toList();
     if (entries.isEmpty) {
-      return Text(context.l10n.kundaliNoData, style: const TextStyle(fontSize: 12.5));
+      return Text(
+        context.l10n.kundaliNoData,
+        style: const TextStyle(fontSize: 12.5),
+      );
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

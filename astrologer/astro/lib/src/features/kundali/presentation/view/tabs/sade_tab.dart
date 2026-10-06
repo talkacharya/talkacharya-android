@@ -1,6 +1,5 @@
 part of '../consultation_kundali_page.dart';
 
-
 class _SadeSatiTab extends StatefulWidget {
   const _SadeSatiTab();
   @override

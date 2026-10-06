@@ -2865,4 +2865,94 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get wsGalleryReviewed =>
       'New photos are reviewed before customers see them. This usually takes a day.';
+
+  @override
+  String get ccTool => 'Kundli';
+
+  @override
+  String get ccTitle => 'Kundli';
+
+  @override
+  String get ccSubtitle =>
+      'Charts you cast yourself — a walk-in, a phone client, family. Only you see them.';
+
+  @override
+  String get ccNew => 'New chart';
+
+  @override
+  String get ccEmpty => 'No charts yet';
+
+  @override
+  String get ccEmptyBody =>
+      'Add someone\'s birth details to see their full kundali: charts, dasha, yogas, doshas and more.';
+
+  @override
+  String ccMoonSign(String sign) {
+    return 'Moon in $sign';
+  }
+
+  @override
+  String ccDeleteTitle(String name) {
+    return 'Remove $name?';
+  }
+
+  @override
+  String get ccDeleteBody =>
+      'Their chart is removed from your list. Matches you ran with it go too.';
+
+  @override
+  String get ccName => 'Name';
+
+  @override
+  String get ccMale => 'Male';
+
+  @override
+  String get ccFemale => 'Female';
+
+  @override
+  String get ccOther => 'Other';
+
+  @override
+  String get ccBirthDate => 'Date of birth';
+
+  @override
+  String get ccBirthTime => 'Time of birth';
+
+  @override
+  String get ccTimeUnknown => 'Time of birth not known';
+
+  @override
+  String get ccTimeUnknownHint =>
+      'The lagna and houses can\'t be trusted without it; planets and the Moon sign still can.';
+
+  @override
+  String get ccBirthPlace => 'Place of birth';
+
+  @override
+  String get ccSave => 'Cast chart';
+
+  @override
+  String get mmTitle => 'Matchmaking';
+
+  @override
+  String get mmSubtitle => 'Guna Milan between two of your saved charts.';
+
+  @override
+  String get mmBoy => 'Boy';
+
+  @override
+  String get mmGirl => 'Girl';
+
+  @override
+  String get mmRun => 'Match kundlis';
+
+  @override
+  String get mmRecent => 'Recent matches';
+
+  @override
+  String get mmNeedTwo => 'Add two charts first';
+
+  @override
+  String get mmNeedTwoBody =>
+      'Matchmaking compares two saved charts. Add the boy\'s and the girl\'s birth details to begin.';
 }

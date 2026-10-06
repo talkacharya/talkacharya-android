@@ -1,9 +1,9 @@
 part of '../consultation_kundali_page.dart';
 
-
 class _ChartsTab extends StatefulWidget {
-  const _ChartsTab({required this.consultationId});
+  const _ChartsTab({required this.consultationId, this.standalone = false});
   final String consultationId;
+  final bool standalone;
 
   @override
   State<_ChartsTab> createState() => _ChartsTabState();
@@ -41,7 +41,9 @@ class _ChartsTabState extends State<_ChartsTab>
       onPick: (t) {
         Navigator.of(context).pop();
         context.push(
-          '/consultations/${widget.consultationId}/kundali/chart/$t',
+          widget.standalone
+              ? '/client-charts/${widget.consultationId}/kundali/chart/$t'
+              : '/consultations/${widget.consultationId}/kundali/chart/$t',
         );
       },
     );

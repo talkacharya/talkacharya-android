@@ -24,6 +24,7 @@ import '../../features/workspace/presentation/view/calendar_page.dart';
 import '../../features/workspace/presentation/view/notices_pages.dart';
 import '../../features/workspace/presentation/view/people_pages.dart';
 import '../../features/workspace/presentation/view/studio_pages.dart';
+import '../../features/client_charts/presentation/view/client_charts_pages.dart';
 import '../../features/notifications/presentation/view/notifications_page.dart';
 import '../../features/onboarding/presentation/view/onboarding_gate_page.dart';
 import '../../features/onboarding/presentation/view/wizard_page.dart';
@@ -161,6 +162,39 @@ GoRouter buildRouter(
         path: Routes.calendar,
         parentNavigatorKey: _rootKey,
         builder: (_, _) => const CalendarPage(),
+      ),
+      GoRoute(
+        path: Routes.clientCharts,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const ClientChartsPage(),
+      ),
+      GoRoute(
+        path: Routes.clientChartNew,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const NewClientChartPage(),
+      ),
+      GoRoute(
+        path: '/client-charts/:id/kundali',
+        parentNavigatorKey: _rootKey,
+        builder: (_, s) => ConsultationKundaliPage(
+          consultationId: s.pathParameters['id']!,
+          clientName: s.extra is String ? s.extra as String : null,
+          standalone: true,
+        ),
+      ),
+      GoRoute(
+        path: '/client-charts/:id/kundali/chart/:type',
+        parentNavigatorKey: _rootKey,
+        builder: (_, s) => ChartDetailPage(
+          consultationId: s.pathParameters['id']!,
+          type: s.pathParameters['type']!,
+          standalone: true,
+        ),
+      ),
+      GoRoute(
+        path: Routes.matchmaking,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const MatchmakingPage(),
       ),
       GoRoute(
         path: Routes.waitlist,

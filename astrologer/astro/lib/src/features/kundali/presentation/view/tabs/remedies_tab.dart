@@ -1,6 +1,5 @@
 part of '../consultation_kundali_page.dart';
 
-
 class _RemediesTab extends StatefulWidget {
   const _RemediesTab();
   @override

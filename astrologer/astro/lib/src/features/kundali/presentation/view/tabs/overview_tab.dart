@@ -1,6 +1,5 @@
 part of '../consultation_kundali_page.dart';
 
-
 class _OverviewTab extends StatefulWidget {
   const _OverviewTab();
   @override

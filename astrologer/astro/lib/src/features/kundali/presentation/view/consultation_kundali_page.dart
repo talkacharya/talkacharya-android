@@ -12,6 +12,7 @@ import '../cubit/kundali_cubit.dart';
 import '../../../../shared/widgets/language_quick_button.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// The client's full kundali during a consultation — charts + planets + dasha
 /// + yogas + bhava + advanced strengths. All read consultation-scoped from the
 /// birth profile the customer shared.
@@ -32,9 +33,16 @@ class ConsultationKundaliPage extends StatelessWidget {
     required this.consultationId,
     this.clientName,
     this.profileId,
+    this.standalone = false,
     super.key,
   });
+
+  /// The consultation — or, when [standalone], one of the astrologer's own
+  /// saved charts.
   final String consultationId;
+
+  /// A chart the astrologer cast themselves, outside any consultation.
+  final bool standalone;
   final String? clientName;
 
   /// One of the people the customer shared; null = the primary profile.
@@ -42,14 +50,22 @@ class ConsultationKundaliPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lang = context.select((AuthBloc b) => b.state.user?.preferredLanguage);
+    final lang = context.select(
+      (AuthBloc b) => b.state.user?.preferredLanguage,
+    );
     return BlocProvider(
       key: ValueKey(lang),
       create: (_) => KundaliCubit(
-        repo: getIt<KundaliRepository>().forProfile(profileId),
+        repo: standalone
+            ? getIt<KundaliRepository>().forOwnCharts()
+            : getIt<KundaliRepository>().forProfile(profileId),
         consultationId: consultationId,
       )..loadOverview(),
-      child: _View(consultationId: consultationId, clientName: clientName),
+      child: _View(
+        consultationId: consultationId,
+        clientName: clientName,
+        standalone: standalone,
+      ),
     );
   }
 }
@@ -65,8 +81,13 @@ const _essentials = <String>[
 ];
 
 class _View extends StatelessWidget {
-  const _View({required this.consultationId, this.clientName});
+  const _View({
+    required this.consultationId,
+    this.clientName,
+    this.standalone = false,
+  });
   final String consultationId;
+  final bool standalone;
   final String? clientName;
 
   @override
@@ -81,9 +102,7 @@ class _View extends StatelessWidget {
                 ? l.kundaliTitle
                 : l.kundaliTitleFor(clientName!),
           ),
-          actions: const [
-            LanguageQuickButton(),
-          ],
+          actions: const [LanguageQuickButton()],
           bottom: TabBar(
             isScrollable: true,
             tabAlignment: TabAlignment.start,
@@ -104,7 +123,7 @@ class _View extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            _ChartsTab(consultationId: consultationId),
+            _ChartsTab(consultationId: consultationId, standalone: standalone),
             const _PlanetsTab(),
             const _DashaTab(),
             const _YogasTab(),

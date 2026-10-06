@@ -13,6 +13,10 @@ class KundaliRepository {
   KundaliRepository forProfile(String? id) =>
       id == null ? this : KundaliRepository(_api.forProfile(id));
 
+  /// A repository over the astrologer's own saved charts: every `id` is then
+  /// a saved chart's id instead of a consultation's.
+  KundaliRepository forOwnCharts() => KundaliRepository(_api.forOwnCharts());
+
   Future<Kundali> overview(String id) async =>
       Kundali.fromArtifact(await _api.overview(id));
 

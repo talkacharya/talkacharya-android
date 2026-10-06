@@ -1,6 +1,5 @@
 part of '../consultation_kundali_page.dart';
 
-
 class _PlanetsTab extends StatefulWidget {
   const _PlanetsTab();
   @override

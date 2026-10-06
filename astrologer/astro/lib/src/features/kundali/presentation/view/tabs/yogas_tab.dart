@@ -1,6 +1,5 @@
 part of '../consultation_kundali_page.dart';
 
-
 class _YogasTab extends StatefulWidget {
   const _YogasTab();
   @override

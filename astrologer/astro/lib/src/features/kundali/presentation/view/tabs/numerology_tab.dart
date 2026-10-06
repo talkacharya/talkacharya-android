@@ -1,6 +1,5 @@
 part of '../consultation_kundali_page.dart';
 
-
 class _NumerologyTab extends StatefulWidget {
   const _NumerologyTab();
   @override
