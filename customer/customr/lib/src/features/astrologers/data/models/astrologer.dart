@@ -36,6 +36,10 @@ abstract class Astrologer with _$Astrologer {
 
     /// Photos the astrologer put on their profile (approved ones only).
     @Default(<AstrologerPhoto>[]) List<AstrologerPhoto> gallery,
+
+    /// A discount the astrologer is running on their own rates right now,
+    /// when it applies to this viewer.
+    AstrologerOffer? offer,
   }) = _Astrologer;
 
   const Astrologer._();
@@ -59,6 +63,22 @@ abstract class Astrologer with _$Astrologer {
     return null;
   }
 
+  /// Percent off [channel] under the running offer; 0 when there is none or
+  /// it does not cover that channel.
+  int offerPercentFor(String channel) {
+    final o = offer;
+    if (o == null) return 0;
+    if (o.channels.isNotEmpty && !o.channels.contains(channel)) return 0;
+    return o.percentOff;
+  }
+
+  /// What [rate] costs per minute right now, offer included.
+  double priceFor(AstrologerRate rate) {
+    final percent = offerPercentFor(rate.channel);
+    if (percent == 0) return rate.perMinute;
+    return (rate.perMinute * (100 - percent)).round() / 100;
+  }
+
   /// Rate to lead the profile CTA with — chat when published, else the cheapest.
   AstrologerRate? get leadRate => rateFor('chat') ?? cheapestRate;
 
@@ -70,6 +90,21 @@ abstract class Astrologer with _$Astrologer {
   }
 
   String get skillsLabel => skills.take(3).map((s) => s.name).join(' · ');
+}
+
+@freezed
+abstract class AstrologerOffer with _$AstrologerOffer {
+  const factory AstrologerOffer({
+    @JsonKey(name: 'percent_off') @Default(0) int percentOff,
+
+    /// chat / voice / video it covers; empty means all of them.
+    @Default(<String>[]) List<String> channels,
+    @Default('everyone') String audience,
+    @JsonKey(name: 'ends_at') DateTime? endsAt,
+  }) = _AstrologerOffer;
+
+  factory AstrologerOffer.fromJson(Map<String, dynamic> json) =>
+      _$AstrologerOfferFromJson(json);
 }
 
 @freezed

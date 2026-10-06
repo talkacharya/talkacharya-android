@@ -26,9 +26,7 @@ class _RemediesTabState extends State<_RemediesTab> {
           padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
           children: [
             Text(
-              '${report.count} remedies matched to this chart\'s doshas, weak '
-              'planets, dasha and afflicted houses. Gemstone / yantra / rudraksha '
-              'entries are flagged — confirm before advising them.',
+              KT.of(context).remediesIntro(report.count),
               style: TextStyle(
                 fontSize: 11.5,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -37,7 +35,7 @@ class _RemediesTabState extends State<_RemediesTab> {
             const SizedBox(height: 12),
             for (final group in report.groups) ...[
               Text(
-                RemedyCategoryInfo.label(group.category).toUpperCase(),
+                KT.of(context).remedyCategory(group.category).toUpperCase(),
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0.5,
@@ -68,13 +66,17 @@ class _LalKitabBlock extends StatelessWidget {
       builder: (context, state) {
         final r = state.lalKitab.value;
         if (r == null) return const SizedBox.shrink();
+        final kt = KT.of(context);
         return KundaliCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Lal Kitab — rin & totke',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+              Text(
+                kt.lalKitabTitle,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                ),
               ),
               if (r.summary.isNotEmpty) ...[
                 const SizedBox(height: 3),
@@ -123,12 +125,13 @@ class _UpayaBlock extends StatelessWidget {
       builder: (context, state) {
         final r = state.jyotishUpaya.value;
         if (r == null) return const SizedBox.shrink();
+        final kt = KT.of(context);
         return KundaliCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Upaya table — ${r.lagnaSign} lagna (${r.lagnaLord})',
+                kt.upayaTitle(kt.term(r.lagnaSign), kt.term(r.lagnaLord)),
                 style: const TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 13,
@@ -136,8 +139,9 @@ class _UpayaBlock extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                'Support: ${r.strengthen.join(", ")} · Pacify: ${r.pacify.join(", ")}'
-                '${r.priorityPlanets.isNotEmpty ? " · Priority: ${r.priorityPlanets.join(", ")}" : ""}',
+                '${kt.support}: ${kt.terms(r.strengthen)} · '
+                '${kt.pacify}: ${kt.terms(r.pacify)}'
+                '${r.priorityPlanets.isNotEmpty ? " · ${kt.priority}: ${kt.terms(r.priorityPlanets)}" : ""}',
                 style: TextStyle(fontSize: 10.5, height: 1.35, color: muted),
               ),
               const SizedBox(height: 6),
@@ -145,8 +149,10 @@ class _UpayaBlock extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 3),
                   child: Text(
-                    '· ${p.planet} (${p.role}) — ${p.mantra}; gem ${p.gemstone} '
-                    '(gated), rudraksha ${p.rudrakshaMukhi} (gated)',
+                    '· ${kt.term(p.planet)} (${kt.term(p.role)}) — '
+                    '${kt.term(p.mantra)}; ${kt.gem} ${kt.term(p.gemstone)} '
+                    '(${kt.gated}), ${kt.rudraksha} '
+                    '${kt.term(p.rudrakshaMukhi)} (${kt.gated})',
                     style: TextStyle(
                       fontSize: 10.5,
                       height: 1.35,
@@ -178,6 +184,7 @@ class _RemedyRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final muted = Theme.of(context).colorScheme.onSurfaceVariant;
+    final kt = KT.of(context);
     return KundaliCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,9 +210,9 @@ class _RemedyRow extends StatelessWidget {
                     color: const Color(0xFFB0691F).withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(999),
                   ),
-                  child: const Text(
-                    'confirm first',
-                    style: TextStyle(
+                  child: Text(
+                    kt.confirmFirst,
+                    style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFFB0691F),
@@ -229,7 +236,8 @@ class _RemedyRow extends StatelessWidget {
           ],
           const SizedBox(height: 2),
           Text(
-            '${remedy.triggerType}:${remedy.triggerValue} · ${remedy.source}',
+            '${kt.term(remedy.triggerType)}: ${kt.term(remedy.triggerValue)} · '
+            '${kt.term(remedy.source)}',
             style: TextStyle(fontSize: 10, color: muted),
           ),
         ],

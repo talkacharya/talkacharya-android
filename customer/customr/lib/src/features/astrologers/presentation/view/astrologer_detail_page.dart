@@ -18,6 +18,7 @@ import '../../../gifting/presentation/view/gift_sheet.dart';
 import '../../data/astrologers_repository.dart';
 import '../../data/models/astrologer.dart';
 import 'widgets/astrologer_gallery.dart';
+import 'widgets/waitlist_banner.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 class AstrologerDetailPage extends StatefulWidget {
@@ -88,7 +89,7 @@ class _ProfileView extends StatelessWidget {
       if (a.skills.isNotEmpty) _SkillsCard(skills: a.skills),
       if (a.bio.isNotEmpty) _AboutSection(bio: a.bio, languages: a.languages),
       if (a.gallery.isNotEmpty) AstrologerGallery(photos: a.gallery),
-      if (a.rates.isNotEmpty) _RatesCard(rates: a.rates),
+      if (a.rates.isNotEmpty) _RatesCard(rates: a.rates, astrologer: a),
       const _TrustRow(),
     ];
 
@@ -117,6 +118,17 @@ class _ProfileView extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           _Header(a: a),
+          SliverToBoxAdapter(
+            child: WaitlistBanner(
+              astrologerId: a.id,
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              onStart: (channel) => switch (channel) {
+                'voice' => _startVoice(context, a),
+                'video' => _startVideo(context, a),
+                _ => _startChat(context, a),
+              },
+            ),
+          ),
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
             sliver: SliverList.separated(
@@ -797,9 +809,10 @@ class _AboutSectionState extends State<_AboutSection> {
 // --- rates ------------------------------------------------------------------
 
 class _RatesCard extends StatelessWidget {
-  const _RatesCard({required this.rates});
+  const _RatesCard({required this.rates, required this.astrologer});
 
   final List<AstrologerRate> rates;
+  final Astrologer astrologer;
 
   @override
   Widget build(BuildContext context) {
@@ -817,6 +830,10 @@ class _RatesCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SectionTitle(l.astroRatesTitle),
+          if (astrologer.offer case final offer?) ...[
+            const SizedBox(height: 8),
+            _OfferPill(offer: offer),
+          ],
           const SizedBox(height: 4),
           for (var i = 0; i < ordered.length; i++) ...[
             if (i > 0) Container(height: 1, color: brand.hairline),
@@ -869,17 +886,34 @@ class _RatesCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                  Text(
-                    l.astroPerMinute(
-                      Money.format(
-                        ordered[i].perMinute,
-                        ordered[i].currency,
-                        locale: locale,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      if (astrologer.offerPercentFor(ordered[i].channel) > 0)
+                        Text(
+                          Money.format(
+                            ordered[i].perMinute,
+                            ordered[i].currency,
+                            locale: locale,
+                          ),
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: brand.inkMuted,
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                        ),
+                      Text(
+                        l.astroPerMinute(
+                          Money.format(
+                            astrologer.priceFor(ordered[i]),
+                            ordered[i].currency,
+                            locale: locale,
+                          ),
+                        ),
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                    ),
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
+                    ],
                   ),
                 ],
               ),
@@ -920,6 +954,59 @@ class _RatesCard extends StatelessWidget {
 }
 
 // --- trust + shared -------------------------------------------------------
+
+/// The astrologer's running offer, above their rates: how much off, for
+/// whom, and until when.
+class _OfferPill extends StatelessWidget {
+  const _OfferPill({required this.offer});
+
+  final AstrologerOffer offer;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    final ends = offer.endsAt;
+    final details = [
+      if (offer.audience == 'new') l.astroOfferNew,
+      if (ends != null)
+        l.astroOfferEnds(
+          MaterialLocalizations.of(context).formatShortDate(ends.toLocal()),
+          TimeOfDay.fromDateTime(ends.toLocal()).format(context),
+        ),
+    ].join(' · ');
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: AstroPalette.fire.tint(0.12),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.local_offer_rounded, size: 18, color: AstroPalette.fire.end),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l.astroOfferBadge(offer.percentOff),
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: AstroPalette.fire.end,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                if (details.isNotEmpty)
+                  Text(details, style: theme.textTheme.bodySmall),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class _TrustRow extends StatelessWidget {
   const _TrustRow();
@@ -1005,7 +1092,8 @@ void _startChat(BuildContext context, Astrologer a) {
     context,
     astrologerId: a.id,
     astrologerName: a.name,
-    ratePerMinute: chat.perMinute,
+    ratePerMinute: a.priceFor(chat),
+    offerPercent: a.offerPercentFor('chat'),
     currency: chat.currency,
   );
 }
@@ -1024,7 +1112,8 @@ void _startVoice(BuildContext context, Astrologer a) {
     context,
     astrologerId: a.id,
     astrologerName: a.name,
-    ratePerMinute: voice.perMinute,
+    ratePerMinute: a.priceFor(voice),
+    offerPercent: a.offerPercentFor('voice'),
     currency: voice.currency,
     channel: 'voice',
   );
@@ -1044,7 +1133,8 @@ void _startVideo(BuildContext context, Astrologer a) {
     context,
     astrologerId: a.id,
     astrologerName: a.name,
-    ratePerMinute: video.perMinute,
+    ratePerMinute: a.priceFor(video),
+    offerPercent: a.offerPercentFor('video'),
     currency: video.currency,
     channel: 'video',
   );

@@ -6,6 +6,7 @@ import '../../../../core/di/service_locator.dart';
 import '../../../../core/util/async_value.dart';
 import '../../data/kundali_repository.dart';
 import '../cubit/kundali_cubit.dart';
+import '../kundali_text.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
@@ -26,17 +27,28 @@ class ChartDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) =>
-          KundaliCubit(
-              repo: standalone
-                  ? getIt<KundaliRepository>().forOwnCharts()
-                  : getIt<KundaliRepository>(),
-              consultationId: consultationId,
-            )
-            ..loadChartTypes()
-            ..loadChart(type),
-      child: _View(initialType: type),
+    return ValueListenableBuilder<String?>(
+      valueListenable: kundaliLanguage,
+      builder: (context, _, _) {
+        final lang = kundaliLanguageOf(context);
+        final repo = standalone
+            ? getIt<KundaliRepository>().forOwnCharts()
+            : getIt<KundaliRepository>();
+        return KundaliTextScope(
+          language: lang,
+          child: BlocProvider(
+            key: ValueKey(lang),
+            create: (_) =>
+                KundaliCubit(
+                    repo: repo.withLanguage(lang),
+                    consultationId: consultationId,
+                  )
+                  ..loadChartTypes()
+                  ..loadChart(type),
+            child: _View(initialType: type),
+          ),
+        );
+      },
     );
   }
 }
@@ -61,24 +73,27 @@ class _ViewState extends State<_View> {
 
   @override
   Widget build(BuildContext context) {
+    final kt = KT.of(context);
     return BlocBuilder<KundaliCubit, KundaliState>(
       builder: (context, state) {
         final menu = state.chartTypes.value ?? const <ChartTypeInfo>[];
         final info = menu.firstWhere(
           (c) => c.type == _type,
           orElse: () =>
-              ChartTypeInfo(type: _type, name: chartShortLabel(_type)),
+              ChartTypeInfo(type: _type, name: kt.chartShortLabel(_type)),
         );
+        final name = kt.chartName(_type, info.name);
         final slice =
             state.charts[_type] ?? const AsyncValue<VargaChart>.idle();
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(info.name),
+            title: Text(name),
             actions: [
+              const KundaliLanguageButton(),
               if (menu.isNotEmpty)
                 IconButton(
-                  tooltip: 'All charts',
+                  tooltip: kt.allChartsShort,
                   icon: const Icon(Icons.grid_view_rounded),
                   onPressed: () => showChartPicker(
                     context,
@@ -109,12 +124,12 @@ class _ViewState extends State<_View> {
               ),
               const SizedBox(height: 12),
               if (slice.value != null) ...[
-                ChartDetails(vc: slice.value!, fallbackTitle: info.name),
+                ChartDetails(vc: slice.value!, fallbackTitle: name),
                 const SizedBox(height: 14),
                 PlanetTable(vc: slice.value!),
               ] else if (slice.status == AsyncStatus.error)
                 ErrorView(
-                  message: slice.error ?? 'Could not load this chart',
+                  message: slice.error ?? kt.loadFailed,
                   onRetry: () => context.read<KundaliCubit>().loadChart(
                     _type,
                     force: true,

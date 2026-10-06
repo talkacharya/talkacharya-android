@@ -23,8 +23,7 @@ class _DoshasTabState extends State<_DoshasTab> {
           padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
           children: [
             Text(
-              '${report.count} present of ${report.doshas.length} checked · '
-              'structural only, cancellations flagged.',
+              KT.of(context).doshaCount(report.count, report.doshas.length),
               style: TextStyle(
                 fontSize: 11.5,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -47,16 +46,17 @@ class _DoshaRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final muted = Theme.of(context).colorScheme.onSurfaceVariant;
+    final kt = KT.of(context);
     final sev = dosha.displaySeverity;
     final (chipText, chipColor) = !dosha.present
-        ? ('clear', const Color(0xFF1E7A3C))
+        ? (kt.doshaClear, const Color(0xFF1E7A3C))
         : dosha.isCancelled || sev == 0
-        ? ('cancelled', muted)
+        ? (kt.doshaCancelled, muted)
         : sev >= 3
-        ? ('strong', const Color(0xFFB23A28))
+        ? (kt.doshaStrong, const Color(0xFFB23A28))
         : sev == 2
-        ? ('moderate', const Color(0xFFB0691F))
-        : ('mild', const Color(0xFF8A7A32));
+        ? (kt.doshaModerate, const Color(0xFFB0691F))
+        : (kt.doshaMild, const Color(0xFF8A7A32));
 
     return Opacity(
       opacity: dosha.present ? 1 : 0.6,
@@ -68,7 +68,7 @@ class _DoshaRow extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    dosha.name,
+                    kt.term(dosha.name),
                     style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 13.5,
@@ -99,7 +99,8 @@ class _DoshaRow extends StatelessWidget {
               if (dosha.kaalSarpaType.isNotEmpty) ...[
                 const SizedBox(height: 4),
                 Text(
-                  '${dosha.kaalSarpaType}${dosha.partial ? " · partial" : ""}',
+                  '${kt.term(dosha.kaalSarpaType)}'
+                  '${dosha.partial ? " · ${kt.partial}" : ""}',
                   style: TextStyle(fontSize: 11.5, color: muted),
                 ),
               ],

@@ -24,6 +24,7 @@ class _DashaTabState extends State<_DashaTab> {
         builder: (d) {
           final now = DateTime.now();
           final narrative = state.dashaNarrative.value;
+          final kt = KT.of(context);
           return ListView(
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
             children: [
@@ -31,11 +32,14 @@ class _DashaTabState extends State<_DashaTab> {
                 spacing: 8,
                 runSpacing: 6,
                 children: [
-                  KundaliChip('Running · ${d.currentMaha} / ${d.currentAntar}'),
+                  KundaliChip(
+                    '${kt.running} · ${kt.term(d.currentMaha)} / '
+                    '${kt.term(d.currentAntar)}',
+                  ),
                   if (d.balanceLord.isNotEmpty)
                     KundaliChip(
-                      'Balance · ${d.balanceLord} '
-                      '${d.balanceYears.toStringAsFixed(1)}y',
+                      '${kt.balance} · ${kt.term(d.balanceLord)} '
+                      '${kt.years(d.balanceYears)}',
                     ),
                 ],
               ),
@@ -51,7 +55,8 @@ class _DashaTabState extends State<_DashaTab> {
                     childrenPadding: const EdgeInsets.only(bottom: 8),
                     initiallyExpanded: maha.contains(now),
                     title: Text(
-                      '${maha.lord}  ·  ${_y(maha.start)}–${_y(maha.end)}',
+                      '${kt.term(maha.lord)}  ·  '
+                      '${_y(maha.start)}–${_y(maha.end)}',
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 13.5,
@@ -77,7 +82,7 @@ class _DashaTabState extends State<_DashaTab> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  antar.lord,
+                                  kt.term(antar.lord),
                                   style: TextStyle(
                                     fontSize: 12.5,
                                     fontWeight: antar.contains(now)

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'consultation_api.dart';
 import 'models/consultation.dart';
 import 'models/conversation.dart';
+import 'models/queue_entry.dart';
 
 /// Consultation lifecycle (request / detail / list / cancel / end / review).
 /// The live chat stream is owned by `talkacharya_chat`'s `ChatController` via
@@ -144,4 +145,22 @@ class ConsultationRepository {
 
   Future<void> review(String id, {required int rating, String text = ''}) =>
       _api.review(id, rating: rating, text: text);
+
+  Future<QueueEntry> joinQueue({
+    required String astrologerId,
+    required String channel,
+  }) async {
+    final entry = await _api.joinQueue(
+      astrologerId: astrologerId,
+      channel: channel,
+    );
+    waitlistChanges.value++;
+    return entry;
+  }
+
+  Future<List<QueueEntry>> myQueue() => _api.myQueue();
+
+  Future<int> welcomeOfferMinutes() => _api.welcomeOfferMinutes();
+
+  Future<void> leaveQueue(String id) => _api.leaveQueue(id);
 }

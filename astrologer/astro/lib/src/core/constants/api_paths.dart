@@ -69,6 +69,8 @@ class ApiPaths {
   static const astroFeedback = '/astro/feedback';
   static const astroFollowers = '/astro/followers';
   static const astroReferrals = '/astro/referrals';
+  static const astroOffers = '/astro/offers';
+  static String astroOffer(String id) => '/astro/offers/$id';
 
   // remedies suggested from the store
   static const astroStoreRecommendations = '/astro/store/recommendations';

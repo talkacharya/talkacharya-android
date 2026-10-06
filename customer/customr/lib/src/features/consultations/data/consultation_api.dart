@@ -4,6 +4,7 @@ import '../../../core/constants/api_paths.dart';
 import '../../../core/network/api_exception.dart';
 import 'models/consultation.dart';
 import 'models/conversation.dart';
+import 'models/queue_entry.dart';
 
 /// Raised on `402` — the wallet needs a top-up before the consultation starts.
 class InsufficientBalance implements Exception {
@@ -235,4 +236,58 @@ class ConsultationApi {
         ApiPaths.consultationReview(id),
         data: {'rating': rating, 'text': text},
       );
+
+  /// Take a place in a busy astrologer's waitlist. Joining twice returns the
+  /// place already held.
+  Future<QueueEntry> joinQueue({
+    required String astrologerId,
+    required String channel,
+  }) async {
+    try {
+      final res = await _dio.post<Map<String, dynamic>>(
+        ApiPaths.queue,
+        data: {'astrologer': astrologerId, 'channel': channel},
+      );
+      _raise(res);
+      return QueueEntry.fromMap(res.data ?? const {});
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// Free minutes this customer's next consultation gets back under the
+  /// welcome offer; 0 when it is not theirs (or the answer is unknown).
+  Future<int> welcomeOfferMinutes() async {
+    try {
+      final res = await _dio.get<Map<String, dynamic>>(ApiPaths.welcomeOffer);
+      if ((res.statusCode ?? 0) >= 400) return 0;
+      if (res.data?['eligible'] != true) return 0;
+      return (res.data?['free_minutes'] as num?)?.toInt() ?? 0;
+    } on DioException {
+      return 0;
+    }
+  }
+
+  /// Every waitlist this customer is still in.
+  Future<List<QueueEntry>> myQueue() async {
+    try {
+      final res = await _dio.get<List<dynamic>>(ApiPaths.queue);
+      _raise(res);
+      return (res.data ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(QueueEntry.fromMap)
+          .toList();
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  Future<void> leaveQueue(String id) async {
+    try {
+      final res = await _dio.delete<void>(ApiPaths.queueEntry(id));
+      _raise(res);
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
 }

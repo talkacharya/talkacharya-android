@@ -250,6 +250,41 @@ class EarningClub extends Equatable {
 }
 
 /// Mirrors `apps/analytics/services/performance.py::astrologer_performance`.
+/// Sessions with customers on the platform's welcome offer: how they rated,
+/// and how many came back and paid.
+class PromoStats extends Equatable {
+  const PromoStats({
+    this.sessions = 0,
+    this.rating,
+    this.customers = 0,
+    this.returned = 0,
+    this.repeatPercent = 0,
+  });
+
+  final int sessions;
+  final double? rating;
+  final int customers;
+  final int returned;
+  final double repeatPercent;
+
+  factory PromoStats.fromJson(Map<String, dynamic> j) => PromoStats(
+    sessions: (j['sessions'] as num?)?.toInt() ?? 0,
+    rating: (j['rating'] as num?)?.toDouble(),
+    customers: (j['customers'] as num?)?.toInt() ?? 0,
+    returned: (j['returned'] as num?)?.toInt() ?? 0,
+    repeatPercent: (j['repeat_percent'] as num?)?.toDouble() ?? 0,
+  );
+
+  @override
+  List<Object?> get props => [
+    sessions,
+    rating,
+    customers,
+    returned,
+    repeatPercent,
+  ];
+}
+
 class Performance extends Equatable {
   const Performance({
     required this.windowDays,
@@ -264,6 +299,7 @@ class Performance extends Equatable {
     required this.ratingByChannel,
     required this.today,
     required this.club,
+    this.promo = const PromoStats(),
   });
 
   final int windowDays;
@@ -280,6 +316,9 @@ class Performance extends Equatable {
   final Map<String, RatingStat> ratingByChannel;
   final TodayStats today;
   final EarningClub? club;
+
+  /// Customers on the platform's welcome offer.
+  final PromoStats promo;
 
   PerfMetric? metric(String key) {
     for (final m in metrics) {
@@ -312,6 +351,7 @@ class Performance extends Equatable {
       },
       today: TodayStats.fromJson(_map(j['today'])),
       club: j['club'] == null ? null : EarningClub.fromJson(_map(j['club'])),
+      promo: PromoStats.fromJson(_map(j['promo'])),
     );
   }
 
@@ -329,6 +369,7 @@ class Performance extends Equatable {
     ratingByChannel,
     today,
     club,
+    promo,
   ];
 }
 

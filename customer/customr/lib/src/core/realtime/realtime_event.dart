@@ -22,8 +22,13 @@ sealed class RealtimeEvent {
         );
       case 'queue.offer':
         return QueueOffer(
+          astrologerId: _nested(data, 'astrologer', 'id'),
           astrologerName: _nested(data, 'astrologer', 'display_name'),
           offerExpiresAt: data['offer_expires_at'] as String?,
+        );
+      case 'queue.removed':
+        return QueueRemoved(
+          astrologerName: _nested(data, 'astrologer', 'display_name'),
         );
       case 'chat.new_message':
         return NewChatMessage(
@@ -82,9 +87,20 @@ class LowBalance extends RealtimeEvent {
 }
 
 class QueueOffer extends RealtimeEvent {
-  const QueueOffer({this.astrologerName, this.offerExpiresAt});
+  const QueueOffer({
+    this.astrologerId,
+    this.astrologerName,
+    this.offerExpiresAt,
+  });
+  final String? astrologerId;
   final String? astrologerName;
   final String? offerExpiresAt;
+}
+
+/// The astrologer took this customer off their waitlist.
+class QueueRemoved extends RealtimeEvent {
+  const QueueRemoved({this.astrologerName});
+  final String? astrologerName;
 }
 
 class ConsultationEvent extends RealtimeEvent {

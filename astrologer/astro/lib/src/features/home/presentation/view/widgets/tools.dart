@@ -172,6 +172,12 @@ List<ToolGroup> buildToolGroups(BuildContext context) {
         () => context.go(Routes.profileFeatured),
       ),
       ToolAction(
+        AstroPalette.fire,
+        Icons.local_offer_rounded,
+        l.offerTitle,
+        () => context.push(Routes.offers),
+      ),
+      ToolAction(
         AstroPalette.money,
         Icons.card_giftcard_rounded,
         l.wsReferral,

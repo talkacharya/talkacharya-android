@@ -20,12 +20,13 @@ class _AdvancedTabState extends State<_AdvancedTab> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final kt = KT.of(context);
     return BlocBuilder<KundaliCubit, KundaliState>(
       builder: (context, state) {
         return ListView(
           padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
           children: [
-            const KundaliLabel('Sarvashtakavarga (bindus by house)'),
+            KundaliLabel(kt.sarvashtakavarga),
             const SizedBox(height: 8),
             _Slice<Ashtakavarga>(
               slice: state.ashtakavarga,
@@ -49,7 +50,7 @@ class _AdvancedTabState extends State<_AdvancedTab> {
                                   : null,
                             ),
                           ),
-                          Text('H$h', style: const TextStyle(fontSize: 10)),
+                          Text(kt.h(h), style: const TextStyle(fontSize: 10)),
                         ],
                       ),
                   ],
@@ -57,7 +58,7 @@ class _AdvancedTabState extends State<_AdvancedTab> {
               ),
             ),
             const SizedBox(height: 18),
-            const KundaliLabel('Shadbala (rupa / required)'),
+            KundaliLabel(kt.shadbala),
             const SizedBox(height: 8),
             _Slice<Shadbala>(
               slice: state.shadbala,
@@ -77,7 +78,7 @@ class _AdvancedTabState extends State<_AdvancedTab> {
                             SizedBox(
                               width: 72,
                               child: Text(
-                                p.name,
+                                kt.term(p.name),
                                 style: const TextStyle(
                                   fontSize: 12.5,
                                   fontWeight: FontWeight.w600,
@@ -108,7 +109,7 @@ class _AdvancedTabState extends State<_AdvancedTab> {
               ),
             ),
             const SizedBox(height: 18),
-            const KundaliLabel('KP significators'),
+            KundaliLabel(kt.kp),
             const SizedBox(height: 8),
             _Slice<Map<String, dynamic>>(
               slice: state.kp,
@@ -116,7 +117,7 @@ class _AdvancedTabState extends State<_AdvancedTab> {
               builder: (kp) => KundaliCard(child: _KeyValues(kp)),
             ),
             const SizedBox(height: 18),
-            const KundaliLabel('Jaimini (karakas, arudhas)'),
+            KundaliLabel(kt.jaimini),
             const SizedBox(height: 8),
             _Slice<Map<String, dynamic>>(
               slice: state.jaimini,
@@ -139,18 +140,12 @@ class _KeyValues extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    String fmt(Object? v) {
-      if (v is Map) {
-        return v.entries.map((e) => '${e.key}: ${e.value}').join(', ');
-      }
-      if (v is List) return v.join(', ');
-      return '$v';
-    }
+    final kt = KT.of(context);
 
     final entries = data.entries.where((e) => e.key != 'engine').toList();
     if (entries.isEmpty) {
       return Text(
-        context.l10n.kundaliNoData,
+        kt.noData,
         style: const TextStyle(fontSize: 12.5),
       );
     }
@@ -166,7 +161,7 @@ class _KeyValues extends StatelessWidget {
                 SizedBox(
                   width: 110,
                   child: Text(
-                    e.key.replaceAll('_', ' '),
+                    kt.fieldName(e.key),
                     style: TextStyle(
                       fontSize: 11.5,
                       fontWeight: FontWeight.w600,
@@ -176,7 +171,7 @@ class _KeyValues extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    fmt(e.value),
+                    kt.value(e.value),
                     style: const TextStyle(fontSize: 11.5),
                   ),
                 ),

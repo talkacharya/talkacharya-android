@@ -12565,6 +12565,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Photo {index} of {total}'**
   String astroGalleryPhoto(int index, int total);
+
+  /// No description provided for @waitlistBusyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is with someone right now'**
+  String waitlistBusyTitle(String name);
+
+  /// No description provided for @waitlistBusyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Join the waitlist and we\'ll tell you the moment they are free. Waiting costs nothing.'**
+  String get waitlistBusyBody;
+
+  /// No description provided for @waitlistJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Join waitlist'**
+  String get waitlistJoin;
+
+  /// No description provided for @waitlistJoined.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re number {position} in line. We\'ll notify you when it\'s your turn.'**
+  String waitlistJoined(int position);
+
+  /// No description provided for @waitlistWaitingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re number {position} in the waitlist'**
+  String waitlistWaitingTitle(int position);
+
+  /// No description provided for @waitlistWaitingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll notify you when it\'s your turn.'**
+  String get waitlistWaitingBody;
+
+  /// No description provided for @waitlistLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave'**
+  String get waitlistLeave;
+
+  /// No description provided for @waitlistTurnTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s your turn'**
+  String get waitlistTurnTitle;
+
+  /// No description provided for @waitlistTurnBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Start within {time}, or the turn passes on.'**
+  String waitlistTurnBody(String time);
+
+  /// No description provided for @waitlistStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start now'**
+  String get waitlistStart;
+
+  /// No description provided for @waitlistOfferToast.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is free now — it\'s your turn'**
+  String waitlistOfferToast(String name);
+
+  /// No description provided for @waitlistRemovedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} has closed the waitlist for now'**
+  String waitlistRemovedToast(String name);
+
+  /// No description provided for @waitlistAnAstrologer.
+  ///
+  /// In en, this message translates to:
+  /// **'An astrologer'**
+  String get waitlistAnAstrologer;
+
+  /// No description provided for @waitlistView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get waitlistView;
+
+  /// No description provided for @astroOfferBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% off right now'**
+  String astroOfferBadge(int percent);
+
+  /// No description provided for @astroOfferNew.
+  ///
+  /// In en, this message translates to:
+  /// **'For new customers'**
+  String get astroOfferNew;
+
+  /// No description provided for @astroOfferEnds.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends {date}, {time}'**
+  String astroOfferEnds(String date, String time);
+
+  /// No description provided for @bookOfferApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% offer applied to this price'**
+  String bookOfferApplied(int percent);
+
+  /// No description provided for @bookWelcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes, plural, =1{Your first minute is on us} other{Your first {minutes} minutes are on us}}'**
+  String bookWelcomeTitle(int minutes);
+
+  /// No description provided for @bookWelcomeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome offer: we credit them back to your wallet when the session ends.'**
+  String get bookWelcomeBody;
 }
 
 class _AppLocalizationsDelegate

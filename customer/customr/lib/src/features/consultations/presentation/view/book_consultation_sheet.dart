@@ -30,6 +30,7 @@ Future<void> showBookConsultationSheet(
   required double ratePerMinute,
   required String currency,
   String channel = 'chat',
+  int offerPercent = 0,
   ValueChanged<Consultation>? onStarted,
 }) {
   context.read<BirthProfilesCubit>().load();
@@ -43,9 +44,11 @@ Future<void> showBookConsultationSheet(
     },
     builder: (context) => _BookForm(
       astrologerId: astrologerId,
+      astrologerName: astrologerName,
       ratePerMinute: ratePerMinute,
       currency: currency,
       channel: channel,
+      offerPercent: offerPercent,
       onStarted: onStarted,
     ),
   );
@@ -54,15 +57,21 @@ Future<void> showBookConsultationSheet(
 class _BookForm extends StatefulWidget {
   const _BookForm({
     required this.astrologerId,
+    required this.astrologerName,
     required this.ratePerMinute,
     required this.currency,
     required this.channel,
+    this.offerPercent = 0,
     this.onStarted,
   });
   final String astrologerId;
+  final String astrologerName;
   final double ratePerMinute;
   final String currency;
   final String channel;
+
+  /// The astrologer's running offer, already taken off [ratePerMinute].
+  final int offerPercent;
 
   /// Where the new session goes. Null means open the room for it; a room that
   /// is already showing this thread passes a handler instead and takes the
@@ -82,6 +91,10 @@ class _BookFormState extends State<_BookForm> {
   String? _birthProfileId;
   bool _submitting = false;
 
+  /// Minutes the welcome offer gives back on this booking; 0 when it is not
+  /// this customer's first.
+  int _welcomeMinutes = 0;
+
   @override
   void initState() {
     super.initState();
@@ -89,6 +102,9 @@ class _BookFormState extends State<_BookForm> {
     _birthProfileId =
         pending.birthProfileId ??
         context.read<BirthProfilesCubit>().state.activeProfileId;
+    getIt<ConsultationRepository>().welcomeOfferMinutes().then((minutes) {
+      if (mounted && minutes > 0) setState(() => _welcomeMinutes = minutes);
+    });
   }
 
   @override
@@ -167,11 +183,7 @@ class _BookFormState extends State<_BookForm> {
     } on AstrologerBusy {
       if (!mounted) return;
       setState(() => _submitting = false);
-      AppSnack.showTop(
-        context,
-        'This astrologer is busy right now. Try again shortly.',
-        type: SnackType.warning,
-      );
+      await _offerWaitlist();
     } on AstrologerOffline catch (e) {
       if (!mounted) return;
       setState(() => _submitting = false);
@@ -188,6 +200,48 @@ class _BookFormState extends State<_BookForm> {
         friendlyError(e),
         type: SnackType.error,
       );
+    }
+  }
+
+  /// The astrologer is with someone else: offer a place in line instead of a
+  /// dead end.
+  Future<void> _offerWaitlist() async {
+    final l = context.l10n;
+    final join = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l.waitlistBusyTitle(widget.astrologerName)),
+        content: Text(l.waitlistBusyBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l.commonNotNow),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l.waitlistJoin),
+          ),
+        ],
+      ),
+    );
+    if (join != true || !mounted) return;
+    setState(() => _submitting = true);
+    try {
+      final entry = await getIt<ConsultationRepository>().joinQueue(
+        astrologerId: widget.astrologerId,
+        channel: widget.channel,
+      );
+      if (!mounted) return;
+      Navigator.pop(context); // the sheet — there is nothing to book yet
+      AppSnack.showTop(
+        context,
+        l.waitlistJoined(entry.position),
+        type: SnackType.success,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _submitting = false);
+      AppSnack.showTop(context, friendlyError(e), type: SnackType.error);
     }
   }
 
@@ -293,6 +347,69 @@ class _BookFormState extends State<_BookForm> {
                   ],
                 ),
               ),
+              if (_welcomeMinutes > 0) ...[
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.card_giftcard_rounded,
+                        size: 20,
+                        color: theme.colorScheme.onPrimaryContainer,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              context.l10n.bookWelcomeTitle(_welcomeMinutes),
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                color: theme.colorScheme.onPrimaryContainer,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            Text(
+                              context.l10n.bookWelcomeBody,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onPrimaryContainer,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              if (widget.offerPercent > 0) ...[
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.local_offer_rounded,
+                      size: 16,
+                      color: theme.colorScheme.primary,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        context.l10n.bookOfferApplied(widget.offerPercent),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
               const SizedBox(height: 16),
               if (getIt<PendingShare>().label.isNotEmpty) ...[
                 _SharingHint(label: getIt<PendingShare>().label),

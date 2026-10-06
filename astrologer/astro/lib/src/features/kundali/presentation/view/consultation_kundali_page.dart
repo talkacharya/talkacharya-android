@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/l10n/l10n.dart';
 import '../../../../core/di/service_locator.dart';
-import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../../../core/util/async_value.dart';
 import '../../data/kundali_repository.dart';
 import '../cubit/kundali_cubit.dart';
-import '../../../../shared/widgets/language_quick_button.dart';
+import '../kundali_text.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
@@ -50,22 +48,32 @@ class ConsultationKundaliPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lang = context.select(
-      (AuthBloc b) => b.state.user?.preferredLanguage,
-    );
-    return BlocProvider(
-      key: ValueKey(lang),
-      create: (_) => KundaliCubit(
-        repo: standalone
+    // The kundali has its own language (see [kundaliLanguage]): switching it
+    // re-reads the chart in that language and re-labels these screens, and
+    // leaves the rest of the app as it was.
+    return ValueListenableBuilder<String?>(
+      valueListenable: kundaliLanguage,
+      builder: (context, _, _) {
+        final lang = kundaliLanguageOf(context);
+        final repo = standalone
             ? getIt<KundaliRepository>().forOwnCharts()
-            : getIt<KundaliRepository>().forProfile(profileId),
-        consultationId: consultationId,
-      )..loadOverview(),
-      child: _View(
-        consultationId: consultationId,
-        clientName: clientName,
-        standalone: standalone,
-      ),
+            : getIt<KundaliRepository>().forProfile(profileId);
+        return KundaliTextScope(
+          language: lang,
+          child: BlocProvider(
+            key: ValueKey(lang),
+            create: (_) => KundaliCubit(
+              repo: repo.withLanguage(lang),
+              consultationId: consultationId,
+            )..loadOverview(),
+            child: _View(
+              consultationId: consultationId,
+              clientName: clientName,
+              standalone: standalone,
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -92,33 +100,19 @@ class _View extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.l10n;
+    final kt = KT.of(context);
     return DefaultTabController(
       length: 11,
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            clientName == null
-                ? l.kundaliTitle
-                : l.kundaliTitleFor(clientName!),
+            clientName == null ? kt.title : kt.titleFor(clientName!),
           ),
-          actions: const [LanguageQuickButton()],
+          actions: const [KundaliLanguageButton()],
           bottom: TabBar(
             isScrollable: true,
             tabAlignment: TabAlignment.start,
-            tabs: [
-              Tab(text: l.kundaliTabCharts),
-              Tab(text: l.kundaliTabPlanets),
-              Tab(text: l.kundaliTabDasha),
-              Tab(text: l.kundaliTabYogas),
-              Tab(text: l.kundaliTabDoshas),
-              Tab(text: l.kundaliTabOverview),
-              Tab(text: l.kundaliTabRemedies),
-              Tab(text: l.kundaliTabBhava),
-              Tab(text: l.kundaliTabGochar),
-              Tab(text: l.kundaliTabNumbers),
-              Tab(text: l.kundaliTabAdvanced),
-            ],
+            tabs: [for (final label in kt.tabs) Tab(text: label)],
           ),
         ),
         body: TabBarView(

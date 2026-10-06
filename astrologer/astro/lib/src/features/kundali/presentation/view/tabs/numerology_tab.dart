@@ -16,6 +16,7 @@ class _NumerologyTabState extends State<_NumerologyTab> {
   @override
   Widget build(BuildContext context) {
     final muted = Theme.of(context).colorScheme.onSurfaceVariant;
+    final kt = KT.of(context);
     return BlocBuilder<KundaliCubit, KundaliState>(
       builder: (context, state) => _Slice<NumerologyReport>(
         slice: state.numerology,
@@ -24,8 +25,7 @@ class _NumerologyTabState extends State<_NumerologyTab> {
           padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
           children: [
             Text(
-              'DOB numerology + Lo Shu grid — the same view the client sees. '
-              'Traditional; gemstones are gated.',
+              kt.numerologyIntro,
               style: TextStyle(fontSize: 11.5, color: muted),
             ),
             const SizedBox(height: 12),
@@ -35,8 +35,8 @@ class _NumerologyTabState extends State<_NumerologyTab> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${n.kind[0].toUpperCase()}${n.kind.substring(1)} · '
-                      '${n.value}  (${n.planet})',
+                      '${kt.term(n.kind)} · ${n.value}  '
+                      '(${kt.term(n.planet)})',
                       style: const TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 13,
@@ -51,9 +51,10 @@ class _NumerologyTabState extends State<_NumerologyTab> {
                     ],
                     const SizedBox(height: 5),
                     Text(
-                      'Friendly ${n.friendly.join(", ")} · clashing '
-                      '${n.unfriendly.join(", ")} · days ${n.days.join(", ")} · '
-                      'colours ${n.colours.join(", ")}',
+                      '${kt.friendly} ${n.friendly.join(", ")} · '
+                      '${kt.clashing} ${n.unfriendly.join(", ")} · '
+                      '${kt.days} ${kt.terms(n.days)} · '
+                      '${kt.colours} ${kt.terms(n.colours)}',
                       style: TextStyle(
                         fontSize: 10.5,
                         height: 1.35,
@@ -62,7 +63,8 @@ class _NumerologyTabState extends State<_NumerologyTab> {
                     ),
                     if (n.gemstone.isNotEmpty)
                       Text(
-                        'Gemstone (gated): ${n.gemstone} — ${n.gemstoneNote}',
+                        '${kt.gemstoneGated}: ${kt.term(n.gemstone)} — '
+                        '${n.gemstoneNote}',
                         style: const TextStyle(
                           fontSize: 10.5,
                           height: 1.35,
@@ -83,9 +85,12 @@ class _NumerologyTabState extends State<_NumerologyTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Lo Shu birth grid',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                  Text(
+                    kt.loShu,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Wrap(
@@ -109,7 +114,8 @@ class _NumerologyTabState extends State<_NumerologyTab> {
                             borderRadius: BorderRadius.circular(999),
                           ),
                           child: Text(
-                            '${line.status == "strength" ? "✓" : "–"} ${line.name}',
+                            '${line.status == "strength" ? "✓" : "–"} '
+                            '${kt.term(line.name)}',
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w700,

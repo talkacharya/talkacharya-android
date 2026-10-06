@@ -17,6 +17,10 @@ class KundaliRepository {
   /// a saved chart's id instead of a consultation's.
   KundaliRepository forOwnCharts() => KundaliRepository(_api.forOwnCharts());
 
+  /// A repository that reads everything in [code] (see [KundaliApi.language]).
+  KundaliRepository withLanguage(String code) =>
+      KundaliRepository(_api.withLanguage(code));
+
   Future<Kundali> overview(String id) async =>
       Kundali.fromArtifact(await _api.overview(id));
 

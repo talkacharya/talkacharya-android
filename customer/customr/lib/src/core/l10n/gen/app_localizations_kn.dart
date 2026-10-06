@@ -7239,4 +7239,92 @@ class AppLocalizationsKn extends AppLocalizations {
   String astroGalleryPhoto(int index, int total) {
     return 'Photo $index of $total';
   }
+
+  @override
+  String waitlistBusyTitle(String name) {
+    return '$name is with someone right now';
+  }
+
+  @override
+  String get waitlistBusyBody =>
+      'Join the waitlist and we\'ll tell you the moment they are free. Waiting costs nothing.';
+
+  @override
+  String get waitlistJoin => 'Join waitlist';
+
+  @override
+  String waitlistJoined(int position) {
+    return 'You\'re number $position in line. We\'ll notify you when it\'s your turn.';
+  }
+
+  @override
+  String waitlistWaitingTitle(int position) {
+    return 'You\'re number $position in the waitlist';
+  }
+
+  @override
+  String get waitlistWaitingBody => 'We\'ll notify you when it\'s your turn.';
+
+  @override
+  String get waitlistLeave => 'Leave';
+
+  @override
+  String get waitlistTurnTitle => 'It\'s your turn';
+
+  @override
+  String waitlistTurnBody(String time) {
+    return 'Start within $time, or the turn passes on.';
+  }
+
+  @override
+  String get waitlistStart => 'Start now';
+
+  @override
+  String waitlistOfferToast(String name) {
+    return '$name is free now — it\'s your turn';
+  }
+
+  @override
+  String waitlistRemovedToast(String name) {
+    return '$name has closed the waitlist for now';
+  }
+
+  @override
+  String get waitlistAnAstrologer => 'An astrologer';
+
+  @override
+  String get waitlistView => 'View';
+
+  @override
+  String astroOfferBadge(int percent) {
+    return '$percent% off right now';
+  }
+
+  @override
+  String get astroOfferNew => 'For new customers';
+
+  @override
+  String astroOfferEnds(String date, String time) {
+    return 'Ends $date, $time';
+  }
+
+  @override
+  String bookOfferApplied(int percent) {
+    return '$percent% offer applied to this price';
+  }
+
+  @override
+  String bookWelcomeTitle(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'Your first $minutes minutes are on us',
+      one: 'Your first minute is on us',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get bookWelcomeBody =>
+      'Welcome offer: we credit them back to your wallet when the session ends.';
 }

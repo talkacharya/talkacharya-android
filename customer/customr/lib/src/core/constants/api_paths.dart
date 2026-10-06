@@ -68,6 +68,11 @@ class ApiPaths {
   static const predictions = '/app/predictions';
   static String prediction(String id) => '/app/predictions/$id';
   static const consultations = '/app/consultations';
+  // a busy astrologer's waitlist — this customer's places in line
+  static const queue = '/app/queue';
+  // is this customer's next consultation their welcome one?
+  static const welcomeOffer = '/app/welcome-offer';
+  static String queueEntry(String id) => '/app/queue/$id';
   static String consultation(String id) => '/app/consultations/$id';
   static String consultationCancel(String id) =>
       '/app/consultations/$id/cancel';

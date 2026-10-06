@@ -306,6 +306,94 @@ class ReferralOverview extends Equatable {
 /// Everything in the astrologer's own corner of the app that is not a
 /// session: notices, training, favourites, gallery, feedback, followers,
 /// referrals.
+/// A discount the astrologer runs on their own rates, and what it brought in.
+class AstroOffer extends Equatable {
+  const AstroOffer({
+    required this.id,
+    required this.percentOff,
+    required this.channels,
+    required this.audience,
+    required this.startsAt,
+    required this.endsAt,
+    required this.isLive,
+    required this.sessions,
+    required this.earned,
+  });
+
+  final String id;
+  final int percentOff;
+
+  /// chat / voice / video it covers; empty means all of them.
+  final List<String> channels;
+  final String audience; // everyone | new
+  final DateTime? startsAt;
+  final DateTime? endsAt;
+  final bool isLive;
+  final int sessions;
+  final double earned;
+
+  factory AstroOffer.fromJson(Map<String, dynamic> j) => AstroOffer(
+    id: '${j['id']}',
+    percentOff: (j['percent_off'] as num?)?.toInt() ?? 0,
+    channels: [for (final c in j['channels'] as List? ?? const []) '$c'],
+    audience: j['audience'] as String? ?? 'everyone',
+    startsAt: DateTime.tryParse('${j['starts_at']}'),
+    endsAt: DateTime.tryParse('${j['ends_at']}'),
+    isLive: j['is_live'] == true,
+    sessions: (j['sessions'] as num?)?.toInt() ?? 0,
+    earned: double.tryParse('${j['earned']}') ?? 0,
+  );
+
+  @override
+  List<Object?> get props => [
+    id,
+    percentOff,
+    channels,
+    audience,
+    startsAt,
+    endsAt,
+    isLive,
+    sessions,
+    earned,
+  ];
+}
+
+/// The offers page: what the platform allows, the offer running now, and
+/// the earlier ones.
+class OffersOverview extends Equatable {
+  const OffersOverview({
+    required this.enabled,
+    required this.percentChoices,
+    required this.hourChoices,
+    required this.live,
+    required this.past,
+  });
+
+  final bool enabled;
+  final List<int> percentChoices;
+  final List<int> hourChoices;
+  final AstroOffer? live;
+  final List<AstroOffer> past;
+
+  factory OffersOverview.fromJson(Map<String, dynamic> j) {
+    final limits = _map(j['limits']);
+    List<int> ints(Object? v) => [
+      for (final e in v as List? ?? const [])
+        if (e is num) e.toInt(),
+    ];
+    return OffersOverview(
+      enabled: limits['enabled'] != false,
+      percentChoices: ints(limits['percent_choices']),
+      hourChoices: ints(limits['hour_choices']),
+      live: j['live'] is Map ? AstroOffer.fromJson(_map(j['live'])) : null,
+      past: _list(j['past'], AstroOffer.fromJson),
+    );
+  }
+
+  @override
+  List<Object?> get props => [enabled, percentChoices, hourChoices, live, past];
+}
+
 class WorkspaceApi {
   WorkspaceApi(this._dio);
 
@@ -394,4 +482,30 @@ class WorkspaceApi {
   Future<ReferralOverview> referrals() async => ReferralOverview.fromJson(
     _map((await _dio.get<dynamic>(ApiPaths.astroReferrals)).ensureOk().data),
   );
+
+  Future<OffersOverview> offers() async => OffersOverview.fromJson(
+    _map((await _dio.get<dynamic>(ApiPaths.astroOffers)).ensureOk().data),
+  );
+
+  /// Starts an offer now. [channels] empty means every channel.
+  Future<void> startOffer({
+    required int percentOff,
+    required int hours,
+    String audience = 'everyone',
+    List<String> channels = const [],
+  }) async {
+    (await _dio.post<dynamic>(
+      ApiPaths.astroOffers,
+      data: {
+        'percent_off': percentOff,
+        'hours': hours,
+        'audience': audience,
+        'channels': channels,
+      },
+    )).ensureOk();
+  }
+
+  Future<void> endOffer(String id) async {
+    (await _dio.delete<dynamic>(ApiPaths.astroOffer(id))).ensureOk();
+  }
 }

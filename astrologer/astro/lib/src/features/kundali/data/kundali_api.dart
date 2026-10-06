@@ -7,7 +7,12 @@ import '../../../core/network/api_exception.dart';
 /// (`/api/v1/astro/consultations/{id}/{sub}`). Every method returns the raw
 /// `{kind, language, payload}` envelope; the models pull what they need.
 class KundaliApi {
-  KundaliApi(this._dio, {this.profileId, this.standalone = false});
+  KundaliApi(
+    this._dio, {
+    this.profileId,
+    this.standalone = false,
+    this.language,
+  });
 
   final Dio _dio;
 
@@ -20,12 +25,31 @@ class KundaliApi {
   /// saved charts (a birth profile) rather than a consultation.
   final bool standalone;
 
+  /// The language the readings are asked for in (`?lang=`), which wins over
+  /// the account's language on the server. Null leaves it to the account.
+  final String? language;
+
   /// A view of this API bound to one shared person.
-  KundaliApi forProfile(String? id) =>
-      id == null ? this : KundaliApi(_dio, profileId: id);
+  KundaliApi forProfile(String? id) => id == null
+      ? this
+      : KundaliApi(
+          _dio,
+          profileId: id,
+          standalone: standalone,
+          language: language,
+        );
 
   /// A view of this API that reads the astrologer's own saved charts.
-  KundaliApi forOwnCharts() => KundaliApi(_dio, standalone: true);
+  KundaliApi forOwnCharts() =>
+      KundaliApi(_dio, standalone: true, language: language);
+
+  /// A view of this API that asks for everything in [code].
+  KundaliApi withLanguage(String code) => KundaliApi(
+    _dio,
+    profileId: profileId,
+    standalone: standalone,
+    language: code,
+  );
 
   Future<Map<String, dynamic>> _sub(
     String consultationId,
@@ -40,7 +64,11 @@ class KundaliApi {
             : sub == 'chart-types'
             ? ApiPaths.chartTypes
             : ApiPaths.birthProfileKundali(consultationId, sub),
-        queryParameters: {...?query, 'profile': ?profileId},
+        queryParameters: {
+          ...?query,
+          'profile': ?profileId,
+          'lang': ?language,
+        },
       );
       return res.data ?? const {};
     } on DioException catch (e) {

@@ -47,7 +47,7 @@ class AstrologerListTile extends StatelessWidget {
     // compact "₹16/m" so it fits beside the rating on the photo
     final priceText = rate == null
         ? '—'
-        : '${Money.format(rate.perMinute, rate.currency, locale: locale)}/m';
+        : '${Money.format(a.priceFor(rate), rate.currency, locale: locale)}/m';
     return Pressable(
       child: OpenContainer(
         useRootNavigator: true,

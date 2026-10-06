@@ -52,6 +52,7 @@ class Routes {
   static const favourites = '/favourites';
   static const community = '/community';
   static const referral = '/referral';
+  static const offers = '/offers';
   static const gallery = '/gallery';
   static const feedback = '/feedback';
   static const quickReplies = '/quick-replies';

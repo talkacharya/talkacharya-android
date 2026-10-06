@@ -2976,5 +2976,25 @@
     }
   },
   "astroGalleryTitle": "फ़ोटो",
-  "astroGalleryPhoto": "फ़ोटो {index} / {total}"
+  "astroGalleryPhoto": "फ़ोटो {index} / {total}",
+  "waitlistBusyTitle": "{name} अभी किसी और के साथ हैं",
+  "waitlistBusyBody": "वेटलिस्ट में जुड़ें, उनके फ़्री होते ही हम आपको बता देंगे। इंतज़ार का कोई शुल्क नहीं है।",
+  "waitlistJoin": "वेटलिस्ट में जुड़ें",
+  "waitlistJoined": "आप कतार में {position} नंबर पर हैं। आपकी बारी आने पर हम बता देंगे।",
+  "waitlistWaitingTitle": "आप वेटलिस्ट में {position} नंबर पर हैं",
+  "waitlistWaitingBody": "आपकी बारी आने पर हम बता देंगे।",
+  "waitlistLeave": "हटें",
+  "waitlistTurnTitle": "आपकी बारी आ गई",
+  "waitlistTurnBody": "{time} के अंदर शुरू करें, वरना बारी आगे बढ़ जाएगी।",
+  "waitlistStart": "अभी शुरू करें",
+  "waitlistOfferToast": "{name} अब फ़्री हैं — आपकी बारी है",
+  "waitlistRemovedToast": "{name} ने अभी के लिए वेटलिस्ट बंद कर दी है",
+  "waitlistAnAstrologer": "ज्योतिषी",
+  "waitlistView": "देखें",
+  "astroOfferBadge": "अभी {percent}% की छूट",
+  "astroOfferNew": "नए ग्राहकों के लिए",
+  "astroOfferEnds": "{date}, {time} तक",
+  "bookOfferApplied": "इस कीमत में {percent}% का ऑफ़र लगा है",
+  "bookWelcomeTitle": "{minutes, plural, =1{आपका पहला मिनट हमारी ओर से} other{आपके पहले {minutes} मिनट हमारी ओर से}}",
+  "bookWelcomeBody": "वेलकम ऑफ़र: सेशन खत्म होते ही इनका पैसा आपके वॉलेट में वापस आ जाएगा।"
 }

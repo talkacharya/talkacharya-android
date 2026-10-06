@@ -5407,6 +5407,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next available date'**
   String get poojaNextDate;
+
+  /// No description provided for @offerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers'**
+  String get offerTitle;
+
+  /// No description provided for @offerSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Put a discount on your rates for a while to bring customers in.'**
+  String get offerSubtitle;
+
+  /// No description provided for @offerPickPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount'**
+  String get offerPickPercent;
+
+  /// No description provided for @offerPickDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Runs for'**
+  String get offerPickDuration;
+
+  /// No description provided for @offerPickAudience.
+  ///
+  /// In en, this message translates to:
+  /// **'Who gets it'**
+  String get offerPickAudience;
+
+  /// No description provided for @offerPickChannels.
+  ///
+  /// In en, this message translates to:
+  /// **'On which sessions'**
+  String get offerPickChannels;
+
+  /// No description provided for @offerChannelsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick none to cover chat, voice and video.'**
+  String get offerChannelsHint;
+
+  /// No description provided for @offerPercentOff.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% off'**
+  String offerPercentOff(int percent);
+
+  /// No description provided for @offerHours.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 hour} other{{count} hours}}'**
+  String offerHours(int count);
+
+  /// No description provided for @offerDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 day} other{{count} days}}'**
+  String offerDays(int count);
+
+  /// No description provided for @offerAudienceAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone'**
+  String get offerAudienceAll;
+
+  /// No description provided for @offerAudienceNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New customers'**
+  String get offerAudienceNew;
+
+  /// No description provided for @offerAllChannels.
+  ///
+  /// In en, this message translates to:
+  /// **'All sessions'**
+  String get offerAllChannels;
+
+  /// No description provided for @offerChannelChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get offerChannelChat;
+
+  /// No description provided for @offerChannelVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice'**
+  String get offerChannelVoice;
+
+  /// No description provided for @offerChannelVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Video'**
+  String get offerChannelVideo;
+
+  /// No description provided for @offerWhoPays.
+  ///
+  /// In en, this message translates to:
+  /// **'The discount comes out of your rate: while the offer runs, sessions are billed at the lower price and your earnings follow it. Customers see the offer on your profile.'**
+  String get offerWhoPays;
+
+  /// No description provided for @offerStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start offer'**
+  String get offerStart;
+
+  /// No description provided for @offerStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Your offer is live'**
+  String get offerStarted;
+
+  /// No description provided for @offerLiveBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'LIVE NOW'**
+  String get offerLiveBadge;
+
+  /// No description provided for @offerEndsAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends {when}'**
+  String offerEndsAt(String when);
+
+  /// No description provided for @offerSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Sessions'**
+  String get offerSessions;
+
+  /// No description provided for @offerEarned.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned'**
+  String get offerEarned;
+
+  /// No description provided for @offerSessionCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 session} other{{count} sessions}}'**
+  String offerSessionCount(int count);
+
+  /// No description provided for @offerEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End offer'**
+  String get offerEnd;
+
+  /// No description provided for @offerEndTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'End this offer now?'**
+  String get offerEndTitle;
+
+  /// No description provided for @offerEndBody.
+  ///
+  /// In en, this message translates to:
+  /// **'New sessions go back to your normal rates. Sessions already booked keep the offer price.'**
+  String get offerEndBody;
+
+  /// No description provided for @offerEarlier.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier offers'**
+  String get offerEarlier;
+
+  /// No description provided for @offerOffTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers are paused'**
+  String get offerOffTitle;
+
+  /// No description provided for @offerOffBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers are switched off for now. Check back later.'**
+  String get offerOffBody;
+
+  /// No description provided for @perfPromoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome-offer customers'**
+  String get perfPromoTitle;
+
+  /// No description provided for @perfPromoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'New customers on the platform\'s welcome offer. You are paid your full rate for these sessions.'**
+  String get perfPromoBody;
+
+  /// No description provided for @perfPromoSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Sessions'**
+  String get perfPromoSessions;
+
+  /// No description provided for @perfPromoRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Their rating'**
+  String get perfPromoRating;
+
+  /// No description provided for @perfPromoRepeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Came back ({returned} of {customers})'**
+  String perfPromoRepeat(int returned, int customers);
 }
 
 class _AppLocalizationsDelegate

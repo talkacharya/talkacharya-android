@@ -27,8 +27,7 @@ class _OverviewTabState extends State<_OverviewTab> {
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
             children: [
               Text(
-                'Descriptive D1 read — the free "at a glance" the client also '
-                'sees. Tendencies, not a forecast.',
+                KT.of(context).overviewIntro,
                 style: TextStyle(
                   fontSize: 11.5,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -62,14 +61,16 @@ class _OverviewSectionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final muted = Theme.of(context).colorScheme.onSurfaceVariant;
-    final (chipText, chipColor) = switch (section.tone) {
-      'supportive' => ('supportive', const Color(0xFF1E7A3C)),
-      'challenging' => ('needs care', const Color(0xFFB0691F)),
-      'mixed' => ('mixed', const Color(0xFF3F4E86)),
-      _ => ('balanced', muted),
+    final kt = KT.of(context);
+    final chipText = kt.toneWord(section.tone);
+    final chipColor = switch (section.tone) {
+      'supportive' => const Color(0xFF1E7A3C),
+      'challenging' => const Color(0xFFB0691F),
+      'mixed' => const Color(0xFF3F4E86),
+      _ => muted,
     };
     final factors = section.readingFactors
-        .map(KundaliInsights.factorText)
+        .map(kt.factorText)
         .where((t) => t.isNotEmpty)
         .toList();
 
@@ -83,7 +84,7 @@ class _OverviewSectionRow extends StatelessWidget {
               const SizedBox(width: 7),
               Expanded(
                 child: Text(
-                  KundaliInsights.title(section.area),
+                  kt.areaTitle(section.area),
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 13.5,

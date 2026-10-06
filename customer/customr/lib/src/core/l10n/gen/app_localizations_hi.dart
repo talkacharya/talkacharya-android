@@ -7313,4 +7313,92 @@ class AppLocalizationsHi extends AppLocalizations {
   String astroGalleryPhoto(int index, int total) {
     return 'फ़ोटो $index / $total';
   }
+
+  @override
+  String waitlistBusyTitle(String name) {
+    return '$name अभी किसी और के साथ हैं';
+  }
+
+  @override
+  String get waitlistBusyBody =>
+      'वेटलिस्ट में जुड़ें, उनके फ़्री होते ही हम आपको बता देंगे। इंतज़ार का कोई शुल्क नहीं है।';
+
+  @override
+  String get waitlistJoin => 'वेटलिस्ट में जुड़ें';
+
+  @override
+  String waitlistJoined(int position) {
+    return 'आप कतार में $position नंबर पर हैं। आपकी बारी आने पर हम बता देंगे।';
+  }
+
+  @override
+  String waitlistWaitingTitle(int position) {
+    return 'आप वेटलिस्ट में $position नंबर पर हैं';
+  }
+
+  @override
+  String get waitlistWaitingBody => 'आपकी बारी आने पर हम बता देंगे।';
+
+  @override
+  String get waitlistLeave => 'हटें';
+
+  @override
+  String get waitlistTurnTitle => 'आपकी बारी आ गई';
+
+  @override
+  String waitlistTurnBody(String time) {
+    return '$time के अंदर शुरू करें, वरना बारी आगे बढ़ जाएगी।';
+  }
+
+  @override
+  String get waitlistStart => 'अभी शुरू करें';
+
+  @override
+  String waitlistOfferToast(String name) {
+    return '$name अब फ़्री हैं — आपकी बारी है';
+  }
+
+  @override
+  String waitlistRemovedToast(String name) {
+    return '$name ने अभी के लिए वेटलिस्ट बंद कर दी है';
+  }
+
+  @override
+  String get waitlistAnAstrologer => 'ज्योतिषी';
+
+  @override
+  String get waitlistView => 'देखें';
+
+  @override
+  String astroOfferBadge(int percent) {
+    return 'अभी $percent% की छूट';
+  }
+
+  @override
+  String get astroOfferNew => 'नए ग्राहकों के लिए';
+
+  @override
+  String astroOfferEnds(String date, String time) {
+    return '$date, $time तक';
+  }
+
+  @override
+  String bookOfferApplied(int percent) {
+    return 'इस कीमत में $percent% का ऑफ़र लगा है';
+  }
+
+  @override
+  String bookWelcomeTitle(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'आपके पहले $minutes मिनट हमारी ओर से',
+      one: 'आपका पहला मिनट हमारी ओर से',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get bookWelcomeBody =>
+      'वेलकम ऑफ़र: सेशन खत्म होते ही इनका पैसा आपके वॉलेट में वापस आ जाएगा।';
 }

@@ -25,6 +25,7 @@ import '../../features/waitlist/presentation/view/waitlist_page.dart';
 import '../../features/home/presentation/view/tools_page.dart';
 import '../../features/workspace/presentation/view/calendar_page.dart';
 import '../../features/workspace/presentation/view/notices_pages.dart';
+import '../../features/workspace/presentation/view/offers_page.dart';
 import '../../features/workspace/presentation/view/people_pages.dart';
 import '../../features/workspace/presentation/view/studio_pages.dart';
 import '../../features/client_charts/presentation/view/client_charts_pages.dart';
@@ -145,6 +146,11 @@ GoRouter buildRouter(
         path: Routes.referral,
         parentNavigatorKey: _rootKey,
         builder: (_, _) => const ReferralPage(),
+      ),
+      GoRoute(
+        path: Routes.offers,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const OffersPage(),
       ),
       GoRoute(
         path: Routes.gallery,

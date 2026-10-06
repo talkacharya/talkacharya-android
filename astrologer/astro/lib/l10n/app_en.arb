@@ -2174,5 +2174,85 @@
   "poojaStatusPerformed": "Performed",
   "poojaStatusDone": "Video shared",
   "poojaStatusCancelled": "Cancelled",
-  "poojaNextDate": "Next available date"
+  "poojaNextDate": "Next available date",
+  "offerTitle": "Offers",
+  "offerSubtitle": "Put a discount on your rates for a while to bring customers in.",
+  "offerPickPercent": "Discount",
+  "offerPickDuration": "Runs for",
+  "offerPickAudience": "Who gets it",
+  "offerPickChannels": "On which sessions",
+  "offerChannelsHint": "Pick none to cover chat, voice and video.",
+  "offerPercentOff": "{percent}% off",
+  "@offerPercentOff": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "offerHours": "{count, plural, =1{1 hour} other{{count} hours}}",
+  "@offerHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offerDays": "{count, plural, =1{1 day} other{{count} days}}",
+  "@offerDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offerAudienceAll": "Everyone",
+  "offerAudienceNew": "New customers",
+  "offerAllChannels": "All sessions",
+  "offerChannelChat": "Chat",
+  "offerChannelVoice": "Voice",
+  "offerChannelVideo": "Video",
+  "offerWhoPays": "The discount comes out of your rate: while the offer runs, sessions are billed at the lower price and your earnings follow it. Customers see the offer on your profile.",
+  "offerStart": "Start offer",
+  "offerStarted": "Your offer is live",
+  "offerLiveBadge": "LIVE NOW",
+  "offerEndsAt": "Ends {when}",
+  "@offerEndsAt": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "offerSessions": "Sessions",
+  "offerEarned": "Earned",
+  "offerSessionCount": "{count, plural, =1{1 session} other{{count} sessions}}",
+  "@offerSessionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "offerEnd": "End offer",
+  "offerEndTitle": "End this offer now?",
+  "offerEndBody": "New sessions go back to your normal rates. Sessions already booked keep the offer price.",
+  "offerEarlier": "Earlier offers",
+  "offerOffTitle": "Offers are paused",
+  "offerOffBody": "Offers are switched off for now. Check back later.",
+  "perfPromoTitle": "Welcome-offer customers",
+  "perfPromoBody": "New customers on the platform's welcome offer. You are paid your full rate for these sessions.",
+  "perfPromoSessions": "Sessions",
+  "perfPromoRating": "Their rating",
+  "perfPromoRepeat": "Came back ({returned} of {customers})",
+  "@perfPromoRepeat": {
+    "placeholders": {
+      "returned": {
+        "type": "int"
+      },
+      "customers": {
+        "type": "int"
+      }
+    }
+  }
 }

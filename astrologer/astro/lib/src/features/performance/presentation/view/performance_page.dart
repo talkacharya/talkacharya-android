@@ -12,6 +12,7 @@ import '../../data/performance_models.dart';
 import '../cubit/performance_cubit.dart';
 import '../widgets/band_meter.dart';
 import '../widgets/loyal_card.dart';
+import '../widgets/promo_card.dart';
 import '../widgets/perf_format.dart';
 
 /// The full scorecard: every reading on a three-zone meter with what it means
@@ -65,6 +66,7 @@ class _PerformanceView extends StatelessWidget {
                   : null,
             ),
           LoyalCard(loyal: p.loyal, windowDays: p.windowDays),
+          if (p.promo.sessions > 0) PromoCard(promo: p.promo),
           _RatingsCard(perf: p),
         ], step: const Duration(milliseconds: 50)).map(_spaced).toList(),
       ),

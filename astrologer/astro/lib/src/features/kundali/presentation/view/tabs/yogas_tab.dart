@@ -20,8 +20,9 @@ class _YogasTabState extends State<_YogasTab> {
         slice: state.yogas,
         onRetry: () => context.read<KundaliCubit>().loadYogas(),
         builder: (yogas) {
+          final kt = KT.of(context);
           if (yogas.isEmpty) {
-            return Center(child: Text(context.l10n.kundaliNoYogas));
+            return Center(child: Text(kt.noYogas));
           }
           return ListView(
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
@@ -35,20 +36,20 @@ class _YogasTabState extends State<_YogasTab> {
                         children: [
                           Expanded(
                             child: Text(
-                              y.name,
+                              kt.term(y.name),
                               style: const TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 13.5,
                               ),
                             ),
                           ),
-                          if (y.type.isNotEmpty) KundaliChip(y.type),
+                          if (y.type.isNotEmpty) KundaliChip(kt.term(y.type)),
                         ],
                       ),
                       if (y.planets.isNotEmpty) ...[
                         const SizedBox(height: 4),
                         Text(
-                          y.planets.join(' · '),
+                          kt.terms(y.planets, separator: ' · '),
                           style: TextStyle(
                             fontSize: 11.5,
                             color: Theme.of(

@@ -3094,4 +3094,144 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get poojaNextDate => 'Next available date';
+
+  @override
+  String get offerTitle => 'Offers';
+
+  @override
+  String get offerSubtitle =>
+      'Put a discount on your rates for a while to bring customers in.';
+
+  @override
+  String get offerPickPercent => 'Discount';
+
+  @override
+  String get offerPickDuration => 'Runs for';
+
+  @override
+  String get offerPickAudience => 'Who gets it';
+
+  @override
+  String get offerPickChannels => 'On which sessions';
+
+  @override
+  String get offerChannelsHint => 'Pick none to cover chat, voice and video.';
+
+  @override
+  String offerPercentOff(int percent) {
+    return '$percent% off';
+  }
+
+  @override
+  String offerHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hours',
+      one: '1 hour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String offerDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days',
+      one: '1 day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get offerAudienceAll => 'Everyone';
+
+  @override
+  String get offerAudienceNew => 'New customers';
+
+  @override
+  String get offerAllChannels => 'All sessions';
+
+  @override
+  String get offerChannelChat => 'Chat';
+
+  @override
+  String get offerChannelVoice => 'Voice';
+
+  @override
+  String get offerChannelVideo => 'Video';
+
+  @override
+  String get offerWhoPays =>
+      'The discount comes out of your rate: while the offer runs, sessions are billed at the lower price and your earnings follow it. Customers see the offer on your profile.';
+
+  @override
+  String get offerStart => 'Start offer';
+
+  @override
+  String get offerStarted => 'Your offer is live';
+
+  @override
+  String get offerLiveBadge => 'LIVE NOW';
+
+  @override
+  String offerEndsAt(String when) {
+    return 'Ends $when';
+  }
+
+  @override
+  String get offerSessions => 'Sessions';
+
+  @override
+  String get offerEarned => 'Earned';
+
+  @override
+  String offerSessionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sessions',
+      one: '1 session',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get offerEnd => 'End offer';
+
+  @override
+  String get offerEndTitle => 'End this offer now?';
+
+  @override
+  String get offerEndBody =>
+      'New sessions go back to your normal rates. Sessions already booked keep the offer price.';
+
+  @override
+  String get offerEarlier => 'Earlier offers';
+
+  @override
+  String get offerOffTitle => 'Offers are paused';
+
+  @override
+  String get offerOffBody =>
+      'Offers are switched off for now. Check back later.';
+
+  @override
+  String get perfPromoTitle => 'Welcome-offer customers';
+
+  @override
+  String get perfPromoBody =>
+      'New customers on the platform\'s welcome offer. You are paid your full rate for these sessions.';
+
+  @override
+  String get perfPromoSessions => 'Sessions';
+
+  @override
+  String get perfPromoRating => 'Their rating';
+
+  @override
+  String perfPromoRepeat(int returned, int customers) {
+    return 'Came back ($returned of $customers)';
+  }
 }

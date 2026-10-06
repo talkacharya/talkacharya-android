@@ -68,9 +68,22 @@ class _AppShellState extends State<AppShell> {
             onAction: () => context.push('/consultations/$consultationId'),
           );
         }
-      case QueueOffer(:final astrologerName):
+      case QueueOffer(:final astrologerId, :final astrologerName):
         context.read<NotificationsCubit>().bump();
-        _toast('${astrologerName ?? 'An astrologer'} is available now');
+        final l = context.l10n;
+        AppSounds.notify();
+        _toast(
+          l.waitlistOfferToast(astrologerName ?? l.waitlistAnAstrologer),
+          actionLabel: astrologerId == null ? null : l.waitlistView,
+          onAction: astrologerId == null
+              ? null
+              : () => context.push(Routes.astrologer(astrologerId)),
+        );
+      case QueueRemoved(:final astrologerName):
+        final l = context.l10n;
+        _toast(
+          l.waitlistRemovedToast(astrologerName ?? l.waitlistAnAstrologer),
+        );
       case LowBalance(:final runwaySeconds):
         _toast(
           'Low balance — about ${(runwaySeconds / 60).ceil()} min left',

@@ -20,6 +20,7 @@ class _SadeSatiTabState extends State<_SadeSatiTab> {
   @override
   Widget build(BuildContext context) {
     final muted = Theme.of(context).colorScheme.onSurfaceVariant;
+    final kt = KT.of(context);
     String range(String a, String b) => '$a → $b';
     return BlocBuilder<KundaliCubit, KundaliState>(
       builder: (context, state) => _Slice<SadeSatiCalendar>(
@@ -29,8 +30,7 @@ class _SadeSatiTabState extends State<_SadeSatiTab> {
           padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
           children: [
             Text(
-              'Dated Saturn windows from the natal Moon (${cal.natalMoonSign}). '
-              'Same view the client sees.',
+              kt.sadeIntro(kt.term(cal.natalMoonSign)),
               style: TextStyle(fontSize: 11.5, color: muted),
             ),
             const SizedBox(height: 10),
@@ -47,8 +47,9 @@ class _SadeSatiTabState extends State<_SadeSatiTab> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Sade Sati · ${period.signs.join(" → ")}'
-                      '${period.running ? "  · running" : ""}',
+                      '${kt.sadeSati} · '
+                      '${kt.terms(period.signs, separator: " → ")}'
+                      '${period.running ? "  · ${kt.runningNow}" : ""}',
                       style: const TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 12.5,
@@ -63,7 +64,8 @@ class _SadeSatiTabState extends State<_SadeSatiTab> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 3),
                         child: Text(
-                          '· ${ph.phase} (${range(ph.start, ph.end)}) — '
+                          '· ${kt.term(ph.phase)} '
+                          '(${range(ph.start, ph.end)}) — '
                           '${ph.summary}',
                           style: TextStyle(
                             fontSize: 10.5,
@@ -78,8 +80,9 @@ class _SadeSatiTabState extends State<_SadeSatiTab> {
             for (final d in cal.dhaiyaPeriods)
               KundaliCard(
                 child: Text(
-                  'Dhaiya · ${d.phase} (${range(d.start, d.end)})'
-                  '${d.running ? "  · running" : ""} — ${d.summary}',
+                  '${kt.dhaiya} · ${kt.term(d.phase)} '
+                  '(${range(d.start, d.end)})'
+                  '${d.running ? "  · ${kt.runningNow}" : ""} — ${d.summary}',
                   style: const TextStyle(fontSize: 11, height: 1.4),
                 ),
               ),
@@ -104,12 +107,13 @@ class _VarshphalBlock extends StatelessWidget {
       builder: (context, state) {
         final v = state.varshphal.value;
         if (v == null) return const SizedBox.shrink();
+        final kt = KT.of(context);
         return KundaliCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Varshphal — age ${v.age} (${v.starts} → ${v.ends})',
+                kt.varshphalTitle(v.age, v.starts, v.ends),
                 style: const TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 13,
@@ -117,8 +121,10 @@ class _VarshphalBlock extends StatelessWidget {
               ),
               const SizedBox(height: 3),
               Text(
-                'Varsha Lagna ${v.varshaLagna} · Muntha ${v.munthaSign} H${v.munthaHouse} · '
-                'year lord ${v.yearLord} (H${v.yearLordHouse}, ${v.yearLordDignity})',
+                '${kt.varshaLagna} ${kt.term(v.varshaLagna)} · '
+                '${kt.muntha} ${kt.term(v.munthaSign)} ${kt.h(v.munthaHouse)} · '
+                '${kt.yearLord} ${kt.term(v.yearLord)} '
+                '(${kt.h(v.yearLordHouse)}, ${kt.term(v.yearLordDignity)})',
                 style: TextStyle(fontSize: 10.5, height: 1.35, color: muted),
               ),
               if (v.summary.isNotEmpty) ...[
@@ -147,13 +153,18 @@ class _MuhurtaBlock extends StatelessWidget {
       builder: (context, state) {
         final d = state.muhurta.value;
         if (d == null || !d.available) return const SizedBox.shrink();
+        final kt = KT.of(context);
         return KundaliCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Today's timing — ${d.weekday} (${d.dayLord}), "
-                '${d.sunrise}/${d.sunset}',
+                kt.muhurtaTitle(
+                  kt.term(d.weekday),
+                  kt.term(d.dayLord),
+                  d.sunrise,
+                  d.sunset,
+                ),
                 style: const TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 13,
@@ -196,21 +207,27 @@ class _AvTransitBlock extends StatelessWidget {
       builder: (context, state) {
         final r = state.avTransit.value;
         if (r == null) return const SizedBox.shrink();
+        final kt = KT.of(context);
         return KundaliCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Ashtakavarga transit reading',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+              Text(
+                kt.avTransitTitle,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                ),
               ),
               const SizedBox(height: 6),
               for (final row in r.transits)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 3),
                   child: Text(
-                    '· ${row.planet} ${row.sign} H${row.houseFromLagna} — '
-                    '${row.bindus}/8${row.retrograde ? " R" : ""} · ${row.tone}',
+                    '· ${kt.term(row.planet)} ${kt.term(row.sign)} '
+                    '${kt.h(row.houseFromLagna)} — '
+                    '${row.bindus}/8${row.retrograde ? kt.retro : ""} · '
+                    '${kt.term(row.tone)}',
                     style: TextStyle(
                       fontSize: 10.5,
                       height: 1.35,

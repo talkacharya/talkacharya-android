@@ -53,6 +53,7 @@ class _ChartsTabState extends State<_ChartsTab>
   Widget build(BuildContext context) {
     super.build(context);
     final wheelH = MediaQuery.sizeOf(context).width - 20;
+    final kt = KT.of(context);
 
     return BlocBuilder<KundaliCubit, KundaliState>(
       builder: (context, state) {
@@ -74,7 +75,7 @@ class _ChartsTabState extends State<_ChartsTab>
                   final on = i == _page;
                   final scheme = Theme.of(context).colorScheme;
                   return ChoiceChip(
-                    label: Text(chartShortLabel(_essentials[i])),
+                    label: Text(kt.chartShortLabel(_essentials[i])),
                     selected: on,
                     showCheckmark: false,
                     labelStyle: TextStyle(
@@ -124,20 +125,20 @@ class _ChartsTabState extends State<_ChartsTab>
             if (current.value != null) ...[
               ChartDetails(
                 vc: current.value!,
-                fallbackTitle: chartShortLabel(currentType),
+                fallbackTitle: kt.chartShortLabel(currentType),
               ),
               const SizedBox(height: 14),
               PlanetTable(vc: current.value!),
             ] else if (current.status == AsyncStatus.error)
               ChartBanner(
                 icon: Icons.error_outline_rounded,
-                text: current.error ?? 'Could not load this chart',
+                text: current.error ?? kt.loadFailed,
               ),
             const SizedBox(height: 14),
             FilledButton.tonalIcon(
               onPressed: menu.isEmpty ? null : () => _openPicker(menu),
               icon: const Icon(Icons.grid_view_rounded, size: 18),
-              label: Text(context.l10n.kundaliAllCharts),
+              label: Text(kt.allCharts),
               style: FilledButton.styleFrom(
                 minimumSize: const Size.fromHeight(48),
               ),

@@ -21,6 +21,7 @@ class _BhavaTabState extends State<_BhavaTab> {
         onRetry: () => context.read<KundaliCubit>().loadBhava(),
         builder: (houses) {
           final scheme = Theme.of(context).colorScheme;
+          final kt = KT.of(context);
           return ListView(
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
             children: [
@@ -45,21 +46,27 @@ class _BhavaTabState extends State<_BhavaTab> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Text(
-                            '${h.sign}  ·  lord ${h.lord}'
-                            '${h.lordSign.isNotEmpty ? " in ${h.lordSign} (H${h.lordHouse})" : ""}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12.5,
+                          Expanded(
+                            child: Text(
+                              kt.bhavaHeader(
+                                kt.term(h.sign),
+                                kt.term(h.lord),
+                                kt.term(h.lordSign),
+                                h.lordHouse,
+                              ),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12.5,
+                              ),
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Occupants: ${h.occupants.isEmpty ? "—" : h.occupants.join(", ")}'
-                        '${h.aspectedBy.isEmpty ? "" : "    Aspected by: ${h.aspectedBy.join(", ")}"}'
-                        '${h.karaka.isNotEmpty ? "    Karaka: ${h.karaka}" : ""}',
+                        '${kt.occupants}: ${h.occupants.isEmpty ? "—" : kt.terms(h.occupants)}'
+                        '${h.aspectedBy.isEmpty ? "" : "    ${kt.aspectedBy}: ${kt.terms(h.aspectedBy)}"}'
+                        '${h.karaka.isNotEmpty ? "    ${kt.karaka}: ${kt.term(h.karaka)}" : ""}',
                         style: TextStyle(
                           fontSize: 11.5,
                           color: scheme.onSurfaceVariant,
@@ -69,7 +76,7 @@ class _BhavaTabState extends State<_BhavaTab> {
                         Padding(
                           padding: const EdgeInsets.only(top: 4),
                           child: Text(
-                            '+${h.beneficCount} benefic   −${h.maleficCount} malefic',
+                            kt.beneficMalefic(h.beneficCount, h.maleficCount),
                             style: const TextStyle(fontSize: 11),
                           ),
                         ),
