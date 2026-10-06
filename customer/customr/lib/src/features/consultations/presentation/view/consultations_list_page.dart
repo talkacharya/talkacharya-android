@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/error_view.dart';
 import '../../data/consultation_repository.dart';
 import '../../data/models/consultation.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class ConsultationsListPage extends StatefulWidget {
   const ConsultationsListPage({super.key});
 

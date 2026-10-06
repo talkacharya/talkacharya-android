@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_theme.dart';
-import '../../core/theme/astro_palette.dart';
-import '../../core/theme/brand_colors.dart';
-import 'hue_widgets.dart';
-import 'pressable.dart';
-
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Chrome for a pushed settings / editor page: a large collapsing title,
 /// optional subtitle, scrolling [children], and an optional sticky
 /// [bottomBar] (see [StickyActionBar]).

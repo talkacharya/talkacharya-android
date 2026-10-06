@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../engine/chat_controller.dart';
 import '../ports/chat_ports.dart';
@@ -44,8 +45,27 @@ class _ChatComposerState extends State<ChatComposer> {
 
   ChatController get c => widget.controller;
 
+  StreamSubscription<ChatSessionState>? _replies;
+
+  @override
+  void initState() {
+    super.initState();
+    // Choosing a reply — a swipe or the long-press menu — means "I am about to
+    // type": bring the keyboard up with the quote, the way every messenger
+    // does, rather than leaving a reply bar over a closed field.
+    var quoting = c.state.replyingTo;
+    _replies = c.stream.listen((s) {
+      final next = s.replyingTo;
+      if (next != null && next != quoting && widget.enabled && mounted) {
+        _focus.requestFocus();
+      }
+      quoting = next;
+    });
+  }
+
   @override
   void dispose() {
+    _replies?.cancel();
     _field.dispose();
     _focus.dispose();
     super.dispose();
@@ -54,6 +74,7 @@ class _ChatComposerState extends State<ChatComposer> {
   void _send() {
     final text = _field.text.trim();
     if (text.isEmpty) return;
+    HapticFeedback.lightImpact();
     c.sendText(text);
     _field.clear();
     setState(() {});
@@ -169,7 +190,11 @@ class _ChatComposerState extends State<ChatComposer> {
                     minLines: 1,
                     maxLines: 5,
                     textInputAction: TextInputAction.newline,
-                    onChanged: c.onComposerChanged,
+                    onChanged: (v) {
+                      c.onComposerChanged(v);
+                      // Rebuild so the mic ↔ send toggle reacts immediately.
+                      setState(() {});
+                    },
                     decoration: InputDecoration(
                       isDense: true,
                       hintText: _dictating ? 'Listening…' : widget.hint,
@@ -202,29 +227,39 @@ class _ChatComposerState extends State<ChatComposer> {
                   ),
                 ],
                 const SizedBox(width: 2),
-                // Hold to talk. Typing Hindi on a phone keyboard is slow enough
-                // that a voice note is often the difference between a question
-                // asked and one abandoned.
-                if (c.canRecordVoice && _field.text.trim().isEmpty)
-                  GestureDetector(
-                    onLongPressStart: (_) => _startVoice(),
-                    onLongPressEnd: (_) => _endVoice(send: true),
-                    onLongPressCancel: () => _endVoice(send: false),
-                    child: IconButton.filled(
-                      onPressed: widget.enabled ? _voiceHint : null,
-                      icon: Icon(
-                        c.state.recording
-                            ? Icons.stop_rounded
-                            : Icons.graphic_eq_rounded,
-                        size: 20,
-                      ),
-                    ),
-                  )
-                else
-                  IconButton.filled(
-                    onPressed: widget.enabled ? _send : null,
-                    icon: const Icon(Icons.send_rounded, size: 20),
+                // AnimatedSwitcher gives a smooth crossfade between the
+                // mic (empty field) and send (has text) buttons. Without
+                // it the swap is a hard frame-cut that looks like a jhatka.
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 200),
+                  switchInCurve: Curves.easeOut,
+                  switchOutCurve: Curves.easeIn,
+                  transitionBuilder: (child, anim) => FadeTransition(
+                    opacity: anim,
+                    child: ScaleTransition(scale: anim, child: child),
                   ),
+                  child: (c.canRecordVoice && _field.text.trim().isEmpty)
+                      ? GestureDetector(
+                          key: const ValueKey('mic'),
+                          onLongPressStart: (_) => _startVoice(),
+                          onLongPressEnd: (_) => _endVoice(send: true),
+                          onLongPressCancel: () => _endVoice(send: false),
+                          child: IconButton.filled(
+                            onPressed: widget.enabled ? _voiceHint : null,
+                            icon: Icon(
+                              c.state.recording
+                                  ? Icons.stop_rounded
+                                  : Icons.graphic_eq_rounded,
+                              size: 20,
+                            ),
+                          ),
+                        )
+                      : IconButton.filled(
+                          key: const ValueKey('send'),
+                          onPressed: widget.enabled ? _send : null,
+                          icon: const Icon(Icons.send_rounded, size: 20),
+                        ),
+                ),
               ],
             ),
           ],

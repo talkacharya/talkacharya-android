@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import '../config/config_repository.dart';
 import '../di/service_locator.dart';
 
-enum HapticLevel { none, selection, light, medium, heavy }
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 /// Centralized haptic feedback service.
 class HapticService {

@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:talkacharya_predictions/talkacharya_predictions.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../shared/widgets/error_view.dart';
 import '../cubit/predictions_cubit.dart';
 import 'buy_credits_sheet.dart';
 import 'prediction_routes.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class PredictionsHomePage extends StatefulWidget {
   const PredictionsHomePage({super.key});
 

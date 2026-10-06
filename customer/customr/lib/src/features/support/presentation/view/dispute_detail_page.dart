@@ -5,17 +5,13 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/l10n/api_error_l10n.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/async_value.dart';
 import '../../../../core/util/money.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
 import '../../data/models/dispute.dart';
 import '../cubit/dispute_detail_cubit.dart';
 import '../widgets/dispute_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// One report's status (`/disputes/:id`, deep link
 /// `talkacharya://disputes/{id}`).
 class DisputeDetailPage extends StatelessWidget {

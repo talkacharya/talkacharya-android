@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:astro/src/core/l10n/l10n.dart';
-import 'package:astro/src/core/theme/brand_colors.dart';
 import 'package:astro/src/features/earnings/data/earnings_api.dart';
 import 'package:astro/src/features/earnings/data/earnings_models.dart';
 import 'package:astro/src/features/earnings/presentation/cubit/earnings_cubit.dart';
@@ -10,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class _MockApi extends Mock implements EarningsApi {}
 
 Map<String, dynamic> _entry(

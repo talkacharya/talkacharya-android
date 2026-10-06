@@ -2,13 +2,10 @@ import 'package:astro_kundali/astro_kundali.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
-import '../../../../shared/widgets/pressable.dart';
 import '../kundali_terms.dart';
 import 'k_kit.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Chart building blocks for the kundali screens, in the section's visual
 /// language. Pure rendering over the `astro_kundali` models — the shared
 /// package keeps its own neutral widgets for the astrologer app.
@@ -168,8 +165,10 @@ class KChartPanel extends StatelessWidget {
         style: style,
         retrograde: retrograde,
         fillColor: Colors.white.withValues(alpha: 0.03),
-        lineColor: Colors.white.withValues(alpha: 0.26),
-        numberColor: Colors.white.withValues(alpha: 0.5),
+        // Use brand gold so the grid lines and rasi house numbers are clearly
+        // visible on the dark cosmic background — matching the "D1 Rasi" chip.
+        lineColor: const Color(0xFFF6D695).withValues(alpha: 0.65),
+        numberColor: const Color(0xFFF6D695).withValues(alpha: 0.95),
         textColor: Colors.white,
         onHouseTap: onHouseTap,
       );

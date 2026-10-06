@@ -4,13 +4,13 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
 import '../../../home/presentation/view/widgets/home_shared.dart';
 import '../../data/models/catalog.dart';
 import '../../data/models/product.dart';
 import '../../data/store_repository.dart';
 import 'store_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Home feed section: featured remedies and poojas from the store home payload.
 /// Owns its data (the repository caches `/store/home` for a few minutes) and hides
 /// itself when the catalogue is empty or unreachable — never an empty rail.

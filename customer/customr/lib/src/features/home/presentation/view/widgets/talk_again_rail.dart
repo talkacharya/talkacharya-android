@@ -4,12 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/router/routes.dart';
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../shared/widgets/pressable.dart';
 import '../../../data/models/home_consultation.dart';
 import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Recently consulted astrologers — the cheapest repeat revenue. Hidden for
 /// users with no history. Each tile carries the astrologer's own colour.
 class TalkAgainRail extends StatelessWidget {

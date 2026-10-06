@@ -1258,5 +1258,669 @@
         "type": "String"
       }
     }
-  }
+  },
+  "callAudio": "Audio",
+  "@callAudio": {
+    "description": "Call screen audio-output picker"
+  },
+  "callEarpiece": "Phone",
+  "@callEarpiece": {
+    "description": "Call screen audio-output picker"
+  },
+  "callWiredHeadset": "Headset",
+  "@callWiredHeadset": {
+    "description": "Call screen audio-output picker"
+  },
+  "callBluetooth": "Bluetooth",
+  "@callBluetooth": {
+    "description": "Call screen audio-output picker"
+  },
+  "chatMute": "Mute notifications",
+  "@chatMute": {
+    "description": "Chat room / chats list"
+  },
+  "chatUnmute": "Unmute notifications",
+  "@chatUnmute": {
+    "description": "Chat room / chats list"
+  },
+  "chatArchive": "Archive chat",
+  "@chatArchive": {
+    "description": "Chat room / chats list"
+  },
+  "chatUnarchive": "Move out of archive",
+  "@chatUnarchive": {
+    "description": "Chat room / chats list"
+  },
+  "chatArchivedTitle": "Archived",
+  "@chatArchivedTitle": {
+    "description": "Chat room / chats list"
+  },
+  "chatArchivedRow": "Archived ({count})",
+  "@chatArchivedRow": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatBlock": "Block {name}",
+  "@chatBlock": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatUnblock": "Unblock {name}",
+  "@chatUnblock": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatBlockConfirmTitle": "Block {name}?",
+  "@chatBlockConfirmTitle": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatBlockConfirmYes": "Block",
+  "@chatBlockConfirmYes": {
+    "description": "Chat room / chats list"
+  },
+  "chatBlockedByMe": "You blocked {name}.",
+  "@chatBlockedByMe": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatBlockedByThem": "Messages are turned off in this conversation.",
+  "@chatBlockedByThem": {
+    "description": "Chat room / chats list"
+  },
+  "chatMoreOptions": "More options",
+  "@chatMoreOptions": {
+    "description": "Chat room / chats list"
+  },
+  "chatBlockConfirmBody": "Neither of you will be able to send messages here, and {name} won't be able to book you until you unblock them.",
+  "@chatBlockConfirmBody": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sessionChat": "Chat",
+  "@sessionChat": {
+    "description": "Chat room / chats list"
+  },
+  "sessionVoice": "Voice call",
+  "@sessionVoice": {
+    "description": "Chat room / chats list"
+  },
+  "sessionVideo": "Video call",
+  "@sessionVideo": {
+    "description": "Chat room / chats list"
+  },
+  "roomLiveNow": "{session} in progress",
+  "@roomLiveNow": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "session": {
+        "type": "String"
+      }
+    }
+  },
+  "astroEarnedSoFar": "{amount} earned so far",
+  "@astroEarnedSoFar": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "astroEndedEarned": "You earned {amount} · {minutes} min",
+  "@astroEndedEarned": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "astroCustomerRated": "{name} rated this session {rating}/5",
+  "@astroCustomerRated": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "rating": {
+        "type": "int"
+      }
+    }
+  },
+  "astroNotRatedYet": "Not rated yet",
+  "@astroNotRatedYet": {
+    "description": "Chat room / chats list"
+  },
+  "astroRequestInRoom": "{name} is asking for a {session}",
+  "@astroRequestInRoom": {
+    "description": "In-chat request card, shown instead of the request sheet when the astrologer is already in that customer's room",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "session": {
+        "type": "String"
+      }
+    }
+  },
+  "astroThreadClosed": "Consultation ended. {name} can start a new one any time.",
+  "@astroThreadClosed": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sysRequested": "{session} requested",
+  "@sysRequested": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "session": {
+        "type": "String"
+      }
+    }
+  },
+  "sysAccepted": "You picked up · connecting",
+  "@sysAccepted": {
+    "description": "Chat room / chats list"
+  },
+  "sysStarted": "{session} started",
+  "@sysStarted": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "session": {
+        "type": "String"
+      }
+    }
+  },
+  "sysEnded": "{session} ended · {minutes} min",
+  "@sysEnded": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "session": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "sysEndedPlain": "{session} ended",
+  "@sysEndedPlain": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "session": {
+        "type": "String"
+      }
+    }
+  },
+  "sysRejected": "You declined the request",
+  "@sysRejected": {
+    "description": "Chat room / chats list"
+  },
+  "sysCancelled": "{name} cancelled the request",
+  "@sysCancelled": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sysExpired": "Request not answered in time",
+  "@sysExpired": {
+    "description": "Chat room / chats list"
+  },
+  "sysNoShow": "{session} didn't connect",
+  "@sysNoShow": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "session": {
+        "type": "String"
+      }
+    }
+  },
+  "sysEndingSoon": "{name}'s balance is running low",
+  "@sysEndingSoon": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "presenceOnBreak": "On a break",
+  "presenceOnBreakHint": "You'll be back online by yourself when it ends",
+  "clubTitle": "You're in the {club} club",
+  "@clubTitle": {
+    "placeholders": {
+      "club": {
+        "type": "String"
+      }
+    }
+  },
+  "clubTitleNone": "Your first club is within reach",
+  "clubProjection": "On pace for {amount} this month",
+  "@clubProjection": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "clubNeedToday": "Earn {amount} more today to stay on pace for the {club} club.",
+  "@clubNeedToday": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "club": {
+        "type": "String"
+      }
+    }
+  },
+  "clubOnTrack": "Today's target is met — the {club} club is next. Keep going.",
+  "@clubOnTrack": {
+    "placeholders": {
+      "club": {
+        "type": "String"
+      }
+    }
+  },
+  "clubTop": "You're in the top club. Outstanding work.",
+  "todayTitle": "Today's earnings",
+  "todaySub": "After platform fee",
+  "todayHide": "Hide amounts",
+  "todayShow": "Show amounts",
+  "todayViewEarnings": "View earnings",
+  "todaySessions": "Sessions",
+  "todayTalkTime": "Talk time",
+  "todayOnline": "Online",
+  "scoreTitle": "Last {days} days",
+  "@scoreTitle": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "scoreUpdated": "Updated {time}",
+  "@scoreUpdated": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "scoreOpen": "Open performance dashboard",
+  "perfOnlineShort": "Online\nper day",
+  "perfSessionShort": "Average\nsession",
+  "perfFirstRepeatShort": "First-time\nrepeat",
+  "perfLoyalShort": "Loyal\ncustomers",
+  "perfHoursMinutes": "{h}h {m}m",
+  "@perfHoursMinutes": {
+    "placeholders": {
+      "h": {
+        "type": "int"
+      },
+      "m": {
+        "type": "int"
+      }
+    }
+  },
+  "perfMinutesSeconds": "{m}m {s}s",
+  "@perfMinutesSeconds": {
+    "placeholders": {
+      "m": {
+        "type": "int"
+      },
+      "s": {
+        "type": "int"
+      }
+    }
+  },
+  "perfSeconds": "{s}s",
+  "@perfSeconds": {
+    "placeholders": {
+      "s": {
+        "type": "int"
+      }
+    }
+  },
+  "perfHours": "{h}h",
+  "@perfHours": {
+    "placeholders": {
+      "h": {
+        "type": "int"
+      }
+    }
+  },
+  "perfMinutes": "{m}m",
+  "@perfMinutes": {
+    "placeholders": {
+      "m": {
+        "type": "int"
+      }
+    }
+  },
+  "breakTitle": "Take a break",
+  "breakLeft": "{count, plural, =1{1 break left today} other{{count} breaks left today}}",
+  "@breakLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "breakNoneLeft": "No breaks left today",
+  "breakButton": "Take a break",
+  "breakSheetTitle": "How long do you need?",
+  "breakInfo": "Customers won't be able to reach you during the break. You come back online by yourself when it ends — no need to switch anything on.",
+  "breakMinutes": "{minutes} min",
+  "@breakMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "breakStart": "Start break",
+  "breakOnTitle": "On a break",
+  "breakBackIn": "Back online in {time}",
+  "@breakBackIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "breakResume": "I'm back",
+  "loyalTitle": "Loyal customers",
+  "loyalBody": "Customers who came back in the last {days} days and spent {minutes}+ minutes with you.",
+  "@loyalBody": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "loyalWinBack": "See who's gone quiet",
+  "dashTools": "Tools",
+  "dashActionPerformance": "Performance",
+  "dashActionWinBack": "Win back",
+  "dashActionChats": "Chat history",
+  "dashActionRequests": "Requests",
+  "dashActionBoost": "Boost profile",
+  "dashActionAlerts": "Notifications",
+  "perfTitle": "Performance",
+  "perfSubtitle": "Last {days} days, compared with the {days} before.",
+  "@perfSubtitle": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "perfFocusTitle": "Where to focus",
+  "perfLegendLow": "Needs work",
+  "perfLegendMid": "Moderate",
+  "perfLegendGood": "Good",
+  "perfVerdictLow": "Needs work",
+  "perfVerdictMid": "Almost there",
+  "perfVerdictGood": "Doing well",
+  "perfVerdictNone": "Not enough data yet",
+  "perfFirstRepeat": "First-time repeat",
+  "perfTotalRepeat": "Total repeat",
+  "perfAvgSession": "Average session",
+  "perfOnlineTime": "Average online time",
+  "perfMissed": "Missed requests",
+  "perfFirstRepeatAbout": "Of the customers who consulted you for the first time in this period, the share who came back for another session.\n\nExample: 10 new customers, 4 of them returned — that is 40%.",
+  "perfTotalRepeatAbout": "Of everyone you consulted in this period, new or not, the share who have consulted you more than once.\n\nExample: 20 customers, 9 of them have been with you before or came back — that is 45%.",
+  "perfAvgSessionAbout": "Total billed time in this period divided by the number of sessions. Longer sessions usually mean the customer felt heard.\n\nExample: 120 minutes across 10 sessions — 12 minutes each.",
+  "perfOnlineTimeAbout": "How long you were reachable each day on average — online or in a session. Breaks and time offline are not counted. We recommend at least six hours a day: customers return to astrologers they can find.",
+  "perfMissedAbout": "Requests that timed out before you answered, plus the ones you declined. Requests the customer cancelled are not counted. If you need to step away, take a break instead of leaving requests to ring out.",
+  "perfHowCalculated": "How it's calculated",
+  "perfShowLess": "Show less",
+  "perfNoChange": "Same as the period before",
+  "perfDeltaUp": "Up {amount} on the period before",
+  "@perfDeltaUp": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "perfDeltaDown": "Down {amount} on the period before",
+  "@perfDeltaDown": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "perfOnlineChart": "Hours online, day by day",
+  "perfGoalLine": "{hours}h goal",
+  "@perfGoalLine": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "perfMissedUnanswered": "Timed out · {count}",
+  "@perfMissedUnanswered": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "perfMissedDeclined": "Declined · {count}",
+  "@perfMissedDeclined": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "perfRatings": "Ratings",
+  "perfRatingsAbout": "Lifetime average of published ratings from customers you've consulted.",
+  "perfRatingOverall": "Overall",
+  "perfRatingCount": "{count, plural, =1{1 rating} other{{count} ratings}}",
+  "@perfRatingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "perfNoRatings": "No ratings yet",
+  "perfTipOnline": "More hours online is your quickest win — customers can only return to someone they can find.",
+  "perfTipSession": "Aim for longer sessions: ask a follow-up question before you wrap up.",
+  "perfTipFirstRepeat": "Give first-time customers a reason to return — tell them what to look at next time.",
+  "perfTipTotalRepeat": "Your regulars are slipping away. See who's gone quiet and be online when they usually come.",
+  "perfTipMissed": "Too many requests are getting away. Answer before they time out, or take a break when you step away.",
+  "winBackTitle": "Win back",
+  "winBackSubtitle": "Returning customers you haven't spoken to in {days}+ days. Open a thread to see where you left off.",
+  "@winBackSubtitle": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "winBackTile": "{sessions} sessions · {minutes} min together",
+  "@winBackTile": {
+    "placeholders": {
+      "sessions": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "winBackLast": "Last session {time}",
+  "@winBackLast": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "winBackCustomer": "Customer",
+  "winBackEmptyTitle": "No one's gone quiet",
+  "winBackEmptyBody": "Returning customers who stop coming back will show up here.",
+  "dashActionWaitlist": "Waitlist",
+  "dashActionCalls": "Call history",
+  "dashActionRemedies": "Remedies",
+  "dashActionSounds": "Sounds",
+  "waitlistTitle": "Waitlist",
+  "waitlistSubtitle": "Customers waiting for you, longest first. When a session ends the next person is told it's their turn — or call someone in yourself.",
+  "waitlistEmptyTitle": "No one is waiting",
+  "waitlistEmptyBody": "Customers who try to reach you while you're in a session can join your waitlist. They'll show up here.",
+  "waitlistInvite": "Call in",
+  "waitlistInvited": "{name} has been told it's their turn",
+  "@waitlistInvited": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "waitlistInvitedLeft": "Invited · {time} to join",
+  "@waitlistInvitedLeft": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "waitlistWaiting": "Waiting {time}",
+  "@waitlistWaiting": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "waitlistNew": "New customer",
+  "waitlistRegular": "{count, plural, =1{1 session with you} other{{count} sessions with you}}",
+  "@waitlistRegular": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "waitlistRemove": "Remove from waitlist",
+  "waitlistRemoveTitle": "Remove {name}?",
+  "@waitlistRemoveTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "waitlistRemoveBody": "They lose their place in line and are told you can't take them right now.",
+  "callsTitle": "Call history",
+  "callsFilterAll": "All",
+  "callsFilterCompleted": "Completed",
+  "callsFilterMissed": "Missed",
+  "callsStatCompleted": "Completed",
+  "callsStatTalkTime": "Talk time",
+  "callsStatMissed": "Missed",
+  "callsEmptyTitle": "No calls yet",
+  "callsEmptyBody": "Voice and video calls with your customers will be listed here.",
+  "callsEmptyFilter": "Nothing here",
+  "remediesTitle": "Remedies",
+  "remediesSubtitle": "Gemstones, rudraksha, poojas and more from the store that you've suggested to your customers.",
+  "remediesSuggest": "Suggest a remedy",
+  "remediesSummary": "{sent} suggested · {bought} bought",
+  "@remediesSummary": {
+    "placeholders": {
+      "sent": {
+        "type": "int"
+      },
+      "bought": {
+        "type": "int"
+      }
+    }
+  },
+  "remediesCommission": "You earn {percent} when a customer buys what you suggested.",
+  "@remediesCommission": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "remediesEmptyTitle": "No remedies suggested yet",
+  "remediesEmptyBody": "Suggest a product from the store after a reading. The customer gets it in their app, and you earn a commission if they buy.",
+  "remedyStatusSent": "Sent",
+  "remedyStatusViewed": "Seen",
+  "remedyStatusPurchased": "Bought",
+  "remedyStatusExpired": "Expired",
+  "remedyFor": "For {name} · {time}",
+  "@remedyFor": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remedySuggestTitle": "Suggest a remedy",
+  "remedySuggestFor": "For {name}",
+  "@remedySuggestFor": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "remedyStepCustomer": "Who is it for?",
+  "remedyStepProduct": "Choose the remedy",
+  "remedyStepNote": "How should they use it?",
+  "remedySearchHint": "Search gemstones, rudraksha, poojas…",
+  "remedyNoteHint": "For example: wear it on the ring finger on a Saturday morning.",
+  "remedyNoProducts": "No products match that search.",
+  "remedyNoCustomers": "You can suggest remedies to customers you've consulted. None yet.",
+  "remedySend": "Send suggestion",
+  "remedySent": "Suggestion sent",
+  "remedyDisclosure": "The customer sees this as your recommendation and decides for themselves. Suggest only what the chart calls for."
 }

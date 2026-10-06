@@ -3,14 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/router/routes.dart';
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
 import '../../../../birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
 import '../../../data/models/panchang.dart';
 import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
 import 'package:customr/src/core/l10n/l10n.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Today's panchang. Needs a birth profile (for the location); prompts to add
 /// one when there is none.
 /// Redesigned with warm gradient cards and golden accents.

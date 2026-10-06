@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// The twelve houses (bhavas): each one's sign, lord, occupants and aspects,
 /// and whether benefic or malefic influence dominates.
 class BhavaPage extends StatefulWidget {

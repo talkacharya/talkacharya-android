@@ -10,11 +10,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../../wallet/data/wallet_api.dart';
 import '../../data/models/order.dart';
 import '../../data/models/product.dart';
@@ -22,6 +17,7 @@ import '../cubit/order_cubits.dart';
 import '../cubit/store_payment.dart';
 import '../widgets/order_widgets.dart';
 import '../widgets/store_ui.dart';
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 import 'orders_page.dart' show BookingCard;
 
 /// `/store/orders/:id` — what was bought, where it is, what to do next.

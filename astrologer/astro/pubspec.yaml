@@ -1,7 +1,7 @@
 name: astro
 description: "TalkAcharya — astrologer app (consultations, availability, earnings)."
 publish_to: 'none'
-version: 1.0.4+4
+version: 1.1.0+10
 
 environment:
   sdk: ^3.11.0
@@ -73,11 +73,15 @@ dependencies:
 
   # ui
   google_fonts: ^6.2.1
+  flutter_svg: ^2.0.0
   pinput: ^5.0.0
   image_picker: ^1.1.2
   shimmer: ^3.0.0
   url_launcher: ^6.3.1
   share_plus: ^10.1.2
+  talkacharya_ui:
+    path: ../../packages/talkacharya_ui
+  simple_pip_mode: ^1.1.0
 
 
 dev_dependencies:

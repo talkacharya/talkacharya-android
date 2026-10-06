@@ -5,14 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
-import '../../../../shared/widgets/pressable.dart';
-import '../../../../shared/widgets/skeleton.dart';
-
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// The kundali section's visual kit — the same language as Home, Horoscope and
 /// Panchang: a cosmic hero, hue-tinted tiles, gradient-bar section headers,
 /// staggered entrances and shimmer skeletons. Pages compose these; none of
@@ -71,6 +64,8 @@ class KundaliScaffold extends StatelessWidget {
     this.expandedHeight,
     this.bodyPadding = const EdgeInsets.fromLTRB(16, 16, 16, 40),
     this.animate = true,
+    this.leading,
+    this.automaticallyImplyLeading = true,
     super.key,
   });
 
@@ -98,6 +93,8 @@ class KundaliScaffold extends StatelessWidget {
 
   /// Stagger the body in on first build.
   final bool animate;
+  final Widget? leading;
+  final bool automaticallyImplyLeading;
   final List<Widget> children;
 
   @override
@@ -117,6 +114,8 @@ class KundaliScaffold extends StatelessWidget {
           actions: actions,
           hue: hue,
           expandedHeight: expandedHeight,
+          leading: leading,
+          automaticallyImplyLeading: automaticallyImplyLeading,
         ),
         SliverPadding(
           padding: bodyPadding,
@@ -155,6 +154,8 @@ class KHeroAppBar extends StatelessWidget {
     this.actions = const [],
     this.hue = AstroPalette.career,
     this.expandedHeight,
+    this.leading,
+    this.automaticallyImplyLeading = true,
     super.key,
   });
 
@@ -168,56 +169,93 @@ class KHeroAppBar extends StatelessWidget {
   final List<Widget> actions;
   final AstroHue hue;
   final double? expandedHeight;
+  final Widget? leading;
+  final bool automaticallyImplyLeading;
 
   @override
   Widget build(BuildContext context) {
     final brand = context.brand;
     final theme = Theme.of(context);
+    final canPop = ModalRoute.of(context)?.canPop == true || context.canPop();
+    final showBackButton =
+        leading != null || (automaticallyImplyLeading && canPop);
     final height =
         expandedHeight ??
         (180 +
             (subheadline == null ? 0 : 22) +
             (chips.isEmpty ? 0 : 44) +
             (bottom == null ? 0 : 58));
-    return SliverAppBar(
-      pinned: true,
-      stretch: true,
-      expandedHeight: height,
-      backgroundColor: brand.cosmicStart,
-      foregroundColor: brand.onCosmic,
-      surfaceTintColor: Colors.transparent,
-      systemOverlayStyle: SystemUiOverlayStyle.light,
-      actions: actions,
-      flexibleSpace: LayoutBuilder(
-        builder: (context, box) {
-          final top = MediaQuery.paddingOf(context).top;
-          final collapsed = box.maxHeight <= top + kToolbarHeight + 16;
-          return FlexibleSpaceBar(
-            collapseMode: CollapseMode.parallax,
-            stretchModes: const [StretchMode.zoomBackground],
-            titlePadding: const EdgeInsetsDirectional.only(
-              start: 56,
-              end: 96,
-              bottom: 16,
-            ),
-            // Hidden while expanded — and must not swallow taps meant for the
-            // hero controls it sits over.
-            title: IgnorePointer(
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 160),
-                opacity: collapsed ? 1 : 0,
-                child: Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: brand.onCosmic,
-                    fontWeight: FontWeight.w700,
+
+    return SliverLayoutBuilder(
+      builder: (context, constraints) {
+        final top = MediaQuery.paddingOf(context).top;
+        final isCollapsed =
+            constraints.scrollOffset >= (height - top - kToolbarHeight - 16);
+
+        final effectiveActions = isCollapsed && actions.length > 2
+            ? _buildCollapsedActions(context, actions)
+            : actions;
+
+        final visibleActionCount = effectiveActions.length;
+        final endPadding = visibleActionCount == 0
+            ? 20.0
+            : (visibleActionCount * 48.0 + 12.0);
+
+        return SliverAppBar(
+          pinned: true,
+          stretch: true,
+          expandedHeight: height,
+          backgroundColor: brand.cosmicStart,
+          foregroundColor: brand.onCosmic,
+          surfaceTintColor: Colors.transparent,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          automaticallyImplyLeading: false,
+          leading: leading ??
+              (showBackButton
+                  ? IconButton(
+                      icon: const Icon(Icons.arrow_back_rounded),
+                      color: brand.onCosmic,
+                      tooltip:
+                          MaterialLocalizations.of(context).backButtonTooltip,
+                      onPressed: () {
+                        if (context.canPop()) {
+                          context.pop();
+                        } else {
+                          Navigator.of(context).maybePop();
+                        }
+                      },
+                    )
+                  : null),
+          actions: effectiveActions,
+          flexibleSpace: LayoutBuilder(
+            builder: (context, box) {
+              final collapsed = box.maxHeight <= top + kToolbarHeight + 16;
+              return FlexibleSpaceBar(
+                collapseMode: CollapseMode.parallax,
+                stretchModes: const [StretchMode.zoomBackground],
+                titlePadding: EdgeInsetsDirectional.only(
+                  start: showBackButton ? 56 : 20,
+                  end: endPadding,
+                  bottom: 16,
+                ),
+                // Hidden while expanded — and must not swallow taps meant for the
+                // hero controls it sits over.
+                title: IgnorePointer(
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 160),
+                    opacity: collapsed ? 1 : 0,
+                    child: Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: brand.onCosmic,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            background: Stack(
+                background: Stack(
               fit: StackFit.expand,
               children: [
                 DecoratedBox(
@@ -328,7 +366,83 @@ class KHeroAppBar extends StatelessWidget {
         },
       ),
     );
+  },
+);
   }
+}
+
+class _ActionInfo {
+  final Widget icon;
+  final String label;
+  final VoidCallback? onPressed;
+
+  const _ActionInfo({required this.icon, required this.label, this.onPressed});
+}
+
+_ActionInfo? _extractActionInfo(Widget widget) {
+  if (widget is IconButton) {
+    return _ActionInfo(
+      icon: widget.icon,
+      label: widget.tooltip ?? '',
+      onPressed: widget.onPressed,
+    );
+  }
+  return null;
+}
+
+List<Widget> _buildCollapsedActions(
+  BuildContext context,
+  List<Widget> actions,
+) {
+  if (actions.length <= 2) return actions;
+
+  final primaryAction = actions.first;
+  final overflowActions = actions.sublist(1);
+
+  final overflowInfos = overflowActions
+      .map((w) => _extractActionInfo(w))
+      .toList();
+
+  return [
+    primaryAction,
+    PopupMenuButton<int>(
+      position: PopupMenuPosition.under,
+      tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
+      icon: const Icon(Icons.more_vert_rounded),
+      color: Theme.of(context).colorScheme.surface,
+      onSelected: (index) {
+        if (index >= 0 && index < overflowInfos.length) {
+          overflowInfos[index]?.onPressed?.call();
+        }
+      },
+      itemBuilder: (context) => [
+        for (var i = 0; i < overflowActions.length; i++)
+          PopupMenuItem<int>(
+            value: i,
+            enabled: overflowInfos[i] == null ||
+                overflowInfos[i]!.onPressed != null,
+            child: overflowInfos[i] != null
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconTheme(
+                        data: IconThemeData(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          size: 20,
+                        ),
+                        child: overflowInfos[i]!.icon,
+                      ),
+                      if (overflowInfos[i]!.label.isNotEmpty) ...[
+                        const SizedBox(width: 12),
+                        Text(overflowInfos[i]!.label),
+                      ],
+                    ],
+                  )
+                : overflowActions[i],
+          ),
+      ],
+    ),
+  ];
 }
 
 class _Glow extends StatelessWidget {

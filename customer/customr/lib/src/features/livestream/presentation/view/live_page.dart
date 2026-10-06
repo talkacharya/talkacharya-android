@@ -5,15 +5,10 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/l10n/api_error_l10n.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/pressable.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../data/models/live_stream_summary.dart';
 import '../cubit/live_list_cubit.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Live tab — who is on air now, and what is scheduled next.
 class LivePage extends StatefulWidget {
   const LivePage({super.key});

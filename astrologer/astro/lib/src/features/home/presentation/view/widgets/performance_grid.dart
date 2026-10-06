@@ -4,11 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/astro/onboarding_store.dart';
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/l10n/l10n.dart';
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
-import '../../../../../shared/widgets/skeleton.dart';
 import '../../cubit/dashboard_cubit.dart';
 import 'dash_shared.dart';
+
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 /// Six hue-coded KPI tiles for the selected window (period is shared with the
 /// earnings card).

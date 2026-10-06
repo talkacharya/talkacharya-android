@@ -8,6 +8,7 @@ import '../models/chat_enums.dart';
 import '../models/chat_message.dart';
 import '../models/chat_pin.dart';
 import '../models/chat_presence.dart';
+import '../ports/chat_media.dart';
 import '../ports/chat_outbox.dart';
 import '../ports/chat_store.dart';
 import '../ports/voice_note.dart';
@@ -37,7 +38,9 @@ class ChatController extends Cubit<ChatSessionState> {
     ChatSounds sounds = const NoopChatSounds(),
     VoiceRecorder? recorder,
     VoicePlayer? voicePlayer,
+    ChatMediaStore? media,
   }) : _recorder = recorder,
+       _media = media,
        _voicePlayer = voicePlayer,
        _t = transport,
        _sounds = sounds,
@@ -62,6 +65,19 @@ class ChatController extends Cubit<ChatSessionState> {
   final VoicePlayer? _voicePlayer;
 
   VoicePlayer? get voicePlayer => _voicePlayer;
+
+  /// Where photos and voice notes are kept on the device. Null where the app
+  /// has not wired one: the bubbles then load from the server every time.
+  final ChatMediaStore? _media;
+  ChatMediaStore? get media => _media;
+
+  /// Keep the file just sent as this device's copy, so the sender never
+  /// downloads their own photo back. Best-effort: failing only costs a fetch.
+  Future<void> _keepSent(ChatAttachment uploaded, String path) async {
+    try {
+      await _media?.keep(uploaded, path);
+    } catch (_) {}
+  }
   bool get canRecordVoice => _recorder != null;
 
   DateTime? _recordingSince;
@@ -451,6 +467,7 @@ class ChatController extends Cubit<ChatSessionState> {
   Future<void> _dispatchVoice(String cmid, String path, int seconds) async {
     try {
       final uploaded = await _t.uploadAttachment(path, durationSeconds: seconds);
+      await _keepSent(uploaded, path);
       final server = await _t.send(
         attachmentIds: [uploaded.id],
         clientMessageId: cmid,
@@ -496,6 +513,7 @@ class ChatController extends Cubit<ChatSessionState> {
   Future<void> _dispatchImage(String cmid, String path) async {
     try {
       final uploaded = await _t.uploadAttachment(path);
+      await _keepSent(uploaded, path);
       final server = await _t.send(
         attachmentIds: [uploaded.id],
         clientMessageId: cmid,

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:wakelock_plus/wakelock_plus.dart';
+
 import '../models/live_join.dart';
 import '../models/live_state.dart';
 import '../ports/live_ports.dart';
@@ -59,6 +61,8 @@ class LiveViewerCubit extends LiveCubitBase {
     if (closed) return;
     emitIfOpen(state.copyWith(phase: LivePhase.live));
 
+    unawaited(WakelockPlus.enable());
+
     _heartbeat = Timer.periodic(heartbeatEvery, (_) => _beat());
     unawaited(_loadHistory());
   }
@@ -112,6 +116,17 @@ class LiveViewerCubit extends LiveCubitBase {
   @override
   Future<void> finish(LiveEndReason reason) async {
     _heartbeat?.cancel();
+    try {
+      await WakelockPlus.disable();
+    } catch (_) {}
     await super.finish(reason);
+  }
+
+  @override
+  Future<void> close() async {
+    try {
+      await WakelockPlus.disable();
+    } catch (_) {}
+    return super.close();
   }
 }

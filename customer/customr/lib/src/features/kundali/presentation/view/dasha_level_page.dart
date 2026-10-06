@@ -5,12 +5,11 @@ import 'package:intl/intl.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/network/friendly_error.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../data/kundali_repository.dart';
 import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// One level of the dasha tree, in full.
 ///
 /// Four levels do not nest on a phone — by the third indent there is no room

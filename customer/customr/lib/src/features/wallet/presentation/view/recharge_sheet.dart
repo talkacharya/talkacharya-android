@@ -10,7 +10,6 @@ import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/payments/razorpay_service.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/money.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../data/wallet_repository.dart';
@@ -18,6 +17,7 @@ import '../cubit/recharge_cubit.dart';
 import '../cubit/wallet_cubit.dart';
 import '../../../../core/utils/haptic_service.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Opens the recharge bottom sheet. Returns when it closes.
 Future<void> showRechargeSheet(BuildContext context, {int? initialAmount}) {
   final walletCubit = context.read<WalletCubit>();

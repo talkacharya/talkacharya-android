@@ -6880,7 +6880,8 @@ class AppLocalizationsMr extends AppLocalizations {
   }
 
   @override
-  String get roomClosedHint => 'Follow-up time is over.';
+  String get roomClosedHint =>
+      'Consultation ended. Start a new one to chat again.';
 
   @override
   String get roomStartConsultation => 'Start consultation';
@@ -7051,5 +7052,162 @@ class AppLocalizationsMr extends AppLocalizations {
   @override
   String roomWaitingCountdown(String time) {
     return 'Usually under a minute · $time left';
+  }
+
+  @override
+  String get sessionChat => 'Chat';
+
+  @override
+  String get sessionVoice => 'Voice call';
+
+  @override
+  String get sessionVideo => 'Video call';
+
+  @override
+  String sysRequested(String session) {
+    return '$session requested';
+  }
+
+  @override
+  String sysAccepted(String name) {
+    return '$name picked up · connecting';
+  }
+
+  @override
+  String sysStarted(String name, String session) {
+    return '$name joined · $session started';
+  }
+
+  @override
+  String sysEnded(String session, int minutes, String amount) {
+    return '$session ended · $minutes min · $amount';
+  }
+
+  @override
+  String sysEndedPlain(String session) {
+    return '$session ended';
+  }
+
+  @override
+  String sysRejected(String name) {
+    return '$name couldn’t take this request';
+  }
+
+  @override
+  String get sysCancelled => 'Request cancelled';
+
+  @override
+  String sysExpired(String name) {
+    return '$name didn’t answer in time';
+  }
+
+  @override
+  String sysNoShow(String session) {
+    return '$session didn’t connect';
+  }
+
+  @override
+  String get sysEndingSoon => 'A few minutes of balance left';
+
+  @override
+  String roomLiveNow(String session) {
+    return '$session in progress';
+  }
+
+  @override
+  String roomStarting(String name) {
+    return 'Sending your request to $name…';
+  }
+
+  @override
+  String roomStartNeedMoney(String amount) {
+    return 'You need at least $amount to start. Add money and the request goes out straight after.';
+  }
+
+  @override
+  String roomStartBusy(String name) {
+    return '$name is with someone right now. Try again in a few minutes.';
+  }
+
+  @override
+  String roomStartOffline(String name) {
+    return '$name is offline right now.';
+  }
+
+  @override
+  String roomStartHint(String name, String rate) {
+    return 'Chat again with $name · $rate';
+  }
+
+  @override
+  String get callAudio => 'Audio';
+
+  @override
+  String get callEarpiece => 'Phone';
+
+  @override
+  String get callWiredHeadset => 'Headset';
+
+  @override
+  String get callBluetooth => 'Bluetooth';
+
+  @override
+  String get chatMute => 'Mute notifications';
+
+  @override
+  String get chatUnmute => 'Unmute notifications';
+
+  @override
+  String get chatArchive => 'Archive chat';
+
+  @override
+  String get chatUnarchive => 'Move out of archive';
+
+  @override
+  String get chatArchivedTitle => 'Archived';
+
+  @override
+  String chatArchivedRow(int count) {
+    return 'Archived ($count)';
+  }
+
+  @override
+  String chatBlock(String name) {
+    return 'Block $name';
+  }
+
+  @override
+  String chatUnblock(String name) {
+    return 'Unblock $name';
+  }
+
+  @override
+  String chatBlockConfirmTitle(String name) {
+    return 'Block $name?';
+  }
+
+  @override
+  String get chatBlockConfirmYes => 'Block';
+
+  @override
+  String chatBlockedByMe(String name) {
+    return 'You blocked $name.';
+  }
+
+  @override
+  String get chatBlockedByThem =>
+      'Messages are turned off in this conversation.';
+
+  @override
+  String get chatMoreOptions => 'More options';
+
+  @override
+  String chatBlockConfirmBody(String name) {
+    return 'Neither of you will be able to send messages here, and you won\'t be able to book $name until you unblock them.';
+  }
+
+  @override
+  String chatsLastMessageMine(String body) {
+    return 'तुम्ही: $body';
   }
 }

@@ -4,13 +4,11 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
-import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
 import '../../data/models/wallet_transaction.dart';
 import '../cubit/transactions_cubit.dart';
 import 'widgets/transaction_tile.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class TransactionsPage extends StatelessWidget {
   const TransactionsPage({super.key});
 

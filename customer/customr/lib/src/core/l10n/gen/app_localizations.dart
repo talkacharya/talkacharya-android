@@ -12053,7 +12053,7 @@ abstract class AppLocalizations {
   /// Room follow-up window / closed-thread affordances
   ///
   /// In en, this message translates to:
-  /// **'Follow-up time is over.'**
+  /// **'Consultation ended. Start a new one to chat again.'**
   String get roomClosedHint;
 
   /// Room follow-up window / closed-thread affordances
@@ -12325,6 +12325,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Usually under a minute · {time} left'**
   String roomWaitingCountdown(String time);
+
+  /// No description provided for @sessionChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get sessionChat;
+
+  /// No description provided for @sessionVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice call'**
+  String get sessionVoice;
+
+  /// No description provided for @sessionVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call'**
+  String get sessionVideo;
+
+  /// Thread line: a session was asked for
+  ///
+  /// In en, this message translates to:
+  /// **'{session} requested'**
+  String sysRequested(String session);
+
+  /// Thread line: the astrologer picked up a call
+  ///
+  /// In en, this message translates to:
+  /// **'{name} picked up · connecting'**
+  String sysAccepted(String name);
+
+  /// Thread line: the astrologer joined and the session began
+  ///
+  /// In en, this message translates to:
+  /// **'{name} joined · {session} started'**
+  String sysStarted(String name, String session);
+
+  /// Thread line: a session ended, with its length and cost
+  ///
+  /// In en, this message translates to:
+  /// **'{session} ended · {minutes} min · {amount}'**
+  String sysEnded(String session, int minutes, String amount);
+
+  /// Thread line: a session ended with nothing billed
+  ///
+  /// In en, this message translates to:
+  /// **'{session} ended'**
+  String sysEndedPlain(String session);
+
+  /// Thread line: the astrologer declined
+  ///
+  /// In en, this message translates to:
+  /// **'{name} couldn’t take this request'**
+  String sysRejected(String name);
+
+  /// No description provided for @sysCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Request cancelled'**
+  String get sysCancelled;
+
+  /// Thread line: the astrologer did not answer
+  ///
+  /// In en, this message translates to:
+  /// **'{name} didn’t answer in time'**
+  String sysExpired(String name);
+
+  /// Thread line: a call never connected
+  ///
+  /// In en, this message translates to:
+  /// **'{session} didn’t connect'**
+  String sysNoShow(String session);
+
+  /// No description provided for @sysEndingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'A few minutes of balance left'**
+  String get sysEndingSoon;
+
+  /// Heading of the live card in the thread
+  ///
+  /// In en, this message translates to:
+  /// **'{session} in progress'**
+  String roomLiveNow(String session);
+
+  /// While the new request is being sent
+  ///
+  /// In en, this message translates to:
+  /// **'Sending your request to {name}…'**
+  String roomStarting(String name);
+
+  /// Starting again needs a top-up first
+  ///
+  /// In en, this message translates to:
+  /// **'You need at least {amount} to start. Add money and the request goes out straight after.'**
+  String roomStartNeedMoney(String amount);
+
+  /// Starting again: the astrologer is busy
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is with someone right now. Try again in a few minutes.'**
+  String roomStartBusy(String name);
+
+  /// Starting again: the astrologer is offline
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is offline right now.'**
+  String roomStartOffline(String name);
+
+  /// Under the start button: who and what it costs
+  ///
+  /// In en, this message translates to:
+  /// **'Chat again with {name} · {rate}'**
+  String roomStartHint(String name, String rate);
+
+  /// Call screen audio-output picker
+  ///
+  /// In en, this message translates to:
+  /// **'Audio'**
+  String get callAudio;
+
+  /// Call screen audio-output picker
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get callEarpiece;
+
+  /// Call screen audio-output picker
+  ///
+  /// In en, this message translates to:
+  /// **'Headset'**
+  String get callWiredHeadset;
+
+  /// Call screen audio-output picker
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth'**
+  String get callBluetooth;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Mute notifications'**
+  String get chatMute;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Unmute notifications'**
+  String get chatUnmute;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Archive chat'**
+  String get chatArchive;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Move out of archive'**
+  String get chatUnarchive;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get chatArchivedTitle;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Archived ({count})'**
+  String chatArchivedRow(int count);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Block {name}'**
+  String chatBlock(String name);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock {name}'**
+  String chatUnblock(String name);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Block {name}?'**
+  String chatBlockConfirmTitle(String name);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Block'**
+  String get chatBlockConfirmYes;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'You blocked {name}.'**
+  String chatBlockedByMe(String name);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Messages are turned off in this conversation.'**
+  String get chatBlockedByThem;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'More options'**
+  String get chatMoreOptions;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Neither of you will be able to send messages here, and you won\'t be able to book {name} until you unblock them.'**
+  String chatBlockConfirmBody(String name);
+
+  /// No description provided for @chatsLastMessageMine.
+  ///
+  /// In en, this message translates to:
+  /// **'You: {body}'**
+  String chatsLastMessageMine(String body);
 }
 
 class _AppLocalizationsDelegate

@@ -4,7 +4,6 @@ import 'package:customr/src/core/config/config_repository.dart';
 import 'package:customr/src/core/config/remote_config.dart';
 import 'package:customr/src/core/di/service_locator.dart';
 import 'package:customr/src/core/l10n/l10n.dart';
-import 'package:customr/src/core/theme/brand_colors.dart';
 import 'package:customr/src/core/util/async_value.dart';
 import 'package:customr/src/features/consultations/data/models/consultation.dart';
 import 'package:customr/src/features/support/data/models/dispute.dart';
@@ -21,6 +20,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class _MockRepo extends Mock implements SupportRepository {}
 
 class _MockConfig extends Mock implements ConfigRepository {}

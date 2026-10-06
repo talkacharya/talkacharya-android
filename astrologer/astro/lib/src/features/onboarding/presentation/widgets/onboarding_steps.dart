@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// The wizard's steps and the backend `onboarding_gaps` each one closes.
 enum OnboardingStep {
   profile(['bio'], Icons.person_rounded, AstroPalette.career),

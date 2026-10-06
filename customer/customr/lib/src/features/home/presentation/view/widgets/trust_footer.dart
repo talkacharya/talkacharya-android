@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
 import 'home_shared.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Quiet reassurance at the end of the feed — three promises, each with its own
 /// colour badge.
 class TrustFooter extends StatelessWidget {

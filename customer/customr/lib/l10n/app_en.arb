@@ -3657,7 +3657,7 @@
       }
     }
   },
-  "roomClosedHint": "Follow-up time is over.",
+  "roomClosedHint": "Consultation ended. Start a new one to chat again.",
   "@roomClosedHint": {
     "description": "Room follow-up window / closed-thread affordances"
   },
@@ -3936,5 +3936,258 @@
       }
     },
     "description": "How long the astrologer still has to accept"
+  },
+  "sessionChat": "Chat",
+  "sessionVoice": "Voice call",
+  "sessionVideo": "Video call",
+  "sysRequested": "{session} requested",
+  "@sysRequested": {
+    "description": "Thread line: a session was asked for",
+    "placeholders": {
+      "session": {
+        "type": "String"
+      }
+    }
+  },
+  "sysAccepted": "{name} picked up · connecting",
+  "@sysAccepted": {
+    "description": "Thread line: the astrologer picked up a call",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sysStarted": "{name} joined · {session} started",
+  "@sysStarted": {
+    "description": "Thread line: the astrologer joined and the session began",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "session": {
+        "type": "String"
+      }
+    }
+  },
+  "sysEnded": "{session} ended · {minutes} min · {amount}",
+  "@sysEnded": {
+    "description": "Thread line: a session ended, with its length and cost",
+    "placeholders": {
+      "session": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "sysEndedPlain": "{session} ended",
+  "@sysEndedPlain": {
+    "description": "Thread line: a session ended with nothing billed",
+    "placeholders": {
+      "session": {
+        "type": "String"
+      }
+    }
+  },
+  "sysRejected": "{name} couldn’t take this request",
+  "@sysRejected": {
+    "description": "Thread line: the astrologer declined",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sysCancelled": "Request cancelled",
+  "sysExpired": "{name} didn’t answer in time",
+  "@sysExpired": {
+    "description": "Thread line: the astrologer did not answer",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sysNoShow": "{session} didn’t connect",
+  "@sysNoShow": {
+    "description": "Thread line: a call never connected",
+    "placeholders": {
+      "session": {
+        "type": "String"
+      }
+    }
+  },
+  "sysEndingSoon": "A few minutes of balance left",
+  "roomLiveNow": "{session} in progress",
+  "@roomLiveNow": {
+    "description": "Heading of the live card in the thread",
+    "placeholders": {
+      "session": {
+        "type": "String"
+      }
+    }
+  },
+  "roomStarting": "Sending your request to {name}…",
+  "@roomStarting": {
+    "description": "While the new request is being sent",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roomStartNeedMoney": "You need at least {amount} to start. Add money and the request goes out straight after.",
+  "@roomStartNeedMoney": {
+    "description": "Starting again needs a top-up first",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "roomStartBusy": "{name} is with someone right now. Try again in a few minutes.",
+  "@roomStartBusy": {
+    "description": "Starting again: the astrologer is busy",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roomStartOffline": "{name} is offline right now.",
+  "@roomStartOffline": {
+    "description": "Starting again: the astrologer is offline",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "roomStartHint": "Chat again with {name} · {rate}",
+  "@roomStartHint": {
+    "description": "Under the start button: who and what it costs",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "rate": {
+        "type": "String"
+      }
+    }
+  },
+  "callAudio": "Audio",
+  "@callAudio": {
+    "description": "Call screen audio-output picker"
+  },
+  "callEarpiece": "Phone",
+  "@callEarpiece": {
+    "description": "Call screen audio-output picker"
+  },
+  "callWiredHeadset": "Headset",
+  "@callWiredHeadset": {
+    "description": "Call screen audio-output picker"
+  },
+  "callBluetooth": "Bluetooth",
+  "@callBluetooth": {
+    "description": "Call screen audio-output picker"
+  },
+  "chatMute": "Mute notifications",
+  "@chatMute": {
+    "description": "Chat room / chats list"
+  },
+  "chatUnmute": "Unmute notifications",
+  "@chatUnmute": {
+    "description": "Chat room / chats list"
+  },
+  "chatArchive": "Archive chat",
+  "@chatArchive": {
+    "description": "Chat room / chats list"
+  },
+  "chatUnarchive": "Move out of archive",
+  "@chatUnarchive": {
+    "description": "Chat room / chats list"
+  },
+  "chatArchivedTitle": "Archived",
+  "@chatArchivedTitle": {
+    "description": "Chat room / chats list"
+  },
+  "chatArchivedRow": "Archived ({count})",
+  "@chatArchivedRow": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatBlock": "Block {name}",
+  "@chatBlock": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatUnblock": "Unblock {name}",
+  "@chatUnblock": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatBlockConfirmTitle": "Block {name}?",
+  "@chatBlockConfirmTitle": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatBlockConfirmYes": "Block",
+  "@chatBlockConfirmYes": {
+    "description": "Chat room / chats list"
+  },
+  "chatBlockedByMe": "You blocked {name}.",
+  "@chatBlockedByMe": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatBlockedByThem": "Messages are turned off in this conversation.",
+  "@chatBlockedByThem": {
+    "description": "Chat room / chats list"
+  },
+  "chatMoreOptions": "More options",
+  "@chatMoreOptions": {
+    "description": "Chat room / chats list"
+  },
+  "chatBlockConfirmBody": "Neither of you will be able to send messages here, and you won't be able to book {name} until you unblock them.",
+  "@chatBlockConfirmBody": {
+    "description": "Chat room / chats list",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatsLastMessageMine": "You: {body}",
+  "@chatsLastMessageMine": {
+    "placeholders": {
+      "body": {
+        "type": "String"
+      }
+    }
   }
 }

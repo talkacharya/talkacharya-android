@@ -6,11 +6,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../data/models/consult.dart';
 import '../../data/models/product.dart';
 import '../cubit/product_detail_cubit.dart';
@@ -18,6 +13,7 @@ import '../widgets/consult_widgets.dart';
 import '../widgets/product_inputs_form.dart';
 import '../widgets/store_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// `/store/products/:slug` — everything needed to decide and buy.
 class ProductDetailPage extends StatelessWidget {
   const ProductDetailPage({super.key});

@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
 import '../widgets/sade_sati_card.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Dated Sade Sati / Dhaiya calendar (`/sade-sati`). A map of Saturn's transit
 /// windows over the lifetime — traditional themes and years, not events.
 class SadeSatiPage extends StatefulWidget {

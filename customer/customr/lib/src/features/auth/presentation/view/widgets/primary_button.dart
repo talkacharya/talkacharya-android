@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../../shared/widgets/pressable.dart';
 import '../../../../../core/utils/haptic_service.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 const _gold = Color(0xFFC5A358);
 
 /// Gold gradient CTA for the auth screens. Disabled + loading states dim it.

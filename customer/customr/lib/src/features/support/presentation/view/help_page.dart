@@ -7,19 +7,14 @@ import '../../../../core/config/config_repository.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/async_value.dart';
 import '../../../../core/util/money.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../../consultations/data/models/consultation.dart';
 import '../../data/models/dispute.dart';
 import '../cubit/help_cubit.dart';
 import '../widgets/dispute_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Help & support hub (`/profile/help`): report a session, track reports,
 /// contact the team, FAQs.
 class HelpPage extends StatelessWidget {

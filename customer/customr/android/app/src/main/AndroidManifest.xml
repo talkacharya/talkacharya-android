@@ -37,6 +37,8 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:supportsPictureInPicture="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
             android:resizeableActivity="true"
             android:taskAffinity=""
             android:theme="@style/LaunchTheme"
@@ -98,16 +100,6 @@
             android:name="com.pravera.flutter_foreground_task.service.ForegroundService"
             android:foregroundServiceType="microphone|camera"
             android:exported="false"/>
-        <!-- registers a consultation as a self-managed call, so a cellular call
-             holds it instead of fighting it for the microphone (CallTelecom) -->
-        <service
-            android:name=".CallConnectionService"
-            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.telecom.ConnectionService"/>
-            </intent-filter>
-        </service>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

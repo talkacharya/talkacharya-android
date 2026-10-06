@@ -4,11 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/app_bottom_sheet.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../data/models/address.dart';
 import '../../data/models/checkout.dart';
 import '../cubit/checkout_cubit.dart';
@@ -17,6 +12,7 @@ import '../widgets/order_widgets.dart';
 import 'addresses_pages.dart';
 import '../widgets/store_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// `/store/checkout` — pops the order id once an order exists (paid or not).
 class CheckoutPage extends StatelessWidget {
   const CheckoutPage({super.key});

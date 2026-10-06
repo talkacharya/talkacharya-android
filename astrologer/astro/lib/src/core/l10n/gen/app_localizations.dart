@@ -3367,6 +3367,1110 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dev mode — the code is {code}'**
   String otpDevMode(String code);
+
+  /// Call screen audio-output picker
+  ///
+  /// In en, this message translates to:
+  /// **'Audio'**
+  String get callAudio;
+
+  /// Call screen audio-output picker
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get callEarpiece;
+
+  /// Call screen audio-output picker
+  ///
+  /// In en, this message translates to:
+  /// **'Headset'**
+  String get callWiredHeadset;
+
+  /// Call screen audio-output picker
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth'**
+  String get callBluetooth;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Mute notifications'**
+  String get chatMute;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Unmute notifications'**
+  String get chatUnmute;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Archive chat'**
+  String get chatArchive;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Move out of archive'**
+  String get chatUnarchive;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get chatArchivedTitle;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Archived ({count})'**
+  String chatArchivedRow(int count);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Block {name}'**
+  String chatBlock(String name);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock {name}'**
+  String chatUnblock(String name);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Block {name}?'**
+  String chatBlockConfirmTitle(String name);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Block'**
+  String get chatBlockConfirmYes;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'You blocked {name}.'**
+  String chatBlockedByMe(String name);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Messages are turned off in this conversation.'**
+  String get chatBlockedByThem;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'More options'**
+  String get chatMoreOptions;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Neither of you will be able to send messages here, and {name} won\'t be able to book you until you unblock them.'**
+  String chatBlockConfirmBody(String name);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get sessionChat;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Voice call'**
+  String get sessionVoice;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Video call'**
+  String get sessionVideo;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'{session} in progress'**
+  String roomLiveNow(String session);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} earned so far'**
+  String astroEarnedSoFar(String amount);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'You earned {amount} · {minutes} min'**
+  String astroEndedEarned(String amount, int minutes);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'{name} rated this session {rating}/5'**
+  String astroCustomerRated(String name, int rating);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Not rated yet'**
+  String get astroNotRatedYet;
+
+  /// In-chat request card, shown instead of the request sheet when the astrologer is already in that customer's room
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is asking for a {session}'**
+  String astroRequestInRoom(String name, String session);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Consultation ended. {name} can start a new one any time.'**
+  String astroThreadClosed(String name);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'{session} requested'**
+  String sysRequested(String session);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'You picked up · connecting'**
+  String get sysAccepted;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'{session} started'**
+  String sysStarted(String session);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'{session} ended · {minutes} min'**
+  String sysEnded(String session, int minutes);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'{session} ended'**
+  String sysEndedPlain(String session);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'You declined the request'**
+  String get sysRejected;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'{name} cancelled the request'**
+  String sysCancelled(String name);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'Request not answered in time'**
+  String get sysExpired;
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'{session} didn\'t connect'**
+  String sysNoShow(String session);
+
+  /// Chat room / chats list
+  ///
+  /// In en, this message translates to:
+  /// **'{name}\'s balance is running low'**
+  String sysEndingSoon(String name);
+
+  /// No description provided for @presenceOnBreak.
+  ///
+  /// In en, this message translates to:
+  /// **'On a break'**
+  String get presenceOnBreak;
+
+  /// No description provided for @presenceOnBreakHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll be back online by yourself when it ends'**
+  String get presenceOnBreakHint;
+
+  /// No description provided for @clubTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re in the {club} club'**
+  String clubTitle(String club);
+
+  /// No description provided for @clubTitleNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Your first club is within reach'**
+  String get clubTitleNone;
+
+  /// No description provided for @clubProjection.
+  ///
+  /// In en, this message translates to:
+  /// **'On pace for {amount} this month'**
+  String clubProjection(String amount);
+
+  /// No description provided for @clubNeedToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Earn {amount} more today to stay on pace for the {club} club.'**
+  String clubNeedToday(String amount, String club);
+
+  /// No description provided for @clubOnTrack.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s target is met — the {club} club is next. Keep going.'**
+  String clubOnTrack(String club);
+
+  /// No description provided for @clubTop.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re in the top club. Outstanding work.'**
+  String get clubTop;
+
+  /// No description provided for @todayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s earnings'**
+  String get todayTitle;
+
+  /// No description provided for @todaySub.
+  ///
+  /// In en, this message translates to:
+  /// **'After platform fee'**
+  String get todaySub;
+
+  /// No description provided for @todayHide.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide amounts'**
+  String get todayHide;
+
+  /// No description provided for @todayShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Show amounts'**
+  String get todayShow;
+
+  /// No description provided for @todayViewEarnings.
+  ///
+  /// In en, this message translates to:
+  /// **'View earnings'**
+  String get todayViewEarnings;
+
+  /// No description provided for @todaySessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Sessions'**
+  String get todaySessions;
+
+  /// No description provided for @todayTalkTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Talk time'**
+  String get todayTalkTime;
+
+  /// No description provided for @todayOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get todayOnline;
+
+  /// No description provided for @scoreTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Last {days} days'**
+  String scoreTitle(int days);
+
+  /// No description provided for @scoreUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated {time}'**
+  String scoreUpdated(String time);
+
+  /// No description provided for @scoreOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open performance dashboard'**
+  String get scoreOpen;
+
+  /// No description provided for @perfOnlineShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Online\nper day'**
+  String get perfOnlineShort;
+
+  /// No description provided for @perfSessionShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Average\nsession'**
+  String get perfSessionShort;
+
+  /// No description provided for @perfFirstRepeatShort.
+  ///
+  /// In en, this message translates to:
+  /// **'First-time\nrepeat'**
+  String get perfFirstRepeatShort;
+
+  /// No description provided for @perfLoyalShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Loyal\ncustomers'**
+  String get perfLoyalShort;
+
+  /// No description provided for @perfHoursMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{h}h {m}m'**
+  String perfHoursMinutes(int h, int m);
+
+  /// No description provided for @perfMinutesSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{m}m {s}s'**
+  String perfMinutesSeconds(int m, int s);
+
+  /// No description provided for @perfSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{s}s'**
+  String perfSeconds(int s);
+
+  /// No description provided for @perfHours.
+  ///
+  /// In en, this message translates to:
+  /// **'{h}h'**
+  String perfHours(int h);
+
+  /// No description provided for @perfMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{m}m'**
+  String perfMinutes(int m);
+
+  /// No description provided for @breakTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a break'**
+  String get breakTitle;
+
+  /// No description provided for @breakLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 break left today} other{{count} breaks left today}}'**
+  String breakLeft(int count);
+
+  /// No description provided for @breakNoneLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'No breaks left today'**
+  String get breakNoneLeft;
+
+  /// No description provided for @breakButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a break'**
+  String get breakButton;
+
+  /// No description provided for @breakSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How long do you need?'**
+  String get breakSheetTitle;
+
+  /// No description provided for @breakInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers won\'t be able to reach you during the break. You come back online by yourself when it ends — no need to switch anything on.'**
+  String get breakInfo;
+
+  /// No description provided for @breakMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String breakMinutes(int minutes);
+
+  /// No description provided for @breakStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start break'**
+  String get breakStart;
+
+  /// No description provided for @breakOnTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'On a break'**
+  String get breakOnTitle;
+
+  /// No description provided for @breakBackIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Back online in {time}'**
+  String breakBackIn(String time);
+
+  /// No description provided for @breakResume.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m back'**
+  String get breakResume;
+
+  /// No description provided for @loyalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Loyal customers'**
+  String get loyalTitle;
+
+  /// No description provided for @loyalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers who came back in the last {days} days and spent {minutes}+ minutes with you.'**
+  String loyalBody(int days, int minutes);
+
+  /// No description provided for @loyalWinBack.
+  ///
+  /// In en, this message translates to:
+  /// **'See who\'s gone quiet'**
+  String get loyalWinBack;
+
+  /// No description provided for @dashTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Tools'**
+  String get dashTools;
+
+  /// No description provided for @dashActionPerformance.
+  ///
+  /// In en, this message translates to:
+  /// **'Performance'**
+  String get dashActionPerformance;
+
+  /// No description provided for @dashActionWinBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Win back'**
+  String get dashActionWinBack;
+
+  /// No description provided for @dashActionChats.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat history'**
+  String get dashActionChats;
+
+  /// No description provided for @dashActionRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests'**
+  String get dashActionRequests;
+
+  /// No description provided for @dashActionBoost.
+  ///
+  /// In en, this message translates to:
+  /// **'Boost profile'**
+  String get dashActionBoost;
+
+  /// No description provided for @dashActionAlerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get dashActionAlerts;
+
+  /// No description provided for @perfTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Performance'**
+  String get perfTitle;
+
+  /// No description provided for @perfSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Last {days} days, compared with the {days} before.'**
+  String perfSubtitle(int days);
+
+  /// No description provided for @perfFocusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where to focus'**
+  String get perfFocusTitle;
+
+  /// No description provided for @perfLegendLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs work'**
+  String get perfLegendLow;
+
+  /// No description provided for @perfLegendMid.
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate'**
+  String get perfLegendMid;
+
+  /// No description provided for @perfLegendGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get perfLegendGood;
+
+  /// No description provided for @perfVerdictLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs work'**
+  String get perfVerdictLow;
+
+  /// No description provided for @perfVerdictMid.
+  ///
+  /// In en, this message translates to:
+  /// **'Almost there'**
+  String get perfVerdictMid;
+
+  /// No description provided for @perfVerdictGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Doing well'**
+  String get perfVerdictGood;
+
+  /// No description provided for @perfVerdictNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough data yet'**
+  String get perfVerdictNone;
+
+  /// No description provided for @perfFirstRepeat.
+  ///
+  /// In en, this message translates to:
+  /// **'First-time repeat'**
+  String get perfFirstRepeat;
+
+  /// No description provided for @perfTotalRepeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Total repeat'**
+  String get perfTotalRepeat;
+
+  /// No description provided for @perfAvgSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Average session'**
+  String get perfAvgSession;
+
+  /// No description provided for @perfOnlineTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Average online time'**
+  String get perfOnlineTime;
+
+  /// No description provided for @perfMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed requests'**
+  String get perfMissed;
+
+  /// No description provided for @perfFirstRepeatAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'Of the customers who consulted you for the first time in this period, the share who came back for another session.\n\nExample: 10 new customers, 4 of them returned — that is 40%.'**
+  String get perfFirstRepeatAbout;
+
+  /// No description provided for @perfTotalRepeatAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'Of everyone you consulted in this period, new or not, the share who have consulted you more than once.\n\nExample: 20 customers, 9 of them have been with you before or came back — that is 45%.'**
+  String get perfTotalRepeatAbout;
+
+  /// No description provided for @perfAvgSessionAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'Total billed time in this period divided by the number of sessions. Longer sessions usually mean the customer felt heard.\n\nExample: 120 minutes across 10 sessions — 12 minutes each.'**
+  String get perfAvgSessionAbout;
+
+  /// No description provided for @perfOnlineTimeAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'How long you were reachable each day on average — online or in a session. Breaks and time offline are not counted. We recommend at least six hours a day: customers return to astrologers they can find.'**
+  String get perfOnlineTimeAbout;
+
+  /// No description provided for @perfMissedAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests that timed out before you answered, plus the ones you declined. Requests the customer cancelled are not counted. If you need to step away, take a break instead of leaving requests to ring out.'**
+  String get perfMissedAbout;
+
+  /// No description provided for @perfHowCalculated.
+  ///
+  /// In en, this message translates to:
+  /// **'How it\'s calculated'**
+  String get perfHowCalculated;
+
+  /// No description provided for @perfShowLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get perfShowLess;
+
+  /// No description provided for @perfNoChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Same as the period before'**
+  String get perfNoChange;
+
+  /// No description provided for @perfDeltaUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Up {amount} on the period before'**
+  String perfDeltaUp(String amount);
+
+  /// No description provided for @perfDeltaDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Down {amount} on the period before'**
+  String perfDeltaDown(String amount);
+
+  /// No description provided for @perfOnlineChart.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours online, day by day'**
+  String get perfOnlineChart;
+
+  /// No description provided for @perfGoalLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h goal'**
+  String perfGoalLine(int hours);
+
+  /// No description provided for @perfMissedUnanswered.
+  ///
+  /// In en, this message translates to:
+  /// **'Timed out · {count}'**
+  String perfMissedUnanswered(int count);
+
+  /// No description provided for @perfMissedDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Declined · {count}'**
+  String perfMissedDeclined(int count);
+
+  /// No description provided for @perfRatings.
+  ///
+  /// In en, this message translates to:
+  /// **'Ratings'**
+  String get perfRatings;
+
+  /// No description provided for @perfRatingsAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'Lifetime average of published ratings from customers you\'ve consulted.'**
+  String get perfRatingsAbout;
+
+  /// No description provided for @perfRatingOverall.
+  ///
+  /// In en, this message translates to:
+  /// **'Overall'**
+  String get perfRatingOverall;
+
+  /// No description provided for @perfRatingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 rating} other{{count} ratings}}'**
+  String perfRatingCount(int count);
+
+  /// No description provided for @perfNoRatings.
+  ///
+  /// In en, this message translates to:
+  /// **'No ratings yet'**
+  String get perfNoRatings;
+
+  /// No description provided for @perfTipOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'More hours online is your quickest win — customers can only return to someone they can find.'**
+  String get perfTipOnline;
+
+  /// No description provided for @perfTipSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Aim for longer sessions: ask a follow-up question before you wrap up.'**
+  String get perfTipSession;
+
+  /// No description provided for @perfTipFirstRepeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Give first-time customers a reason to return — tell them what to look at next time.'**
+  String get perfTipFirstRepeat;
+
+  /// No description provided for @perfTipTotalRepeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Your regulars are slipping away. See who\'s gone quiet and be online when they usually come.'**
+  String get perfTipTotalRepeat;
+
+  /// No description provided for @perfTipMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests are getting away. Answer before they time out, or take a break when you step away.'**
+  String get perfTipMissed;
+
+  /// No description provided for @winBackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Win back'**
+  String get winBackTitle;
+
+  /// No description provided for @winBackSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Returning customers you haven\'t spoken to in {days}+ days. Open a thread to see where you left off.'**
+  String winBackSubtitle(int days);
+
+  /// No description provided for @winBackTile.
+  ///
+  /// In en, this message translates to:
+  /// **'{sessions} sessions · {minutes} min together'**
+  String winBackTile(int sessions, int minutes);
+
+  /// No description provided for @winBackLast.
+  ///
+  /// In en, this message translates to:
+  /// **'Last session {time}'**
+  String winBackLast(String time);
+
+  /// No description provided for @winBackCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer'**
+  String get winBackCustomer;
+
+  /// No description provided for @winBackEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No one\'s gone quiet'**
+  String get winBackEmptyTitle;
+
+  /// No description provided for @winBackEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Returning customers who stop coming back will show up here.'**
+  String get winBackEmptyBody;
+
+  /// No description provided for @dashActionWaitlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Waitlist'**
+  String get dashActionWaitlist;
+
+  /// No description provided for @dashActionCalls.
+  ///
+  /// In en, this message translates to:
+  /// **'Call history'**
+  String get dashActionCalls;
+
+  /// No description provided for @dashActionRemedies.
+  ///
+  /// In en, this message translates to:
+  /// **'Remedies'**
+  String get dashActionRemedies;
+
+  /// No description provided for @dashActionSounds.
+  ///
+  /// In en, this message translates to:
+  /// **'Sounds'**
+  String get dashActionSounds;
+
+  /// No description provided for @waitlistTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Waitlist'**
+  String get waitlistTitle;
+
+  /// No description provided for @waitlistSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers waiting for you, longest first. When a session ends the next person is told it\'s their turn — or call someone in yourself.'**
+  String get waitlistSubtitle;
+
+  /// No description provided for @waitlistEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No one is waiting'**
+  String get waitlistEmptyTitle;
+
+  /// No description provided for @waitlistEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers who try to reach you while you\'re in a session can join your waitlist. They\'ll show up here.'**
+  String get waitlistEmptyBody;
+
+  /// No description provided for @waitlistInvite.
+  ///
+  /// In en, this message translates to:
+  /// **'Call in'**
+  String get waitlistInvite;
+
+  /// No description provided for @waitlistInvited.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} has been told it\'s their turn'**
+  String waitlistInvited(String name);
+
+  /// No description provided for @waitlistInvitedLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Invited · {time} to join'**
+  String waitlistInvitedLeft(String time);
+
+  /// No description provided for @waitlistWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting {time}'**
+  String waitlistWaiting(String time);
+
+  /// No description provided for @waitlistNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New customer'**
+  String get waitlistNew;
+
+  /// No description provided for @waitlistRegular.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 session with you} other{{count} sessions with you}}'**
+  String waitlistRegular(int count);
+
+  /// No description provided for @waitlistRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from waitlist'**
+  String get waitlistRemove;
+
+  /// No description provided for @waitlistRemoveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name}?'**
+  String waitlistRemoveTitle(String name);
+
+  /// No description provided for @waitlistRemoveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'They lose their place in line and are told you can\'t take them right now.'**
+  String get waitlistRemoveBody;
+
+  /// No description provided for @callsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Call history'**
+  String get callsTitle;
+
+  /// No description provided for @callsFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get callsFilterAll;
+
+  /// No description provided for @callsFilterCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get callsFilterCompleted;
+
+  /// No description provided for @callsFilterMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get callsFilterMissed;
+
+  /// No description provided for @callsStatCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get callsStatCompleted;
+
+  /// No description provided for @callsStatTalkTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Talk time'**
+  String get callsStatTalkTime;
+
+  /// No description provided for @callsStatMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get callsStatMissed;
+
+  /// No description provided for @callsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No calls yet'**
+  String get callsEmptyTitle;
+
+  /// No description provided for @callsEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice and video calls with your customers will be listed here.'**
+  String get callsEmptyBody;
+
+  /// No description provided for @callsEmptyFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here'**
+  String get callsEmptyFilter;
+
+  /// No description provided for @remediesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remedies'**
+  String get remediesTitle;
+
+  /// No description provided for @remediesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gemstones, rudraksha, poojas and more from the store that you\'ve suggested to your customers.'**
+  String get remediesSubtitle;
+
+  /// No description provided for @remediesSuggest.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest a remedy'**
+  String get remediesSuggest;
+
+  /// No description provided for @remediesSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{sent} suggested · {bought} bought'**
+  String remediesSummary(int sent, int bought);
+
+  /// No description provided for @remediesCommission.
+  ///
+  /// In en, this message translates to:
+  /// **'You earn {percent} when a customer buys what you suggested.'**
+  String remediesCommission(String percent);
+
+  /// No description provided for @remediesEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No remedies suggested yet'**
+  String get remediesEmptyTitle;
+
+  /// No description provided for @remediesEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest a product from the store after a reading. The customer gets it in their app, and you earn a commission if they buy.'**
+  String get remediesEmptyBody;
+
+  /// No description provided for @remedyStatusSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get remedyStatusSent;
+
+  /// No description provided for @remedyStatusViewed.
+  ///
+  /// In en, this message translates to:
+  /// **'Seen'**
+  String get remedyStatusViewed;
+
+  /// No description provided for @remedyStatusPurchased.
+  ///
+  /// In en, this message translates to:
+  /// **'Bought'**
+  String get remedyStatusPurchased;
+
+  /// No description provided for @remedyStatusExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get remedyStatusExpired;
+
+  /// No description provided for @remedyFor.
+  ///
+  /// In en, this message translates to:
+  /// **'For {name} · {time}'**
+  String remedyFor(String name, String time);
+
+  /// No description provided for @remedySuggestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest a remedy'**
+  String get remedySuggestTitle;
+
+  /// No description provided for @remedySuggestFor.
+  ///
+  /// In en, this message translates to:
+  /// **'For {name}'**
+  String remedySuggestFor(String name);
+
+  /// No description provided for @remedyStepCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Who is it for?'**
+  String get remedyStepCustomer;
+
+  /// No description provided for @remedyStepProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the remedy'**
+  String get remedyStepProduct;
+
+  /// No description provided for @remedyStepNote.
+  ///
+  /// In en, this message translates to:
+  /// **'How should they use it?'**
+  String get remedyStepNote;
+
+  /// No description provided for @remedySearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search gemstones, rudraksha, poojas…'**
+  String get remedySearchHint;
+
+  /// No description provided for @remedyNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For example: wear it on the ring finger on a Saturday morning.'**
+  String get remedyNoteHint;
+
+  /// No description provided for @remedyNoProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'No products match that search.'**
+  String get remedyNoProducts;
+
+  /// No description provided for @remedyNoCustomers.
+  ///
+  /// In en, this message translates to:
+  /// **'You can suggest remedies to customers you\'ve consulted. None yet.'**
+  String get remedyNoCustomers;
+
+  /// No description provided for @remedySend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send suggestion'**
+  String get remedySend;
+
+  /// No description provided for @remedySent.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestion sent'**
+  String get remedySent;
+
+  /// No description provided for @remedyDisclosure.
+  ///
+  /// In en, this message translates to:
+  /// **'The customer sees this as your recommendation and decides for themselves. Suggest only what the chart calls for.'**
+  String get remedyDisclosure;
 }
 
 class _AppLocalizationsDelegate

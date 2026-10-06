@@ -43,11 +43,11 @@ class LiveChatMessage extends Equatable {
     at: DateTime.tryParse('${j['created_at'] ?? ''}')?.toLocal(),
   );
 
-  LiveChatMessage copyWith({bool? pinned}) => LiveChatMessage(
+  LiveChatMessage copyWith({bool? pinned, String? text}) => LiveChatMessage(
     id: id,
     userId: userId,
     name: name,
-    text: text,
+    text: text ?? this.text,
     imageUrl: imageUrl,
     isHost: isHost,
     pinned: pinned ?? this.pinned,

@@ -7,7 +7,6 @@ import 'src/app/app.dart';
 import 'src/core/config/config_repository.dart';
 import 'src/core/config/flavor.dart';
 import 'src/core/network/friendly_error.dart';
-import 'src/shared/widgets/app_error_widget.dart';
 import 'src/core/di/service_locator.dart';
 import 'src/core/firebase/firebase_setup.dart';
 import 'src/core/notifications/local_notifications.dart';
@@ -16,6 +15,7 @@ import 'src/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:talkacharya_call/talkacharya_call.dart';
 import 'src/core/sounds/app_sound_adapters.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class _AppBlocObserver extends BlocObserver {
   const _AppBlocObserver();
 

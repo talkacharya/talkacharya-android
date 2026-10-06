@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../engine/call_telecom.dart';
 import '../engine/rtc_engine.dart';
 
 enum CallPhase {
@@ -51,6 +52,7 @@ class CallState extends Equatable {
     this.muted = false,
     this.speakerOn = false,
     this.bluetooth = false,
+    this.audioRoutes = const {},
     this.videoPausedForNetwork = false,
     this.quality = 0,
     this.peerQuality = 0,
@@ -75,6 +77,21 @@ class CallState extends Equatable {
   /// Audio is on a Bluetooth headset. Reported by Telecom, which owns the
   /// route — the UI shows a headset rather than claiming "speaker".
   final bool bluetooth;
+
+  /// Where the audio could go, as Telecom reports it. Empty when Telecom is not
+  /// managing the call — then the screen offers only the speaker toggle.
+  final Set<CallAudioOutput> audioRoutes;
+
+  /// Where the audio is.
+  CallAudioOutput get audioRoute => bluetooth
+      ? CallAudioOutput.bluetooth
+      : (speakerOn ? CallAudioOutput.speaker : CallAudioOutput.earpiece);
+
+  /// More places to send the audio than a speaker toggle can express — a
+  /// headset is connected — so the screen offers a picker instead.
+  bool get canPickAudioRoute =>
+      audioRoutes.contains(CallAudioOutput.bluetooth) ||
+      audioRoutes.contains(CallAudioOutput.wired);
 
   /// The camera was turned off because the connection couldn't carry it, not
   /// because the user turned it off — so the UI can say so, and say it will
@@ -129,6 +146,7 @@ class CallState extends Equatable {
     bool? muted,
     bool? speakerOn,
     bool? bluetooth,
+    Set<CallAudioOutput>? audioRoutes,
     bool? videoPausedForNetwork,
     int? quality,
     int? peerQuality,
@@ -152,6 +170,7 @@ class CallState extends Equatable {
     muted: muted ?? this.muted,
     speakerOn: speakerOn ?? this.speakerOn,
     bluetooth: bluetooth ?? this.bluetooth,
+    audioRoutes: audioRoutes ?? this.audioRoutes,
     videoPausedForNetwork: videoPausedForNetwork ?? this.videoPausedForNetwork,
     quality: quality ?? this.quality,
       peerQuality: peerQuality ?? this.peerQuality,
@@ -175,6 +194,7 @@ class CallState extends Equatable {
     muted,
     speakerOn,
     bluetooth,
+    audioRoutes,
     videoPausedForNetwork,
     quality,
     peerQuality,

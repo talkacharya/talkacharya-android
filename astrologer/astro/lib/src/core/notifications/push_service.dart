@@ -1,3 +1,4 @@
+import 'package:talkacharya_call/talkacharya_call.dart';
 import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -40,6 +41,17 @@ Future<void> ringForRequest(
   final seconds = int.tryParse('${data['expires_in'] ?? ''}') ?? 90;
   final who = '${data['customer_name'] ?? ''}'.trim();
   final channel = '${data['channel'] ?? 'chat'}';
+  // A voice/video request is a call: tell Android, so it is treated as one —
+  // a headset or watch can answer it, and a cellular call in progress gets the
+  // system's own choice. A chat request is not a call and stays a notification.
+  if (channel == 'voice' || channel == 'video') {
+    await CallTelecom.reportIncoming(
+      callId: '${data['consultation_id'] ?? ''}',
+      peerName: who.isEmpty ? 'Customer' : who,
+      video: channel == 'video',
+      expiresIn: Duration(seconds: seconds),
+    );
+  }
   await local.showIncomingCall(
     title: who.isEmpty ? 'Incoming consultation' : who,
     body: switch (channel) {
@@ -58,8 +70,16 @@ Future<void> ringForRequest(
 /// (Firebase not configured) it logs once and every accessor becomes a no-op,
 /// so the rest of the app is unaffected.
 class PushService {
-  PushService(this._local, {bool Function()? realtimeOnline})
-    : _realtimeOnline = realtimeOnline ?? _never;
+  PushService(
+    this._local, {
+    bool Function()? realtimeOnline,
+    bool Function(String thread)? roomOpen,
+  }) : _realtimeOnline = realtimeOnline ?? _never,
+       _roomOpen = roomOpen ?? _nowhere;
+
+  /// Whether the room for this thread is the one on screen.
+  final bool Function(String thread) _roomOpen;
+  static bool _nowhere(String _) => false;
 
   final LocalNotifications _local;
 
@@ -138,6 +158,13 @@ class PushService {
       if (!_realtimeOnline()) unawaited(ringForRequest(_local, message.data));
       return;
     }
+    // A chat message. The server pushes every one now — a live socket is no
+    // proof the user saw it — so the call is made here, where it is known:
+    // in that room, the message is already on screen; elsewhere in the app
+    // with the socket up, the in-app toast has just said it. Only with the
+    // socket down does the foreground need the tray.
+    final thread = '${message.data['thread'] ?? ''}';
+    if (thread.isNotEmpty && (_roomOpen(thread) || _realtimeOnline())) return;
     final n = message.notification;
     _local.show(
       title: n?.title ?? '',

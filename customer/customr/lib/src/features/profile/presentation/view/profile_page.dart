@@ -11,12 +11,7 @@ import '../../../../core/config/remote_config.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/money.dart';
-import '../../../../shared/widgets/app_bottom_sheet.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/pressable.dart';
 import '../../../auth/data/models/auth_user.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../../birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
@@ -25,6 +20,7 @@ import '../../../home/presentation/view/widgets/home_shared.dart' show PullUp;
 import '../../../wallet/presentation/cubit/wallet_cubit.dart';
 import '../../data/profile_api.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// How far the stats card tucks up into the header.
 const double _kStatsOverlap = 34;
 

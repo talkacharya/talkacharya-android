@@ -16,6 +16,11 @@ abstract class ChatAttachment with _$ChatAttachment {
     @Default('') String url,
     // client-only: local file path while an optimistic upload is in flight
     @Default('') String localPath,
+    // False once the server has deleted its copy (it keeps media a week);
+    // the device's own copy is then the only one.
+    @Default(true) bool available,
+    // When the server copy goes.
+    DateTime? expiresAt,
   }) = _ChatAttachment;
 
   const ChatAttachment._();
@@ -28,6 +33,8 @@ abstract class ChatAttachment with _$ChatAttachment {
     sizeBytes: (j['size_bytes'] as num?)?.toInt() ?? 0,
     durationSeconds: (j['duration_seconds'] as num?)?.toInt() ?? 0,
     url: j['url'] as String? ?? '',
+    available: j['available'] as bool? ?? true,
+    expiresAt: DateTime.tryParse('${j['expires_at'] ?? ''}'),
   );
 
   /// `localPath` is left out on purpose: it names a file in this install's
@@ -40,6 +47,8 @@ abstract class ChatAttachment with _$ChatAttachment {
     'size_bytes': sizeBytes,
     'duration_seconds': durationSeconds,
     'url': url,
+    'available': available,
+    'expires_at': expiresAt?.toIso8601String(),
   };
 }
 
@@ -158,6 +167,20 @@ abstract class ChatMessage with _$ChatMessage {
   /// without a second fetch.
   Map<String, dynamic> get shareSummary =>
       (meta['summary'] as Map?)?.cast<String, dynamic>() ?? const {};
+
+  /// What a shared-details card opens: a birth profile's kundali, or a match
+  /// report. Null on anything that is not such a card, or one too old to say.
+  SharedDetails? get shared {
+    if (!isKundaliRef) return null;
+    final id = shareSummary['id']?.toString() ?? '';
+    if (id.isEmpty) return null;
+    return SharedDetails(
+      isMatch: meta['share_kind'] == 'match',
+      id: id,
+      consultationId: meta['consultation_id']?.toString() ?? '',
+      name: _sharedName(shareSummary),
+    );
+  }
   String get systemEvent => meta['event'] as String? ?? '';
   String get dedupeKey =>
       clientMessageId.isNotEmpty ? 'c:$clientMessageId' : 'i:$id';
@@ -173,4 +196,37 @@ abstract class ChatMessage with _$ChatMessage {
 
   bool hasTranslationFor(String lang) =>
       translations.containsKey(lang.split('-').first);
+}
+
+
+/// The target of a shared-details card. [id] is the birth profile's id, or the
+/// match's; [consultationId] is the session it was shared in, which is what
+/// scopes the astrologer's access to it.
+class SharedDetails {
+  const SharedDetails({
+    required this.isMatch,
+    required this.id,
+    required this.consultationId,
+    required this.name,
+  });
+
+  final bool isMatch;
+  final String id;
+  final String consultationId;
+  final String name;
+}
+
+String _sharedName(Map<String, dynamic> summary) {
+  String nameOf(Object? m) {
+    final map = (m as Map?)?.cast<String, dynamic>() ?? const {};
+    final full = (map['full_name'] as String? ?? '').trim();
+    return full.isNotEmpty ? full : (map['label'] as String? ?? '').trim();
+  }
+
+  if (summary['boy'] != null || summary['girl'] != null) {
+    return [nameOf(summary['boy']), nameOf(summary['girl'])]
+        .where((n) => n.isNotEmpty)
+        .join(' & ');
+  }
+  return nameOf(summary);
 }

@@ -3,14 +3,11 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
-import '../../../../shared/widgets/pressable.dart';
 import '../../data/models/consult.dart';
 import '../../data/models/product.dart';
 import 'store_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Colour + icon for a verdict.
 ({AstroHue hue, IconData icon}) verdictStyle(VerdictKind kind) =>
     switch (kind) {

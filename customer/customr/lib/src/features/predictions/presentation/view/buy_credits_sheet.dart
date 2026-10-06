@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talkacharya_predictions/talkacharya_predictions.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../shared/widgets/app_bottom_sheet.dart';
 import '../cubit/predictions_cubit.dart';
 import '../../../../core/l10n/api_error_l10n.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 Future<void> showBuyCreditsSheet(
   BuildContext context,
   PredictionCatalog catalog,

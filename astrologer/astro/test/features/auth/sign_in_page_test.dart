@@ -2,7 +2,6 @@ import 'package:astro/src/core/config/config_repository.dart';
 import 'package:astro/src/core/config/remote_config.dart';
 import 'package:astro/src/core/di/service_locator.dart';
 import 'package:astro/src/core/l10n/gen/app_localizations.dart';
-import 'package:astro/src/core/theme/brand_colors.dart';
 import 'package:astro/src/features/auth/data/auth_repository.dart';
 import 'package:astro/src/features/auth/data/models/otp_request_result.dart';
 import 'package:astro/src/features/auth/presentation/bloc/auth/auth_bloc.dart';
@@ -15,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class _MockRepo extends Mock implements AuthRepository {}
 
 class _MockAuthBloc extends MockBloc<AuthEvent, AuthState>

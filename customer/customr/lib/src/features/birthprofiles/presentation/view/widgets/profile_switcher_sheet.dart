@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/router/routes.dart';
-import '../../../../../shared/widgets/app_bottom_sheet.dart';
 import '../../bloc/birth_profiles_cubit.dart';
 import 'profile_card.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Bottom sheet to switch the active birth profile or jump to adding one.
 /// Opened from the Home app-bar chip.
 Future<void> showProfileSwitcherSheet(BuildContext context) {

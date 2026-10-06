@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/util/async_value.dart';
-import '../../../../shared/widgets/error_view.dart';
 import '../../data/kundali_repository.dart';
 import '../cubit/kundali_cubit.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// One chart in full, reached from the "All charts" picker. Creates its own
 /// [KundaliCubit] for the consultation (charts cache per type).
 class ChartDetailPage extends StatelessWidget {

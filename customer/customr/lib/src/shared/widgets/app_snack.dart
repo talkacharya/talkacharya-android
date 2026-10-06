@@ -111,6 +111,42 @@ class AppSnack {
         ),
       );
   }
+
+  /// Top floating toast overlay from a BuildContext.
+  /// Renders directly into the root Overlay so it appears on top of
+  /// everything, including modal bottom sheets and dialogs.
+  static void showTop(
+    BuildContext context,
+    String message, {
+    String? title,
+    SnackType type = SnackType.info,
+    SnackStyle style = SnackStyle.glass,
+    String? actionLabel,
+    VoidCallback? onAction,
+    Duration duration = const Duration(seconds: 4),
+  }) {
+    final overlay = Navigator.of(context, rootNavigator: true).overlay ??
+        Overlay.of(context);
+    late final OverlayEntry entry;
+    entry = OverlayEntry(
+      builder: (context) => _TopToast(
+        duration: duration,
+        onDone: () {
+          if (entry.mounted) entry.remove();
+        },
+        builder: (close) => _SnackCard(
+          message: message,
+          title: title,
+          type: type,
+          style: style,
+          actionLabel: actionLabel,
+          onAction: onAction,
+          onClose: close,
+        ),
+      ),
+    );
+    overlay.insert(entry);
+  }
 }
 
 class _Look {

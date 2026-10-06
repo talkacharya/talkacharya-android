@@ -43,21 +43,28 @@ class _FadeSlideInState extends State<FadeSlideIn>
     super.dispose();
   }
 
+  // Pre-compute both animations once from the single controller.
+  late final Animation<double> _opacity = CurvedAnimation(
+    parent: _c,
+    curve: Curves.easeOutCubic,
+  );
+  late final Animation<Offset> _slide = Tween<Offset>(
+    // Offset is in fractional units — 0.08 ≈ 8% of the child's own height,
+    // which visually matches the old 22 px absolute offset at typical sizes.
+    begin: Offset(0, widget.offset / 300),
+    end: Offset.zero,
+  ).animate(CurvedAnimation(parent: _c, curve: Curves.easeOutCubic));
+
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _c,
-      builder: (context, child) {
-        final t = Curves.easeOutCubic.transform(_c.value);
-        return Opacity(
-          opacity: _c.value.clamp(0.0, 1.0),
-          child: Transform.translate(
-            offset: Offset(0, (1 - t) * widget.offset),
-            child: child,
-          ),
-        );
-      },
-      child: widget.child,
+    // FadeTransition + SlideTransition are compositor-driven: no Opacity
+    // widget layer, no per-frame CPU layout. The GPU handles blend + offset.
+    return FadeTransition(
+      opacity: _opacity,
+      child: SlideTransition(
+        position: _slide,
+        child: widget.child,
+      ),
     );
   }
 }

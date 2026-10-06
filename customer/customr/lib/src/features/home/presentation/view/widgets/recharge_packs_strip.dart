@@ -4,13 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/router/routes.dart';
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
-import '../../../../../shared/widgets/pressable.dart';
 import '../../../data/models/recharge_pack.dart';
 import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Recharge denominations as small money-coloured cards; the badged pack is
 /// filled and lifted so it's the obvious pick.
 class RechargePacksStrip extends StatelessWidget {

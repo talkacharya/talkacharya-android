@@ -13,6 +13,12 @@ import '../../features/home/presentation/view/home_page.dart';
 import '../../features/livestream/presentation/view/go_live_page.dart';
 import '../../features/kundali/presentation/view/chart_detail_page.dart';
 import '../../features/kundali/presentation/view/consultation_kundali_page.dart';
+import '../../features/performance/presentation/view/performance_page.dart';
+import '../../features/performance/presentation/view/win_back_page.dart';
+import '../../features/call_history/presentation/view/call_history_page.dart';
+import '../../features/remedies/presentation/view/remedies_page.dart';
+import '../../features/remedies/presentation/view/suggest_remedy_page.dart';
+import '../../features/waitlist/presentation/view/waitlist_page.dart';
 import '../../features/notifications/presentation/view/notifications_page.dart';
 import '../../features/onboarding/presentation/view/onboarding_gate_page.dart';
 import '../../features/onboarding/presentation/view/wizard_page.dart';
@@ -100,6 +106,39 @@ GoRouter buildRouter(
         path: Routes.goLive,
         parentNavigatorKey: _rootKey,
         builder: (_, _) => const GoLivePage(),
+      ),
+      GoRoute(
+        path: Routes.waitlist,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const WaitlistPage(),
+      ),
+      GoRoute(
+        path: Routes.callHistory,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const CallHistoryPage(),
+      ),
+      GoRoute(
+        path: Routes.remedies,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const RemediesPage(),
+      ),
+      GoRoute(
+        path: '/remedies/suggest',
+        parentNavigatorKey: _rootKey,
+        builder: (_, s) => SuggestRemedyPage(
+          consultationId: s.uri.queryParameters['consultation'],
+          customerName: s.uri.queryParameters['name'],
+        ),
+      ),
+      GoRoute(
+        path: Routes.performance,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const PerformancePage(),
+      ),
+      GoRoute(
+        path: Routes.winBack,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const WinBackPage(),
       ),
       GoRoute(
         path: Routes.notifications,

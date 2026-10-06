@@ -6,12 +6,12 @@ import '../../../../core/payments/razorpay_service.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/network/friendly_error.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../data/models/auto_recharge.dart';
 import '../../data/wallet_repository.dart';
 import '../cubit/wallet_cubit.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Turn on automatic top-ups, or turn them off.
 ///
 /// This asks someone to let us take money while they are not looking, so the

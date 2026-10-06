@@ -23,7 +23,7 @@ class LocalNotifications {
   /// shows the call rather than a line in the shade. Android freezes a
   /// channel's sound and importance at creation, which is why this can never be
   /// the same channel as everything else.
-  static const callChannelId = 'talkacharya_incoming_call';
+  static const callChannelId = 'talkacharya_incoming_call_v2';
 
   /// One id, so a second push for the same call replaces the first and
   /// opening or the call ending can take it away again.

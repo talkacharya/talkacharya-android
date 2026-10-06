@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
 import 'package:customr/src/core/l10n/l10n.dart';
 
-export '../../../../../shared/widgets/hue_widgets.dart';
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 /// Layout constants shared across home sections.
 class HomeGaps {
@@ -198,26 +196,7 @@ class SectionSwitcher extends StatelessWidget {
   }
 }
 
-/// A rounded placeholder block; wrap a tree of these in [HomeShimmer].
-class SkeletonBox extends StatelessWidget {
-  const SkeletonBox({this.width, this.height = 12, this.radius = 6, super.key});
 
-  final double? width;
-  final double height;
-  final double radius;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(radius),
-      ),
-    );
-  }
-}
 
 /// Shimmer tuned to the warm palette.
 class HomeShimmer extends StatelessWidget {

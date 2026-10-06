@@ -22,11 +22,27 @@ class ChatView extends StatefulWidget {
     this.composerEnabled = true,
     this.composerHint = 'Message',
     this.aboveComposer,
+    this.footer,
+    this.systemLabel,
+    this.onOpenShared,
     super.key,
   });
 
   final bool composerEnabled;
   final String composerHint;
+
+  /// An app-supplied card at the very end of the thread, below the newest
+  /// message — where the room says what is happening *now*: a request being
+  /// answered, a session being billed, the wrap-up and the way to start again.
+  /// Part of the conversation rather than a bar bolted around it, so it
+  /// scrolls with the messages and reads like one.
+  final Widget? footer;
+
+  /// The app's wording for system lines; see [MessageBubble.systemLabel].
+  final String? Function(ChatMessage message)? systemLabel;
+
+  /// Opens the kundali or match report behind a shared-details card.
+  final void Function(SharedDetails details)? onOpenShared;
 
   /// An app-supplied strip above the composer — the astrologer's quick
   /// replies. `insert` puts text into the field for editing.
@@ -50,6 +66,10 @@ class _ChatViewState extends State<ChatView> {
   /// Messages that arrived while the reader was scrolled up. Reset when they
   /// come back down, because that is when they have actually seen them.
   int _missed = 0;
+
+  /// Track which message dedupeKeys are "new" (just appeared) so we can
+  /// animate only those. Cleared after the post-frame callback fires.
+  final Set<String> _newKeys = {};
 
   @override
   void initState() {
@@ -88,13 +108,48 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // Scroll intelligence: only scroll-to-bottom when the user is already near
+  // the bottom. Use addPostFrameCallback so the list has settled before we
+  // measure — this prevents the layout-first-then-jerk problem.
+  // ---------------------------------------------------------------------------
+  void _handleNewMessages(int arrived) {
+    if (!_scroll.hasClients) return;
+    if (_away) {
+      setState(() => _missed += arrived);
+    } else {
+      // Wait one frame for the new item to be laid out, then animate.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || !_scroll.hasClients) return;
+        _scroll.animateTo(
+          0,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+        );
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.read<ChatController>();
+
+    // ── OUTER: only rebuild the full list tree when the message list length
+    //    changes, loading state flips, typing starts/stops, or a reply bar
+    //    appears/disappears.
+    //
+    //    Receipts, connection, pins, recording — all handled by isolated child
+    //    widgets with their own buildWhen, so they don't cascade here.
     return BlocConsumer<ChatController, ChatSessionState>(
       listenWhen: (a, b) =>
-          a.messages.length != b.messages.length ||
+      a.messages.length != b.messages.length ||
           a.jumpToSeq != b.jumpToSeq,
+      buildWhen: (a, b) =>
+      a.messages.length != b.messages.length ||
+          a.loading != b.loading ||
+          a.loadingOlder != b.loadingOlder ||
+          a.otherTyping != b.otherTyping ||
+          a.replyingTo != b.replyingTo,
       listener: (context, state) {
         final jump = state.jumpToSeq;
         if (jump != null) {
@@ -102,41 +157,36 @@ class _ChatViewState extends State<ChatView> {
           context.read<ChatController>().jumpHandled();
         }
         final arrived = state.messages.length - _lastCount;
-        if (arrived > 0 && _scroll.hasClients) {
-          if (_away) {
-            // Someone reading back through the conversation must not be
-            // dragged to the bottom by a message they have not asked for.
-            setState(() => _missed += arrived);
-          } else {
-            // stick to bottom (reverse list => offset 0)
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (_scroll.hasClients) {
-                _scroll.animateTo(
-                  0,
-                  duration: const Duration(milliseconds: 220),
-                  curve: Curves.easeOut,
-                );
-              }
-            });
+        if (arrived > 0) {
+          // Record the keys of newly appeared messages for their entry animation.
+          final start = state.messages.length - arrived;
+          for (var i = start; i < state.messages.length; i++) {
+            _newKeys.add(state.messages[i].dedupeKey);
           }
+          _handleNewMessages(arrived);
         }
         _lastCount = state.messages.length;
       },
       builder: (context, state) {
         if (state.loading && state.messages.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: ChatSkeletonLoader());
         }
 
         final rows = _rows(state);
+
+        // Clear entry-animation keys after this frame so subsequent rebuilds
+        // (receipts, etc.) don't re-trigger the animation on existing messages.
+        WidgetsBinding.instance.addPostFrameCallback((_) => _newKeys.clear());
+
         return Column(
           children: [
-            ConnectionBanner(status: state.connection),
-            if (state.pins.isNotEmpty)
-              PinnedBar(
-                pins: state.pins,
-                onUnpin: c.unpin,
-                onTap: (seq) => _scrollToSeq(seq, state),
-              ),
+            // Isolated: rebuilds only when connection status changes.
+            _ConnectionBannerBridge(),
+            // Isolated: rebuilds only when pins list changes.
+            _PinnedBarBridge(
+              onTap: (seq) => _scrollToSeq(seq, state),
+              onUnpin: c.unpin,
+            ),
             Expanded(
               child: Stack(
                 children: [
@@ -160,37 +210,47 @@ class _ChatViewState extends State<ChatView> {
                       }
                       final row = rows[i];
                       return switch (row) {
+                        _FooterRow() => widget.footer!,
                         _TypingRow() => const TypingIndicator(),
                         _DateRow(:final label) => _DaySeparator(label: label),
                         _MsgRow(
-                          :final message,
-                          :final continuesAbove,
-                          :final continuesBelow,
+                            :final message,
+                            :final continuesAbove,
+                            :final continuesBelow,
                         ) =>
-                          _SeenReporter(
+                        // ValueKey on _MessageEntry gives the list a stable
+                        // identity so it reuses rather than recreates the
+                        // widget when the list grows.
+                        _MessageEntry(
+                          key: ValueKey(message.dedupeKey),
+                          animate: _newKeys.contains(message.dedupeKey),
+                          child: _SeenReporter(
                             seq: message.seq,
                             controller: c,
                             child: SwipeToReply(
-                              // Nothing to quote on a system line, and a card is
-                              // its own thing.
                               enabled:
-                                  widget.composerEnabled &&
-                                  !message.isSystem &&
-                                  !message.isKundaliRef,
+                              widget.composerEnabled &&
+                                  (!message.isSystem || message.isKundaliRef),
+                              reverse: message.senderRole == c.identity.role,
                               onReply: () => c.replyTo(message),
                               child: MessageBubble(
+                                // Stable key inside SwipeToReply too, so the
+                                // bubble state (_showOriginal etc.) survives
+                                // a parent rebuild.
+                                key: ValueKey('bubble:${message.dedupeKey}'),
                                 message: message,
                                 controller: c,
                                 continuesAbove: continuesAbove,
                                 continuesBelow: continuesBelow,
+                                systemLabel: widget.systemLabel,
+                                onOpenShared: widget.onOpenShared,
                               ),
                             ),
                           ),
+                        ),
                       };
                     },
                   ),
-                  // A way back to the newest message, and a count of what
-                  // arrived while the reader was elsewhere in the history.
                   if (_away)
                     Positioned(
                       right: 12,
@@ -219,12 +279,6 @@ class _ChatViewState extends State<ChatView> {
   }
 
   /// Newest-first rows (list is reverse:true) with day separators + a typing row.
-  /// Bring the message at [seq] into view, if it is in the loaded window.
-  ///
-  /// The list is `reverse: true` and mixes messages with day separators, so the
-  /// index has to be counted off the same rows the builder draws. A pin that
-  /// points further back than what is loaded simply doesn't move — better than
-  /// jumping somewhere arbitrary.
   void _scrollToSeq(int seq, ChatSessionState state) {
     final rows = _rows(state);
     final index = rows.indexWhere((r) => r is _MsgRow && r.message.seq == seq);
@@ -238,6 +292,7 @@ class _ChatViewState extends State<ChatView> {
 
   List<_Row> _rows(ChatSessionState state) {
     final out = <_Row>[];
+    if (widget.footer != null) out.add(const _FooterRow());
     if (state.otherTyping) out.add(const _TypingRow());
     final msgs = state.messages;
     for (var i = msgs.length - 1; i >= 0; i--) {
@@ -268,7 +323,9 @@ class _ChatViewState extends State<ChatView> {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final that = DateTime(local.year, local.month, local.day);
-    final diff = today.difference(that).inDays;
+    final diff = today
+        .difference(that)
+        .inDays;
     if (diff == 0) return 'Today';
     if (diff == 1) return 'Yesterday';
     if (diff < 7) return DateFormat('EEEE').format(local);
@@ -276,15 +333,112 @@ class _ChatViewState extends State<ChatView> {
   }
 }
 
-// --- row model -----------------------------------------------------------
+// --- Isolated sub-widgets that only rebuild for their own state slice --------
+
+/// Wraps [ConnectionBanner] with a scoped selector so connection-status changes
+/// don't cascade a rebuild of the full message list.
+class _ConnectionBannerBridge extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ChatController, ChatSessionState>(
+      buildWhen: (a, b) => a.connection != b.connection,
+      builder: (context, state) => ConnectionBanner(status: state.connection),
+    );
+  }
+}
+
+/// Wraps [PinnedBar] and only rebuilds when the pins list actually changes.
+class _PinnedBarBridge extends StatelessWidget {
+  const _PinnedBarBridge({required this.onTap, required this.onUnpin});
+
+  final void Function(int seq) onTap;
+  final void Function(int seq) onUnpin;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ChatController, ChatSessionState>(
+      buildWhen: (a, b) => a.pins != b.pins,
+      builder: (context, state) {
+        if (state.pins.isEmpty) return const SizedBox.shrink();
+        return PinnedBar(pins: state.pins, onUnpin: onUnpin, onTap: onTap);
+      },
+    );
+  }
+}
+
+// --- Subtle entry animation for newly inserted messages ---------------------
+
+/// Wraps a new message bubble with a 200ms fade + tiny upward slide.
+///
+/// When [animate] is false (for existing messages on a re-render) this is a
+/// zero-cost transparent passthrough — no AnimationController is created.
+class _MessageEntry extends StatefulWidget {
+  const _MessageEntry({required this.child, required this.animate, super.key});
+
+  final Widget child;
+  final bool animate;
+
+  @override
+  State<_MessageEntry> createState() => _MessageEntryState();
+}
+
+class _MessageEntryState extends State<_MessageEntry>
+    with SingleTickerProviderStateMixin {
+  AnimationController? _ctrl;
+  Animation<double>? _opacity;
+  Animation<Offset>? _slide;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.animate) {
+      _ctrl = AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 250),
+      );
+      final curve = CurvedAnimation(parent: _ctrl!, curve: Curves.easeOutCubic);
+      _opacity = curve;
+      _slide = Tween<Offset>(
+        begin: const Offset(0, 0.1), // slightly more slide
+        end: Offset.zero,
+      ).animate(curve);
+      _ctrl!.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    _ctrl?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ctrl = _ctrl;
+    if (ctrl == null) return widget.child; // no animation — just render
+    return SizeTransition(
+      sizeFactor: _opacity!,
+      axisAlignment: 1.0, // 1.0 aligns child to the bottom as it grows
+      child: FadeTransition(
+        opacity: _opacity!,
+        child: SlideTransition(position: _slide!, child: widget.child),
+      ),
+    );
+  }
+}
+
+// --- Row model ---------------------------------------------------------------
 
 sealed class _Row {
   const _Row();
 }
 
+class _FooterRow extends _Row {
+  const _FooterRow();
+}
+
 class _MsgRow extends _Row {
-  const _MsgRow(
-    this.message, {
+  const _MsgRow(this.message, {
     this.continuesAbove = false,
     this.continuesBelow = false,
   });
@@ -300,6 +454,7 @@ class _MsgRow extends _Row {
 
 class _DateRow extends _Row {
   const _DateRow(this.label);
+
   final String label;
 }
 
@@ -309,11 +464,14 @@ class _TypingRow extends _Row {
 
 class _DaySeparator extends StatelessWidget {
   const _DaySeparator({required this.label});
+
   final String label;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final scheme = Theme
+        .of(context)
+        .colorScheme;
     return Center(
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
@@ -343,6 +501,7 @@ class _SeenReporter extends StatefulWidget {
     required this.controller,
     required this.child,
   });
+
   final int seq;
   final ChatController controller;
   final Widget child;
@@ -370,20 +529,22 @@ class ChatHeaderStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ChatController, ChatSessionState>(
       buildWhen: (a, b) =>
-          a.otherTyping != b.otherTyping ||
+      a.otherTyping != b.otherTyping ||
           a.presence != b.presence ||
           a.connection != b.connection,
       builder: (context, state) {
-        final scheme = Theme.of(context).colorScheme;
+        final scheme = Theme
+            .of(context)
+            .colorScheme;
         final (String text, Color color) = state.otherTyping
             ? ('typing…', scheme.primary)
             : state.presence.otherOnline
             ? ('online', const Color(0xFF2E7D32))
             : state.presence.otherLastSeen != null
             ? (
-                'last seen ${_ago(state.presence.otherLastSeen!)}',
-                scheme.onSurfaceVariant,
-              )
+        'last seen ${_ago(state.presence.otherLastSeen!)}',
+        scheme.onSurfaceVariant,
+        )
             : ('', scheme.onSurfaceVariant);
         if (text.isEmpty) return const SizedBox.shrink();
         return Text(
@@ -420,7 +581,9 @@ class _ToBottomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final scheme = Theme
+        .of(context)
+        .colorScheme;
     return Material(
       elevation: 3,
       color: scheme.surface,
@@ -455,4 +618,238 @@ class _ToBottomButton extends StatelessWidget {
       ),
     );
   }
+}
+
+
+class ChatSkeletonLoader extends StatefulWidget {
+  const ChatSkeletonLoader({super.key});
+
+  @override
+  State<ChatSkeletonLoader> createState() => _ChatRoomSkeletonState();
+}
+
+class _ChatRoomSkeletonState extends State<ChatSkeletonLoader>
+    with SingleTickerProviderStateMixin {
+  // Swap for your theme colors.
+  static const _bg = Color(0xFFFFF8F5);
+  static const _recv = Color(0xFFEFDDD6);
+  static const _recvBar = Color(0xFFE2C9BE);
+  static const _sent = Color(0xFF8E4B2C);
+  static const _sentBar = Color(0x40FFFFFF);
+  static const _card = Color(0xFFFFF0EB);
+  static const _cardBorder = Color(0xFFEBD3C9);
+  static const _neutral = Color(0xFFEBDAD2);
+
+  // (isMine, textWidth) top to bottom, mirroring the real chat.
+  static const _items = <(bool, double)>[
+    (true, 60),
+    (false, 190),
+    (true, 80),
+    (false, 50),
+    (false, 110),
+    (false, 50),
+    (false, 150),
+    (false, 240),
+    (true, 50),
+    (true, 200),
+  ];
+
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1400),
+  )
+    ..repeat();
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  Widget _b(double w, double h, {double? r, Color color = _neutral}) =>
+      Container(
+        width: w,
+        height: h,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(r ?? h / 2),
+        ),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: _bg,
+      body: AnimatedBuilder(
+        animation: _c,
+        builder: (context, child) =>
+            ShaderMask(
+              blendMode: BlendMode.srcATop,
+              shaderCallback: (rect) =>
+                  LinearGradient(
+                    begin: Alignment(-1.5 + 3 * _c.value, -0.3),
+                    end: Alignment(-0.5 + 3 * _c.value, 0.3),
+                    colors: const [
+                      Color(0x00FFFFFF),
+                      Color(0x66FFFFFF),
+                      Color(0x00FFFFFF),
+                    ],
+                  ).createShader(rect),
+              child: child,
+            ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              _appBar(),
+              Expanded(
+                child: SingleChildScrollView(
+                  reverse: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                  child: Column(
+                    children: [
+                      for (final (mine, w) in _items) _bubble(mine, w),
+                    ],
+                  ),
+                ),
+              ),
+              Center(child: _b(230, 36, color: _recv)), // "Chat ended" pill
+              const SizedBox(height: 14),
+              _ratingCard(),
+              const SizedBox(height: 10),
+              _composer(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _appBar() =>
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          children: [
+            _b(24, 24, r: 12),
+            const SizedBox(width: 20),
+            _b(46, 46, r: 23), // avatar
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _b(140, 16), // name
+                const SizedBox(height: 7),
+                _b(100, 11), // consultation status
+              ],
+            ),
+            const Spacer(),
+            _b(24, 24, r: 12), // search
+            const SizedBox(width: 22),
+            _b(6, 24, r: 3), // more
+            const SizedBox(width: 8),
+          ],
+        ),
+      );
+
+  Widget _bubble(bool mine, double width) {
+    final bar = mine ? _sentBar : _recvBar;
+    return Align(
+      alignment: mine ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
+        decoration: BoxDecoration(
+          color: mine ? _sent : _recv,
+          borderRadius: BorderRadius.only(
+            topLeft: const Radius.circular(20),
+            topRight: const Radius.circular(20),
+            bottomLeft: Radius.circular(mine ? 20 : 6),
+            bottomRight: Radius.circular(mine ? 6 : 20),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _b(width, 12, color: bar),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _b(12, 12, color: bar), // speaker icon
+                const SizedBox(width: 8),
+                _b(44, 8, color: bar), // time
+                if (mine) ...[
+                  const SizedBox(width: 8),
+                  _b(14, 8, color: bar), // ticks
+                ],
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _ratingCard() =>
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.fromLTRB(18, 18, 18, 14),
+        decoration: BoxDecoration(
+          color: _card,
+          borderRadius: BorderRadius.circular(28),
+          border: Border.all(color: _cardBorder),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                for (var i = 0; i < 5; i++) ...[
+                  _b(22, 22, r: 5, color: _cardBorder), // stars
+                  const SizedBox(width: 4),
+                ],
+                const SizedBox(width: 12),
+                _b(150, 12), // "You rated this session"
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                _b(22, 22, r: 6), // lock icon
+                const SizedBox(width: 12),
+                _b(220, 14), // "Consultation ended..."
+              ],
+            ),
+            const SizedBox(height: 16),
+            Container(
+              height: 56,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: _sent,
+                borderRadius: BorderRadius.circular(28),
+              ),
+              child: Center(child: _b(140, 14, color: _sentBar)),
+            ),
+            const SizedBox(height: 12),
+            _b(210, 10), // "Chat again with ..."
+          ],
+        ),
+      );
+
+  Widget _composer() =>
+      Container(
+        decoration: const BoxDecoration(
+          border: Border(top: BorderSide(color: _cardBorder)),
+        ),
+        padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+        child: Row(
+          children: [
+            _b(28, 28, r: 7),
+            const SizedBox(width: 14),
+            Expanded(child: _b(double.infinity, 52, r: 26)),
+            const SizedBox(width: 10),
+            _b(52, 52, r: 26),
+          ],
+        ),
+      );
 }

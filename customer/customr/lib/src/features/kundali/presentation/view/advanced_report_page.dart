@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/error_view.dart';
 import '../../data/kundali_repository.dart';
 import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// One advanced report — `report` is ashtakavarga | shadbala | kp | jaimini.
 class AdvancedReportPage extends StatefulWidget {
   const AdvancedReportPage({

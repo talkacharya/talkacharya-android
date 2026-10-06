@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'auth_background.dart';
-import 'fade_slide_in.dart';
-
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 const _gold = Color(0xFFC5A358);
 
 /// Dark, celestial chrome shared by the phone and OTP steps: a starfield

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// The visual for a gift: its glyph on a gradient tile coloured by category.
 ///
 /// The catalog's `icon_key` / `animation_key` point at artwork the content team

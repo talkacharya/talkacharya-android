@@ -3,9 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../../../core/l10n/l10n.dart';
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../shared/widgets/pressable.dart';
-
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Initials in a gradient circle, optionally ringed (for overlapping stacks).
 class PersonAvatar extends StatelessWidget {
   const PersonAvatar({
@@ -148,9 +146,12 @@ class GradientCta extends StatelessWidget {
       button: true,
       enabled: active,
       child: Pressable(
-        child: AnimatedOpacity(
+        child: TweenAnimationBuilder<double>(
+          // TweenAnimationBuilder disposes its controller after the animation
+          // completes — no permanent compositing layer at opacity 1.0 (enabled).
+          tween: Tween(end: enabled ? 1.0 : 0.5),
           duration: const Duration(milliseconds: 200),
-          opacity: enabled ? 1 : 0.5,
+          builder: (_, opacity, child) => Opacity(opacity: opacity, child: child!),
           child: Material(
             borderRadius: BorderRadius.circular(18),
             clipBehavior: Clip.antiAlias,

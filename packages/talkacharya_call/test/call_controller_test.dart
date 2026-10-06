@@ -50,7 +50,7 @@ class _Backend implements CallBackend {
   );
 
   @override
-  Future<void> reportState(
+  Future<Map<String, dynamic>?> reportState(
     CallNetState state, {
     bool? relayed,
     int? quality,
@@ -59,6 +59,7 @@ class _Backend implements CallBackend {
   }) async {
     reports.add(state);
     qualityReports.add({'quality': quality, 'rtt': rttMs, 'loss': lossPct});
+    return null;
   }
 
   @override
@@ -637,6 +638,67 @@ void main() {
     await _settle(20);
     expect(cust.c.state.speakerOn, isTrue);
     expect(cust.c.state.bluetooth, isFalse);
+
+    await cust.c.close();
+    await telecom.close();
+  });
+
+  test('a connected headset turns the speaker toggle into a picker', () async {
+    final hub = _Hub();
+    final telecom = StreamController<CallTelecomEvent>.broadcast();
+    final cust = _side('customer', hub, telecomEvents: telecom.stream);
+    await cust.c.start();
+    await _settle();
+
+    // Phone and speaker only: a toggle says everything there is to say.
+    telecom.add(
+      const TelecomAudioRoute(
+        speaker: false,
+        bluetooth: false,
+        routes: {CallAudioOutput.earpiece, CallAudioOutput.speaker},
+      ),
+    );
+    await _settle(20);
+    expect(cust.c.state.canPickAudioRoute, isFalse);
+
+    // A Bluetooth headset arrives, and takes the audio.
+    telecom.add(
+      const TelecomAudioRoute(
+        speaker: false,
+        bluetooth: true,
+        route: CallAudioOutput.bluetooth,
+        routes: {
+          CallAudioOutput.earpiece,
+          CallAudioOutput.speaker,
+          CallAudioOutput.bluetooth,
+        },
+      ),
+    );
+    await _settle(20);
+    expect(cust.c.state.canPickAudioRoute, isTrue);
+    expect(cust.c.state.audioRoute, CallAudioOutput.bluetooth);
+
+    await cust.c.close();
+    await telecom.close();
+  });
+
+  test('another call being declined does not hang this one up', () async {
+    final hub = _Hub();
+    final telecom = StreamController<CallTelecomEvent>.broadcast();
+    final cust = _side('customer', hub, telecomEvents: telecom.stream);
+    await cust.c.start();
+    await _settle();
+
+    // A second request rang and was turned away — not this call.
+    telecom.add(const TelecomDisconnect(callId: 'some-other-call'));
+    telecom.add(const TelecomReject('some-other-call'));
+    await _settle(20);
+    expect(cust.c.state.phase, isNot(CallPhase.ended));
+
+    // Ours, by the id it was handed to Telecom under, is final.
+    telecom.add(const TelecomDisconnect(callId: 'customer-sid'));
+    await _settle(20);
+    expect(cust.c.state.phase, CallPhase.ended);
 
     await cust.c.close();
     await telecom.close();

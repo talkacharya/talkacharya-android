@@ -147,16 +147,16 @@ class _Skeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      opacity: loading ? 1 : 0.4,
-      duration: const Duration(milliseconds: 400),
-      child: Container(
-        width: 150,
-        height: 32,
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.18),
-          borderRadius: BorderRadius.circular(8),
-        ),
+    // _Skeleton is only in the tree when b == null (parent uses if/else).
+    // The loading→done transition always removes _Skeleton and adds CountUpText
+    // — the opacity-0.4 state never occurs in practice. Simple guard is enough.
+    if (!loading) return const SizedBox(width: 150, height: 32);
+    return Container(
+      width: 150,
+      height: 32,
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.18),
+        borderRadius: BorderRadius.circular(8),
       ),
     );
   }

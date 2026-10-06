@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Numerology + Lo Shu birth grid (`/numerology`). Traditional, descriptive —
 /// tendencies, favourable days and colours, no dated prediction. Gemstones are
 /// gated behind an astrologer, like every other remedy in the app.

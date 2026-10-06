@@ -4,15 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
 import '../widgets/sade_sati_card.dart';
 import 'kundali_routes.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Gochar: where the planets are today relative to your chart, Sade Sati /
 /// panoti status, Jupiter's support, close contacts, and the ashtakavarga
 /// scores for each transit.

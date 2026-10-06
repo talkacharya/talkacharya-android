@@ -1,3 +1,4 @@
+import '../core/notifications/local_notifications.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/consultations/presentation/room_presence.dart';
+import '../features/consultations/presentation/view/widgets/call_room.dart';
 import '../features/consultations/presentation/view/widgets/live_session_banner.dart';
 import '../core/config/flavor.dart';
 import '../core/deeplink/deep_link_parser.dart';
@@ -27,7 +29,14 @@ import '../features/notifications/presentation/bloc/notifications_cubit.dart';
 import '../features/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:talkacharya_call/talkacharya_call.dart';
 import '../core/router/routes.dart';
-import '../features/consultations/presentation/view/consultation_room_page.dart';
+
+class AppScrollBehavior extends ScrollBehavior {
+  const AppScrollBehavior();
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics());
+  }
+}
 
 class TalkAcharyaApp extends StatefulWidget {
   const TalkAcharyaApp({super.key});
@@ -44,6 +53,7 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
   );
 
   final _subs = <StreamSubscription<dynamic>>[];
+  VoidCallback? _onHubChange;
 
   @override
   void initState() {
@@ -63,12 +73,49 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
       deepLinks.uris.listen((uri) => _handleLocation(locationForUri(uri))),
     );
     _subs.add(notifRouter.locations.listen(_handleLocation));
+    _subs.add(CallTelecom.events.listen(_onTelecom));
+
+    // If the astrologer disconnects while the incoming-call notification is
+    // still ringing (user never opened the call room), no screen is present to
+    // call cancelIncomingCall(). Listen to the hub so the ringtone is stopped
+    // as soon as the call is known to be over.
+    final hub = getIt<CallHub>();
+    _onHubChange = () {
+      final c = hub.controller;
+      if (c != null && c.state.phase == CallPhase.ended) {
+        unawaited(getIt<LocalNotifications>().cancelIncomingCall());
+      }
+    };
+    hub.addListener(_onHubChange!);
 
     // Cold-start entry points, resolved once after the first frame.
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _handleLocation(locationForUri(await deepLinks.initialLink() ?? Uri()));
       _handleLocation(await notifRouter.initialLocation());
+      // Answered from a headset or watch while the app was not running.
+      final answered = await CallTelecom.takePendingAnswer();
+      if (answered != null) _openCall(answered);
     });
+  }
+
+  /// The ringing call answered or declined by the system — a headset button,
+  /// a watch, a car — rather than by tapping the notification.
+  void _onTelecom(CallTelecomEvent event) {
+    switch (event) {
+      case TelecomAnswer(:final callId) when callId.isNotEmpty:
+        _openCall(callId);
+      case TelecomReject():
+        // The astrologer's side times the call out; nothing to send.
+        unawaited(getIt<LocalNotifications>().cancelIncomingCall());
+      default:
+        break;
+    }
+  }
+
+  /// Into the call's room, whose controller adopts the answered Telecom call.
+  void _openCall(String consultationId) {
+    unawaited(getIt<LocalNotifications>().cancelIncomingCall());
+    _handleLocation(Routes.consultation(consultationId));
   }
 
   void _handleLocation(String? location) {
@@ -91,6 +138,8 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
     for (final s in _subs) {
       s.cancel();
     }
+    final cb = _onHubChange;
+    if (cb != null) getIt<CallHub>().removeListener(cb);
     super.dispose();
   }
 
@@ -121,6 +170,7 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
             debugShowCheckedModeBanner: !config.isProd,
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,
+            scrollBehavior: const AppScrollBehavior(),
             routerConfig: _router,
             locale: locale,
             supportedLocales: kSupportedLocales,

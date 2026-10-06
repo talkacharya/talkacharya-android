@@ -59,25 +59,48 @@ class ConsultationApi {
           'topics': topics,
         },
       );
-      final code = res.statusCode ?? 0;
-      if (code == 402) {
-        final d =
-            (res.data?['detail'] as Map?)?.cast<String, dynamic>() ?? const {};
-        throw InsufficientBalance(
-          required: '${d['required'] ?? ''}',
-          available: '${d['available'] ?? ''}',
-          currency: '${d['currency'] ?? 'INR'}',
-        );
-      }
-      if (code == 409) throw AstrologerBusy();
-      if (res.data?['code'] == 'consultation.astrologer_unavailable') {
-        throw AstrologerOffline(res.data?['message'] as String?);
-      }
-      _raise(res);
-      return Consultation.fromMap(res.data ?? const {});
+      return _booked(res);
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
     }
+  }
+
+  /// Ask for another session inside thread [threadId], carrying over who the
+  /// reading is for. Returns the one already pending if there is one.
+  Future<Consultation> consultAgain(
+    String threadId, {
+    String channel = 'chat',
+  }) async {
+    try {
+      final res = await _dio.post<Map<String, dynamic>>(
+        ApiPaths.conversationConsult(threadId),
+        data: {'channel': channel},
+      );
+      return _booked(res);
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// A booking response, or the reason there is no booking — typed, because
+  /// each one has its own way forward (top up, wait, try someone else).
+  Consultation _booked(Response<Map<String, dynamic>> res) {
+    final code = res.statusCode ?? 0;
+    if (code == 402) {
+      final d =
+          (res.data?['detail'] as Map?)?.cast<String, dynamic>() ?? const {};
+      throw InsufficientBalance(
+        required: '${d['required'] ?? ''}',
+        available: '${d['available'] ?? ''}',
+        currency: '${d['currency'] ?? 'INR'}',
+      );
+    }
+    if (code == 409) throw AstrologerBusy();
+    if (res.data?['code'] == 'consultation.astrologer_unavailable') {
+      throw AstrologerOffline(res.data?['message'] as String?);
+    }
+    _raise(res);
+    return Consultation.fromMap(res.data ?? const {});
   }
 
   /// A PDF (or plain text, where the server cannot make one) of the thread,
@@ -132,6 +155,26 @@ class ConsultationApi {
     try {
       final res = await _dio.get<Map<String, dynamic>>(
         ApiPaths.conversation(id),
+      );
+      _raise(res);
+      return Conversation.fromMap(res.data ?? const {});
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// Mute, archive or block — this user's own settings for the thread.
+  /// Returns the thread as it now stands.
+  Future<Conversation> setPreferences(
+    String threadId, {
+    bool? muted,
+    bool? archived,
+    bool? blocked,
+  }) async {
+    try {
+      final res = await _dio.post<Map<String, dynamic>>(
+        ApiPaths.conversationPreferences(threadId),
+        data: {'muted': ?muted, 'archived': ?archived, 'blocked': ?blocked},
       );
       _raise(res);
       return Conversation.fromMap(res.data ?? const {});

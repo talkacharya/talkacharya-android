@@ -1,16 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
+
+import 'package:animations/animations.dart';
 
 import '../../../../../core/l10n/l10n.dart';
 import '../../../../../core/router/routes.dart';
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
 import '../../../../../core/util/money.dart';
-import '../../../../../shared/widgets/pressable.dart';
 import '../../../../follows/data/follows_api.dart';
 import '../../../../follows/presentation/widgets/follow_widgets.dart';
 import '../../../data/models/astrologer.dart';
+import '../astrologer_detail_page.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Discovery row: rounded-rect photo with a bottom scrim carrying rating and
 /// price, name + follow heart on the right, and an icon-only CTA.
 class AstrologerListTile extends StatelessWidget {
@@ -19,8 +22,8 @@ class AstrologerListTile extends StatelessWidget {
   final Astrologer astrologer;
   final String? channel;
 
-  static const double _photoW = 100;
-  static const double _photoH = 100;
+  static const double _photoW = 104;
+  static const double _photoH = 116;
 
   @override
   Widget build(BuildContext context) {
@@ -46,123 +49,142 @@ class AstrologerListTile extends StatelessWidget {
         ? '—'
         : '${Money.format(rate.perMinute, rate.currency, locale: locale)}/m';
     return Pressable(
-      child: Material(
-        color: theme.colorScheme.surface,
-        shape: RoundedRectangleBorder(
+      child: OpenContainer(
+        useRootNavigator: true,
+        transitionType: ContainerTransitionType.fade,
+        closedElevation: 0,
+        openElevation: 0,
+        closedColor: theme.colorScheme.surface,
+        openColor: brand.canvas,
+        middleColor: brand.cosmicStart,
+        closedShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(color: brand.hairline),
         ),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: open,
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _PhotoBox(
-                    astrologer: a,
-                    width: _photoW,
-                    height: _photoH,
-                    ratingText: a.ratingAvg > 0
-                        ? a.ratingAvg.toStringAsFixed(1)
-                        : l.astroRatingNew,
-                    priceText: priceText,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Text.rich(
-                                    TextSpan(
-                                      text: a.name,
-                                      children: [
-                                        if (a.isVerified)
-                                          WidgetSpan(
-                                            alignment:
-                                                PlaceholderAlignment.middle,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                left: 4,
-                                              ),
-                                              child: Icon(
-                                                Icons.verified_rounded,
-                                                size: 16,
-                                                color: AstroPalette.air.end,
+        openBuilder: (context, _) => AstrologerDetailPage(astrologerId: a.id),
+        closedBuilder: (context, openContainer) {
+          return InkWell(
+            onTap: openContainer,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Hero(
+                      tag: 'astrologer_photo_${a.id}',
+                      child: _PhotoBox(
+                        astrologer: a,
+                        width: _photoW,
+                        height: _photoH,
+                        ratingText: a.ratingAvg > 0
+                            ? a.ratingAvg.toStringAsFixed(1)
+                            : l.astroRatingNew,
+                        priceText: priceText,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Text.rich(
+                                      TextSpan(
+                                        text: a.name,
+                                        children: [
+                                          if (a.isVerified)
+                                            WidgetSpan(
+                                              alignment:
+                                                  PlaceholderAlignment.middle,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                  left: 4,
+                                                ),
+                                                child: Shimmer.fromColors(
+                                                  baseColor:
+                                                      AstroPalette.air.end,
+                                                  highlightColor: Colors.white,
+                                                  period: const Duration(
+                                                    milliseconds: 2500,
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.verified_rounded,
+                                                    size: 16,
+                                                    color: AstroPalette.air.end,
+                                                  ),
+                                                ),
                                               ),
                                             ),
+                                        ],
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: theme.textTheme.titleMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                            height: 1.2,
                                           ),
-                                      ],
                                     ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: theme.textTheme.titleMedium
-                                        ?.copyWith(
-                                          fontWeight: FontWeight.w700,
-                                          height: 1.2,
-                                        ),
                                   ),
-                                ),
-                                const SizedBox(width: 6),
-                                FollowIconToggle(
-                                  astrologerId: a.id,
-                                  astrologerName: a.name,
-                                  fallback: followEntryOf(a),
-                                  size: 26,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              a.skillsLabel.isEmpty
-                                  ? l.astroDefaultSkill
-                                  : a.skillsLabel,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: muted,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              [
-                                if (a.yearsExperience > 0)
-                                  '${a.yearsExperience} yrs',
-                                if (langs.isNotEmpty) langs,
-                              ].join('  ·  '),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: muted,
-                            ),
-                          ],
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: available
-                              ? _Cta(
-                                  available: true,
-                                  icon: _ctaIcon(),
-                                  tooltip: _ctaLabel(l),
-                                  onTap: open,
-                                )
-                              : _NotifyCta(astrologer: a),
-                        ),
-                      ],
+                                  const SizedBox(width: 6),
+                                  FollowIconToggle(
+                                    astrologerId: a.id,
+                                    astrologerName: a.name,
+                                    fallback: followEntryOf(a),
+                                    size: 26,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                a.skillsLabel.isEmpty
+                                    ? l.astroDefaultSkill
+                                    : a.skillsLabel,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: muted,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                [
+                                  if (a.yearsExperience > 0)
+                                    '${a.yearsExperience} yrs',
+                                  if (langs.isNotEmpty) langs,
+                                ].join('  ·  '),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: muted,
+                              ),
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: available
+                                ? _Cta(
+                                    available: true,
+                                    icon: _ctaIcon(),
+                                    tooltip: _ctaLabel(l),
+                                    onTap: openContainer,
+                                  )
+                                : _NotifyCta(astrologer: a),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -244,10 +266,11 @@ class _PhotoBox extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: (url != null && url.isNotEmpty)
-                  ? Image.network(
-                      url,
+                  ? CachedNetworkImage(
+                      imageUrl: url,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => initial,
+                      placeholder: (_, _) => initial,
+                      errorWidget: (_, _, _) => initial,
                     )
                   : initial,
             ),

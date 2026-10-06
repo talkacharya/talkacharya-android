@@ -7,13 +7,8 @@ import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/money.dart';
 import '../../../../core/util/time_format.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
 import '../../../consultations/data/consultation_api.dart';
 import '../../../consultations/data/models/consultation.dart';
 import '../../../consultations/presentation/widgets/consultation_style.dart';
@@ -21,6 +16,7 @@ import '../../../consultations/presentation/widgets/shared_details.dart';
 import '../cubit/requests_cubit.dart';
 import 'widgets/decline_reason_sheet.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Opened from a History row or an incoming-request push. Shows the
 /// consultation and — while it's still `requested` — an Accept / Decline bar.
 /// If it's already live, it bounces straight into the room.
@@ -196,6 +192,20 @@ class _DetailView extends StatelessWidget {
           ),
           icon: const Icon(Icons.auto_awesome_rounded),
           label: Text(l.detailKundali),
+        ),
+      if (c.isEnded)
+        OutlinedButton.icon(
+          style: OutlinedButton.styleFrom(
+            minimumSize: const Size.fromHeight(50),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+          ),
+          onPressed: () => context.push(
+            Routes.suggestRemedy(consultation: c.id, name: c.customerName),
+          ),
+          icon: const Icon(Icons.spa_rounded),
+          label: Text(l.remediesSuggest),
         ),
     ];
 

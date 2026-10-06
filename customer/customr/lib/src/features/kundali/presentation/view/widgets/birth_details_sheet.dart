@@ -2,13 +2,11 @@ import 'package:astro_kundali/astro_kundali.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/l10n/l10n.dart';
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
-import '../../../../../shared/widgets/hue_widgets.dart';
 import '../../../../birthprofiles/data/models/birth_profile.dart';
 import '../../kundali_terms.dart';
 import '../../widgets/kundali_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// The full "birth details" surface — the janma panchang running at birth plus
 /// the avakahada chakra (varna, vashya, yoni, gana, nadi, tara, …). Opened from
 /// the identity strip on the kundali overview.

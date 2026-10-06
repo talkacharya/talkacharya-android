@@ -77,19 +77,30 @@ class KundaliCard extends StatelessWidget {
   const KundaliCard({
     required this.message,
     required this.controller,
+    this.onOpen,
     super.key,
   });
 
   final ChatMessage message;
   final ChatController controller;
 
+  /// Opens the kundali (or match report) the card is about. Each app knows its
+  /// own route; without one the card is information only.
+  final void Function(SharedDetails details)? onOpen;
+
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final summary = message.shareSummary;
+    final shared = message.shared;
+    final isMatch = message.meta['share_kind'] == 'match';
+    final open = onOpen;
+    final canOpen = shared != null && open != null;
     final fullName = (summary['full_name'] as String? ?? '').trim();
     final label = (summary['label'] as String? ?? '').trim();
-    final name = fullName.isNotEmpty
+    final name = (shared?.name.isNotEmpty ?? false)
+        ? shared!.name
+        : fullName.isNotEmpty
         ? fullName
         : (label.isNotEmpty ? label : 'Birth details');
 
@@ -103,10 +114,16 @@ class KundaliCard extends StatelessWidget {
       else if (summary['time_known'] == false)
         (Icons.schedule_rounded, 'Birth time not known'),
       if (place.isNotEmpty) (Icons.place_outlined, place),
+      if (isMatch && summary['total_points'] != null)
+        (
+          Icons.favorite_outline_rounded,
+          '${summary['total_points']} / ${summary['max_points'] ?? 36} gunas',
+        ),
     ];
 
     return Align(
       child: GestureDetector(
+        onTap: canOpen ? () => open(shared) : null,
         onLongPress: () => _menu(context),
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
@@ -132,7 +149,7 @@ class KundaliCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    'Birth details shared',
+                    isMatch ? 'Kundali match shared' : 'Birth details shared',
                     style: TextStyle(
                       color: scheme.onPrimaryContainer,
                       fontSize: 11.5,
@@ -176,6 +193,27 @@ class KundaliCard extends StatelessWidget {
                     ],
                   ),
                 ),
+              if (canOpen) ...[
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      isMatch ? 'Open match report' : 'Open kundali',
+                      style: TextStyle(
+                        color: scheme.primary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      size: 18,
+                      color: scheme.primary,
+                    ),
+                  ],
+                ),
+              ],
             ],
           ),
         ),

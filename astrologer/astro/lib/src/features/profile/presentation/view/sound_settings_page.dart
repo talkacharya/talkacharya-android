@@ -4,10 +4,10 @@ import 'package:talkacharya_sounds/talkacharya_sounds.dart';
 import '../../../../core/config/config_repository.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
 import '../../../../core/utils/haptic_service.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Whether the app may make a sound or vibrate at all.
 ///
 /// Both switches sit above the phone's own silent/vibrate mode, which always

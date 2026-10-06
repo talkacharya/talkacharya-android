@@ -1858,4 +1858,704 @@ class AppLocalizationsEn extends AppLocalizations {
   String otpDevMode(String code) {
     return 'Dev mode — the code is $code';
   }
+
+  @override
+  String get callAudio => 'Audio';
+
+  @override
+  String get callEarpiece => 'Phone';
+
+  @override
+  String get callWiredHeadset => 'Headset';
+
+  @override
+  String get callBluetooth => 'Bluetooth';
+
+  @override
+  String get chatMute => 'Mute notifications';
+
+  @override
+  String get chatUnmute => 'Unmute notifications';
+
+  @override
+  String get chatArchive => 'Archive chat';
+
+  @override
+  String get chatUnarchive => 'Move out of archive';
+
+  @override
+  String get chatArchivedTitle => 'Archived';
+
+  @override
+  String chatArchivedRow(int count) {
+    return 'Archived ($count)';
+  }
+
+  @override
+  String chatBlock(String name) {
+    return 'Block $name';
+  }
+
+  @override
+  String chatUnblock(String name) {
+    return 'Unblock $name';
+  }
+
+  @override
+  String chatBlockConfirmTitle(String name) {
+    return 'Block $name?';
+  }
+
+  @override
+  String get chatBlockConfirmYes => 'Block';
+
+  @override
+  String chatBlockedByMe(String name) {
+    return 'You blocked $name.';
+  }
+
+  @override
+  String get chatBlockedByThem =>
+      'Messages are turned off in this conversation.';
+
+  @override
+  String get chatMoreOptions => 'More options';
+
+  @override
+  String chatBlockConfirmBody(String name) {
+    return 'Neither of you will be able to send messages here, and $name won\'t be able to book you until you unblock them.';
+  }
+
+  @override
+  String get sessionChat => 'Chat';
+
+  @override
+  String get sessionVoice => 'Voice call';
+
+  @override
+  String get sessionVideo => 'Video call';
+
+  @override
+  String roomLiveNow(String session) {
+    return '$session in progress';
+  }
+
+  @override
+  String astroEarnedSoFar(String amount) {
+    return '$amount earned so far';
+  }
+
+  @override
+  String astroEndedEarned(String amount, int minutes) {
+    return 'You earned $amount · $minutes min';
+  }
+
+  @override
+  String astroCustomerRated(String name, int rating) {
+    return '$name rated this session $rating/5';
+  }
+
+  @override
+  String get astroNotRatedYet => 'Not rated yet';
+
+  @override
+  String astroRequestInRoom(String name, String session) {
+    return '$name is asking for a $session';
+  }
+
+  @override
+  String astroThreadClosed(String name) {
+    return 'Consultation ended. $name can start a new one any time.';
+  }
+
+  @override
+  String sysRequested(String session) {
+    return '$session requested';
+  }
+
+  @override
+  String get sysAccepted => 'You picked up · connecting';
+
+  @override
+  String sysStarted(String session) {
+    return '$session started';
+  }
+
+  @override
+  String sysEnded(String session, int minutes) {
+    return '$session ended · $minutes min';
+  }
+
+  @override
+  String sysEndedPlain(String session) {
+    return '$session ended';
+  }
+
+  @override
+  String get sysRejected => 'You declined the request';
+
+  @override
+  String sysCancelled(String name) {
+    return '$name cancelled the request';
+  }
+
+  @override
+  String get sysExpired => 'Request not answered in time';
+
+  @override
+  String sysNoShow(String session) {
+    return '$session didn\'t connect';
+  }
+
+  @override
+  String sysEndingSoon(String name) {
+    return '$name\'s balance is running low';
+  }
+
+  @override
+  String get presenceOnBreak => 'On a break';
+
+  @override
+  String get presenceOnBreakHint =>
+      'You\'ll be back online by yourself when it ends';
+
+  @override
+  String clubTitle(String club) {
+    return 'You\'re in the $club club';
+  }
+
+  @override
+  String get clubTitleNone => 'Your first club is within reach';
+
+  @override
+  String clubProjection(String amount) {
+    return 'On pace for $amount this month';
+  }
+
+  @override
+  String clubNeedToday(String amount, String club) {
+    return 'Earn $amount more today to stay on pace for the $club club.';
+  }
+
+  @override
+  String clubOnTrack(String club) {
+    return 'Today\'s target is met — the $club club is next. Keep going.';
+  }
+
+  @override
+  String get clubTop => 'You\'re in the top club. Outstanding work.';
+
+  @override
+  String get todayTitle => 'Today\'s earnings';
+
+  @override
+  String get todaySub => 'After platform fee';
+
+  @override
+  String get todayHide => 'Hide amounts';
+
+  @override
+  String get todayShow => 'Show amounts';
+
+  @override
+  String get todayViewEarnings => 'View earnings';
+
+  @override
+  String get todaySessions => 'Sessions';
+
+  @override
+  String get todayTalkTime => 'Talk time';
+
+  @override
+  String get todayOnline => 'Online';
+
+  @override
+  String scoreTitle(int days) {
+    return 'Last $days days';
+  }
+
+  @override
+  String scoreUpdated(String time) {
+    return 'Updated $time';
+  }
+
+  @override
+  String get scoreOpen => 'Open performance dashboard';
+
+  @override
+  String get perfOnlineShort => 'Online\nper day';
+
+  @override
+  String get perfSessionShort => 'Average\nsession';
+
+  @override
+  String get perfFirstRepeatShort => 'First-time\nrepeat';
+
+  @override
+  String get perfLoyalShort => 'Loyal\ncustomers';
+
+  @override
+  String perfHoursMinutes(int h, int m) {
+    return '${h}h ${m}m';
+  }
+
+  @override
+  String perfMinutesSeconds(int m, int s) {
+    return '${m}m ${s}s';
+  }
+
+  @override
+  String perfSeconds(int s) {
+    return '${s}s';
+  }
+
+  @override
+  String perfHours(int h) {
+    return '${h}h';
+  }
+
+  @override
+  String perfMinutes(int m) {
+    return '${m}m';
+  }
+
+  @override
+  String get breakTitle => 'Take a break';
+
+  @override
+  String breakLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count breaks left today',
+      one: '1 break left today',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get breakNoneLeft => 'No breaks left today';
+
+  @override
+  String get breakButton => 'Take a break';
+
+  @override
+  String get breakSheetTitle => 'How long do you need?';
+
+  @override
+  String get breakInfo =>
+      'Customers won\'t be able to reach you during the break. You come back online by yourself when it ends — no need to switch anything on.';
+
+  @override
+  String breakMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String get breakStart => 'Start break';
+
+  @override
+  String get breakOnTitle => 'On a break';
+
+  @override
+  String breakBackIn(String time) {
+    return 'Back online in $time';
+  }
+
+  @override
+  String get breakResume => 'I\'m back';
+
+  @override
+  String get loyalTitle => 'Loyal customers';
+
+  @override
+  String loyalBody(int days, int minutes) {
+    return 'Customers who came back in the last $days days and spent $minutes+ minutes with you.';
+  }
+
+  @override
+  String get loyalWinBack => 'See who\'s gone quiet';
+
+  @override
+  String get dashTools => 'Tools';
+
+  @override
+  String get dashActionPerformance => 'Performance';
+
+  @override
+  String get dashActionWinBack => 'Win back';
+
+  @override
+  String get dashActionChats => 'Chat history';
+
+  @override
+  String get dashActionRequests => 'Requests';
+
+  @override
+  String get dashActionBoost => 'Boost profile';
+
+  @override
+  String get dashActionAlerts => 'Notifications';
+
+  @override
+  String get perfTitle => 'Performance';
+
+  @override
+  String perfSubtitle(int days) {
+    return 'Last $days days, compared with the $days before.';
+  }
+
+  @override
+  String get perfFocusTitle => 'Where to focus';
+
+  @override
+  String get perfLegendLow => 'Needs work';
+
+  @override
+  String get perfLegendMid => 'Moderate';
+
+  @override
+  String get perfLegendGood => 'Good';
+
+  @override
+  String get perfVerdictLow => 'Needs work';
+
+  @override
+  String get perfVerdictMid => 'Almost there';
+
+  @override
+  String get perfVerdictGood => 'Doing well';
+
+  @override
+  String get perfVerdictNone => 'Not enough data yet';
+
+  @override
+  String get perfFirstRepeat => 'First-time repeat';
+
+  @override
+  String get perfTotalRepeat => 'Total repeat';
+
+  @override
+  String get perfAvgSession => 'Average session';
+
+  @override
+  String get perfOnlineTime => 'Average online time';
+
+  @override
+  String get perfMissed => 'Missed requests';
+
+  @override
+  String get perfFirstRepeatAbout =>
+      'Of the customers who consulted you for the first time in this period, the share who came back for another session.\n\nExample: 10 new customers, 4 of them returned — that is 40%.';
+
+  @override
+  String get perfTotalRepeatAbout =>
+      'Of everyone you consulted in this period, new or not, the share who have consulted you more than once.\n\nExample: 20 customers, 9 of them have been with you before or came back — that is 45%.';
+
+  @override
+  String get perfAvgSessionAbout =>
+      'Total billed time in this period divided by the number of sessions. Longer sessions usually mean the customer felt heard.\n\nExample: 120 minutes across 10 sessions — 12 minutes each.';
+
+  @override
+  String get perfOnlineTimeAbout =>
+      'How long you were reachable each day on average — online or in a session. Breaks and time offline are not counted. We recommend at least six hours a day: customers return to astrologers they can find.';
+
+  @override
+  String get perfMissedAbout =>
+      'Requests that timed out before you answered, plus the ones you declined. Requests the customer cancelled are not counted. If you need to step away, take a break instead of leaving requests to ring out.';
+
+  @override
+  String get perfHowCalculated => 'How it\'s calculated';
+
+  @override
+  String get perfShowLess => 'Show less';
+
+  @override
+  String get perfNoChange => 'Same as the period before';
+
+  @override
+  String perfDeltaUp(String amount) {
+    return 'Up $amount on the period before';
+  }
+
+  @override
+  String perfDeltaDown(String amount) {
+    return 'Down $amount on the period before';
+  }
+
+  @override
+  String get perfOnlineChart => 'Hours online, day by day';
+
+  @override
+  String perfGoalLine(int hours) {
+    return '${hours}h goal';
+  }
+
+  @override
+  String perfMissedUnanswered(int count) {
+    return 'Timed out · $count';
+  }
+
+  @override
+  String perfMissedDeclined(int count) {
+    return 'Declined · $count';
+  }
+
+  @override
+  String get perfRatings => 'Ratings';
+
+  @override
+  String get perfRatingsAbout =>
+      'Lifetime average of published ratings from customers you\'ve consulted.';
+
+  @override
+  String get perfRatingOverall => 'Overall';
+
+  @override
+  String perfRatingCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ratings',
+      one: '1 rating',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get perfNoRatings => 'No ratings yet';
+
+  @override
+  String get perfTipOnline =>
+      'More hours online is your quickest win — customers can only return to someone they can find.';
+
+  @override
+  String get perfTipSession =>
+      'Aim for longer sessions: ask a follow-up question before you wrap up.';
+
+  @override
+  String get perfTipFirstRepeat =>
+      'Give first-time customers a reason to return — tell them what to look at next time.';
+
+  @override
+  String get perfTipTotalRepeat =>
+      'Your regulars are slipping away. See who\'s gone quiet and be online when they usually come.';
+
+  @override
+  String get perfTipMissed =>
+      'Too many requests are getting away. Answer before they time out, or take a break when you step away.';
+
+  @override
+  String get winBackTitle => 'Win back';
+
+  @override
+  String winBackSubtitle(int days) {
+    return 'Returning customers you haven\'t spoken to in $days+ days. Open a thread to see where you left off.';
+  }
+
+  @override
+  String winBackTile(int sessions, int minutes) {
+    return '$sessions sessions · $minutes min together';
+  }
+
+  @override
+  String winBackLast(String time) {
+    return 'Last session $time';
+  }
+
+  @override
+  String get winBackCustomer => 'Customer';
+
+  @override
+  String get winBackEmptyTitle => 'No one\'s gone quiet';
+
+  @override
+  String get winBackEmptyBody =>
+      'Returning customers who stop coming back will show up here.';
+
+  @override
+  String get dashActionWaitlist => 'Waitlist';
+
+  @override
+  String get dashActionCalls => 'Call history';
+
+  @override
+  String get dashActionRemedies => 'Remedies';
+
+  @override
+  String get dashActionSounds => 'Sounds';
+
+  @override
+  String get waitlistTitle => 'Waitlist';
+
+  @override
+  String get waitlistSubtitle =>
+      'Customers waiting for you, longest first. When a session ends the next person is told it\'s their turn — or call someone in yourself.';
+
+  @override
+  String get waitlistEmptyTitle => 'No one is waiting';
+
+  @override
+  String get waitlistEmptyBody =>
+      'Customers who try to reach you while you\'re in a session can join your waitlist. They\'ll show up here.';
+
+  @override
+  String get waitlistInvite => 'Call in';
+
+  @override
+  String waitlistInvited(String name) {
+    return '$name has been told it\'s their turn';
+  }
+
+  @override
+  String waitlistInvitedLeft(String time) {
+    return 'Invited · $time to join';
+  }
+
+  @override
+  String waitlistWaiting(String time) {
+    return 'Waiting $time';
+  }
+
+  @override
+  String get waitlistNew => 'New customer';
+
+  @override
+  String waitlistRegular(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sessions with you',
+      one: '1 session with you',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get waitlistRemove => 'Remove from waitlist';
+
+  @override
+  String waitlistRemoveTitle(String name) {
+    return 'Remove $name?';
+  }
+
+  @override
+  String get waitlistRemoveBody =>
+      'They lose their place in line and are told you can\'t take them right now.';
+
+  @override
+  String get callsTitle => 'Call history';
+
+  @override
+  String get callsFilterAll => 'All';
+
+  @override
+  String get callsFilterCompleted => 'Completed';
+
+  @override
+  String get callsFilterMissed => 'Missed';
+
+  @override
+  String get callsStatCompleted => 'Completed';
+
+  @override
+  String get callsStatTalkTime => 'Talk time';
+
+  @override
+  String get callsStatMissed => 'Missed';
+
+  @override
+  String get callsEmptyTitle => 'No calls yet';
+
+  @override
+  String get callsEmptyBody =>
+      'Voice and video calls with your customers will be listed here.';
+
+  @override
+  String get callsEmptyFilter => 'Nothing here';
+
+  @override
+  String get remediesTitle => 'Remedies';
+
+  @override
+  String get remediesSubtitle =>
+      'Gemstones, rudraksha, poojas and more from the store that you\'ve suggested to your customers.';
+
+  @override
+  String get remediesSuggest => 'Suggest a remedy';
+
+  @override
+  String remediesSummary(int sent, int bought) {
+    return '$sent suggested · $bought bought';
+  }
+
+  @override
+  String remediesCommission(String percent) {
+    return 'You earn $percent when a customer buys what you suggested.';
+  }
+
+  @override
+  String get remediesEmptyTitle => 'No remedies suggested yet';
+
+  @override
+  String get remediesEmptyBody =>
+      'Suggest a product from the store after a reading. The customer gets it in their app, and you earn a commission if they buy.';
+
+  @override
+  String get remedyStatusSent => 'Sent';
+
+  @override
+  String get remedyStatusViewed => 'Seen';
+
+  @override
+  String get remedyStatusPurchased => 'Bought';
+
+  @override
+  String get remedyStatusExpired => 'Expired';
+
+  @override
+  String remedyFor(String name, String time) {
+    return 'For $name · $time';
+  }
+
+  @override
+  String get remedySuggestTitle => 'Suggest a remedy';
+
+  @override
+  String remedySuggestFor(String name) {
+    return 'For $name';
+  }
+
+  @override
+  String get remedyStepCustomer => 'Who is it for?';
+
+  @override
+  String get remedyStepProduct => 'Choose the remedy';
+
+  @override
+  String get remedyStepNote => 'How should they use it?';
+
+  @override
+  String get remedySearchHint => 'Search gemstones, rudraksha, poojas…';
+
+  @override
+  String get remedyNoteHint =>
+      'For example: wear it on the ring finger on a Saturday morning.';
+
+  @override
+  String get remedyNoProducts => 'No products match that search.';
+
+  @override
+  String get remedyNoCustomers =>
+      'You can suggest remedies to customers you\'ve consulted. None yet.';
+
+  @override
+  String get remedySend => 'Send suggestion';
+
+  @override
+  String get remedySent => 'Suggestion sent';
+
+  @override
+  String get remedyDisclosure =>
+      'The customer sees this as your recommendation and decides for themselves. Suggest only what the chart calls for.';
 }

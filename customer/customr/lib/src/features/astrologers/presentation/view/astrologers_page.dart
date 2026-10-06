@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,18 +8,11 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/app_bottom_sheet.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
 import '../../data/astrologers_api.dart';
 import '../cubit/discovery_cubit.dart';
 import 'widgets/astrologer_list_tile.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 const _channelKeys = <String>['', 'chat', 'voice', 'video'];
 const _sortKeys = <String>[
   'recommended',
@@ -102,7 +96,8 @@ class _DiscoveryViewState extends State<_DiscoveryView> {
   }
 
   void _onSearchChanged(String value) {
-    setState(() {}); // toggles the clear button
+    // No setState here: _SearchField reads the controller via
+    // ValueListenableBuilder and updates its own clear button.
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 400), () {
       if (mounted) context.read<DiscoveryCubit>().search(value);
@@ -113,7 +108,8 @@ class _DiscoveryViewState extends State<_DiscoveryView> {
     _debounce?.cancel();
     _searchController.clear();
     context.read<DiscoveryCubit>().search(null);
-    setState(() {});
+    // No setState: _SearchField's ValueListenableBuilder sees the clear and
+    // hides the X button on its own.
   }
 
   @override
@@ -139,30 +135,28 @@ class _DiscoveryViewState extends State<_DiscoveryView> {
               _scroll.jumpTo(0);
             }
           },
-          builder: (context, state) => RefreshIndicator(
-            onRefresh: cubit.refresh,
-            color: AstroPalette.romance[1],
-            edgeOffset: 200,
-            child: CustomScrollView(
-              controller: _scroll,
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                _Header(
-                  state: state,
-                  search: _SearchField(
-                    controller: _searchController,
-                    onChanged: _onSearchChanged,
-                    onSubmitted: cubit.search,
-                    onClear: _clearSearch,
-                  ),
+          builder: (context, state) => CustomScrollView(
+            controller: _scroll,
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              CupertinoSliverRefreshControl(
+                onRefresh: () async => cubit.refresh(),
+              ),
+              _Header(
+                state: state,
+                search: _SearchField(
+                  controller: _searchController,
+                  onChanged: _onSearchChanged,
+                  onSubmitted: cubit.search,
+                  onClear: _clearSearch,
                 ),
-                const SliverPersistentHeader(
-                  pinned: true,
-                  delegate: _FilterHeaderDelegate(),
-                ),
-                ..._results(context, state, l, cubit),
-              ],
-            ),
+              ),
+              const SliverPersistentHeader(
+                pinned: true,
+                delegate: _FilterHeaderDelegate(),
+              ),
+              ..._results(context, state, l, cubit),
+            ],
           ),
         ),
       ),
@@ -298,15 +292,34 @@ class _Header extends StatelessWidget {
                             const LiveDot(),
                             const SizedBox(width: 8),
                             Flexible(
-                              child: Text(
-                                online > 0
-                                    ? l.homeOnlineCount(online)
-                                    : l.homeTalkToAstrologer,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.titleSmall?.copyWith(
-                                  color: Colors.white.withValues(alpha: 0.9),
-                                  fontWeight: FontWeight.w700,
+                              child: AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 300),
+                                transitionBuilder: (child, animation) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: const Offset(0, -0.35),
+                                      end: Offset.zero,
+                                    ).animate(CurvedAnimation(
+                                      parent: animation,
+                                      curve: Curves.easeOutCubic,
+                                    )),
+                                    child: FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  online > 0
+                                      ? l.homeOnlineCount(online)
+                                      : l.homeTalkToAstrologer,
+                                  key: ValueKey<int>(online),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: theme.textTheme.titleSmall?.copyWith(
+                                    color: Colors.white.withValues(alpha: 0.9),
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ),
                             ),
@@ -402,12 +415,20 @@ class _SearchField extends StatelessWidget {
               ),
             ),
           ),
-          if (controller.text.isNotEmpty)
-            IconButton(
-              tooltip: MaterialLocalizations.of(context).deleteButtonTooltip,
-              icon: Icon(Icons.close_rounded, color: brand.inkMuted),
-              onPressed: onClear,
-            ),
+          // ValueListenableBuilder reacts to the controller directly — no
+          // setState in the parent page needed to toggle the clear button.
+          ValueListenableBuilder<TextEditingValue>(
+            valueListenable: controller,
+            builder: (context, value, _) {
+              if (value.text.isEmpty) return const SizedBox.shrink();
+              return IconButton(
+                tooltip:
+                    MaterialLocalizations.of(context).deleteButtonTooltip,
+                icon: Icon(Icons.close_rounded, color: brand.inkMuted),
+                onPressed: onClear,
+              );
+            },
+          ),
           const SizedBox(width: 4),
         ],
       ),
@@ -645,7 +666,10 @@ class _HueChip extends StatelessWidget {
       button: true,
       selected: selected,
       child: GestureDetector(
-        onTap: onTap,
+        onTap: () {
+          HapticFeedback.selectionClick();
+          onTap();
+        },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 220),
           curve: Curves.easeOutCubic,

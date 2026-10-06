@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/l10n/l10n.dart';
-import '../../../../../core/theme/brand_colors.dart';
-
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Asks why a request is being declined. Returns the reason code sent to
 /// `POST /astro/consultations/{id}/reject`, or `null` if dismissed.
 Future<String?> showDeclineReasonSheet(BuildContext context) {

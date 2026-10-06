@@ -35,13 +35,13 @@ class _Backend implements CallBackend {
   );
 
   @override
-  Future<void> reportState(
+  Future<Map<String, dynamic>?> reportState(
     CallNetState state, {
     bool? relayed,
     int? quality,
     int? rttMs,
     int? lossPct,
-  }) async {}
+  }) async => null;
 
   @override
   Future<void> endConsultation() async => ended++;
@@ -171,9 +171,8 @@ void main() {
     // would keep claiming the consultation is still in progress.
     final hub = CallHub();
     final call = _controller();
-    hub
-      ..attach(call, _info)
-      ..minimize();
+    hub.attach(call, _info);
+    await hub.minimize();
 
     await call.hangUp();
     await Future<void>.delayed(Duration.zero);

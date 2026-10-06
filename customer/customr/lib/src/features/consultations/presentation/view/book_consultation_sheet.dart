@@ -1,13 +1,17 @@
 import '../../data/models/consultation.dart';
+import 'dart:math' as math;
+
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:talkacharya_call/talkacharya_call.dart';
+import '../../../../core/utils/haptic_service.dart';
 
 import '../../../../core/l10n/l10n.dart';
 
 import '../../../../core/di/service_locator.dart';
-import '../../../../shared/widgets/app_bottom_sheet.dart';
+import '../../../../shared/widgets/app_snack.dart';
 import '../../../birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
 import '../../data/consultation_api.dart';
 import '../../data/consultation_repository.dart';
@@ -16,6 +20,7 @@ import '../../../../core/network/friendly_error.dart';
 import '../../../../core/util/money.dart';
 import '../../../wallet/presentation/cubit/wallet_cubit.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Bottom sheet to start a consultation (text chat, voice or video call) with an
 /// astrologer.
 Future<void> showBookConsultationSheet(
@@ -73,6 +78,7 @@ class _BookForm extends StatefulWidget {
 
 class _BookFormState extends State<_BookForm> {
   final _question = TextEditingController();
+  final _confetti = ConfettiController(duration: const Duration(milliseconds: 1200));
   String? _birthProfileId;
   bool _submitting = false;
 
@@ -88,46 +94,44 @@ class _BookFormState extends State<_BookForm> {
   @override
   void dispose() {
     _question.dispose();
+    _confetti.dispose();
     super.dispose();
   }
 
   /// Shows why we stopped, with a shortcut to Settings when the answer is final.
   bool _allowed(
-    ScaffoldMessengerState messenger,
     MediaPermission result,
     String body,
   ) {
     if (result == MediaPermission.granted) return true;
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(body),
-        action: result == MediaPermission.permanentlyDenied
-            ? SnackBarAction(
-                label: context.l10n.callOpenSettings,
-                onPressed:
-                    const PermissionHandlerCallPermissions().openSettings,
-              )
-            : null,
-      ),
+    AppSnack.showTop(
+      context,
+      body,
+      type: SnackType.warning,
+      actionLabel: result == MediaPermission.permanentlyDenied
+          ? context.l10n.callOpenSettings
+          : null,
+      onAction: result == MediaPermission.permanentlyDenied
+          ? const PermissionHandlerCallPermissions().openSettings
+          : null,
     );
     return false;
   }
 
   Future<void> _start() async {
     final router = GoRouter.of(context);
-    final messenger = ScaffoldMessenger.of(context);
     final l = context.l10n;
     if (widget.isCall) {
       // ask BEFORE paging the astrologer — no silent calls, no blind video ones
       const permissions = PermissionHandlerCallPermissions();
       final mic = await permissions.requestMicrophone();
       if (!mounted) return;
-      if (!_allowed(messenger, mic, l.callMicBody)) return;
+      if (!_allowed(mic, l.callMicBody)) return;
 
       if (widget.isVideo) {
         final camera = await permissions.requestCamera();
         if (!mounted) return;
-        if (!_allowed(messenger, camera, l.callCameraBody)) return;
+        if (!_allowed(camera, l.callCameraBody)) return;
       }
     }
     setState(() => _submitting = true);
@@ -143,6 +147,12 @@ class _BookFormState extends State<_BookForm> {
       );
       pending.clear();
       if (!mounted) return;
+      
+      HapticService.heavy();
+      _confetti.play();
+      await Future.delayed(const Duration(milliseconds: 1000));
+      if (!mounted) return;
+
       Navigator.pop(context);
       final started = widget.onStarted;
       if (started != null) {
@@ -157,27 +167,27 @@ class _BookFormState extends State<_BookForm> {
     } on AstrologerBusy {
       if (!mounted) return;
       setState(() => _submitting = false);
-      messenger.showSnackBar(
-        const SnackBar(
-          content: Text(
-            'This astrologer is busy right now. Try again shortly.',
-          ),
-        ),
+      AppSnack.showTop(
+        context,
+        'This astrologer is busy right now. Try again shortly.',
+        type: SnackType.warning,
       );
     } on AstrologerOffline catch (e) {
       if (!mounted) return;
       setState(() => _submitting = false);
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            e.message ?? 'This astrologer is offline. Please try again later.',
-          ),
-        ),
+      AppSnack.showTop(
+        context,
+        e.message ?? 'This astrologer is offline. Please try again later.',
+        type: SnackType.warning,
       );
     } catch (e) {
       if (!mounted) return;
       setState(() => _submitting = false);
-      messenger.showSnackBar(SnackBar(content: Text(friendlyError(e))));
+      AppSnack.showTop(
+        context,
+        friendlyError(e),
+        type: SnackType.error,
+      );
     }
   }
 
@@ -243,119 +253,144 @@ class _BookFormState extends State<_BookForm> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  widget.isCall
-                      ? Icons.phone_in_talk_rounded
-                      : Icons.chat_bubble_outline_rounded,
-                  size: 18,
+    return Stack(
+      alignment: Alignment.topCenter,
+      clipBehavior: Clip.none,
+      children: [
+        SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    widget.isCall
-                        ? (widget.isVideo
-                              ? context.l10n.callVideoBookBilling
-                              : context.l10n.callBookBilling)
-                        : 'Text chat · billed per minute',
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                ),
-                Text(
-                  '${widget.currency} ${widget.ratePerMinute.toStringAsFixed(0)}/min',
-                  style: const TextStyle(fontWeight: FontWeight.w700),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          if (getIt<PendingShare>().label.isNotEmpty) ...[
-            _SharingHint(label: getIt<PendingShare>().label),
-            const SizedBox(height: 12),
-          ],
-          Text('Birth profile', style: theme.textTheme.labelLarge),
-          const SizedBox(height: 6),
-          BlocBuilder<BirthProfilesCubit, BirthProfilesState>(
-            builder: (context, state) {
-              if (state.profiles.isEmpty) {
-                return OutlinedButton.icon(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    context.push('/select-profile/new');
-                  },
-                  icon: const Icon(Icons.add_rounded),
-                  label: const Text('Add a birth profile first'),
-                );
-              }
-              return Wrap(
-                spacing: 8,
-                children: [
-                  for (final p in state.profiles)
-                    ChoiceChip(
-                      label: Text(p.displayName),
-                      selected: _birthProfileId == p.id,
-                      onSelected: (_) => setState(() => _birthProfileId = p.id),
+                child: Row(
+                  children: [
+                    Icon(
+                      widget.isCall
+                          ? Icons.phone_in_talk_rounded
+                          : Icons.chat_bubble_outline_rounded,
+                      size: 18,
                     ),
-                  ChoiceChip(
-                    label: const Text('Don’t share'),
-                    selected: _birthProfileId == null,
-                    onSelected: (_) => setState(() => _birthProfileId = null),
-                  ),
-                ],
-              );
-            },
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        widget.isCall
+                            ? (widget.isVideo
+                                  ? context.l10n.callVideoBookBilling
+                                  : context.l10n.callBookBilling)
+                            : 'Text chat · billed per minute',
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                    ),
+                    Text(
+                      '${widget.currency} ${widget.ratePerMinute.toStringAsFixed(0)}/min',
+                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              if (getIt<PendingShare>().label.isNotEmpty) ...[
+                _SharingHint(label: getIt<PendingShare>().label),
+                const SizedBox(height: 12),
+              ],
+              Text('Birth profile', style: theme.textTheme.labelLarge),
+              const SizedBox(height: 6),
+              BlocBuilder<BirthProfilesCubit, BirthProfilesState>(
+                builder: (context, state) {
+                  if (state.profiles.isEmpty) {
+                    return OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        context.push('/select-profile/new');
+                      },
+                      icon: const Icon(Icons.add_rounded),
+                      label: const Text('Add a birth profile first'),
+                    );
+                  }
+                  return Wrap(
+                    spacing: 8,
+                    children: [
+                      for (final p in state.profiles)
+                        ChoiceChip(
+                          label: Text(p.displayName),
+                          selected: _birthProfileId == p.id,
+                          onSelected: (_) => setState(() => _birthProfileId = p.id),
+                        ),
+                      ChoiceChip(
+                        label: const Text('Don’t share'),
+                        selected: _birthProfileId == null,
+                        onSelected: (_) => setState(() => _birthProfileId = null),
+                      ),
+                    ],
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _question,
+                minLines: 2,
+                maxLines: 4,
+                decoration: const InputDecoration(
+                  labelText: 'Your question (optional)',
+                  hintText: 'What would you like guidance on?',
+                ),
+              ),
+              const SizedBox(height: 20),
+              FilledButton(
+                onPressed: _submitting ? null : _start,
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size.fromHeight(50),
+                ),
+                child: _submitting
+                    ? const SizedBox(
+                        height: 22,
+                        width: 22,
+                        child: CircularProgressIndicator(strokeWidth: 2.5),
+                      )
+                    : Text(
+                        widget.isCall
+                            ? context.l10n.callBookCta(
+                                '${widget.currency} ${widget.ratePerMinute.toStringAsFixed(0)}',
+                              )
+                            : 'Start chat · ${widget.currency} ${widget.ratePerMinute.toStringAsFixed(0)}/min',
+                      ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'You’re only charged for the minutes you talk. End anytime.',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _question,
-            minLines: 2,
-            maxLines: 4,
-            decoration: const InputDecoration(
-              labelText: 'Your question (optional)',
-              hintText: 'What would you like guidance on?',
-            ),
+        ),
+        Positioned(
+          top: -20,
+          child: ConfettiWidget(
+            confettiController: _confetti,
+            blastDirection: math.pi / 2,
+            blastDirectionality: BlastDirectionality.explosive,
+            emissionFrequency: 0.05,
+            numberOfParticles: 20,
+            maxBlastForce: 15,
+            minBlastForce: 8,
+            gravity: 0.2,
+            colors: const [
+              Color(0xFFEA6A1E),
+              Color(0xFFF2A93B),
+              Color(0xFFE63E9B),
+              Color(0xFF2E9E4F),
+            ],
           ),
-          const SizedBox(height: 20),
-          FilledButton(
-            onPressed: _submitting ? null : _start,
-            style: FilledButton.styleFrom(
-              minimumSize: const Size.fromHeight(50),
-            ),
-            child: _submitting
-                ? const SizedBox(
-                    height: 22,
-                    width: 22,
-                    child: CircularProgressIndicator(strokeWidth: 2.5),
-                  )
-                : Text(
-                    widget.isCall
-                        ? context.l10n.callBookCta(
-                            '${widget.currency} ${widget.ratePerMinute.toStringAsFixed(0)}',
-                          )
-                        : 'Start chat · ${widget.currency} ${widget.ratePerMinute.toStringAsFixed(0)}/min',
-                  ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'You’re only charged for the minutes you talk. End anytime.',
-            textAlign: TextAlign.center,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

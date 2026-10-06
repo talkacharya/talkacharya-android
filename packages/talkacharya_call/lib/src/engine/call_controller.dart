@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
-
 import 'package:bloc/bloc.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../models/call_join.dart';
 import '../models/video_rung.dart';
@@ -75,8 +75,10 @@ class CallController extends Cubit<CallState> {
     CallSounds sounds = const NoopCallSounds(),
     bool ringback = false,
     String? sessionId,
+    String? telecomCallId,
     Stream<CallTelecomEvent>? telecomEvents,
   }) : _backend = backend,
+       _telecomCallIdOverride = telecomCallId,
        _telecomEvents = telecomEvents,
        _sounds = sounds,
        _wantsRingback = ringback,
@@ -102,6 +104,12 @@ class CallController extends Cubit<CallState> {
 
   /// Overridable so tests can drive Telecom without a platform channel.
   final Stream<CallTelecomEvent>? _telecomEvents;
+
+  /// The id this call has with Telecom. The consultation's id when the app
+  /// passes it — which is what the ringing call was reported under, so the
+  /// live call adopts that one instead of placing a second.
+  final String? _telecomCallIdOverride;
+  String get _telecomCallId => _telecomCallIdOverride ?? sid;
 
   /// This side placed the call: play ringback from creation (e.g. while the
   /// consultation still waits to be accepted) until audio first flows.
@@ -139,6 +147,8 @@ class CallController extends Cubit<CallState> {
   /// Latest transport sample, sent along with the next heartbeat.
   int? _lastRttMs;
   int? _lastLossPct;
+
+  bool _mutedBeforeHold = false;
 
   /// Hello is announced quickly at first and backs off: a peer that opens its
   /// screen a moment later shouldn't wait a full interval in silence.
@@ -323,7 +333,7 @@ class CallController extends Cubit<CallState> {
     // Tell Android this phone is in a call. Best-effort: if Telecom declines,
     // the consultation runs exactly as it did before.
     unawaited(
-      CallTelecom.start(callId: sid, peerName: join.peerName),
+      CallTelecom.start(callId: _telecomCallId, peerName: join.peerName),
     );
     unawaited(
       _keepAlive.start(
@@ -332,6 +342,9 @@ class CallController extends Cubit<CallState> {
         video: video,
       ),
     );
+    if (video) {
+      unawaited(WakelockPlus.enable());
+    }
 
     emit(state.copyWith(phase: CallPhase.waitingPeer, peerName: join.peerName));
     _sendHello();
@@ -415,6 +428,30 @@ class CallController extends Cubit<CallState> {
       await _engine.setMicrophoneEnabled(!muted);
     } catch (_) {}
     emit(state.copyWith(muted: muted));
+  }
+
+  /// Send the audio to [output] — the picker the call screen shows once a
+  /// headset is connected. Only through Telecom: it is the one that knows
+  /// the headset is there, and the one that owns the route.
+  Future<void> selectAudioRoute(CallAudioOutput output) async {
+    if (output == CallAudioOutput.speaker ||
+        output == CallAudioOutput.earpiece) {
+      if (!await CallTelecom.setAudioRoute(output)) {
+        try {
+          await _engine.setSpeakerphone(output == CallAudioOutput.speaker);
+        } catch (_) {}
+      }
+      _emitIfOpen(
+        state.copyWith(
+          speakerOn: output == CallAudioOutput.speaker,
+          bluetooth: false,
+        ),
+      );
+      return;
+    }
+    // Headsets have no fallback — without Telecom we cannot address one. The
+    // route event that follows is what updates the state.
+    await CallTelecom.setAudioRoute(output);
   }
 
   Future<void> toggleSpeaker() async {
@@ -716,25 +753,46 @@ class CallController extends Cubit<CallState> {
     switch (event) {
       case TelecomHold():
         _diagnostics.log('telecom: held (cellular call)');
+        _mutedBeforeHold = state.muted;
         if (!state.muted) await toggleMute();
       case TelecomUnhold():
         _diagnostics.log('telecom: released');
-        if (state.muted) await toggleMute();
-      case TelecomDisconnect():
+        if (!_mutedBeforeHold && state.muted) await toggleMute();
+      case TelecomDisconnect(:final callId):
+        // Another call's disconnect — a ring declined elsewhere — is not ours.
+        if (callId.isNotEmpty && callId != _telecomCallId) return;
         _diagnostics.log('telecom: disconnect');
         await hangUp();
-      case TelecomAudioRoute(speaker: final speaker, bluetooth: final bluetooth):
+      case TelecomAudioRoute(
+        speaker: final speaker,
+        bluetooth: final bluetooth,
+        :final routes,
+      ):
         // Telecom owns the route, so this corrects our own idea of it — a
         // headset connecting mid-call used to leave the speaker button
-        // claiming something that was no longer true.
-        if (speaker != state.speakerOn || bluetooth != state.bluetooth) {
+        // claiming something that was no longer true. The set of routes is
+        // what decides whether the screen shows a toggle or a picker.
+        final routesChanged =
+            routes.isNotEmpty &&
+            (routes.length != state.audioRoutes.length ||
+                !routes.containsAll(state.audioRoutes));
+        if (speaker != state.speakerOn ||
+            bluetooth != state.bluetooth ||
+            routesChanged) {
           _diagnostics.log(
             'audio route: ${bluetooth ? 'bluetooth' : (speaker ? 'speaker' : 'earpiece')}',
           );
           _emitIfOpen(
-            state.copyWith(speakerOn: speaker, bluetooth: bluetooth),
+            state.copyWith(
+              speakerOn: speaker,
+              bluetooth: bluetooth,
+              audioRoutes: routes.isEmpty ? null : routes,
+            ),
           );
         }
+      case TelecomAnswer() || TelecomReject() || TelecomMissed():
+        // A ringing consultation — the app acts on those, not the live call.
+        break;
     }
   }
 
@@ -767,20 +825,28 @@ class CallController extends Cubit<CallState> {
   // --- backend + stats ----------------------------------------------------------------
 
   Future<void> _report(CallNetState s) async {
-    if (!_everConnected && s != CallNetState.disconnected) return;
     try {
-      await _backend.reportState(
+      final body = await _backend.reportState(
         s,
         relayed: state.relayed ? true : null,
         quality: state.quality > 0 ? state.quality : null,
         rttMs: _lastRttMs,
         lossPct: _lastLossPct,
       );
+      // The server tells us the consultation ended (balance ran out, ops ended
+      // it, the other side hung up before the signaling 'bye' arrived, etc.).
+      // Without this the heartbeat loop keeps hammering /call/state forever on
+      // an already-ended call — we saw this filling the log every few seconds.
+      if (body != null && body['status'] == 'ended' && !_closed) {
+        _diagnostics.log('server: consultation ended (heartbeat response)');
+        unawaited(onConsultationEnded());
+      }
     } catch (_) {}
   }
 
+
   void _heartbeat() {
-    if (!_everConnected || _closed) return;
+    if (_closed) return;
     unawaited(
       _report(
         state.phase == CallPhase.connected
@@ -941,6 +1007,9 @@ class CallController extends Cubit<CallState> {
       await _engine.release();
     } catch (_) {}
     unawaited(_keepAlive.stop());
+    try {
+      await WakelockPlus.disable();
+    } catch (_) {}
     // Or the OS goes on believing this phone is in a call — blocking the next
     // one and holding the audio route.
     unawaited(CallTelecom.end());

@@ -102,20 +102,26 @@ class ChatCubit extends Cubit<ChatState> {
     if (!state.loading) emit(state.copyWith(loading: true, error: null));
     try {
       final conversation = await _api.conversation(threadId);
-      emit(state.copyWith(loading: false, conversation: conversation));
+      emit(state.copyWith(conversation: conversation));
       await _loadSession(conversation);
       _frames = _realtime
           .channelFrames('conv:${conversation.id}')
           .listen(_onFrame, onError: (_) {});
+      emit(state.copyWith(loading: false));
     } catch (e) {
       emit(state.copyWith(loading: false, error: friendlyError(e)));
     }
     _poll = Timer.periodic(const Duration(seconds: 8), (_) => _refreshDetail());
   }
 
+  /// The session the room is about: the live one, then one the customer is
+  /// asking for right now (which the card answers with Accept / Decline),
+  /// else the most recent.
   Future<void> _loadSession(Conversation conversation) async {
     final id =
-        conversation.window.consultationId ?? conversation.lastConsultationId;
+        conversation.window.consultationId ??
+        conversation.pendingConsultationId ??
+        conversation.lastConsultationId;
     if (id == null) return;
     try {
       emit(state.copyWith(consultation: await _api.detail(id)));
@@ -151,17 +157,46 @@ class ChatCubit extends Cubit<ChatState> {
       case 'consultation.no_show':
       case 'call.ringing':
         _refreshDetail();
+      // The customer asked, withdrew, or the ask ran out — in a thread that is
+      // closed at the time, which the ordinary refresh would skip.
+      case 'consultation.requested':
+      case 'consultation.cancelled':
+      case 'consultation.expired':
+      case 'consultation.rejected':
+        _refreshDetail(force: true);
     }
+  }
+
+  /// Accept the request waiting in this room. For a chat the session starts
+  /// right here; for a call the room turns into the call screen.
+  Future<bool> acceptPending(Future<Object?> Function(String id) accept) =>
+      _answerPending(accept);
+
+  /// Decline it without leaving the conversation.
+  Future<bool> declinePending(Future<Object?> Function(String id) decline) =>
+      _answerPending(decline);
+
+  Future<bool> _answerPending(Future<Object?> Function(String id) act) async {
+    final c = state.consultation;
+    if (c == null || !c.isRequested) return false;
+    final done = await act(c.id);
+    // Whatever happened, re-read: the thread moves from closed to live on an
+    // accept, and back to its last session on a decline.
+    await _refreshDetail(force: true);
+    _poll?.cancel();
+    _poll = Timer.periodic(const Duration(seconds: 8), (_) => _refreshDetail());
+    return done != null && done != false;
   }
 
   /// Re-read the thread and its session (e.g. after the call ended on the
   /// other side).
   Future<void> refresh() => _refreshDetail();
 
-  Future<void> _refreshDetail() async {
-    // Keep polling past the end of a session: the window still moves from
-    // follow-up to closed, and the composer follows it.
-    if (state.isClosed) {
+  Future<void> _refreshDetail({bool force = false}) async {
+    // Nothing moves in a closed thread by itself — but a request waiting in
+    // it does (accepted, declined, expired), and so does one just made.
+    final waiting = state.consultation?.isRequested ?? false;
+    if (state.isClosed && !waiting && !force) {
       _poll?.cancel();
       return;
     }
@@ -170,6 +205,23 @@ class ChatCubit extends Cubit<ChatState> {
       emit(state.copyWith(conversation: conversation));
       await _loadSession(conversation);
     } catch (_) {}
+  }
+
+  /// Mute or block from the room. Returns the error to show, or null —
+  /// blocking during an open session is refused by the server, and that
+  /// refusal is the message.
+  Future<String?> setPreferences({bool? muted, bool? blocked}) async {
+    try {
+      final updated = await _api.setPreferences(
+        state.conversation?.id ?? threadId,
+        muted: muted,
+        blocked: blocked,
+      );
+      emit(state.copyWith(conversation: updated));
+      return null;
+    } catch (e) {
+      return friendlyError(e);
+    }
   }
 
   /// Ends the session; returns whether the backend accepted it.

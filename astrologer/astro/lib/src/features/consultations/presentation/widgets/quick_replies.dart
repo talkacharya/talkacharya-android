@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../data/consultation_api.dart';
 import '../../data/models/saved_reply.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// The astrologer's canned openers, as a scrolling strip above the composer.
 ///
 /// Tapping one puts it in the field instead of sending it: the first line of a

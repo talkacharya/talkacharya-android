@@ -51,6 +51,12 @@ class FlutterWebRtcEngine implements RtcEngine {
         'echoCancellation': true,
         'noiseSuppression': true,
         'autoGainControl': true,
+        // Request wideband (HD Voice) — without this, AndroidAudioConfiguration
+        // .communication falls back to 8kHz narrowband on many chipsets, which
+        // makes voices sound like a 1990s phone call. 16kHz is sufficient for
+        // speech; Opus internally resamples to 48kHz in its encode path.
+        'sampleRate': 16000,
+        'channelCount': 1, // mono voice — no stereo needed, halves jitter-buffer load
       },
       'video': video ? _videoConstraints : false,
     });

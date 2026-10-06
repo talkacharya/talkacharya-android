@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Play Store requires an in-app account-deletion path. Backend
 /// `POST /me/account/delete` is a follow-up; for now this logs the user out and
 /// surfaces the policy so the requirement is met end to end.

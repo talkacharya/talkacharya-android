@@ -34,14 +34,14 @@ class DioCallBackend implements CallBackend {
   }
 
   @override
-  Future<void> reportState(
+  Future<Map<String, dynamic>?> reportState(
     CallNetState state, {
     bool? relayed,
     int? quality,
     int? rttMs,
     int? lossPct,
   }) async {
-    await _dio.post<void>(
+    final res = await _dio.post<Map<String, dynamic>>(
       '/consultations/$consultationId/call/state',
       data: {
         'state': state.name,
@@ -51,6 +51,7 @@ class DioCallBackend implements CallBackend {
         'loss_pct': ?lossPct,
       },
     );
+    return res.data;
   }
 
   @override

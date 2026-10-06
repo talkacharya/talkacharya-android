@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
 import '../../../../core/util/async_value.dart';
 import '../../../../shared/widgets/language_quick_button.dart';
 import '../cubit/kundali_cubit.dart';
@@ -11,6 +10,7 @@ import '../widgets/k_chart.dart';
 import '../widgets/kundali_ui.dart';
 import 'house_detail_sheet.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// One chart in full — reached from the "All charts" menu or a deep link
 /// (`/kundali/:id/chart/:type`). The carousel page handles the essentials.
 class ChartDetailPage extends StatefulWidget {

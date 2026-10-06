@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
 import '../../data/models/dispute.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Labels, icons and colours for reports — one place so the hub, the form and
 /// the detail page always describe a report the same way.
 extension DisputeTypeUi on DisputeType {

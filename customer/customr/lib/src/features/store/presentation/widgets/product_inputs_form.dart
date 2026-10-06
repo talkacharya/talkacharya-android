@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../data/models/product.dart';
 import 'store_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Renders a product's `input_schema` (sankalp names, gotra, ring size, date of
 /// birth …). Per-participant fields repeat once per person in the package.
 class ProductInputsForm extends StatefulWidget {

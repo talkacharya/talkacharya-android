@@ -3,14 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
 import '../../../../shared/widgets/language_quick_button.dart';
 import '../../data/models/daily_mood.dart';
 import '../cubit/kundali_cubit.dart';
 import '../widgets/kundali_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Today's mood (`/kundali/:id/mood`) — where the daily-mood push lands.
 ///
 /// Deliberately partial: the mood, why, and one small tip are free; the

@@ -4,12 +4,11 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/l10n/l10n.dart';
 import '../../../../../core/router/routes.dart';
 import '../../../../../core/theme/app_theme.dart';
-import '../../../../../core/theme/brand_colors.dart';
 import '../../../../../core/util/money.dart';
-import '../../../../../shared/widgets/cosmic.dart';
-import '../../../../../shared/widgets/pressable.dart';
 import '../../../../consultations/data/models/consultation.dart';
 import 'dash_shared.dart';
+
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 /// Urgent card for requests waiting on the astrologer. Only placed in the
 /// feed when [requests] is non-empty.

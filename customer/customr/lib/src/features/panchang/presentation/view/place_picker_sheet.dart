@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../shared/widgets/app_bottom_sheet.dart';
 import '../../../birthprofiles/presentation/view/widgets/place_search_field.dart';
 import '../../data/models/day_panchang.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// City picker for the panchang. Resolves with the chosen place, or `null`.
 /// [suggestion] (usually the birth city) is offered as a one-tap choice.
 Future<PanchangPlace?> showPanchangPlacePicker(

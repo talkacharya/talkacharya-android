@@ -1,17 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:customr/src/features/astrologers/presentation/view/widgets/detail_skeleton_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/money.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/pressable.dart';
+import '../../../../shared/widgets/app_snack.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../../consultations/presentation/view/book_consultation_sheet.dart';
 import '../../../follows/presentation/cubit/follow_cubit.dart';
@@ -21,8 +18,10 @@ import '../../../gifting/presentation/view/gift_sheet.dart';
 import '../../data/astrologers_repository.dart';
 import '../../data/models/astrologer.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class AstrologerDetailPage extends StatefulWidget {
   const AstrologerDetailPage({required this.astrologerId, super.key});
+
   final String astrologerId;
 
   @override
@@ -54,7 +53,7 @@ class _AstrologerDetailPageState extends State<AstrologerDetailPage> {
             if (snap.connectionState != ConnectionState.done) {
               return _ChromeOnly(
                 title: l.astroProfileTitle,
-                child: const Center(child: CircularProgressIndicator()),
+                child: const Center(child: AstrologerProfileSkeleton()),
               );
             }
             if (snap.hasError || !snap.hasData) {
@@ -78,6 +77,7 @@ class _AstrologerDetailPageState extends State<AstrologerDetailPage> {
 
 class _ProfileView extends StatelessWidget {
   const _ProfileView({required this.a});
+
   final Astrologer a;
 
   @override
@@ -90,22 +90,44 @@ class _ProfileView extends StatelessWidget {
       const _TrustRow(),
     ];
 
-    return CustomScrollView(
-      slivers: [
-        _Header(a: a),
-        SliverPadding(
-          // Bottom inset clears the floating nav bar.
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 140),
-          sliver: SliverList.separated(
-            itemCount: sections.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 12),
-            itemBuilder: (context, i) => FadeSlideIn(
-              delay: Duration(milliseconds: 40 * i),
-              child: sections[i],
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: context.brand.cosmicStart,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10,
+                  offset: Offset(0, 4),
+                ),
+              ],
             ),
+            child: _HeaderCtas(a: a),
           ),
         ),
-      ],
+      ),
+      body: CustomScrollView(
+        slivers: [
+          _Header(a: a),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+            sliver: SliverList.separated(
+              itemCount: sections.length,
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
+              itemBuilder: (context, i) => FadeSlideIn(
+                delay: Duration(milliseconds: 40 * i),
+                child: sections[i],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -114,6 +136,7 @@ class _ProfileView extends StatelessWidget {
 
 class _Header extends StatelessWidget {
   const _Header({required this.a});
+
   final Astrologer a;
 
   @override
@@ -126,104 +149,144 @@ class _Header extends StatelessWidget {
 
     return SliverAppBar(
       pinned: true,
-      expandedHeight: 348,
-      backgroundColor: brand.cosmicStart,
+      expandedHeight: 260,
+      backgroundColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
       foregroundColor: Colors.white,
       systemOverlayStyle: SystemUiOverlayStyle.light,
       flexibleSpace: LayoutBuilder(
         builder: (context, box) {
           final top = MediaQuery.paddingOf(context).top;
-          // Once the big header scrolls away, the bar shows the name plus
-          // compact chat / call / video actions so they're always one tap away.
-          final collapsed = box.maxHeight <= top + kToolbarHeight + 24;
+          final toolbarHeight = top + kToolbarHeight;
+          final collapsed = box.maxHeight <= toolbarHeight + 24;
+          final bgHeight = (box.maxHeight - 42) > toolbarHeight
+              ? (box.maxHeight - 42)
+              : toolbarHeight;
+
           return Stack(
             fit: StackFit.expand,
             children: [
-              const CosmicBackdrop(),
-              if (a.banner?.isNotEmpty ?? false)
-                _BannerBackdrop(url: a.banner!),
-              FlexibleSpaceBar(
-                collapseMode: CollapseMode.parallax,
-                background: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 56, 20, 18),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        _Avatar(
-                          name: a.name,
-                          url: a.avatar,
-                          online: a.isAvailable,
-                          hue: hue,
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: Text(
-                                a.name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                                style: theme.textTheme.titleLarge?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                height: bgHeight,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Container(color: brand.cosmicStart),
+                    const CosmicBackdrop(),
+                    if (a.banner?.isNotEmpty ?? false)
+                      _BannerBackdrop(url: a.banner!),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                height: bgHeight,
+                child: FlexibleSpaceBar(
+                  collapseMode: CollapseMode.parallax,
+                  background: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 56, 20, 54),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  a.name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: theme.textTheme.titleLarge?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ),
-                            ),
-                            if (a.isVerified) ...[
-                              const SizedBox(width: 6),
-                              Icon(
-                                Icons.verified_rounded,
-                                size: 20,
-                                color: AstroPalette.air.start,
-                              ),
+                              if (a.isVerified) ...[
+                                const SizedBox(width: 6),
+                                Shimmer.fromColors(
+                                  baseColor: AstroPalette.air.start,
+                                  highlightColor: Colors.white,
+                                  period: const Duration(milliseconds: 2500),
+                                  child: Icon(
+                                    Icons.verified_rounded,
+                                    size: 20,
+                                    color: AstroPalette.air.start,
+                                  ),
+                                ),
+                              ],
                             ],
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          a.headline.isNotEmpty
-                              ? a.headline
-                              : a.skillsLabel.isNotEmpty
-                              ? a.skillsLabel
-                              : l.astroDefaultSkill,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: Colors.white.withValues(alpha: 0.75),
-                            height: 1.35,
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        Wrap(
-                          alignment: WrapAlignment.center,
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: [
-                            _GlassPill(
-                              dot: a.isAvailable
-                                  ? const Color(0xFF4ADE80)
-                                  : Colors.white.withValues(alpha: 0.5),
-                              label: a.isAvailable
-                                  ? l.astroOnlineNow
-                                  : l.astroBusy,
+                          const SizedBox(height: 4),
+                          Text(
+                            a.headline.isNotEmpty
+                                ? a.headline
+                                : a.skillsLabel.isNotEmpty
+                                ? a.skillsLabel
+                                : l.astroDefaultSkill,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: Colors.white.withValues(alpha: 0.75),
+                              height: 1.35,
                             ),
-                            if (replies != null)
-                              _GlassPill(
-                                icon: Icons.bolt_rounded,
-                                label: l.astroRepliesIn(
-                                  l.commonMinutesShort(replies),
+                          ),
+                          const SizedBox(height: 12),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 84),
+                            child: Wrap(
+                              alignment: WrapAlignment.center,
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: [
+                                _GlassPill(
+                                  dot: a.isAvailable
+                                      ? const Color(0xFF4ADE80)
+                                      : Colors.white.withValues(alpha: 0.5),
+                                  label: a.isAvailable
+                                      ? l.astroOnlineNow
+                                      : l.astroBusy,
                                 ),
-                              ),
-                          ],
-                        ),
-                        const SizedBox(height: 14),
-                        _HeaderCtas(a: a),
-                      ],
+                                if (replies != null)
+                                  _GlassPill(
+                                    icon: Icons.bolt_rounded,
+                                    label: l.astroRepliesIn(
+                                      l.commonMinutesShort(replies),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                left: 16,
+                child: IgnorePointer(
+                  ignoring: collapsed,
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 180),
+                    opacity: collapsed ? 0 : 1,
+                    child: Hero(
+                      tag: 'astrologer_photo_${a.id}',
+                      child: _Avatar(
+                        name: a.name,
+                        url: a.avatar,
+                        online: a.isAvailable,
+                        hue: hue,
+                      ),
                     ),
                   ),
                 ),
@@ -256,6 +319,16 @@ class _Header extends StatelessWidget {
                     opacity: collapsed ? 1 : 0,
                     child: Row(
                       children: [
+                        if (a.avatar != null && a.avatar!.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: CircleAvatar(
+                              radius: 16,
+                              backgroundImage: CachedNetworkImageProvider(
+                                a.avatar!,
+                              ),
+                            ),
+                          ),
                         Expanded(
                           child: Text(
                             a.name,
@@ -266,31 +339,6 @@ class _Header extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                        ),
-                        _BarAction(
-                          icon: Icons.chat_bubble_rounded,
-                          tooltip: l.channelChat,
-                          color: AstroPalette.money.start,
-                          onTap: () => _startChat(context, a),
-                        ),
-                        _BarAction(
-                          icon: Icons.phone_in_talk_rounded,
-                          tooltip: l.channelVoice,
-                          color: AstroPalette.health.start,
-                          onTap: () => _startVoice(context, a),
-                        ),
-                        if (a.rateFor('video') != null)
-                          _BarAction(
-                            icon: Icons.videocam_rounded,
-                            tooltip: l.channelVideo,
-                            color: AstroPalette.love.start,
-                            onTap: () => _startVideo(context, a),
-                          ),
-                        _BarAction(
-                          icon: Icons.card_giftcard_rounded,
-                          tooltip: l.giftAction,
-                          color: BrandColors.goldGradient[1],
-                          onTap: () => _sendGift(context, a),
                         ),
                         FollowGlassButton(
                           astrologerId: a.id,
@@ -315,6 +363,7 @@ class _Header extends StatelessWidget {
 /// the white name, pills and CTAs stay readable on any image.
 class _BannerBackdrop extends StatelessWidget {
   const _BannerBackdrop({required this.url});
+
   final String url;
 
   @override
@@ -391,14 +440,15 @@ class _Avatar extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: hue.linear(),
-              border: Border.all(color: brand.cosmicStart, width: 2.5),
+              border: Border.all(color: brand.canvas, width: 3.5),
             ),
             clipBehavior: Clip.antiAlias,
             child: (u != null && u.isNotEmpty)
-                ? Image.network(
-                    u,
+                ? CachedNetworkImage(
+                    imageUrl: u,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => initial,
+                    placeholder: (_, _) => initial,
+                    errorWidget: (_, _, _) => initial,
                   )
                 : initial,
           ),
@@ -413,7 +463,7 @@ class _Avatar extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color(0xFF4ADE80),
                 shape: BoxShape.circle,
-                border: Border.all(color: brand.cosmicStart, width: 3),
+                border: Border.all(color: brand.canvas, width: 3),
               ),
             ),
           ),
@@ -423,11 +473,17 @@ class _Avatar extends StatelessWidget {
 }
 
 class _GlassPill extends StatelessWidget {
-  const _GlassPill({required this.label, this.icon, this.dot});
+  const _GlassPill({
+    required this.label,
+    this.icon,
+    this.dot,
+    this.darkText = false,
+  });
 
   final String label;
   final IconData? icon;
   final Color? dot;
+  final bool darkText;
 
   @override
   Widget build(BuildContext context) {
@@ -435,9 +491,15 @@ class _GlassPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 5, 12, 5),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.12),
+        color: darkText
+            ? theme.colorScheme.surfaceContainerHigh
+            : Colors.white.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+        border: Border.all(
+          color: darkText
+              ? theme.colorScheme.outlineVariant
+              : Colors.white.withValues(alpha: 0.2),
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -454,7 +516,7 @@ class _GlassPill extends StatelessWidget {
           Text(
             label,
             style: theme.textTheme.labelMedium?.copyWith(
-              color: Colors.white,
+              color: darkText ? theme.colorScheme.onSurface : Colors.white,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -468,6 +530,7 @@ class _GlassPill extends StatelessWidget {
 
 class _StatsCard extends StatelessWidget {
   const _StatsCard({required this.a});
+
   final Astrologer a;
 
   @override
@@ -602,6 +665,7 @@ class _StatCell extends StatelessWidget {
 
 class _SkillsCard extends StatelessWidget {
   const _SkillsCard({required this.skills});
+
   final List<AstrologerSkill> skills;
 
   @override
@@ -648,6 +712,7 @@ class _SkillsCard extends StatelessWidget {
 
 class _AboutSection extends StatefulWidget {
   const _AboutSection({required this.bio, required this.languages});
+
   final String bio;
   final List<AstrologerLanguage> languages;
 
@@ -731,6 +796,7 @@ class _AboutSectionState extends State<_AboutSection> {
 
 class _RatesCard extends StatelessWidget {
   const _RatesCard({required this.rates});
+
   final List<AstrologerRate> rates;
 
   @override
@@ -886,6 +952,7 @@ class _TrustRow extends StatelessWidget {
 
 class _Card extends StatelessWidget {
   const _Card({required this.child, this.padding});
+
   final Widget child;
   final EdgeInsetsGeometry? padding;
 
@@ -906,6 +973,7 @@ class _Card extends StatelessWidget {
 
 class _SectionTitle extends StatelessWidget {
   const _SectionTitle(this.text);
+
   final String text;
 
   @override
@@ -924,9 +992,11 @@ class _SectionTitle extends StatelessWidget {
 void _startChat(BuildContext context, Astrologer a) {
   final chat = a.rateFor('chat');
   if (chat == null || !a.isAvailable) {
-    ScaffoldMessenger.of(
+    AppSnack.showTop(
       context,
-    ).showSnackBar(SnackBar(content: Text(context.l10n.astroNotifyWhenOnline)));
+      context.l10n.astroNotifyWhenOnline,
+      type: SnackType.info,
+    );
     return;
   }
   showBookConsultationSheet(
@@ -941,9 +1011,11 @@ void _startChat(BuildContext context, Astrologer a) {
 void _startVoice(BuildContext context, Astrologer a) {
   final voice = a.rateFor('voice');
   if (voice == null || !a.isAvailable) {
-    ScaffoldMessenger.of(
+    AppSnack.showTop(
       context,
-    ).showSnackBar(SnackBar(content: Text(context.l10n.callUnavailable)));
+      context.l10n.callUnavailable,
+      type: SnackType.info,
+    );
     return;
   }
   showBookConsultationSheet(
@@ -959,9 +1031,11 @@ void _startVoice(BuildContext context, Astrologer a) {
 void _startVideo(BuildContext context, Astrologer a) {
   final video = a.rateFor('video');
   if (video == null || !a.isAvailable) {
-    ScaffoldMessenger.of(
+    AppSnack.showTop(
       context,
-    ).showSnackBar(SnackBar(content: Text(context.l10n.callVideoUnavailable)));
+      context.l10n.callVideoUnavailable,
+      type: SnackType.info,
+    );
     return;
   }
   showBookConsultationSheet(
@@ -988,6 +1062,7 @@ void _sendGift(BuildContext context, Astrologer a) {
 /// Chat (primary, gold) + call / video (glass) inside the expanded header.
 class _HeaderCtas extends StatelessWidget {
   const _HeaderCtas({required this.a});
+
   final Astrologer a;
 
   @override

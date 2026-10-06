@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/async_value.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
@@ -12,6 +10,7 @@ import '../widgets/k_chart.dart';
 import '../widgets/kundali_ui.dart';
 import 'dasha_level_page.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Planetary periods: what's running now and the whole life timeline, in the
 /// Vimshottari, Yogini or Ashtottari system.
 class DashaPage extends StatefulWidget {

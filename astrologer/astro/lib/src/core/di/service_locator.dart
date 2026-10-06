@@ -1,3 +1,5 @@
+import 'package:talkacharya_chat/talkacharya_chat.dart';
+import '../../features/consultations/data/chat_adapters.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -17,6 +19,12 @@ import '../../features/kundali/data/kundali_repository.dart';
 import '../../features/livestream/data/live_api.dart';
 import '../../features/predictions/data/predictions_api.dart';
 import '../../features/predictions/data/predictions_repository.dart';
+import '../../features/performance/data/performance_api.dart';
+import '../../features/performance/presentation/cubit/performance_cubit.dart';
+import '../util/amount_privacy.dart';
+import '../../features/remedies/data/remedies_api.dart';
+import '../../features/waitlist/data/waitlist_api.dart';
+import '../../features/waitlist/presentation/cubit/waitlist_cubit.dart';
 import '../../features/home/data/dashboard_api.dart';
 import '../../features/home/presentation/cubit/dashboard_cubit.dart';
 import '../../features/notifications/data/notifications_api.dart';
@@ -66,6 +74,10 @@ Future<void> configureDependencies(AppConfig config) async {
 
   getIt
     ..registerSingleton<Dio>(dio)
+    // Chat photos and voice notes, downloaded once and kept on the device.
+    ..registerLazySingleton<ChatMediaStore>(
+      () => DeviceChatMediaStore(download: chatMediaDownloader(dio)),
+    )
     ..registerLazySingleton<AuthApi>(() => AuthApi(dio))
     ..registerLazySingleton<AuthRepository>(
       () => AuthRepository(api: getIt(), tokens: getIt()),
@@ -111,6 +123,9 @@ Future<void> configureDependencies(AppConfig config) async {
     realtimeOnline: () =>
         getIt.isRegistered<RealtimeClient>() &&
         getIt<RealtimeClient>().isConnected,
+    roomOpen: (thread) =>
+        getIt.isRegistered<RoomPresence>() &&
+        getIt<RoomPresence>().isOpen(thread),
   );
   getIt
     ..registerSingleton<LocalNotifications>(local)
@@ -139,6 +154,7 @@ Future<void> configureDependencies(AppConfig config) async {
         dio: dio,
         authBloc: authBloc,
         onboarding: getIt(),
+        storage: getIt(),
       ),
     );
 
@@ -176,5 +192,16 @@ Future<void> configureDependencies(AppConfig config) async {
     ..registerLazySingleton<ChatsCubit>(
       () => ChatsCubit(api: getIt(), realtime: realtime),
     )
-    ..registerFactory<EarningsCubit>(() => EarningsCubit(getIt()));
+    ..registerFactory<EarningsCubit>(() => EarningsCubit(getIt()))
+    ..registerLazySingleton<AmountPrivacy>(() => AmountPrivacy(getIt()))
+    ..registerLazySingleton<PerformanceApi>(() => PerformanceApi(dio))
+    ..registerLazySingleton<RemediesApi>(() => RemediesApi(dio))
+    ..registerLazySingleton<WaitlistApi>(() => WaitlistApi(dio))
+    // App-level: it also feeds the badge on the Home waitlist tile.
+    ..registerLazySingleton<WaitlistCubit>(
+      () => WaitlistCubit(api: getIt(), realtime: realtime),
+    )
+    ..registerFactory<PerformanceCubit>(
+      () => PerformanceCubit(api: getIt(), availability: getIt()),
+    );
 }

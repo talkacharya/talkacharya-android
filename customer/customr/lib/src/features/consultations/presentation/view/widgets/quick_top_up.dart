@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/l10n/l10n.dart';
-import '../../../../../core/theme/brand_colors.dart';
 import '../../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../../../wallet/data/wallet_repository.dart';
 import '../../../../wallet/presentation/cubit/recharge_cubit.dart';
@@ -13,6 +12,7 @@ import '../../../../wallet/presentation/cubit/wallet_cubit.dart';
 import '../../../../wallet/presentation/view/recharge_sheet.dart';
 import '../../../data/models/consultation.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Two amounts and a way out, right where the warning is.
 ///
 /// Mid-consultation the clock is running and the customer is trying to listen

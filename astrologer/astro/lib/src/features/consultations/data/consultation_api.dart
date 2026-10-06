@@ -11,10 +11,12 @@ class ConsultationApi {
   ConsultationApi(this._dio);
   final Dio _dio;
 
-  Future<List<Consultation>> list({String? status}) async {
+  /// [status] and [channel] are comma-separated lists; call history is this
+  /// list with `channel: 'voice,video'`.
+  Future<List<Consultation>> list({String? status, String? channel}) async {
     final res = await _dio.get<dynamic>(
       ApiPaths.astroConsultations,
-      queryParameters: {if (status != null) 'status': status},
+      queryParameters: {'status': ?status, 'channel': ?channel},
     );
     return (res.data as List? ?? const [])
         .map((e) => Consultation.fromJson((e as Map).cast<String, dynamic>()))
@@ -35,6 +37,24 @@ class ConsultationApi {
     try {
       final res = (await _dio.get<Map<String, dynamic>>(
         ApiPaths.conversation(id),
+      )).ensureOk();
+      return Conversation.fromJson(res.data ?? const {});
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// Mute, archive or block — this user's own settings for the thread.
+  Future<Conversation> setPreferences(
+    String threadId, {
+    bool? muted,
+    bool? archived,
+    bool? blocked,
+  }) async {
+    try {
+      final res = (await _dio.post<Map<String, dynamic>>(
+        ApiPaths.conversationPreferences(threadId),
+        data: {'muted': ?muted, 'archived': ?archived, 'blocked': ?blocked},
       )).ensureOk();
       return Conversation.fromJson(res.data ?? const {});
     } on DioException catch (e) {

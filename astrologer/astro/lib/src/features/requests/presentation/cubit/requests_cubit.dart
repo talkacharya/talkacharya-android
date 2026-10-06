@@ -1,3 +1,4 @@
+import 'package:talkacharya_call/talkacharya_call.dart';
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
@@ -96,6 +97,9 @@ class RequestsCubit extends Cubit<RequestsState> {
     _setBusy(id, true);
     try {
       final c = await _repo.api.accept(id);
+      // If Android was told this request is ringing, the ring becomes the
+      // call — the room adopts it instead of placing a second one.
+      unawaited(CallTelecom.answerIncoming(id));
       _removeIncoming(id);
       emit(
         state.copyWith(active: [c, ...state.active.where((a) => a.id != id)]),
@@ -113,6 +117,7 @@ class RequestsCubit extends Cubit<RequestsState> {
     _setBusy(id, true);
     try {
       await _repo.api.reject(id, reason);
+      unawaited(CallTelecom.declineIncoming(id));
       _removeIncoming(id);
       return true;
     } catch (e) {

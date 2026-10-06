@@ -6,7 +6,7 @@ import 'package:astro/src/core/l10n/l10n.dart';
 import 'package:astro/src/core/realtime/realtime_client.dart';
 import 'package:astro/src/core/realtime/realtime_event.dart';
 import 'package:astro/src/core/router/routes.dart';
-import 'package:astro/src/core/theme/brand_colors.dart';
+import 'package:astro/src/core/util/amount_privacy.dart';
 import 'package:astro/src/core/util/async_value.dart';
 import 'package:astro/src/features/consultations/data/consultation_api.dart';
 import 'package:astro/src/features/consultations/data/models/consultation.dart';
@@ -17,9 +17,12 @@ import 'package:astro/src/features/home/presentation/view/widgets/earnings_card.
 import 'package:astro/src/features/home/presentation/view/widgets/profile_strength_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class _MockApi extends Mock implements DashboardApi {}
 
 class _MockConsultations extends Mock implements ConsultationApi {}
@@ -27,6 +30,8 @@ class _MockConsultations extends Mock implements ConsultationApi {}
 class _MockStore extends Mock implements OnboardingStore {}
 
 class _MockRealtime extends Mock implements RealtimeClient {}
+
+class _MockStorage extends Mock implements FlutterSecureStorage {}
 
 const _statsJson = {
   'window_days': 7,
@@ -223,6 +228,16 @@ void main() {
   });
 
   group('EarningsCard', () {
+    setUp(() {
+      final storage = _MockStorage();
+      when(
+        () => storage.read(key: any(named: 'key')),
+      ).thenAnswer((_) async => null);
+      GetIt.I.registerSingleton<AmountPrivacy>(AmountPrivacy(storage));
+    });
+
+    tearDown(GetIt.I.reset);
+
     Future<void> pump(WidgetTester tester, DashboardState state) async {
       final cubit = _FixedCubit(state);
       await tester.pumpWidget(

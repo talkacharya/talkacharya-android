@@ -7,9 +7,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/router/routes.dart';
 
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
-import '../../../../../shared/widgets/app_bottom_sheet.dart';
 import '../../../data/models/horoscope.dart';
 import '../../../data/models/zodiac.dart';
 import '../../cubit/home_cubit.dart';
@@ -17,6 +14,7 @@ import 'home_shared.dart';
 import 'zodiac_wheel.dart';
 import 'package:customr/src/core/l10n/l10n.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Today's reading. The sign follows the active birth profile's sun sign by
 /// default; the chip opens a picker to override it (persisted).
 class HoroscopeCard extends StatelessWidget {
@@ -76,10 +74,12 @@ class HoroscopeCard extends StatelessWidget {
                 ),
                 // Decorative celestial shapes (painted behind content)
                 Positioned.fill(
-                  child: CustomPaint(
-                    painter: _HoroscopeCardTexturePainter(
-                      dustColor: brand.cosmicAccent,
-                      starColor: brand.gold,
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: _HoroscopeCardTexturePainter(
+                        dustColor: brand.cosmicAccent,
+                        starColor: brand.gold,
+                      ),
                     ),
                   ),
                 ),

@@ -1,4 +1,5 @@
 import '../../../../../core/di/service_locator.dart';
+import 'package:talkacharya_chat/talkacharya_chat.dart';
 import 'package:talkacharya_chat_store/talkacharya_chat_store.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -62,6 +63,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // session they are trying to leave.
     try {
       await getIt<FloorChatStore>().clearEverything();
+    } catch (_) {}
+    // And the photos and voice notes kept alongside it.
+    try {
+      await getIt<ChatMediaStore>().clear();
     } catch (_) {}
     emit(const AuthState.unauthenticated());
   }

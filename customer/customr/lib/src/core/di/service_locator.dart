@@ -1,3 +1,5 @@
+import 'package:talkacharya_chat/talkacharya_chat.dart';
+import '../../features/consultations/data/chat_adapters.dart';
 import 'package:talkacharya_chat_store/talkacharya_chat_store.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -99,6 +101,10 @@ Future<void> configureDependencies(AppConfig config) async {
 
   getIt
     ..registerSingleton<Dio>(dio)
+    // Chat photos and voice notes, downloaded once and kept on the device.
+    ..registerLazySingleton<ChatMediaStore>(
+      () => DeviceChatMediaStore(download: chatMediaDownloader(dio)),
+    )
     ..registerLazySingleton<AuthApi>(() => AuthApi(dio))
     ..registerLazySingleton<AuthRepository>(
       () => AuthRepository(api: getIt(), tokens: getIt()),
@@ -196,6 +202,9 @@ Future<void> configureDependencies(AppConfig config) async {
     realtimeOnline: () =>
         getIt.isRegistered<RealtimeClient>() &&
         getIt<RealtimeClient>().isConnected,
+    roomOpen: (thread) =>
+        getIt.isRegistered<RoomPresence>() &&
+        getIt<RoomPresence>().isOpen(thread),
   );
   getIt
     ..registerSingleton<LocalNotifications>(local)

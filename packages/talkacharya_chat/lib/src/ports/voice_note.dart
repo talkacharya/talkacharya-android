@@ -32,6 +32,9 @@ abstract class VoicePlayer {
   Future<void> pause();
   Future<void> stop();
 
+  /// Change playback speed (e.g. 1.0, 1.5, 2.0).
+  Future<void> setSpeed(double speed) async {}
+
   /// The url currently playing, or null.
   Stream<String?> get nowPlaying;
 

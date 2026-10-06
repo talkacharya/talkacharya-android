@@ -4,15 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/app_bottom_sheet.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../../birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
 import '../../../wallet/presentation/view/recharge_sheet.dart';
 import '../../data/models/consult.dart';
@@ -20,6 +11,7 @@ import '../../data/models/product.dart';
 import '../cubit/consult_cubits.dart';
 import '../widgets/store_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// `/store/products/:slug/consult` — pick an astrologer for a video call about
 /// this product. The call runs in the normal consultation room.
 class ConsultAstrologerPage extends StatelessWidget {

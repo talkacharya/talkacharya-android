@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:talkacharya_sounds/talkacharya_sounds.dart';
@@ -11,11 +13,11 @@ import '../../../../core/network/connectivity_service.dart';
 import '../../../../core/realtime/realtime_client.dart';
 import '../../../../core/realtime/realtime_event.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../consultations/presentation/cubit/chats_list_cubit.dart';
 import '../../../notifications/presentation/bloc/notifications_cubit.dart';
 import '../../../consultations/presentation/room_presence.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// The signed-in container: an [IndexedStack] of the 4 tab navigators driven by
 /// go_router's [StatefulNavigationShell], a floating rounded bottom nav, an
 /// offline banner, and realtime toast handling. Horizontal swipes between tabs.
@@ -211,35 +213,41 @@ class _FloatingNavBar extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(26),
-            child: Container(
-              height: 66,
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(26),
-                gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [
-                    brand.cosmicStart,
-                    brand.cosmicEnd,
-                    const Color(0xFF3B0F5C),
-                  ],
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+              child: Container(
+                height: 66,
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(26),
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      brand.cosmicStart.withValues(alpha: 0.85),
+                      brand.cosmicEnd.withValues(alpha: 0.85),
+                      const Color(0xFF3B0F5C).withValues(alpha: 0.85),
+                    ],
+                  ),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
                 ),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-              ),
-              child: Material(
-                type: MaterialType.transparency,
-                child: Row(
-                  children: [
-                    for (var i = 0; i < destinations.length; i++)
-                      Expanded(
-                        child: _NavCell(
-                          dest: destinations[i],
-                          selected: i == currentIndex,
-                          onTap: () => onTap(i),
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: Row(
+                    children: [
+                      for (var i = 0; i < destinations.length; i++)
+                        Expanded(
+                          child: _NavCell(
+                            dest: destinations[i],
+                            selected: i == currentIndex,
+                            onTap: () {
+                              HapticFeedback.selectionClick();
+                              onTap(i);
+                            },
+                          ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

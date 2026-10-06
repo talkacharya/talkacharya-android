@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talkacharya_live/talkacharya_live.dart';
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../../core/l10n/l10n.dart';
@@ -106,7 +107,7 @@ class _GoLivePageState extends State<GoLivePage> {
       title: l.goLiveTitle,
       subtitle: l.goLiveSubtitle,
       children: _loading
-          ? const [SizedBox(height: 60), Center(child: CircularProgressIndicator())]
+          ? const [_GoLiveSkeleton()]
           : [
                 if (_resumable != null) ...[
                   Card(
@@ -198,6 +199,40 @@ class _GoLivePageState extends State<GoLivePage> {
                     ),
           ],
         ],
+    );
+  }
+}
+
+class _GoLiveSkeleton extends StatelessWidget {
+  const _GoLiveSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppShimmer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Card(
+            child: ListTile(
+              leading: const SkeletonBox(width: 24, height: 24, radius: 4),
+              title: const SkeletonBox(width: 150, height: 16, radius: 4),
+              subtitle: const Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: SkeletonBox(width: 100, height: 12, radius: 4),
+              ),
+              trailing: const SkeletonBox(width: 80, height: 36, radius: 18),
+            ),
+          ),
+          const SizedBox(height: 20),
+          const SkeletonBox(width: 180, height: 20, radius: 4),
+          const SizedBox(height: 10),
+          const SkeletonBox(width: double.infinity, height: 56, radius: 4),
+          const SizedBox(height: 4),
+          const SkeletonBox(width: 250, height: 12, radius: 4),
+          const SizedBox(height: 30),
+          const SkeletonBox(width: double.infinity, height: 48, radius: 24),
+        ],
+      ),
     );
   }
 }

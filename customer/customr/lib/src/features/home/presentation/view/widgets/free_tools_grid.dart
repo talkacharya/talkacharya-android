@@ -4,12 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/router/routes.dart';
-import '../../../../../core/theme/astro_palette.dart';
 import '../../../../../features/birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
 import '../../../../../features/kundali/presentation/view/kundali_routes.dart';
-import '../../../../../shared/widgets/pressable.dart';
 import 'home_shared.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Lead-magnet grid. Kundli tools open the active birth profile's kundali (or
 /// the birth-profile flow when there isn't one); discipline tiles drop into
 /// discovery filtered by that skill.

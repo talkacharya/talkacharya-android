@@ -105,6 +105,14 @@ class ApiPaths {
   static String chatPresence(String id) => '/conversations/$id/presence';
   static String attachments(String id) => '/conversations/$id/attachments';
 
+  /// This user's mute / archive / block settings for a thread.
+  static String conversationPreferences(String id) =>
+      '/conversations/$id/preferences';
+
+  /// Start another session inside a thread, without the booking form.
+  static String conversationConsult(String id) =>
+      '/app/conversations/$id/consult';
+
   /// Move a live consultation onto voice or video without re-booking.
   static String consultationUpgrade(String id) =>
       '/app/consultations/$id/upgrade';

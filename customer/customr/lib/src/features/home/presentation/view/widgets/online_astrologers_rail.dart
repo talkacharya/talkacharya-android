@@ -4,12 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/router/routes.dart';
-import '../../../../../core/theme/astro_palette.dart';
 import '../../../../astrologers/data/models/astrologer.dart';
 import '../../cubit/home_cubit.dart';
 import 'astrologer_card.dart';
 import 'home_shared.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 const _channels = <(String, String, IconData, AstroHue)>[
   ('', 'All', Icons.people_rounded, AstroPalette.money),
   ('chat', 'Chat', Icons.chat_bubble_rounded, AstroPalette.career),

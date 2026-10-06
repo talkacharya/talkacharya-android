@@ -1,3 +1,4 @@
+import 'package:talkacharya_call/talkacharya_call.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -9,10 +10,7 @@ import 'package:talkacharya_sounds/talkacharya_sounds.dart';
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/l10n/l10n.dart';
 import '../../../../../core/router/routes.dart';
-import '../../../../../core/theme/brand_colors.dart';
 import '../../../../../core/util/money.dart';
-import '../../../../../shared/widgets/cosmic.dart';
-import '../../../../../shared/widgets/hue_widgets.dart';
 import '../../../../consultations/data/consultation_api.dart';
 import '../../../../consultations/data/models/consultation.dart';
 import '../../../../consultations/presentation/widgets/consultation_style.dart';
@@ -23,6 +21,7 @@ import 'request_card.dart';
 import '../../../../../core/notifications/local_notifications.dart';
 import '../../../../../core/utils/haptic_service.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Full-width sheet shown when an `astro:` `consultation.requested` frame
 /// arrives: countdown ring, who's asking, and Accept / Decline. Accept opens
 /// the consultation room.
@@ -122,6 +121,18 @@ class _IncomingRequestSheetState extends State<_IncomingRequestSheet> {
     // astrologer acts or the request expires — like an incoming call.
     HapticService.heavy();
     AppSounds.startRinging();
+    // With the app open the push is skipped, so Android hears about a ringing
+    // voice/video request from here. A no-op if the push already reported it.
+    if (widget.channel == 'voice' || widget.channel == 'video') {
+      unawaited(
+        CallTelecom.reportIncoming(
+          callId: widget.consultationId,
+          peerName: _detail?.customerName ?? '',
+          video: widget.channel == 'video',
+          expiresIn: Duration(seconds: _left.clamp(1, 600)),
+        ),
+      );
+    }
     // If a push got here first and is ringing in the tray, this sheet is now
     // the one asking — two ringtones at once is worse than none.
     unawaited(getIt<LocalNotifications>().cancelIncomingCall());

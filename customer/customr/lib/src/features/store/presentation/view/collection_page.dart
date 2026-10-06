@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/async_value.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/error_view.dart';
 import '../../data/models/catalog.dart';
 import '../cubit/order_cubits.dart';
 import '../widgets/store_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// `/store/collections/:slug` — a curated set ("For Saturn", "Wealth & career").
 class CollectionPage extends StatelessWidget {
   const CollectionPage({super.key});

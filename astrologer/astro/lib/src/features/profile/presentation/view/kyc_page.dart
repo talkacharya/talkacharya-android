@@ -9,12 +9,11 @@ import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../onboarding/data/onboarding_api.dart';
 import '../widgets/verification_badge.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 final kPanPattern = RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]$');
 final kIfscPattern = RegExp(r'^[A-Z]{4}0[A-Z0-9]{6}$');
 

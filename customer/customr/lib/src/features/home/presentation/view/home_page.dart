@@ -3,9 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/service_locator.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
 import '../../../../core/config/config_repository.dart';
 import '../../../birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
 import '../../../store/presentation/widgets/store_home_rail.dart';
@@ -27,6 +24,7 @@ import 'widgets/resume_card.dart';
 import 'widgets/talk_again_rail.dart';
 import 'widgets/trust_footer.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// The customer home feed: a collapsing cosmic hero, a floating tools dock, then
 /// colour-coded sections. Every section is an independent [AsyncValue] slice on
 /// [HomeCubit], so the feed renders and retries section-by-section — a slow or
@@ -88,7 +86,32 @@ class _HomeViewState extends State<_HomeView> {
             color: AstroPalette.romance[1],
             edgeOffset: 64,
             child: BlocBuilder<HomeCubit, HomeState>(
+              // Only rebuild the entire scroll structure when section
+              // *visibility* changes (a section appears or disappears).
+              // State changes that only affect a section's internal content
+              // (horoscope data, panchang data, promos, sign, wallet) are
+              // handled by that section's own context.select/BlocBuilder,
+              // so they don't need to rebuild the whole list.
+              buildWhen: (a, b) =>
+                  (a.resume.value != null) != (b.resume.value != null) ||
+                  (a.online.isLoading || (a.online.value?.isNotEmpty ?? false)) !=
+                      (b.online.isLoading ||
+                          (b.online.value?.isNotEmpty ?? false)) ||
+                  (a.live.isLoading || (a.live.value?.isNotEmpty ?? false)) !=
+                      (b.live.isLoading ||
+                          (b.live.value?.isNotEmpty ?? false)) ||
+                  (a.talkAgain.value?.isNotEmpty ?? false) !=
+                      (b.talkAgain.value?.isNotEmpty ?? false) ||
+                  (a.articles.isLoading ||
+                          (a.articles.value?.isNotEmpty ?? false)) !=
+                      (b.articles.isLoading ||
+                          (b.articles.value?.isNotEmpty ?? false)),
               builder: (context, state) => CustomScrollView(
+                // cacheExtent: how far off-screen Flutter pre-builds sliver
+                // children. 250 is the default; raising it slightly lets
+                // items paint before the user reaches them, eliminating the
+                // blank-then-appear flicker on fast scrolls.
+                cacheExtent: 400,
                 slivers: [
                   const HomeTopBar(),
                   SliverPadding(
@@ -124,13 +147,15 @@ class _HomeViewState extends State<_HomeView> {
       const HoroscopeCard(),
       const PanchangStrip(),
       const FreeToolsGrid(),
-      if (getIt<ConfigRepository>().value.features.store) const StoreHomeRail(),
+      if (getIt<ConfigRepository>().value.features.store)
+        const StoreHomeRail(),
       if (hasTalkAgain) const TalkAgainRail(),
       if (hasArticles) const ArticlesRail(),
       const RechargePacksStrip(),
       const ReferEarnBanner(),
       const TrustFooter(),
     ];
+
 
     final children = <Widget>[const HomeHeroPanel(dock: QuickActionsRow())];
     for (var i = 0; i < sections.length; i++) {

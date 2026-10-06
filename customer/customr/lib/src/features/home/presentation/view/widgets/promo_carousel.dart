@@ -7,13 +7,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
-import '../../../../../shared/widgets/pressable.dart';
 import '../../../data/models/home_promo.dart';
 import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Height of every slide, whatever its kind. Fixed so the [PageView] doesn't
 /// jump as slides of different content swipe past.
 const double _railHeight = 188;

@@ -4,14 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/router/routes.dart';
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
-import '../../../../../shared/widgets/pressable.dart';
 import '../../../../articles/data/models/article.dart';
 import '../../../../articles/presentation/widgets/article_ui.dart';
 import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// "Read & learn" — the newest editorial articles (`/content/articles`).
 /// Hidden when there's nothing published, so the feed never shows an empty rail.
 class ArticlesRail extends StatelessWidget {

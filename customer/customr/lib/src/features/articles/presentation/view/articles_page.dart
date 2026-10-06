@@ -5,16 +5,11 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/l10n/api_error_l10n.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/pressable.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../data/models/article.dart';
 import '../cubit/articles_cubit.dart';
 import '../widgets/article_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// "Read & learn" (`/articles`, `?category=` pre-selects).
 class ArticlesPage extends StatefulWidget {
   const ArticlesPage({super.key});

@@ -5,12 +5,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
 import '../cubit/kundali_cubit.dart';
 import '../widgets/kundali_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Remedies matched to this chart, grouped by kind (mantra, daan, lifestyle…).
 /// Gemstone / rudraksha style items stay gated behind an astrologer check.
 class RemediesPage extends StatefulWidget {

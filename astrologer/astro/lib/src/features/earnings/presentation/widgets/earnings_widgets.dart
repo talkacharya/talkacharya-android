@@ -7,14 +7,11 @@ import 'package:share_plus/share_plus.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/money.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
-import '../../../../shared/widgets/pressable.dart';
 import '../../data/earnings_api.dart';
 import '../../data/earnings_models.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Icon, label and hue for an [EarningKinds] value.
 ({IconData icon, String label, AstroHue hue}) earningKindStyle(
   BuildContext context,

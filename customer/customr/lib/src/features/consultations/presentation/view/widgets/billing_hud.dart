@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/l10n/l10n.dart';
-import '../../../../../core/theme/brand_colors.dart';
 import '../../../data/models/consultation.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Thin banner under the app bar during a live chat: money spent + minutes left.
 /// When the balance is low it turns into a warning with an "Add money" action
 /// ([onRecharge]) that opens the recharge sheet over the room.

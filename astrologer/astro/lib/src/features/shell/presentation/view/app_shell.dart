@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:talkacharya_sounds/talkacharya_sounds.dart';
@@ -11,13 +12,14 @@ import '../../../../core/network/connectivity_service.dart';
 import '../../../../core/realtime/realtime_client.dart';
 import '../../../../core/realtime/realtime_event.dart';
 import '../../../../core/router/transitions.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../chats/presentation/cubit/chats_cubit.dart';
 import '../../../notifications/presentation/bloc/notifications_cubit.dart';
 import '../../../requests/presentation/cubit/requests_cubit.dart';
+import '../../../waitlist/presentation/cubit/waitlist_cubit.dart';
 import '../../../requests/presentation/view/widgets/incoming_request_sheet.dart';
 import '../../../consultations/presentation/room_presence.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Signed-in container: the 5 tab navigators (cross-faded, see
 /// [AnimatedBranchContainer]), a floating cosmic bottom nav, an offline banner,
 /// and realtime handling (incoming requests).
@@ -39,6 +41,7 @@ class _AppShellState extends State<AppShell> {
     context.read<NotificationsCubit>().load();
     context.read<RequestsCubit>().load();
     context.read<ChatsCubit>().load();
+    context.read<WaitlistCubit>().load();
     _sub = getIt<RealtimeClient>().events.listen(_onRealtime);
   }
 
@@ -53,9 +56,19 @@ class _AppShellState extends State<AppShell> {
     switch (event) {
       case ConsultationRequested(
         :final consultationId,
+        :final conversationId,
         :final channel,
         :final question,
       ):
+        // Already in this customer's room: the request shows there, as an
+        // Accept in the conversation, with a short tone and a buzz — not a
+        // sheet over the chat they are reading, and not the full ringtone.
+        if (conversationId.isNotEmpty &&
+            getIt<RoomPresence>().isOpen(conversationId)) {
+          AppSounds.notify();
+          unawaited(HapticFeedback.heavyImpact());
+          return;
+        }
         showIncomingRequestSheet(
           context,
           consultationId: consultationId,
@@ -134,6 +147,7 @@ class _AppShellState extends State<AppShell> {
 
 class _NavDest {
   const _NavDest(this.icon, this.selectedIcon, this.label, {this.badge = 0});
+
   final IconData icon;
   final IconData selectedIcon;
   final String label;
@@ -262,15 +276,17 @@ class _NavCell extends StatelessWidget {
                       ]
                     : null,
               ),
-              child: Badge(
-                isLabelVisible: dest.badge > 0,
-                label: Text(dest.badge > 99 ? '99+' : '${dest.badge}'),
-                backgroundColor: context.brand.live,
-                offset: const Offset(10, -6),
-                child: Icon(
-                  selected ? dest.selectedIcon : dest.icon,
-                  size: 21,
-                  color: selected ? selectedFg : idle,
+              child: Center(
+                child: Badge(
+                  isLabelVisible: dest.badge > 0,
+                  label: Text(dest.badge > 99 ? '99+' : '${dest.badge}'),
+                  backgroundColor: context.brand.live,
+                  offset: const Offset(4, -4),
+                  child: Icon(
+                    selected ? dest.selectedIcon : dest.icon,
+                    size: 21,
+                    color: selected ? selectedFg : idle,
+                  ),
                 ),
               ),
             ),

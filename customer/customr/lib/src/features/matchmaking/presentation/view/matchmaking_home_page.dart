@@ -8,18 +8,14 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/utils/haptic_service.dart';
-import '../../../../shared/widgets/app_bottom_sheet.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/pressable.dart';
 import '../../../birthprofiles/data/models/birth_profile.dart';
 import '../../../birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
 import '../../data/models/match_result.dart';
 import '../cubit/matchmaking_cubit.dart';
 import 'widgets/match_widgets.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class MatchmakingHomePage extends StatefulWidget {
   const MatchmakingHomePage({super.key});
 

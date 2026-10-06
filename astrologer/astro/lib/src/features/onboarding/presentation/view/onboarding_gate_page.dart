@@ -9,14 +9,10 @@ import '../../../../core/config/config_repository.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
-import '../../../../shared/widgets/pressable.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../widgets/onboarding_steps.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// The screen a not-yet-approved astrologer sees, per [OnboardingStage]:
 /// a step checklist, the under-review timeline, or a blocked state.
 class OnboardingGatePage extends StatefulWidget {

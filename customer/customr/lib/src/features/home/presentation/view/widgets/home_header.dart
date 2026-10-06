@@ -5,13 +5,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/l10n/l10n.dart';
 import '../../../../../core/router/routes.dart';
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
 import '../../../../../core/util/async_value.dart';
 import '../../../../../core/util/money.dart';
 import '../../../../../shared/widgets/language_quick_button.dart';
-import '../../../../../shared/widgets/cosmic.dart';
-import '../../../../../shared/widgets/pressable.dart';
 import '../../../../astrologers/data/models/astrologer.dart';
 import '../../../../auth/data/models/auth_user.dart';
 import '../../../../auth/presentation/bloc/auth/auth_bloc.dart';
@@ -21,6 +17,7 @@ import '../../../../wallet/presentation/cubit/wallet_cubit.dart';
 import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Height the quick-actions dock tucks up into the hero.
 const double kHeroDockOverlap = 36;
 

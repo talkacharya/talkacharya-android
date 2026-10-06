@@ -6,12 +6,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/l10n/l10n.dart';
 import '../../../../../core/router/routes.dart';
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
-import '../../../../../shared/widgets/pressable.dart';
 import '../../../../astrologers/data/models/astrologer.dart';
 import 'home_shared.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Height of [AstrologerCard] — rails size themselves from it.
 const double kAstrologerCardHeight = 236;
 

@@ -7,9 +7,9 @@ import '../../core/di/service_locator.dart';
 import '../../core/l10n/l10n.dart';
 import '../../features/auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../features/profile/data/profile_api.dart';
-import 'app_bottom_sheet.dart';
 import '../../core/l10n/api_error_l10n.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// App-bar shortcut to switch app language without diving into Profile.
 class LanguageQuickButton extends StatelessWidget {
   const LanguageQuickButton({super.key});

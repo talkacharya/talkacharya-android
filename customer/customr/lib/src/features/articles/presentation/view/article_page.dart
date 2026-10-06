@@ -7,17 +7,12 @@ import 'package:share_plus/share_plus.dart';
 import '../../../../core/l10n/api_error_l10n.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/async_value.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/pressable.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../data/models/article.dart';
 import '../cubit/article_cubit.dart';
 import '../widgets/article_ui.dart';
 import '../widgets/markdown_view.dart';
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 import 'articles_page.dart' show ArticleRowTile;
 
 /// The reader (`/articles/:slug`, deep link `talkacharya://articles/{slug}`).

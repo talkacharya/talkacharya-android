@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Label for a backend `verification_level`.
 String verificationLabel(AppLocalizations l, String level) => switch (level) {
   'verified' => l.verifVerified,

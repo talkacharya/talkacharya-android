@@ -21,6 +21,7 @@ import '../core/router/pending_deep_link.dart';
 import '../core/theme/app_theme.dart';
 import '../features/auth/presentation/bloc/auth/auth_bloc.dart';
 import '../features/chats/presentation/cubit/chats_cubit.dart';
+import '../features/waitlist/presentation/cubit/waitlist_cubit.dart';
 import '../features/consultations/presentation/room_presence.dart';
 import '../features/consultations/presentation/widgets/live_session_banner.dart';
 import '../features/notifications/presentation/bloc/notifications_cubit.dart';
@@ -30,6 +31,14 @@ import '../features/consultations/presentation/view/consultation_room_page.dart'
 import '../core/router/routes.dart';
 import '../core/notifications/local_notifications.dart';
 import '../features/consultations/data/consultation_api.dart';
+
+class AppScrollBehavior extends ScrollBehavior {
+  const AppScrollBehavior();
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics());
+  }
+}
 
 class TalkAcharyaApp extends StatefulWidget {
   const TalkAcharyaApp({super.key});
@@ -85,10 +94,14 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
     _subs.add(deepLinks.uris.listen((u) => _handle(locationForUri(u))));
     _subs.add(notifRouter.locations.listen(_handle));
     _subs.add(getIt<LocalNotifications>().callActions.listen(_onCallAction));
+    _subs.add(CallTelecom.events.listen(_onTelecom));
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _handle(locationForUri(await deepLinks.initialLink() ?? Uri()));
       _handle(await notifRouter.initialLocation());
+      // Answered from a headset or watch while the app was not running.
+      final answered = await CallTelecom.takePendingAnswer();
+      if (answered != null) await _acceptFromSystem(answered);
     });
   }
 
@@ -107,15 +120,43 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
     if (id.isEmpty) return;
 
     if (event.action == LocalNotifications.answerAction) {
+      unawaited(CallTelecom.answerIncoming(id));
       _handle(locationForRaw('${data['deeplink'] ?? ''}'));
       return;
     }
+    unawaited(CallTelecom.declineIncoming(id));
     try {
       await getIt<ConsultationApi>().reject(id, 'declined');
     } on Object {
       // Nothing to show — the app is in the background. The request expires on
       // its own, which is the same outcome.
     }
+  }
+
+  /// A ringing voice/video request answered or declined by the system — a
+  /// headset button, a watch, a car — rather than the app's own buttons.
+  Future<void> _onTelecom(CallTelecomEvent event) async {
+    switch (event) {
+      case TelecomAnswer(:final callId) when callId.isNotEmpty:
+        await _acceptFromSystem(callId);
+      case TelecomReject(:final callId) when callId.isNotEmpty:
+        unawaited(getIt<LocalNotifications>().cancelIncomingCall());
+        try {
+          await getIt<RequestsCubit>().reject(callId, 'declined');
+        } on Object {
+          // It expires on its own — the same outcome.
+        }
+      default:
+        break;
+    }
+  }
+
+  /// Accept exactly as the Accept button does, then open the room — whose call
+  /// adopts the Telecom call that is already answered.
+  Future<void> _acceptFromSystem(String id) async {
+    unawaited(getIt<LocalNotifications>().cancelIncomingCall());
+    final accepted = await getIt<RequestsCubit>().accept(id);
+    if (accepted != null) _handle(Routes.chatRoom(id));
   }
 
   void _handle(String? location) {
@@ -151,6 +192,7 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
         BlocProvider.value(value: getIt<NotificationsCubit>()),
         BlocProvider.value(value: getIt<RequestsCubit>()),
         BlocProvider.value(value: getIt<ChatsCubit>()),
+        BlocProvider.value(value: getIt<WaitlistCubit>()),
       ],
       child: BlocBuilder<AuthBloc, AuthState>(
         buildWhen: (a, b) =>
@@ -167,6 +209,7 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
             debugShowCheckedModeBanner: !config.isProd,
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,
+            scrollBehavior: const AppScrollBehavior(),
             routerConfig: _router,
             locale: locale,
             builder: (context, child) => CallOverlayHost(
@@ -175,9 +218,12 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
               // Tapping the minimized call returns to its room, or
               // raises the one already in the stack rather than
               // stacking a second copy of the same consultation.
-              onOpen: (info) => getIt<CallHub>().isRoomOpen(info.consultationId)
-                  ? _router.pop()
-                  : _router.push(Routes.chatRoom(info.consultationId)).ignore(),
+              onOpen: (info) {
+                getIt<CallHub>().expand();
+                if (!getIt<CallHub>().isRoomOpen(info.consultationId)) {
+                  _router.push(Routes.chatRoom(info.consultationId)).ignore();
+                }
+              },
               child: LiveSessionBanner(child: child ?? const SizedBox.shrink()),
             ),
             supportedLocales: kSupportedLocales,

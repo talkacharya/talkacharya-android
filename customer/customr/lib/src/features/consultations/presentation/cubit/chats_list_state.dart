@@ -15,14 +15,21 @@ class ChatsListState extends Equatable {
   final List<Conversation> conversations;
   final String? error;
 
-  /// Threads with a paid session running right now.
+  /// Threads with a paid session running right now. A live one is never
+  /// hidden in Archived, whatever the setting says.
   List<Conversation> get live =>
       conversations.where((c) => c.window.isLive).toList();
 
-  /// Everything else: finished readings, and the ones still inside their free
-  /// follow-up window.
-  List<Conversation> get past =>
-      conversations.where((c) => !c.window.isLive).toList();
+  /// Everything else not archived: finished readings, and the ones still
+  /// inside their free follow-up window.
+  List<Conversation> get past => conversations
+      .where((c) => !c.window.isLive && !c.archived)
+      .toList();
+
+  /// Put away by the customer; still there, one tap down.
+  List<Conversation> get archived => conversations
+      .where((c) => !c.window.isLive && c.archived)
+      .toList();
 
   int get totalUnread => conversations.fold(0, (sum, c) => sum + c.unread);
 

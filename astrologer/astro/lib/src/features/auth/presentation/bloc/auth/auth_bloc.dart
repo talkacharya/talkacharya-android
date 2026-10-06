@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:talkacharya_chat/talkacharya_chat.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/network/api_exception.dart';
 import '../../../data/auth_repository.dart';
 import '../../../data/models/auth_user.dart';
@@ -60,6 +62,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     await _repo.logout();
+    // The chat photos and voice notes kept on the device are this account's.
+    // Best-effort: a cache that will not clear must not trap someone in a
+    // session they are trying to leave.
+    try {
+      await getIt<ChatMediaStore>().clear();
+    } catch (_) {}
     emit(const AuthState.unauthenticated());
   }
 }

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../router/transitions.dart';
-import 'brand_colors.dart';
-
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Central theme — the customer app's theme with an indigo seed (the customer
 /// app is saffron). Keep the two files in step. Keep widget code theme-driven (no hard-coded colours) —
 /// reach for [BrandColors] (a [ThemeExtension]) when you need a role the

@@ -56,14 +56,16 @@ class _AuthBackgroundState extends State<AuthBackground>
         Positioned(
           top: -size.height * 0.05,
           right: -size.width * 0.1,
-          child: Opacity(
-            opacity: 0.25,
-            child: Image.asset(
-              'assets/images/login-bg.png',
-              width: size.width * 0.8,
-              fit: BoxFit.contain,
-              errorBuilder: (_, _, _) => const SizedBox.shrink(),
-            ),
+          // Bake the 25 % fade directly into the image paint call.
+          // Static Opacity always allocates a permanent offscreen GPU
+          // compositing layer; this avoids that entirely.
+          child: Image.asset(
+            'assets/images/login-bg.png',
+            width: size.width * 0.8,
+            fit: BoxFit.contain,
+            color: Colors.white.withAlpha(64), // 64 ≈ 0.25 × 255
+            colorBlendMode: BlendMode.modulate,
+            errorBuilder: (_, _, _) => const SizedBox.shrink(),
           ),
         ),
 

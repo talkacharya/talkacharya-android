@@ -7,10 +7,7 @@ import '../../../../../core/config/config_repository.dart';
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/l10n/l10n.dart';
 import '../../../../../core/theme/app_theme.dart';
-import '../../../../../core/theme/brand_colors.dart';
-import '../../../../../shared/widgets/cosmic.dart';
-import '../../../../../shared/widgets/fade_slide_in.dart';
-
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// The frame both sign-in steps sit in.
 ///
 /// Sign-in is the one screen every astrologer sees before anything else, and

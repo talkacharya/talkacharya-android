@@ -3,15 +3,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../core/l10n/l10n.dart';
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
-import '../../../../../shared/widgets/pressable.dart';
 import '../../../../home/data/models/zodiac.dart';
 import '../../../../kundali/presentation/kundali_terms.dart';
 import '../../../../matchmaking/presentation/view/widgets/match_widgets.dart'
     show relationLabel;
 import '../../../data/models/birth_profile.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Colour family + icon per relation.
 (AstroHue, IconData) relationStyle(String relation) => switch (relation) {
   'self' => (AstroPalette.money, Icons.person_rounded),

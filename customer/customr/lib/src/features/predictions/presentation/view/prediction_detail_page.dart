@@ -6,8 +6,8 @@ import 'package:talkacharya_predictions/talkacharya_predictions.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
 import '../../../../core/util/async_value.dart';
-import '../../../../shared/widgets/error_view.dart';
 import '../cubit/prediction_detail_cubit.dart';
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 import 'predictions_home_page.dart' show predAreaTitle, predPeriodTitle;
 
 class PredictionDetailPage extends StatefulWidget {

@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/router/routes.dart';
-import '../../../../../shared/widgets/pressable.dart';
 import '../../../data/models/home_consultation.dart';
 import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
 import 'package:customr/src/core/l10n/l10n.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Only renders when a session is active / paused. Sits just under the header —
 /// nothing else matters while a paid consultation is open.
 class ResumeCard extends StatelessWidget {

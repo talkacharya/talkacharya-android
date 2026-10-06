@@ -3,15 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/utils/haptic_service.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
-import '../../../../shared/widgets/pressable.dart';
 import '../../../astrologers/data/models/astrologer.dart';
 import '../../data/follows_api.dart';
 import '../cubit/follow_cubit.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 Future<void> toggleFollow(
   BuildContext context, {
   required String astrologerId,

@@ -93,7 +93,8 @@ class DeviceVoicePlayer implements VoicePlayer {
     _player.playerStateStream.listen((s) {
       if (s.processingState == ProcessingState.completed) {
         _now.add(null);
-        unawaited(_player.stop());
+        unawaited(_player.pause());
+        unawaited(_player.seek(Duration.zero));
       }
     });
   }
@@ -127,6 +128,13 @@ class DeviceVoicePlayer implements VoicePlayer {
     await _player.stop();
     _url = null;
     _now.add(null);
+  }
+
+  @override
+  Future<void> setSpeed(double speed) async {
+    try {
+      await _player.setSpeed(speed);
+    } catch (_) {}
   }
 
   @override

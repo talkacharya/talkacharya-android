@@ -5,10 +5,10 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../requests/presentation/cubit/requests_cubit.dart';
 import '../room_presence.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Strip above every screen while a session is live and its room isn't on top,
 /// so the astrologer can always get back to it in one tap.
 class LiveSessionBanner extends StatelessWidget {

@@ -5,18 +5,13 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../data/models/order.dart';
 
 import '../cubit/order_cubits.dart';
 import '../widgets/order_widgets.dart';
 import '../widgets/store_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// `/store/orders` (`?tab=poojas` opens the bookings tab).
 class OrdersPage extends StatefulWidget {
   const OrdersPage({this.initialTab = 0, super.key});

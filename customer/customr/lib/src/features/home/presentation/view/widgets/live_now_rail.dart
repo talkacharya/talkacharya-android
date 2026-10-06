@@ -4,12 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/router/routes.dart';
-import '../../../../../core/theme/brand_colors.dart';
-import '../../../../../shared/widgets/pressable.dart';
 import '../../../data/models/live_stream_card.dart';
 import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Astrologers broadcasting right now. Hidden entirely when nobody is live.
 /// Redesigned with pulsing LIVE badge and gradient avatar ring.
 class LiveNowRail extends StatelessWidget {
@@ -104,7 +103,11 @@ class _LiveTile extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            _PulsingLiveBadge(viewerCount: stream.viewerCount),
+            // RepaintBoundary keeps the 60 fps pulse animation isolated from
+            // the parent ListView — only the badge layer repaints each frame.
+            RepaintBoundary(
+              child: _PulsingLiveBadge(viewerCount: stream.viewerCount),
+            ),
             const SizedBox(height: 3),
             Text(
               stream.hostName,

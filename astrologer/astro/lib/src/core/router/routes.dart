@@ -41,6 +41,23 @@ class Routes {
   /// Prediction work queue (full-screen).
   static const predictions = '/predictions';
 
+  /// The banded scorecard, and the returning customers gone quiet.
+  static const performance = '/performance';
+  static const winBack = '/performance/win-back';
+
+  static const waitlist = '/waitlist';
+  static const callHistory = '/call-history';
+  static const remedies = '/remedies';
+
+  /// [consultation] presets the customer when opened from their session.
+  static String suggestRemedy({String? consultation, String? name}) {
+    final q = <String, String>{'consultation': ?consultation, 'name': ?name};
+    return Uri(
+      path: '/remedies/suggest',
+      queryParameters: q.isEmpty ? null : q,
+    ).toString();
+  }
+
   /// Going live (full-screen; the broadcast room is pushed from here).
   static const goLive = '/go-live';
 }

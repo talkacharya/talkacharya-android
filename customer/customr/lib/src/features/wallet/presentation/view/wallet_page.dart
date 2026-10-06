@@ -4,12 +4,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/async_value.dart';
 import '../../../../core/util/money.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
-import '../../../../shared/widgets/app_bottom_sheet.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
 import '../../data/models/recharge_pack.dart';
 import '../../data/models/wallet_transaction.dart';
 import '../cubit/wallet_cubit.dart';
@@ -19,6 +16,7 @@ import 'widgets/balance_card.dart';
 import 'widgets/transaction_tile.dart';
 import '../../../../core/l10n/api_error_l10n.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class WalletPage extends StatefulWidget {
   const WalletPage({super.key, this.initialAmount});
 

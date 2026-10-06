@@ -8,18 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/app_bottom_sheet.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
 import '../bloc/birth_profiles_cubit.dart';
 import '../../data/models/birth_profile.dart';
 import 'widgets/profile_card.dart';
 import '../../../../core/utils/haptic_service.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class ManageProfilesPage extends StatefulWidget {
   const ManageProfilesPage({super.key});
 

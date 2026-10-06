@@ -7,16 +7,14 @@ import '../../../../core/astro/onboarding_store.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/network/api_exception.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/money.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../consultations/presentation/widgets/consultation_style.dart';
 import '../../data/profile_api.dart';
 import '../../data/profile_models.dart';
 import '../../../../core/utils/haptic_service.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 const _currency = 'INR';
 
 /// Per-channel per-minute pricing within the platform's allowed bands.

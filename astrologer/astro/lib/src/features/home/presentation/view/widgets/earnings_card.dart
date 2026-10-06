@@ -4,16 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/l10n/l10n.dart';
 import '../../../../../core/router/routes.dart';
 import '../../../../../core/theme/app_theme.dart';
-import '../../../../../core/theme/brand_colors.dart';
+import '../../../../../core/util/amount_privacy.dart';
 import '../../../../../core/util/money.dart';
-import '../../../../../shared/widgets/pressable.dart';
-import '../../../../../shared/widgets/skeleton.dart';
 import '../../../data/dashboard_models.dart';
 import '../../cubit/dashboard_cubit.dart';
 import 'dash_shared.dart';
+
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 /// Net earnings for the selected window with a daily sparkline, and the
 /// payout balance underneath (→ Earnings tab).
@@ -28,6 +29,21 @@ class EarningsCard extends StatelessWidget {
     final state = context.watch<DashboardCubit>().state;
     final currency = state.payouts.value?.currency ?? 'INR';
 
+    // Rebuilt when amounts are hidden or shown from the card above.
+    return ListenableBuilder(
+      listenable: getIt<AmountPrivacy>(),
+      builder: (context, _) => _card(context, l, brand, theme, state, currency),
+    );
+  }
+
+  Widget _card(
+    BuildContext context,
+    AppLocalizations l,
+    BrandColors brand,
+    ThemeData theme,
+    DashboardState state,
+    String currency,
+  ) {
     return Padding(
       padding: DashGaps.sidePad,
       child: Container(
@@ -107,6 +123,7 @@ class _StatsBody extends StatelessWidget {
     final l = context.l10n;
     final brand = context.brand;
     final theme = Theme.of(context);
+    final privacy = getIt<AmountPrivacy>();
     return Padding(
       padding: const EdgeInsets.fromLTRB(18, 10, 18, 14),
       child: Column(
@@ -117,7 +134,7 @@ class _StatsBody extends StatelessWidget {
             duration: const Duration(milliseconds: 600),
             curve: Curves.easeOutCubic,
             builder: (_, v, _) => Text(
-              Money.format(v.roundToDouble(), currency),
+              privacy.mask(Money.format(v.roundToDouble(), currency)),
               style: theme.textTheme.displaySmall?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
@@ -125,8 +142,9 @@ class _StatsBody extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            '${l.dashGross(Money.format(stats.gross, currency))}  ·  '
-            '${l.dashFee(Money.format(stats.commission, currency))}',
+            '${l.dashGross(privacy.mask(Money.format(stats.gross, currency)))}'
+            '  ·  '
+            '${l.dashFee(privacy.mask(Money.format(stats.commission, currency)))}',
             style: theme.textTheme.bodySmall?.copyWith(color: brand.inkMuted),
           ),
           const SizedBox(height: 14),
@@ -291,7 +309,9 @@ class _PayoutStrip extends StatelessWidget {
                         )
                       else
                         Text(
-                          Money.format(s.available, s.currency),
+                          getIt<AmountPrivacy>().mask(
+                            Money.format(s.available, s.currency),
+                          ),
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.w700,
                           ),
@@ -301,7 +321,11 @@ class _PayoutStrip extends StatelessWidget {
                 ),
                 if (s != null && s.pending > 0)
                   Text(
-                    l.dashPending(Money.format(s.pending, s.currency)),
+                    l.dashPending(
+                      getIt<AmountPrivacy>().mask(
+                        Money.format(s.pending, s.currency),
+                      ),
+                    ),
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: brand.inkMuted,
                     ),

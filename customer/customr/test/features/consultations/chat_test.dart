@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:customr/src/core/realtime/realtime_client.dart';
+import 'package:customr/src/features/consultations/data/consultation_api.dart';
 import 'package:customr/src/features/consultations/data/consultation_repository.dart';
 import 'package:customr/src/features/consultations/data/models/consultation.dart';
 import 'package:customr/src/features/consultations/data/models/conversation.dart';
@@ -218,7 +219,34 @@ void main() {
   blocTest<ChatCubit, ChatState>(
     'endConsultation swaps in the terminal consultation',
     build: () {
-      when(() => repo.end('c1')).thenAnswer(
+      const ended = Consultation(
+        id: 'c1',
+        status: ConsultationStatus.ended,
+        astrologerName: 'Ravi',
+        rateSnapshot: '20',
+        currency: 'INR',
+      );
+      when(() => repo.end('c1')).thenAnswer((_) async => ended);
+      return build();
+    },
+    act: (c) async {
+      await c.init();
+      // What the server says once it has ended: nothing live, the free
+      // follow-up open, and the wrap-up pointing at the session just finished.
+      when(() => repo.conversation('c1')).thenAnswer(
+        (_) async => Conversation(
+          id: 't1',
+          astrologerId: 'a1',
+          peerName: 'Ravi',
+          window: SendingWindow(
+            canSend: true,
+            reason: 'follow_up',
+            followUpUntil: DateTime.now().add(const Duration(hours: 24)),
+          ),
+          lastConsultationId: 'c1',
+        ),
+      );
+      when(() => repo.detail('c1')).thenAnswer(
         (_) async => const Consultation(
           id: 'c1',
           status: ConsultationStatus.ended,
@@ -227,14 +255,121 @@ void main() {
           currency: 'INR',
         ),
       );
-      return build();
+      await c.endConsultation();
+      await Future<void>.delayed(Duration.zero);
+    },
+    verify: (c) {
+      expect(c.state.consultation?.status, ConsultationStatus.ended);
+      // The composer follows the window, which has moved on to the follow-up.
+      expect(c.state.window.isFollowUp, isTrue);
+    },
+  );
+
+  group('the session the room opens on', () {
+    blocTest<ChatCubit, ChatState>(
+      'is the ringing call, not the chat that ended before it',
+      build: () {
+        // The window only counts sessions that take messages, so a call
+        // still ringing is invisible to it; the thread names it separately.
+        when(() => repo.conversation('c1')).thenAnswer(
+          (_) async => const Conversation(
+            id: 't1',
+            astrologerId: 'a1',
+            window: SendingWindow(reason: 'closed'),
+            lastConsultationId: 'old',
+            pendingConsultationId: 'call',
+          ),
+        );
+        when(() => repo.detail('call')).thenAnswer(
+          (_) async => const Consultation(
+            id: 'call',
+            channel: 'voice',
+            status: ConsultationStatus.requested,
+            astrologerName: 'Ravi',
+          ),
+        );
+        return build();
+      },
+      act: (c) => c.init(),
+      verify: (c) {
+        expect(c.state.consultation?.id, 'call');
+        expect(c.state.consultation?.channel, 'voice');
+      },
+    );
+  });
+
+  group('starting again from the thread', () {
+    Conversation closed() => const Conversation(
+      id: 't1',
+      astrologerId: 'a1',
+      window: SendingWindow(reason: 'closed'),
+      lastConsultationId: 'c1',
+    );
+
+    blocTest<ChatCubit, ChatState>(
+      'asks for it on the thread and shows it being answered in place',
+      build: () {
+        when(() => repo.conversation('c1')).thenAnswer((_) async => closed());
+        when(() => repo.consultAgain('t1', channel: 'chat')).thenAnswer(
+          (_) async => const Consultation(
+            id: 'c2',
+            status: ConsultationStatus.requested,
+            astrologerName: 'Ravi',
+          ),
+        );
+        return build();
+      },
+      act: (c) async {
+        await c.init();
+        await c.startAgain();
+      },
+      verify: (c) {
+        // The thread's id, not the one the route carried.
+        verify(() => repo.consultAgain('t1', channel: 'chat')).called(1);
+        expect(c.state.consultation?.id, 'c2');
+        expect(c.state.status, ConsultationStatus.requested);
+      },
+    );
+
+    blocTest<ChatCubit, ChatState>(
+      'lets a short wallet through to the room, which offers the top-up',
+      build: () {
+        when(() => repo.conversation('c1')).thenAnswer((_) async => closed());
+        when(() => repo.consultAgain('t1', channel: 'chat')).thenThrow(
+          InsufficientBalance(required: '20', available: '5', currency: 'INR'),
+        );
+        return build();
+      },
+      act: (c) async {
+        await c.init();
+        await expectLater(c.startAgain(), throwsA(isA<InsufficientBalance>()));
+      },
+      verify: (c) => expect(c.state.consultation?.id, 'c1'),
+    );
+  });
+
+  blocTest<ChatCubit, ChatState>(
+    'rates the session it shows, not the thread id the room was opened with',
+    build: () {
+      when(() => repo.conversation('t1')).thenAnswer(
+        (_) async => const Conversation(
+          id: 't1',
+          astrologerId: 'a1',
+          window: SendingWindow(reason: 'closed'),
+          lastConsultationId: 'c1',
+        ),
+      );
+      when(
+        () => repo.review(any(), rating: any(named: 'rating')),
+      ).thenAnswer((_) async {});
+      return ChatCubit(repo: repo, realtime: realtime, consultationId: 't1');
     },
     act: (c) async {
       await c.init();
-      await c.endConsultation();
+      await c.submitReview(5);
     },
-    verify: (c) =>
-        expect(c.state.consultation?.status, ConsultationStatus.ended),
+    verify: (_) =>
+        verify(() => repo.review('c1', rating: 5, text: '')).called(1),
   );
 
   test('a held consultation is shown as held, not as a dead call', () async {

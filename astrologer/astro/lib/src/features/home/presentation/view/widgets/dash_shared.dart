@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/l10n/l10n.dart';
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
-
-export '../../../../../shared/widgets/hue_widgets.dart';
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 export '../../../../consultations/presentation/widgets/consultation_style.dart'
     show channelStyle;
 

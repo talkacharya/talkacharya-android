@@ -1,7 +1,7 @@
 name: customr
 description: "TalkAcharya — customer app (astrology consultation marketplace)."
 publish_to: 'none'
-version: 1.0.8+8
+version: 1.1.4+14
 
 environment:
   sdk: ^3.11.0
@@ -97,6 +97,10 @@ dependencies:
   # storage / di
   flutter_secure_storage: ^9.2.2
   get_it: ^8.0.3
+  animations: ^2.2.0
+  talkacharya_ui:
+    path: ../../packages/talkacharya_ui
+  simple_pip_mode: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -114,11 +118,11 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icons/logo.png"
+  image_path: "assets/icons/logo.jpeg"
   min_sdk_android: 21
   # Android 8+ adaptive icon: logo on the warm brand canvas.
   adaptive_icon_background: "#FFF8F4"
-  adaptive_icon_foreground: "assets/icons/logo.png"
+  adaptive_icon_foreground: "assets/icons/logo.jpeg"
   adaptive_icon_foreground_inset: 18
   remove_alpha_ios: true
 
@@ -126,15 +130,15 @@ flutter_launcher_icons:
 # SplashScreen API) so cold start shows the logo instead of a blank white window.
 flutter_native_splash:
   color: "#FFF8F4"
-  image: assets/icons/logo.png
+  image: assets/icons/logo.jpeg
   color_dark: "#17120E"
-  image_dark: assets/icons/logo.png
+  image_dark: assets/icons/logo.jpeg
   android_12:
     color: "#FFF8F4"
-    image: assets/icons/logo.png
+    image: assets/icons/logo.jpeg
     icon_background_color: "#FFF8F4"
     color_dark: "#17120E"
-    image_dark: assets/icons/logo.png
+    image_dark: assets/icons/logo.jpeg
     icon_background_color_dark: "#17120E"
   fullscreen: false
   web: false

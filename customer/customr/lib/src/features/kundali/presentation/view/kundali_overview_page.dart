@@ -8,12 +8,8 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/async_value.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
 import '../../../../shared/widgets/language_quick_button.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../../birthprofiles/data/models/birth_profile.dart';
 import '../../../birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
 import '../../../home/data/models/zodiac.dart';
@@ -26,6 +22,7 @@ import '../widgets/sade_sati_card.dart';
 import 'house_detail_sheet.dart';
 import 'kundali_routes.dart';
 import 'widgets/birth_details_sheet.dart';
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 import 'yogas_doshas_page.dart' show yogaName;
 
 /// The kundali hub: who this chart is for, the chart itself, what's running
@@ -354,8 +351,8 @@ class _ChartPanelState extends State<_ChartPanel> {
                       style: _style,
                       retrograde: _d9 ? const {} : retro,
                       fillColor: Colors.white.withValues(alpha: 0.03),
-                      lineColor: Colors.white.withValues(alpha: 0.26),
-                      numberColor: Colors.white.withValues(alpha: 0.5),
+                      lineColor: const Color(0xFFF6D695).withValues(alpha: 0.65),
+                      numberColor: const Color(0xFFF6D695).withValues(alpha: 0.95),
                       textColor: Colors.white,
                       onHouseTap: _d9
                           ? null

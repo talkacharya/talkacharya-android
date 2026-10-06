@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/money.dart';
 import '../../../../core/util/time_format.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
-import '../../../../shared/widgets/pressable.dart';
 import '../../data/models/consultation.dart';
 import '../../data/models/conversation.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Icon + label + hue for a consultation channel (`chat|call|video`).
 ({IconData icon, String label, AstroHue hue}) channelStyle(
   BuildContext context,

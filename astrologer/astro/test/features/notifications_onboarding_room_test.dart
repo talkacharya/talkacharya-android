@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:astro/src/core/l10n/l10n.dart';
 import 'package:astro/src/core/realtime/realtime_client.dart';
-import 'package:astro/src/core/theme/astro_palette.dart';
 import 'package:astro/src/features/consultations/data/consultation_api.dart';
 import 'package:astro/src/features/consultations/data/models/consultation.dart';
 import 'package:astro/src/features/consultations/data/models/conversation.dart';
@@ -14,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class _MockApi extends Mock implements ConsultationApi {}
 
 class _MockRealtime extends Mock implements RealtimeClient {}

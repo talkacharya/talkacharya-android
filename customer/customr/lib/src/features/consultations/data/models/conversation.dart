@@ -13,6 +13,11 @@ class Conversation {
     this.unread = 0,
     this.window = const SendingWindow(),
     this.lastConsultationId,
+    this.pendingConsultationId,
+    this.muted = false,
+    this.archived = false,
+    this.blockedByMe = false,
+    this.blockedByThem = false,
   });
 
   final String id;
@@ -28,6 +33,22 @@ class Conversation {
   /// one is gone.
   final String? lastConsultationId;
 
+  /// A request in this thread nobody has answered yet — a chat waiting to be
+  /// accepted, a call still ringing. The window only knows about sessions
+  /// that can take messages, so without this a room opened on a ringing call
+  /// showed the last *ended* chat instead.
+  final String? pendingConsultationId;
+
+  /// This user's own settings for the thread. Muted: no push. Archived: listed
+  /// under "Archived". Blocked by me: I blocked the other side here, and can
+  /// undo it. Blocked by them: the other side did — nothing can be written.
+  final bool muted;
+  final bool archived;
+  final bool blockedByMe;
+  final bool blockedByThem;
+
+  bool get blocked => blockedByMe || blockedByThem;
+
   factory Conversation.fromMap(Map<String, dynamic> j) {
     final peer = (j['peer'] as Map?)?.cast<String, dynamic>() ?? const {};
     final last = (j['last_message'] as Map?)?.cast<String, dynamic>();
@@ -42,6 +63,11 @@ class Conversation {
         (j['window'] as Map?)?.cast<String, dynamic>() ?? const {},
       ),
       lastConsultationId: j['last_consultation'] as String?,
+      pendingConsultationId: j['pending_consultation'] as String?,
+      muted: j['muted'] == true,
+      archived: j['archived'] == true,
+      blockedByMe: j['blocked_by_me'] == true,
+      blockedByThem: j['blocked_by_them'] == true,
     );
   }
 
@@ -101,4 +127,7 @@ class SendingWindow {
   bool get isLive => reason == 'consultation';
   bool get isFollowUp => reason == 'follow_up';
   bool get isClosed => reason == 'closed';
+
+  /// Either side blocked the other; nothing can be written until it is undone.
+  bool get isBlocked => reason == 'blocked';
 }

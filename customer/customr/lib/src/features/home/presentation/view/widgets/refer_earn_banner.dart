@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../../../core/theme/astro_palette.dart';
 import '../../../../matchmaking/presentation/view/widgets/match_widgets.dart';
-import '../../../../../shared/widgets/pressable.dart';
 import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Eye-catching refer-and-earn banner with gradient background and animated
 /// floating gift icon. Uses the [ReferralOverview] from [HomeCubit] state.
 class ReferEarnBanner extends StatelessWidget {

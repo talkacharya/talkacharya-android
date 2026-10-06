@@ -9,10 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/api_error_l10n.dart';
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/money.dart';
-import '../../../../shared/widgets/pressable.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../../wallet/presentation/cubit/wallet_cubit.dart';
 import '../../../wallet/presentation/view/recharge_sheet.dart';
 import '../../data/gifting_repository.dart';
@@ -21,6 +18,7 @@ import '../cubit/send_gift_cubit.dart';
 import '../widgets/gift_art.dart';
 import '../../../../core/utils/haptic_service.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Opens the gift picker for [target]. Resolves with the last gift sent, or
 /// `null` if the sheet was dismissed without sending.
 ///

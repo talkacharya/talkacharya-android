@@ -4,8 +4,11 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simple_pip_mode/pip_widget.dart';
+import 'package:simple_pip_mode/simple_pip.dart';
 
 import '../engine/call_controller.dart';
+import '../engine/call_telecom.dart';
 import '../ports/call_ports.dart';
 import '../models/call_state.dart';
 import 'call_status.dart';
@@ -45,6 +48,10 @@ class CallStrings {
     this.minimize = 'Minimize',
     this.tapToReturn = 'Tap to return to call',
     this.waiting = 'Waiting…',
+    this.audio = 'Audio',
+    this.earpiece = 'Phone',
+    this.wiredHeadset = 'Headset',
+    this.bluetoothHeadset = 'Bluetooth',
   });
 
   final String calling;
@@ -95,6 +102,12 @@ class CallStrings {
 
   /// Minimized status before the call exists (still waiting to be accepted).
   final String waiting;
+
+  /// The audio button once a headset is connected, and the picker it opens.
+  final String audio;
+  final String earpiece;
+  final String wiredHeadset;
+  final String bluetoothHeadset;
 }
 
 /// Full-screen call UI driven by the nearest [CallController] — the voice layout
@@ -108,7 +121,7 @@ class CallStrings {
 /// With [onMinimize] the header gets a collapse button and the back gesture
 /// minimizes instead of asking to end — the call carries on in the app-wide
 /// [CallOverlayHost] (a bar for voice, a floating window for video).
-class CallScreen extends StatelessWidget {
+class CallScreen extends StatefulWidget {
   const CallScreen({
     required this.peerName,
     this.peerAvatarUrl,
@@ -139,96 +152,159 @@ class CallScreen extends StatelessWidget {
   final VoidCallback? onEnded;
   final VoidCallback? onMinimize;
   final bool confirmEnd;
+  @override
+  State<CallScreen> createState() => _CallScreenState();
+}
 
+class _CallScreenState extends State<CallScreen> {
   static const _bgTop = Color(0xFF140B2E);
   static const _bgBottom = Color(0xFF2A1454);
 
+  final _simplePip = SimplePip();
+
+  @override
+  void initState() {
+    super.initState();
+    _simplePip.setAutoPipMode();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final halo = accent ?? const Color(0xFFFFB347);
+    final halo = widget.accent ?? const Color(0xFFFFB347);
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: BlocConsumer<CallController, CallState>(
         listenWhen: (a, b) => a.phase != b.phase && b.phase == CallPhase.ended,
-        listener: (_, _) => onEnded?.call(),
+        listener: (_, _) => widget.onEnded?.call(),
+        // Rebuild the *layout* (voice vs. video, enabled controls) only when
+        // fields that affect it change. Quality ticks, peer quality changes, and
+        // timer updates are handled inside their own sub-widgets.
+        buildWhen: (a, b) =>
+            a.phase != b.phase ||
+            a.video != b.video ||
+            a.muted != b.muted ||
+            a.cameraOn != b.cameraOn ||
+            a.frontCamera != b.frontCamera ||
+            a.peerCameraOn != b.peerCameraOn ||
+            a.speakerOn != b.speakerOn ||
+            a.bluetooth != b.bluetooth ||
+            a.audioRoutes != b.audioRoutes ||
+            a.showRemoteVideo != b.showRemoteVideo ||
+            a.showLocalVideo != b.showLocalVideo ||
+            a.videoPausedForNetwork != b.videoPausedForNetwork ||
+            a.weakSide != b.weakSide ||
+            a.peerName != b.peerName,
         builder: (context, state) {
           final controller = context.read<CallController>();
-          final minimize = onMinimize;
+          final minimize = widget.onMinimize;
           final canMinimize =
               minimize != null && state.phase != CallPhase.ended;
-          return PopScope(
-            canPop: !state.phase.isLive && !canMinimize,
-            onPopInvokedWithResult: (didPop, _) async {
-              if (didPop) return;
-              if (canMinimize) {
-                minimize();
-                return;
-              }
-              if (!state.phase.isLive) return;
-              if (await _confirmEnd(context)) await controller.hangUp();
-            },
-            child: Scaffold(
-              backgroundColor: _bgTop,
-              body: DecoratedBox(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [_bgTop, _bgBottom],
+          
+          return PipWidget(
+            pipBuilder: (context) {
+              if (!state.video) {
+                return const ColoredBox(
+                  color: _bgTop,
+                  child: Center(
+                    child: Icon(Icons.phone, color: Colors.white, size: 48),
                   ),
+                );
+              }
+              return Scaffold(
+                backgroundColor: _bgTop,
+                body: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    if (state.showRemoteVideo)
+                      CallVideoView(
+                        stream: state.remoteVideo,
+                        mirror: false,
+                        cover: true,
+                      )
+                    else
+                      const ColoredBox(color: _bgTop),
+                  ],
                 ),
-                child: SafeArea(
-                  child: switch (state.phase) {
-                    CallPhase.permissionDenied => _PermissionView(
-                      strings: strings,
-                      blocked: state.permanentlyDenied,
-                      onSettings: controller.openSettings,
-                      onRetry: controller.retry,
+              );
+            },
+            builder: (context) => PopScope(
+              canPop: !state.phase.isLive && !canMinimize,
+              onPopInvokedWithResult: (didPop, _) async {
+                if (didPop) return;
+                if (canMinimize) {
+                  minimize();
+                  return;
+                }
+                if (!state.phase.isLive) return;
+                if (await _confirmEnd(context)) await controller.hangUp();
+              },
+              child: Scaffold(
+                backgroundColor: _bgTop,
+                body: DecoratedBox(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [_bgTop, _bgBottom],
                     ),
-                    CallPhase.failed => _FailedView(
-                      strings: strings,
-                      message: state.error,
-                      onRetry: controller.retry,
-                    ),
-                    _ when state.video => _VideoView(
-                      state: state,
-                      peerName: state.peerName.isNotEmpty
-                          ? state.peerName
-                          : peerName,
-                      avatarUrl: peerAvatarUrl,
-                      strings: strings,
-                      statusOverride: statusOverride,
-                      top: top,
-                      overlay: overlay,
-                      halo: halo,
-                      onMute: controller.toggleMute,
-                      onCamera: controller.toggleCamera,
-                      onFlip: controller.switchCamera,
-                      onEnd: () => _end(context, state, controller),
-                      onMinimize: canMinimize ? minimize : null,
-                    ),
-                    _ => _LiveView(
-                      state: state,
-                      peerName: state.peerName.isNotEmpty
-                          ? state.peerName
-                          : peerName,
-                      avatarUrl: peerAvatarUrl,
-                      strings: strings,
-                      statusOverride: statusOverride,
-                      top: top,
-                      overlay: overlay,
-                      halo: halo,
-                      onMute: controller.toggleMute,
-                      onSpeaker: controller.toggleSpeaker,
+                  ),
+                  child: SafeArea(
+                    child: switch (state.phase) {
+                      CallPhase.permissionDenied => _PermissionView(
+                        strings: widget.strings,
+                        blocked: state.permanentlyDenied,
+                        onSettings: controller.openSettings,
+                        onRetry: controller.retry,
+                      ),
+                      CallPhase.failed => _FailedView(
+                        strings: widget.strings,
+                        message: state.error,
+                        onRetry: controller.retry,
+                      ),
+                      _ when state.video => _VideoView(
+                        state: state,
+                        peerName: state.peerName.isNotEmpty
+                            ? state.peerName
+                            : widget.peerName,
+                        avatarUrl: widget.peerAvatarUrl,
+                        strings: widget.strings,
+                        statusOverride: widget.statusOverride,
+                        top: widget.top,
+                        overlay: widget.overlay,
+                        halo: halo,
+                        onMute: controller.toggleMute,
+                        onCamera: controller.toggleCamera,
+                        onFlip: controller.switchCamera,
+                        onEnd: () => _end(context, state, controller),
+                        onMinimize: canMinimize ? minimize : null,
+                      ),
+                      _ => _LiveView(
+                        state: state,
+                        peerName: state.peerName.isNotEmpty
+                            ? state.peerName
+                            : widget.peerName,
+                        avatarUrl: widget.peerAvatarUrl,
+                        strings: widget.strings,
+                        statusOverride: widget.statusOverride,
+                        top: widget.top,
+                        overlay: widget.overlay,
+                        halo: halo,
+                        onMute: controller.toggleMute,
+                      // A toggle while the choice is phone-or-speaker; a
+                      // picker once a headset makes it a real choice.
+                      onSpeaker: () => state.canPickAudioRoute
+                          ? _pickAudioRoute(context, state, controller, widget.strings)
+                          : controller.toggleSpeaker(),
                       onEnd: () => _end(context, state, controller),
                       onMinimize: canMinimize ? minimize : null,
                     ),
                   },
                 ),
               ),
-            ),
-          );
-        },
+            ), // closes Scaffold
+          ), // closes PopScope
+        ); // closes PipWidget
+      },
       ),
     );
   }
@@ -238,7 +314,7 @@ class CallScreen extends StatelessWidget {
     CallState state,
     CallController controller,
   ) async {
-    if (!confirmEnd ||
+    if (!widget.confirmEnd ||
         state.phase != CallPhase.connected ||
         await _confirmEnd(context)) {
       await controller.hangUp();
@@ -249,17 +325,17 @@ class CallScreen extends StatelessWidget {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(strings.endConfirmTitle),
-        content: Text(strings.endConfirmBody),
+        title: Text(widget.strings.endConfirmTitle),
+        content: Text(widget.strings.endConfirmBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(strings.endConfirmNo),
+            child: Text(widget.strings.endConfirmNo),
           ),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: _endRed),
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(strings.endConfirmYes),
+            child: Text(widget.strings.endConfirmYes),
           ),
         ],
       ),
@@ -417,11 +493,17 @@ class _LiveView extends StatelessWidget {
                 onTap: onEnd,
               ),
               _RoundButton(
-                icon: state.speakerOn
-                    ? Icons.volume_up_rounded
-                    : Icons.volume_down_rounded,
-                label: strings.speaker,
-                active: state.speakerOn,
+                icon: switch (state.audioRoute) {
+                  CallAudioOutput.bluetooth => Icons.bluetooth_audio_rounded,
+                  CallAudioOutput.wired => Icons.headset_rounded,
+                  CallAudioOutput.speaker => Icons.volume_up_rounded,
+                  CallAudioOutput.earpiece =>
+                    state.canPickAudioRoute
+                        ? Icons.phone_in_talk_rounded
+                        : Icons.volume_down_rounded,
+                },
+                label: state.canPickAudioRoute ? strings.audio : strings.speaker,
+                active: state.speakerOn || state.bluetooth,
                 onTap: onSpeaker,
               ),
             ],
@@ -494,7 +576,12 @@ class _VideoViewState extends State<_VideoView> {
     if (widget.state.phase != CallPhase.connected && !_chromeVisible) {
       setState(() => _chromeVisible = true);
     }
-    _scheduleHide();
+    // Only restart the hide timer when the phase changes — not on every quality
+    // tick. Quality emits happen every ~2 s; restarting the timer each time
+    // effectively keeps chrome visible forever during a connected call.
+    if (old.state.phase != widget.state.phase) {
+      _scheduleHide();
+    }
   }
 
   void _scheduleHide() {
@@ -549,27 +636,35 @@ class _VideoViewState extends State<_VideoView> {
           if (s.showRemoteVideo)
             CallVideoView(stream: s.remoteVideo)
           else
-            Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _Avatar(
-                    name: widget.peerName,
-                    url: widget.avatarUrl,
-                    halo: s.phase == CallPhase.reconnecting
-                        ? const Color(0xFFFFC53D)
-                        : widget.halo,
-                    pulsing: s.phase != CallPhase.connected,
+            Positioned.fill(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: _chromeVisible ? (widget.top != null ? 180 : 120) : 48,
+                  bottom: _chromeVisible ? 160 : 24,
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _Avatar(
+                        name: widget.peerName,
+                        url: widget.avatarUrl,
+                        halo: s.phase == CallPhase.reconnecting
+                            ? const Color(0xFFFFC53D)
+                            : widget.halo,
+                        pulsing: s.phase != CallPhase.connected,
+                      ),
+                      if (s.phase == CallPhase.connected && !s.peerCameraOn) ...[
+                        const SizedBox(height: 18),
+                        _Pill(
+                          icon: Icons.videocam_off_rounded,
+                          text: strings.peerCameraOff,
+                          color: Colors.white70,
+                        ),
+                      ],
+                    ],
                   ),
-                  if (s.phase == CallPhase.connected && !s.peerCameraOn) ...[
-                    const SizedBox(height: 18),
-                    _Pill(
-                      icon: Icons.videocam_off_rounded,
-                      text: strings.peerCameraOff,
-                      color: Colors.white70,
-                    ),
-                  ],
-                ],
+                ),
               ),
             ),
 
@@ -580,9 +675,9 @@ class _VideoViewState extends State<_VideoView> {
               child: Padding(
                 padding: EdgeInsets.fromLTRB(
                   12,
-                  _chromeVisible ? 96 : 24,
+                  _chromeVisible ? (widget.top != null ? 185 : 130) : 24,
                   12,
-                  _chromeVisible ? 160 : 24,
+                  _chromeVisible ? 165 : 24,
                 ),
                 child: GestureDetector(
                   onPanEnd: (d) => _moveSelfView(d, MediaQuery.sizeOf(context)),
@@ -597,9 +692,12 @@ class _VideoViewState extends State<_VideoView> {
             ),
 
           // --- chrome -------------------------------------------------------
-          AnimatedOpacity(
-            opacity: _chromeVisible ? 1 : 0,
-            duration: const Duration(milliseconds: 220),
+          // AnimatedBuilder+FadeTransition instead of AnimatedOpacity:
+          // AnimatedOpacity always creates an offscreen compositing layer for
+          // the ENTIRE chrome column. FadeTransition is compositor-driven
+          // and only composites when the animation is actually running.
+          _ChromeLayer(
+            visible: _chromeVisible,
             child: IgnorePointer(
               ignoring: !_chromeVisible,
               child: Column(
@@ -715,6 +813,51 @@ class _VideoViewState extends State<_VideoView> {
       ),
     );
   }
+}
+
+/// Replaces [AnimatedOpacity] on the video-call chrome panel.
+///
+/// [AnimatedOpacity] creates a permanent offscreen compositing layer for its
+/// entire subtree (the chrome column) even while the opacity is 1 and nothing
+/// is changing. [_ChromeLayer] uses [FadeTransition] which only composites
+/// during the actual 220 ms fade — the rest of the time there is no extra GPU
+/// buffer, freeing render resources for the peer's live video.
+class _ChromeLayer extends StatefulWidget {
+  const _ChromeLayer({required this.visible, required this.child});
+  final bool visible;
+  final Widget child;
+
+  @override
+  State<_ChromeLayer> createState() => _ChromeLayerState();
+}
+
+class _ChromeLayerState extends State<_ChromeLayer>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 220),
+    value: widget.visible ? 1.0 : 0.0,
+  );
+
+  @override
+  void didUpdateWidget(_ChromeLayer old) {
+    super.didUpdateWidget(old);
+    if (old.visible != widget.visible) {
+      widget.visible ? _c.forward() : _c.reverse();
+    }
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => FadeTransition(
+    opacity: _c,
+    child: widget.child,
+  );
 }
 
 /// Our own picture: a rounded tile, mirrored for the front camera, replaced by a
@@ -918,61 +1061,66 @@ class _AvatarState extends State<_Avatar> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     const size = 132.0;
-    return SizedBox(
-      width: size * 1.9,
-      height: size * 1.9,
-      child: AnimatedBuilder(
-        animation: _c,
-        builder: (context, child) => Stack(
-          alignment: Alignment.center,
-          children: [
-            if (widget.pulsing)
-              for (var i = 0; i < 3; i++)
-                Builder(
-                  builder: (_) {
-                    final t = (_c.value + i / 3) % 1.0;
-                    return Container(
-                      width: size * (1 + 0.9 * t),
-                      height: size * (1 + 0.9 * t),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: widget.halo.withValues(alpha: 0.22 * (1 - t)),
-                      ),
-                    );
-                  },
-                ),
-            child!,
-          ],
-        ),
-        child: Container(
-          width: size,
-          height: size,
-          padding: const EdgeInsets.all(3),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: SweepGradient(
-              colors: [widget.halo, const Color(0xFFE8364F), widget.halo],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: widget.halo.withValues(alpha: 0.45),
-                blurRadius: 30,
-              ),
+    // RepaintBoundary: the pulsing rings animate at 60 fps during ringing and
+    // reconnecting. Without a boundary that repaint propagates up through the
+    // entire voice-call scaffold on every frame.
+    return RepaintBoundary(
+      child: SizedBox(
+        width: size * 1.9,
+        height: size * 1.9,
+        child: AnimatedBuilder(
+          animation: _c,
+          builder: (context, child) => Stack(
+            alignment: Alignment.center,
+            children: [
+              if (widget.pulsing)
+                for (var i = 0; i < 3; i++)
+                  Builder(
+                    builder: (_) {
+                      final t = (_c.value + i / 3) % 1.0;
+                      return Container(
+                        width: size * (1 + 0.9 * t),
+                        height: size * (1 + 0.9 * t),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: widget.halo.withValues(alpha: 0.22 * (1 - t)),
+                        ),
+                      );
+                    },
+                  ),
+              child!,
             ],
           ),
-          child: ClipOval(
-            child: Container(
-              color: const Color(0xFF23133F),
-              alignment: Alignment.center,
-              child: widget.url != null && widget.url!.isNotEmpty
-                  ? Image.network(
-                      widget.url!,
-                      width: size,
-                      height: size,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => _initialsText(),
-                    )
-                  : _initialsText(),
+          child: Container(
+            width: size,
+            height: size,
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: SweepGradient(
+                colors: [widget.halo, const Color(0xFFE8364F), widget.halo],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: widget.halo.withValues(alpha: 0.45),
+                  blurRadius: 30,
+                ),
+              ],
+            ),
+            child: ClipOval(
+              child: Container(
+                color: const Color(0xFF23133F),
+                alignment: Alignment.center,
+                child: widget.url != null && widget.url!.isNotEmpty
+                    ? Image.network(
+                        widget.url!,
+                        width: size,
+                        height: size,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, _, _) => _initialsText(),
+                      )
+                    : _initialsText(),
+              ),
             ),
           ),
         ),
@@ -1018,13 +1166,17 @@ class _RoundButton extends StatelessWidget {
     final fg = background != null
         ? Colors.white
         : (active ? const Color(0xFF23133F) : Colors.white);
+    // AnimatedOpacity instead of plain Opacity: plain Opacity always creates
+    // a compositing layer even when the value is 1.0, costing GPU memory.
+    // AnimatedOpacity only composites when it is actually animating.
     return Semantics(
       button: true,
       enabled: enabled,
       toggled: background == null ? active : null,
       label: label,
-      child: Opacity(
+      child: AnimatedOpacity(
         opacity: enabled ? 1 : 0.45,
+        duration: const Duration(milliseconds: 150),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -1233,4 +1385,68 @@ class _MinimizeButton extends StatelessWidget {
       backgroundColor: Colors.white.withValues(alpha: 0.12),
     ),
   );
+}
+
+/// Earpiece, speaker, wired or Bluetooth headset — whichever Telecom says are
+/// there, with the current one ticked.
+Future<void> _pickAudioRoute(
+  BuildContext context,
+  CallState state,
+  CallController controller,
+  CallStrings strings,
+) async {
+  const order = [
+    CallAudioOutput.bluetooth,
+    CallAudioOutput.wired,
+    CallAudioOutput.earpiece,
+    CallAudioOutput.speaker,
+  ];
+  final options = [
+    for (final o in order)
+      if (state.audioRoutes.contains(o)) o,
+  ];
+  final picked = await showModalBottomSheet<CallAudioOutput>(
+    context: context,
+    showDragHandle: true,
+    builder: (sheet) => SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                strings.audio,
+                style: Theme.of(sheet).textTheme.titleMedium,
+              ),
+            ),
+          ),
+          for (final o in options)
+            ListTile(
+              leading: Icon(switch (o) {
+                CallAudioOutput.bluetooth => Icons.bluetooth_audio_rounded,
+                CallAudioOutput.wired => Icons.headset_rounded,
+                CallAudioOutput.speaker => Icons.volume_up_rounded,
+                CallAudioOutput.earpiece => Icons.phone_in_talk_rounded,
+              }),
+              title: Text(switch (o) {
+                CallAudioOutput.bluetooth => strings.bluetoothHeadset,
+                CallAudioOutput.wired => strings.wiredHeadset,
+                CallAudioOutput.speaker => strings.speaker,
+                CallAudioOutput.earpiece => strings.earpiece,
+              }),
+              trailing: o == state.audioRoute
+                  ? const Icon(Icons.check_rounded)
+                  : null,
+              onTap: () => Navigator.pop(sheet, o),
+            ),
+          const SizedBox(height: 8),
+        ],
+      ),
+    ),
+  );
+  if (picked != null && picked != state.audioRoute) {
+    await controller.selectAudioRoute(picked);
+  }
 }

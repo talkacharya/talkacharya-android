@@ -6,17 +6,12 @@ import '../../../../core/deeplink/deep_link_parser.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/time_format.dart';
-import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
-import '../../../../shared/widgets/pressable.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../data/models/app_notification.dart';
 import '../bloc/notifications_cubit.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Icon + hue for a notification, inferred from where it links to (the inbox
 /// payload carries no type).
 ({IconData icon, AstroHue hue}) notificationStyle(String deeplink) {

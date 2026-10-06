@@ -3,12 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/async_value.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/pressable.dart';
 import '../../../../shared/widgets/score_ring.dart';
 import '../../../kundali/presentation/kundali_terms.dart';
 import '../../../consultations/presentation/view/widgets/share_with_astrologer.dart';
@@ -16,6 +11,7 @@ import '../../data/models/match_result.dart';
 import '../cubit/matchmaking_cubit.dart';
 import 'widgets/match_widgets.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class MatchResultPage extends StatefulWidget {
   const MatchResultPage({super.key});
 

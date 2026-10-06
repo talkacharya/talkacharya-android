@@ -6,18 +6,13 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../data/models/cart.dart';
 import '../../data/models/product.dart';
 import '../cubit/cart_cubit.dart';
 import '../widgets/order_widgets.dart';
 import '../widgets/store_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// `/store/cart` — items grouped by seller, quantity steppers, proceed to checkout.
 class CartPage extends StatefulWidget {
   const CartPage({super.key});

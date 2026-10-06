@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../core/l10n/l10n.dart';
-import '../../../../../core/theme/brand_colors.dart';
 import '../../../../../core/util/money.dart';
 import '../../../data/models/wallet_transaction.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class TransactionTile extends StatelessWidget {
   const TransactionTile({required this.txn, this.onTap, super.key});
 

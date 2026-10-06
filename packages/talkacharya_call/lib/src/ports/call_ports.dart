@@ -13,7 +13,12 @@ abstract class CallBackend {
   /// The heartbeat carries the last transport sample with it, so the server
   /// ends up with a picture of how the call actually went for nothing: no
   /// extra request, and no need to ask the customer what "bad" meant.
-  Future<void> reportState(
+  ///
+  /// Returns the status body from the server (`{"status": ...}`), or null on
+  /// network error. The controller checks for `status == "ended"` so it can
+  /// tear itself down when the consultation is closed server-side even without
+  /// a Centrifugo push (e.g. balance ran out while ICE was reconnecting).
+  Future<Map<String, dynamic>?> reportState(
     CallNetState state, {
     bool? relayed,
     int? quality,

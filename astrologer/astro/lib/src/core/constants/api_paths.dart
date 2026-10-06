@@ -41,6 +41,15 @@ class ApiPaths {
   static const astroAvailability = '/astro/availability';
   static const astroHeartbeat = '/astro/availability/heartbeat';
   static const astroOffline = '/astro/availability/offline';
+  static const astroBreak = '/astro/availability/break';
+
+  // waitlist
+  static const astroQueue = '/astro/queue';
+  static String astroQueueEntry(String id) => '/astro/queue/$id';
+
+  // remedies suggested from the store
+  static const astroStoreRecommendations = '/astro/store/recommendations';
+  static const astroStoreProducts = '/astro/store/products';
   static const astroWorkingHours = '/astro/working-hours';
 
   // consultations (astrologer-scoped)
@@ -83,6 +92,10 @@ class ApiPaths {
 
   /// The chats list: one thread per peer.
   static const conversations = '/conversations';
+  /// This user's mute / archive / block settings for a thread.
+  static String conversationPreferences(String id) =>
+      '/conversations/$id/preferences';
+
   static String conversation(String id) => '/conversations/$id';
 
   // Everything inside a thread is keyed on the thread, not on the session
@@ -120,6 +133,8 @@ class ApiPaths {
 
   // analytics / reviews / gifts
   static const astroAnalytics = '/astro/analytics/dashboard';
+  static const astroPerformance = '/astro/analytics/performance';
+  static const astroLapsedCustomers = '/astro/analytics/lapsed-customers';
   static const astroReviews = '/astro/reviews';
   static String astroReviewReply(String id) => '/astro/reviews/$id/reply';
   static const astroGiftsReceived = '/astro/gifts/received';

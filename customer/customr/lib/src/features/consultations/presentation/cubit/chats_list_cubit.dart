@@ -49,6 +49,50 @@ class ChatsListCubit extends Cubit<ChatsListState> {
     }
   }
 
+  /// Mute or archive a thread from the list. Returns the error to show, if any.
+  Future<String?> setPreferences(
+    String threadId, {
+    bool? muted,
+    bool? archived,
+  }) async {
+    try {
+      final updated = await _repo.setPreferences(
+        threadId,
+        muted: muted,
+        archived: archived,
+      );
+      // Keep the row's place and its preview; only the settings changed.
+      emit(
+        state.copyWith(
+          conversations: [
+            for (final c in state.conversations)
+              c.id == threadId ? _withSettings(c, updated) : c,
+          ],
+        ),
+      );
+      return null;
+    } catch (e) {
+      return friendlyError(e);
+    }
+  }
+
+  static Conversation _withSettings(Conversation c, Conversation u) =>
+      Conversation(
+        id: c.id,
+        astrologerId: c.astrologerId,
+        peerName: c.peerName,
+        peerAvatar: c.peerAvatar,
+        lastMessage: c.lastMessage,
+        unread: c.unread,
+        window: u.window,
+        lastConsultationId: c.lastConsultationId,
+        pendingConsultationId: c.pendingConsultationId,
+        muted: u.muted,
+        archived: u.archived,
+        blockedByMe: u.blockedByMe,
+        blockedByThem: u.blockedByThem,
+      );
+
   void startPolling() {
     _poll?.cancel();
     _poll = Timer.periodic(const Duration(seconds: 20), (_) => load());

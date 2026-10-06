@@ -6,16 +6,13 @@ import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/money.dart';
 import '../../../../core/util/time_format.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
 import '../../data/earnings_api.dart';
 import '../../data/earnings_models.dart';
 import '../widgets/earnings_widgets.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class PayoutDetailPage extends StatefulWidget {
   const PayoutDetailPage({required this.payoutId, super.key});
   final String payoutId;

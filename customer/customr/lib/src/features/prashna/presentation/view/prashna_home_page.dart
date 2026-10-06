@@ -6,11 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../shared/widgets/error_view.dart';
 import '../cubit/prashna_cubit.dart';
 import 'prashna_routes.dart';
 import '../../../../core/l10n/api_error_l10n.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class PrashnaHomePage extends StatefulWidget {
   const PrashnaHomePage({super.key});
 

@@ -6,19 +6,13 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/l10n/api_error_l10n.dart';
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
-import '../../../../shared/widgets/pressable.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../../birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
 import '../../../kundali/presentation/kundali_terms.dart';
 import '../../data/models/day_panchang.dart';
 import '../cubit/panchang_cubit.dart';
 import 'place_picker_sheet.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Full daily panchang (`/panchang`, `?date=YYYY-MM-DD`) for a chosen city.
 class PanchangPage extends StatelessWidget {
   const PanchangPage({super.key});

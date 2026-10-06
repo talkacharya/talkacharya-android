@@ -7,9 +7,9 @@ import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/l10n/l10n.dart';
 import '../../../../../core/router/routes.dart';
 import '../../../../../core/theme/app_theme.dart';
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
 import 'dash_shared.dart';
+
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 /// One profile-completeness check and where to fix it.
 typedef ProfileTip = ({bool done, String route});

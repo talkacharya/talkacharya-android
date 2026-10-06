@@ -2,12 +2,10 @@ import 'package:astro_kundali/astro_kundali.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
 import '../kundali_terms.dart';
 import 'kundali_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Calm (amber / indigo, never alarm-red) Sade Sati / small-panoti summary.
 /// Falls back to a "sky right now" teaser when neither is active.
 class SadeSatiCard extends StatelessWidget {

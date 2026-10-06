@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/deeplink/deep_link_parser.dart';
-import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/error_view.dart';
 import '../bloc/notifications_cubit.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
 

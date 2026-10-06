@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/async_value.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
 import 'k_kit.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 export 'k_kit.dart';
 
 /// Surface card used across the kundali screens: surface fill, hairline, soft

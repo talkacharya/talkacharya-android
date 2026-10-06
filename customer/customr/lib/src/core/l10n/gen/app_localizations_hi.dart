@@ -6976,7 +6976,8 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get roomClosedHint => 'फ़ॉलो-अप का समय समाप्त।';
+  String get roomClosedHint =>
+      'परामर्श समाप्त। फिर से चैट करने के लिए नया परामर्श शुरू करें।';
 
   @override
   String get roomStartConsultation => 'परामर्श शुरू करें';
@@ -7147,5 +7148,161 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String roomWaitingCountdown(String time) {
     return 'आमतौर पर एक मिनट से कम · $time बचे';
+  }
+
+  @override
+  String get sessionChat => 'चैट';
+
+  @override
+  String get sessionVoice => 'वॉइस कॉल';
+
+  @override
+  String get sessionVideo => 'वीडियो कॉल';
+
+  @override
+  String sysRequested(String session) {
+    return '$session का अनुरोध भेजा गया';
+  }
+
+  @override
+  String sysAccepted(String name) {
+    return '$name ने कॉल उठाई · कनेक्ट हो रहा है';
+  }
+
+  @override
+  String sysStarted(String name, String session) {
+    return '$name जुड़ गए · $session शुरू हुई';
+  }
+
+  @override
+  String sysEnded(String session, int minutes, String amount) {
+    return '$session समाप्त · $minutes मिनट · $amount';
+  }
+
+  @override
+  String sysEndedPlain(String session) {
+    return '$session समाप्त';
+  }
+
+  @override
+  String sysRejected(String name) {
+    return '$name यह अनुरोध नहीं ले सके';
+  }
+
+  @override
+  String get sysCancelled => 'अनुरोध रद्द किया गया';
+
+  @override
+  String sysExpired(String name) {
+    return '$name ने समय पर जवाब नहीं दिया';
+  }
+
+  @override
+  String sysNoShow(String session) {
+    return '$session कनेक्ट नहीं हुई';
+  }
+
+  @override
+  String get sysEndingSoon => 'बैलेंस के कुछ ही मिनट बचे हैं';
+
+  @override
+  String roomLiveNow(String session) {
+    return '$session चल रही है';
+  }
+
+  @override
+  String roomStarting(String name) {
+    return '$name को आपका अनुरोध भेजा जा रहा है…';
+  }
+
+  @override
+  String roomStartNeedMoney(String amount) {
+    return 'शुरू करने के लिए कम से कम $amount चाहिए। पैसे जोड़ें, अनुरोध तुरंत भेज दिया जाएगा।';
+  }
+
+  @override
+  String roomStartBusy(String name) {
+    return '$name अभी किसी और के साथ हैं। कुछ मिनट बाद फिर कोशिश करें।';
+  }
+
+  @override
+  String roomStartOffline(String name) {
+    return '$name अभी ऑफ़लाइन हैं।';
+  }
+
+  @override
+  String roomStartHint(String name, String rate) {
+    return '$name से फिर चैट करें · $rate';
+  }
+
+  @override
+  String get callAudio => 'ऑडियो';
+
+  @override
+  String get callEarpiece => 'फ़ोन';
+
+  @override
+  String get callWiredHeadset => 'हेडसेट';
+
+  @override
+  String get callBluetooth => 'ब्लूटूथ';
+
+  @override
+  String get chatMute => 'सूचनाएँ बंद करें';
+
+  @override
+  String get chatUnmute => 'सूचनाएँ चालू करें';
+
+  @override
+  String get chatArchive => 'चैट संग्रहित करें';
+
+  @override
+  String get chatUnarchive => 'संग्रह से निकालें';
+
+  @override
+  String get chatArchivedTitle => 'संग्रहित';
+
+  @override
+  String chatArchivedRow(int count) {
+    return 'संग्रहित ($count)';
+  }
+
+  @override
+  String chatBlock(String name) {
+    return '$name को ब्लॉक करें';
+  }
+
+  @override
+  String chatUnblock(String name) {
+    return '$name को अनब्लॉक करें';
+  }
+
+  @override
+  String chatBlockConfirmTitle(String name) {
+    return '$name को ब्लॉक करें?';
+  }
+
+  @override
+  String get chatBlockConfirmYes => 'ब्लॉक करें';
+
+  @override
+  String chatBlockedByMe(String name) {
+    return 'आपने $name को ब्लॉक किया है।';
+  }
+
+  @override
+  String get chatBlockedByThem => 'इस बातचीत में संदेश बंद हैं।';
+
+  @override
+  String get chatMoreOptions => 'और विकल्प';
+
+  @override
+  String chatBlockConfirmBody(String name) {
+    return 'यहाँ आप दोनों संदेश नहीं भेज पाएँगे, और अनब्लॉक करने तक आप $name से परामर्श बुक नहीं कर पाएँगे।';
+  }
+
+  @override
+  String chatsLastMessageMine(String body) {
+    return 'आप: $body';
   }
 }

@@ -1,0 +1,17 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Self-managed telecom: a consultation is a real call as far as the OS is
+         concerned — cellular calls hold it, Telecom owns the audio route, headset
+         buttons answer and hang up. No dialer role, no user prompt. -->
+    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
+
+    <application>
+        <service
+            android:name="com.talkacharya.call.CallConnectionService"
+            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.telecom.ConnectionService" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>

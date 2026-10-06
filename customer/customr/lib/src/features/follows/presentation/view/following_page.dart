@@ -4,14 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../../astrologers/presentation/view/widgets/astrologer_list_tile.dart';
 import '../cubit/following_list_cubit.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Profile → Following: astrologers the customer follows, newest first.
 class FollowingPage extends StatefulWidget {
   const FollowingPage({super.key});

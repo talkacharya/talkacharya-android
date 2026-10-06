@@ -5,13 +5,10 @@ import 'package:intl/intl.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
-import '../../../../shared/widgets/pressable.dart';
 import '../../data/models/consultation.dart';
 import '../../data/models/consultation_share.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// "12 May 1994 · 07:30 · Mumbai" (or "Birth time not known").
 String sharedPersonLine(BuildContext context, SharedPerson p) {
   final l = context.l10n;

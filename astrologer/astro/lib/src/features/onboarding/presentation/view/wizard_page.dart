@@ -8,9 +8,6 @@ import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../profile/data/profile_api.dart';
 import '../../../profile/data/profile_models.dart';
@@ -20,6 +17,7 @@ import '../cubit/onboarding_cubit.dart';
 import '../widgets/onboarding_steps.dart';
 import '../../../../core/utils/haptic_service.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Guided onboarding: Profile → Expertise → Identity → Bank → Review.
 /// Completion is driven by the backend's `onboarding_gaps`; the wizard opens
 /// on [initialStep] (an [OnboardingStep] name) or the first unfinished step.

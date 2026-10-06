@@ -7,10 +7,10 @@ import 'package:talkacharya_predictions/talkacharya_predictions.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/di/service_locator.dart';
-import '../../../../shared/widgets/error_view.dart';
 import '../../data/predictions_repository.dart';
 import '../cubit/prediction_work_cubit.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class PredictionWorkPage extends StatelessWidget {
   const PredictionWorkPage({required this.id, super.key});
   final String id;

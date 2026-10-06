@@ -18,6 +18,7 @@ sealed class RealtimeEvent {
               '',
           channel: data['channel'] as String? ?? 'chat',
           question: data['question'] as String? ?? '',
+          conversationId: data['conversation']?.toString() ?? '',
         );
       case 'call.ringing':
         return CallRinging(
@@ -70,6 +71,10 @@ sealed class RealtimeEvent {
           giftName: _nested(data, 'gift', 'name'),
           animationKey: data['animation_key'] as String?,
         );
+      case 'queue.updated':
+        return QueueUpdated(
+          waiting: (data['waiting'] as num?)?.toInt() ?? 0,
+        );
       case 'system.reconnect_hint':
         return const ReconnectHint();
       default:
@@ -84,15 +89,26 @@ sealed class RealtimeEvent {
   }
 }
 
+/// The astrologer's waitlist changed: someone joined, left or was called in.
+class QueueUpdated extends RealtimeEvent {
+  const QueueUpdated({required this.waiting});
+  final int waiting;
+}
+
 class ConsultationRequested extends RealtimeEvent {
   const ConsultationRequested({
     required this.consultationId,
     required this.channel,
     required this.question,
+    this.conversationId = '',
   });
   final String consultationId;
   final String channel;
   final String question;
+
+  /// The thread the request was made in. Empty from a server that predates
+  /// sending it — then the request sheet shows, as it always did.
+  final String conversationId;
 }
 
 class CallRinging extends RealtimeEvent {

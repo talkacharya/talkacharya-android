@@ -15,12 +15,14 @@ class SwipeToReply extends StatefulWidget {
     required this.child,
     required this.onReply,
     this.enabled = true,
+    this.reverse = false,
     super.key,
   });
 
   final Widget child;
   final VoidCallback onReply;
   final bool enabled;
+  final bool reverse;
 
   @override
   State<SwipeToReply> createState() => _SwipeToReplyState();
@@ -36,7 +38,8 @@ class _SwipeToReplyState extends State<SwipeToReply>
 
   void _update(DragUpdateDetails d) {
     if (!widget.enabled) return;
-    final next = (_offset + d.delta.dx).clamp(0.0, _maxPull);
+    final dx = widget.reverse ? -d.delta.dx : d.delta.dx;
+    final next = (_offset + dx).clamp(0.0, _maxPull);
     final armed = next >= _trigger;
     if (armed != _armed) {
       // The buzz is the whole affordance: it says "let go now" without asking
@@ -59,7 +62,8 @@ class _SwipeToReplyState extends State<SwipeToReply>
     final scheme = Theme.of(context).colorScheme;
 
     return GestureDetector(
-      behavior: HitTestBehavior.deferToChild,
+      behavior: HitTestBehavior.translucent,
+      onHorizontalDragStart: (_) {},
       onHorizontalDragUpdate: _update,
       onHorizontalDragEnd: _end,
       onHorizontalDragCancel: () {
@@ -67,11 +71,13 @@ class _SwipeToReplyState extends State<SwipeToReply>
         setState(() => _offset = 0);
       },
       child: Stack(
-        alignment: Alignment.centerLeft,
+        alignment: widget.reverse ? Alignment.centerRight : Alignment.centerLeft,
         children: [
           if (_offset > 4)
             Padding(
-              padding: const EdgeInsets.only(left: 12),
+              padding: widget.reverse 
+                  ? const EdgeInsets.only(right: 12) 
+                  : const EdgeInsets.only(left: 12),
               child: Opacity(
                 opacity: (_offset / _trigger).clamp(0.0, 1.0),
                 child: Icon(
@@ -84,7 +90,9 @@ class _SwipeToReplyState extends State<SwipeToReply>
           AnimatedContainer(
             duration: Duration(milliseconds: _offset == 0 ? 160 : 0),
             curve: Curves.easeOut,
-            transform: Matrix4.translationValues(_offset, 0, 0),
+            transform: Matrix4.translationValues(
+              widget.reverse ? -_offset : _offset, 0, 0
+            ),
             child: widget.child,
           ),
         ],

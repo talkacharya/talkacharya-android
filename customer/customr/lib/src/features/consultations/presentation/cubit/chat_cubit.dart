@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../../core/realtime/realtime_client.dart';
+import '../../data/consultation_api.dart';
 import '../../data/consultation_repository.dart';
 import '../../data/models/consultation.dart';
 import '../../data/models/conversation.dart';
@@ -56,12 +57,18 @@ class ChatCubit extends Cubit<ChatState> {
     _startPolling();
   }
 
-  /// The session this room is about: the live one when there is one, else the
-  /// most recent — the wrap-up and the rating still belong to it after it
-  /// ends, and the thread outlives both.
+  /// The session this room is about: the live one when there is one, then
+  /// one still waiting to be answered, else the most recent — the wrap-up and
+  /// the rating still belong to it after it ends, and the thread outlives both.
+  ///
+  /// The pending one matters most on a call: the window does not count a
+  /// ringing call as live, so this used to fall through to the last ended chat
+  /// and the customer watched a finished conversation while the phone rang.
   Future<void> _loadLiveConsultation(Conversation conversation) async {
     final id =
-        conversation.window.consultationId ?? conversation.lastConsultationId;
+        conversation.window.consultationId ??
+        conversation.pendingConsultationId ??
+        conversation.lastConsultationId;
     if (id == null) {
       // A thread nobody has ever consulted in. Rare — threads are created by
       // consultations — and not an error, so nothing is said about it.
@@ -88,6 +95,45 @@ class ChatCubit extends Cubit<ChatState> {
     emit(state.copyWith(consultation: started, clearError: true));
     _startPolling();
   }
+
+  /// Mute or block from the room. Returns the error to show, or null.
+  ///
+  /// Blocking is refused while a session is open (the server says so), which
+  /// comes back here as the message to show.
+  Future<String?> setPreferences({bool? muted, bool? blocked}) async {
+    try {
+      final updated = await _repo.setPreferences(
+        state.threadId ?? consultationId,
+        muted: muted,
+        blocked: blocked,
+      );
+      emit(state.copyWith(conversation: updated));
+      return null;
+    } catch (e) {
+      return friendlyError(e);
+    }
+  }
+
+  /// Ask this astrologer for another session, from inside the thread.
+  ///
+  /// No booking form: the server carries over who the reading is for, and the
+  /// room shows the request being answered where the button was. Throws the
+  /// booking exceptions ([InsufficientBalance], [AstrologerBusy],
+  /// [AstrologerOffline]) for the room to answer in place.
+  Future<Consultation> startAgain({String channel = 'chat'}) async {
+    final started = await _repo.consultAgain(
+      state.threadId ?? consultationId,
+      channel: channel,
+    );
+    adopt(started);
+    return started;
+  }
+
+  /// The session actions aim at: the live one, else the one the room shows.
+  /// Never [consultationId] first — opened from the chats list, that is the
+  /// *thread's* id, and the consultation endpoints answer it with a 404.
+  String get _sessionId =>
+      state.window.consultationId ?? state.consultation?.id ?? consultationId;
 
   /// Move this consultation onto [channel]. The chat ends and a new session
   /// is requested with the same astrologer, in the same thread — so the room
@@ -179,6 +225,8 @@ class ChatCubit extends Cubit<ChatState> {
       case 'consultation.ended':
       case 'consultation.rejected':
       case 'consultation.no_show':
+      case 'consultation.expired':
+      case 'consultation.cancelled':
         _refreshDetail();
     }
   }
@@ -217,9 +265,13 @@ class ChatCubit extends Cubit<ChatState> {
       final conversation = await _repo.conversation(consultationId);
       emit(state.copyWith(conversation: conversation));
       await _loadLiveConsultation(conversation);
-      // Nothing left to poll for once the thread stops taking messages; a new
-      // consultation re-opens the room through its own realtime frame.
-      if (conversation.window.isClosed) _poll?.cancel();
+      // Nothing left to poll for once the thread stops taking messages and
+      // nothing is waiting to be answered; a new consultation re-opens the room
+      // through its own realtime frame.
+      if (conversation.window.isClosed &&
+          conversation.pendingConsultationId == null) {
+        _poll?.cancel();
+      }
     } catch (_) {}
   }
 
@@ -270,7 +322,7 @@ class ChatCubit extends Cubit<ChatState> {
   Future<String?> share({String? birthProfileId, String? matchId}) async {
     try {
       final c = await _repo.share(
-        consultationId,
+        _sessionId,
         birthProfileId: birthProfileId,
         matchId: matchId,
       );
@@ -283,8 +335,10 @@ class ChatCubit extends Cubit<ChatState> {
 
   Future<void> endConsultation() async {
     try {
-      emit(state.copyWith(consultation: await _repo.end(consultationId)));
-      _poll?.cancel();
+      emit(state.copyWith(consultation: await _repo.end(_sessionId)));
+      // The window has moved to the free follow-up, which is what decides
+      // whether the composer stays open — so read it rather than guess.
+      unawaited(_reloadThread());
     } catch (e) {
       emit(state.copyWith(error: friendlyError(e)));
     }
@@ -323,7 +377,11 @@ class ChatCubit extends Cubit<ChatState> {
 
   Future<void> submitReview(int rating, {String text = ''}) async {
     try {
-      await _repo.review(consultationId, rating: rating, text: text);
+      await _repo.review(
+        state.consultation?.id ?? consultationId,
+        rating: rating,
+        text: text,
+      );
       final c = state.consultation;
       if (c != null) {
         emit(state.copyWith(consultation: c.copyWith(rating: rating)));

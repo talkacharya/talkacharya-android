@@ -6,19 +6,16 @@ import '../../../../core/availability/availability_coordinator.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/time_format.dart';
-import '../../../../shared/widgets/cosmic_header.dart';
-import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
 import '../../../consultations/data/models/consultation.dart';
 import '../../../consultations/presentation/widgets/consultation_style.dart';
 import '../../../notifications/presentation/view/notification_bell.dart';
 import '../cubit/requests_cubit.dart';
 import 'widgets/decline_reason_sheet.dart';
 import 'widgets/request_card.dart';
+
+import 'package:talkacharya_ui/talkacharya_ui.dart';
+import '../../../../shared/widgets/cosmic_header.dart';
 
 /// Requests tab: Incoming / Active / History behind gold pill tabs. Backed by
 /// the app-level [RequestsCubit] (which also feeds the nav badge).

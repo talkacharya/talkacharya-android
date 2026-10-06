@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/cosmic.dart';
 import '../../data/models/article.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Label, icon and colour per category — shared by the rail, list and reader.
 extension ArticleCategoryUi on ArticleCategory {
   String label(AppLocalizations l) => switch (this) {

@@ -12,10 +12,6 @@ import '../../../../core/config/config_repository.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../../home/presentation/view/widgets/profile_strength_card.dart';
@@ -23,6 +19,7 @@ import '../../../notifications/presentation/view/notification_bell.dart';
 import '../../data/profile_api.dart';
 import '../widgets/verification_badge.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Profile tab: identity hero (photo, name, verification, stats), profile
 /// strength, and grouped settings.
 class ProfilePage extends StatefulWidget {

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../core/theme/brand_colors.dart';
-import 'cosmic.dart';
-
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Deep-space header for a bottom-nav tab: large title, optional subtitle,
 /// trailing [actions] (render them in [BrandColors.onCosmic]), and an optional
 /// [bottom] slot (search field, [PillTabBar], …). Same visual language as the

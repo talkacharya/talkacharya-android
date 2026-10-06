@@ -6,20 +6,17 @@ import '../../../../core/astro/onboarding_store.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/money.dart';
 import '../../../../core/util/time_format.dart';
-import '../../../../shared/widgets/cosmic_header.dart';
-import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../../home/data/dashboard_models.dart';
 import '../../../notifications/presentation/view/notification_bell.dart';
 import '../../data/earnings_models.dart';
 import '../../data/received_gift.dart';
 import '../cubit/earnings_cubit.dart';
 import '../widgets/earnings_widgets.dart';
+
+import 'package:talkacharya_ui/talkacharya_ui.dart';
+import '../../../../shared/widgets/cosmic_header.dart';
 
 class EarningsPage extends StatelessWidget {
   const EarningsPage({super.key});

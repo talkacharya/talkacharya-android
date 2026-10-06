@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:astro/src/core/l10n/l10n.dart';
 import 'package:astro/src/core/realtime/realtime_client.dart';
 import 'package:astro/src/core/realtime/realtime_event.dart';
-import 'package:astro/src/core/theme/brand_colors.dart';
 import 'package:astro/src/core/util/time_format.dart';
 import 'package:astro/src/features/chats/presentation/cubit/chats_cubit.dart';
 import 'package:astro/src/features/consultations/data/consultation_api.dart';
@@ -17,6 +16,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class _MockApi extends Mock implements ConsultationApi {}
 
 class _MockRealtime extends Mock implements RealtimeClient {}

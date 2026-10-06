@@ -6,7 +6,6 @@ import 'package:customr/src/core/config/remote_config.dart';
 import 'package:customr/src/core/di/service_locator.dart';
 import 'package:customr/src/core/l10n/l10n.dart';
 import 'package:customr/src/core/profile/active_profile_store.dart';
-import 'package:customr/src/core/theme/brand_colors.dart';
 import 'package:customr/src/features/birthprofiles/data/birth_profiles_repository.dart';
 import 'package:customr/src/features/birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
 import 'package:customr/src/features/kundali/presentation/cubit/kundali_cubit.dart';
@@ -16,6 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class MockKundaliCubit extends MockCubit<KundaliState> implements KundaliCubit {
   /// Pages kick off `load*` calls in initState; unstubbed they'd return null
   /// where a Future is expected. Treat them as already-complete no-ops.

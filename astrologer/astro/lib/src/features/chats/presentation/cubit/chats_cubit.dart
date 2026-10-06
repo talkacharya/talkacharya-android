@@ -31,7 +31,14 @@ class ChatsState extends Equatable {
   }
 
   List<Conversation> get live => _filtered.where((c) => c.isLive).toList();
-  List<Conversation> get recent => _filtered.where((c) => !c.isLive).toList();
+
+  /// Not archived. A live thread is never hidden, whatever the setting says.
+  List<Conversation> get recent =>
+      _filtered.where((c) => !c.isLive && !c.archived).toList();
+
+  /// Put away by the astrologer — finished readings they are done with.
+  List<Conversation> get archived =>
+      _filtered.where((c) => !c.isLive && c.archived).toList();
 
   /// Unread messages across every thread — the Chats nav badge. Not just the
   /// live ones: a message can arrive in the free follow-up window too, and a
@@ -82,6 +89,32 @@ class ChatsCubit extends Cubit<ChatsState> {
   }
 
   void search(String query) => emit(state.copyWith(query: query));
+
+  /// Mute or archive from the list. Returns the error to show, if any.
+  Future<String?> setPreferences(
+    String threadId, {
+    bool? muted,
+    bool? archived,
+  }) async {
+    try {
+      final updated = await _api.setPreferences(
+        threadId,
+        muted: muted,
+        archived: archived,
+      );
+      emit(
+        state.copyWith(
+          all: [
+            for (final c in state.all)
+              c.id == threadId ? c.withSettings(updated) : c,
+          ],
+        ),
+      );
+      return null;
+    } catch (e) {
+      return friendlyError(e);
+    }
+  }
 
   void startPolling() {
     _poll?.cancel();

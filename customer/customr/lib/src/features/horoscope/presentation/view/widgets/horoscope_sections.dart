@@ -4,15 +4,13 @@ import 'package:intl/intl.dart';
 
 import '../../../../../core/l10n/l10n.dart';
 import '../../../../../core/router/routes.dart';
-import '../../../../../core/theme/astro_palette.dart';
-import '../../../../../core/theme/brand_colors.dart';
-import '../../../../../shared/widgets/pressable.dart';
 import '../../../../../shared/widgets/score_ring.dart';
 import '../../../../home/data/models/zodiac.dart';
 import '../../../../kundali/presentation/kundali_terms.dart';
 import '../../../data/models/sign_horoscope.dart';
 import '../horoscope_page.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Card chrome used by every section: surface, hairline, generous radius.
 class _Section extends StatelessWidget {
   const _Section({required this.child, this.color});

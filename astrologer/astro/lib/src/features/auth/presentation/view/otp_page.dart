@@ -6,10 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../bloc/login/login_cubit.dart';
 import 'widgets/auth_shell.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Step two: the code.
 class OtpPage extends StatefulWidget {
   const OtpPage({super.key});

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import '../../features/auth/presentation/bloc/auth/auth_bloc.dart';
 import '../astro/onboarding_store.dart';
 import '../constants/api_paths.dart';
@@ -16,15 +18,19 @@ class AvailabilityCoordinator with ChangeNotifier {
     required Dio dio,
     required AuthBloc authBloc,
     required OnboardingStore onboarding,
+    required FlutterSecureStorage storage,
   }) : _dio = dio,
        _authBloc = authBloc,
-       _onboarding = onboarding;
+       _onboarding = onboarding,
+       _storage = storage;
 
   final Dio _dio;
   final AuthBloc _authBloc;
   final OnboardingStore _onboarding;
+  final FlutterSecureStorage _storage;
 
   static const _interval = Duration(seconds: 20);
+  static const _key = 'ta_astro_online_enabled';
 
   StreamSubscription<AuthState>? _authSub;
   AppLifecycleListener? _lifecycle;
@@ -37,7 +43,26 @@ class AvailabilityCoordinator with ChangeNotifier {
   /// Last presence the backend reported: online / away / busy / offline.
   String presence = 'offline';
 
-  void start() {
+  /// When the running break ends, while one is — the backend reads as offline
+  /// for its length, and this is what tells a break from really being offline.
+  DateTime? breakEndsAt;
+
+  bool get onBreak =>
+      _enabled && (breakEndsAt?.isAfter(DateTime.now()) ?? false);
+
+  /// Re-reads presence now rather than at the next tick: a break just started
+  /// or ended. Does nothing while offline — a beat would put them online.
+  Future<void> refresh() async {
+    if (_timer != null) await _beat();
+  }
+
+  Future<void> start() async {
+    final cached = await _storage.read(key: _key);
+    if (cached == 'true') {
+      _enabled = true;
+      notifyListeners();
+    }
+
     _lifecycle = AppLifecycleListener(
       onResume: () {
         _foreground = true;
@@ -54,6 +79,7 @@ class AvailabilityCoordinator with ChangeNotifier {
   /// `false` tells the backend to go offline.
   Future<void> setEnabled(bool value) async {
     _enabled = value;
+    await _storage.write(key: _key, value: value.toString());
     notifyListeners();
     if (value) {
       await _beat();
@@ -66,6 +92,7 @@ class AvailabilityCoordinator with ChangeNotifier {
         );
         presence = res.data?['presence_state'] as String? ?? 'offline';
       } catch (_) {}
+      breakEndsAt = null;
       notifyListeners();
     }
   }
@@ -91,8 +118,10 @@ class AvailabilityCoordinator with ChangeNotifier {
         ApiPaths.astroHeartbeat,
       );
       final next = res.data?['presence_state'] as String?;
-      if (next != null && next != presence) {
-        presence = next;
+      final until = DateTime.tryParse('${res.data?['break_ends_at']}');
+      if ((next != null && next != presence) || until != breakEndsAt) {
+        presence = next ?? presence;
+        breakEndsAt = until;
         notifyListeners();
       }
     } catch (_) {}

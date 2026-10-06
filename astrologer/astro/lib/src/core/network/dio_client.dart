@@ -5,6 +5,7 @@ import '../config/flavor.dart';
 import '../storage/token_storage.dart';
 import 'app_check_interceptor.dart';
 import 'auth_interceptor.dart';
+import 'language_interceptor.dart';
 
 /// Builds the app's Dio instances. [buildApiClient] is the authenticated client
 /// used everywhere; it shares a bare [_buildBareClient] for token refresh + replay
@@ -45,6 +46,7 @@ class DioClientFactory {
         onSessionExpired: onSessionExpired,
       ),
     );
+    dio.interceptors.add(const LanguageInterceptor());
     if (!_config.isProd) {
       dio.interceptors.add(
         PrettyDioLogger(

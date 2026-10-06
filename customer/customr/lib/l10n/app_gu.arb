@@ -1720,5 +1720,13 @@
   "storeBuyNow": "હવે ખરીદો",
   "storeBookPooja": "બુક પૂજા",
   "storeConsultFirst": "પહેલા સલાહ લો",
-  "storePersonN": "વ્યક્તિ {n}"
+  "storePersonN": "વ્યક્તિ {n}",
+  "chatsLastMessageMine": "તમે: {body}",
+  "@chatsLastMessageMine": {
+    "placeholders": {
+      "body": {
+        "type": "String"
+      }
+    }
+  }
 }

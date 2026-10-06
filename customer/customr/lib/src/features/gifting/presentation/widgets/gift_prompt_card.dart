@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/brand_colors.dart';
-import '../../../../shared/widgets/pressable.dart';
 import '../../data/models/gift.dart';
 import '../view/gift_sheet.dart';
 import 'gift_art.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// "Say thanks with a gift" card — the post-session entry point. Flips to a
 /// thank-you line once a gift has gone out from it.
 class GiftPromptCard extends StatefulWidget {

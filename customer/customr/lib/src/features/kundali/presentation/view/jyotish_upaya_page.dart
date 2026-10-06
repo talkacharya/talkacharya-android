@@ -5,12 +5,11 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Jyotish upaya (`/jyotish-upaya`) — the per-planet remedy table. Colour, day,
 /// deity, mantra and charity are free to adopt; gemstone and rudraksha lines are
 /// ALWAYS shown behind a "confirm with an astrologer first" gate.

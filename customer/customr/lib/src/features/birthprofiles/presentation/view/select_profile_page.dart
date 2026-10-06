@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/routes.dart';
-import '../../../../shared/widgets/error_view.dart';
 import '../bloc/birth_profiles_cubit.dart';
 import 'widgets/profile_card.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Shown once after an OTP login: pick which birth profile to use, or add one.
 /// Soft gate — "Not now" lets the user into the app without choosing.
 class SelectProfilePage extends StatefulWidget {

@@ -253,3 +253,50 @@ class CustomerChatIdentity implements ChatIdentity {
   @override
   bool get canDictate => false;
 }
+
+
+/// Fetches chat media for the on-device store ([DeviceChatMediaStore]).
+///
+/// Two kinds of URL come back from the server: a signed storage link (S3 and
+/// friends), which must go out *without* our auth header — it already carries
+/// its own credential and storage rejects a second one — and our own gated
+/// download route, which needs it. 404/410 mean the server has deleted its
+/// copy (it keeps chat media a week), which is [MediaGone], not a retry.
+MediaDownload chatMediaDownloader(Dio api) {
+  final plain = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 20),
+      receiveTimeout: const Duration(seconds: 90),
+    ),
+  );
+  final origin = Uri.parse(api.options.baseUrl);
+  return (url, savePath) async {
+    final parsed = Uri.parse(url);
+    var target = url;
+    var client = plain;
+    if (!parsed.hasScheme) {
+      // A bare path: ours, resolved against the API's host.
+      target = origin
+          .replace(path: parsed.path, query: parsed.hasQuery ? parsed.query : null)
+          .toString();
+      client = api;
+    } else if (parsed.host == origin.host && parsed.port == origin.port) {
+      client = api;
+    }
+    try {
+      await client.download(
+        target,
+        savePath,
+        // Explicit: the app's client accepts 4xx as responses, and a download
+        // that did would write the error body into the photo's file.
+        options: Options(
+          validateStatus: (s) => s != null && s >= 200 && s < 300,
+        ),
+      );
+    } on DioException catch (e) {
+      final code = e.response?.statusCode;
+      if (code == 404 || code == 410) throw const MediaGone();
+      rethrow;
+    }
+  };
+}

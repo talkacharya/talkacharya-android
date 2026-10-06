@@ -8,7 +8,6 @@ import 'package:customr/src/features/birthprofiles/data/birth_profiles_repositor
 import 'package:customr/src/features/birthprofiles/data/models/birth_profile.dart';
 import 'package:customr/src/features/birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
 import 'package:customr/src/features/matchmaking/presentation/view/matchmaking_home_page.dart';
-import 'package:customr/src/core/theme/brand_colors.dart';
 import 'package:customr/src/core/util/async_value.dart';
 import 'package:customr/src/features/home/data/models/zodiac.dart';
 import 'package:customr/src/features/horoscope/data/models/sign_horoscope.dart';
@@ -22,6 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 class _MockMatchRepo extends Mock implements MatchmakingRepository {}
 
 class _MockConfig extends Mock implements ConfigRepository {}

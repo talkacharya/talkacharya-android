@@ -6,9 +6,7 @@ import 'package:markdown/markdown.dart' as md;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/deeplink/deep_link_parser.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
-
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Renders an article's markdown on the app's own type scale and colours.
 ///
 /// Parsed with `package:markdown` (GitHub-flavoured) and mapped to plain

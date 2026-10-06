@@ -6,10 +6,10 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/l10n/l10n.dart';
 import '../../../../../core/router/routes.dart';
-import '../../../../../core/theme/brand_colors.dart';
 import '../../cubit/chats_list_cubit.dart';
 import '../../room_presence.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Green strip above every screen while a consultation is live and its room is
 /// not on top — one tap goes back to it, so a session is never "lost" behind
 /// other pages.

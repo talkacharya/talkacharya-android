@@ -6,19 +6,14 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/l10n/api_error_l10n.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/money.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/hue_widgets.dart';
-import '../../../../shared/widgets/pressable.dart';
 import '../../../consultations/data/models/consultation.dart';
 import '../../data/models/dispute.dart';
 import '../cubit/report_issue_cubit.dart';
 import '../widgets/dispute_ui.dart';
 import '../../../../core/utils/haptic_service.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// "Report a problem" for one session (`/consultations/:id/report`).
 class ReportIssuePage extends StatefulWidget {
   const ReportIssuePage({super.key});

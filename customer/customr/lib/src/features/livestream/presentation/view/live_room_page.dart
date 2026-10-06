@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:simple_pip_mode/pip_widget.dart';
+import 'package:simple_pip_mode/simple_pip.dart';
 import 'package:talkacharya_live/talkacharya_live.dart';
 
 import '../../../../core/di/service_locator.dart';
@@ -12,7 +14,6 @@ import '../../../../core/network/friendly_error.dart';
 import '../../../../core/l10n/api_error_l10n.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/realtime/realtime_client.dart';
-import '../../../../core/theme/astro_palette.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../../gifting/data/models/gift.dart';
 import '../../../gifting/presentation/view/gift_sheet.dart';
@@ -22,6 +23,7 @@ import '../../data/livestream_api.dart';
 import '../../data/models/live_stream_summary.dart';
 import 'widgets/live_chat_image.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Watching a live stream (`/live/{id}`, deep link `talkacharya://livestreams/{id}`).
 ///
 /// The picture comes from our own media server; the chat, viewer count and gift
@@ -85,19 +87,39 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
 ///
 /// Separate from the page so a feed can swap which stream is connected as the
 /// reader swipes, without rebuilding the chrome around it.
-class LiveRoomBody extends StatelessWidget {
+class LiveRoomBody extends StatefulWidget {
   const LiveRoomBody({required this.streamId, this.stream, super.key});
 
   final String streamId;
   final LiveStreamSummary? stream;
 
   @override
+  State<LiveRoomBody> createState() => _LiveRoomBodyState();
+}
+
+class _LiveRoomBodyState extends State<LiveRoomBody> {
+  final _simplePip = SimplePip();
+
+  @override
+  void initState() {
+    super.initState();
+    _simplePip.setAutoPipMode();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final cubit = context.read<LiveViewerCubit>();
-    final hostName = stream?.hostName ?? '';
+    final hostName = widget.stream?.hostName ?? '';
     return BlocBuilder<LiveViewerCubit, LiveState>(
       builder: (context, state) {
-        return PopScope(
+        return PipWidget(
+          pipBuilder: (context) {
+            return Scaffold(
+              backgroundColor: const Color(0xFF120A26),
+              body: _Stage(state: state, hostName: hostName),
+            );
+          },
+          builder: (context) => PopScope(
           canPop: !state.phase.isOn,
           onPopInvokedWithResult: (didPop, _) async {
             if (didPop) return;
@@ -123,7 +145,7 @@ class LiveRoomBody extends StatelessWidget {
                     ),
                     _ => _WatchingOverlay(
                       state: state,
-                      stream: stream,
+                      stream: widget.stream,
                       hostName: hostName,
                       onLeave: () async {
                         await cubit.leave();
@@ -133,6 +155,7 @@ class LiveRoomBody extends StatelessWidget {
                   },
                 ),
               ],
+            ),
             ),
           ),
         );

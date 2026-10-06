@@ -3,13 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:talkacharya_chat/talkacharya_chat.dart';
 
 void main() {
-  Future<void> pump(WidgetTester t, {required VoidCallback onReply, bool enabled = true}) {
+  Future<void> pump(WidgetTester t, {required VoidCallback onReply, bool enabled = true, bool reverse = false}) {
     return t.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: Center(
             child: SwipeToReply(
               enabled: enabled,
+              reverse: reverse,
               onReply: onReply,
               child: const SizedBox(width: 200, height: 60, child: Text('hi')),
             ),
@@ -48,6 +49,16 @@ void main() {
     await t.pumpAndSettle();
 
     expect(replies, 0);
+  });
+
+  testWidgets('reverse pull replies when reverse is true', (t) async {
+    var replies = 0;
+    await pump(t, onReply: () => replies++, reverse: true);
+
+    await t.drag(find.text('hi'), const Offset(-80, 0));
+    await t.pumpAndSettle();
+
+    expect(replies, 1);
   });
 
   testWidgets('disabled means the child is handed through untouched', (t) async {

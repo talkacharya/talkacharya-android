@@ -9,21 +9,14 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/utils/haptic_service.dart';
-import '../../../../shared/widgets/app_bottom_sheet.dart';
-import '../../../../shared/widgets/cosmic.dart';
-import '../../../../shared/widgets/error_view.dart';
-import '../../../../shared/widgets/fade_slide_in.dart';
-import '../../../../shared/widgets/pressable.dart';
-import '../../../../shared/widgets/skeleton.dart';
 import '../../../home/data/models/zodiac.dart';
 import '../../../kundali/presentation/kundali_terms.dart';
 import '../../data/models/sign_horoscope.dart';
 import '../cubit/horoscope_cubit.dart';
 import 'widgets/horoscope_sections.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// Full horoscope: pick a sign, pick a span, read the day / week / month.
 class HoroscopePage extends StatefulWidget {
   const HoroscopePage({super.key});

@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/theme/astro_palette.dart';
-import '../../../../core/theme/brand_colors.dart';
 import '../../../../core/util/async_value.dart';
 import '../../../../shared/widgets/language_quick_button.dart';
 import '../cubit/kundali_cubit.dart';
@@ -14,6 +12,7 @@ import '../widgets/kundali_ui.dart';
 import 'house_detail_sheet.dart';
 import 'kundali_routes.dart';
 
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 /// The birth-chart screen. Swipe (or tap a chip in the hero) between the charts
 /// people ask about most — all pre-fetched, so there's no reload. "All charts"
 /// opens the full D1–D60 menu.
@@ -294,8 +293,8 @@ class _Carousel extends StatelessWidget {
               if (p.retrograde) p.name,
           },
           fillColor: Colors.white.withValues(alpha: 0.03),
-          lineColor: Colors.white.withValues(alpha: 0.26),
-          numberColor: Colors.white.withValues(alpha: 0.5),
+          lineColor: const Color(0xFFF6D695).withValues(alpha: 0.65),
+          numberColor: const Color(0xFFF6D695).withValues(alpha: 0.95),
           textColor: Colors.white,
           onHouseTap: type == 'd1'
               ? (h) {

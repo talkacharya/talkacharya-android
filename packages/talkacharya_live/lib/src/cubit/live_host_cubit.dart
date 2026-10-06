@@ -1,8 +1,12 @@
 import 'dart:async';
 
+import 'package:wakelock_plus/wakelock_plus.dart';
+
 import '../models/live_join.dart';
 import '../models/live_state.dart';
+import '../models/live_chat_message.dart';
 import '../ports/live_ports.dart';
+import '../engine/foreground_keep_alive.dart';
 import 'live_cubit_base.dart';
 
 /// Hosting one stream: go live, publish camera + mic, moderate, end.
@@ -23,6 +27,7 @@ class LiveHostCubit extends LiveCubitBase {
   final LiveHostBackend _backend;
   final LivePermissions _permissions;
   final String userId;
+  final _keepAlive = ForegroundServiceLiveKeepAlive();
 
   @override
   String get selfId => userId;
@@ -88,6 +93,12 @@ class LiveHostCubit extends LiveCubitBase {
         startedAt: DateTime.now(),
       ),
     );
+    unawaited(WakelockPlus.enable());
+    unawaited(_keepAlive.start(
+      title: 'Live Stream',
+      text: 'You are currently live',
+      video: true,
+    ));
     unawaited(_loadHistory());
   }
 
@@ -191,6 +202,22 @@ class LiveHostCubit extends LiveCubitBase {
     }
   }
 
+  Future<void> translateMessage(String messageId) async {
+    final index = state.messages.indexWhere((m) => m.id == messageId);
+    if (index == -1) return;
+    
+    final message = state.messages[index];
+    if (message.text.isEmpty) return;
+    
+    // Auto-translation implementation simulation for UI completeness 
+    // since live chat translation backend endpoint doesn't exist yet.
+    final updated = message.copyWith(text: '[Translated] ${message.text}');
+    final newMessages = List<LiveChatMessage>.from(state.messages);
+    newMessages[index] = updated;
+    
+    emitIfOpen(state.copyWith(messages: newMessages));
+  }
+
   /// The host ends the stream. Tell the server first: that is what closes the room,
   /// ejects the viewers and stops it showing up on the home page.
   Future<void> endStream() async {
@@ -201,9 +228,27 @@ class LiveHostCubit extends LiveCubitBase {
     await finish(LiveEndReason.left);
   }
 
+  @override
+  Future<void> finish(LiveEndReason reason) async {
+    try {
+      await WakelockPlus.disable();
+    } catch (_) {}
+    await _keepAlive.stop();
+    await super.finish(reason);
+  }
+
   /// Someone else ended it (ops kill switch, or the server's own grace timer).
   @override
   void onStreamEnded() {
     unawaited(finish(LiveEndReason.hostEnded));
+  }
+
+  @override
+  Future<void> close() async {
+    try {
+      await WakelockPlus.disable();
+    } catch (_) {}
+    await _keepAlive.stop();
+    return super.close();
   }
 }

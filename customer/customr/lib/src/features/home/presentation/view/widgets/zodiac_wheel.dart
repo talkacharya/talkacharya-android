@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -201,6 +202,7 @@ class _ZodiacWheelState extends State<ZodiacWheel>
 
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
+                dragStartBehavior: DragStartBehavior.down,
                 onHorizontalDragStart: (d) => _onDragStart(d, centre),
                 onHorizontalDragUpdate: (d) => _onDragUpdate(d, centre),
                 onHorizontalDragEnd: (d) => _onDragEnd(d, centre),
@@ -212,11 +214,13 @@ class _ZodiacWheelState extends State<ZodiacWheel>
                   clipBehavior: Clip.hardEdge,
                   children: [
                     Positioned.fill(
-                      child: CustomPaint(
-                        painter: _WheelPainter(
-                          centre: centre,
-                          ringR: ringR,
-                          scheme: Theme.of(context).colorScheme,
+                      child: RepaintBoundary(
+                        child: CustomPaint(
+                          painter: _WheelPainter(
+                            centre: centre,
+                            ringR: ringR,
+                            scheme: Theme.of(context).colorScheme,
+                          ),
                         ),
                       ),
                     ),
