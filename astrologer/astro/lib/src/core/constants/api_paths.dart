@@ -73,6 +73,12 @@ class ApiPaths {
   // remedies suggested from the store
   static const astroStoreRecommendations = '/astro/store/recommendations';
   static const astroStoreProducts = '/astro/store/products';
+  static const astroPoojaCalendar = '/astro/store/pooja-calendar';
+  static const astroPoojaBookings = '/astro/store/pooja-bookings';
+
+  // remedies that cost nothing to follow
+  static const astroRemedyLibrary = '/astro/remedy-library';
+  static const astroRemedyAdvice = '/astro/remedy-advice';
   static const astroWorkingHours = '/astro/working-hours';
 
   // consultations (astrologer-scoped)

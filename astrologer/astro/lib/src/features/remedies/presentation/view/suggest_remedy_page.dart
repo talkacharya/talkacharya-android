@@ -29,11 +29,20 @@ List<Consultation> latestPerCustomer(List<Consultation> sessions) {
 /// Pick a customer (unless the page was opened from their session), pick a
 /// product, add a line on how to use it, send. Pops `true` once sent.
 class SuggestRemedyPage extends StatefulWidget {
-  const SuggestRemedyPage({this.consultationId, this.customerName, super.key});
+  const SuggestRemedyPage({
+    this.consultationId,
+    this.customerName,
+    this.product,
+    super.key,
+  });
 
   /// Set when opened from a session: the customer is already decided.
   final String? consultationId;
   final String? customerName;
+
+  /// Set when opened for one product (a pooja from the calendar): it starts
+  /// selected, and still can be changed.
+  final RemedyProduct? product;
 
   @override
   State<SuggestRemedyPage> createState() => _SuggestRemedyPageState();
@@ -49,7 +58,7 @@ class _SuggestRemedyPageState extends State<SuggestRemedyPage> {
   String? _productsError;
 
   late String? _consultationId = widget.consultationId;
-  RemedyProduct? _product;
+  late RemedyProduct? _product = widget.product;
   bool _sending = false;
 
   @override
@@ -84,8 +93,15 @@ class _SuggestRemedyPageState extends State<SuggestRemedyPage> {
       final products = await getIt<RemediesApi>().products(query: query);
       // A slower response for an earlier query must not replace a newer one.
       if (!mounted || query != _search.text) return;
+      // A product the page was opened for stays in the list, at the top, even
+      // when the search that is showing would not have found it.
+      final preset = widget.product;
       setState(() {
-        _products = products;
+        _products = [
+          if (preset != null && products.every((p) => p.id != preset.id))
+            preset,
+          ...products,
+        ];
         _productsError = null;
       });
     } catch (e) {

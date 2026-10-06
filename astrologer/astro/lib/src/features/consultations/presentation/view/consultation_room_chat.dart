@@ -299,10 +299,14 @@ class _AstroRoomMenu extends StatelessWidget {
         'remedy' => context.push(
           Routes.suggestRemedy(consultation: consultation.id, name: name),
         ),
+        'advise' => context.push(
+          Routes.adviseRemedy(consultation: consultation.id, name: name),
+        ),
         'favourite' => _favourite(context, thread.id, name),
         _ => _act(context, v, thread.muted, name),
       },
       itemBuilder: (_) => [
+        PopupMenuItem(value: 'advise', child: Text(l.adviceTitle)),
         PopupMenuItem(value: 'remedy', child: Text(l.remediesSuggest)),
         PopupMenuItem(value: 'favourite', child: Text(l.wsAddFavourite)),
         PopupMenuItem(

@@ -2120,5 +2120,59 @@
   "mmRun": "Match kundlis",
   "mmRecent": "Recent matches",
   "mmNeedTwo": "Add two charts first",
-  "mmNeedTwoBody": "Matchmaking compares two saved charts. Add the boy's and the girl's birth details to begin."
+  "mmNeedTwoBody": "Matchmaking compares two saved charts. Add the boy's and the girl's birth details to begin.",
+  "remediesTabStore": "From the store",
+  "remediesTabFree": "Free advice",
+  "adviceTitle": "Advise a free remedy",
+  "adviceSubtitle": "A mantra, a fast, a charity — something that costs them nothing to follow.",
+  "adviceListSubtitle": "Remedies you've advised that cost nothing to follow. Each one went to the customer in their chat.",
+  "adviceEmptyTitle": "No free advice yet",
+  "adviceEmptyBody": "Advise a mantra, a fast or a charity after a reading. It reaches the customer as a message they can keep.",
+  "adviceStepLibrary": "Pick from the library",
+  "adviceStepWrite": "Or write your own",
+  "adviceLibraryEmpty": "Nothing in the library for this yet — write your own below.",
+  "adviceFieldTitle": "Remedy",
+  "adviceFieldBody": "How to do it",
+  "adviceHowSent": "This is sent to the customer as a message in your chat, so the chat has to be open: during a session, or in the follow-up window after it.",
+  "adviceSend": "Send advice",
+  "adviceSent": "Advice sent",
+  "adviceCatMantra": "Mantra",
+  "adviceCatStotra": "Stotra",
+  "adviceCatDaan": "Daan",
+  "adviceCatVrat": "Vrat",
+  "adviceCatPuja": "Puja",
+  "adviceCatLifestyle": "Lifestyle",
+  "poojaTool": "Mandir puja",
+  "poojaBookingsTool": "My bookings",
+  "poojaCalendarTitle": "Mandir puja",
+  "poojaCalendarSubtitle": "Poojas open for booking, soonest first. Suggest one to a customer — you earn a commission when they book.",
+  "poojaCalendarEmpty": "No poojas scheduled",
+  "poojaCalendarEmptyBody": "When partner temples open dates for booking, they'll appear here.",
+  "poojaFrom": "From {price}",
+  "@poojaFrom": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "poojaSeatsLeft": "{count, plural, =1{1 place left} other{{count} places left}}",
+  "@poojaSeatsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "poojaSuggest": "Suggest to a customer",
+  "poojaBookingsTitle": "My bookings",
+  "poojaBookingsSubtitle": "Poojas your customers booked on your suggestion, and where each one stands.",
+  "poojaBookingsEmpty": "No bookings yet",
+  "poojaBookingsEmptyBody": "When a customer books a pooja you suggested, it shows up here.",
+  "poojaStatusPending": "Payment pending",
+  "poojaStatusConfirmed": "Booked",
+  "poojaStatusPerformed": "Performed",
+  "poojaStatusDone": "Video shared",
+  "poojaStatusCancelled": "Cancelled",
+  "poojaNextDate": "Next available date"
 }

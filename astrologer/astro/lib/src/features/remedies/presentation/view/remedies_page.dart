@@ -37,7 +37,11 @@ class RemediesPage extends StatefulWidget {
 
 class _RemediesPageState extends State<RemediesPage> {
   List<RemedySuggestion>? _items;
+  List<RemedyAdvice> _advice = const [];
   String? _error;
+
+  /// Showing free advice instead of store suggestions.
+  bool _free = false;
 
   @override
   void initState() {
@@ -48,9 +52,16 @@ class _RemediesPageState extends State<RemediesPage> {
   Future<void> _load() async {
     try {
       final items = await getIt<RemediesApi>().suggestions();
+      // The free-advice list is the smaller half of the page: without it
+      // the store suggestions still show.
+      var advice = const <RemedyAdvice>[];
+      try {
+        advice = await getIt<RemediesApi>().advice();
+      } catch (_) {}
       if (mounted) {
         setState(() {
           _items = items;
+          _advice = advice;
           _error = null;
         });
       }
@@ -60,7 +71,9 @@ class _RemediesPageState extends State<RemediesPage> {
   }
 
   Future<void> _suggest() async {
-    final sent = await context.push<bool>(Routes.suggestRemedy());
+    final sent = await context.push<bool>(
+      _free ? Routes.adviseRemedy() : Routes.suggestRemedy(),
+    );
     if (sent == true) await _load();
   }
 
@@ -79,6 +92,20 @@ class _RemediesPageState extends State<RemediesPage> {
       ];
     } else if (items == null) {
       body = const [_Skeleton()];
+    } else if (_free) {
+      body = _advice.isEmpty
+          ? [
+              Padding(
+                padding: const EdgeInsets.only(top: 40),
+                child: EmptyState(
+                  icon: Icons.self_improvement_rounded,
+                  hue: AstroPalette.career,
+                  title: l.adviceEmptyTitle,
+                  message: l.adviceEmptyBody,
+                ),
+              ),
+            ]
+          : [for (final a in _advice) _AdviceTile(advice: a)];
     } else if (items.isEmpty) {
       body = [
         Padding(
@@ -103,16 +130,87 @@ class _RemediesPageState extends State<RemediesPage> {
 
     return SubPageScaffold(
       title: l.remediesTitle,
-      subtitle: l.remediesSubtitle,
+      subtitle: _free ? l.adviceListSubtitle : l.remediesSubtitle,
       onRefresh: _load,
       bottomBar: StickyActionBar(
         child: BusyButton(
-          label: l.remediesSuggest,
+          label: _free ? l.adviceTitle : l.remediesSuggest,
           icon: Icons.add_rounded,
           onPressed: _suggest,
         ),
       ),
-      children: body,
+      children: [
+        SegmentedButton<bool>(
+          showSelectedIcon: false,
+          segments: [
+            ButtonSegment(
+              value: false,
+              icon: const Icon(Icons.storefront_rounded),
+              label: Text(l.remediesTabStore),
+            ),
+            ButtonSegment(
+              value: true,
+              icon: const Icon(Icons.self_improvement_rounded),
+              label: Text(l.remediesTabFree),
+            ),
+          ],
+          selected: {_free},
+          onSelectionChanged: (s) => setState(() => _free = s.first),
+        ),
+        const SizedBox(height: 14),
+        ...body,
+      ],
+    );
+  }
+}
+
+class _AdviceTile extends StatelessWidget {
+  const _AdviceTile({required this.advice});
+
+  final RemedyAdvice advice;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final brand = context.brand;
+    final theme = Theme.of(context);
+    final a = advice;
+    final name = a.customerName.trim().isEmpty
+        ? l.winBackCustomer
+        : a.customerName;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(Radii.md),
+          border: Border.all(color: brand.hairline),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              a.title,
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Text(
+              l.remedyFor(name, TimeFormat.relative(l, a.createdAt)),
+              style: theme.textTheme.bodySmall?.copyWith(color: brand.inkMuted),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              a.body,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.bodySmall,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

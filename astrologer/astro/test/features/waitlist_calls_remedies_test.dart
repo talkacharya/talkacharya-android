@@ -9,6 +9,8 @@ import 'package:astro/src/features/call_history/presentation/view/call_history_p
 import 'package:astro/src/features/consultations/data/consultation_api.dart';
 import 'package:astro/src/features/consultations/data/models/consultation.dart';
 import 'package:astro/src/features/remedies/data/remedies_api.dart';
+import 'package:astro/src/features/remedies/presentation/view/advise_remedy_page.dart';
+import 'package:astro/src/features/remedies/presentation/view/pooja_pages.dart';
 import 'package:astro/src/features/remedies/presentation/view/remedies_page.dart';
 import 'package:astro/src/features/remedies/presentation/view/suggest_remedy_page.dart';
 import 'package:astro/src/features/waitlist/data/waitlist_api.dart';
@@ -356,6 +358,232 @@ void main() {
           productId: 'p2',
           note: 'Wear on Monday',
         ),
+      ).called(1);
+    });
+  });
+
+  group('free remedies', () {
+    late _MockRemedies api;
+
+    setUp(() {
+      api = _MockRemedies();
+      GetIt.I.registerSingleton<RemediesApi>(api);
+    });
+
+    tearDown(GetIt.I.reset);
+
+    testWidgets('the list switches between store suggestions and free advice', (
+      tester,
+    ) async {
+      when(() => api.suggestions()).thenAnswer((_) async => []);
+      when(() => api.advice()).thenAnswer(
+        (_) async => [
+          RemedyAdvice.fromJson({
+            'id': 'a1',
+            'customer_name': 'Asha',
+            'category': 'mantra',
+            'title': 'Shani mantra',
+            'body': 'Chant 108 times on Saturdays.',
+          }),
+        ],
+      );
+      await tester.pumpWidget(_app(const RemediesPage()));
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.text('Shani mantra'), findsNothing);
+      expect(find.text('Suggest a remedy'), findsOneWidget);
+
+      await tester.tap(find.text('Free advice'));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.text('Shani mantra'), findsOneWidget);
+      expect(find.text('Chant 108 times on Saturdays.'), findsOneWidget);
+      expect(find.text('Advise a free remedy'), findsOneWidget);
+    });
+
+    testWidgets('a library remedy fills the form and is sent for the session', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(1080, 4200);
+      tester.view.devicePixelRatio = 2;
+      addTearDown(tester.view.reset);
+      when(() => api.library(category: any(named: 'category'))).thenAnswer(
+        (_) async => const [
+          RemedyTemplate(
+            id: 't1',
+            category: 'mantra',
+            title: 'Shani mantra',
+            body: 'Chant Om Sham Shanicharaya Namah 108 times.',
+            caution: 'Begin on a Saturday.',
+          ),
+        ],
+      );
+      when(
+        () => api.advise(
+          consultationId: any(named: 'consultationId'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          templateId: any(named: 'templateId'),
+          category: any(named: 'category'),
+        ),
+      ).thenAnswer(
+        (_) async =>
+            RemedyAdvice.fromJson({'id': 'a1', 'title': 'Shani mantra'}),
+      );
+
+      await tester.pumpWidget(
+        _app(
+          const AdviseRemedyPage(consultationId: 'c1', customerName: 'Asha'),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.text('For Asha'), findsOneWidget);
+      await tester.tap(find.text('Shani mantra'));
+      await tester.pump();
+      await tester.tap(find.text('Send advice'));
+      await tester.pump();
+
+      verify(
+        () => api.advise(
+          consultationId: 'c1',
+          templateId: 't1',
+          category: 'mantra',
+          title: 'Shani mantra',
+          // The caution travels with the instructions.
+          body: any(named: 'body', that: contains('Begin on a Saturday.')),
+        ),
+      ).called(1);
+    });
+  });
+
+  group('poojas', () {
+    late _MockRemedies api;
+
+    setUp(() {
+      api = _MockRemedies();
+      GetIt.I.registerSingleton<RemediesApi>(api);
+    });
+
+    tearDown(GetIt.I.reset);
+
+    test('a pooja date carries its product, price and places left', () {
+      final d = PoojaDate.fromJson({
+        'id': 'e1',
+        'starts_at': '2026-10-12T07:00:00+05:30',
+        'venue': 'Kashi Vishwanath',
+        'remaining': 4,
+        'product': {
+          'id': 'p1',
+          'title': 'Rudrabhishek',
+          'price_from': '1100.00',
+          'currency': 'INR',
+          'temple': 'Kashi Mandir Seva',
+        },
+      });
+      expect(d.product.id, 'p1');
+      expect(d.product.priceFrom, 1100);
+      expect(d.temple, 'Kashi Mandir Seva');
+      expect(d.remaining, 4);
+    });
+
+    testWidgets('the calendar lists open dates with price and scarcity', (
+      tester,
+    ) async {
+      when(() => api.poojaCalendar()).thenAnswer(
+        (_) async => [
+          PoojaDate.fromJson({
+            'id': 'e1',
+            'starts_at': '2026-10-12T07:00:00+05:30',
+            'venue': 'Kashi Vishwanath',
+            'remaining': 4,
+            'product': {
+              'id': 'p1',
+              'title': 'Rudrabhishek',
+              'price_from': '1100.00',
+              'currency': 'INR',
+            },
+          }),
+        ],
+      );
+      await tester.pumpWidget(_app(const PoojaCalendarPage()));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(find.text('Rudrabhishek'), findsOneWidget);
+      expect(find.text('From ₹1,100'), findsOneWidget);
+      expect(find.text('4 places left'), findsOneWidget);
+      expect(find.text('Suggest to a customer'), findsOneWidget);
+    });
+
+    testWidgets('bookings show who, which package and how far it has got', (
+      tester,
+    ) async {
+      when(() => api.poojaBookings()).thenAnswer(
+        (_) async => [
+          PoojaBooking.fromJson({
+            'id': 'b1',
+            'status': 'performed',
+            'customer_name': 'Asha',
+            'title': 'Rudrabhishek',
+            'package': 'Family',
+            'temple': 'Kashi Mandir Seva',
+            'scheduled_for': '2026-10-12T07:00:00+05:30',
+            'booked_at': DateTime.now().toIso8601String(),
+          }),
+        ],
+      );
+      await tester.pumpWidget(_app(const PoojaBookingsPage()));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(find.text('Rudrabhishek · Family'), findsOneWidget);
+      expect(find.text('Performed'), findsOneWidget);
+      expect(find.textContaining('For Asha'), findsOneWidget);
+    });
+
+    testWidgets('a pooja picked from the calendar arrives already selected', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(1080, 4000);
+      tester.view.devicePixelRatio = 2;
+      addTearDown(tester.view.reset);
+      when(() => api.products(query: any(named: 'query'))).thenAnswer(
+        (_) async => const [RemedyProduct(id: 'p9', title: 'Rudraksha Mala')],
+      );
+      when(
+        () => api.suggest(
+          consultationId: any(named: 'consultationId'),
+          productId: any(named: 'productId'),
+          note: any(named: 'note'),
+        ),
+      ).thenAnswer(
+        (_) async => RemedySuggestion.fromJson({
+          'id': 'r1',
+          'product': {'title': 'Rudrabhishek'},
+        }),
+      );
+      await tester.pumpWidget(
+        _app(
+          const SuggestRemedyPage(
+            consultationId: 'c1',
+            customerName: 'Asha',
+            product: RemedyProduct(id: 'p1', title: 'Rudrabhishek'),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Kept in the list although the default search did not return it.
+      expect(find.text('Rudrabhishek'), findsOneWidget);
+      await tester.tap(find.text('Send suggestion'));
+      await tester.pump();
+
+      verify(
+        () => api.suggest(consultationId: 'c1', productId: 'p1', note: ''),
       ).called(1);
     });
   });

@@ -16,6 +16,9 @@ import '../../features/kundali/presentation/view/consultation_kundali_page.dart'
 import '../../features/performance/presentation/view/performance_page.dart';
 import '../../features/performance/presentation/view/win_back_page.dart';
 import '../../features/call_history/presentation/view/call_history_page.dart';
+import '../../features/remedies/presentation/view/advise_remedy_page.dart';
+import '../../features/remedies/data/remedies_api.dart';
+import '../../features/remedies/presentation/view/pooja_pages.dart';
 import '../../features/remedies/presentation/view/remedies_page.dart';
 import '../../features/remedies/presentation/view/suggest_remedy_page.dart';
 import '../../features/waitlist/presentation/view/waitlist_page.dart';
@@ -212,12 +215,32 @@ GoRouter buildRouter(
         builder: (_, _) => const RemediesPage(),
       ),
       GoRoute(
+        path: '/remedies/advise',
+        parentNavigatorKey: _rootKey,
+        builder: (_, s) => AdviseRemedyPage(
+          consultationId: s.uri.queryParameters['consultation'],
+          customerName: s.uri.queryParameters['name'],
+        ),
+      ),
+      GoRoute(
         path: '/remedies/suggest',
         parentNavigatorKey: _rootKey,
         builder: (_, s) => SuggestRemedyPage(
           consultationId: s.uri.queryParameters['consultation'],
           customerName: s.uri.queryParameters['name'],
+          // From the pooja calendar: the product is already chosen.
+          product: s.extra is RemedyProduct ? s.extra as RemedyProduct : null,
         ),
+      ),
+      GoRoute(
+        path: Routes.poojaCalendar,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const PoojaCalendarPage(),
+      ),
+      GoRoute(
+        path: Routes.poojaBookings,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const PoojaBookingsPage(),
       ),
       GoRoute(
         path: Routes.performance,

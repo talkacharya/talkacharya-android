@@ -2948,4 +2948,143 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get mmNeedTwoBody =>
       'मिलान दो सहेजी हुई कुंडलियों की तुलना करता है। शुरू करने के लिए वर और कन्या का जन्म विवरण जोड़ें।';
+
+  @override
+  String get remediesTabStore => 'स्टोर से';
+
+  @override
+  String get remediesTabFree => 'मुफ़्त उपाय';
+
+  @override
+  String get adviceTitle => 'मुफ़्त उपाय बताएँ';
+
+  @override
+  String get adviceSubtitle =>
+      'कोई मंत्र, व्रत, दान — ऐसा उपाय जिसे करने में उनका कुछ खर्च न हो।';
+
+  @override
+  String get adviceListSubtitle =>
+      'आपके बताए वे उपाय जिन्हें करने में कुछ खर्च नहीं होता। हर उपाय ग्राहक को उनकी चैट में भेजा गया।';
+
+  @override
+  String get adviceEmptyTitle => 'अभी कोई मुफ़्त उपाय नहीं';
+
+  @override
+  String get adviceEmptyBody =>
+      'परामर्श के बाद कोई मंत्र, व्रत या दान बताएँ। यह ग्राहक को संदेश के रूप में मिलता है जिसे वे रख सकते हैं।';
+
+  @override
+  String get adviceStepLibrary => 'लाइब्रेरी से चुनें';
+
+  @override
+  String get adviceStepWrite => 'या खुद लिखें';
+
+  @override
+  String get adviceLibraryEmpty =>
+      'इसके लिए लाइब्रेरी में अभी कुछ नहीं है — नीचे खुद लिखें।';
+
+  @override
+  String get adviceFieldTitle => 'उपाय';
+
+  @override
+  String get adviceFieldBody => 'कैसे करना है';
+
+  @override
+  String get adviceHowSent =>
+      'यह ग्राहक को आपकी चैट में संदेश के रूप में जाता है, इसलिए चैट खुली होनी चाहिए: सेशन के दौरान, या उसके बाद के फ़ॉलो-अप समय में।';
+
+  @override
+  String get adviceSend => 'उपाय भेजें';
+
+  @override
+  String get adviceSent => 'उपाय भेज दिया गया';
+
+  @override
+  String get adviceCatMantra => 'मंत्र';
+
+  @override
+  String get adviceCatStotra => 'स्तोत्र';
+
+  @override
+  String get adviceCatDaan => 'दान';
+
+  @override
+  String get adviceCatVrat => 'व्रत';
+
+  @override
+  String get adviceCatPuja => 'पूजा';
+
+  @override
+  String get adviceCatLifestyle => 'जीवनशैली';
+
+  @override
+  String get poojaTool => 'मंदिर पूजा';
+
+  @override
+  String get poojaBookingsTool => 'मेरी बुकिंग';
+
+  @override
+  String get poojaCalendarTitle => 'मंदिर पूजा';
+
+  @override
+  String get poojaCalendarSubtitle =>
+      'बुकिंग के लिए खुली पूजाएँ, सबसे नज़दीकी पहले। किसी ग्राहक को सुझाएँ — उनके बुक करने पर आपको कमीशन मिलता है।';
+
+  @override
+  String get poojaCalendarEmpty => 'अभी कोई पूजा तय नहीं';
+
+  @override
+  String get poojaCalendarEmptyBody =>
+      'जब साझेदार मंदिर बुकिंग के लिए तारीखें खोलेंगे, वे यहाँ दिखेंगी।';
+
+  @override
+  String poojaFrom(String price) {
+    return '$price से';
+  }
+
+  @override
+  String poojaSeatsLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count जगहें बचीं',
+      one: '1 जगह बची',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get poojaSuggest => 'ग्राहक को सुझाएँ';
+
+  @override
+  String get poojaBookingsTitle => 'मेरी बुकिंग';
+
+  @override
+  String get poojaBookingsSubtitle =>
+      'आपके सुझाव पर ग्राहकों की बुक की हुई पूजाएँ, और हर एक की स्थिति।';
+
+  @override
+  String get poojaBookingsEmpty => 'अभी कोई बुकिंग नहीं';
+
+  @override
+  String get poojaBookingsEmptyBody =>
+      'जब कोई ग्राहक आपकी सुझाई पूजा बुक करेगा, वह यहाँ दिखेगी।';
+
+  @override
+  String get poojaStatusPending => 'भुगतान बाकी';
+
+  @override
+  String get poojaStatusConfirmed => 'बुक हो गई';
+
+  @override
+  String get poojaStatusPerformed => 'संपन्न';
+
+  @override
+  String get poojaStatusDone => 'वीडियो भेजा गया';
+
+  @override
+  String get poojaStatusCancelled => 'रद्द';
+
+  @override
+  String get poojaNextDate => 'अगली उपलब्ध तारीख';
 }

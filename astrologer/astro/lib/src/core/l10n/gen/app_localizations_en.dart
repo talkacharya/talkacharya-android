@@ -2955,4 +2955,143 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get mmNeedTwoBody =>
       'Matchmaking compares two saved charts. Add the boy\'s and the girl\'s birth details to begin.';
+
+  @override
+  String get remediesTabStore => 'From the store';
+
+  @override
+  String get remediesTabFree => 'Free advice';
+
+  @override
+  String get adviceTitle => 'Advise a free remedy';
+
+  @override
+  String get adviceSubtitle =>
+      'A mantra, a fast, a charity — something that costs them nothing to follow.';
+
+  @override
+  String get adviceListSubtitle =>
+      'Remedies you\'ve advised that cost nothing to follow. Each one went to the customer in their chat.';
+
+  @override
+  String get adviceEmptyTitle => 'No free advice yet';
+
+  @override
+  String get adviceEmptyBody =>
+      'Advise a mantra, a fast or a charity after a reading. It reaches the customer as a message they can keep.';
+
+  @override
+  String get adviceStepLibrary => 'Pick from the library';
+
+  @override
+  String get adviceStepWrite => 'Or write your own';
+
+  @override
+  String get adviceLibraryEmpty =>
+      'Nothing in the library for this yet — write your own below.';
+
+  @override
+  String get adviceFieldTitle => 'Remedy';
+
+  @override
+  String get adviceFieldBody => 'How to do it';
+
+  @override
+  String get adviceHowSent =>
+      'This is sent to the customer as a message in your chat, so the chat has to be open: during a session, or in the follow-up window after it.';
+
+  @override
+  String get adviceSend => 'Send advice';
+
+  @override
+  String get adviceSent => 'Advice sent';
+
+  @override
+  String get adviceCatMantra => 'Mantra';
+
+  @override
+  String get adviceCatStotra => 'Stotra';
+
+  @override
+  String get adviceCatDaan => 'Daan';
+
+  @override
+  String get adviceCatVrat => 'Vrat';
+
+  @override
+  String get adviceCatPuja => 'Puja';
+
+  @override
+  String get adviceCatLifestyle => 'Lifestyle';
+
+  @override
+  String get poojaTool => 'Mandir puja';
+
+  @override
+  String get poojaBookingsTool => 'My bookings';
+
+  @override
+  String get poojaCalendarTitle => 'Mandir puja';
+
+  @override
+  String get poojaCalendarSubtitle =>
+      'Poojas open for booking, soonest first. Suggest one to a customer — you earn a commission when they book.';
+
+  @override
+  String get poojaCalendarEmpty => 'No poojas scheduled';
+
+  @override
+  String get poojaCalendarEmptyBody =>
+      'When partner temples open dates for booking, they\'ll appear here.';
+
+  @override
+  String poojaFrom(String price) {
+    return 'From $price';
+  }
+
+  @override
+  String poojaSeatsLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count places left',
+      one: '1 place left',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get poojaSuggest => 'Suggest to a customer';
+
+  @override
+  String get poojaBookingsTitle => 'My bookings';
+
+  @override
+  String get poojaBookingsSubtitle =>
+      'Poojas your customers booked on your suggestion, and where each one stands.';
+
+  @override
+  String get poojaBookingsEmpty => 'No bookings yet';
+
+  @override
+  String get poojaBookingsEmptyBody =>
+      'When a customer books a pooja you suggested, it shows up here.';
+
+  @override
+  String get poojaStatusPending => 'Payment pending';
+
+  @override
+  String get poojaStatusConfirmed => 'Booked';
+
+  @override
+  String get poojaStatusPerformed => 'Performed';
+
+  @override
+  String get poojaStatusDone => 'Video shared';
+
+  @override
+  String get poojaStatusCancelled => 'Cancelled';
+
+  @override
+  String get poojaNextDate => 'Next available date';
 }

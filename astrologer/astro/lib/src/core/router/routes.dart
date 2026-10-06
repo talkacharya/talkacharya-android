@@ -63,6 +63,10 @@ class Routes {
   static String clientKundali(String id) => '/client-charts/$id/kundali';
   static const matchmaking = '/matchmaking';
 
+  /// Poojas open for booking, and those booked on the astrologer's advice.
+  static const poojaCalendar = '/poojas';
+  static const poojaBookings = '/poojas/bookings';
+
   static const waitlist = '/waitlist';
   static const callHistory = '/call-history';
   static const remedies = '/remedies';
@@ -72,6 +76,15 @@ class Routes {
     final q = <String, String>{'consultation': ?consultation, 'name': ?name};
     return Uri(
       path: '/remedies/suggest',
+      queryParameters: q.isEmpty ? null : q,
+    ).toString();
+  }
+
+  /// Free advice (a mantra, a fast…), as against a store product.
+  static String adviseRemedy({String? consultation, String? name}) {
+    final q = <String, String>{'consultation': ?consultation, 'name': ?name};
+    return Uri(
+      path: '/remedies/advise',
       queryParameters: q.isEmpty ? null : q,
     ).toString();
   }

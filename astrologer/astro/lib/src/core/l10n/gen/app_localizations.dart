@@ -5167,6 +5167,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Matchmaking compares two saved charts. Add the boy\'s and the girl\'s birth details to begin.'**
   String get mmNeedTwoBody;
+
+  /// No description provided for @remediesTabStore.
+  ///
+  /// In en, this message translates to:
+  /// **'From the store'**
+  String get remediesTabStore;
+
+  /// No description provided for @remediesTabFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free advice'**
+  String get remediesTabFree;
+
+  /// No description provided for @adviceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Advise a free remedy'**
+  String get adviceTitle;
+
+  /// No description provided for @adviceSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A mantra, a fast, a charity — something that costs them nothing to follow.'**
+  String get adviceSubtitle;
+
+  /// No description provided for @adviceListSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remedies you\'ve advised that cost nothing to follow. Each one went to the customer in their chat.'**
+  String get adviceListSubtitle;
+
+  /// No description provided for @adviceEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No free advice yet'**
+  String get adviceEmptyTitle;
+
+  /// No description provided for @adviceEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Advise a mantra, a fast or a charity after a reading. It reaches the customer as a message they can keep.'**
+  String get adviceEmptyBody;
+
+  /// No description provided for @adviceStepLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick from the library'**
+  String get adviceStepLibrary;
+
+  /// No description provided for @adviceStepWrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Or write your own'**
+  String get adviceStepWrite;
+
+  /// No description provided for @adviceLibraryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing in the library for this yet — write your own below.'**
+  String get adviceLibraryEmpty;
+
+  /// No description provided for @adviceFieldTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remedy'**
+  String get adviceFieldTitle;
+
+  /// No description provided for @adviceFieldBody.
+  ///
+  /// In en, this message translates to:
+  /// **'How to do it'**
+  String get adviceFieldBody;
+
+  /// No description provided for @adviceHowSent.
+  ///
+  /// In en, this message translates to:
+  /// **'This is sent to the customer as a message in your chat, so the chat has to be open: during a session, or in the follow-up window after it.'**
+  String get adviceHowSent;
+
+  /// No description provided for @adviceSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send advice'**
+  String get adviceSend;
+
+  /// No description provided for @adviceSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Advice sent'**
+  String get adviceSent;
+
+  /// No description provided for @adviceCatMantra.
+  ///
+  /// In en, this message translates to:
+  /// **'Mantra'**
+  String get adviceCatMantra;
+
+  /// No description provided for @adviceCatStotra.
+  ///
+  /// In en, this message translates to:
+  /// **'Stotra'**
+  String get adviceCatStotra;
+
+  /// No description provided for @adviceCatDaan.
+  ///
+  /// In en, this message translates to:
+  /// **'Daan'**
+  String get adviceCatDaan;
+
+  /// No description provided for @adviceCatVrat.
+  ///
+  /// In en, this message translates to:
+  /// **'Vrat'**
+  String get adviceCatVrat;
+
+  /// No description provided for @adviceCatPuja.
+  ///
+  /// In en, this message translates to:
+  /// **'Puja'**
+  String get adviceCatPuja;
+
+  /// No description provided for @adviceCatLifestyle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lifestyle'**
+  String get adviceCatLifestyle;
+
+  /// No description provided for @poojaTool.
+  ///
+  /// In en, this message translates to:
+  /// **'Mandir puja'**
+  String get poojaTool;
+
+  /// No description provided for @poojaBookingsTool.
+  ///
+  /// In en, this message translates to:
+  /// **'My bookings'**
+  String get poojaBookingsTool;
+
+  /// No description provided for @poojaCalendarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mandir puja'**
+  String get poojaCalendarTitle;
+
+  /// No description provided for @poojaCalendarSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Poojas open for booking, soonest first. Suggest one to a customer — you earn a commission when they book.'**
+  String get poojaCalendarSubtitle;
+
+  /// No description provided for @poojaCalendarEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No poojas scheduled'**
+  String get poojaCalendarEmpty;
+
+  /// No description provided for @poojaCalendarEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'When partner temples open dates for booking, they\'ll appear here.'**
+  String get poojaCalendarEmptyBody;
+
+  /// No description provided for @poojaFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From {price}'**
+  String poojaFrom(String price);
+
+  /// No description provided for @poojaSeatsLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 place left} other{{count} places left}}'**
+  String poojaSeatsLeft(int count);
+
+  /// No description provided for @poojaSuggest.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest to a customer'**
+  String get poojaSuggest;
+
+  /// No description provided for @poojaBookingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My bookings'**
+  String get poojaBookingsTitle;
+
+  /// No description provided for @poojaBookingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Poojas your customers booked on your suggestion, and where each one stands.'**
+  String get poojaBookingsSubtitle;
+
+  /// No description provided for @poojaBookingsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No bookings yet'**
+  String get poojaBookingsEmpty;
+
+  /// No description provided for @poojaBookingsEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'When a customer books a pooja you suggested, it shows up here.'**
+  String get poojaBookingsEmptyBody;
+
+  /// No description provided for @poojaStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment pending'**
+  String get poojaStatusPending;
+
+  /// No description provided for @poojaStatusConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Booked'**
+  String get poojaStatusConfirmed;
+
+  /// No description provided for @poojaStatusPerformed.
+  ///
+  /// In en, this message translates to:
+  /// **'Performed'**
+  String get poojaStatusPerformed;
+
+  /// No description provided for @poojaStatusDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Video shared'**
+  String get poojaStatusDone;
+
+  /// No description provided for @poojaStatusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get poojaStatusCancelled;
+
+  /// No description provided for @poojaNextDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Next available date'**
+  String get poojaNextDate;
 }
 
 class _AppLocalizationsDelegate
