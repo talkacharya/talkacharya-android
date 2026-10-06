@@ -47,6 +47,18 @@ class ApiPaths {
   static const astroQueue = '/astro/queue';
   static String astroQueueEntry(String id) => '/astro/queue/$id';
 
+  // the astrologer's own corner
+  static const astroAnnouncements = '/astro/announcements';
+  static const astroTrainingVideos = '/astro/training-videos';
+  static const astroFavourites = '/astro/favourites';
+  static String astroFavourite(String conversationId) =>
+      '/astro/favourites/$conversationId';
+  static const astroPhotos = '/astro/profile/photos';
+  static String astroPhoto(String id) => '/astro/profile/photos/$id';
+  static const astroFeedback = '/astro/feedback';
+  static const astroFollowers = '/astro/followers';
+  static const astroReferrals = '/astro/referrals';
+
   // remedies suggested from the store
   static const astroStoreRecommendations = '/astro/store/recommendations';
   static const astroStoreProducts = '/astro/store/products';

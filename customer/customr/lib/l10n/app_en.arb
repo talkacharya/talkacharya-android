@@ -4189,5 +4189,17 @@
         "type": "String"
       }
     }
+  },
+  "astroGalleryTitle": "Photos",
+  "astroGalleryPhoto": "Photo {index} of {total}",
+  "@astroGalleryPhoto": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   }
 }

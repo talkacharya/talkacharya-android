@@ -21,6 +21,7 @@ import '../core/router/pending_deep_link.dart';
 import '../core/theme/app_theme.dart';
 import '../features/auth/presentation/bloc/auth/auth_bloc.dart';
 import '../features/chats/presentation/cubit/chats_cubit.dart';
+import '../features/home/presentation/cubit/tool_counts_cubit.dart';
 import '../features/waitlist/presentation/cubit/waitlist_cubit.dart';
 import '../features/consultations/presentation/room_presence.dart';
 import '../features/consultations/presentation/widgets/live_session_banner.dart';
@@ -193,6 +194,7 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
         BlocProvider.value(value: getIt<RequestsCubit>()),
         BlocProvider.value(value: getIt<ChatsCubit>()),
         BlocProvider.value(value: getIt<WaitlistCubit>()),
+        BlocProvider.value(value: getIt<ToolCountsCubit>()),
       ],
       child: BlocBuilder<AuthBloc, AuthState>(
         buildWhen: (a, b) =>

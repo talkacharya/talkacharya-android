@@ -347,7 +347,9 @@
     "chatBlockedByMe",
     "chatBlockedByThem",
     "chatMoreOptions",
-    "chatBlockConfirmBody"
+    "chatBlockConfirmBody",
+    "astroGalleryTitle",
+    "astroGalleryPhoto"
   ],
 
   "gu": [
@@ -698,7 +700,9 @@
     "chatBlockedByMe",
     "chatBlockedByThem",
     "chatMoreOptions",
-    "chatBlockConfirmBody"
+    "chatBlockConfirmBody",
+    "astroGalleryTitle",
+    "astroGalleryPhoto"
   ],
 
   "kn": [
@@ -1049,7 +1053,9 @@
     "chatBlockedByMe",
     "chatBlockedByThem",
     "chatMoreOptions",
-    "chatBlockConfirmBody"
+    "chatBlockConfirmBody",
+    "astroGalleryTitle",
+    "astroGalleryPhoto"
   ],
 
   "mr": [
@@ -1400,7 +1406,9 @@
     "chatBlockedByMe",
     "chatBlockedByThem",
     "chatMoreOptions",
-    "chatBlockConfirmBody"
+    "chatBlockConfirmBody",
+    "astroGalleryTitle",
+    "astroGalleryPhoto"
   ],
 
   "ta": [
@@ -1751,7 +1759,9 @@
     "chatBlockedByMe",
     "chatBlockedByThem",
     "chatMoreOptions",
-    "chatBlockConfirmBody"
+    "chatBlockConfirmBody",
+    "astroGalleryTitle",
+    "astroGalleryPhoto"
   ],
 
   "te": [
@@ -2102,6 +2112,8 @@
     "chatBlockedByMe",
     "chatBlockedByThem",
     "chatMoreOptions",
-    "chatBlockConfirmBody"
+    "chatBlockConfirmBody",
+    "astroGalleryTitle",
+    "astroGalleryPhoto"
   ]
 }

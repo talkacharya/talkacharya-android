@@ -33,6 +33,9 @@ abstract class Astrologer with _$Astrologer {
     @JsonKey(name: 'avg_response_seconds') int? avgResponseSeconds,
     @JsonKey(name: 'repeat_client_rate') double? repeatClientRate,
     @JsonKey(name: 'response_rate') double? responseRate,
+
+    /// Photos the astrologer put on their profile (approved ones only).
+    @Default(<AstrologerPhoto>[]) List<AstrologerPhoto> gallery,
   }) = _Astrologer;
 
   const Astrologer._();
@@ -67,6 +70,17 @@ abstract class Astrologer with _$Astrologer {
   }
 
   String get skillsLabel => skills.take(3).map((s) => s.name).join(' · ');
+}
+
+@freezed
+abstract class AstrologerPhoto with _$AstrologerPhoto {
+  const factory AstrologerPhoto({
+    @Default('') String image,
+    @Default('') String caption,
+  }) = _AstrologerPhoto;
+
+  factory AstrologerPhoto.fromJson(Map<String, dynamic> json) =>
+      _$AstrologerPhotoFromJson(json);
 }
 
 @freezed

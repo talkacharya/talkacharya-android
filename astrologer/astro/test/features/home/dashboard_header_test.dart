@@ -218,6 +218,8 @@ void main() {
     await pump(tester);
     await tester.tap(find.text('Go online'));
     await tester.pump();
+    // The slider's label flips halfway through its travel, not on the tap.
+    await tester.pump(const Duration(milliseconds: 300));
     expect(coord.enabled, isTrue);
     expect(find.text('Go offline'), findsOneWidget);
   });

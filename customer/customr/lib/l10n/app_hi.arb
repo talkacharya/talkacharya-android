@@ -2974,5 +2974,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "astroGalleryTitle": "फ़ोटो",
+  "astroGalleryPhoto": "फ़ोटो {index} / {total}"
 }

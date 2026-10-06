@@ -24,8 +24,10 @@ import '../../features/performance/presentation/cubit/performance_cubit.dart';
 import '../util/amount_privacy.dart';
 import '../../features/remedies/data/remedies_api.dart';
 import '../../features/waitlist/data/waitlist_api.dart';
+import '../../features/workspace/data/workspace_api.dart';
 import '../../features/waitlist/presentation/cubit/waitlist_cubit.dart';
 import '../../features/home/data/dashboard_api.dart';
+import '../../features/home/presentation/cubit/tool_counts_cubit.dart';
 import '../../features/home/presentation/cubit/dashboard_cubit.dart';
 import '../../features/notifications/data/notifications_api.dart';
 import '../../features/notifications/data/notifications_repository.dart';
@@ -197,9 +199,19 @@ Future<void> configureDependencies(AppConfig config) async {
     ..registerLazySingleton<PerformanceApi>(() => PerformanceApi(dio))
     ..registerLazySingleton<RemediesApi>(() => RemediesApi(dio))
     ..registerLazySingleton<WaitlistApi>(() => WaitlistApi(dio))
+    ..registerLazySingleton<WorkspaceApi>(() => WorkspaceApi(dio))
     // App-level: it also feeds the badge on the Home waitlist tile.
     ..registerLazySingleton<WaitlistCubit>(
       () => WaitlistCubit(api: getIt(), realtime: realtime),
+    )
+    ..registerLazySingleton<ToolCountsCubit>(
+      () => ToolCountsCubit(
+        consultations: getIt(),
+        predictions: getIt(),
+        workspace: getIt(),
+        storage: getIt(),
+        realtime: realtime,
+      ),
     )
     ..registerFactory<PerformanceCubit>(
       () => PerformanceCubit(api: getIt(), availability: getIt()),

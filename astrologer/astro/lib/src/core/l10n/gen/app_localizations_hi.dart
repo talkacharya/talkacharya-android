@@ -2553,4 +2553,309 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get remedyDisclosure =>
       'ग्राहक इसे आपकी सलाह के रूप में देखता है और फ़ैसला खुद करता है। वही सुझाएँ जो कुंडली के हिसाब से ज़रूरी हो।';
+
+  @override
+  String get toolsTitle => 'सभी टूल्स';
+
+  @override
+  String get toolsGroupWork => 'आपका काम';
+
+  @override
+  String get toolsGroupCustomers => 'आपके ग्राहक';
+
+  @override
+  String get toolsGroupGrow => 'आगे बढ़ें';
+
+  @override
+  String get toolsGroupSchedule => 'समय और कमाई';
+
+  @override
+  String get toolsGroupHelp => 'अपडेट और सहायता';
+
+  @override
+  String get wsCantOpen => 'इस फ़ोन पर यह नहीं खुल सका';
+
+  @override
+  String get wsRemove => 'हटाएँ';
+
+  @override
+  String get wsNew => 'नया';
+
+  @override
+  String get wsReadMore => 'और पढ़ें';
+
+  @override
+  String get wsAnnouncements => 'घोषणाएँ';
+
+  @override
+  String get wsAnnouncementsEmpty => 'अभी कोई नई घोषणा नहीं';
+
+  @override
+  String get wsAnnouncementsEmptyBody =>
+      'TalkAcharya की नीति में बदलाव, त्योहारों का समय और नई सुविधाएँ यहाँ दिखेंगी।';
+
+  @override
+  String get wsTraining => 'ट्रेनिंग';
+
+  @override
+  String get wsTrainingSubtitle =>
+      'ऐप से ज़्यादा फ़ायदा उठाने के छोटे वीडियो। ये आपके वीडियो ऐप में खुलते हैं।';
+
+  @override
+  String get wsTrainingEmpty => 'अभी कोई वीडियो नहीं';
+
+  @override
+  String get wsTrainingEmptyBody => 'ट्रेनिंग वीडियो जुड़ते ही यहाँ दिखेंगे।';
+
+  @override
+  String get wsFavourites => 'पसंदीदा';
+
+  @override
+  String get wsFavouritesSubtitle =>
+      'आपके चुने हुए ग्राहक, और उनके बारे में नोट जो सिर्फ़ आप देख सकते हैं।';
+
+  @override
+  String get wsFavouritesEmpty => 'अभी कोई पसंदीदा नहीं';
+
+  @override
+  String get wsFavouritesEmptyBody =>
+      'किसी ग्राहक की चैट खोलें और मेनू से \"पसंदीदा में जोड़ें\" चुनें।';
+
+  @override
+  String get wsAddFavourite => 'पसंदीदा में जोड़ें';
+
+  @override
+  String wsFavouriteAdded(String name) {
+    return '$name पसंदीदा में जुड़ गए';
+  }
+
+  @override
+  String get wsUnfavourite => 'पसंदीदा से हटाएँ';
+
+  @override
+  String get wsEditNote => 'नोट बदलें';
+
+  @override
+  String wsNoteTitle(String name) {
+    return '$name के बारे में नोट';
+  }
+
+  @override
+  String get wsNoteHint =>
+      'यह सिर्फ़ आपको दिखता है। उदाहरण: करियर का सवाल, दिवाली के बाद फिर बात करनी है।';
+
+  @override
+  String get wsCommunity => 'मेरी कम्युनिटी';
+
+  @override
+  String get wsCommunitySubtitle =>
+      'आपको फ़ॉलो करने वाले लोग। आपके ऑनलाइन या लाइव आने पर इन्हें सूचना मिलती है।';
+
+  @override
+  String get wsFollowers => 'फ़ॉलोअर';
+
+  @override
+  String get wsNewThisWeek => 'इस हफ़्ते नए';
+
+  @override
+  String wsFollowingSince(String time) {
+    return '$time जुड़े';
+  }
+
+  @override
+  String get wsCommunityEmpty => 'अभी कोई फ़ॉलोअर नहीं';
+
+  @override
+  String get wsCommunityEmptyBody =>
+      'ग्राहक आपकी प्रोफ़ाइल से या सेशन के बाद आपको फ़ॉलो कर सकते हैं। लाइव जाना सबसे तेज़ तरीका है।';
+
+  @override
+  String get wsReferral => 'रेफ़र करें, कमाएँ';
+
+  @override
+  String wsReferralPitch(String reward, String gift) {
+    return 'आपके कोड से जुड़ने वाले हर नए ग्राहक पर $reward कमाएँ। उन्हें $gift मिलते हैं।';
+  }
+
+  @override
+  String get wsCodeCopied => 'कोड कॉपी हो गया';
+
+  @override
+  String get wsShareInvite => 'निमंत्रण भेजें';
+
+  @override
+  String wsReferralShare(String code, String gift, String link) {
+    return 'TalkAcharya पर मुझसे परामर्श लें। साइन अप करते समय मेरा कोड $code डालें और अपने वॉलेट में $gift पाएँ। $link';
+  }
+
+  @override
+  String get wsReferralJoined => 'आपके कोड से जुड़े';
+
+  @override
+  String get wsReferralEarned => 'कमाए';
+
+  @override
+  String get wsReferralHow =>
+      'जिसे आपने बुलाया, उसका पहला भुगतान वाला परामर्श पूरा होते ही इनाम आपके पेआउट में जुड़ जाता है।';
+
+  @override
+  String get wsReferralPending => 'जुड़ गए';
+
+  @override
+  String get wsReferralRewarded => 'इनाम मिला';
+
+  @override
+  String get wsReferralVoid => 'गिना नहीं गया';
+
+  @override
+  String get wsGallery => 'फ़ोटो';
+
+  @override
+  String get wsGallerySubtitle =>
+      'वे तस्वीरें जो ग्राहक आपकी प्रोफ़ाइल पर देखते हैं।';
+
+  @override
+  String wsGalleryCount(int count, int max) {
+    return '$max में से $count फ़ोटो';
+  }
+
+  @override
+  String get wsAddPhoto => 'फ़ोटो जोड़ें';
+
+  @override
+  String get wsPhotoRemoveTitle => 'यह फ़ोटो हटाएँ?';
+
+  @override
+  String get wsGalleryRules =>
+      'अपनी ही तस्वीरें लगाएँ: काम करते हुए, आपके प्रमाणपत्र, आपकी करवाई पूजाएँ। तस्वीर में फ़ोन नंबर या कोई संपर्क जानकारी न हो।';
+
+  @override
+  String get wsFeedback => 'फ़ीडबैक';
+
+  @override
+  String get wsFeedbackSubtitle =>
+      'बताइए क्या ठीक नहीं चल रहा या किससे मदद मिलेगी। हम हर संदेश पढ़ते हैं।';
+
+  @override
+  String get wsFeedbackBug => 'कुछ ठीक नहीं चल रहा';
+
+  @override
+  String get wsFeedbackSuggestion => 'सुझाव';
+
+  @override
+  String get wsFeedbackPayments => 'भुगतान';
+
+  @override
+  String get wsFeedbackCustomers => 'ग्राहक';
+
+  @override
+  String get wsFeedbackOther => 'अन्य';
+
+  @override
+  String get wsFeedbackHint => 'क्या हुआ, और आप क्या चाहते थे?';
+
+  @override
+  String get wsFeedbackSend => 'फ़ीडबैक भेजें';
+
+  @override
+  String get wsFeedbackTooShort => 'कृपया थोड़ा और लिखें ताकि हम मदद कर सकें।';
+
+  @override
+  String get wsFeedbackSent => 'धन्यवाद — भेज दिया गया';
+
+  @override
+  String get wsFeedbackEarlier => 'आपने जो भेजा';
+
+  @override
+  String get wsFeedbackReply => 'TalkAcharya का जवाब';
+
+  @override
+  String get wsReplies => 'त्वरित उत्तर';
+
+  @override
+  String get wsRepliesSubtitle =>
+      'वे संदेश जो आप अक्सर भेजते हैं, हर चैट में एक टैप पर। सबसे ज़्यादा इस्तेमाल वाले ऊपर आते हैं।';
+
+  @override
+  String get wsRepliesEmpty => 'अभी कोई त्वरित उत्तर नहीं';
+
+  @override
+  String get wsReplyNew => 'नया त्वरित उत्तर';
+
+  @override
+  String get wsReplyHint => 'नमस्ते! कृपया अपनी जन्म तिथि, समय और स्थान बताएँ।';
+
+  @override
+  String wsReplyUsed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count बार इस्तेमाल',
+      one: '1 बार इस्तेमाल',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get wsCalendar => 'कैलेंडर';
+
+  @override
+  String get wsCalendarSubtitle =>
+      'अगले दो हफ़्तों के आपके काम के घंटे और तय किए गए लाइव।';
+
+  @override
+  String get wsCalendarWorking => 'काम के घंटे';
+
+  @override
+  String wsCalendarLiveAt(String time) {
+    return '$time बजे लाइव';
+  }
+
+  @override
+  String get wsCalendarDayOff => 'छुट्टी';
+
+  @override
+  String get wsCalendarDayOffBody => 'इस दिन के लिए काम के घंटे तय नहीं हैं।';
+
+  @override
+  String get wsCalendarNoHours => 'कोई तय समय नहीं';
+
+  @override
+  String get wsCalendarNoHoursBody =>
+      'आपने काम के घंटे तय नहीं किए हैं, इसलिए आप जब भी ऑनलाइन हों ग्राहक आपसे जुड़ सकते हैं।';
+
+  @override
+  String get wsCalendarEdit => 'काम के घंटे बदलें';
+
+  @override
+  String get wsCalendarNote =>
+      'काम के घंटों के बाहर, ऐप खुला होने पर भी आप \'दूर\' दिखते हैं।';
+
+  @override
+  String get wsHelpline => 'हेल्पलाइन';
+
+  @override
+  String get wsHelpWhatsapp => 'WhatsApp करें';
+
+  @override
+  String get wsHelpEmail => 'ईमेल करें';
+
+  @override
+  String get wsHelpCentre => 'सहायता केंद्र';
+
+  @override
+  String get wsHelpCentreSub => 'आम सवालों के जवाब';
+
+  @override
+  String get wsHelpNone => 'सहायता की संपर्क जानकारी अभी उपलब्ध नहीं है।';
+
+  @override
+  String get wsPhotoPending => 'समीक्षा में';
+
+  @override
+  String get wsPhotoRejected => 'स्वीकृत नहीं\nकारण के लिए टैप करें';
+
+  @override
+  String get wsGalleryReviewed =>
+      'नई फ़ोटो ग्राहकों को दिखने से पहले जाँची जाती हैं। इसमें आमतौर पर एक दिन लगता है।';
 }

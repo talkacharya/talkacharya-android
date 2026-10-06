@@ -2558,4 +2558,311 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get remedyDisclosure =>
       'The customer sees this as your recommendation and decides for themselves. Suggest only what the chart calls for.';
+
+  @override
+  String get toolsTitle => 'All tools';
+
+  @override
+  String get toolsGroupWork => 'Your work';
+
+  @override
+  String get toolsGroupCustomers => 'Your customers';
+
+  @override
+  String get toolsGroupGrow => 'Grow';
+
+  @override
+  String get toolsGroupSchedule => 'Schedule & money';
+
+  @override
+  String get toolsGroupHelp => 'Updates & help';
+
+  @override
+  String get wsCantOpen => 'Couldn\'t open that on this phone';
+
+  @override
+  String get wsRemove => 'Remove';
+
+  @override
+  String get wsNew => 'NEW';
+
+  @override
+  String get wsReadMore => 'Read more';
+
+  @override
+  String get wsAnnouncements => 'Announcements';
+
+  @override
+  String get wsAnnouncementsEmpty => 'Nothing new right now';
+
+  @override
+  String get wsAnnouncementsEmptyBody =>
+      'Policy changes, festival timings and new features from TalkAcharya will show up here.';
+
+  @override
+  String get wsTraining => 'Training';
+
+  @override
+  String get wsTrainingSubtitle =>
+      'Short videos on getting more from the app. They open in your video app.';
+
+  @override
+  String get wsTrainingEmpty => 'No videos yet';
+
+  @override
+  String get wsTrainingEmptyBody =>
+      'Training videos will appear here as they are added.';
+
+  @override
+  String get wsFavourites => 'Favourites';
+
+  @override
+  String get wsFavouritesSubtitle =>
+      'Customers you\'ve marked, with notes only you can see.';
+
+  @override
+  String get wsFavouritesEmpty => 'No favourites yet';
+
+  @override
+  String get wsFavouritesEmptyBody =>
+      'Open a customer\'s chat and choose \"Add to favourites\" from the menu.';
+
+  @override
+  String get wsAddFavourite => 'Add to favourites';
+
+  @override
+  String wsFavouriteAdded(String name) {
+    return '$name added to favourites';
+  }
+
+  @override
+  String get wsUnfavourite => 'Remove from favourites';
+
+  @override
+  String get wsEditNote => 'Edit note';
+
+  @override
+  String wsNoteTitle(String name) {
+    return 'Note about $name';
+  }
+
+  @override
+  String get wsNoteHint =>
+      'Only you see this. For example: career question, follow up after Diwali.';
+
+  @override
+  String get wsCommunity => 'My community';
+
+  @override
+  String get wsCommunitySubtitle =>
+      'People who follow you. They\'re told when you come online or go live.';
+
+  @override
+  String get wsFollowers => 'Followers';
+
+  @override
+  String get wsNewThisWeek => 'New this week';
+
+  @override
+  String wsFollowingSince(String time) {
+    return 'Joined $time';
+  }
+
+  @override
+  String get wsCommunityEmpty => 'No followers yet';
+
+  @override
+  String get wsCommunityEmptyBody =>
+      'Customers can follow you from your profile or after a session. Going live is the quickest way to be found.';
+
+  @override
+  String get wsReferral => 'Refer & earn';
+
+  @override
+  String wsReferralPitch(String reward, String gift) {
+    return 'Earn $reward for every new customer who joins with your code. They get $gift.';
+  }
+
+  @override
+  String get wsCodeCopied => 'Code copied';
+
+  @override
+  String get wsShareInvite => 'Share invite';
+
+  @override
+  String wsReferralShare(String code, String gift, String link) {
+    return 'Consult me on TalkAcharya. Use my code $code when you sign up and get $gift in your wallet. $link';
+  }
+
+  @override
+  String get wsReferralJoined => 'Joined with your code';
+
+  @override
+  String get wsReferralEarned => 'Earned';
+
+  @override
+  String get wsReferralHow =>
+      'The reward is added to your payouts once the person you invited completes their first paid consultation.';
+
+  @override
+  String get wsReferralPending => 'Joined';
+
+  @override
+  String get wsReferralRewarded => 'Rewarded';
+
+  @override
+  String get wsReferralVoid => 'Not counted';
+
+  @override
+  String get wsGallery => 'Photos';
+
+  @override
+  String get wsGallerySubtitle => 'Pictures customers see on your profile.';
+
+  @override
+  String wsGalleryCount(int count, int max) {
+    return '$count of $max photos';
+  }
+
+  @override
+  String get wsAddPhoto => 'Add photo';
+
+  @override
+  String get wsPhotoRemoveTitle => 'Remove this photo?';
+
+  @override
+  String get wsGalleryRules =>
+      'Use your own photos: you at work, your certificates, poojas you\'ve performed. No phone numbers or other contact details in the picture.';
+
+  @override
+  String get wsFeedback => 'Feedback';
+
+  @override
+  String get wsFeedbackSubtitle =>
+      'Tell us what\'s broken or what would help. We read every message.';
+
+  @override
+  String get wsFeedbackBug => 'Something\'s broken';
+
+  @override
+  String get wsFeedbackSuggestion => 'Suggestion';
+
+  @override
+  String get wsFeedbackPayments => 'Payments';
+
+  @override
+  String get wsFeedbackCustomers => 'Customers';
+
+  @override
+  String get wsFeedbackOther => 'Other';
+
+  @override
+  String get wsFeedbackHint => 'What happened, and what did you expect?';
+
+  @override
+  String get wsFeedbackSend => 'Send feedback';
+
+  @override
+  String get wsFeedbackTooShort => 'Please write a little more so we can help.';
+
+  @override
+  String get wsFeedbackSent => 'Thank you — sent';
+
+  @override
+  String get wsFeedbackEarlier => 'What you\'ve sent';
+
+  @override
+  String get wsFeedbackReply => 'TalkAcharya replied';
+
+  @override
+  String get wsReplies => 'Quick replies';
+
+  @override
+  String get wsRepliesSubtitle =>
+      'Messages you send often, one tap away in every chat. The ones you use most rise to the top.';
+
+  @override
+  String get wsRepliesEmpty => 'No quick replies yet';
+
+  @override
+  String get wsReplyNew => 'New quick reply';
+
+  @override
+  String get wsReplyHint =>
+      'Namaste! Please share your date, time and place of birth.';
+
+  @override
+  String wsReplyUsed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Used $count times',
+      one: 'Used once',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get wsCalendar => 'Calendar';
+
+  @override
+  String get wsCalendarSubtitle =>
+      'Your working hours and scheduled lives for the next two weeks.';
+
+  @override
+  String get wsCalendarWorking => 'Working hours';
+
+  @override
+  String wsCalendarLiveAt(String time) {
+    return 'Live stream at $time';
+  }
+
+  @override
+  String get wsCalendarDayOff => 'Day off';
+
+  @override
+  String get wsCalendarDayOffBody => 'No working hours set for this day.';
+
+  @override
+  String get wsCalendarNoHours => 'No fixed hours';
+
+  @override
+  String get wsCalendarNoHoursBody =>
+      'You haven\'t set working hours, so customers can reach you whenever you\'re online.';
+
+  @override
+  String get wsCalendarEdit => 'Edit working hours';
+
+  @override
+  String get wsCalendarNote =>
+      'Outside your working hours you show as away, even with the app open.';
+
+  @override
+  String get wsHelpline => 'Helpline';
+
+  @override
+  String get wsHelpWhatsapp => 'WhatsApp us';
+
+  @override
+  String get wsHelpEmail => 'Email us';
+
+  @override
+  String get wsHelpCentre => 'Help centre';
+
+  @override
+  String get wsHelpCentreSub => 'Answers to common questions';
+
+  @override
+  String get wsHelpNone =>
+      'Support contact details aren\'t available right now.';
+
+  @override
+  String get wsPhotoPending => 'In review';
+
+  @override
+  String get wsPhotoRejected => 'Not approved\nTap for why';
+
+  @override
+  String get wsGalleryReviewed =>
+      'New photos are reviewed before customers see them. This usually takes a day.';
 }

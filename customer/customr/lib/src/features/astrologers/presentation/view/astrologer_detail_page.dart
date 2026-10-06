@@ -17,6 +17,7 @@ import '../../../gifting/data/models/gift.dart';
 import '../../../gifting/presentation/view/gift_sheet.dart';
 import '../../data/astrologers_repository.dart';
 import '../../data/models/astrologer.dart';
+import 'widgets/astrologer_gallery.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 class AstrologerDetailPage extends StatefulWidget {
@@ -86,6 +87,7 @@ class _ProfileView extends StatelessWidget {
       _StatsCard(a: a),
       if (a.skills.isNotEmpty) _SkillsCard(skills: a.skills),
       if (a.bio.isNotEmpty) _AboutSection(bio: a.bio, languages: a.languages),
+      if (a.gallery.isNotEmpty) AstrologerGallery(photos: a.gallery),
       if (a.rates.isNotEmpty) _RatesCard(rates: a.rates),
       const _TrustRow(),
     ];

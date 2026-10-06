@@ -7231,4 +7231,12 @@ class AppLocalizationsKn extends AppLocalizations {
   String chatsLastMessageMine(String body) {
     return 'ನೀವು: $body';
   }
+
+  @override
+  String get astroGalleryTitle => 'Photos';
+
+  @override
+  String astroGalleryPhoto(int index, int total) {
+    return 'Photo $index of $total';
+  }
 }

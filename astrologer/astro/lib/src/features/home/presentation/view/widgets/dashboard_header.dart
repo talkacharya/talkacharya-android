@@ -11,7 +11,6 @@ import '../../../../../core/theme/app_theme.dart';
 import '../../../../../core/utils/haptic_service.dart';
 import '../../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../../../notifications/presentation/view/notification_bell.dart';
-import 'dash_shared.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
@@ -475,14 +474,12 @@ class _PresencePanel extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              Flexible(
-                child: _PresenceButton(
-                  on: on,
-                  onTap: () {
-                    HapticService.medium();
-                    coord.setEnabled(!on);
-                  },
-                ),
+              _PresenceSliderButton(
+                on: on,
+                onChanged: (val) {
+                  HapticService.medium();
+                  coord.setEnabled(val);
+                },
               ),
             ],
           ),
@@ -492,77 +489,193 @@ class _PresencePanel extends StatelessWidget {
   }
 }
 
-/// Gold "Go online" when offline (the call to action); a quiet outlined
-/// "Go offline" once online.
-class _PresenceButton extends StatelessWidget {
-  const _PresenceButton({required this.on, required this.onTap});
+/// Interactive slide-to-toggle button for Go Online (slide right) and Go Offline (slide left).
+class _PresenceSliderButton extends StatefulWidget {
+  const _PresenceSliderButton({required this.on, required this.onChanged});
 
   final bool on;
-  final VoidCallback onTap;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  State<_PresenceSliderButton> createState() => _PresenceSliderButtonState();
+}
+
+class _PresenceSliderButtonState extends State<_PresenceSliderButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _anim;
+  double _dragValue = 0;
+  bool _isDragging = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _anim = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 250),
+      value: widget.on ? 1.0 : 0.0,
+    );
+  }
+
+  @override
+  void didUpdateWidget(_PresenceSliderButton old) {
+    super.didUpdateWidget(old);
+    if (old.on != widget.on && !_isDragging) {
+      _anim.animateTo(widget.on ? 1.0 : 0.0, curve: Curves.easeOutCubic);
+    }
+  }
+
+  @override
+  void dispose() {
+    _anim.dispose();
+    super.dispose();
+  }
+
+  void _onDragStart(DragStartDetails d) {
+    setState(() {
+      _isDragging = true;
+      _dragValue = _anim.value;
+    });
+  }
+
+  void _onDragUpdate(DragUpdateDetails d, double trackWidth) {
+    final available = trackWidth - 34.0 - 8.0;
+    if (available <= 0) return;
+    final delta = d.delta.dx / available;
+    setState(() {
+      _dragValue = (_dragValue + delta).clamp(0.0, 1.0);
+    });
+  }
+
+  void _onDragEnd(DragEndDetails d) {
+    _isDragging = false;
+    final threshold = widget.on ? 0.6 : 0.4;
+    final target = _dragValue > threshold;
+    _anim.animateTo(target ? 1.0 : 0.0, curve: Curves.easeOutCubic);
+    if (target != widget.on) {
+      widget.onChanged(target);
+    }
+  }
+
+  void _onTap() {
+    final next = !widget.on;
+    _anim.animateTo(next ? 1.0 : 0.0, curve: Curves.easeOutCubic);
+    widget.onChanged(next);
+  }
 
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
     final brand = context.brand;
-    final label = on ? l.presenceGoOffline : l.presenceGoOnline;
-    return Pressable(
-      haptic: HapticLevel.none,
-      child: Semantics(
-        button: true,
-        toggled: on,
-        label: label,
-        child: Material(
-          type: MaterialType.transparency,
-          child: InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(999),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 220),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+    final on = widget.on;
+
+    const width = 138.0;
+    const height = 42.0;
+    const thumbSize = 34.0;
+    const padding = 4.0;
+    const maxTravel = width - thumbSize - (padding * 2);
+
+    return Semantics(
+      button: true,
+      toggled: on,
+      label: on ? l.presenceGoOffline : l.presenceGoOnline,
+      child: GestureDetector(
+        onTap: _onTap,
+        onHorizontalDragStart: _onDragStart,
+        onHorizontalDragUpdate: (d) => _onDragUpdate(d, width),
+        onHorizontalDragEnd: _onDragEnd,
+        child: AnimatedBuilder(
+          animation: _anim,
+          builder: (context, _) {
+            final t = _isDragging ? _dragValue : _anim.value;
+            final thumbLeft = padding + (t * maxTravel);
+
+            return Container(
+              width: width,
+              height: height,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(999),
-                gradient: on
-                    ? null
-                    : const LinearGradient(colors: BrandColors.goldGradient),
-                border: on
-                    ? Border.all(color: Colors.white.withValues(alpha: 0.35))
-                    : null,
-                boxShadow: on
-                    ? null
-                    : [
-                        BoxShadow(
-                          color: BrandColors.goldGradient.last.withValues(
-                            alpha: 0.45,
-                          ),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-              ),
-              // Shrinks rather than overflows at very large text sizes.
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.power_settings_new_rounded,
-                      size: 18,
-                      color: on ? brand.onCosmic : const Color(0xFF3A1703),
+                color: Color.lerp(
+                  Colors.white.withValues(alpha: 0.10),
+                  brand.online.withValues(alpha: 0.20),
+                  t,
+                ),
+                border: Border.all(
+                  color: Color.lerp(
+                    Colors.white.withValues(alpha: 0.20),
+                    brand.online.withValues(alpha: 0.45),
+                    t,
+                  )!,
+                ),
+                boxShadow: [
+                  if (t < 0.5)
+                    BoxShadow(
+                      color: BrandColors.goldGradient.last.withValues(
+                        alpha: 0.25 * (1 - t),
+                      ),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
                     ),
-                    const SizedBox(width: 6),
-                    Text(
-                      label,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w800,
-                        color: on ? brand.onCosmic : const Color(0xFF3A1703),
+                ],
+              ),
+              child: Stack(
+                alignment: Alignment.centerLeft,
+                children: [
+                  // Text inside track
+                  Positioned.fill(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: t < 0.5 ? 40 : 10,
+                        right: t >= 0.5 ? 40 : 10,
+                      ),
+                      child: Align(
+                        alignment: t < 0.5
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
+                        child: Text(
+                          t < 0.5 ? l.presenceGoOnline : l.presenceGoOffline,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                            color: Color.lerp(brand.gold, brand.onCosmic, t),
+                          ),
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+
+                  // Sliding Thumb Handle
+                  Positioned(
+                    left: thumbLeft,
+                    child: Container(
+                      width: thumbSize,
+                      height: thumbSize,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: t < 0.5
+                            ? const LinearGradient(
+                                colors: BrandColors.goldGradient,
+                              )
+                            : null,
+                        color: t >= 0.5 ? brand.online : null,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.3),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        Icons.power_settings_new_rounded,
+                        size: 18,
+                        color: t < 0.5 ? const Color(0xFF3A1703) : Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

@@ -4471,6 +4471,540 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The customer sees this as your recommendation and decides for themselves. Suggest only what the chart calls for.'**
   String get remedyDisclosure;
+
+  /// No description provided for @toolsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All tools'**
+  String get toolsTitle;
+
+  /// No description provided for @toolsGroupWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Your work'**
+  String get toolsGroupWork;
+
+  /// No description provided for @toolsGroupCustomers.
+  ///
+  /// In en, this message translates to:
+  /// **'Your customers'**
+  String get toolsGroupCustomers;
+
+  /// No description provided for @toolsGroupGrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Grow'**
+  String get toolsGroupGrow;
+
+  /// No description provided for @toolsGroupSchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule & money'**
+  String get toolsGroupSchedule;
+
+  /// No description provided for @toolsGroupHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates & help'**
+  String get toolsGroupHelp;
+
+  /// No description provided for @wsCantOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open that on this phone'**
+  String get wsCantOpen;
+
+  /// No description provided for @wsRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get wsRemove;
+
+  /// No description provided for @wsNew.
+  ///
+  /// In en, this message translates to:
+  /// **'NEW'**
+  String get wsNew;
+
+  /// No description provided for @wsReadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Read more'**
+  String get wsReadMore;
+
+  /// No description provided for @wsAnnouncements.
+  ///
+  /// In en, this message translates to:
+  /// **'Announcements'**
+  String get wsAnnouncements;
+
+  /// No description provided for @wsAnnouncementsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing new right now'**
+  String get wsAnnouncementsEmpty;
+
+  /// No description provided for @wsAnnouncementsEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Policy changes, festival timings and new features from TalkAcharya will show up here.'**
+  String get wsAnnouncementsEmptyBody;
+
+  /// No description provided for @wsTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Training'**
+  String get wsTraining;
+
+  /// No description provided for @wsTrainingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Short videos on getting more from the app. They open in your video app.'**
+  String get wsTrainingSubtitle;
+
+  /// No description provided for @wsTrainingEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No videos yet'**
+  String get wsTrainingEmpty;
+
+  /// No description provided for @wsTrainingEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Training videos will appear here as they are added.'**
+  String get wsTrainingEmptyBody;
+
+  /// No description provided for @wsFavourites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favourites'**
+  String get wsFavourites;
+
+  /// No description provided for @wsFavouritesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers you\'ve marked, with notes only you can see.'**
+  String get wsFavouritesSubtitle;
+
+  /// No description provided for @wsFavouritesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No favourites yet'**
+  String get wsFavouritesEmpty;
+
+  /// No description provided for @wsFavouritesEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Open a customer\'s chat and choose \"Add to favourites\" from the menu.'**
+  String get wsFavouritesEmptyBody;
+
+  /// No description provided for @wsAddFavourite.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to favourites'**
+  String get wsAddFavourite;
+
+  /// No description provided for @wsFavouriteAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} added to favourites'**
+  String wsFavouriteAdded(String name);
+
+  /// No description provided for @wsUnfavourite.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from favourites'**
+  String get wsUnfavourite;
+
+  /// No description provided for @wsEditNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit note'**
+  String get wsEditNote;
+
+  /// No description provided for @wsNoteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Note about {name}'**
+  String wsNoteTitle(String name);
+
+  /// No description provided for @wsNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Only you see this. For example: career question, follow up after Diwali.'**
+  String get wsNoteHint;
+
+  /// No description provided for @wsCommunity.
+  ///
+  /// In en, this message translates to:
+  /// **'My community'**
+  String get wsCommunity;
+
+  /// No description provided for @wsCommunitySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'People who follow you. They\'re told when you come online or go live.'**
+  String get wsCommunitySubtitle;
+
+  /// No description provided for @wsFollowers.
+  ///
+  /// In en, this message translates to:
+  /// **'Followers'**
+  String get wsFollowers;
+
+  /// No description provided for @wsNewThisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'New this week'**
+  String get wsNewThisWeek;
+
+  /// No description provided for @wsFollowingSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined {time}'**
+  String wsFollowingSince(String time);
+
+  /// No description provided for @wsCommunityEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No followers yet'**
+  String get wsCommunityEmpty;
+
+  /// No description provided for @wsCommunityEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers can follow you from your profile or after a session. Going live is the quickest way to be found.'**
+  String get wsCommunityEmptyBody;
+
+  /// No description provided for @wsReferral.
+  ///
+  /// In en, this message translates to:
+  /// **'Refer & earn'**
+  String get wsReferral;
+
+  /// No description provided for @wsReferralPitch.
+  ///
+  /// In en, this message translates to:
+  /// **'Earn {reward} for every new customer who joins with your code. They get {gift}.'**
+  String wsReferralPitch(String reward, String gift);
+
+  /// No description provided for @wsCodeCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Code copied'**
+  String get wsCodeCopied;
+
+  /// No description provided for @wsShareInvite.
+  ///
+  /// In en, this message translates to:
+  /// **'Share invite'**
+  String get wsShareInvite;
+
+  /// No description provided for @wsReferralShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Consult me on TalkAcharya. Use my code {code} when you sign up and get {gift} in your wallet. {link}'**
+  String wsReferralShare(String code, String gift, String link);
+
+  /// No description provided for @wsReferralJoined.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined with your code'**
+  String get wsReferralJoined;
+
+  /// No description provided for @wsReferralEarned.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned'**
+  String get wsReferralEarned;
+
+  /// No description provided for @wsReferralHow.
+  ///
+  /// In en, this message translates to:
+  /// **'The reward is added to your payouts once the person you invited completes their first paid consultation.'**
+  String get wsReferralHow;
+
+  /// No description provided for @wsReferralPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined'**
+  String get wsReferralPending;
+
+  /// No description provided for @wsReferralRewarded.
+  ///
+  /// In en, this message translates to:
+  /// **'Rewarded'**
+  String get wsReferralRewarded;
+
+  /// No description provided for @wsReferralVoid.
+  ///
+  /// In en, this message translates to:
+  /// **'Not counted'**
+  String get wsReferralVoid;
+
+  /// No description provided for @wsGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get wsGallery;
+
+  /// No description provided for @wsGallerySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pictures customers see on your profile.'**
+  String get wsGallerySubtitle;
+
+  /// No description provided for @wsGalleryCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {max} photos'**
+  String wsGalleryCount(int count, int max);
+
+  /// No description provided for @wsAddPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photo'**
+  String get wsAddPhoto;
+
+  /// No description provided for @wsPhotoRemoveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this photo?'**
+  String get wsPhotoRemoveTitle;
+
+  /// No description provided for @wsGalleryRules.
+  ///
+  /// In en, this message translates to:
+  /// **'Use your own photos: you at work, your certificates, poojas you\'ve performed. No phone numbers or other contact details in the picture.'**
+  String get wsGalleryRules;
+
+  /// No description provided for @wsFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback'**
+  String get wsFeedback;
+
+  /// No description provided for @wsFeedbackSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us what\'s broken or what would help. We read every message.'**
+  String get wsFeedbackSubtitle;
+
+  /// No description provided for @wsFeedbackBug.
+  ///
+  /// In en, this message translates to:
+  /// **'Something\'s broken'**
+  String get wsFeedbackBug;
+
+  /// No description provided for @wsFeedbackSuggestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestion'**
+  String get wsFeedbackSuggestion;
+
+  /// No description provided for @wsFeedbackPayments.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments'**
+  String get wsFeedbackPayments;
+
+  /// No description provided for @wsFeedbackCustomers.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers'**
+  String get wsFeedbackCustomers;
+
+  /// No description provided for @wsFeedbackOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get wsFeedbackOther;
+
+  /// No description provided for @wsFeedbackHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What happened, and what did you expect?'**
+  String get wsFeedbackHint;
+
+  /// No description provided for @wsFeedbackSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send feedback'**
+  String get wsFeedbackSend;
+
+  /// No description provided for @wsFeedbackTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write a little more so we can help.'**
+  String get wsFeedbackTooShort;
+
+  /// No description provided for @wsFeedbackSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you — sent'**
+  String get wsFeedbackSent;
+
+  /// No description provided for @wsFeedbackEarlier.
+  ///
+  /// In en, this message translates to:
+  /// **'What you\'ve sent'**
+  String get wsFeedbackEarlier;
+
+  /// No description provided for @wsFeedbackReply.
+  ///
+  /// In en, this message translates to:
+  /// **'TalkAcharya replied'**
+  String get wsFeedbackReply;
+
+  /// No description provided for @wsReplies.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick replies'**
+  String get wsReplies;
+
+  /// No description provided for @wsRepliesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages you send often, one tap away in every chat. The ones you use most rise to the top.'**
+  String get wsRepliesSubtitle;
+
+  /// No description provided for @wsRepliesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No quick replies yet'**
+  String get wsRepliesEmpty;
+
+  /// No description provided for @wsReplyNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New quick reply'**
+  String get wsReplyNew;
+
+  /// No description provided for @wsReplyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Namaste! Please share your date, time and place of birth.'**
+  String get wsReplyHint;
+
+  /// No description provided for @wsReplyUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Used once} other{Used {count} times}}'**
+  String wsReplyUsed(int count);
+
+  /// No description provided for @wsCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get wsCalendar;
+
+  /// No description provided for @wsCalendarSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your working hours and scheduled lives for the next two weeks.'**
+  String get wsCalendarSubtitle;
+
+  /// No description provided for @wsCalendarWorking.
+  ///
+  /// In en, this message translates to:
+  /// **'Working hours'**
+  String get wsCalendarWorking;
+
+  /// No description provided for @wsCalendarLiveAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Live stream at {time}'**
+  String wsCalendarLiveAt(String time);
+
+  /// No description provided for @wsCalendarDayOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Day off'**
+  String get wsCalendarDayOff;
+
+  /// No description provided for @wsCalendarDayOffBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No working hours set for this day.'**
+  String get wsCalendarDayOffBody;
+
+  /// No description provided for @wsCalendarNoHours.
+  ///
+  /// In en, this message translates to:
+  /// **'No fixed hours'**
+  String get wsCalendarNoHours;
+
+  /// No description provided for @wsCalendarNoHoursBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t set working hours, so customers can reach you whenever you\'re online.'**
+  String get wsCalendarNoHoursBody;
+
+  /// No description provided for @wsCalendarEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit working hours'**
+  String get wsCalendarEdit;
+
+  /// No description provided for @wsCalendarNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Outside your working hours you show as away, even with the app open.'**
+  String get wsCalendarNote;
+
+  /// No description provided for @wsHelpline.
+  ///
+  /// In en, this message translates to:
+  /// **'Helpline'**
+  String get wsHelpline;
+
+  /// No description provided for @wsHelpWhatsapp.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp us'**
+  String get wsHelpWhatsapp;
+
+  /// No description provided for @wsHelpEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email us'**
+  String get wsHelpEmail;
+
+  /// No description provided for @wsHelpCentre.
+  ///
+  /// In en, this message translates to:
+  /// **'Help centre'**
+  String get wsHelpCentre;
+
+  /// No description provided for @wsHelpCentreSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Answers to common questions'**
+  String get wsHelpCentreSub;
+
+  /// No description provided for @wsHelpNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Support contact details aren\'t available right now.'**
+  String get wsHelpNone;
+
+  /// No description provided for @wsPhotoPending.
+  ///
+  /// In en, this message translates to:
+  /// **'In review'**
+  String get wsPhotoPending;
+
+  /// No description provided for @wsPhotoRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Not approved\nTap for why'**
+  String get wsPhotoRejected;
+
+  /// No description provided for @wsGalleryReviewed.
+  ///
+  /// In en, this message translates to:
+  /// **'New photos are reviewed before customers see them. This usually takes a day.'**
+  String get wsGalleryReviewed;
 }
 
 class _AppLocalizationsDelegate

@@ -45,6 +45,18 @@ class Routes {
   static const performance = '/performance';
   static const winBack = '/performance/win-back';
 
+  /// Every tool, grouped (Home shows only the first eight).
+  static const tools = '/tools';
+  static const announcements = '/announcements';
+  static const training = '/training';
+  static const favourites = '/favourites';
+  static const community = '/community';
+  static const referral = '/referral';
+  static const gallery = '/gallery';
+  static const feedback = '/feedback';
+  static const quickReplies = '/quick-replies';
+  static const calendar = '/calendar';
+
   static const waitlist = '/waitlist';
   static const callHistory = '/call-history';
   static const remedies = '/remedies';

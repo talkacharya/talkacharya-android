@@ -7210,4 +7210,12 @@ class AppLocalizationsMr extends AppLocalizations {
   String chatsLastMessageMine(String body) {
     return 'तुम्ही: $body';
   }
+
+  @override
+  String get astroGalleryTitle => 'Photos';
+
+  @override
+  String astroGalleryPhoto(int index, int total) {
+    return 'Photo $index of $total';
+  }
 }

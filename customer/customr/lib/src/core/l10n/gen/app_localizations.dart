@@ -12553,6 +12553,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You: {body}'**
   String chatsLastMessageMine(String body);
+
+  /// No description provided for @astroGalleryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get astroGalleryTitle;
+
+  /// No description provided for @astroGalleryPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo {index} of {total}'**
+  String astroGalleryPhoto(int index, int total);
 }
 
 class _AppLocalizationsDelegate

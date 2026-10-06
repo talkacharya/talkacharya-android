@@ -11,10 +11,12 @@ import 'package:talkacharya_chat/talkacharya_chat.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/network/friendly_error.dart';
 import '../../../../core/realtime/realtime_client.dart';
 import '../../../../core/router/routes.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/util/money.dart';
+import '../../../workspace/data/workspace_api.dart';
 import '../../../../core/sounds/app_sound_adapters.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';

@@ -10,6 +10,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/util/time_format.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../consultations/data/consultation_api.dart';
+import '../../../home/presentation/cubit/tool_counts_cubit.dart';
 import '../../../consultations/data/models/consultation.dart';
 import '../../../consultations/presentation/widgets/consultation_style.dart';
 import '../../../performance/presentation/widgets/perf_format.dart';
@@ -52,6 +53,10 @@ class _CallHistoryPageState extends State<CallHistoryPage> {
   void initState() {
     super.initState();
     _load();
+    // Opening the list is what clears the missed-calls badge on Home.
+    if (getIt.isRegistered<ToolCountsCubit>()) {
+      getIt<ToolCountsCubit>().markCallsSeen();
+    }
   }
 
   Future<void> _load() async {

@@ -13,6 +13,7 @@ import '../../../../core/realtime/realtime_client.dart';
 import '../../../../core/realtime/realtime_event.dart';
 import '../../../../core/router/transitions.dart';
 import '../../../chats/presentation/cubit/chats_cubit.dart';
+import '../../../home/presentation/cubit/tool_counts_cubit.dart';
 import '../../../notifications/presentation/bloc/notifications_cubit.dart';
 import '../../../requests/presentation/cubit/requests_cubit.dart';
 import '../../../waitlist/presentation/cubit/waitlist_cubit.dart';
@@ -42,6 +43,7 @@ class _AppShellState extends State<AppShell> {
     context.read<RequestsCubit>().load();
     context.read<ChatsCubit>().load();
     context.read<WaitlistCubit>().load();
+    context.read<ToolCountsCubit>().load();
     _sub = getIt<RealtimeClient>().events.listen(_onRealtime);
   }
 

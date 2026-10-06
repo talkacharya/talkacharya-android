@@ -295,13 +295,16 @@ class _AstroRoomMenu extends StatelessWidget {
     return PopupMenuButton<String>(
       position: PopupMenuPosition.under,
       tooltip: l.chatMoreOptions,
-      onSelected: (v) => v == 'remedy'
-          ? context.push(
-              Routes.suggestRemedy(consultation: consultation.id, name: name),
-            )
-          : _act(context, v, thread.muted, name),
+      onSelected: (v) => switch (v) {
+        'remedy' => context.push(
+          Routes.suggestRemedy(consultation: consultation.id, name: name),
+        ),
+        'favourite' => _favourite(context, thread.id, name),
+        _ => _act(context, v, thread.muted, name),
+      },
       itemBuilder: (_) => [
         PopupMenuItem(value: 'remedy', child: Text(l.remediesSuggest)),
+        PopupMenuItem(value: 'favourite', child: Text(l.wsAddFavourite)),
         PopupMenuItem(
           value: 'mute',
           child: Text(thread.muted ? l.chatUnmute : l.chatMute),
@@ -312,6 +315,27 @@ class _AstroRoomMenu extends StatelessWidget {
           PopupMenuItem(value: 'block', child: Text(l.chatBlock(name))),
       ],
     );
+  }
+
+  /// Marking twice is harmless, so the menu does not need to know whether
+  /// they already are one; unmarking is done from the Favourites list.
+  Future<void> _favourite(
+    BuildContext context,
+    String threadId,
+    String name,
+  ) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final l = context.l10n;
+    String message;
+    try {
+      await getIt<WorkspaceApi>().setFavourite(threadId);
+      message = l.wsFavouriteAdded(name);
+    } catch (e) {
+      message = friendlyError(e);
+    }
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
   }
 
   Future<void> _act(

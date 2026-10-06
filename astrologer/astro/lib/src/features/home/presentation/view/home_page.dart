@@ -5,6 +5,7 @@ import '../../../../core/di/service_locator.dart';
 import '../../../performance/presentation/cubit/performance_cubit.dart';
 import '../../../performance/presentation/widgets/loyal_card.dart';
 import '../cubit/dashboard_cubit.dart';
+import '../cubit/tool_counts_cubit.dart';
 import 'widgets/break_card.dart';
 import 'widgets/dash_shared.dart';
 import 'widgets/dashboard_header.dart';
@@ -93,6 +94,7 @@ class _HomeViewState extends State<_HomeView> {
         onRefresh: () => Future.wait([
           context.read<DashboardCubit>().load(),
           context.read<PerformanceCubit>().load(),
+          context.read<ToolCountsCubit>().load(),
         ]),
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),

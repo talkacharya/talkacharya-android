@@ -1922,5 +1922,162 @@
   "remedyNoCustomers": "You can suggest remedies to customers you've consulted. None yet.",
   "remedySend": "Send suggestion",
   "remedySent": "Suggestion sent",
-  "remedyDisclosure": "The customer sees this as your recommendation and decides for themselves. Suggest only what the chart calls for."
+  "remedyDisclosure": "The customer sees this as your recommendation and decides for themselves. Suggest only what the chart calls for.",
+  "toolsTitle": "All tools",
+  "toolsGroupWork": "Your work",
+  "toolsGroupCustomers": "Your customers",
+  "toolsGroupGrow": "Grow",
+  "toolsGroupSchedule": "Schedule & money",
+  "toolsGroupHelp": "Updates & help",
+  "wsCantOpen": "Couldn't open that on this phone",
+  "wsRemove": "Remove",
+  "wsNew": "NEW",
+  "wsReadMore": "Read more",
+  "wsAnnouncements": "Announcements",
+  "wsAnnouncementsEmpty": "Nothing new right now",
+  "wsAnnouncementsEmptyBody": "Policy changes, festival timings and new features from TalkAcharya will show up here.",
+  "wsTraining": "Training",
+  "wsTrainingSubtitle": "Short videos on getting more from the app. They open in your video app.",
+  "wsTrainingEmpty": "No videos yet",
+  "wsTrainingEmptyBody": "Training videos will appear here as they are added.",
+  "wsFavourites": "Favourites",
+  "wsFavouritesSubtitle": "Customers you've marked, with notes only you can see.",
+  "wsFavouritesEmpty": "No favourites yet",
+  "wsFavouritesEmptyBody": "Open a customer's chat and choose \"Add to favourites\" from the menu.",
+  "wsAddFavourite": "Add to favourites",
+  "wsFavouriteAdded": "{name} added to favourites",
+  "@wsFavouriteAdded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "wsUnfavourite": "Remove from favourites",
+  "wsEditNote": "Edit note",
+  "wsNoteTitle": "Note about {name}",
+  "@wsNoteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "wsNoteHint": "Only you see this. For example: career question, follow up after Diwali.",
+  "wsCommunity": "My community",
+  "wsCommunitySubtitle": "People who follow you. They're told when you come online or go live.",
+  "wsFollowers": "Followers",
+  "wsNewThisWeek": "New this week",
+  "wsFollowingSince": "Joined {time}",
+  "@wsFollowingSince": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "wsCommunityEmpty": "No followers yet",
+  "wsCommunityEmptyBody": "Customers can follow you from your profile or after a session. Going live is the quickest way to be found.",
+  "wsReferral": "Refer & earn",
+  "wsReferralPitch": "Earn {reward} for every new customer who joins with your code. They get {gift}.",
+  "@wsReferralPitch": {
+    "placeholders": {
+      "reward": {
+        "type": "String"
+      },
+      "gift": {
+        "type": "String"
+      }
+    }
+  },
+  "wsCodeCopied": "Code copied",
+  "wsShareInvite": "Share invite",
+  "wsReferralShare": "Consult me on TalkAcharya. Use my code {code} when you sign up and get {gift} in your wallet. {link}",
+  "@wsReferralShare": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      },
+      "gift": {
+        "type": "String"
+      },
+      "link": {
+        "type": "String"
+      }
+    }
+  },
+  "wsReferralJoined": "Joined with your code",
+  "wsReferralEarned": "Earned",
+  "wsReferralHow": "The reward is added to your payouts once the person you invited completes their first paid consultation.",
+  "wsReferralPending": "Joined",
+  "wsReferralRewarded": "Rewarded",
+  "wsReferralVoid": "Not counted",
+  "wsGallery": "Photos",
+  "wsGallerySubtitle": "Pictures customers see on your profile.",
+  "wsGalleryCount": "{count} of {max} photos",
+  "@wsGalleryCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "wsAddPhoto": "Add photo",
+  "wsPhotoRemoveTitle": "Remove this photo?",
+  "wsGalleryRules": "Use your own photos: you at work, your certificates, poojas you've performed. No phone numbers or other contact details in the picture.",
+  "wsFeedback": "Feedback",
+  "wsFeedbackSubtitle": "Tell us what's broken or what would help. We read every message.",
+  "wsFeedbackBug": "Something's broken",
+  "wsFeedbackSuggestion": "Suggestion",
+  "wsFeedbackPayments": "Payments",
+  "wsFeedbackCustomers": "Customers",
+  "wsFeedbackOther": "Other",
+  "wsFeedbackHint": "What happened, and what did you expect?",
+  "wsFeedbackSend": "Send feedback",
+  "wsFeedbackTooShort": "Please write a little more so we can help.",
+  "wsFeedbackSent": "Thank you — sent",
+  "wsFeedbackEarlier": "What you've sent",
+  "wsFeedbackReply": "TalkAcharya replied",
+  "wsReplies": "Quick replies",
+  "wsRepliesSubtitle": "Messages you send often, one tap away in every chat. The ones you use most rise to the top.",
+  "wsRepliesEmpty": "No quick replies yet",
+  "wsReplyNew": "New quick reply",
+  "wsReplyHint": "Namaste! Please share your date, time and place of birth.",
+  "wsReplyUsed": "{count, plural, =1{Used once} other{Used {count} times}}",
+  "@wsReplyUsed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "wsCalendar": "Calendar",
+  "wsCalendarSubtitle": "Your working hours and scheduled lives for the next two weeks.",
+  "wsCalendarWorking": "Working hours",
+  "wsCalendarLiveAt": "Live stream at {time}",
+  "@wsCalendarLiveAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "wsCalendarDayOff": "Day off",
+  "wsCalendarDayOffBody": "No working hours set for this day.",
+  "wsCalendarNoHours": "No fixed hours",
+  "wsCalendarNoHoursBody": "You haven't set working hours, so customers can reach you whenever you're online.",
+  "wsCalendarEdit": "Edit working hours",
+  "wsCalendarNote": "Outside your working hours you show as away, even with the app open.",
+  "wsHelpline": "Helpline",
+  "wsHelpWhatsapp": "WhatsApp us",
+  "wsHelpEmail": "Email us",
+  "wsHelpCentre": "Help centre",
+  "wsHelpCentreSub": "Answers to common questions",
+  "wsHelpNone": "Support contact details aren't available right now.",
+  "wsPhotoPending": "In review",
+  "wsPhotoRejected": "Not approved\nTap for why",
+  "wsGalleryReviewed": "New photos are reviewed before customers see them. This usually takes a day."
 }

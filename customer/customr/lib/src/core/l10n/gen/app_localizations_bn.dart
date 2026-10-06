@@ -7225,4 +7225,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String chatsLastMessageMine(String body) {
     return 'আপনি: $body';
   }
+
+  @override
+  String get astroGalleryTitle => 'Photos';
+
+  @override
+  String astroGalleryPhoto(int index, int total) {
+    return 'Photo $index of $total';
+  }
 }

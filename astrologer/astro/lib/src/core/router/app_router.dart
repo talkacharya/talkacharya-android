@@ -19,6 +19,11 @@ import '../../features/call_history/presentation/view/call_history_page.dart';
 import '../../features/remedies/presentation/view/remedies_page.dart';
 import '../../features/remedies/presentation/view/suggest_remedy_page.dart';
 import '../../features/waitlist/presentation/view/waitlist_page.dart';
+import '../../features/home/presentation/view/tools_page.dart';
+import '../../features/workspace/presentation/view/calendar_page.dart';
+import '../../features/workspace/presentation/view/notices_pages.dart';
+import '../../features/workspace/presentation/view/people_pages.dart';
+import '../../features/workspace/presentation/view/studio_pages.dart';
 import '../../features/notifications/presentation/view/notifications_page.dart';
 import '../../features/onboarding/presentation/view/onboarding_gate_page.dart';
 import '../../features/onboarding/presentation/view/wizard_page.dart';
@@ -106,6 +111,56 @@ GoRouter buildRouter(
         path: Routes.goLive,
         parentNavigatorKey: _rootKey,
         builder: (_, _) => const GoLivePage(),
+      ),
+      GoRoute(
+        path: Routes.tools,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const ToolsPage(),
+      ),
+      GoRoute(
+        path: Routes.announcements,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const AnnouncementsPage(),
+      ),
+      GoRoute(
+        path: Routes.training,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const TrainingPage(),
+      ),
+      GoRoute(
+        path: Routes.favourites,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const FavouritesPage(),
+      ),
+      GoRoute(
+        path: Routes.community,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const CommunityPage(),
+      ),
+      GoRoute(
+        path: Routes.referral,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const ReferralPage(),
+      ),
+      GoRoute(
+        path: Routes.gallery,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const GalleryPage(),
+      ),
+      GoRoute(
+        path: Routes.feedback,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const FeedbackPage(),
+      ),
+      GoRoute(
+        path: Routes.quickReplies,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const QuickRepliesPage(),
+      ),
+      GoRoute(
+        path: Routes.calendar,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const CalendarPage(),
       ),
       GoRoute(
         path: Routes.waitlist,
