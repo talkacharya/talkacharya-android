@@ -2254,5 +2254,41 @@
         "type": "int"
       }
     }
-  }
+  },
+  "callSetupTitle": "Ring on a locked phone",
+  "callSetupSubtitle": "Make sure consultation calls ring this phone even with the screen off.",
+  "callSetupMenuSub": "Check that calls reach you with the screen off",
+  "callSetupReady": "This phone is set to ring for consultations, even locked.",
+  "callSetupNotReady": "Calls may not ring this phone with the screen off. Fix the items below.",
+  "callSetupNotAndroid": "Nothing to set up on this phone.",
+  "callSetupNotifications": "Notifications",
+  "callSetupNotificationsHelp": "Allow notifications for TalkAcharya.",
+  "callSetupCallChannel": "Call ringing",
+  "callSetupCallChannelHelp": "The \"Incoming consultations\" category must stay on, with sound.",
+  "callSetupFullScreen": "Show calls over the lock screen",
+  "callSetupFullScreenHelp": "Lets a call fill the screen and wake the phone, like a phone call.",
+  "callSetupBattery": "Battery optimisation",
+  "callSetupBatteryHelp": "Set TalkAcharya to \"Don't optimise\" / \"Unrestricted\" so a call can wake the app.",
+  "callSetupAutostart": "Autostart (phone maker's setting)",
+  "callSetupAutostartHelp": "Your phone has its own switch that stops apps waking up. Turn it on for TalkAcharya.",
+  "callSetupLockScreen": "Show on lock screen (Xiaomi)",
+  "callSetupLockScreenHelp": "Under Other permissions, allow \"Show on lock screen\" and \"Display pop-up windows\".",
+  "callSetupFix": "Fix",
+  "callSetupCheck": "Check",
+  "callSetupTestTitle": "Test it",
+  "callSetupTestBody": "Tap the button, lock the phone and wait — it should ring like a call within about 10 seconds.",
+  "callSetupTestButton": "Send me a test call",
+  "callSetupTestSent": "Test call coming in {seconds} seconds — lock your phone now.",
+  "@callSetupTestSent": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "callSetupTestNoPhone": "This phone is not registered for calls yet. Open the app once with internet on, then try again.",
+  "callSetupTestWorked": "The test call reached you. Calls will ring this phone.",
+  "callSetupHomeTitle": "Calls may not ring when your phone is locked",
+  "callSetupHomeBody": "Tap to fix a phone setting.",
+  "authSessionReplaced": "You were signed out because your account was signed in on another phone."
 }

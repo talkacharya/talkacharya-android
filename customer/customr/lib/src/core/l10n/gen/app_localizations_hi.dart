@@ -7432,4 +7432,20 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get authResendCode => 'कोड दोबारा भेजें';
+
+  @override
+  String get astroReviewsTitle => 'ग्राहकों की राय';
+
+  @override
+  String get astroReviewsSeeAll => 'सभी रिव्यू देखें';
+
+  @override
+  String get astroReviewsEmpty => 'अभी दिखाने के लिए कोई रिव्यू नहीं है।';
+
+  @override
+  String get astroReviewReply => 'ज्योतिषी का जवाब';
+
+  @override
+  String get authSessionReplaced =>
+      'आपका अकाउंट किसी दूसरे फ़ोन पर लॉग इन हुआ, इसलिए इस फ़ोन से लॉग आउट कर दिया गया।';
 }

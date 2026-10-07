@@ -13,6 +13,7 @@ import '../../features/articles/presentation/view/article_page.dart';
 import '../../features/articles/presentation/view/articles_page.dart';
 import '../../features/astrologers/presentation/view/astrologer_detail_page.dart';
 import '../../features/astrologers/presentation/view/astrologers_page.dart';
+import '../../features/astrologers/presentation/view/widgets/astrologer_reviews.dart';
 import '../../features/auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../features/auth/presentation/view/login_page.dart';
 import '../../features/birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
@@ -753,6 +754,11 @@ GoRouter buildRouter(
         path: '/astrologers/:id',
         builder: (_, s) =>
             AstrologerDetailPage(astrologerId: s.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/astrologers/:id/reviews',
+        builder: (_, s) =>
+            AstrologerReviewsPage(astrologerId: s.pathParameters['id']!),
       ),
 
       StatefulShellRoute(

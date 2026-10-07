@@ -378,7 +378,12 @@
     "authAgreeTrail",
     "authAgreeRequired",
     "authResendIn",
-    "authResendCode"
+    "authResendCode",
+    "astroReviewsTitle",
+    "astroReviewsSeeAll",
+    "astroReviewsEmpty",
+    "astroReviewReply",
+    "authSessionReplaced"
   ],
 
   "gu": [
@@ -760,7 +765,12 @@
     "authAgreeTrail",
     "authAgreeRequired",
     "authResendIn",
-    "authResendCode"
+    "authResendCode",
+    "astroReviewsTitle",
+    "astroReviewsSeeAll",
+    "astroReviewsEmpty",
+    "astroReviewReply",
+    "authSessionReplaced"
   ],
 
   "kn": [
@@ -1142,7 +1152,12 @@
     "authAgreeTrail",
     "authAgreeRequired",
     "authResendIn",
-    "authResendCode"
+    "authResendCode",
+    "astroReviewsTitle",
+    "astroReviewsSeeAll",
+    "astroReviewsEmpty",
+    "astroReviewReply",
+    "authSessionReplaced"
   ],
 
   "mr": [
@@ -1524,7 +1539,12 @@
     "authAgreeTrail",
     "authAgreeRequired",
     "authResendIn",
-    "authResendCode"
+    "authResendCode",
+    "astroReviewsTitle",
+    "astroReviewsSeeAll",
+    "astroReviewsEmpty",
+    "astroReviewReply",
+    "authSessionReplaced"
   ],
 
   "ta": [
@@ -1906,7 +1926,12 @@
     "authAgreeTrail",
     "authAgreeRequired",
     "authResendIn",
-    "authResendCode"
+    "authResendCode",
+    "astroReviewsTitle",
+    "astroReviewsSeeAll",
+    "astroReviewsEmpty",
+    "astroReviewReply",
+    "authSessionReplaced"
   ],
 
   "te": [
@@ -2288,6 +2313,11 @@
     "authAgreeTrail",
     "authAgreeRequired",
     "authResendIn",
-    "authResendCode"
+    "authResendCode",
+    "astroReviewsTitle",
+    "astroReviewsSeeAll",
+    "astroReviewsEmpty",
+    "astroReviewReply",
+    "authSessionReplaced"
   ]
 }

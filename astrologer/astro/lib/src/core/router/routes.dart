@@ -36,6 +36,8 @@ class Routes {
   static const profileReviews = '/profile/reviews';
   static const profileKyc = '/profile/kyc';
   static const profileSound = '/profile/sound';
+  static const callSetup = '/profile/calls';
+  static const callSetupTested = '/profile/calls?tested=1';
   static const profileFeatured = '/profile/featured';
 
   /// Prediction work queue (full-screen).

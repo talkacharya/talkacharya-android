@@ -5617,6 +5617,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Came back ({returned} of {customers})'**
   String perfPromoRepeat(int returned, int customers);
+
+  /// No description provided for @callSetupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ring on a locked phone'**
+  String get callSetupTitle;
+
+  /// No description provided for @callSetupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Make sure consultation calls ring this phone even with the screen off.'**
+  String get callSetupSubtitle;
+
+  /// No description provided for @callSetupMenuSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Check that calls reach you with the screen off'**
+  String get callSetupMenuSub;
+
+  /// No description provided for @callSetupReady.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone is set to ring for consultations, even locked.'**
+  String get callSetupReady;
+
+  /// No description provided for @callSetupNotReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls may not ring this phone with the screen off. Fix the items below.'**
+  String get callSetupNotReady;
+
+  /// No description provided for @callSetupNotAndroid.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to set up on this phone.'**
+  String get callSetupNotAndroid;
+
+  /// No description provided for @callSetupNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get callSetupNotifications;
+
+  /// No description provided for @callSetupNotificationsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow notifications for TalkAcharya.'**
+  String get callSetupNotificationsHelp;
+
+  /// No description provided for @callSetupCallChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Call ringing'**
+  String get callSetupCallChannel;
+
+  /// No description provided for @callSetupCallChannelHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'The \"Incoming consultations\" category must stay on, with sound.'**
+  String get callSetupCallChannelHelp;
+
+  /// No description provided for @callSetupFullScreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Show calls over the lock screen'**
+  String get callSetupFullScreen;
+
+  /// No description provided for @callSetupFullScreenHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Lets a call fill the screen and wake the phone, like a phone call.'**
+  String get callSetupFullScreenHelp;
+
+  /// No description provided for @callSetupBattery.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery optimisation'**
+  String get callSetupBattery;
+
+  /// No description provided for @callSetupBatteryHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Set TalkAcharya to \"Don\'t optimise\" / \"Unrestricted\" so a call can wake the app.'**
+  String get callSetupBatteryHelp;
+
+  /// No description provided for @callSetupAutostart.
+  ///
+  /// In en, this message translates to:
+  /// **'Autostart (phone maker\'s setting)'**
+  String get callSetupAutostart;
+
+  /// No description provided for @callSetupAutostartHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone has its own switch that stops apps waking up. Turn it on for TalkAcharya.'**
+  String get callSetupAutostartHelp;
+
+  /// No description provided for @callSetupLockScreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Show on lock screen (Xiaomi)'**
+  String get callSetupLockScreen;
+
+  /// No description provided for @callSetupLockScreenHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Under Other permissions, allow \"Show on lock screen\" and \"Display pop-up windows\".'**
+  String get callSetupLockScreenHelp;
+
+  /// No description provided for @callSetupFix.
+  ///
+  /// In en, this message translates to:
+  /// **'Fix'**
+  String get callSetupFix;
+
+  /// No description provided for @callSetupCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Check'**
+  String get callSetupCheck;
+
+  /// No description provided for @callSetupTestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Test it'**
+  String get callSetupTestTitle;
+
+  /// No description provided for @callSetupTestBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the button, lock the phone and wait — it should ring like a call within about 10 seconds.'**
+  String get callSetupTestBody;
+
+  /// No description provided for @callSetupTestButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send me a test call'**
+  String get callSetupTestButton;
+
+  /// No description provided for @callSetupTestSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Test call coming in {seconds} seconds — lock your phone now.'**
+  String callSetupTestSent(int seconds);
+
+  /// No description provided for @callSetupTestNoPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone is not registered for calls yet. Open the app once with internet on, then try again.'**
+  String get callSetupTestNoPhone;
+
+  /// No description provided for @callSetupTestWorked.
+  ///
+  /// In en, this message translates to:
+  /// **'The test call reached you. Calls will ring this phone.'**
+  String get callSetupTestWorked;
+
+  /// No description provided for @callSetupHomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls may not ring when your phone is locked'**
+  String get callSetupHomeTitle;
+
+  /// No description provided for @callSetupHomeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to fix a phone setting.'**
+  String get callSetupHomeBody;
+
+  /// No description provided for @authSessionReplaced.
+  ///
+  /// In en, this message translates to:
+  /// **'You were signed out because your account was signed in on another phone.'**
+  String get authSessionReplaced;
 }
 
 class _AppLocalizationsDelegate

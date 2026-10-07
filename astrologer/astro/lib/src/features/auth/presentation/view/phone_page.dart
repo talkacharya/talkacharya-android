@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/network/session_end.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../bloc/login/login_cubit.dart';
 import 'widgets/auth_shell.dart';
@@ -28,6 +29,21 @@ class _PhonePageState extends State<PhonePage> {
     _controller.text = nationalDigits(context.read<LoginCubit>().state.phone);
     // Redraws the Continue button as the number becomes complete.
     _controller.addListener(_onTyped);
+
+    // Signed out because the account was used on another phone: say so.
+    if (sessionEndReason.value == kSessionReplaced) {
+      sessionEndReason.value = null;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.l10n.authSessionReplaced),
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 6),
+          ),
+        );
+      });
+    }
   }
 
   @override

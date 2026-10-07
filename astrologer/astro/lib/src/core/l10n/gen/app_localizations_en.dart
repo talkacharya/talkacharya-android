@@ -3234,4 +3234,108 @@ class AppLocalizationsEn extends AppLocalizations {
   String perfPromoRepeat(int returned, int customers) {
     return 'Came back ($returned of $customers)';
   }
+
+  @override
+  String get callSetupTitle => 'Ring on a locked phone';
+
+  @override
+  String get callSetupSubtitle =>
+      'Make sure consultation calls ring this phone even with the screen off.';
+
+  @override
+  String get callSetupMenuSub =>
+      'Check that calls reach you with the screen off';
+
+  @override
+  String get callSetupReady =>
+      'This phone is set to ring for consultations, even locked.';
+
+  @override
+  String get callSetupNotReady =>
+      'Calls may not ring this phone with the screen off. Fix the items below.';
+
+  @override
+  String get callSetupNotAndroid => 'Nothing to set up on this phone.';
+
+  @override
+  String get callSetupNotifications => 'Notifications';
+
+  @override
+  String get callSetupNotificationsHelp =>
+      'Allow notifications for TalkAcharya.';
+
+  @override
+  String get callSetupCallChannel => 'Call ringing';
+
+  @override
+  String get callSetupCallChannelHelp =>
+      'The \"Incoming consultations\" category must stay on, with sound.';
+
+  @override
+  String get callSetupFullScreen => 'Show calls over the lock screen';
+
+  @override
+  String get callSetupFullScreenHelp =>
+      'Lets a call fill the screen and wake the phone, like a phone call.';
+
+  @override
+  String get callSetupBattery => 'Battery optimisation';
+
+  @override
+  String get callSetupBatteryHelp =>
+      'Set TalkAcharya to \"Don\'t optimise\" / \"Unrestricted\" so a call can wake the app.';
+
+  @override
+  String get callSetupAutostart => 'Autostart (phone maker\'s setting)';
+
+  @override
+  String get callSetupAutostartHelp =>
+      'Your phone has its own switch that stops apps waking up. Turn it on for TalkAcharya.';
+
+  @override
+  String get callSetupLockScreen => 'Show on lock screen (Xiaomi)';
+
+  @override
+  String get callSetupLockScreenHelp =>
+      'Under Other permissions, allow \"Show on lock screen\" and \"Display pop-up windows\".';
+
+  @override
+  String get callSetupFix => 'Fix';
+
+  @override
+  String get callSetupCheck => 'Check';
+
+  @override
+  String get callSetupTestTitle => 'Test it';
+
+  @override
+  String get callSetupTestBody =>
+      'Tap the button, lock the phone and wait — it should ring like a call within about 10 seconds.';
+
+  @override
+  String get callSetupTestButton => 'Send me a test call';
+
+  @override
+  String callSetupTestSent(int seconds) {
+    return 'Test call coming in $seconds seconds — lock your phone now.';
+  }
+
+  @override
+  String get callSetupTestNoPhone =>
+      'This phone is not registered for calls yet. Open the app once with internet on, then try again.';
+
+  @override
+  String get callSetupTestWorked =>
+      'The test call reached you. Calls will ring this phone.';
+
+  @override
+  String get callSetupHomeTitle =>
+      'Calls may not ring when your phone is locked';
+
+  @override
+  String get callSetupHomeBody => 'Tap to fix a phone setting.';
+
+  @override
+  String get authSessionReplaced =>
+      'You were signed out because your account was signed in on another phone.';
 }

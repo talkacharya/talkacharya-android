@@ -7352,4 +7352,20 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get authResendCode => 'Resend code';
+
+  @override
+  String get astroReviewsTitle => 'What clients say';
+
+  @override
+  String get astroReviewsSeeAll => 'See all reviews';
+
+  @override
+  String get astroReviewsEmpty => 'No reviews to show yet.';
+
+  @override
+  String get astroReviewReply => 'Astrologer\'s reply';
+
+  @override
+  String get authSessionReplaced =>
+      'You were signed out because your account was signed in on another phone.';
 }

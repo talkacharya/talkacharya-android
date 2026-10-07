@@ -179,6 +179,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         label: l.profileGroupGrowth,
                         rows: [
                           MenuRow(
+                            icon: Icons.phone_locked_rounded,
+                            hue: AstroPalette.fire,
+                            title: l.callSetupTitle,
+                            subtitle: l.callSetupMenuSub,
+                            onTap: () => context.push(Routes.callSetup),
+                          ),
+                          MenuRow(
                             icon: Icons.volume_up_rounded,
                             hue: AstroPalette.love,
                             title: l.profileSoundVibration,

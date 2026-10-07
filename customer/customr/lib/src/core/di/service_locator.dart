@@ -63,6 +63,7 @@ import '../deeplink/deep_link_service.dart';
 import '../profile/active_profile_store.dart';
 import '../network/connectivity_service.dart';
 import '../network/dio_client.dart';
+import '../network/session_end.dart';
 import '../notifications/local_notifications.dart';
 import '../notifications/notification_router.dart';
 import '../notifications/push_device_registrar.dart';
@@ -221,6 +222,13 @@ Future<void> configureDependencies(AppConfig config) async {
 
   // --- realtime ---------------------------------------------------------
   final realtime = RealtimeClient(dio);
+  // Signed in on another phone: leave at once, and say why on the sign-in
+  // screen, rather than waiting for the next request to be refused.
+  realtime.sessionReplaced.listen((_) async {
+    sessionEndReason.value = kSessionReplaced;
+    await getIt<TokenStorage>().clear();
+    authBloc.add(const AuthSessionExpired());
+  });
   getIt
     ..registerSingleton<RealtimeClient>(realtime)
     ..registerSingleton<RealtimeCoordinator>(

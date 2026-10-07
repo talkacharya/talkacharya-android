@@ -3227,4 +3227,107 @@ class AppLocalizationsHi extends AppLocalizations {
   String perfPromoRepeat(int returned, int customers) {
     return 'वापस आए ($customers में से $returned)';
   }
+
+  @override
+  String get callSetupTitle => 'लॉक फ़ोन पर कॉल की घंटी';
+
+  @override
+  String get callSetupSubtitle =>
+      'पक्का करें कि स्क्रीन बंद होने पर भी कंसल्टेशन कॉल इस फ़ोन पर बजे।';
+
+  @override
+  String get callSetupMenuSub =>
+      'देखें कि स्क्रीन बंद होने पर कॉल आपको मिलती है';
+
+  @override
+  String get callSetupReady =>
+      'यह फ़ोन कंसल्टेशन के लिए तैयार है — लॉक होने पर भी बजेगा।';
+
+  @override
+  String get callSetupNotReady =>
+      'स्क्रीन बंद होने पर कॉल शायद इस फ़ोन पर न बजे। नीचे दी गई चीज़ें ठीक करें।';
+
+  @override
+  String get callSetupNotAndroid => 'इस फ़ोन पर कुछ सेट नहीं करना है।';
+
+  @override
+  String get callSetupNotifications => 'नोटिफ़िकेशन';
+
+  @override
+  String get callSetupNotificationsHelp =>
+      'TalkAcharya के नोटिफ़िकेशन चालू करें।';
+
+  @override
+  String get callSetupCallChannel => 'कॉल की घंटी';
+
+  @override
+  String get callSetupCallChannelHelp =>
+      '\"Incoming consultations\" वाला विकल्प आवाज़ के साथ चालू रहना चाहिए।';
+
+  @override
+  String get callSetupFullScreen => 'लॉक स्क्रीन पर कॉल दिखाना';
+
+  @override
+  String get callSetupFullScreenHelp =>
+      'फ़ोन कॉल की तरह कॉल पूरी स्क्रीन पर आए और फ़ोन जगाए।';
+
+  @override
+  String get callSetupBattery => 'बैटरी ऑप्टिमाइज़ेशन';
+
+  @override
+  String get callSetupBatteryHelp =>
+      'TalkAcharya को \"Don\'t optimise\" / \"Unrestricted\" पर रखें ताकि कॉल ऐप को जगा सके।';
+
+  @override
+  String get callSetupAutostart => 'ऑटोस्टार्ट (फ़ोन कंपनी की सेटिंग)';
+
+  @override
+  String get callSetupAutostartHelp =>
+      'आपके फ़ोन में ऐप को जागने से रोकने वाला अलग स्विच है। TalkAcharya के लिए उसे चालू करें।';
+
+  @override
+  String get callSetupLockScreen => 'लॉक स्क्रीन पर दिखाएँ (Xiaomi)';
+
+  @override
+  String get callSetupLockScreenHelp =>
+      'Other permissions में \"Show on lock screen\" और \"Display pop-up windows\" की अनुमति दें।';
+
+  @override
+  String get callSetupFix => 'ठीक करें';
+
+  @override
+  String get callSetupCheck => 'देखें';
+
+  @override
+  String get callSetupTestTitle => 'जाँच करें';
+
+  @override
+  String get callSetupTestBody =>
+      'बटन दबाएँ, फ़ोन लॉक करें और रुकें — लगभग 10 सेकंड में कॉल की तरह घंटी बजनी चाहिए।';
+
+  @override
+  String get callSetupTestButton => 'मुझे टेस्ट कॉल भेजें';
+
+  @override
+  String callSetupTestSent(int seconds) {
+    return 'टेस्ट कॉल $seconds सेकंड में आएगी — अभी फ़ोन लॉक करें।';
+  }
+
+  @override
+  String get callSetupTestNoPhone =>
+      'यह फ़ोन अभी कॉल के लिए रजिस्टर नहीं है। इंटरनेट चालू रखकर ऐप एक बार खोलें, फिर कोशिश करें।';
+
+  @override
+  String get callSetupTestWorked =>
+      'टेस्ट कॉल आप तक पहुँची। इस फ़ोन पर कॉल बजेगी।';
+
+  @override
+  String get callSetupHomeTitle => 'फ़ोन लॉक होने पर कॉल शायद न बजे';
+
+  @override
+  String get callSetupHomeBody => 'फ़ोन की एक सेटिंग ठीक करने के लिए दबाएँ।';
+
+  @override
+  String get authSessionReplaced =>
+      'आपका अकाउंट किसी दूसरे फ़ोन पर लॉग इन हुआ, इसलिए इस फ़ोन से लॉग आउट कर दिया गया।';
 }

@@ -483,6 +483,17 @@ class WorkspaceApi {
     _map((await _dio.get<dynamic>(ApiPaths.astroReferrals)).ensureOk().data),
   );
 
+  /// Ring this astrologer's phones in a few seconds, as a request does.
+  Future<({int phones, int ringsInSeconds})> testRing() async {
+    final j = _map(
+      (await _dio.post<dynamic>(ApiPaths.astroTestRing)).ensureOk().data,
+    );
+    return (
+      phones: (j['phones'] as num?)?.toInt() ?? 0,
+      ringsInSeconds: (j['rings_in_seconds'] as num?)?.toInt() ?? 10,
+    );
+  }
+
   Future<OffersOverview> offers() async => OffersOverview.fromJson(
     _map((await _dio.get<dynamic>(ApiPaths.astroOffers)).ensureOk().data),
   );

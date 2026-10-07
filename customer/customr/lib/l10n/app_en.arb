@@ -4310,5 +4310,10 @@
       }
     }
   },
-  "authResendCode": "Resend code"
+  "authResendCode": "Resend code",
+  "astroReviewsTitle": "What clients say",
+  "astroReviewsSeeAll": "See all reviews",
+  "astroReviewsEmpty": "No reviews to show yet.",
+  "astroReviewReply": "Astrologer's reply",
+  "authSessionReplaced": "You were signed out because your account was signed in on another phone."
 }

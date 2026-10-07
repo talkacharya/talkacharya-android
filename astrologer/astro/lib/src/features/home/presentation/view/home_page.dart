@@ -16,6 +16,9 @@ import 'widgets/profile_strength_card.dart';
 import 'widgets/quick_actions_grid.dart';
 import 'widgets/session_cards.dart';
 import 'widgets/today_pulse_card.dart';
+import '../../../profile/presentation/view/call_setup_page.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/router/routes.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
@@ -61,6 +64,14 @@ class _HomeViewState extends State<_HomeView> {
     final sections = <Widget>[
       if (incoming.isNotEmpty) IncomingRequestsCard(requests: incoming),
       if (active.isNotEmpty) ActiveSessionsSection(sessions: active),
+      // Only while something on this phone would keep a request from
+      // ringing it with the screen off.
+      Padding(
+        padding: DashGaps.sidePad,
+        child: CallSetupHomeCard(
+          onOpen: () => context.push(Routes.callSetup),
+        ),
+      ),
       if (EarningClubBanner.visibleFor(perfState)) const EarningClubBanner(),
       const TodayPulseCard(),
       const EarningsCard(),

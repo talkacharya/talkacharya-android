@@ -155,7 +155,10 @@ class PushService {
     if (message.data['ring'] == '1') {
       // With the socket up the in-app sheet is already ringing in person; a
       // notification on top would only double the sound.
-      if (!_realtimeOnline()) unawaited(ringForRequest(_local, message.data));
+      // A test ring has no in-app sheet behind it, so it always rings.
+      if (message.data['test'] == '1' || !_realtimeOnline()) {
+        unawaited(ringForRequest(_local, message.data));
+      }
       return;
     }
     // A chat message. The server pushes every one now — a live socket is no

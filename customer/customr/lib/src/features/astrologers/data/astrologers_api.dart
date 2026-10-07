@@ -133,6 +133,30 @@ class AstrologersApi {
     }
   }
 
+  /// Well-rated, written reviews of [id], newest first, a page at a time.
+  Future<({List<AstrologerReview> items, String? nextCursor})> positiveReviews(
+    String id, {
+    String? cursor,
+  }) async {
+    try {
+      final res = await _dio.get<Map<String, dynamic>>(
+        ApiPaths.astrologerReviews(id),
+        queryParameters: {'positive': '1', 'cursor': ?cursor},
+      );
+      _raiseFor(res);
+      final data = res.data ?? const {};
+      return (
+        items: [
+          for (final e in data['results'] as List? ?? const [])
+            AstrologerReview.fromJson((e as Map).cast<String, dynamic>()),
+        ],
+        nextCursor: _cursorOf(data['next'] as String?),
+      );
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
   void _raiseFor(Response<dynamic> res) {
     if ((res.statusCode ?? 0) >= 400) {
       throw ApiException.fromDio(

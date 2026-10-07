@@ -40,6 +40,7 @@ class Routes {
 
   // nested inside a branch (keep the tab selected)
   static String astrologer(String id) => '/astrologers/$id';
+  static String astrologerReviews(String id) => '/astrologers/$id/reviews';
   static String liveRoom(String id) => '/live/$id';
 
   /// Swipe through every live astrologer, optionally opening on one.

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/network/session_end.dart';
 import '../bloc/login/login_cubit.dart';
 import 'widgets/auth_scaffold.dart';
 import 'widgets/legal_consent.dart';
@@ -30,6 +31,21 @@ class _PhonePageState extends State<PhonePage> {
   void initState() {
     super.initState();
     _controller.addListener(() => setState(() {}));
+
+    // Signed out because the account was used on another phone: say so.
+    if (sessionEndReason.value == kSessionReplaced) {
+      sessionEndReason.value = null;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.l10n.authSessionReplaced),
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 6),
+          ),
+        );
+      });
+    }
   }
 
   @override

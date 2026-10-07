@@ -78,6 +78,13 @@ public class CallTelecomPlugin implements FlutterPlugin, MethodChannel.MethodCal
             case "setAudioRoute":
                 result.success(CallTelecom.setAudioRoute(str(call, "route")));
                 break;
+            case "readiness":
+                result.success(CallReadiness.check(context, str(call, "callChannelId")));
+                break;
+            case "openReadinessSetting":
+                result.success(CallReadiness.open(
+                    context, str(call, "which"), str(call, "callChannelId")));
+                break;
             case "end":
                 CallTelecom.end();
                 result.success(null);

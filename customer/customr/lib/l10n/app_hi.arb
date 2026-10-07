@@ -3005,5 +3005,10 @@
   "authAgreeTrail": " से सहमत हूँ।",
   "authAgreeRequired": "आगे बढ़ने के लिए उपयोग की शर्तें और गोपनीयता नीति स्वीकार करें।",
   "authResendIn": "कोड नहीं मिला? {time} में दोबारा भेजें",
-  "authResendCode": "कोड दोबारा भेजें"
+  "authResendCode": "कोड दोबारा भेजें",
+  "astroReviewsTitle": "ग्राहकों की राय",
+  "astroReviewsSeeAll": "सभी रिव्यू देखें",
+  "astroReviewsEmpty": "अभी दिखाने के लिए कोई रिव्यू नहीं है।",
+  "astroReviewReply": "ज्योतिषी का जवाब",
+  "authSessionReplaced": "आपका अकाउंट किसी दूसरे फ़ोन पर लॉग इन हुआ, इसलिए इस फ़ोन से लॉग आउट कर दिया गया।"
 }

@@ -67,6 +67,7 @@ class ApiPaths {
   static const astroPhotos = '/astro/profile/photos';
   static String astroPhoto(String id) => '/astro/profile/photos/$id';
   static const astroFeedback = '/astro/feedback';
+  static const astroTestRing = '/astro/test-ring';
   static const astroFollowers = '/astro/followers';
   static const astroReferrals = '/astro/referrals';
   static const astroOffers = '/astro/offers';

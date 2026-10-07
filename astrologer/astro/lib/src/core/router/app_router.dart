@@ -50,6 +50,7 @@ import 'pending_deep_link.dart';
 import 'transitions.dart';
 import 'routes.dart';
 import '../../features/profile/presentation/view/sound_settings_page.dart';
+import '../../features/profile/presentation/view/call_setup_page.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
 
@@ -350,6 +351,12 @@ GoRouter buildRouter(
                   _leaf('kyc', (_) => const KycPage()),
                   _leaf('featured', (_) => const FeaturedSlotsPage()),
                   _leaf('sound', (_) => const SoundSettingsPage()),
+                  _leaf(
+                    'calls',
+                    (s) => CallSetupPage(
+                      tested: s.uri.queryParameters['tested'] == '1',
+                    ),
+                  ),
                 ],
               ),
             ],

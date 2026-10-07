@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'session_end.dart';
 
 import 'package:dio/dio.dart';
 
@@ -107,6 +108,14 @@ class AuthInterceptor extends Interceptor {
     return gate.future;
   }
 
+  /// A refusal because the account signed in on another phone is worth
+  /// telling the person about; any other is just an expired session.
+  static void _noteReason(Object? body) {
+    if (body is Map && body['code'] == kSessionReplaced) {
+      sessionEndReason.value = kSessionReplaced;
+    }
+  }
+
   Future<_RefreshResult> _doRefresh() async {
     final refresh = await tokens.readRefresh();
     if (refresh == null || refresh.isEmpty) {
@@ -119,6 +128,7 @@ class AuthInterceptor extends Interceptor {
       );
       final status = res.statusCode ?? 0;
       if (status == 401 || status == 400) {
+        _noteReason(res.data);
         return const _RefreshResult(_RefreshOutcome.rejected);
       }
       if (status >= 400) {
@@ -139,6 +149,7 @@ class AuthInterceptor extends Interceptor {
     } on DioException catch (e) {
       final code = e.response?.statusCode;
       if (code == 401 || code == 400) {
+        _noteReason(e.response?.data);
         return const _RefreshResult(_RefreshOutcome.rejected);
       }
       return const _RefreshResult(

@@ -42,6 +42,8 @@ class ApiPaths {
 
   static const astrologers = '/app/astrologers';
   static String astrologer(String id) => '/app/astrologers/$id';
+  static String astrologerReviews(String id) =>
+      '/app/astrologers/$id/reviews';
   static String astrologerFollow(String id) => '/app/astrologers/$id/follow';
   static const meFollowing = '/app/me/following';
   static const followAlerts = '/app/follows/alerts';

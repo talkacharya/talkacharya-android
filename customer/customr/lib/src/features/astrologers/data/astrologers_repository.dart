@@ -12,4 +12,9 @@ class AstrologersRepository {
   }) => _api.list(query: query, cursor: cursor);
 
   Future<Astrologer> detail(String id) => _api.detail(id);
+
+  Future<({List<AstrologerReview> items, String? nextCursor})> positiveReviews(
+    String id, {
+    String? cursor,
+  }) => _api.positiveReviews(id, cursor: cursor);
 }

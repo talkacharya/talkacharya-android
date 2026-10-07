@@ -40,6 +40,11 @@ abstract class Astrologer with _$Astrologer {
     /// A discount the astrologer is running on their own rates right now,
     /// when it applies to this viewer.
     AstrologerOffer? offer,
+
+    /// The latest well-rated, written reviews (detail only).
+    @JsonKey(name: 'top_reviews')
+    @Default(<AstrologerReview>[])
+    List<AstrologerReview> topReviews,
   }) = _Astrologer;
 
   const Astrologer._();
@@ -90,6 +95,23 @@ abstract class Astrologer with _$Astrologer {
   }
 
   String get skillsLabel => skills.take(3).map((s) => s.name).join(' · ');
+}
+
+@freezed
+abstract class AstrologerReview with _$AstrologerReview {
+  const factory AstrologerReview({
+    @Default('') String id,
+    @Default(0) int rating,
+    @Default('') String text,
+
+    /// First name and initial — the server never sends more to strangers.
+    @JsonKey(name: 'customer_name') @Default('') String customerName,
+    @JsonKey(name: 'astrologer_reply') @Default('') String astrologerReply,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+  }) = _AstrologerReview;
+
+  factory AstrologerReview.fromJson(Map<String, dynamic> json) =>
+      _$AstrologerReviewFromJson(json);
 }
 
 @freezed

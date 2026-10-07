@@ -120,6 +120,15 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
     final id = '${data['consultation_id'] ?? ''}';
     if (id.isEmpty) return;
 
+    // A test ring from the call setup page: nobody is calling.
+    if (data['test'] == '1') {
+      unawaited(CallTelecom.declineIncoming(id));
+      if (event.action == LocalNotifications.answerAction) {
+        _handle(Routes.callSetupTested);
+      }
+      return;
+    }
+
     if (event.action == LocalNotifications.answerAction) {
       unawaited(CallTelecom.answerIncoming(id));
       _handle(locationForRaw('${data['deeplink'] ?? ''}'));
@@ -156,6 +165,11 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
   /// adopts the Telecom call that is already answered.
   Future<void> _acceptFromSystem(String id) async {
     unawaited(getIt<LocalNotifications>().cancelIncomingCall());
+    if (id.startsWith('test-')) {
+      unawaited(CallTelecom.declineIncoming(id));
+      _handle(Routes.callSetupTested);
+      return;
+    }
     final accepted = await getIt<RequestsCubit>().accept(id);
     if (accepted != null) _handle(Routes.chatRoom(id));
   }

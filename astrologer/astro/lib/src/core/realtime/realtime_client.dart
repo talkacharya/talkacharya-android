@@ -45,6 +45,13 @@ class RealtimeClient {
   bool _building = false;
 
   final _events = StreamController<RealtimeEvent>.broadcast();
+
+  /// The account signed in on another phone: this one must sign out now.
+  /// Said on the personal channel, and by the server closing the connection
+  /// with [_sessionReplacedCode] in case that message is missed.
+  final _sessionReplaced = StreamController<void>.broadcast();
+  Stream<void> get sessionReplaced => _sessionReplaced.stream;
+  static const _sessionReplacedCode = 3501;
   Stream<RealtimeEvent> get events => _events.stream;
 
   final _connected = ValueNotifier<bool>(false);
@@ -277,6 +284,10 @@ class RealtimeClient {
       client.connecting.listen((_) => _connected.value = false);
       client.disconnected.listen((e) {
         _connected.value = false;
+        if (e.code == _sessionReplacedCode) {
+          _sessionReplaced.add(null);
+          return; // not to be revived: this phone is signed out
+        }
         // Terminal for this client. Unless we asked for it, build a new one.
         if (identical(_client, client) && _wanted) {
           debugPrint('RealtimeClient: gave up ($e) — rebuilding');
@@ -337,6 +348,10 @@ class RealtimeClient {
   void _onData(List<int> bytes) {
     try {
       final frame = jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
+      if (frame['type'] == 'session.replaced') {
+        _sessionReplaced.add(null);
+        return;
+      }
       final event = RealtimeEvent.fromFrame(frame);
       if (event != null) _events.add(event);
     } catch (e) {

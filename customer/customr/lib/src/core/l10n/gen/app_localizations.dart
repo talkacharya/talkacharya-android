@@ -12739,6 +12739,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Resend code'**
   String get authResendCode;
+
+  /// No description provided for @astroReviewsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What clients say'**
+  String get astroReviewsTitle;
+
+  /// No description provided for @astroReviewsSeeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all reviews'**
+  String get astroReviewsSeeAll;
+
+  /// No description provided for @astroReviewsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No reviews to show yet.'**
+  String get astroReviewsEmpty;
+
+  /// No description provided for @astroReviewReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Astrologer\'s reply'**
+  String get astroReviewReply;
+
+  /// No description provided for @authSessionReplaced.
+  ///
+  /// In en, this message translates to:
+  /// **'You were signed out because your account was signed in on another phone.'**
+  String get authSessionReplaced;
 }
 
 class _AppLocalizationsDelegate
