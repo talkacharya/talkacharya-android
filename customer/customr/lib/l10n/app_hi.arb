@@ -3024,5 +3024,19 @@
   "astroOffNow": "अभी उपलब्ध नहीं",
   "astroBackWhen": "{when} वापस",
   "astroAvailableOn": "{channels} पर उपलब्ध",
-  "astroNoChannelNow": "अभी परामर्श नहीं ले रहे"
+  "astroNoChannelNow": "अभी परामर्श नहीं ले रहे",
+  "astroOffline": "ऑफ़लाइन",
+  "astroInSession": "परामर्श में व्यस्त",
+  "astroOnlineShort": "ऑनलाइन",
+  "astroBusyShort": "व्यस्त",
+  "waitlistWaitingCount": "{count} प्रतीक्षा में",
+  "waitlistJoinedTitle": "आप कतार में नंबर {position} पर हैं",
+  "waitlistJoinedBody": "आपकी बारी आते ही हम आपको बताएँगे। बारी आने पर शुरू करने के लिए दो मिनट मिलेंगे।",
+  "waitlistAhead": "अभी कतार में",
+  "waitlistEstimate": "अनुमानित प्रतीक्षा",
+  "waitlistFree": "मुफ़्त",
+  "waitlistToWait": "प्रतीक्षा",
+  "waitlistQueueFor": "किसके लिए प्रतीक्षा करें",
+  "waitlistGotIt": "ठीक है",
+  "waitlistTurnWith": "{name} आपके {channel} के लिए उपलब्ध हैं।"
 }

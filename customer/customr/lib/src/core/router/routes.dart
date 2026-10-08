@@ -40,6 +40,11 @@ class Routes {
 
   // nested inside a branch (keep the tab selected)
   static String astrologer(String id) => '/astrologers/$id';
+
+  /// The profile, with the booking for [channel] opening as it loads —
+  /// where a waitlist turn lands.
+  static String astrologerStarting(String id, String channel) =>
+      '/astrologers/$id?start=$channel';
   static String astrologerReviews(String id) => '/astrologers/$id/reviews';
   static String liveRoom(String id) => '/live/$id';
 

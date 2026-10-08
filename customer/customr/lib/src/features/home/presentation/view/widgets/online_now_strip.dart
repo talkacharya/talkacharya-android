@@ -127,6 +127,21 @@ class _Story extends StatelessWidget {
                         ),
                       ),
                     ),
+                  // With someone: an amber dot — online, and worth queueing for.
+                  if (a.isQueueable)
+                    Positioned(
+                      right: 3,
+                      bottom: 3,
+                      child: Container(
+                        width: 14,
+                        height: 14,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFBBF24),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: surface, width: 2.5),
+                        ),
+                      ),
+                    ),
                   // Online but with everything switched off until a time: a
                   // small clock where the live dot would be.
                   if (a.isAvailable && !a.isReachable && a.soonestBack != null)

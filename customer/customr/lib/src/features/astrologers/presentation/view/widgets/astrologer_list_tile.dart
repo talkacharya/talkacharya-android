@@ -210,10 +210,14 @@ class AstrologerListTile extends StatelessWidget {
                                       const SizedBox(width: 3),
                                       _Cta(
                                         available: offered != null,
-                                        icon: offered == null
+                                        icon: a.isQueueable
+                                            ? Icons.hourglass_top_rounded
+                                            : offered == null
                                             ? Icons.schedule_rounded
                                             : channelIcon(offered),
-                                        tooltip: offered == null
+                                        tooltip: a.isQueueable
+                                            ? l.waitlistJoin
+                                            : offered == null
                                             ? (closedLine ?? _ctaLabel(l))
                                             : channelLabel(l, offered),
                                         onTap: openContainer,
@@ -361,7 +365,11 @@ class _PhotoBox extends StatelessWidget {
                 width: 13,
                 height: 13,
                 decoration: BoxDecoration(
-                  color: a.isAvailable ? brand.online : brand.hairline,
+                  color: !a.isAvailable
+                      ? brand.hairline
+                      : a.isBusy
+                      ? const Color(0xFFFBBF24)
+                      : brand.online,
                   shape: BoxShape.circle,
                   border: Border.all(color: surface, width: 2),
                 ),

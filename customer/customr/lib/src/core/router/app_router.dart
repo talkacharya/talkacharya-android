@@ -752,8 +752,10 @@ GoRouter buildRouter(
       GoRoute(
         parentNavigatorKey: _rootKey,
         path: '/astrologers/:id',
-        builder: (_, s) =>
-            AstrologerDetailPage(astrologerId: s.pathParameters['id']!),
+        builder: (_, s) => AstrologerDetailPage(
+          astrologerId: s.pathParameters['id']!,
+          autoStart: s.uri.queryParameters['start'],
+        ),
       ),
       GoRoute(
         path: '/astrologers/:id/reviews',

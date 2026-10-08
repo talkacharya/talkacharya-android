@@ -393,7 +393,21 @@
     "astroOffNow",
     "astroBackWhen",
     "astroAvailableOn",
-    "astroNoChannelNow"
+    "astroNoChannelNow",
+    "astroOffline",
+    "astroInSession",
+    "astroOnlineShort",
+    "astroBusyShort",
+    "waitlistWaitingCount",
+    "waitlistJoinedTitle",
+    "waitlistJoinedBody",
+    "waitlistAhead",
+    "waitlistEstimate",
+    "waitlistFree",
+    "waitlistToWait",
+    "waitlistQueueFor",
+    "waitlistGotIt",
+    "waitlistTurnWith"
   ],
 
   "gu": [
@@ -790,7 +804,21 @@
     "astroOffNow",
     "astroBackWhen",
     "astroAvailableOn",
-    "astroNoChannelNow"
+    "astroNoChannelNow",
+    "astroOffline",
+    "astroInSession",
+    "astroOnlineShort",
+    "astroBusyShort",
+    "waitlistWaitingCount",
+    "waitlistJoinedTitle",
+    "waitlistJoinedBody",
+    "waitlistAhead",
+    "waitlistEstimate",
+    "waitlistFree",
+    "waitlistToWait",
+    "waitlistQueueFor",
+    "waitlistGotIt",
+    "waitlistTurnWith"
   ],
 
   "kn": [
@@ -1187,7 +1215,21 @@
     "astroOffNow",
     "astroBackWhen",
     "astroAvailableOn",
-    "astroNoChannelNow"
+    "astroNoChannelNow",
+    "astroOffline",
+    "astroInSession",
+    "astroOnlineShort",
+    "astroBusyShort",
+    "waitlistWaitingCount",
+    "waitlistJoinedTitle",
+    "waitlistJoinedBody",
+    "waitlistAhead",
+    "waitlistEstimate",
+    "waitlistFree",
+    "waitlistToWait",
+    "waitlistQueueFor",
+    "waitlistGotIt",
+    "waitlistTurnWith"
   ],
 
   "mr": [
@@ -1584,7 +1626,21 @@
     "astroOffNow",
     "astroBackWhen",
     "astroAvailableOn",
-    "astroNoChannelNow"
+    "astroNoChannelNow",
+    "astroOffline",
+    "astroInSession",
+    "astroOnlineShort",
+    "astroBusyShort",
+    "waitlistWaitingCount",
+    "waitlistJoinedTitle",
+    "waitlistJoinedBody",
+    "waitlistAhead",
+    "waitlistEstimate",
+    "waitlistFree",
+    "waitlistToWait",
+    "waitlistQueueFor",
+    "waitlistGotIt",
+    "waitlistTurnWith"
   ],
 
   "ta": [
@@ -1981,7 +2037,21 @@
     "astroOffNow",
     "astroBackWhen",
     "astroAvailableOn",
-    "astroNoChannelNow"
+    "astroNoChannelNow",
+    "astroOffline",
+    "astroInSession",
+    "astroOnlineShort",
+    "astroBusyShort",
+    "waitlistWaitingCount",
+    "waitlistJoinedTitle",
+    "waitlistJoinedBody",
+    "waitlistAhead",
+    "waitlistEstimate",
+    "waitlistFree",
+    "waitlistToWait",
+    "waitlistQueueFor",
+    "waitlistGotIt",
+    "waitlistTurnWith"
   ],
 
   "te": [
@@ -2378,6 +2448,20 @@
     "astroOffNow",
     "astroBackWhen",
     "astroAvailableOn",
-    "astroNoChannelNow"
+    "astroNoChannelNow",
+    "astroOffline",
+    "astroInSession",
+    "astroOnlineShort",
+    "astroBusyShort",
+    "waitlistWaitingCount",
+    "waitlistJoinedTitle",
+    "waitlistJoinedBody",
+    "waitlistAhead",
+    "waitlistEstimate",
+    "waitlistFree",
+    "waitlistToWait",
+    "waitlistQueueFor",
+    "waitlistGotIt",
+    "waitlistTurnWith"
   ]
 }

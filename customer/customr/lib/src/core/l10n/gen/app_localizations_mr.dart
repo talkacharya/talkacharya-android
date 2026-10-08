@@ -7409,4 +7409,53 @@ class AppLocalizationsMr extends AppLocalizations {
 
   @override
   String get astroNoChannelNow => 'Not taking consultations right now';
+
+  @override
+  String get astroOffline => 'Offline';
+
+  @override
+  String get astroInSession => 'In a session';
+
+  @override
+  String get astroOnlineShort => 'Online';
+
+  @override
+  String get astroBusyShort => 'Busy';
+
+  @override
+  String waitlistWaitingCount(int count) {
+    return '$count waiting';
+  }
+
+  @override
+  String waitlistJoinedTitle(int position) {
+    return 'You\'re number $position in line';
+  }
+
+  @override
+  String get waitlistJoinedBody =>
+      'We\'ll notify you the moment it\'s your turn. You have two minutes to start once it is.';
+
+  @override
+  String get waitlistAhead => 'in line now';
+
+  @override
+  String get waitlistEstimate => 'likely wait';
+
+  @override
+  String get waitlistFree => 'Free';
+
+  @override
+  String get waitlistToWait => 'to wait';
+
+  @override
+  String get waitlistQueueFor => 'Wait for a';
+
+  @override
+  String get waitlistGotIt => 'Got it';
+
+  @override
+  String waitlistTurnWith(String name, String channel) {
+    return '$name is free for your $channel.';
+  }
 }

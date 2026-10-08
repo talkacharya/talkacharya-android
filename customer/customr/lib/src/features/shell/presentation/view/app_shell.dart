@@ -16,8 +16,10 @@ import '../../../../core/router/routes.dart';
 import '../../../consultations/presentation/cubit/chats_list_cubit.dart';
 import '../../../notifications/presentation/bloc/notifications_cubit.dart';
 import '../../../consultations/presentation/room_presence.dart';
+import '../../../consultations/presentation/view/waitlist_sheets.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// The signed-in container: an [IndexedStack] of the 4 tab navigators driven by
 /// go_router's [StatefulNavigationShell], a floating rounded bottom nav, an
 /// offline banner, and realtime toast handling. Horizontal swipes between tabs.
@@ -68,17 +70,31 @@ class _AppShellState extends State<AppShell> {
             onAction: () => context.push('/consultations/$consultationId'),
           );
         }
-      case QueueOffer(:final astrologerId, :final astrologerName):
+      case QueueOffer(
+        :final astrologerId,
+        :final astrologerName,
+        :final channel,
+        :final offerExpiresAt,
+      ):
         context.read<NotificationsCubit>().bump();
         final l = context.l10n;
         AppSounds.notify();
-        _toast(
-          l.waitlistOfferToast(astrologerName ?? l.waitlistAnAstrologer),
-          actionLabel: astrologerId == null ? null : l.waitlistView,
-          onAction: astrologerId == null
-              ? null
-              : () => context.push(Routes.astrologer(astrologerId)),
-        );
+        if (astrologerId == null) {
+          _toast(
+            l.waitlistOfferToast(astrologerName ?? l.waitlistAnAstrologer),
+          );
+        } else {
+          // A turn lasts two minutes: it gets the screen, not a toast.
+          unawaited(
+            showWaitlistTurnSheet(
+              context,
+              astrologerId: astrologerId,
+              astrologerName: astrologerName ?? l.waitlistAnAstrologer,
+              channel: channel ?? 'chat',
+              expiresAt: DateTime.tryParse(offerExpiresAt ?? '')?.toLocal(),
+            ),
+          );
+        }
       case QueueRemoved(:final astrologerName):
         final l = context.l10n;
         _toast(
@@ -242,7 +258,9 @@ class _FloatingNavBar extends StatelessWidget {
                       const Color(0xFF3B0F5C).withValues(alpha: 0.85),
                     ],
                   ),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.08),
+                  ),
                 ),
                 child: Material(
                   type: MaterialType.transparency,

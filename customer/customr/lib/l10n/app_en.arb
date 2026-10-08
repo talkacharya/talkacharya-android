@@ -4336,5 +4336,22 @@
   "@astroBackWhen": {"placeholders": {"when": {"type": "String"}}},
   "astroAvailableOn": "Available on {channels}",
   "@astroAvailableOn": {"placeholders": {"channels": {"type": "String"}}},
-  "astroNoChannelNow": "Not taking consultations right now"
+  "astroNoChannelNow": "Not taking consultations right now",
+  "astroOffline": "Offline",
+  "astroInSession": "In a session",
+  "astroOnlineShort": "Online",
+  "astroBusyShort": "Busy",
+  "waitlistWaitingCount": "{count} waiting",
+  "@waitlistWaitingCount": {"placeholders": {"count": {"type": "int"}}},
+  "waitlistJoinedTitle": "You're number {position} in line",
+  "@waitlistJoinedTitle": {"placeholders": {"position": {"type": "int"}}},
+  "waitlistJoinedBody": "We'll notify you the moment it's your turn. You have two minutes to start once it is.",
+  "waitlistAhead": "in line now",
+  "waitlistEstimate": "likely wait",
+  "waitlistFree": "Free",
+  "waitlistToWait": "to wait",
+  "waitlistQueueFor": "Wait for a",
+  "waitlistGotIt": "Got it",
+  "waitlistTurnWith": "{name} is free for your {channel}.",
+  "@waitlistTurnWith": {"placeholders": {"name": {"type": "String"}, "channel": {"type": "String"}}}
 }

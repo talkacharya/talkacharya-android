@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/l10n/l10n.dart';
@@ -87,7 +88,9 @@ class _WaitlistBannerState extends State<WaitlistBanner>
           .where((e) => !e.isLapsedAt(now))
           .toList();
       // A turn outranks a place in line (they may be queued on two channels).
-      mine.sort((a, b) => (b.isTurnAt(now) ? 1 : 0) - (a.isTurnAt(now) ? 1 : 0));
+      mine.sort(
+        (a, b) => (b.isTurnAt(now) ? 1 : 0) - (a.isTurnAt(now) ? 1 : 0),
+      );
       _show(mine.isEmpty ? null : mine.first);
     } catch (_) {
       // Not knowing is shown as not being in the list; the next load corrects it.
@@ -136,26 +139,57 @@ class _WaitlistBannerState extends State<WaitlistBanner>
     if (entry == null) return const SizedBox.shrink();
 
     final l = context.l10n;
-    final scheme = Theme.of(context).colorScheme;
-    final text = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final brand = context.brand;
     final now = DateTime.now();
     final turn = entry.isTurnAt(now);
-    final background = turn ? scheme.primaryContainer : scheme.surfaceContainerHighest;
-    final foreground = turn ? scheme.onPrimaryContainer : scheme.onSurface;
+    const goldInk = Color(0xFF3A1703);
+    final hue = AstroPalette.air;
 
     return Padding(
       padding: widget.padding,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 260),
         padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
         decoration: BoxDecoration(
-          color: background,
-          borderRadius: BorderRadius.circular(16),
+          // The turn wears the app's gold: it is the one thing on the page
+          // with a clock on it.
+          gradient: turn
+              ? const LinearGradient(colors: BrandColors.goldGradient)
+              : null,
+          color: turn ? null : theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(18),
+          border: turn ? null : Border.all(color: brand.hairline),
+          boxShadow: turn
+              ? [
+                  BoxShadow(
+                    color: BrandColors.goldGradient.last.withValues(
+                      alpha: 0.35,
+                    ),
+                    blurRadius: 16,
+                    offset: const Offset(0, 6),
+                  ),
+                ]
+              : null,
         ),
         child: Row(
           children: [
-            Icon(
-              turn ? Icons.notifications_active_rounded : Icons.hourglass_top_rounded,
-              color: foreground,
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: turn
+                    ? Colors.white.withValues(alpha: 0.35)
+                    : hue.tint(0.13),
+                borderRadius: BorderRadius.circular(13),
+              ),
+              child: Icon(
+                turn
+                    ? Icons.notifications_active_rounded
+                    : Icons.hourglass_top_rounded,
+                color: turn ? goldInk : hue.end,
+                size: 22,
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -163,10 +197,12 @@ class _WaitlistBannerState extends State<WaitlistBanner>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    turn ? l.waitlistTurnTitle : l.waitlistWaitingTitle(entry.position),
-                    style: text.titleSmall?.copyWith(
-                      color: foreground,
-                      fontWeight: FontWeight.w700,
+                    turn
+                        ? l.waitlistTurnTitle
+                        : l.waitlistWaitingTitle(entry.position),
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: turn ? goldInk : null,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -176,8 +212,11 @@ class _WaitlistBannerState extends State<WaitlistBanner>
                             _clock(entry.offerExpiresAt!.difference(now)),
                           )
                         : l.waitlistWaitingBody,
-                    style: text.bodySmall?.copyWith(
-                      color: foreground.withValues(alpha: 0.8),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: turn
+                          ? goldInk.withValues(alpha: 0.8)
+                          : brand.inkMuted,
+                      fontFeatures: const [FontFeature.tabularFigures()],
                     ),
                   ),
                 ],
@@ -185,12 +224,32 @@ class _WaitlistBannerState extends State<WaitlistBanner>
             ),
             const SizedBox(width: 8),
             if (turn)
-              FilledButton(
-                onPressed: () => widget.onStart(entry.channel),
-                child: Text(l.waitlistStart),
+              Pressable(
+                child: Material(
+                  color: goldInk,
+                  borderRadius: BorderRadius.circular(12),
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    onTap: () => widget.onStart(entry.channel),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 10,
+                      ),
+                      child: Text(
+                        l.waitlistStart,
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               )
             else
               TextButton(
+                style: TextButton.styleFrom(foregroundColor: brand.inkMuted),
                 onPressed: _leaving ? null : _leave,
                 child: Text(l.waitlistLeave),
               ),

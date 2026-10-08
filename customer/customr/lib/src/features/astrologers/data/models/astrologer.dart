@@ -38,6 +38,12 @@ abstract class Astrologer with _$Astrologer {
     /// Which of chat / voice / video the astrologer is taking right now. Null
     /// from a server that does not say: then nothing is known to be off.
     @JsonKey(name: 'channels_open') List<String>? channelsOpen,
+
+    /// In a session and unable to take another: the waitlist is the way in.
+    @JsonKey(name: 'is_busy') @Default(false) bool isBusy,
+
+    /// How many people are already in their waitlist.
+    @JsonKey(name: 'queue_waiting') @Default(0) int queueWaiting,
     // detail-only
     @Default('') String bio,
     @JsonKey(name: 'avg_response_seconds') int? avgResponseSeconds,
@@ -103,9 +109,12 @@ abstract class Astrologer with _$Astrologer {
       if (takes(c)) c,
   ];
 
-  /// Online *and* taking at least one kind of consultation: someone a
+  /// Online, free, and taking at least one kind of consultation: someone a
   /// customer can actually start with now.
-  bool get isReachable => isAvailable && openChannels.isNotEmpty;
+  bool get isReachable => isAvailable && !isBusy && openChannels.isNotEmpty;
+
+  /// Online and taking consultations, but with someone: join their waitlist.
+  bool get isQueueable => isAvailable && isBusy && openChannels.isNotEmpty;
 
   /// The soonest any switched-off channel comes back, if one has a time.
   DateTime? get soonestBack {

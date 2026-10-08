@@ -25,6 +25,7 @@ sealed class RealtimeEvent {
           astrologerId: _nested(data, 'astrologer', 'id'),
           astrologerName: _nested(data, 'astrologer', 'display_name'),
           offerExpiresAt: data['offer_expires_at'] as String?,
+          channel: data['channel'] as String?,
         );
       case 'queue.removed':
         return QueueRemoved(
@@ -91,10 +92,14 @@ class QueueOffer extends RealtimeEvent {
     this.astrologerId,
     this.astrologerName,
     this.offerExpiresAt,
+    this.channel,
   });
   final String? astrologerId;
   final String? astrologerName;
   final String? offerExpiresAt;
+
+  /// chat | voice | video — what they queued for.
+  final String? channel;
 }
 
 /// The astrologer took this customer off their waitlist.

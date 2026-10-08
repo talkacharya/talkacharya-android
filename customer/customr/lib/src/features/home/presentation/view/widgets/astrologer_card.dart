@@ -106,7 +106,7 @@ class AstrologerCard extends StatelessWidget {
                 Positioned(
                   top: 10,
                   right: 10,
-                  child: _PresenceBadge(available: available),
+                  child: _PresenceBadge(available: available, busy: a.isBusy),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(14, 30, 14, 14),
@@ -209,11 +209,15 @@ class AstrologerCard extends StatelessWidget {
                         available: lead != null,
                         icon: !available
                             ? Icons.notifications_active_outlined
+                            : a.isQueueable
+                            ? Icons.hourglass_top_rounded
                             : lead != null
                             ? channelIcon(lead)
                             : Icons.schedule_rounded,
                         label: !available
                             ? l.homeNotifyMeBtn
+                            : a.isQueueable
+                            ? l.waitlistJoin
                             : lead != null
                             ? channelVerb(l, lead)
                             : back != null
@@ -237,8 +241,11 @@ class AstrologerCard extends StatelessWidget {
 }
 
 class _PresenceBadge extends StatelessWidget {
-  const _PresenceBadge({required this.available});
+  const _PresenceBadge({required this.available, required this.busy});
   final bool available;
+
+  /// Online but with someone.
+  final bool busy;
 
   @override
   Widget build(BuildContext context) {
@@ -258,14 +265,20 @@ class _PresenceBadge extends StatelessWidget {
             height: 7,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: available
-                  ? const Color(0xFF4ADE80)
-                  : Colors.white.withValues(alpha: 0.6),
+              color: !available
+                  ? Colors.white.withValues(alpha: 0.6)
+                  : busy
+                  ? const Color(0xFFFBBF24)
+                  : const Color(0xFF4ADE80),
             ),
           ),
           const SizedBox(width: 5),
           Text(
-            available ? 'Online' : 'Busy',
+            !available
+                ? context.l10n.astroOffline
+                : busy
+                ? context.l10n.astroBusyShort
+                : context.l10n.astroOnlineShort,
             style: theme.textTheme.labelSmall?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w800,

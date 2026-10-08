@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:customr/src/features/astrologers/presentation/view/widgets/detail_skeleton_loader.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import '../../../../core/util/money.dart';
 import '../../../../shared/widgets/app_snack.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../../consultations/presentation/view/book_consultation_sheet.dart';
+import '../../../consultations/presentation/view/waitlist_sheets.dart';
 import '../../../follows/presentation/cubit/follow_cubit.dart';
 import '../../../follows/presentation/widgets/follow_widgets.dart';
 import '../../../gifting/data/models/gift.dart';
@@ -26,9 +29,17 @@ import 'widgets/waitlist_banner.dart';
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 class AstrologerDetailPage extends StatefulWidget {
-  const AstrologerDetailPage({required this.astrologerId, super.key});
+  const AstrologerDetailPage({
+    required this.astrologerId,
+    this.autoStart,
+    super.key,
+  });
 
   final String astrologerId;
+
+  /// A channel whose booking opens as the profile loads — set when the
+  /// customer arrives to take a waitlist turn.
+  final String? autoStart;
 
   @override
   State<AstrologerDetailPage> createState() => _AstrologerDetailPageState();
@@ -43,8 +54,17 @@ class _AstrologerDetailPageState extends State<AstrologerDetailPage> {
     );
     // fresh server truth for every follow control showing this astrologer
     if (GetIt.I.isRegistered<FollowCubit>()) GetIt.I<FollowCubit>().seed([a]);
+    final channel = widget.autoStart;
+    if (channel != null && !_autoStarted) {
+      _autoStarted = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _start(context, a, channel, turn: true);
+      });
+    }
     return a;
   }
+
+  bool _autoStarted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -127,11 +147,7 @@ class _ProfileView extends StatelessWidget {
             child: WaitlistBanner(
               astrologerId: a.id,
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              onStart: (channel) => switch (channel) {
-                'voice' => _startVoice(context, a),
-                'video' => _startVideo(context, a),
-                _ => _startChat(context, a),
-              },
+              onStart: (channel) => _start(context, a, channel, turn: true),
             ),
           ),
           SliverPadding(
@@ -267,12 +283,16 @@ class _Header extends StatelessWidget {
                               runSpacing: 8,
                               children: [
                                 _GlassPill(
-                                  dot: a.isAvailable
-                                      ? const Color(0xFF4ADE80)
-                                      : Colors.white.withValues(alpha: 0.5),
-                                  label: a.isAvailable
-                                      ? l.astroOnlineNow
-                                      : l.astroBusy,
+                                  dot: !a.isAvailable
+                                      ? Colors.white.withValues(alpha: 0.5)
+                                      : a.isBusy
+                                      ? const Color(0xFFFBBF24)
+                                      : const Color(0xFF4ADE80),
+                                  label: !a.isAvailable
+                                      ? l.astroOffline
+                                      : a.isBusy
+                                      ? l.astroInSession
+                                      : l.astroOnlineNow,
                                 ),
                                 if (replies != null)
                                   _GlassPill(
@@ -1142,7 +1162,15 @@ class _SectionTitle extends StatelessWidget {
 
 /// Book [channel] with [a] — or, when that is not possible right now, say
 /// why in terms the customer can act on.
-void _start(BuildContext context, Astrologer a, String channel) {
+///
+/// [turn] is a waitlist turn being taken: the astrologer is free for this
+/// customer even if the page still remembers them as busy.
+void _start(
+  BuildContext context,
+  Astrologer a,
+  String channel, {
+  bool turn = false,
+}) {
   final l = context.l10n;
   final rate = a.rateFor(channel);
   if (rate == null || !a.isAvailable) {
@@ -1154,6 +1182,10 @@ void _start(BuildContext context, Astrologer a, String channel) {
     return;
   }
   if (explainClosedChannel(context, a, channel)) return;
+  if (a.isBusy && !turn) {
+    unawaited(_joinWaitlist(context, a, channel: channel));
+    return;
+  }
   showBookConsultationSheet(
     context,
     astrologerId: a.id,
@@ -1165,14 +1197,36 @@ void _start(BuildContext context, Astrologer a, String channel) {
   );
 }
 
-void _startChat(BuildContext context, Astrologer a) =>
-    _start(context, a, 'chat');
-
-void _startVoice(BuildContext context, Astrologer a) =>
-    _start(context, a, 'voice');
-
-void _startVideo(BuildContext context, Astrologer a) =>
-    _start(context, a, 'video');
+/// Offer a place in [a]'s waitlist, for any kind of consultation they take.
+Future<void> _joinWaitlist(
+  BuildContext context,
+  Astrologer a, {
+  String? channel,
+}) {
+  final l = context.l10n;
+  final locale = Localizations.localeOf(context).toLanguageTag();
+  return showJoinWaitlistSheet(
+    context,
+    astrologerId: a.id,
+    astrologerName: a.name,
+    avatar: a.avatar,
+    waiting: a.queueWaiting,
+    initialChannel: channel,
+    channels: [
+      for (final c in a.openChannels)
+        (
+          channel: c,
+          priceLabel: l.astroPerMinute(
+            Money.format(
+              a.priceFor(a.rateFor(c)!),
+              a.rateFor(c)!.currency,
+              locale: locale,
+            ),
+          ),
+        ),
+    ],
+  );
+}
 
 void _sendGift(BuildContext context, Astrologer a) {
   showGiftSheet(
@@ -1219,6 +1273,13 @@ class _HeaderCtas extends StatelessWidget {
         astrologerName: a.name,
         fallback: followEntryOf(a),
       );
+    } else if (a.isQueueable) {
+      // With someone: the way in is a place in line.
+      label = a.queueWaiting > 0
+          ? '${l.waitlistJoin} · ${l.waitlistWaitingCount(a.queueWaiting)}'
+          : l.waitlistJoin;
+      icon = Icons.hourglass_top_rounded;
+      onTap = () => _joinWaitlist(context, a);
     } else if (lead != null && leadRate != null) {
       final price = Money.format(
         a.priceFor(leadRate),

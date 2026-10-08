@@ -12853,6 +12853,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not taking consultations right now'**
   String get astroNoChannelNow;
+
+  /// No description provided for @astroOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get astroOffline;
+
+  /// No description provided for @astroInSession.
+  ///
+  /// In en, this message translates to:
+  /// **'In a session'**
+  String get astroInSession;
+
+  /// No description provided for @astroOnlineShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get astroOnlineShort;
+
+  /// No description provided for @astroBusyShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Busy'**
+  String get astroBusyShort;
+
+  /// No description provided for @waitlistWaitingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} waiting'**
+  String waitlistWaitingCount(int count);
+
+  /// No description provided for @waitlistJoinedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re number {position} in line'**
+  String waitlistJoinedTitle(int position);
+
+  /// No description provided for @waitlistJoinedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll notify you the moment it\'s your turn. You have two minutes to start once it is.'**
+  String get waitlistJoinedBody;
+
+  /// No description provided for @waitlistAhead.
+  ///
+  /// In en, this message translates to:
+  /// **'in line now'**
+  String get waitlistAhead;
+
+  /// No description provided for @waitlistEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'likely wait'**
+  String get waitlistEstimate;
+
+  /// No description provided for @waitlistFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get waitlistFree;
+
+  /// No description provided for @waitlistToWait.
+  ///
+  /// In en, this message translates to:
+  /// **'to wait'**
+  String get waitlistToWait;
+
+  /// No description provided for @waitlistQueueFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait for a'**
+  String get waitlistQueueFor;
+
+  /// No description provided for @waitlistGotIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get waitlistGotIt;
+
+  /// No description provided for @waitlistTurnWith.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is free for your {channel}.'**
+  String waitlistTurnWith(String name, String channel);
 }
 
 class _AppLocalizationsDelegate

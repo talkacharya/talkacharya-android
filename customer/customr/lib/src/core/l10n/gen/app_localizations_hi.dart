@@ -7505,4 +7505,53 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get astroNoChannelNow => 'अभी परामर्श नहीं ले रहे';
+
+  @override
+  String get astroOffline => 'ऑफ़लाइन';
+
+  @override
+  String get astroInSession => 'परामर्श में व्यस्त';
+
+  @override
+  String get astroOnlineShort => 'ऑनलाइन';
+
+  @override
+  String get astroBusyShort => 'व्यस्त';
+
+  @override
+  String waitlistWaitingCount(int count) {
+    return '$count प्रतीक्षा में';
+  }
+
+  @override
+  String waitlistJoinedTitle(int position) {
+    return 'आप कतार में नंबर $position पर हैं';
+  }
+
+  @override
+  String get waitlistJoinedBody =>
+      'आपकी बारी आते ही हम आपको बताएँगे। बारी आने पर शुरू करने के लिए दो मिनट मिलेंगे।';
+
+  @override
+  String get waitlistAhead => 'अभी कतार में';
+
+  @override
+  String get waitlistEstimate => 'अनुमानित प्रतीक्षा';
+
+  @override
+  String get waitlistFree => 'मुफ़्त';
+
+  @override
+  String get waitlistToWait => 'प्रतीक्षा';
+
+  @override
+  String get waitlistQueueFor => 'किसके लिए प्रतीक्षा करें';
+
+  @override
+  String get waitlistGotIt => 'ठीक है';
+
+  @override
+  String waitlistTurnWith(String name, String channel) {
+    return '$name आपके $channel के लिए उपलब्ध हैं।';
+  }
 }

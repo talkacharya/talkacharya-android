@@ -15,12 +15,14 @@ import '../../../../shared/widgets/app_snack.dart';
 import '../../../birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
 import '../../data/consultation_api.dart';
 import '../../data/consultation_repository.dart';
+import 'waitlist_sheets.dart';
 import '../../data/pending_share.dart';
 import '../../../../core/network/friendly_error.dart';
 import '../../../../core/util/money.dart';
 import '../../../wallet/presentation/cubit/wallet_cubit.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Bottom sheet to start a consultation (text chat, voice or video call) with an
 /// astrologer.
 Future<void> showBookConsultationSheet(
@@ -87,7 +89,9 @@ class _BookForm extends StatefulWidget {
 
 class _BookFormState extends State<_BookForm> {
   final _question = TextEditingController();
-  final _confetti = ConfettiController(duration: const Duration(milliseconds: 1200));
+  final _confetti = ConfettiController(
+    duration: const Duration(milliseconds: 1200),
+  );
   String? _birthProfileId;
   bool _submitting = false;
 
@@ -115,10 +119,7 @@ class _BookFormState extends State<_BookForm> {
   }
 
   /// Shows why we stopped, with a shortcut to Settings when the answer is final.
-  bool _allowed(
-    MediaPermission result,
-    String body,
-  ) {
+  bool _allowed(MediaPermission result, String body) {
     if (result == MediaPermission.granted) return true;
     AppSnack.showTop(
       context,
@@ -163,7 +164,7 @@ class _BookFormState extends State<_BookForm> {
       );
       pending.clear();
       if (!mounted) return;
-      
+
       HapticService.heavy();
       _confetti.play();
       await Future.delayed(const Duration(milliseconds: 1000));
@@ -195,54 +196,29 @@ class _BookFormState extends State<_BookForm> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _submitting = false);
-      AppSnack.showTop(
-        context,
-        friendlyError(e),
-        type: SnackType.error,
-      );
+      AppSnack.showTop(context, friendlyError(e), type: SnackType.error);
     }
   }
 
   /// The astrologer is with someone else: offer a place in line instead of a
   /// dead end.
   Future<void> _offerWaitlist() async {
-    final l = context.l10n;
-    final join = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l.waitlistBusyTitle(widget.astrologerName)),
-        content: Text(l.waitlistBusyBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(l.commonNotNow),
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    final entry = await showJoinWaitlistSheet(
+      context,
+      astrologerId: widget.astrologerId,
+      astrologerName: widget.astrologerName,
+      channels: [
+        (
+          channel: widget.channel,
+          priceLabel: context.l10n.astroPerMinute(
+            Money.format(widget.ratePerMinute, widget.currency, locale: locale),
           ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(l.waitlistJoin),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
-    if (join != true || !mounted) return;
-    setState(() => _submitting = true);
-    try {
-      final entry = await getIt<ConsultationRepository>().joinQueue(
-        astrologerId: widget.astrologerId,
-        channel: widget.channel,
-      );
-      if (!mounted) return;
-      Navigator.pop(context); // the sheet — there is nothing to book yet
-      AppSnack.showTop(
-        context,
-        l.waitlistJoined(entry.position),
-        type: SnackType.success,
-      );
-    } catch (e) {
-      if (!mounted) return;
-      setState(() => _submitting = false);
-      AppSnack.showTop(context, friendlyError(e), type: SnackType.error);
-    }
+    // In line now: there is nothing left to book here.
+    if (entry != null && mounted) Navigator.pop(context);
   }
 
   void _showRecharge(InsufficientBalance e) {
@@ -436,12 +412,14 @@ class _BookFormState extends State<_BookForm> {
                         ChoiceChip(
                           label: Text(p.displayName),
                           selected: _birthProfileId == p.id,
-                          onSelected: (_) => setState(() => _birthProfileId = p.id),
+                          onSelected: (_) =>
+                              setState(() => _birthProfileId = p.id),
                         ),
                       ChoiceChip(
                         label: const Text('Don’t share'),
                         selected: _birthProfileId == null,
-                        onSelected: (_) => setState(() => _birthProfileId = null),
+                        onSelected: (_) =>
+                            setState(() => _birthProfileId = null),
                       ),
                     ],
                   );

@@ -6,9 +6,12 @@ void main() {
     List<String>? open,
     Map<String, String> nextOnline = const {},
     bool online = true,
+    bool busy = false,
   }) => Astrologer.fromJson({
     'id': 'a1',
     'is_available_flag': online,
+    'is_busy': busy,
+    'queue_waiting': busy ? 2 : 0,
     'rates': [
       {'channel': 'chat', 'currency': 'INR', 'per_minute_amount': '20.00'},
       {'channel': 'voice', 'currency': 'INR', 'per_minute_amount': '35.00'},
@@ -79,5 +82,21 @@ void main() {
 
   test('offline is never reachable, whatever is switched on', () {
     expect(astrologer(online: false).isReachable, isFalse);
+  });
+
+  test('with someone: not startable now, but worth queueing for', () {
+    final a = astrologer(busy: true);
+    expect(a.isReachable, isFalse);
+    expect(a.isQueueable, isTrue);
+    expect(a.queueWaiting, 2);
+  });
+
+  test('busy with everything switched off offers no queue either', () {
+    final a = astrologer(busy: true, open: []);
+    expect(a.isQueueable, isFalse);
+  });
+
+  test('offline and busy is just offline', () {
+    expect(astrologer(online: false, busy: true).isQueueable, isFalse);
   });
 }
