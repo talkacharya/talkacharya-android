@@ -53,6 +53,7 @@ import 'transitions.dart';
 import 'routes.dart';
 import '../../features/profile/presentation/view/sound_settings_page.dart';
 import '../../features/profile/presentation/view/call_setup_page.dart';
+import '../../features/profile/presentation/view/delete_account_page.dart';
 import '../../features/profile/presentation/view/public_profile_page.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
@@ -376,6 +377,7 @@ GoRouter buildRouter(
                   _leaf('working-hours', (_) => const WorkingHoursPage()),
                   _leaf('reviews', (_) => const ReviewsPage()),
                   _leaf('kyc', (_) => const KycPage()),
+                  _leaf('delete-account', (_) => const DeleteAccountPage()),
                   _leaf('featured', (_) => const FeaturedSlotsPage()),
                   _leaf('sound', (_) => const SoundSettingsPage()),
                   _leaf(

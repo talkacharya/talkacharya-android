@@ -38,6 +38,7 @@ class Routes {
   static const profileWorkingHours = '/profile/working-hours';
   static const profileReviews = '/profile/reviews';
   static const profileKyc = '/profile/kyc';
+  static const profileDeleteAccount = '/profile/delete-account';
   static const profileSound = '/profile/sound';
   static const callSetup = '/profile/calls';
 

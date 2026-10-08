@@ -11,6 +11,9 @@ class ApiPaths {
   static const logout = '/auth/logout';
   static const config = '/config';
   static const me = '/me';
+
+  /// GET what deleting the account would mean; POST to ask for it.
+  static const accountDelete = '/me/account/delete';
   static const meDevices = '/me/devices';
   static String meDevice(String id) => '/me/devices/$id';
   static const realtimeToken = '/realtime/token';

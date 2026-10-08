@@ -7503,4 +7503,84 @@ class AppLocalizationsTa extends AppLocalizations {
   String waitlistTurnWith(String name, String channel) {
     return '$name is free for your $channel.';
   }
+
+  @override
+  String get delAccTitle => 'Delete account';
+
+  @override
+  String get delAccHeroTitle => 'Delete your account';
+
+  @override
+  String get delAccStepNow => 'You are signed out on every phone right away.';
+
+  @override
+  String delAccStepWait(int days) {
+    return 'Your account is erased after $days days.';
+  }
+
+  @override
+  String delAccStepCancel(int days) {
+    return 'Changed your mind? Sign in again within $days days and the deletion is cancelled.';
+  }
+
+  @override
+  String get delAccRemovedTitle => 'What is removed';
+
+  @override
+  String get delAccRemoved1 =>
+      'Your name, phone number, photo and other profile details';
+
+  @override
+  String get delAccRemoved3 => 'Your devices and notifications';
+
+  @override
+  String get delAccKeptTitle => 'What we keep';
+
+  @override
+  String get delAccKept1 =>
+      'Payment, wallet and invoice records, for as long as the law requires — without your name';
+
+  @override
+  String get delAccKept2 =>
+      'Past consultations, chats and reviews: the other person keeps their copy, yours shows as from a deleted user';
+
+  @override
+  String get delAccInSession =>
+      'You have a consultation in progress. Finish or cancel it first.';
+
+  @override
+  String get delAccReasonTitle => 'Why are you leaving?';
+
+  @override
+  String get delAccReasonHint => 'Optional. It helps us do better.';
+
+  @override
+  String delAccUnderstand(int days) {
+    return 'I understand this cannot be undone after $days days';
+  }
+
+  @override
+  String get delAccButton => 'Delete my account';
+
+  @override
+  String get delAccSheetTitle => 'Delete your account?';
+
+  @override
+  String get delAccSheetBody =>
+      'You will be signed out on every phone right now.';
+
+  @override
+  String get delAccKeep => 'Keep my account';
+
+  @override
+  String get delAccDone => 'Your account is scheduled for deletion';
+
+  @override
+  String get delAccRemovedCustomer =>
+      'Saved birth details and kundalis, yours and your family\'s';
+
+  @override
+  String delAccWallet(String amount) {
+    return '$amount is left in your wallet. It is not refunded automatically: use it, or ask support for a refund, before you delete.';
+  }
 }

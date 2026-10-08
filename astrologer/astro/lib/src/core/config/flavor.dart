@@ -33,9 +33,9 @@ class AppConfig {
     return AppConfig(
       flavor: flavor,
       appName: switch (flavor) {
-        Flavor.dev => 'TalkAcharya Astrologer Dev',
-        Flavor.staging => 'TalkAcharya Astrologer Staging',
-        Flavor.prod => 'TalkAcharya for Astrologers',
+        Flavor.dev => 'TalkAcharya-Astro Dev',
+        Flavor.staging => 'TalkAcharya-Astro Staging',
+        Flavor.prod => 'TalkAcharya-Astro',
       },
       apiBaseUrl: override.isNotEmpty ? override : defaults,
       connectTimeout: const Duration(seconds: 15),

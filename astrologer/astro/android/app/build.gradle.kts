@@ -57,7 +57,7 @@ android {
             dimension = "env"
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
-            resValue("string", "app_name", "TalkAcharya Astro Dev")
+            resValue("string", "app_name", "TalkAcharya-Astro Dev")
             resValue("string", "app_link_host", "dev.talkacharya.com")
             manifestPlaceholders["usesCleartextTraffic"] = "true"
         }
@@ -65,13 +65,13 @@ android {
             dimension = "env"
             applicationIdSuffix = ".staging"
             versionNameSuffix = "-staging"
-            resValue("string", "app_name", "TalkAcharya Astro Staging")
+            resValue("string", "app_name", "TalkAcharya-Astro Staging")
             resValue("string", "app_link_host", "dev.talkacharya.com")
             manifestPlaceholders["usesCleartextTraffic"] = "false"
         }
         create("prod") {
             dimension = "env"
-            resValue("string", "app_name", "TalkAcharya Astrologer")
+            resValue("string", "app_name", "TalkAcharya-Astro")
             resValue("string", "app_link_host", "talkacharya.com")
             manifestPlaceholders["usesCleartextTraffic"] = "false"
         }

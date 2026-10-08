@@ -105,7 +105,7 @@ class AuthLogo extends StatelessWidget {
         padding: const EdgeInsets.all(5),
         child: ClipOval(
           child: Image.asset(
-            'assets/icon/logo.jpeg',
+            'assets/icon/logo.png',
             fit: BoxFit.cover,
             // A missing asset should cost a logo, not the sign-in screen.
             errorBuilder: (_, _, _) => ColoredBox(

@@ -12937,6 +12937,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} is free for your {channel}.'**
   String waitlistTurnWith(String name, String channel);
+
+  /// No description provided for @delAccTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get delAccTitle;
+
+  /// No description provided for @delAccHeroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account'**
+  String get delAccHeroTitle;
+
+  /// No description provided for @delAccStepNow.
+  ///
+  /// In en, this message translates to:
+  /// **'You are signed out on every phone right away.'**
+  String get delAccStepNow;
+
+  /// No description provided for @delAccStepWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is erased after {days} days.'**
+  String delAccStepWait(int days);
+
+  /// No description provided for @delAccStepCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Changed your mind? Sign in again within {days} days and the deletion is cancelled.'**
+  String delAccStepCancel(int days);
+
+  /// No description provided for @delAccRemovedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What is removed'**
+  String get delAccRemovedTitle;
+
+  /// No description provided for @delAccRemoved1.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name, phone number, photo and other profile details'**
+  String get delAccRemoved1;
+
+  /// No description provided for @delAccRemoved3.
+  ///
+  /// In en, this message translates to:
+  /// **'Your devices and notifications'**
+  String get delAccRemoved3;
+
+  /// No description provided for @delAccKeptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What we keep'**
+  String get delAccKeptTitle;
+
+  /// No description provided for @delAccKept1.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment, wallet and invoice records, for as long as the law requires — without your name'**
+  String get delAccKept1;
+
+  /// No description provided for @delAccKept2.
+  ///
+  /// In en, this message translates to:
+  /// **'Past consultations, chats and reviews: the other person keeps their copy, yours shows as from a deleted user'**
+  String get delAccKept2;
+
+  /// No description provided for @delAccInSession.
+  ///
+  /// In en, this message translates to:
+  /// **'You have a consultation in progress. Finish or cancel it first.'**
+  String get delAccInSession;
+
+  /// No description provided for @delAccReasonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Why are you leaving?'**
+  String get delAccReasonTitle;
+
+  /// No description provided for @delAccReasonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. It helps us do better.'**
+  String get delAccReasonHint;
+
+  /// No description provided for @delAccUnderstand.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand this cannot be undone after {days} days'**
+  String delAccUnderstand(int days);
+
+  /// No description provided for @delAccButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete my account'**
+  String get delAccButton;
+
+  /// No description provided for @delAccSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account?'**
+  String get delAccSheetTitle;
+
+  /// No description provided for @delAccSheetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You will be signed out on every phone right now.'**
+  String get delAccSheetBody;
+
+  /// No description provided for @delAccKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep my account'**
+  String get delAccKeep;
+
+  /// No description provided for @delAccDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is scheduled for deletion'**
+  String get delAccDone;
+
+  /// No description provided for @delAccRemovedCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved birth details and kundalis, yours and your family\'s'**
+  String get delAccRemovedCustomer;
+
+  /// No description provided for @delAccWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} is left in your wallet. It is not refunded automatically: use it, or ask support for a refund, before you delete.'**
+  String delAccWallet(String amount);
 }
 
 class _AppLocalizationsDelegate

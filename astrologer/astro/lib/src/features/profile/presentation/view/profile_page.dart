@@ -304,6 +304,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             destructive: true,
                             onTap: _logout,
                           ),
+                          MenuRow(
+                            icon: Icons.person_remove_rounded,
+                            hue: AstroPalette.love,
+                            title: l.delAccMenu,
+                            subtitle: l.delAccMenuSub,
+                            onTap: () =>
+                                context.push(Routes.profileDeleteAccount),
+                          ),
                         ],
                       ),
                       const _AppVersion(),

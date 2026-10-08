@@ -3820,4 +3820,89 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get reportsOutcomeNote => 'हमारी टीम की टिप्पणी';
+
+  @override
+  String get delAccTitle => 'खाता हटाएँ';
+
+  @override
+  String get delAccHeroTitle => 'अपना खाता हटाएँ';
+
+  @override
+  String get delAccStepNow => 'आप तुरंत हर फ़ोन से साइन आउट हो जाएँगे।';
+
+  @override
+  String delAccStepWait(int days) {
+    return '$days दिन बाद आपका खाता मिटा दिया जाएगा।';
+  }
+
+  @override
+  String delAccStepCancel(int days) {
+    return 'मन बदल गया? $days दिन के भीतर दोबारा साइन इन करें, खाता हटाना रद्द हो जाएगा।';
+  }
+
+  @override
+  String get delAccRemovedTitle => 'क्या हटाया जाएगा';
+
+  @override
+  String get delAccRemoved1 =>
+      'आपका नाम, फ़ोन नंबर, फ़ोटो और प्रोफ़ाइल की बाक़ी जानकारी';
+
+  @override
+  String get delAccRemoved3 => 'आपके डिवाइस और सूचनाएँ';
+
+  @override
+  String get delAccKeptTitle => 'हम क्या रखते हैं';
+
+  @override
+  String get delAccKept1 =>
+      'भुगतान, वॉलेट और इनवॉइस के रिकॉर्ड, जितने समय तक क़ानून कहता है — आपके नाम के बिना';
+
+  @override
+  String get delAccKept2 =>
+      'पुराने परामर्श, चैट और समीक्षाएँ: दूसरे व्यक्ति के पास उनकी प्रति रहती है, आपकी ओर से \"हटाया गया उपयोगकर्ता\" दिखता है';
+
+  @override
+  String get delAccInSession =>
+      'आपका एक परामर्श चल रहा है। पहले उसे पूरा या रद्द करें।';
+
+  @override
+  String get delAccReasonTitle => 'आप क्यों जा रहे हैं?';
+
+  @override
+  String get delAccReasonHint =>
+      'वैकल्पिक। इससे हमें बेहतर करने में मदद मिलती है।';
+
+  @override
+  String delAccUnderstand(int days) {
+    return 'मैं समझता/समझती हूँ कि $days दिन बाद इसे वापस नहीं लिया जा सकता';
+  }
+
+  @override
+  String get delAccButton => 'मेरा खाता हटाएँ';
+
+  @override
+  String get delAccSheetTitle => 'अपना खाता हटाएँ?';
+
+  @override
+  String get delAccSheetBody => 'आप अभी हर फ़ोन से साइन आउट हो जाएँगे।';
+
+  @override
+  String get delAccKeep => 'खाता रखें';
+
+  @override
+  String get delAccDone => 'आपका खाता हटाने के लिए निर्धारित हो गया है';
+
+  @override
+  String get delAccMenu => 'खाता हटाएँ';
+
+  @override
+  String get delAccMenuSub => 'अपना खाता और डेटा मिटाएँ';
+
+  @override
+  String get delAccRemovedAstro =>
+      'आपकी प्रोफ़ाइल का विवरण और तस्वीरें, पहचान के दस्तावेज़ और बैंक विवरण';
+
+  @override
+  String get delAccPayoutNote =>
+      'हटाने से पहले किसी भी लंबित भुगतान का इंतज़ार करें। बैंक विवरण मिटने के बाद हम उसे नहीं भेज पाएँगे।';
 }
