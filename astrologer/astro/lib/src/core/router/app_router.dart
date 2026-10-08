@@ -21,6 +21,7 @@ import '../../features/remedies/data/remedies_api.dart';
 import '../../features/remedies/presentation/view/pooja_pages.dart';
 import '../../features/remedies/presentation/view/remedies_page.dart';
 import '../../features/remedies/presentation/view/suggest_remedy_page.dart';
+import '../../features/reports/presentation/view/reports_pages.dart';
 import '../../features/waitlist/presentation/view/waitlist_page.dart';
 import '../../features/home/presentation/view/tools_page.dart';
 import '../../features/workspace/presentation/view/calendar_page.dart';
@@ -227,6 +228,19 @@ GoRouter buildRouter(
         path: Routes.callHistory,
         parentNavigatorKey: _rootKey,
         builder: (_, _) => const CallHistoryPage(),
+      ),
+      GoRoute(
+        path: Routes.reports,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const ReportsPage(),
+        routes: [
+          GoRoute(
+            path: ':id',
+            parentNavigatorKey: _rootKey,
+            builder: (_, s) =>
+                ReportDetailPage(reportId: s.pathParameters['id']!),
+          ),
+        ],
       ),
       GoRoute(
         path: Routes.remedies,

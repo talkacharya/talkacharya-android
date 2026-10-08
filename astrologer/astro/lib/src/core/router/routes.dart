@@ -78,6 +78,10 @@ class Routes {
 
   static const waitlist = '/waitlist';
   static const callHistory = '/call-history';
+
+  /// Reports customers raised on the astrologer's sessions.
+  static const reports = '/reports';
+  static String reportDetail(String id) => '/reports/$id';
   static const remedies = '/remedies';
 
   /// [consultation] presets the customer when opened from their session.

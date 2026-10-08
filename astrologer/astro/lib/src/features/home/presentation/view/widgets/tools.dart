@@ -226,6 +226,12 @@ List<ToolGroup> buildToolGroups(BuildContext context) {
     ]),
     ToolGroup(l.toolsGroupHelp, [
       ToolAction(
+        AstroPalette.fire,
+        Icons.flag_rounded,
+        l.reportsTitle,
+        () => context.push(Routes.reports),
+      ),
+      ToolAction(
         AstroPalette.money,
         Icons.campaign_rounded,
         l.wsAnnouncements,

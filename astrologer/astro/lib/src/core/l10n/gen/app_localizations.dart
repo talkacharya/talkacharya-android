@@ -6325,6 +6325,270 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{date}, {time}'**
   String obInterviewOn(String date, String time);
+
+  /// No description provided for @reportsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Session reports'**
+  String get reportsTitle;
+
+  /// No description provided for @reportsMenuSub.
+  ///
+  /// In en, this message translates to:
+  /// **'What customers reported, and your side of it'**
+  String get reportsMenuSub;
+
+  /// No description provided for @reportsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'When a customer reports a session, you see it here and can give your side before our team decides.'**
+  String get reportsSubtitle;
+
+  /// No description provided for @reportsDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get reportsDetailTitle;
+
+  /// No description provided for @reportsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No reports'**
+  String get reportsEmptyTitle;
+
+  /// No description provided for @reportsEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No customer has reported any of your sessions.'**
+  String get reportsEmptyBody;
+
+  /// No description provided for @reportsACustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'A customer'**
+  String get reportsACustomer;
+
+  /// No description provided for @reportsReplyNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Your reply is needed'**
+  String get reportsReplyNeeded;
+
+  /// No description provided for @reportsUnderReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Under review'**
+  String get reportsUnderReview;
+
+  /// No description provided for @reportsCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'No action taken'**
+  String get reportsCleared;
+
+  /// No description provided for @reportsDecided.
+  ///
+  /// In en, this message translates to:
+  /// **'Decided'**
+  String get reportsDecided;
+
+  /// No description provided for @reportsWaitingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 report needs your reply} other{{count} reports need your reply}}'**
+  String reportsWaitingTitle(int count);
+
+  /// No description provided for @reportsWaitingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Our team decides after hearing from you, or when the time runs out.'**
+  String get reportsWaitingBody;
+
+  /// No description provided for @reportsReplyBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply by {when}'**
+  String reportsReplyBy(String when);
+
+  /// No description provided for @reportsTypeBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'About the charge'**
+  String get reportsTypeBilling;
+
+  /// No description provided for @reportsTypeConduct.
+  ///
+  /// In en, this message translates to:
+  /// **'About conduct'**
+  String get reportsTypeConduct;
+
+  /// No description provided for @reportsTypeQuality.
+  ///
+  /// In en, this message translates to:
+  /// **'About the quality of the session'**
+  String get reportsTypeQuality;
+
+  /// No description provided for @reportsTypeNoShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Did not get the session'**
+  String get reportsTypeNoShow;
+
+  /// No description provided for @reportsTypeTechnical.
+  ///
+  /// In en, this message translates to:
+  /// **'A technical problem'**
+  String get reportsTypeTechnical;
+
+  /// No description provided for @reportsTypeOther.
+  ///
+  /// In en, this message translates to:
+  /// **'A report'**
+  String get reportsTypeOther;
+
+  /// No description provided for @reportsHeroReplyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us what happened in this session. Our team reads both sides before deciding.'**
+  String get reportsHeroReplyBody;
+
+  /// No description provided for @reportsHeroReplyBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us what happened in this session by {when}. Our team reads both sides before deciding.'**
+  String reportsHeroReplyBy(String when);
+
+  /// No description provided for @reportsHeroReviewBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Our team is looking into it. You will be told as soon as it is decided.'**
+  String get reportsHeroReviewBody;
+
+  /// No description provided for @reportsHeroClearedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Our team looked into it and took no action against you.'**
+  String get reportsHeroClearedBody;
+
+  /// No description provided for @reportsHeroDecidedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Our team has decided this report. The outcome is below.'**
+  String get reportsHeroDecidedBody;
+
+  /// No description provided for @reportsSaidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What {name} said'**
+  String reportsSaidTitle(String name);
+
+  /// No description provided for @reportsFactSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Session'**
+  String get reportsFactSession;
+
+  /// No description provided for @reportsFactLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Length'**
+  String get reportsFactLength;
+
+  /// No description provided for @reportsFactBilled.
+  ///
+  /// In en, this message translates to:
+  /// **'Billed'**
+  String get reportsFactBilled;
+
+  /// No description provided for @reportsMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} min'**
+  String reportsMinutes(int count);
+
+  /// No description provided for @reportsMySideTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your side'**
+  String get reportsMySideTitle;
+
+  /// No description provided for @reportsMySideHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Say what happened, in your own words.'**
+  String get reportsMySideHint;
+
+  /// No description provided for @reportsReplyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For example: how long the session ran, what you covered, what went wrong and why.'**
+  String get reportsReplyHint;
+
+  /// No description provided for @reportsReplyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'This goes to our review team, not to the customer. You can reply once, so say everything you want considered.'**
+  String get reportsReplyNote;
+
+  /// No description provided for @reportsReplySend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send my reply'**
+  String get reportsReplySend;
+
+  /// No description provided for @reportsReplyTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Write at least a sentence about what happened'**
+  String get reportsReplyTooShort;
+
+  /// No description provided for @reportsReplySent.
+  ///
+  /// In en, this message translates to:
+  /// **'Your reply has been sent to our team'**
+  String get reportsReplySent;
+
+  /// No description provided for @reportsSentAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent {when}'**
+  String reportsSentAt(String when);
+
+  /// No description provided for @reportsNoReply.
+  ///
+  /// In en, this message translates to:
+  /// **'No reply was given before this was decided.'**
+  String get reportsNoReply;
+
+  /// No description provided for @reportsOutcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What was decided'**
+  String get reportsOutcomeTitle;
+
+  /// No description provided for @reportsOutcomeNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No action was taken against you.'**
+  String get reportsOutcomeNone;
+
+  /// No description provided for @reportsOutcomeRefund.
+  ///
+  /// In en, this message translates to:
+  /// **'The customer was refunded. Your earning for this session is unchanged.'**
+  String get reportsOutcomeRefund;
+
+  /// No description provided for @reportsOutcomePenalty.
+  ///
+  /// In en, this message translates to:
+  /// **'The customer was refunded, and {amount} was deducted from your earnings.'**
+  String reportsOutcomePenalty(String amount);
+
+  /// No description provided for @reportsOutcomeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note from our team'**
+  String get reportsOutcomeNote;
 }
 
 class _AppLocalizationsDelegate

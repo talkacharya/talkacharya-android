@@ -43,6 +43,10 @@ String? locationForUri(Uri uri) {
       return id == null ? '/profile' : '/profile/$id';
     case 'reviews':
       return '/profile/reviews';
+    case 'disputes':
+    case 'reports':
+      // A report on one of their sessions: raised, or decided.
+      return id == null ? '/reports' : '/reports/$id';
     case 'livestreams':
     case 'livestream':
     case 'live':

@@ -3657,4 +3657,167 @@ class AppLocalizationsHi extends AppLocalizations {
   String obInterviewOn(String date, String time) {
     return '$date, $time';
   }
+
+  @override
+  String get reportsTitle => 'सत्र की शिकायतें';
+
+  @override
+  String get reportsMenuSub => 'ग्राहकों ने क्या शिकायत की, और आपका पक्ष';
+
+  @override
+  String get reportsSubtitle =>
+      'जब कोई ग्राहक किसी सत्र की शिकायत करता है, तो वह यहाँ दिखती है और हमारी टीम के निर्णय से पहले आप अपना पक्ष रख सकते हैं।';
+
+  @override
+  String get reportsDetailTitle => 'शिकायत';
+
+  @override
+  String get reportsEmptyTitle => 'कोई शिकायत नहीं';
+
+  @override
+  String get reportsEmptyBody =>
+      'किसी ग्राहक ने आपके किसी सत्र की शिकायत नहीं की है।';
+
+  @override
+  String get reportsACustomer => 'एक ग्राहक';
+
+  @override
+  String get reportsReplyNeeded => 'आपका जवाब चाहिए';
+
+  @override
+  String get reportsUnderReview => 'जाँच चल रही है';
+
+  @override
+  String get reportsCleared => 'कोई कार्रवाई नहीं';
+
+  @override
+  String get reportsDecided => 'निर्णय हो गया';
+
+  @override
+  String reportsWaitingTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count शिकायतों पर आपका जवाब चाहिए',
+      one: '1 शिकायत पर आपका जवाब चाहिए',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reportsWaitingBody =>
+      'हमारी टीम आपका पक्ष सुनने के बाद, या समय पूरा होने पर निर्णय लेती है।';
+
+  @override
+  String reportsReplyBy(String when) {
+    return '$when तक जवाब दें';
+  }
+
+  @override
+  String get reportsTypeBilling => 'शुल्क के बारे में';
+
+  @override
+  String get reportsTypeConduct => 'व्यवहार के बारे में';
+
+  @override
+  String get reportsTypeQuality => 'सत्र की गुणवत्ता के बारे में';
+
+  @override
+  String get reportsTypeNoShow => 'सत्र नहीं मिला';
+
+  @override
+  String get reportsTypeTechnical => 'तकनीकी समस्या';
+
+  @override
+  String get reportsTypeOther => 'एक शिकायत';
+
+  @override
+  String get reportsHeroReplyBody =>
+      'बताएँ कि इस सत्र में क्या हुआ। हमारी टीम निर्णय से पहले दोनों पक्ष पढ़ती है।';
+
+  @override
+  String reportsHeroReplyBy(String when) {
+    return '$when तक बताएँ कि इस सत्र में क्या हुआ। हमारी टीम निर्णय से पहले दोनों पक्ष पढ़ती है।';
+  }
+
+  @override
+  String get reportsHeroReviewBody =>
+      'हमारी टीम इसे देख रही है। निर्णय होते ही आपको बताया जाएगा।';
+
+  @override
+  String get reportsHeroClearedBody =>
+      'हमारी टीम ने जाँच की और आपके ख़िलाफ़ कोई कार्रवाई नहीं की।';
+
+  @override
+  String get reportsHeroDecidedBody =>
+      'हमारी टीम ने इस शिकायत पर निर्णय ले लिया है। परिणाम नीचे है।';
+
+  @override
+  String reportsSaidTitle(String name) {
+    return '$name ने क्या कहा';
+  }
+
+  @override
+  String get reportsFactSession => 'सत्र';
+
+  @override
+  String get reportsFactLength => 'अवधि';
+
+  @override
+  String get reportsFactBilled => 'बिल';
+
+  @override
+  String reportsMinutes(int count) {
+    return '$count मिनट';
+  }
+
+  @override
+  String get reportsMySideTitle => 'आपका पक्ष';
+
+  @override
+  String get reportsMySideHint => 'अपने शब्दों में बताएँ कि क्या हुआ।';
+
+  @override
+  String get reportsReplyHint =>
+      'जैसे: सत्र कितनी देर चला, आपने क्या बताया, क्या गड़बड़ हुई और क्यों।';
+
+  @override
+  String get reportsReplyNote =>
+      'यह हमारी समीक्षा टीम को जाता है, ग्राहक को नहीं। आप एक ही बार जवाब दे सकते हैं, इसलिए जो भी कहना हो सब लिखें।';
+
+  @override
+  String get reportsReplySend => 'मेरा जवाब भेजें';
+
+  @override
+  String get reportsReplyTooShort =>
+      'जो हुआ उसके बारे में कम से कम एक वाक्य लिखें';
+
+  @override
+  String get reportsReplySent => 'आपका जवाब हमारी टीम को भेज दिया गया है';
+
+  @override
+  String reportsSentAt(String when) {
+    return '$when को भेजा गया';
+  }
+
+  @override
+  String get reportsNoReply => 'निर्णय होने से पहले कोई जवाब नहीं दिया गया।';
+
+  @override
+  String get reportsOutcomeTitle => 'क्या निर्णय हुआ';
+
+  @override
+  String get reportsOutcomeNone => 'आपके ख़िलाफ़ कोई कार्रवाई नहीं हुई।';
+
+  @override
+  String get reportsOutcomeRefund =>
+      'ग्राहक को रिफ़ंड दिया गया। इस सत्र की आपकी कमाई वैसी ही है।';
+
+  @override
+  String reportsOutcomePenalty(String amount) {
+    return 'ग्राहक को रिफ़ंड दिया गया, और आपकी कमाई से $amount काटे गए।';
+  }
+
+  @override
+  String get reportsOutcomeNote => 'हमारी टीम की टिप्पणी';
 }

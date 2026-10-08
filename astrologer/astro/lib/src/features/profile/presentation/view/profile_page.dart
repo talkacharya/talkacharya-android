@@ -255,6 +255,13 @@ class _ProfilePageState extends State<ProfilePage> {
                       MenuGroup(
                         label: l.profileGroupSupport,
                         rows: [
+                          MenuRow(
+                            icon: Icons.flag_rounded,
+                            hue: AstroPalette.fire,
+                            title: l.reportsTitle,
+                            subtitle: l.reportsMenuSub,
+                            onTap: () => context.push(Routes.reports),
+                          ),
                           if (support.helpUrl.isNotEmpty)
                             MenuRow(
                               icon: Icons.help_rounded,

@@ -170,6 +170,12 @@ class ApiPaths {
   static const astroPerformance = '/astro/analytics/performance';
   static const astroLapsedCustomers = '/astro/analytics/lapsed-customers';
   static const astroReviews = '/astro/reviews';
+
+  // reports customers raised on this astrologer's sessions
+  static const astroDisputes = '/astro/disputes';
+  static String astroDispute(String id) => '/astro/disputes/$id';
+  static String astroDisputeResponse(String id) =>
+      '/astro/disputes/$id/response';
   static String astroReviewReply(String id) => '/astro/reviews/$id/reply';
   static const astroGiftsReceived = '/astro/gifts/received';
 }

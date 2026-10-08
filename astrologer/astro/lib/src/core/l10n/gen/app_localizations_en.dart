@@ -3666,4 +3666,167 @@ class AppLocalizationsEn extends AppLocalizations {
   String obInterviewOn(String date, String time) {
     return '$date, $time';
   }
+
+  @override
+  String get reportsTitle => 'Session reports';
+
+  @override
+  String get reportsMenuSub => 'What customers reported, and your side of it';
+
+  @override
+  String get reportsSubtitle =>
+      'When a customer reports a session, you see it here and can give your side before our team decides.';
+
+  @override
+  String get reportsDetailTitle => 'Report';
+
+  @override
+  String get reportsEmptyTitle => 'No reports';
+
+  @override
+  String get reportsEmptyBody =>
+      'No customer has reported any of your sessions.';
+
+  @override
+  String get reportsACustomer => 'A customer';
+
+  @override
+  String get reportsReplyNeeded => 'Your reply is needed';
+
+  @override
+  String get reportsUnderReview => 'Under review';
+
+  @override
+  String get reportsCleared => 'No action taken';
+
+  @override
+  String get reportsDecided => 'Decided';
+
+  @override
+  String reportsWaitingTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count reports need your reply',
+      one: '1 report needs your reply',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reportsWaitingBody =>
+      'Our team decides after hearing from you, or when the time runs out.';
+
+  @override
+  String reportsReplyBy(String when) {
+    return 'Reply by $when';
+  }
+
+  @override
+  String get reportsTypeBilling => 'About the charge';
+
+  @override
+  String get reportsTypeConduct => 'About conduct';
+
+  @override
+  String get reportsTypeQuality => 'About the quality of the session';
+
+  @override
+  String get reportsTypeNoShow => 'Did not get the session';
+
+  @override
+  String get reportsTypeTechnical => 'A technical problem';
+
+  @override
+  String get reportsTypeOther => 'A report';
+
+  @override
+  String get reportsHeroReplyBody =>
+      'Tell us what happened in this session. Our team reads both sides before deciding.';
+
+  @override
+  String reportsHeroReplyBy(String when) {
+    return 'Tell us what happened in this session by $when. Our team reads both sides before deciding.';
+  }
+
+  @override
+  String get reportsHeroReviewBody =>
+      'Our team is looking into it. You will be told as soon as it is decided.';
+
+  @override
+  String get reportsHeroClearedBody =>
+      'Our team looked into it and took no action against you.';
+
+  @override
+  String get reportsHeroDecidedBody =>
+      'Our team has decided this report. The outcome is below.';
+
+  @override
+  String reportsSaidTitle(String name) {
+    return 'What $name said';
+  }
+
+  @override
+  String get reportsFactSession => 'Session';
+
+  @override
+  String get reportsFactLength => 'Length';
+
+  @override
+  String get reportsFactBilled => 'Billed';
+
+  @override
+  String reportsMinutes(int count) {
+    return '$count min';
+  }
+
+  @override
+  String get reportsMySideTitle => 'Your side';
+
+  @override
+  String get reportsMySideHint => 'Say what happened, in your own words.';
+
+  @override
+  String get reportsReplyHint =>
+      'For example: how long the session ran, what you covered, what went wrong and why.';
+
+  @override
+  String get reportsReplyNote =>
+      'This goes to our review team, not to the customer. You can reply once, so say everything you want considered.';
+
+  @override
+  String get reportsReplySend => 'Send my reply';
+
+  @override
+  String get reportsReplyTooShort =>
+      'Write at least a sentence about what happened';
+
+  @override
+  String get reportsReplySent => 'Your reply has been sent to our team';
+
+  @override
+  String reportsSentAt(String when) {
+    return 'Sent $when';
+  }
+
+  @override
+  String get reportsNoReply => 'No reply was given before this was decided.';
+
+  @override
+  String get reportsOutcomeTitle => 'What was decided';
+
+  @override
+  String get reportsOutcomeNone => 'No action was taken against you.';
+
+  @override
+  String get reportsOutcomeRefund =>
+      'The customer was refunded. Your earning for this session is unchanged.';
+
+  @override
+  String reportsOutcomePenalty(String amount) {
+    return 'The customer was refunded, and $amount was deducted from your earnings.';
+  }
+
+  @override
+  String get reportsOutcomeNote => 'Note from our team';
 }
