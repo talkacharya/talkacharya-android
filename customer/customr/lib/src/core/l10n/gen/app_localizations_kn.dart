@@ -3527,6 +3527,12 @@ class AppLocalizationsKn extends AppLocalizations {
   String get kChSouthIndian => 'South Indian';
 
   @override
+  String get kChRasiNumbers => 'Rasi no.';
+
+  @override
+  String get kChHouseNumbers => 'House no.';
+
+  @override
   String get kChPickerCharts => 'Charts';
 
   @override
@@ -7559,4 +7565,50 @@ class AppLocalizationsKn extends AppLocalizations {
   String delAccWallet(String amount) {
     return '$amount is left in your wallet. It is not refunded automatically: use it, or ask support for a refund, before you delete.';
   }
+
+  @override
+  String get primerAllow => 'Allow all';
+
+  @override
+  String get primerLater => 'Not now';
+
+  @override
+  String get primerDone => 'Continue';
+
+  @override
+  String get primerOpenSettings => 'Open settings';
+
+  @override
+  String get primerAllowed => 'Allowed';
+
+  @override
+  String get primerNotifications => 'Notifications';
+
+  @override
+  String get primerMicrophone => 'Microphone';
+
+  @override
+  String get primerCamera => 'Camera';
+
+  @override
+  String get primerTitle => 'Get set for your consultations';
+
+  @override
+  String get primerBody =>
+      'Allow these once now, so nothing gets in the way when you talk to an astrologer.';
+
+  @override
+  String get primerNotificationsWhy =>
+      'So you know when your astrologer replies, or it is your turn in a waitlist';
+
+  @override
+  String get primerMicrophoneWhy =>
+      'For voice and video calls with an astrologer';
+
+  @override
+  String get primerCameraWhy => 'For video calls with an astrologer';
+
+  @override
+  String get primerBlockedNote =>
+      'Something was not allowed. You can turn it on in your phone\'s settings; without it, calls of that kind will not work.';
 }

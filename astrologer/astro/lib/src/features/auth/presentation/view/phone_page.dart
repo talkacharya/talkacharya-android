@@ -9,6 +9,7 @@ import '../bloc/login/login_cubit.dart';
 import 'widgets/auth_shell.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Step one: the number.
 class PhonePage extends StatefulWidget {
   const PhonePage({super.key});
@@ -138,9 +139,92 @@ class _PhonePageState extends State<PhonePage> {
               loading: state.submitting,
               onPressed: ready ? () => _submit(state) : null,
             ),
+            Gap.lg,
+            // There is no separate sign-up: a new number entered here starts
+            // an application. Without this, the screen reads as "members only".
+            const _JoinCard(),
           ]),
         );
       },
+    );
+  }
+}
+
+/// "New here?" — what joining takes, in four steps, for an astrologer who
+/// does not have an account yet.
+class _JoinCard extends StatelessWidget {
+  const _JoinCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final brand = context.brand;
+    final theme = Theme.of(context);
+    final steps = [
+      (Icons.phone_iphone_rounded, l.authJoinStep1),
+      (Icons.badge_rounded, l.authJoinStep2),
+      (Icons.fact_check_rounded, l.authJoinStep3),
+      (Icons.verified_rounded, l.authJoinStep4),
+    ];
+    return AuthCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.auto_awesome_rounded, size: 18, color: brand.gold),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  l.authJoinTitle,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: brand.onCosmic,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            l.authJoinBody,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: brand.onCosmicMuted,
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 12),
+          for (final (i, (icon, text)) in steps.indexed)
+            Padding(
+              padding: EdgeInsets.only(bottom: i == steps.length - 1 ? 0 : 10),
+              child: Row(
+                children: [
+                  Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withValues(alpha: 0.10),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.16),
+                      ),
+                    ),
+                    child: Icon(icon, size: 15, color: brand.onCosmic),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      text,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: brand.onCosmic,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

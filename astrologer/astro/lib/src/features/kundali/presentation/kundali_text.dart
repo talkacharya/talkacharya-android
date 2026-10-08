@@ -381,6 +381,8 @@ class KT {
       legendNote: c['kChLegendNote']!,
       northIndian: c['kChNorthIndian']!,
       southIndian: c['kChSouthIndian']!,
+      rasiNumbers: c['kChRasiNumbers']!,
+      houseNumbers: c['kChHouseNumbers']!,
       pickerCharts: c['kChPickerCharts']!,
       pickerDivisional: c['kChPickerDivisional']!,
       retry: retry,

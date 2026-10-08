@@ -34,6 +34,8 @@ class KundaliStrings {
         'North: cell number = rasi (1 Aries … 12 Pisces), 1st house is top-centre.',
     this.northIndian = 'North Indian',
     this.southIndian = 'South Indian',
+    this.rasiNumbers = 'Rasi no.',
+    this.houseNumbers = 'House no.',
     this.pickerCharts = 'Charts',
     this.pickerDivisional = 'Divisional charts (Varga)',
     this.retry = 'Retry',
@@ -67,6 +69,8 @@ class KundaliStrings {
   final String legendNote;
   final String northIndian;
   final String southIndian;
+  final String rasiNumbers;
+  final String houseNumbers;
   final String pickerCharts;
   final String pickerDivisional;
   final String retry;

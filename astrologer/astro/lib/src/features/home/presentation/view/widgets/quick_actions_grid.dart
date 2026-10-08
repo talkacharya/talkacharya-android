@@ -7,13 +7,13 @@ import '../../../../../core/router/routes.dart';
 import 'dash_shared.dart';
 import 'tools.dart';
 
-/// The eight tools an astrologer reaches for most, with "See all" opening the
+/// The twelve tools an astrologer reaches for most, with "See all" opening the
 /// full, grouped list. Counts show only where something is waiting.
 class QuickActionsGrid extends StatelessWidget {
   const QuickActionsGrid({super.key});
 
-  /// How many tiles Home keeps — two rows of four.
-  static const featured = 8;
+  /// How many tiles Home keeps — three rows of four.
+  static const featured = 12;
 
   @override
   Widget build(BuildContext context) {

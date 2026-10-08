@@ -6,6 +6,27 @@ import 'planet_palette.dart';
 
 enum ChartStyle { north, south }
 
+/// Which numbers a chart carries in the corners of each bhava.
+class ChartLabels {
+  const ChartLabels({this.rasi = true, this.house = false});
+
+  /// The sign in that bhava, 1 = Aries … 12 = Pisces.
+  final bool rasi;
+
+  /// The bhava's own number, counted from the lagna. Drawn inside a small
+  /// ring so it is never mistaken for the rasi.
+  final bool house;
+
+  ChartLabels copyWith({bool? rasi, bool? house}) =>
+      ChartLabels(rasi: rasi ?? this.rasi, house: house ?? this.house);
+}
+
+/// What the reader has chosen to see; every chart on screen follows it, and it
+/// holds for as long as the app runs.
+final ValueNotifier<ChartLabels> chartLabels = ValueNotifier(
+  const ChartLabels(),
+);
+
 /// A Vedic birth-chart diagram drawn natively (so houses are tappable and it
 /// follows the app theme). Takes the `houses` list from any chart payload
 /// (D1, D9, …) — each entry is house → sign → planet names.
@@ -53,45 +74,51 @@ class NatalChart extends StatelessWidget {
         ? ''
         : houses.firstWhere((h) => h.house == 1, orElse: () => houses.first).sign;
 
-    return AspectRatio(
-      aspectRatio: 1,
-      child: LayoutBuilder(
-        builder: (context, c) {
-          final size = Size(c.maxWidth, c.maxHeight);
-          final geo = style == ChartStyle.north
-              ? _northPolys(size)
-              : _southPolys(size, ascSign);
-          return GestureDetector(
-            onTapUp: onHouseTap == null
-                ? null
-                : (d) {
-                    for (final e in geo.entries) {
-                      if (_contains(e.value, d.localPosition)) {
-                        onHouseTap!(e.key);
-                        return;
+    return ValueListenableBuilder<ChartLabels>(
+      valueListenable: chartLabels,
+      builder: (context, labels, _) => AspectRatio(
+        aspectRatio: 1,
+        child: LayoutBuilder(
+          builder: (context, c) {
+            final size = Size(c.maxWidth, c.maxHeight);
+            final geo = style == ChartStyle.north
+                ? _northPolys(size)
+                : _southPolys(size, ascSign);
+            return GestureDetector(
+              onTapUp: onHouseTap == null
+                  ? null
+                  : (d) {
+                      for (final e in geo.entries) {
+                        if (_contains(e.value, d.localPosition)) {
+                          onHouseTap!(e.key);
+                          return;
+                        }
                       }
-                    }
-                  },
-            child: CustomPaint(
-              size: size,
-              painter: _ChartPainter(
-                houses: houses,
-                geo: geo,
-                style: style,
-                lineColor: line,
-                fillColor: fillColor ?? scheme.surface,
-                selectedFill: scheme.primary.withValues(alpha: 0.14),
-                selectedLine: scheme.primary,
-                numberColor: numberColor ?? scheme.onSurfaceVariant.withValues(alpha: 0.5),
-                onSurface: textColor ?? scheme.onSurface,
-                retrograde: retrograde,
-                selectedHouse: selectedHouse,
-                showNumbers: showHouseNumbers,
-                planetLabel: label,
+                    },
+              child: CustomPaint(
+                size: size,
+                painter: _ChartPainter(
+                  houses: houses,
+                  geo: geo,
+                  style: style,
+                  lineColor: line,
+                  fillColor: fillColor ?? scheme.surface,
+                  selectedFill: scheme.primary.withValues(alpha: 0.14),
+                  selectedLine: scheme.primary,
+                  numberColor:
+                      numberColor ??
+                      scheme.onSurfaceVariant.withValues(alpha: 0.5),
+                  onSurface: textColor ?? scheme.onSurface,
+                  retrograde: retrograde,
+                  selectedHouse: selectedHouse,
+                  showNumbers: showHouseNumbers,
+                  labels: labels,
+                  planetLabel: label,
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -175,6 +202,7 @@ class _ChartPainter extends CustomPainter {
     required this.retrograde,
     required this.selectedHouse,
     required this.showNumbers,
+    required this.labels,
     required this.planetLabel,
   });
 
@@ -185,6 +213,7 @@ class _ChartPainter extends CustomPainter {
   final Set<String> retrograde;
   final int? selectedHouse;
   final bool showNumbers;
+  final ChartLabels labels;
   final String Function(String planetName) planetLabel;
 
   @override
@@ -222,6 +251,19 @@ class _ChartPainter extends CustomPainter {
               Offset(size.width, size.height / 4 * i), stroke);
       }
       canvas.drawRect(Offset.zero & size, stroke);
+      // The lagna's cell: two strokes across its top-left corner, the usual mark.
+      final lagna = geo[1];
+      if (lagna != null) {
+        final o = lagna.first;
+        final cw = size.width / 4, ch = size.height / 4;
+        final mark = Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.4
+          ..color = selectedLine;
+        for (final f in const [0.30, 0.40]) {
+          canvas.drawLine(o + Offset(cw * f, 0), o + Offset(0, ch * f), mark);
+        }
+      }
     }
 
     // selected outline
@@ -244,15 +286,45 @@ class _ChartPainter extends CustomPainter {
 
       if (showNumbers) {
         final corner = _numberAnchor(entry.value, centre);
-        // North Indian charts label each bhava with its *rasi* number (1=Aries …
-        // 12=Pisces), houses being fixed by position — that's what DrikPanchang
-        // shows. South Indian has signs fixed by cell, so the house number is
-        // the useful label there.
-        final rasi = data == null ? 0 : NatalChart._signs.indexOf(data.sign) + 1;
-        final label = style == ChartStyle.north ? '$rasi' : '$house';
-        if (label != '0') {
-          _text(canvas, label, corner, 8, numberColor,
-              anchor: Alignment.center);
+        // The rasi number (1=Aries … 12=Pisces) means the same in both styles,
+        // so the same number sits with the same planets whichever way the
+        // chart is drawn. In the North Indian chart the houses are fixed by
+        // position; in the South Indian one the signs are, and the lagna is
+        // marked above.
+        final rasi = data == null
+            ? 0
+            : NatalChart._signs.indexOf(data.sign) + 1;
+        if (labels.rasi && rasi != 0) {
+          _text(
+            canvas,
+            '$rasi',
+            corner,
+            8,
+            numberColor,
+            anchor: Alignment.center,
+          );
+        }
+        if (labels.house) {
+          // The corner furthest from the rasi's, so the two never meet.
+          final at = _houseAnchor(entry.value, centre, corner);
+          final ring = onSurface.withValues(alpha: 0.75);
+          canvas.drawCircle(
+            at,
+            7,
+            Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 0.9
+              ..color = ring,
+          );
+          _text(
+            canvas,
+            '$house',
+            at,
+            7.5,
+            ring,
+            bold: true,
+            anchor: Alignment.center,
+          );
         }
       }
 
@@ -349,6 +421,14 @@ class _ChartPainter extends CustomPainter {
     return Offset.lerp(far, centre, 0.15)!;
   }
 
+  Offset _houseAnchor(List<Offset> pts, Offset centre, Offset rasiAt) {
+    final far = pts.reduce(
+      (a, b) =>
+          (a - rasiAt).distanceSquared >= (b - rasiAt).distanceSquared ? a : b,
+    );
+    return Offset.lerp(far, centre, 0.34)!;
+  }
+
   void _text(
     Canvas canvas,
     String s,
@@ -391,5 +471,6 @@ class _ChartPainter extends CustomPainter {
       old.houses != houses ||
       old.selectedHouse != selectedHouse ||
       old.style != style ||
+      old.labels != labels ||
       old.lineColor != lineColor;
 }

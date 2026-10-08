@@ -104,14 +104,22 @@ class _ChartDetailPageState extends State<ChartDetailPage> {
               onHouseTap: _type == 'd1' && k != null
                   ? (h) => showHouseDetailSheet(context, kundali: k, house: h)
                   : null,
-              footer: Center(
-                child: KDarkSegment(
-                  labels: [l.kChNorthIndian, l.kChSouthIndian],
-                  selected: _style == ChartStyle.north ? 0 : 1,
-                  onSelect: (i) => setState(
-                    () => _style = i == 0 ? ChartStyle.north : ChartStyle.south,
+              footer: Column(
+                children: [
+                  KDarkSegment(
+                    labels: [l.kChNorthIndian, l.kChSouthIndian],
+                    selected: _style == ChartStyle.north ? 0 : 1,
+                    onSelect: (i) => setState(
+                      () =>
+                          _style = i == 0 ? ChartStyle.north : ChartStyle.south,
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 4),
+                  ChartLabelToggles(
+                    foreground: context.brand.onCosmicMuted,
+                    accent: context.brand.glowAccent,
+                  ),
+                ],
               ),
             ),
             if (vc != null) ...[

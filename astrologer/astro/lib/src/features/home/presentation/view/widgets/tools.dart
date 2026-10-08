@@ -109,24 +109,7 @@ List<ToolGroup> buildToolGroups(BuildContext context) {
         l.dashActionHours,
         () => context.go(Routes.profileWorkingHours),
       ),
-      ToolAction(
-        AstroPalette.health,
-        Icons.speed_rounded,
-        l.dashActionPerformance,
-        () => context.push(Routes.performance),
-      ),
-      ToolAction(
-        AstroPalette.fire,
-        Icons.temple_hindu_rounded,
-        l.poojaTool,
-        () => context.push(Routes.poojaCalendar),
-      ),
-      ToolAction(
-        AstroPalette.health,
-        Icons.event_available_rounded,
-        l.poojaBookingsTool,
-        () => context.push(Routes.poojaBookings),
-      ),
+      // Home's third row: the tools opened mid-consultation.
       ToolAction(
         AstroPalette.career,
         Icons.auto_awesome_rounded,
@@ -140,10 +123,28 @@ List<ToolGroup> buildToolGroups(BuildContext context) {
         () => context.push(Routes.matchmaking),
       ),
       ToolAction(
+        AstroPalette.fire,
+        Icons.temple_hindu_rounded,
+        l.poojaTool,
+        () => context.push(Routes.poojaCalendar),
+      ),
+      ToolAction(
         AstroPalette.air,
         Icons.quickreply_rounded,
         l.wsReplies,
         () => context.push(Routes.quickReplies),
+      ),
+      ToolAction(
+        AstroPalette.health,
+        Icons.speed_rounded,
+        l.dashActionPerformance,
+        () => context.push(Routes.performance),
+      ),
+      ToolAction(
+        AstroPalette.health,
+        Icons.event_available_rounded,
+        l.poojaBookingsTool,
+        () => context.push(Routes.poojaBookings),
       ),
     ]),
     ToolGroup(l.toolsGroupCustomers, [

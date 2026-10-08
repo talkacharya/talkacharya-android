@@ -11,6 +11,7 @@ enum OnboardingStage {
   notAstrologer,
   wizard, // draft / rejected — has gaps to fill or was sent back
   underReview,
+  training, // approved, but the required lessons are not finished
   approved,
   suspended,
 }
@@ -24,6 +25,10 @@ class OnboardingStore extends ChangeNotifier {
   final Dio _dio;
   final FlutterSecureStorage _storage;
   static const _key = 'ta_onboarding_status';
+
+  /// Cached in place of the status while training holds the app back, so a
+  /// cold start does not flash Home before the gate.
+  static const _trainingMark = 'training';
 
   AstroProfile? _profile;
   AstroProfile? get profile => _profile;
@@ -46,7 +51,9 @@ class OnboardingStore extends ChangeNotifier {
     try {
       final cached = await _storage.read(key: _key);
       if (cached != null && cached.isNotEmpty) {
-        _stage = _stageFor(OnboardingStatus.parse(cached), const []);
+        _stage = cached == _trainingMark
+            ? OnboardingStage.training
+            : _stageFor(OnboardingStatus.parse(cached), const []);
       }
     } catch (_) {}
     notifyListeners();
@@ -65,7 +72,15 @@ class OnboardingStore extends ChangeNotifier {
           _profile!.gaps,
           _profile!.hasProfile,
         );
-        await _storage.write(key: _key, value: _profile!.status.name);
+        if (_stage == OnboardingStage.approved && _profile!.trainingBlocked) {
+          _stage = OnboardingStage.training;
+        }
+        await _storage.write(
+          key: _key,
+          value: _stage == OnboardingStage.training
+              ? _trainingMark
+              : _profile!.status.name,
+        );
       }
     } on DioException catch (e) {
       // 403 => not an astrologer account; keep any cached stage on a network error

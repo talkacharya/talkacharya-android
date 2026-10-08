@@ -487,6 +487,8 @@ const kHiChartStrings = <String, String>{
   'kChLegendNote': '℞ वक्री   ⬦ वर्गोत्तम   ← बदला हुआ भाव (चलित)\nउत्तर भारतीय: खाने की संख्या = राशि (1 मेष … 12 मीन), पहला भाव ऊपर बीच में।',
   'kChNorthIndian': 'उत्तर भारतीय',
   'kChSouthIndian': 'दक्षिण भारतीय',
+  'kChRasiNumbers': 'राशि संख्या',
+  'kChHouseNumbers': 'भाव संख्या',
   'kChPickerCharts': 'कुंडलियाँ',
   'kChPickerDivisional': 'वर्ग कुंडलियाँ',
 };

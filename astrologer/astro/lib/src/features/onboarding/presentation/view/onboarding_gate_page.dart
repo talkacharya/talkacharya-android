@@ -15,6 +15,7 @@ import '../../../../core/router/routes.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
+import '../../../training/data/training_api.dart';
 import '../../data/kyc_status.dart';
 import '../../data/onboarding_api.dart';
 import '../widgets/kyc_documents.dart';
@@ -58,6 +59,12 @@ class _OnboardingGatePageState extends State<OnboardingGatePage> {
                 listenable: _store,
                 builder: (context, _) {
                   final stage = _store.stage;
+                  // Come back to from the lessons, with the gate now lifted.
+                  if (stage == OnboardingStage.approved) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (context.mounted) context.go(Routes.home);
+                    });
+                  }
                   return RefreshIndicator(
                     onRefresh: _store.refresh,
                     child: ListView(
@@ -96,6 +103,10 @@ class _OnboardingGatePageState extends State<OnboardingGatePage> {
                             ),
                             OnboardingStage.underReview => _UnderReview(
                               key: const ValueKey('review'),
+                              store: _store,
+                            ),
+                            OnboardingStage.training => _TrainingGate(
+                              key: const ValueKey('training'),
                               store: _store,
                             ),
                             OnboardingStage.suspended => _Blocked(
@@ -577,6 +588,43 @@ class _UnderReviewState extends State<_UnderReview> {
             ],
           ),
         ),
+        const SizedBox(height: 16),
+        _Glass(
+          child: Row(
+            children: [
+              const HueIcon(
+                hue: AstroPalette.fire,
+                icon: Icons.play_lesson_rounded,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l.trainWhileWaiting,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        color: brand.onCosmic,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    Text(
+                      l.trainWhileWaitingBody,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: brand.onCosmicMuted,
+                        height: 1.35,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                onPressed: () => context.push(Routes.training),
+                icon: Icon(Icons.arrow_forward_rounded, color: brand.onCosmic),
+              ),
+            ],
+          ),
+        ),
         const SizedBox(height: 20),
         OutlinedButton.icon(
           style: OutlinedButton.styleFrom(
@@ -806,6 +854,110 @@ class _PulsingOrbState extends State<_PulsingOrb>
     return AnimatedBuilder(
       animation: _c,
       builder: (_, _) => orb(Curves.easeInOut.transform(_c.value)),
+    );
+  }
+}
+
+/// Approved, but the required lessons are not finished: the app stays shut
+/// and this is the way to them.
+class _TrainingGate extends StatefulWidget {
+  const _TrainingGate({required this.store, super.key});
+
+  final OnboardingStore store;
+
+  @override
+  State<_TrainingGate> createState() => _TrainingGateState();
+}
+
+class _TrainingGateState extends State<_TrainingGate> {
+  TrainingStatus? _status;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final data = await getIt<TrainingApi>().load();
+      if (mounted) setState(() => _status = data.status);
+    } catch (_) {
+      // The count is a nicety; the button works without it.
+    }
+  }
+
+  Future<void> _open() async {
+    await context.push<void>(Routes.training);
+    await widget.store.refresh();
+    await _load();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final brand = context.brand;
+    final theme = Theme.of(context);
+    final s = _status;
+    final total = s?.mandatoryTotal ?? 0;
+    final done = s?.mandatoryDone ?? 0;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: 24),
+        const Center(child: _PulsingOrb(icon: Icons.school_rounded)),
+        const SizedBox(height: 24),
+        Text(
+          l.trainGateTitle,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.headlineMedium?.copyWith(
+            color: brand.onCosmic,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          l.trainGateBody,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: brand.onCosmicMuted,
+          ),
+        ),
+        const SizedBox(height: 24),
+        if (total > 0) ...[
+          _Glass(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  l.trainHeroCount(done, total),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: brand.onCosmic,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(999),
+                  child: LinearProgressIndicator(
+                    value: done / total,
+                    minHeight: 7,
+                    color: BrandColors.goldGradient.first,
+                    backgroundColor: Colors.white.withValues(alpha: 0.16),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+        ],
+        _GoldButton(
+          label: done > 0 ? l.trainGateContinue : l.trainGateStart,
+          icon: Icons.play_arrow_rounded,
+          onTap: _open,
+        ),
+        const SizedBox(height: 8),
+        const _SupportButton(),
+      ],
     );
   }
 }

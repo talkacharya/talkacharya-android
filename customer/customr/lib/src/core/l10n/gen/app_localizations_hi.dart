@@ -3505,6 +3505,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get kChSouthIndian => 'दक्षिण भारतीय';
 
   @override
+  String get kChRasiNumbers => 'राशि संख्या';
+
+  @override
+  String get kChHouseNumbers => 'भाव संख्या';
+
+  @override
   String get kChPickerCharts => 'कुंडलियाँ';
 
   @override
@@ -7634,4 +7640,49 @@ class AppLocalizationsHi extends AppLocalizations {
   String delAccWallet(String amount) {
     return 'आपके वॉलेट में $amount बचे हैं। यह अपने आप वापस नहीं होता: हटाने से पहले इसे इस्तेमाल करें या सपोर्ट से रिफ़ंड माँगें।';
   }
+
+  @override
+  String get primerAllow => 'सभी की अनुमति दें';
+
+  @override
+  String get primerLater => 'अभी नहीं';
+
+  @override
+  String get primerDone => 'आगे बढ़ें';
+
+  @override
+  String get primerOpenSettings => 'सेटिंग खोलें';
+
+  @override
+  String get primerAllowed => 'अनुमति मिल गई';
+
+  @override
+  String get primerNotifications => 'सूचनाएँ';
+
+  @override
+  String get primerMicrophone => 'माइक्रोफ़ोन';
+
+  @override
+  String get primerCamera => 'कैमरा';
+
+  @override
+  String get primerTitle => 'अपने परामर्श के लिए तैयार हो जाएँ';
+
+  @override
+  String get primerBody =>
+      'इन्हें अभी एक बार अनुमति दे दें, ताकि ज्योतिषी से बात करते समय कोई रुकावट न आए।';
+
+  @override
+  String get primerNotificationsWhy =>
+      'ताकि ज्योतिषी के जवाब देने या कतार में आपकी बारी आने पर आपको पता चले';
+
+  @override
+  String get primerMicrophoneWhy => 'ज्योतिषी के साथ वॉइस और वीडियो कॉल के लिए';
+
+  @override
+  String get primerCameraWhy => 'ज्योतिषी के साथ वीडियो कॉल के लिए';
+
+  @override
+  String get primerBlockedNote =>
+      'कुछ की अनुमति नहीं मिली। आप इसे फ़ोन की सेटिंग में चालू कर सकते हैं; इसके बिना उस तरह की कॉल नहीं चलेंगी।';
 }

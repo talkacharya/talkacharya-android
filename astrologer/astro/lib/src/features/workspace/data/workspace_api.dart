@@ -43,42 +43,6 @@ class Announcement extends Equatable {
   List<Object?> get props => [id, title, body, linkUrl, pinned, publishedAt];
 }
 
-class TrainingVideo extends Equatable {
-  const TrainingVideo({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.videoUrl,
-    required this.thumbnail,
-    required this.durationSeconds,
-    required this.category,
-    required this.isNew,
-  });
-
-  final String id;
-  final String title;
-  final String description;
-  final String videoUrl;
-  final String? thumbnail;
-  final int durationSeconds;
-  final String category;
-  final bool isNew;
-
-  factory TrainingVideo.fromJson(Map<String, dynamic> j) => TrainingVideo(
-    id: '${j['id']}',
-    title: j['title'] as String? ?? '',
-    description: j['description'] as String? ?? '',
-    videoUrl: j['video_url'] as String? ?? '',
-    thumbnail: j['thumbnail'] as String?,
-    durationSeconds: (j['duration_seconds'] as num?)?.toInt() ?? 0,
-    category: j['category'] as String? ?? '',
-    isNew: j['is_new'] == true,
-  );
-
-  @override
-  List<Object?> get props => [id, title, videoUrl, category, isNew];
-}
-
 /// A customer the astrologer marked, with their private note.
 class FavouriteCustomer extends Equatable {
   const FavouriteCustomer({
@@ -402,11 +366,6 @@ class WorkspaceApi {
   Future<List<Announcement>> announcements() async => _list(
     (await _dio.get<dynamic>(ApiPaths.astroAnnouncements)).ensureOk().data,
     Announcement.fromJson,
-  );
-
-  Future<List<TrainingVideo>> trainingVideos() async => _list(
-    (await _dio.get<dynamic>(ApiPaths.astroTrainingVideos)).ensureOk().data,
-    TrainingVideo.fromJson,
   );
 
   Future<List<FavouriteCustomer>> favourites() async => _list(

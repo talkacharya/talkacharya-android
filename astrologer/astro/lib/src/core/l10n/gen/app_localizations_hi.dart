@@ -2598,10 +2598,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get wsTraining => 'ट्रेनिंग';
 
   @override
-  String get wsTrainingSubtitle =>
-      'ऐप से ज़्यादा फ़ायदा उठाने के छोटे वीडियो। ये आपके वीडियो ऐप में खुलते हैं।';
-
-  @override
   String get wsTrainingEmpty => 'अभी कोई वीडियो नहीं';
 
   @override
@@ -3905,4 +3901,215 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get delAccPayoutNote =>
       'हटाने से पहले किसी भी लंबित भुगतान का इंतज़ार करें। बैंक विवरण मिटने के बाद हम उसे नहीं भेज पाएँगे।';
+
+  @override
+  String get primerAllow => 'सभी की अनुमति दें';
+
+  @override
+  String get primerLater => 'अभी नहीं';
+
+  @override
+  String get primerDone => 'आगे बढ़ें';
+
+  @override
+  String get primerOpenSettings => 'सेटिंग खोलें';
+
+  @override
+  String get primerAllowed => 'अनुमति मिल गई';
+
+  @override
+  String get primerNotifications => 'सूचनाएँ';
+
+  @override
+  String get primerMicrophone => 'माइक्रोफ़ोन';
+
+  @override
+  String get primerCamera => 'कैमरा';
+
+  @override
+  String get primerTitle => 'अपनी पहली कॉल के लिए तैयार रहें';
+
+  @override
+  String get primerBody =>
+      'इन्हें अभी एक बार अनुमति दे दें, ताकि ग्राहक की कॉल किसी अनुमति के सवाल पर न अटके।';
+
+  @override
+  String get primerNotificationsWhy =>
+      'ताकि परामर्श का अनुरोध आने पर आपका फ़ोन बजे, लॉक होने पर भी';
+
+  @override
+  String get primerMicrophoneWhy => 'वॉइस और वीडियो परामर्श के लिए';
+
+  @override
+  String get primerCameraWhy => 'वीडियो परामर्श और लाइव जाने के लिए';
+
+  @override
+  String get primerBlockedNote =>
+      'कुछ की अनुमति नहीं मिली। आप इसे फ़ोन की सेटिंग में चालू कर सकते हैं; इसके बिना उस तरह की कॉल नहीं चलेंगी।';
+
+  @override
+  String get authJoinTitle => 'नए हैं? ज्योतिषी के रूप में जुड़ें';
+
+  @override
+  String get authJoinBody =>
+      'अलग से साइन-अप नहीं है। ऊपर अपना मोबाइल नंबर डालें, आपका आवेदन वहीं से शुरू हो जाएगा।';
+
+  @override
+  String get authJoinStep1 => 'अपना मोबाइल नंबर सत्यापित करें';
+
+  @override
+  String get authJoinStep2 => 'अपनी प्रोफ़ाइल भरें: विशेषज्ञता, भाषाएँ, अनुभव';
+
+  @override
+  String get authJoinStep3 => 'अपने दस्तावेज़ और बैंक विवरण अपलोड करें';
+
+  @override
+  String get authJoinStep4 =>
+      'हमारी टीम के साथ एक छोटा इंटरव्यू, फिर आप स्वीकृत';
+
+  @override
+  String get trainSubtitle =>
+      'TalkAcharya पर काम करने के छोटे पाठ। ये यहीं ऐप में चलते हैं।';
+
+  @override
+  String get trainRequiredShelf => 'ज़रूरी';
+
+  @override
+  String get trainMoreShelf => 'और पाठ';
+
+  @override
+  String get trainHeroDone => 'ट्रेनिंग पूरी हुई';
+
+  @override
+  String trainHeroCount(int done, int total) {
+    return '$total में से $done ज़रूरी पाठ पूरे';
+  }
+
+  @override
+  String get trainHeroDoneBody =>
+      'आपने सभी ज़रूरी पाठ पूरे कर लिए हैं। जब चाहें इन्हें दोबारा देख सकते हैं।';
+
+  @override
+  String get trainHeroBlockedBody =>
+      'ऐप इस्तेमाल करने के लिए ज़रूरी पाठ पूरे करें।';
+
+  @override
+  String get trainHeroRequiredBody => 'ये पाठ हर ज्योतिषी के लिए ज़रूरी हैं।';
+
+  @override
+  String get trainHeroOptionalBody =>
+      'पहला परामर्श लेने से पहले इन्हें देख लेना अच्छा रहेगा।';
+
+  @override
+  String get trainLanguage => 'पाठ की भाषा';
+
+  @override
+  String get trainDone => 'पूरा';
+
+  @override
+  String get trainQuizLeft => 'क्विज़ बाकी';
+
+  @override
+  String trainPercent(int percent) {
+    return '$percent% देखा';
+  }
+
+  @override
+  String get trainRequiredTag => 'ज़रूरी';
+
+  @override
+  String get trainEnterApp => 'ऐप में जाएँ';
+
+  @override
+  String get trainNoVideo => 'इस पाठ का वीडियो अभी नहीं है।';
+
+  @override
+  String get trainCantPlay =>
+      'वीडियो नहीं चल पाया। इंटरनेट जाँचें और दोबारा कोशिश करें।';
+
+  @override
+  String get trainLessonDone => 'पाठ पूरा हुआ';
+
+  @override
+  String get trainAbout => 'इस पाठ के बारे में';
+
+  @override
+  String get trainStateDone => 'पाठ पूरा हुआ';
+
+  @override
+  String get trainStateDoneBody =>
+      'आप इसे कभी भी दोबारा देख सकते हैं और किसी भी हिस्से पर जा सकते हैं।';
+
+  @override
+  String get trainStateQuiz => 'अब क्विज़';
+
+  @override
+  String get trainStateQuizBody =>
+      'आपने पाठ देख लिया है। इसे पूरा करने के लिए कुछ सवालों के जवाब दें।';
+
+  @override
+  String trainStateWatching(int percent) {
+    return '$percent% देखा';
+  }
+
+  @override
+  String trainStateWatchingBody(int needed) {
+    return 'पाठ का $needed% देखने पर ही यह गिना जाएगा। आप पीछे जा सकते हैं, पर आगे नहीं बढ़ा सकते।';
+  }
+
+  @override
+  String get trainTakeQuiz => 'क्विज़ दें';
+
+  @override
+  String get trainQuizTitle => 'क्विज़';
+
+  @override
+  String get trainQuizSubmit => 'जवाब भेजें';
+
+  @override
+  String trainQuizQuestion(int number) {
+    return 'सवाल $number';
+  }
+
+  @override
+  String get trainQuizPassed => 'पास';
+
+  @override
+  String trainQuizPassedBody(int score) {
+    return 'आपके $score% अंक आए। यह पाठ पूरा हुआ।';
+  }
+
+  @override
+  String get trainQuizFailed => 'थोड़ा और';
+
+  @override
+  String trainQuizFailedBody(int score, int pass) {
+    return 'आपके $score% अंक आए। पास होने के लिए $pass% चाहिए। एक बार और कोशिश करें।';
+  }
+
+  @override
+  String get trainQuizContinue => 'आगे बढ़ें';
+
+  @override
+  String get trainQuizRetry => 'दोबारा कोशिश करें';
+
+  @override
+  String get trainGateTitle => 'अपनी ट्रेनिंग पूरी करें';
+
+  @override
+  String get trainGateBody =>
+      'आपका खाता मंज़ूर हो गया है। परामर्श शुरू करने से पहले ज़रूरी पाठ देख लें। इसमें ज़्यादा समय नहीं लगता।';
+
+  @override
+  String get trainGateStart => 'ट्रेनिंग शुरू करें';
+
+  @override
+  String get trainGateContinue => 'ट्रेनिंग जारी रखें';
+
+  @override
+  String get trainWhileWaiting => 'तब तक ट्रेनिंग देख लें';
+
+  @override
+  String get trainWhileWaitingBody =>
+      'अभी पूरे किए पाठ मंज़ूरी के बाद गिने जाएँगे।';
 }

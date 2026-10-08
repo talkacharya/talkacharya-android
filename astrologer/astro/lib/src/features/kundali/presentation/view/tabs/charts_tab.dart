@@ -98,7 +98,8 @@ class _ChartsTabState extends State<_ChartsTab>
               style: _style,
               onChanged: (s) => setState(() => _style = s),
             ),
-            const SizedBox(height: 14),
+            const ChartLabelToggles(),
+            const SizedBox(height: 6),
             SizedBox(
               height: wheelH,
               child: PageView.builder(

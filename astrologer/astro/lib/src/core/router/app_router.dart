@@ -25,6 +25,7 @@ import '../../features/reports/presentation/view/reports_pages.dart';
 import '../../features/waitlist/presentation/view/waitlist_page.dart';
 import '../../features/home/presentation/view/tools_page.dart';
 import '../../features/workspace/presentation/view/calendar_page.dart';
+import '../../features/training/presentation/view/training_page.dart';
 import '../../features/workspace/presentation/view/notices_pages.dart';
 import '../../features/workspace/presentation/view/offers_page.dart';
 import '../../features/workspace/presentation/view/people_pages.dart';
@@ -94,7 +95,15 @@ GoRouter buildRouter(
       if (onboarding.stage == OnboardingStage.loading) {
         return atSplash ? null : Routes.splash;
       }
-      if (!approved) return atOnboarding ? null : Routes.onboarding;
+      if (!approved) {
+        // The lessons can be watched while waiting on review, and have to be
+        // reachable when they are what stands in the way.
+        final lessons =
+            loc.startsWith(Routes.training) &&
+            (onboarding.stage == OnboardingStage.training ||
+                onboarding.stage == OnboardingStage.underReview);
+        return atOnboarding || lessons ? null : Routes.onboarding;
+      }
 
       if (atLogin || atSplash || atOnboarding) {
         return pending.take() ?? Routes.home;

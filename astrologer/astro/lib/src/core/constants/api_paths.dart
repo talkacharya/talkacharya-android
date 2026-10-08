@@ -64,7 +64,10 @@ class ApiPaths {
 
   // the astrologer's own corner
   static const astroAnnouncements = '/astro/announcements';
-  static const astroTrainingVideos = '/astro/training-videos';
+  static const astroTraining = '/astro/training';
+  static String astroTrainingProgress(String id) =>
+      '/astro/training/$id/progress';
+  static String astroTrainingQuiz(String id) => '/astro/training/$id/quiz';
   static const astroFavourites = '/astro/favourites';
   static String astroFavourite(String conversationId) =>
       '/astro/favourites/$conversationId';

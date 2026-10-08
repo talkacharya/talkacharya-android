@@ -14,6 +14,7 @@ export 'src/engine/connectivity_plus_connectivity.dart';
 export 'src/engine/flutter_webrtc_engine.dart';
 export 'src/engine/foreground_keep_alive.dart';
 export 'src/engine/permission_handler_permissions.dart';
+export 'src/engine/startup_permissions.dart';
 export 'src/engine/rtc_engine.dart';
 export 'src/models/call_join.dart';
 export 'src/models/video_rung.dart';

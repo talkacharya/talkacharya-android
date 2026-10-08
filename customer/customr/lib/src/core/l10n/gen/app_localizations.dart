@@ -6254,6 +6254,18 @@ abstract class AppLocalizations {
   /// **'South Indian'**
   String get kChSouthIndian;
 
+  /// No description provided for @kChRasiNumbers.
+  ///
+  /// In en, this message translates to:
+  /// **'Rasi no.'**
+  String get kChRasiNumbers;
+
+  /// No description provided for @kChHouseNumbers.
+  ///
+  /// In en, this message translates to:
+  /// **'House no.'**
+  String get kChHouseNumbers;
+
   /// No description provided for @kChPickerCharts.
   ///
   /// In en, this message translates to:
@@ -13069,6 +13081,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{amount} is left in your wallet. It is not refunded automatically: use it, or ask support for a refund, before you delete.'**
   String delAccWallet(String amount);
+
+  /// No description provided for @primerAllow.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow all'**
+  String get primerAllow;
+
+  /// No description provided for @primerLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get primerLater;
+
+  /// No description provided for @primerDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get primerDone;
+
+  /// No description provided for @primerOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get primerOpenSettings;
+
+  /// No description provided for @primerAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed'**
+  String get primerAllowed;
+
+  /// No description provided for @primerNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get primerNotifications;
+
+  /// No description provided for @primerMicrophone.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone'**
+  String get primerMicrophone;
+
+  /// No description provided for @primerCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get primerCamera;
+
+  /// No description provided for @primerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get set for your consultations'**
+  String get primerTitle;
+
+  /// No description provided for @primerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow these once now, so nothing gets in the way when you talk to an astrologer.'**
+  String get primerBody;
+
+  /// No description provided for @primerNotificationsWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'So you know when your astrologer replies, or it is your turn in a waitlist'**
+  String get primerNotificationsWhy;
+
+  /// No description provided for @primerMicrophoneWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'For voice and video calls with an astrologer'**
+  String get primerMicrophoneWhy;
+
+  /// No description provided for @primerCameraWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'For video calls with an astrologer'**
+  String get primerCameraWhy;
+
+  /// No description provided for @primerBlockedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Something was not allowed. You can turn it on in your phone\'s settings; without it, calls of that kind will not work.'**
+  String get primerBlockedNote;
 }
 
 class _AppLocalizationsDelegate

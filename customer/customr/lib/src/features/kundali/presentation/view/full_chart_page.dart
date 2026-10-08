@@ -261,6 +261,12 @@ class _Carousel extends StatelessWidget {
               ],
             ),
           ),
+          Center(
+            child: ChartLabelToggles(
+              foreground: brand.onCosmicMuted,
+              accent: brand.glowAccent,
+            ),
+          ),
           if (FullChartPage.essentials[page] == 'd1') ...[
             const SizedBox(height: 8),
             Text(

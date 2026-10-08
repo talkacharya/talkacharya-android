@@ -499,6 +499,126 @@ class ChartStyleToggle extends StatelessWidget {
   }
 }
 
+/// Two tick boxes under a chart — rasi numbers, house numbers — for whichever
+/// the reader wants in the corners. Changes [chartLabels], which every chart
+/// follows. [foreground] is the text colour (pass a light one on a dark card).
+class ChartLabelToggles extends StatelessWidget {
+  const ChartLabelToggles({this.foreground, this.accent, super.key});
+
+  final Color? foreground;
+  final Color? accent;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final s = KundaliStrings.of(context);
+    final fg = foreground ?? scheme.onSurfaceVariant;
+    final on = accent ?? scheme.primary;
+    return ValueListenableBuilder<ChartLabels>(
+      valueListenable: chartLabels,
+      builder: (context, labels, _) => Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 6,
+        children: [
+          _Tick(
+            label: s.rasiNumbers,
+            value: labels.rasi,
+            foreground: fg,
+            accent: on,
+            onTap: () =>
+                chartLabels.value = labels.copyWith(rasi: !labels.rasi),
+          ),
+          _Tick(
+            label: s.houseNumbers,
+            value: labels.house,
+            foreground: fg,
+            accent: on,
+            ringed: true,
+            onTap: () =>
+                chartLabels.value = labels.copyWith(house: !labels.house),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Tick extends StatelessWidget {
+  const _Tick({
+    required this.label,
+    required this.value,
+    required this.foreground,
+    required this.accent,
+    required this.onTap,
+    this.ringed = false,
+  });
+
+  final String label;
+  final bool value;
+  final Color foreground;
+  final Color accent;
+  final VoidCallback onTap;
+
+  /// Shows the ring house numbers are drawn in, as a key to the chart.
+  final bool ringed;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(999),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              width: 18,
+              height: 18,
+              decoration: BoxDecoration(
+                color: value ? accent : Colors.transparent,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(
+                  color: value ? accent : foreground.withValues(alpha: 0.6),
+                  width: 1.4,
+                ),
+              ),
+              child: value
+                  ? const Icon(
+                      Icons.check_rounded,
+                      size: 14,
+                      color: Colors.white,
+                    )
+                  : null,
+            ),
+            const SizedBox(width: 7),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12.5,
+                fontWeight: FontWeight.w600,
+                color: foreground,
+              ),
+            ),
+            if (ringed) ...[
+              const SizedBox(width: 5),
+              Container(
+                width: 13,
+                height: 13,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: foreground, width: 0.9),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// The "all charts" bottom sheet — grouped Charts / Divisional, tap to open.
 Future<void> showChartPicker(
   BuildContext context, {

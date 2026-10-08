@@ -293,6 +293,8 @@ class KTerms {
     legendNote: l.kChLegendNote,
     northIndian: l.kChNorthIndian,
     southIndian: l.kChSouthIndian,
+    rasiNumbers: l.kChRasiNumbers,
+    houseNumbers: l.kChHouseNumbers,
     pickerCharts: l.kChPickerCharts,
     pickerDivisional: l.kChPickerDivisional,
     retry: l.homeRetryBtn,

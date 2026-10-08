@@ -391,6 +391,12 @@ class _ChartPanelState extends State<_ChartPanel> {
               ),
             ],
           ),
+          Center(
+            child: ChartLabelToggles(
+              foreground: brand.onCosmicMuted,
+              accent: brand.glowAccent,
+            ),
+          ),
           if (!_d9)
             Text(
               l.kOvTapHouseHint,

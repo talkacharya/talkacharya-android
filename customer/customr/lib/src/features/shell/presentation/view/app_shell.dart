@@ -10,6 +10,7 @@ import 'package:talkacharya_sounds/talkacharya_sounds.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/network/connectivity_service.dart';
+import '../../../../core/permissions/permissions_primer.dart';
 import '../../../../core/realtime/realtime_client.dart';
 import '../../../../core/realtime/realtime_event.dart';
 import '../../../../core/router/routes.dart';
@@ -42,6 +43,10 @@ class _AppShellState extends State<AppShell> {
     context.read<NotificationsCubit>().load();
     context.read<ChatsListCubit>().load();
     _realtimeSub = getIt<RealtimeClient>().events.listen(_onRealtime);
+    // Everything a consultation needs, asked for once and up front.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) unawaited(maybeShowPermissionsPrimer(context));
+    });
   }
 
   @override

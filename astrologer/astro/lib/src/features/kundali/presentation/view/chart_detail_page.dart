@@ -114,7 +114,8 @@ class _ViewState extends State<_View> {
                 style: _style,
                 onChanged: (s) => setState(() => _style = s),
               ),
-              const SizedBox(height: 14),
+              const ChartLabelToggles(),
+              const SizedBox(height: 6),
               ChartWheel(
                 chart: slice.value,
                 error: slice.status == AsyncStatus.error ? slice.error : null,

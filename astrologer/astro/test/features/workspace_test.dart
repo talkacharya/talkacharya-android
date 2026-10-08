@@ -153,36 +153,6 @@ void main() {
     expect(find.byIcon(Icons.push_pin_rounded), findsOneWidget);
   });
 
-  testWidgets('training groups videos by shelf and flags new ones', (
-    tester,
-  ) async {
-    when(() => api.trainingVideos()).thenAnswer(
-      (_) async => [
-        TrainingVideo.fromJson({
-          'id': 'v1',
-          'title': 'Your first session',
-          'video_url': 'https://example.com/1',
-          'duration_seconds': 185,
-          'category': 'Getting started',
-          'is_new': true,
-        }),
-        TrainingVideo.fromJson({
-          'id': 'v2',
-          'title': 'Setting your rates',
-          'video_url': 'https://example.com/2',
-          'category': 'Earning more',
-        }),
-      ],
-    );
-    await tester.pumpWidget(_app(const TrainingPage()));
-    await _settle(tester);
-
-    expect(find.text('Getting started'), findsOneWidget);
-    expect(find.text('Earning more'), findsOneWidget);
-    expect(find.text('3m 5s'), findsOneWidget);
-    expect(find.text('NEW'), findsOneWidget);
-  });
-
   testWidgets('favourites show the private note; removing updates the list', (
     tester,
   ) async {

@@ -1937,7 +1937,6 @@
   "wsAnnouncementsEmpty": "Nothing new right now",
   "wsAnnouncementsEmptyBody": "Policy changes, festival timings and new features from TalkAcharya will show up here.",
   "wsTraining": "Training",
-  "wsTrainingSubtitle": "Short videos on getting more from the app. They open in your video app.",
   "wsTrainingEmpty": "No videos yet",
   "wsTrainingEmptyBody": "Training videos will appear here as they are added.",
   "wsFavourites": "Favourites",
@@ -2477,5 +2476,121 @@
   "delAccMenu": "Delete account",
   "delAccMenuSub": "Erase your account and your data",
   "delAccRemovedAstro": "Your profile text and photos, identity documents and bank details",
-  "delAccPayoutNote": "Wait for any pending payout before you delete. Once your bank details are erased we cannot pay it."
+  "delAccPayoutNote": "Wait for any pending payout before you delete. Once your bank details are erased we cannot pay it.",
+  "primerAllow": "Allow all",
+  "primerLater": "Not now",
+  "primerDone": "Continue",
+  "primerOpenSettings": "Open settings",
+  "primerAllowed": "Allowed",
+  "primerNotifications": "Notifications",
+  "primerMicrophone": "Microphone",
+  "primerCamera": "Camera",
+  "primerTitle": "Be ready for your first call",
+  "primerBody": "Allow these once now, so a customer's call is never held up by a permission prompt.",
+  "primerNotificationsWhy": "So a consultation request rings your phone, even when it is locked",
+  "primerMicrophoneWhy": "For voice and video consultations",
+  "primerCameraWhy": "For video consultations and going live",
+  "primerBlockedNote": "Something was not allowed. You can turn it on in your phone's settings; without it, calls of that kind will not work.",
+  "authJoinTitle": "New here? Join as an astrologer",
+  "authJoinBody": "There is no separate sign-up. Enter your mobile number above and your application starts.",
+  "authJoinStep1": "Verify your mobile number",
+  "authJoinStep2": "Fill in your profile: skills, languages, experience",
+  "authJoinStep3": "Upload your documents and bank details",
+  "authJoinStep4": "A short interview with our team, then you are approved",
+  "trainSubtitle": "Short lessons on working with TalkAcharya. They play right here.",
+  "trainRequiredShelf": "Required",
+  "trainMoreShelf": "More lessons",
+  "trainHeroDone": "Training complete",
+  "trainHeroCount": "{done} of {total} required lessons done",
+  "@trainHeroCount": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "trainHeroDoneBody": "You have finished every required lesson. Come back to any of them whenever you like.",
+  "trainHeroBlockedBody": "Finish the required lessons to start using the app.",
+  "trainHeroRequiredBody": "These lessons are required for every astrologer.",
+  "trainHeroOptionalBody": "Recommended before you take your first consultation.",
+  "trainLanguage": "Lesson language",
+  "trainDone": "Done",
+  "trainQuizLeft": "Quiz left",
+  "trainPercent": "{percent}% watched",
+  "@trainPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "trainRequiredTag": "Required",
+  "trainEnterApp": "Enter the app",
+  "trainNoVideo": "This lesson has no video yet.",
+  "trainCantPlay": "The video could not be played. Check your connection and try again.",
+  "trainLessonDone": "Lesson complete",
+  "trainAbout": "About this lesson",
+  "trainStateDone": "Lesson complete",
+  "trainStateDoneBody": "You can watch it again any time, and skip to any part.",
+  "trainStateQuiz": "Now the quiz",
+  "trainStateQuizBody": "You have watched the lesson. Answer a few questions to finish it.",
+  "trainStateWatching": "{percent}% watched",
+  "@trainStateWatching": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "trainStateWatchingBody": "Watch {needed}% of the lesson for it to count. You can go back, but not skip ahead.",
+  "@trainStateWatchingBody": {
+    "placeholders": {
+      "needed": {
+        "type": "int"
+      }
+    }
+  },
+  "trainTakeQuiz": "Take the quiz",
+  "trainQuizTitle": "Quiz",
+  "trainQuizSubmit": "Submit answers",
+  "trainQuizQuestion": "Question {number}",
+  "@trainQuizQuestion": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "trainQuizPassed": "Passed",
+  "trainQuizPassedBody": "You scored {score}%. This lesson is complete.",
+  "@trainQuizPassedBody": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "trainQuizFailed": "Not quite",
+  "trainQuizFailedBody": "You scored {score}%. You need {pass}% to pass. Have another go.",
+  "@trainQuizFailedBody": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      },
+      "pass": {
+        "type": "int"
+      }
+    }
+  },
+  "trainQuizContinue": "Continue",
+  "trainQuizRetry": "Try again",
+  "trainGateTitle": "Complete your training",
+  "trainGateBody": "You are approved. Before you start taking consultations, watch the required lessons. It does not take long.",
+  "trainGateStart": "Start training",
+  "trainGateContinue": "Continue training",
+  "trainWhileWaiting": "Watch the training meanwhile",
+  "trainWhileWaitingBody": "Lessons you finish now are counted once you are approved."
 }

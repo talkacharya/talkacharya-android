@@ -2603,10 +2603,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wsTraining => 'Training';
 
   @override
-  String get wsTrainingSubtitle =>
-      'Short videos on getting more from the app. They open in your video app.';
-
-  @override
   String get wsTrainingEmpty => 'No videos yet';
 
   @override
@@ -3914,4 +3910,217 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get delAccPayoutNote =>
       'Wait for any pending payout before you delete. Once your bank details are erased we cannot pay it.';
+
+  @override
+  String get primerAllow => 'Allow all';
+
+  @override
+  String get primerLater => 'Not now';
+
+  @override
+  String get primerDone => 'Continue';
+
+  @override
+  String get primerOpenSettings => 'Open settings';
+
+  @override
+  String get primerAllowed => 'Allowed';
+
+  @override
+  String get primerNotifications => 'Notifications';
+
+  @override
+  String get primerMicrophone => 'Microphone';
+
+  @override
+  String get primerCamera => 'Camera';
+
+  @override
+  String get primerTitle => 'Be ready for your first call';
+
+  @override
+  String get primerBody =>
+      'Allow these once now, so a customer\'s call is never held up by a permission prompt.';
+
+  @override
+  String get primerNotificationsWhy =>
+      'So a consultation request rings your phone, even when it is locked';
+
+  @override
+  String get primerMicrophoneWhy => 'For voice and video consultations';
+
+  @override
+  String get primerCameraWhy => 'For video consultations and going live';
+
+  @override
+  String get primerBlockedNote =>
+      'Something was not allowed. You can turn it on in your phone\'s settings; without it, calls of that kind will not work.';
+
+  @override
+  String get authJoinTitle => 'New here? Join as an astrologer';
+
+  @override
+  String get authJoinBody =>
+      'There is no separate sign-up. Enter your mobile number above and your application starts.';
+
+  @override
+  String get authJoinStep1 => 'Verify your mobile number';
+
+  @override
+  String get authJoinStep2 =>
+      'Fill in your profile: skills, languages, experience';
+
+  @override
+  String get authJoinStep3 => 'Upload your documents and bank details';
+
+  @override
+  String get authJoinStep4 =>
+      'A short interview with our team, then you are approved';
+
+  @override
+  String get trainSubtitle =>
+      'Short lessons on working with TalkAcharya. They play right here.';
+
+  @override
+  String get trainRequiredShelf => 'Required';
+
+  @override
+  String get trainMoreShelf => 'More lessons';
+
+  @override
+  String get trainHeroDone => 'Training complete';
+
+  @override
+  String trainHeroCount(int done, int total) {
+    return '$done of $total required lessons done';
+  }
+
+  @override
+  String get trainHeroDoneBody =>
+      'You have finished every required lesson. Come back to any of them whenever you like.';
+
+  @override
+  String get trainHeroBlockedBody =>
+      'Finish the required lessons to start using the app.';
+
+  @override
+  String get trainHeroRequiredBody =>
+      'These lessons are required for every astrologer.';
+
+  @override
+  String get trainHeroOptionalBody =>
+      'Recommended before you take your first consultation.';
+
+  @override
+  String get trainLanguage => 'Lesson language';
+
+  @override
+  String get trainDone => 'Done';
+
+  @override
+  String get trainQuizLeft => 'Quiz left';
+
+  @override
+  String trainPercent(int percent) {
+    return '$percent% watched';
+  }
+
+  @override
+  String get trainRequiredTag => 'Required';
+
+  @override
+  String get trainEnterApp => 'Enter the app';
+
+  @override
+  String get trainNoVideo => 'This lesson has no video yet.';
+
+  @override
+  String get trainCantPlay =>
+      'The video could not be played. Check your connection and try again.';
+
+  @override
+  String get trainLessonDone => 'Lesson complete';
+
+  @override
+  String get trainAbout => 'About this lesson';
+
+  @override
+  String get trainStateDone => 'Lesson complete';
+
+  @override
+  String get trainStateDoneBody =>
+      'You can watch it again any time, and skip to any part.';
+
+  @override
+  String get trainStateQuiz => 'Now the quiz';
+
+  @override
+  String get trainStateQuizBody =>
+      'You have watched the lesson. Answer a few questions to finish it.';
+
+  @override
+  String trainStateWatching(int percent) {
+    return '$percent% watched';
+  }
+
+  @override
+  String trainStateWatchingBody(int needed) {
+    return 'Watch $needed% of the lesson for it to count. You can go back, but not skip ahead.';
+  }
+
+  @override
+  String get trainTakeQuiz => 'Take the quiz';
+
+  @override
+  String get trainQuizTitle => 'Quiz';
+
+  @override
+  String get trainQuizSubmit => 'Submit answers';
+
+  @override
+  String trainQuizQuestion(int number) {
+    return 'Question $number';
+  }
+
+  @override
+  String get trainQuizPassed => 'Passed';
+
+  @override
+  String trainQuizPassedBody(int score) {
+    return 'You scored $score%. This lesson is complete.';
+  }
+
+  @override
+  String get trainQuizFailed => 'Not quite';
+
+  @override
+  String trainQuizFailedBody(int score, int pass) {
+    return 'You scored $score%. You need $pass% to pass. Have another go.';
+  }
+
+  @override
+  String get trainQuizContinue => 'Continue';
+
+  @override
+  String get trainQuizRetry => 'Try again';
+
+  @override
+  String get trainGateTitle => 'Complete your training';
+
+  @override
+  String get trainGateBody =>
+      'You are approved. Before you start taking consultations, watch the required lessons. It does not take long.';
+
+  @override
+  String get trainGateStart => 'Start training';
+
+  @override
+  String get trainGateContinue => 'Continue training';
+
+  @override
+  String get trainWhileWaiting => 'Watch the training meanwhile';
+
+  @override
+  String get trainWhileWaitingBody =>
+      'Lessons you finish now are counted once you are approved.';
 }

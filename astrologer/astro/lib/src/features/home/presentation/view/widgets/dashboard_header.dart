@@ -13,6 +13,7 @@ import '../../../../../core/theme/app_theme.dart';
 import '../../../../../core/utils/haptic_service.dart';
 import '../../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../../../notifications/presentation/view/notification_bell.dart';
+import '../../../../../shared/widgets/language_quick_button.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
@@ -277,6 +278,8 @@ class _HeaderBody extends StatelessWidget {
                               ),
                             ),
                           ),
+                          // Language, one tap away even with the header collapsed.
+                          LanguageQuickButton(color: brand.onCosmic),
                           NotificationBell(color: brand.onCosmic),
                         ],
                       ),

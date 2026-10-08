@@ -86,6 +86,7 @@ class AstroProfile {
     required this.rates,
     required this.commission,
     required this.gaps,
+    this.trainingBlocked = false,
   });
 
   final String id;
@@ -112,6 +113,10 @@ class AstroProfile {
   final List<AstroRate> rates;
   final AstroCommission? commission;
   final List<String> gaps;
+
+  /// Training is required and this astrologer has not finished it: the app
+  /// stays shut until they do.
+  final bool trainingBlocked;
 
   bool get hasProfile => id.isNotEmpty;
 
@@ -149,6 +154,7 @@ class AstroProfile {
     gaps: (j['onboarding_gaps'] as List? ?? const [])
         .map((e) => e.toString())
         .toList(),
+    trainingBlocked: j['training_blocked'] == true,
   );
 }
 

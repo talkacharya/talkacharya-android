@@ -4556,12 +4556,6 @@ abstract class AppLocalizations {
   /// **'Training'**
   String get wsTraining;
 
-  /// No description provided for @wsTrainingSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Short videos on getting more from the app. They open in your video app.'**
-  String get wsTrainingSubtitle;
-
   /// No description provided for @wsTrainingEmpty.
   ///
   /// In en, this message translates to:
@@ -6733,6 +6727,372 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Wait for any pending payout before you delete. Once your bank details are erased we cannot pay it.'**
   String get delAccPayoutNote;
+
+  /// No description provided for @primerAllow.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow all'**
+  String get primerAllow;
+
+  /// No description provided for @primerLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get primerLater;
+
+  /// No description provided for @primerDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get primerDone;
+
+  /// No description provided for @primerOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get primerOpenSettings;
+
+  /// No description provided for @primerAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed'**
+  String get primerAllowed;
+
+  /// No description provided for @primerNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get primerNotifications;
+
+  /// No description provided for @primerMicrophone.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone'**
+  String get primerMicrophone;
+
+  /// No description provided for @primerCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get primerCamera;
+
+  /// No description provided for @primerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Be ready for your first call'**
+  String get primerTitle;
+
+  /// No description provided for @primerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow these once now, so a customer\'s call is never held up by a permission prompt.'**
+  String get primerBody;
+
+  /// No description provided for @primerNotificationsWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'So a consultation request rings your phone, even when it is locked'**
+  String get primerNotificationsWhy;
+
+  /// No description provided for @primerMicrophoneWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'For voice and video consultations'**
+  String get primerMicrophoneWhy;
+
+  /// No description provided for @primerCameraWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'For video consultations and going live'**
+  String get primerCameraWhy;
+
+  /// No description provided for @primerBlockedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Something was not allowed. You can turn it on in your phone\'s settings; without it, calls of that kind will not work.'**
+  String get primerBlockedNote;
+
+  /// No description provided for @authJoinTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New here? Join as an astrologer'**
+  String get authJoinTitle;
+
+  /// No description provided for @authJoinBody.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no separate sign-up. Enter your mobile number above and your application starts.'**
+  String get authJoinBody;
+
+  /// No description provided for @authJoinStep1.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your mobile number'**
+  String get authJoinStep1;
+
+  /// No description provided for @authJoinStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in your profile: skills, languages, experience'**
+  String get authJoinStep2;
+
+  /// No description provided for @authJoinStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload your documents and bank details'**
+  String get authJoinStep3;
+
+  /// No description provided for @authJoinStep4.
+  ///
+  /// In en, this message translates to:
+  /// **'A short interview with our team, then you are approved'**
+  String get authJoinStep4;
+
+  /// No description provided for @trainSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Short lessons on working with TalkAcharya. They play right here.'**
+  String get trainSubtitle;
+
+  /// No description provided for @trainRequiredShelf.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get trainRequiredShelf;
+
+  /// No description provided for @trainMoreShelf.
+  ///
+  /// In en, this message translates to:
+  /// **'More lessons'**
+  String get trainMoreShelf;
+
+  /// No description provided for @trainHeroDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Training complete'**
+  String get trainHeroDone;
+
+  /// No description provided for @trainHeroCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} required lessons done'**
+  String trainHeroCount(int done, int total);
+
+  /// No description provided for @trainHeroDoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You have finished every required lesson. Come back to any of them whenever you like.'**
+  String get trainHeroDoneBody;
+
+  /// No description provided for @trainHeroBlockedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish the required lessons to start using the app.'**
+  String get trainHeroBlockedBody;
+
+  /// No description provided for @trainHeroRequiredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'These lessons are required for every astrologer.'**
+  String get trainHeroRequiredBody;
+
+  /// No description provided for @trainHeroOptionalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended before you take your first consultation.'**
+  String get trainHeroOptionalBody;
+
+  /// No description provided for @trainLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Lesson language'**
+  String get trainLanguage;
+
+  /// No description provided for @trainDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get trainDone;
+
+  /// No description provided for @trainQuizLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz left'**
+  String get trainQuizLeft;
+
+  /// No description provided for @trainPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% watched'**
+  String trainPercent(int percent);
+
+  /// No description provided for @trainRequiredTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get trainRequiredTag;
+
+  /// No description provided for @trainEnterApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the app'**
+  String get trainEnterApp;
+
+  /// No description provided for @trainNoVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'This lesson has no video yet.'**
+  String get trainNoVideo;
+
+  /// No description provided for @trainCantPlay.
+  ///
+  /// In en, this message translates to:
+  /// **'The video could not be played. Check your connection and try again.'**
+  String get trainCantPlay;
+
+  /// No description provided for @trainLessonDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Lesson complete'**
+  String get trainLessonDone;
+
+  /// No description provided for @trainAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About this lesson'**
+  String get trainAbout;
+
+  /// No description provided for @trainStateDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Lesson complete'**
+  String get trainStateDone;
+
+  /// No description provided for @trainStateDoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You can watch it again any time, and skip to any part.'**
+  String get trainStateDoneBody;
+
+  /// No description provided for @trainStateQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Now the quiz'**
+  String get trainStateQuiz;
+
+  /// No description provided for @trainStateQuizBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You have watched the lesson. Answer a few questions to finish it.'**
+  String get trainStateQuizBody;
+
+  /// No description provided for @trainStateWatching.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% watched'**
+  String trainStateWatching(int percent);
+
+  /// No description provided for @trainStateWatchingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch {needed}% of the lesson for it to count. You can go back, but not skip ahead.'**
+  String trainStateWatchingBody(int needed);
+
+  /// No description provided for @trainTakeQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the quiz'**
+  String get trainTakeQuiz;
+
+  /// No description provided for @trainQuizTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz'**
+  String get trainQuizTitle;
+
+  /// No description provided for @trainQuizSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit answers'**
+  String get trainQuizSubmit;
+
+  /// No description provided for @trainQuizQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Question {number}'**
+  String trainQuizQuestion(int number);
+
+  /// No description provided for @trainQuizPassed.
+  ///
+  /// In en, this message translates to:
+  /// **'Passed'**
+  String get trainQuizPassed;
+
+  /// No description provided for @trainQuizPassedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You scored {score}%. This lesson is complete.'**
+  String trainQuizPassedBody(int score);
+
+  /// No description provided for @trainQuizFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not quite'**
+  String get trainQuizFailed;
+
+  /// No description provided for @trainQuizFailedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You scored {score}%. You need {pass}% to pass. Have another go.'**
+  String trainQuizFailedBody(int score, int pass);
+
+  /// No description provided for @trainQuizContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get trainQuizContinue;
+
+  /// No description provided for @trainQuizRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get trainQuizRetry;
+
+  /// No description provided for @trainGateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your training'**
+  String get trainGateTitle;
+
+  /// No description provided for @trainGateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You are approved. Before you start taking consultations, watch the required lessons. It does not take long.'**
+  String get trainGateBody;
+
+  /// No description provided for @trainGateStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start training'**
+  String get trainGateStart;
+
+  /// No description provided for @trainGateContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue training'**
+  String get trainGateContinue;
+
+  /// No description provided for @trainWhileWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch the training meanwhile'**
+  String get trainWhileWaiting;
+
+  /// No description provided for @trainWhileWaitingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Lessons you finish now are counted once you are approved.'**
+  String get trainWhileWaitingBody;
 }
 
 class _AppLocalizationsDelegate

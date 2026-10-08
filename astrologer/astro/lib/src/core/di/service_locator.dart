@@ -25,6 +25,7 @@ import '../util/amount_privacy.dart';
 import '../../features/remedies/data/remedies_api.dart';
 import '../../features/waitlist/data/waitlist_api.dart';
 import '../../features/reports/data/reports_api.dart';
+import '../../features/training/data/training_api.dart';
 import '../../features/workspace/data/workspace_api.dart';
 import '../../features/waitlist/presentation/cubit/waitlist_cubit.dart';
 import '../../features/client_charts/data/client_charts_api.dart';
@@ -210,6 +211,7 @@ Future<void> configureDependencies(AppConfig config) async {
     ..registerLazySingleton<RemediesApi>(() => RemediesApi(dio))
     ..registerLazySingleton<WaitlistApi>(() => WaitlistApi(dio))
     ..registerLazySingleton<WorkspaceApi>(() => WorkspaceApi(dio))
+    ..registerLazySingleton<TrainingApi>(() => TrainingApi(dio))
     ..registerLazySingleton<ReportsApi>(() => ReportsApi(dio))
     ..registerLazySingleton<ClientChartsApi>(() => ClientChartsApi(dio))
     // App-level: it also feeds the badge on the Home waitlist tile.
