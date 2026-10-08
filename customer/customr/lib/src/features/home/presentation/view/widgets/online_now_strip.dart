@@ -9,6 +9,7 @@ import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// "Online now" as a stories-style row: big faces in colour-coded gradient rings,
 /// a live dot on each, one tap into the profile.
 class OnlineNowStrip extends StatelessWidget {
@@ -19,7 +20,9 @@ class OnlineNowStrip extends StatelessWidget {
     final l = context.l10n;
     final online = context.select((HomeCubit c) => c.state.online);
     final people = online.value ?? const <Astrologer>[];
-    final available = people.where((a) => a.isAvailable).toList();
+    // "Online now" promises someone you can start with: online, and taking
+    // at least one kind of consultation.
+    final available = people.where((a) => a.isReachable).toList();
     final show = available.isNotEmpty ? available : people;
     final loading = online.isLoading && show.isEmpty;
     if (!loading && show.isEmpty) return const SizedBox.shrink();
@@ -80,13 +83,13 @@ class _Story extends StatelessWidget {
                     padding: const EdgeInsets.all(2.5),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      gradient: a.isAvailable
+                      gradient: a.isReachable
                           ? SweepGradient(
                               colors: [hue.start, hue.end, hue.start],
                             )
                           : null,
-                      color: a.isAvailable ? null : brand.hairline,
-                      boxShadow: a.isAvailable
+                      color: a.isReachable ? null : brand.hairline,
+                      boxShadow: a.isReachable
                           ? [
                               BoxShadow(
                                 color: hue.start.withValues(alpha: 0.3),
@@ -110,7 +113,7 @@ class _Story extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (a.isAvailable)
+                  if (a.isReachable)
                     Positioned(
                       right: 3,
                       bottom: 3,
@@ -121,6 +124,25 @@ class _Story extends StatelessWidget {
                           color: brand.online,
                           shape: BoxShape.circle,
                           border: Border.all(color: surface, width: 2.5),
+                        ),
+                      ),
+                    ),
+                  // Online but with everything switched off until a time: a
+                  // small clock where the live dot would be.
+                  if (a.isAvailable && !a.isReachable && a.soonestBack != null)
+                    Positioned(
+                      right: 1,
+                      bottom: 1,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: surface,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.schedule_rounded,
+                          size: 14,
+                          color: AstroPalette.fire.end,
                         ),
                       ),
                     ),

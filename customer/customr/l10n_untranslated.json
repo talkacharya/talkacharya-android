@@ -387,7 +387,13 @@
     "appUpdateAvailable",
     "appUpdateAction",
     "appUpdateReady",
-    "appUpdateRestart"
+    "appUpdateRestart",
+    "channelVideoShort",
+    "astroChannelOffNow",
+    "astroOffNow",
+    "astroBackWhen",
+    "astroAvailableOn",
+    "astroNoChannelNow"
   ],
 
   "gu": [
@@ -778,7 +784,13 @@
     "appUpdateAvailable",
     "appUpdateAction",
     "appUpdateReady",
-    "appUpdateRestart"
+    "appUpdateRestart",
+    "channelVideoShort",
+    "astroChannelOffNow",
+    "astroOffNow",
+    "astroBackWhen",
+    "astroAvailableOn",
+    "astroNoChannelNow"
   ],
 
   "kn": [
@@ -1169,7 +1181,13 @@
     "appUpdateAvailable",
     "appUpdateAction",
     "appUpdateReady",
-    "appUpdateRestart"
+    "appUpdateRestart",
+    "channelVideoShort",
+    "astroChannelOffNow",
+    "astroOffNow",
+    "astroBackWhen",
+    "astroAvailableOn",
+    "astroNoChannelNow"
   ],
 
   "mr": [
@@ -1560,7 +1578,13 @@
     "appUpdateAvailable",
     "appUpdateAction",
     "appUpdateReady",
-    "appUpdateRestart"
+    "appUpdateRestart",
+    "channelVideoShort",
+    "astroChannelOffNow",
+    "astroOffNow",
+    "astroBackWhen",
+    "astroAvailableOn",
+    "astroNoChannelNow"
   ],
 
   "ta": [
@@ -1951,7 +1975,13 @@
     "appUpdateAvailable",
     "appUpdateAction",
     "appUpdateReady",
-    "appUpdateRestart"
+    "appUpdateRestart",
+    "channelVideoShort",
+    "astroChannelOffNow",
+    "astroOffNow",
+    "astroBackWhen",
+    "astroAvailableOn",
+    "astroNoChannelNow"
   ],
 
   "te": [
@@ -2342,6 +2372,12 @@
     "appUpdateAvailable",
     "appUpdateAction",
     "appUpdateReady",
-    "appUpdateRestart"
+    "appUpdateRestart",
+    "channelVideoShort",
+    "astroChannelOffNow",
+    "astroOffNow",
+    "astroBackWhen",
+    "astroAvailableOn",
+    "astroNoChannelNow"
   ]
 }

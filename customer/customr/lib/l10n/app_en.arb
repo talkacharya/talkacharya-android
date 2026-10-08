@@ -4327,5 +4327,14 @@
   "astroNextOnlineDate": "{date}, {time}",
   "@astroNextOnlineDate": {"placeholders": {"date": {"type": "String"}, "time": {"type": "String"}}},
   "astroChannelBack": "{channel} back {when}",
-  "@astroChannelBack": {"placeholders": {"channel": {"type": "String"}, "when": {"type": "String"}}}
+  "@astroChannelBack": {"placeholders": {"channel": {"type": "String"}, "when": {"type": "String"}}},
+  "channelVideoShort": "Video",
+  "astroChannelOffNow": "Not taking {channel} right now",
+  "@astroChannelOffNow": {"placeholders": {"channel": {"type": "String"}}},
+  "astroOffNow": "Not available right now",
+  "astroBackWhen": "Back {when}",
+  "@astroBackWhen": {"placeholders": {"when": {"type": "String"}}},
+  "astroAvailableOn": "Available on {channels}",
+  "@astroAvailableOn": {"placeholders": {"channels": {"type": "String"}}},
+  "astroNoChannelNow": "Not taking consultations right now"
 }

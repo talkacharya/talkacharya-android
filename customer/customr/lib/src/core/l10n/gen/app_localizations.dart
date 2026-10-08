@@ -12817,6 +12817,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{channel} back {when}'**
   String astroChannelBack(String channel, String when);
+
+  /// No description provided for @channelVideoShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Video'**
+  String get channelVideoShort;
+
+  /// No description provided for @astroChannelOffNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not taking {channel} right now'**
+  String astroChannelOffNow(String channel);
+
+  /// No description provided for @astroOffNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available right now'**
+  String get astroOffNow;
+
+  /// No description provided for @astroBackWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'Back {when}'**
+  String astroBackWhen(String when);
+
+  /// No description provided for @astroAvailableOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Available on {channels}'**
+  String astroAvailableOn(String channels);
+
+  /// No description provided for @astroNoChannelNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not taking consultations right now'**
+  String get astroNoChannelNow;
 }
 
 class _AppLocalizationsDelegate

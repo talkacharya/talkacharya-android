@@ -18,6 +18,7 @@ import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Height the quick-actions dock tucks up into the hero.
 const double kHeroDockOverlap = 36;
 
@@ -182,7 +183,7 @@ class _HeroContent extends StatelessWidget {
     final theme = Theme.of(context);
     final online = context.select((HomeCubit c) => c.state.online);
     final people = online.value ?? const <Astrologer>[];
-    final available = people.where((a) => a.isAvailable).toList();
+    final available = people.where((a) => a.isReachable).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

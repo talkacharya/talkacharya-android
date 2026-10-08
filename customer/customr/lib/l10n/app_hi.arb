@@ -3018,5 +3018,11 @@
   "astroNextOnlineToday": "आज, {time}",
   "astroNextOnlineTomorrow": "कल, {time}",
   "astroNextOnlineDate": "{date}, {time}",
-  "astroChannelBack": "{channel} {when} से उपलब्ध"
+  "astroChannelBack": "{channel} {when} से उपलब्ध",
+  "channelVideoShort": "वीडियो",
+  "astroChannelOffNow": "अभी {channel} नहीं ले रहे",
+  "astroOffNow": "अभी उपलब्ध नहीं",
+  "astroBackWhen": "{when} वापस",
+  "astroAvailableOn": "{channels} पर उपलब्ध",
+  "astroNoChannelNow": "अभी परामर्श नहीं ले रहे"
 }

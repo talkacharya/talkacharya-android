@@ -7,9 +7,12 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/l10n/l10n.dart';
 import '../../../../../core/router/routes.dart';
 import '../../../../astrologers/data/models/astrologer.dart';
+import '../../../../astrologers/presentation/channel_availability.dart';
+import '../../../../astrologers/presentation/next_online_label.dart';
 import 'home_shared.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Height of [AstrologerCard] — rails size themselves from it.
 const double kAstrologerCardHeight = 236;
 
@@ -31,6 +34,10 @@ class AstrologerCard extends StatelessWidget {
     final hue = HomeHues.forId(a.id);
     final rate = a.cheapestRate;
     final available = a.isAvailable;
+    // What the button offers: chat when they take it, else a call or video;
+    // nothing when, though online, they have every way switched off.
+    final lead = available ? a.openChannels.firstOrNull : null;
+    final back = a.soonestBack;
     final surface = theme.colorScheme.surface;
     void open() => context.push(Routes.astrologer(a.id));
 
@@ -199,8 +206,19 @@ class AstrologerCard extends StatelessWidget {
                       const Spacer(),
                       _CardCta(
                         hue: hue,
-                        available: available,
-                        label: available ? 'Chat' : l.homeNotifyMeBtn,
+                        available: lead != null,
+                        icon: !available
+                            ? Icons.notifications_active_outlined
+                            : lead != null
+                            ? channelIcon(lead)
+                            : Icons.schedule_rounded,
+                        label: !available
+                            ? l.homeNotifyMeBtn
+                            : lead != null
+                            ? channelVerb(l, lead)
+                            : back != null
+                            ? l.astroBackWhen(nextOnlineWhen(context, back))
+                            : l.astroOffNow,
                         onTap: open,
                       ),
                     ],
@@ -300,12 +318,14 @@ class _CardCta extends StatelessWidget {
   const _CardCta({
     required this.hue,
     required this.available,
+    required this.icon,
     required this.label,
     required this.onTap,
   });
 
   final AstroHue hue;
   final bool available;
+  final IconData icon;
   final String label;
   final VoidCallback onTap;
 
@@ -325,25 +345,24 @@ class _CardCta extends StatelessWidget {
         ),
         child: InkWell(
           onTap: onTap,
-          child: SizedBox(
+          child: Container(
             height: 40,
             width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  available
-                      ? Icons.chat_bubble_rounded
-                      : Icons.notifications_active_outlined,
-                  size: 16,
-                  color: fg,
-                ),
+                Icon(icon, size: 16, color: fg),
                 const SizedBox(width: 6),
-                Text(
-                  label,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: fg,
-                    fontWeight: FontWeight.w800,
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: fg,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
               ],

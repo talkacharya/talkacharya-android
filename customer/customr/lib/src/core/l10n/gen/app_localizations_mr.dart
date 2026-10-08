@@ -7385,4 +7385,28 @@ class AppLocalizationsMr extends AppLocalizations {
   String astroChannelBack(String channel, String when) {
     return '$channel $when पासून उपलब्ध';
   }
+
+  @override
+  String get channelVideoShort => 'Video';
+
+  @override
+  String astroChannelOffNow(String channel) {
+    return 'Not taking $channel right now';
+  }
+
+  @override
+  String get astroOffNow => 'Not available right now';
+
+  @override
+  String astroBackWhen(String when) {
+    return 'Back $when';
+  }
+
+  @override
+  String astroAvailableOn(String channels) {
+    return 'Available on $channels';
+  }
+
+  @override
+  String get astroNoChannelNow => 'Not taking consultations right now';
 }

@@ -11,7 +11,7 @@ import '../../../../../core/util/money.dart';
 import '../../../../follows/data/follows_api.dart';
 import '../../../../follows/presentation/widgets/follow_widgets.dart';
 import '../../../data/models/astrologer.dart';
-import '../../next_online_label.dart';
+import '../../channel_availability.dart';
 import '../astrologer_detail_page.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
@@ -37,8 +37,11 @@ class AstrologerListTile extends StatelessWidget {
     final rate =
         (channel != null ? a.rateFor(channel!) : null) ?? a.cheapestRate;
     final available = a.isAvailable;
-    // Online, but not taking this kind of consultation until a time they gave.
-    final back = available ? a.nextOnlineFor(channel ?? 'chat') : null;
+    // Online, but not taking the kind of consultation this list is for.
+    final wanted = channel ?? 'chat';
+    final closedLine = available ? channelClosedLine(context, a, wanted) : null;
+    // What the button offers: the wanted kind when it is on, else whatever is.
+    final offered = a.takes(wanted) ? wanted : a.openChannels.firstOrNull;
     final langs = a.languages
         .take(3)
         .map(
@@ -157,33 +160,66 @@ class AstrologerListTile extends StatelessWidget {
                                 style: muted,
                               ),
                               const SizedBox(height: 4),
-                              Text(
-                                back != null
-                                    ? l.astroChannelBack(
-                                        _ctaLabel(l),
-                                        nextOnlineWhen(context, back),
-                                      )
-                                    : [
-                                        if (a.yearsExperience > 0)
-                                          '${a.yearsExperience} yrs',
-                                        if (langs.isNotEmpty) langs,
-                                      ].join('  ·  '),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: muted,
-                              ),
+                              if (closedLine != null)
+                                Row(
+                                  children: [
+                                    Icon(
+                                      a.stateOf(wanted) ==
+                                              ChannelState.backLater
+                                          ? Icons.schedule_rounded
+                                          : Icons.do_not_disturb_on_rounded,
+                                      size: 13,
+                                      color: AstroPalette.fire.end,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Flexible(
+                                      child: Text(
+                                        closedLine,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: muted?.copyWith(
+                                          color: AstroPalette.fire.end,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              else
+                                Text(
+                                  [
+                                    if (a.yearsExperience > 0)
+                                      '${a.yearsExperience} yrs',
+                                    if (langs.isNotEmpty) langs,
+                                  ].join('  ·  '),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: muted,
+                                ),
                             ],
                           ),
                           Align(
                             alignment: Alignment.centerRight,
-                            child: available
-                                ? _Cta(
-                                    available: true,
-                                    icon: _ctaIcon(),
-                                    tooltip: _ctaLabel(l),
-                                    onTap: openContainer,
-                                  )
-                                : _NotifyCta(astrologer: a),
+                            child: !available
+                                ? _NotifyCta(astrologer: a)
+                                : Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      // Which ways are open with them now.
+                                      ChannelGlyphs(astrologer: a),
+                                      const SizedBox(width: 3),
+                                      _Cta(
+                                        available: offered != null,
+                                        icon: offered == null
+                                            ? Icons.schedule_rounded
+                                            : channelIcon(offered),
+                                        tooltip: offered == null
+                                            ? (closedLine ?? _ctaLabel(l))
+                                            : channelLabel(l, offered),
+                                        onTap: openContainer,
+                                      ),
+                                    ],
+                                  ),
                           ),
                         ],
                       ),
@@ -197,12 +233,6 @@ class AstrologerListTile extends StatelessWidget {
       ),
     );
   }
-
-  IconData _ctaIcon() => switch (channel) {
-    'voice' => Icons.call_rounded,
-    'video' => Icons.videocam_rounded,
-    _ => Icons.chat_bubble_outline_rounded,
-  };
 
   String _ctaLabel(AppLocalizations l) => switch (channel) {
     'voice' => l.channelCall,

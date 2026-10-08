@@ -34,6 +34,10 @@ abstract class Astrologer with _$Astrologer {
     @JsonKey(name: 'next_online')
     @Default(<String, DateTime>{})
     Map<String, DateTime> nextOnline,
+
+    /// Which of chat / voice / video the astrologer is taking right now. Null
+    /// from a server that does not say: then nothing is known to be off.
+    @JsonKey(name: 'channels_open') List<String>? channelsOpen,
     // detail-only
     @Default('') String bio,
     @JsonKey(name: 'avg_response_seconds') int? avgResponseSeconds,
@@ -81,6 +85,38 @@ abstract class Astrologer with _$Astrologer {
     return at != null && at.isAfter(DateTime.now()) ? at : null;
   }
 
+  /// Where [channel] stands for a customer who wants it now.
+  ChannelState stateOf(String channel) {
+    if (rateFor(channel) == null) return ChannelState.noRate;
+    if (nextOnlineFor(channel) != null) return ChannelState.backLater;
+    final open = channelsOpen;
+    if (open != null && !open.contains(channel)) return ChannelState.off;
+    return ChannelState.open;
+  }
+
+  /// Whether [channel] is priced and being taken (says nothing of presence).
+  bool takes(String channel) => stateOf(channel) == ChannelState.open;
+
+  /// Chat, voice, video — those being taken, in that order.
+  List<String> get openChannels => [
+    for (final c in const ['chat', 'voice', 'video'])
+      if (takes(c)) c,
+  ];
+
+  /// Online *and* taking at least one kind of consultation: someone a
+  /// customer can actually start with now.
+  bool get isReachable => isAvailable && openChannels.isNotEmpty;
+
+  /// The soonest any switched-off channel comes back, if one has a time.
+  DateTime? get soonestBack {
+    DateTime? first;
+    for (final c in const ['chat', 'voice', 'video']) {
+      final at = nextOnlineFor(c);
+      if (at != null && (first == null || at.isBefore(first))) first = at;
+    }
+    return first;
+  }
+
   /// Percent off [channel] under the running offer; 0 when there is none or
   /// it does not cover that channel.
   int offerPercentFor(String channel) {
@@ -108,6 +144,21 @@ abstract class Astrologer with _$Astrologer {
   }
 
   String get skillsLabel => skills.take(3).map((s) => s.name).join(' · ');
+}
+
+/// Where one way of consulting stands with an astrologer.
+enum ChannelState {
+  /// Priced and being taken.
+  open,
+
+  /// Switched off until a time they gave.
+  backLater,
+
+  /// Switched off, with no time given.
+  off,
+
+  /// They have no price for it: not something they offer.
+  noRate,
 }
 
 @freezed

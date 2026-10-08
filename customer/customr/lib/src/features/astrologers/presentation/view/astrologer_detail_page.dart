@@ -17,6 +17,7 @@ import '../../../gifting/data/models/gift.dart';
 import '../../../gifting/presentation/view/gift_sheet.dart';
 import '../../data/astrologers_repository.dart';
 import '../../data/models/astrologer.dart';
+import '../channel_availability.dart';
 import '../next_online_label.dart';
 import 'widgets/astrologer_gallery.dart';
 import 'widgets/astrologer_reviews.dart';
@@ -849,25 +850,74 @@ class _RatesCard extends StatelessWidget {
                     width: 34,
                     height: 34,
                     decoration: BoxDecoration(
-                      color: _hue(ordered[i].channel).tint(0.13),
+                      color: _closed(ordered[i])
+                          ? brand.hairline.withValues(alpha: 0.6)
+                          : _hue(ordered[i].channel).tint(0.13),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Icon(
                       _channelIcon(ordered[i].channel),
                       size: 18,
-                      color: _hue(ordered[i].channel).end,
+                      color: _closed(ordered[i])
+                          ? brand.inkMuted
+                          : _hue(ordered[i].channel).end,
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Text(
-                      _channelLabel(l, ordered[i].channel),
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _channelLabel(l, ordered[i].channel),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: _closed(ordered[i]) ? brand.inkMuted : null,
+                          ),
+                        ),
+                        // Off, or off until a time: said here, beside the price,
+                        // rather than left for a tap to discover.
+                        if (_closed(ordered[i]))
+                          Row(
+                            children: [
+                              Icon(
+                                astrologer.stateOf(ordered[i].channel) ==
+                                        ChannelState.backLater
+                                    ? Icons.schedule_rounded
+                                    : Icons.do_not_disturb_on_rounded,
+                                size: 13,
+                                color: AstroPalette.fire.end,
+                              ),
+                              const SizedBox(width: 4),
+                              Flexible(
+                                child: Text(
+                                  astrologer.stateOf(ordered[i].channel) ==
+                                          ChannelState.backLater
+                                      ? l.astroBackWhen(
+                                          nextOnlineWhen(
+                                            context,
+                                            astrologer.nextOnlineFor(
+                                              ordered[i].channel,
+                                            )!,
+                                          ),
+                                        )
+                                      : l.astroOffNow,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: AstroPalette.fire.end,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
                     ),
                   ),
-                  if (ordered[i].perMinute == cheapest && rates.length > 1)
+                  if (ordered[i].perMinute == cheapest &&
+                      rates.length > 1 &&
+                      !_closed(ordered[i]))
                     Flexible(
                       child: Container(
                         margin: const EdgeInsets.only(right: 8),
@@ -927,6 +977,10 @@ class _RatesCard extends StatelessWidget {
       ),
     );
   }
+
+  /// Whether the astrologer, though online, is not taking this channel now.
+  bool _closed(AstrologerRate rate) =>
+      astrologer.isAvailable && !astrologer.takes(rate.channel);
 
   static List<AstrologerRate> _ordered(List<AstrologerRate> rates) {
     const order = {'chat': 0, 'voice': 1, 'video': 2};
@@ -1086,89 +1140,39 @@ class _SectionTitle extends StatelessWidget {
 
 // --- actions -------------------------------------------------------------
 
-/// Says when [channel] is back and returns true, if the astrologer has it
-/// switched off until a time they gave.
-bool _toldWhenBack(BuildContext context, Astrologer a, String channel) {
-  final back = a.nextOnlineFor(channel);
-  if (back == null) return false;
+/// Book [channel] with [a] — or, when that is not possible right now, say
+/// why in terms the customer can act on.
+void _start(BuildContext context, Astrologer a, String channel) {
   final l = context.l10n;
-  final label = switch (channel) {
-    'voice' => l.channelVoice,
-    'video' => l.channelVideo,
-    _ => l.channelChat,
-  };
-  AppSnack.showTop(
-    context,
-    l.astroChannelBack(label, nextOnlineWhen(context, back)),
-    type: SnackType.info,
-  );
-  return true;
-}
-
-void _startChat(BuildContext context, Astrologer a) {
-  final chat = a.rateFor('chat');
-  if (chat == null || !a.isAvailable) {
-    AppSnack.showTop(
-      context,
-      context.l10n.astroNotifyWhenOnline,
-      type: SnackType.info,
-    );
+  final rate = a.rateFor(channel);
+  if (rate == null || !a.isAvailable) {
+    AppSnack.showTop(context, switch (channel) {
+      'voice' => l.callUnavailable,
+      'video' => l.callVideoUnavailable,
+      _ => l.astroNotifyWhenOnline,
+    }, type: SnackType.info);
     return;
   }
-  if (_toldWhenBack(context, a, 'chat')) return;
+  if (explainClosedChannel(context, a, channel)) return;
   showBookConsultationSheet(
     context,
     astrologerId: a.id,
     astrologerName: a.name,
-    ratePerMinute: a.priceFor(chat),
-    offerPercent: a.offerPercentFor('chat'),
-    currency: chat.currency,
+    ratePerMinute: a.priceFor(rate),
+    offerPercent: a.offerPercentFor(channel),
+    currency: rate.currency,
+    channel: channel,
   );
 }
 
-void _startVoice(BuildContext context, Astrologer a) {
-  final voice = a.rateFor('voice');
-  if (voice == null || !a.isAvailable) {
-    AppSnack.showTop(
-      context,
-      context.l10n.callUnavailable,
-      type: SnackType.info,
-    );
-    return;
-  }
-  if (_toldWhenBack(context, a, 'voice')) return;
-  showBookConsultationSheet(
-    context,
-    astrologerId: a.id,
-    astrologerName: a.name,
-    ratePerMinute: a.priceFor(voice),
-    offerPercent: a.offerPercentFor('voice'),
-    currency: voice.currency,
-    channel: 'voice',
-  );
-}
+void _startChat(BuildContext context, Astrologer a) =>
+    _start(context, a, 'chat');
 
-void _startVideo(BuildContext context, Astrologer a) {
-  final video = a.rateFor('video');
-  if (video == null || !a.isAvailable) {
-    AppSnack.showTop(
-      context,
-      context.l10n.callVideoUnavailable,
-      type: SnackType.info,
-    );
-    return;
-  }
-  if (_toldWhenBack(context, a, 'video')) return;
-  showBookConsultationSheet(
-    context,
-    astrologerId: a.id,
-    astrologerName: a.name,
-    ratePerMinute: a.priceFor(video),
-    offerPercent: a.offerPercentFor('video'),
-    currency: video.currency,
-    channel: 'video',
-  );
-}
+void _startVoice(BuildContext context, Astrologer a) =>
+    _start(context, a, 'voice');
+
+void _startVideo(BuildContext context, Astrologer a) =>
+    _start(context, a, 'video');
 
 void _sendGift(BuildContext context, Astrologer a) {
   showGiftSheet(
@@ -1181,7 +1185,10 @@ void _sendGift(BuildContext context, Astrologer a) {
   );
 }
 
-/// Chat (primary, gold) + call / video (glass) inside the expanded header.
+/// The header's buttons. The gold one leads with whatever the astrologer is
+/// taking right now — chat when it is on, otherwise a call or video — so the
+/// obvious tap always works; the other ways sit beside it as glass buttons,
+/// dimmed when they are switched off.
 class _HeaderCtas extends StatelessWidget {
   const _HeaderCtas({required this.a});
 
@@ -1191,66 +1198,74 @@ class _HeaderCtas extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = context.l10n;
     final locale = Localizations.localeOf(context).toLanguageTag();
-    final lead = a.leadRate;
-    // Online, but with chat switched off until a time they gave.
-    final chatBack = a.isAvailable ? a.nextOnlineFor('chat') : null;
-    final canChat =
-        a.rateFor('chat') != null && a.isAvailable && chatBack == null;
-    final priceLabel = lead == null
-        ? null
-        : Money.format(lead.perMinute, lead.currency, locale: locale);
     final following =
         watchFollow(context, a.id, followEntryOf(a))?.following ?? false;
-    final chatLabel = !a.isAvailable
-        ? (following ? l.followNotifyingWhenOnline : l.astroNotifyWhenOnline)
-        : chatBack != null
-        ? l.astroChannelBack(l.channelChat, nextOnlineWhen(context, chatBack))
-        : priceLabel != null
-        ? '${l.astroChat} · ${l.astroPerMinute(priceLabel)}'
-        : l.astroChat;
+    final lead = a.isAvailable ? a.openChannels.firstOrNull : null;
+    final leadRate = lead == null ? null : a.rateFor(lead);
+    final back = a.soonestBack;
+
+    final String label;
+    final IconData icon;
+    final VoidCallback? onTap;
+    if (!a.isAvailable) {
+      // Offline: "Notify me when online" = follow (online pushes).
+      label = following ? l.followNotifyingWhenOnline : l.astroNotifyWhenOnline;
+      icon = following
+          ? Icons.notifications_active_rounded
+          : Icons.notifications_none_rounded;
+      onTap = () => toggleFollow(
+        context,
+        astrologerId: a.id,
+        astrologerName: a.name,
+        fallback: followEntryOf(a),
+      );
+    } else if (lead != null && leadRate != null) {
+      final price = Money.format(
+        a.priceFor(leadRate),
+        leadRate.currency,
+        locale: locale,
+      );
+      label = '${channelVerb(l, lead)} · ${l.astroPerMinute(price)}';
+      icon = channelIcon(lead);
+      onTap = () => _start(context, a, lead);
+    } else {
+      // Online, but with every way of consulting switched off.
+      label = back != null
+          ? l.astroBackWhen(nextOnlineWhen(context, back))
+          : l.astroNoChannelNow;
+      icon = Icons.schedule_rounded;
+      onTap = () => explainClosedChannel(
+        context,
+        a,
+        kConsultChannels.firstWhere(
+          (c) => a.rateFor(c) != null,
+          orElse: () => 'chat',
+        ),
+      );
+    }
 
     return Row(
       children: [
         Expanded(
           child: _PrimaryCta(
-            label: chatLabel,
-            icon: chatBack != null
-                ? Icons.schedule_rounded
-                : a.isAvailable
-                ? Icons.chat_bubble_rounded
-                : following
-                ? Icons.notifications_active_rounded
-                : Icons.notifications_none_rounded,
-            enabled: canChat,
-            // offline: "Notify me when online" = follow (online pushes)
-            onTap: canChat || chatBack != null
-                ? () => _startChat(context, a)
-                : !a.isAvailable
-                ? () => toggleFollow(
-                    context,
-                    astrologerId: a.id,
-                    astrologerName: a.name,
-                    fallback: followEntryOf(a),
-                  )
-                : null,
+            label: label,
+            icon: icon,
+            enabled: lead != null,
+            onTap: onTap,
           ),
         ),
-        const SizedBox(width: 10),
-        _GlassAction(
-          icon: Icons.phone_in_talk_rounded,
-          color: AstroPalette.health.start,
-          tooltip: l.channelVoice,
-          onTap: () => _startVoice(context, a),
-        ),
-        if (a.rateFor('video') != null) ...[
-          const SizedBox(width: 8),
-          _GlassAction(
-            icon: Icons.videocam_rounded,
-            color: AstroPalette.love.start,
-            tooltip: l.channelVideo,
-            onTap: () => _startVideo(context, a),
-          ),
-        ],
+        for (final c in kConsultChannels)
+          if (c != lead && a.rateFor(c) != null) ...[
+            const SizedBox(width: 8),
+            _GlassAction(
+              icon: channelIcon(c),
+              color: channelHue(c).start,
+              tooltip: channelClosedLine(context, a, c) ?? channelLabel(l, c),
+              closed: a.isAvailable && !a.takes(c),
+              waiting: a.stateOf(c) == ChannelState.backLater,
+              onTap: () => _start(context, a, c),
+            ),
+          ],
         const SizedBox(width: 8),
         _GlassAction(
           icon: Icons.card_giftcard_rounded,
@@ -1351,6 +1366,8 @@ class _GlassAction extends StatelessWidget {
     required this.color,
     required this.tooltip,
     required this.onTap,
+    this.closed = false,
+    this.waiting = false,
   });
 
   final IconData icon;
@@ -1358,26 +1375,66 @@ class _GlassAction extends StatelessWidget {
   final String tooltip;
   final VoidCallback onTap;
 
+  /// The astrologer is not taking this right now: drawn quiet. Still
+  /// tappable — the tap says why, and what is open instead.
+  final bool closed;
+
+  /// Closed until a time they gave: a small clock marks it.
+  final bool waiting;
+
   @override
   Widget build(BuildContext context) {
     return Tooltip(
       message: tooltip,
       child: Pressable(
-        child: Material(
-          color: Colors.white.withValues(alpha: 0.12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
-            side: BorderSide(color: Colors.white.withValues(alpha: 0.28)),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: onTap,
-            child: SizedBox(
-              width: 48,
-              height: 48,
-              child: Icon(icon, color: color, size: 22),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Material(
+              color: Colors.white.withValues(alpha: closed ? 0.06 : 0.12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+                side: BorderSide(
+                  color: Colors.white.withValues(alpha: closed ? 0.14 : 0.28),
+                ),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: onTap,
+                child: SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: Icon(
+                    icon,
+                    color: closed
+                        ? Colors.white.withValues(alpha: 0.38)
+                        : color,
+                    size: 22,
+                  ),
+                ),
+              ),
             ),
-          ),
+            if (closed)
+              Positioned(
+                right: -3,
+                top: -3,
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: context.brand.cosmicStart,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: Icon(
+                    waiting ? Icons.schedule_rounded : Icons.block_rounded,
+                    size: 11,
+                    color: Colors.white.withValues(alpha: 0.85),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
