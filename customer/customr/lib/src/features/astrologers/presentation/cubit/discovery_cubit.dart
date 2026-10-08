@@ -78,13 +78,14 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     _pageInFlight = true;
     final cursor = state.nextCursor;
     final query = state.query;
+    if (isClosed) return;
     emit(
       state.copyWith(status: DiscoveryStatus.loadingMore, loadMoreError: false),
     );
     try {
       final page = await _repo.list(query: query, cursor: cursor);
       // A re-filter landed while we were fetching — drop this stale page.
-      if (query != state.query) return;
+      if (query != state.query || isClosed) return;
       emit(
         state.copyWith(
           status: DiscoveryStatus.ready,
@@ -95,7 +96,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
         ),
       );
     } catch (_) {
-      if (query != state.query) return;
+      if (query != state.query || isClosed) return;
       emit(state.copyWith(status: DiscoveryStatus.ready, loadMoreError: true));
     } finally {
       _pageInFlight = false;
@@ -108,7 +109,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     try {
       final page = await _repo.list(query: query);
       // A newer query superseded this one mid-flight.
-      if (query != state.query) return;
+      if (query != state.query || isClosed) return;
       emit(
         state.copyWith(
           status: DiscoveryStatus.ready,
@@ -119,7 +120,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
         ),
       );
     } catch (e) {
-      if (query != state.query) return;
+      if (query != state.query || isClosed) return;
       emit(
         state.copyWith(status: DiscoveryStatus.error, error: friendlyError(e)),
       );

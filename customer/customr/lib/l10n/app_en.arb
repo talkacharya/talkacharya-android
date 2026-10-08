@@ -4315,5 +4315,17 @@
   "astroReviewsSeeAll": "See all reviews",
   "astroReviewsEmpty": "No reviews to show yet.",
   "astroReviewReply": "Astrologer's reply",
-  "authSessionReplaced": "You were signed out because your account was signed in on another phone."
+  "authSessionReplaced": "You were signed out because your account was signed in on another phone.",
+  "appUpdateAvailable": "A new version of the app is available.",
+  "appUpdateAction": "Update",
+  "appUpdateReady": "The update is downloaded. Restart to finish.",
+  "appUpdateRestart": "Restart",
+  "astroNextOnlineToday": "today, {time}",
+  "@astroNextOnlineToday": {"placeholders": {"time": {"type": "String"}}},
+  "astroNextOnlineTomorrow": "tomorrow, {time}",
+  "@astroNextOnlineTomorrow": {"placeholders": {"time": {"type": "String"}}},
+  "astroNextOnlineDate": "{date}, {time}",
+  "@astroNextOnlineDate": {"placeholders": {"date": {"type": "String"}, "time": {"type": "String"}}},
+  "astroChannelBack": "{channel} back {when}",
+  "@astroChannelBack": {"placeholders": {"channel": {"type": "String"}, "when": {"type": "String"}}}
 }

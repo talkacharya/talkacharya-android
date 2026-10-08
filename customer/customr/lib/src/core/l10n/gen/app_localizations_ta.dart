@@ -7398,4 +7398,36 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get authSessionReplaced =>
       'You were signed out because your account was signed in on another phone.';
+
+  @override
+  String get appUpdateAvailable => 'A new version of the app is available.';
+
+  @override
+  String get appUpdateAction => 'Update';
+
+  @override
+  String get appUpdateReady => 'The update is downloaded. Restart to finish.';
+
+  @override
+  String get appUpdateRestart => 'Restart';
+
+  @override
+  String astroNextOnlineToday(String time) {
+    return 'இன்று, $time';
+  }
+
+  @override
+  String astroNextOnlineTomorrow(String time) {
+    return 'நாளை, $time';
+  }
+
+  @override
+  String astroNextOnlineDate(String date, String time) {
+    return '$date, $time';
+  }
+
+  @override
+  String astroChannelBack(String channel, String when) {
+    return '$channel $when முதல் கிடைக்கும்';
+  }
 }

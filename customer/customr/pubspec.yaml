@@ -1,7 +1,7 @@
 name: customr
 description: "TalkAcharya — customer app (astrology consultation marketplace)."
 publish_to: 'none'
-version: 1.1.4+14
+version: 1.1.5+15
 
 environment:
   sdk: ^3.11.0
@@ -101,6 +101,8 @@ dependencies:
   talkacharya_ui:
     path: ../../packages/talkacharya_ui
   simple_pip_mode: ^1.1.0
+  play_install_referrer: ^0.5.0
+  in_app_update: ^4.2.5
 
 dev_dependencies:
   flutter_test:

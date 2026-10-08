@@ -72,6 +72,7 @@ import '../realtime/realtime_client.dart';
 import '../realtime/realtime_coordinator.dart';
 import '../router/pending_deep_link.dart';
 import '../storage/token_storage.dart';
+import '../deeplink/pending_referral.dart';
 import 'package:talkacharya_call/talkacharya_call.dart';
 
 final getIt = GetIt.instance;
@@ -87,6 +88,7 @@ Future<void> configureDependencies(AppConfig config) async {
       ),
     )
     ..registerLazySingleton<TokenStorage>(() => TokenStorage(getIt()))
+    ..registerLazySingleton<PendingReferral>(() => PendingReferral(getIt()))
     // One database for every room. Lazy: an install that never opens a chat
     // never creates the file.
     ..registerLazySingleton<FloorChatStore>(FloorChatStore.new)
@@ -108,7 +110,11 @@ Future<void> configureDependencies(AppConfig config) async {
     )
     ..registerLazySingleton<AuthApi>(() => AuthApi(dio))
     ..registerLazySingleton<AuthRepository>(
-      () => AuthRepository(api: getIt(), tokens: getIt()),
+      () => AuthRepository(
+        api: getIt(),
+        tokens: getIt(),
+        referral: getIt<PendingReferral>(),
+      ),
     )
     ..registerLazySingleton<FirebasePhoneAuth>(() => FirebasePhoneAuth());
 

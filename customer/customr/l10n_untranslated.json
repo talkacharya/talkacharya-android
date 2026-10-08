@@ -383,7 +383,11 @@
     "astroReviewsSeeAll",
     "astroReviewsEmpty",
     "astroReviewReply",
-    "authSessionReplaced"
+    "authSessionReplaced",
+    "appUpdateAvailable",
+    "appUpdateAction",
+    "appUpdateReady",
+    "appUpdateRestart"
   ],
 
   "gu": [
@@ -770,7 +774,11 @@
     "astroReviewsSeeAll",
     "astroReviewsEmpty",
     "astroReviewReply",
-    "authSessionReplaced"
+    "authSessionReplaced",
+    "appUpdateAvailable",
+    "appUpdateAction",
+    "appUpdateReady",
+    "appUpdateRestart"
   ],
 
   "kn": [
@@ -1157,7 +1165,11 @@
     "astroReviewsSeeAll",
     "astroReviewsEmpty",
     "astroReviewReply",
-    "authSessionReplaced"
+    "authSessionReplaced",
+    "appUpdateAvailable",
+    "appUpdateAction",
+    "appUpdateReady",
+    "appUpdateRestart"
   ],
 
   "mr": [
@@ -1544,7 +1556,11 @@
     "astroReviewsSeeAll",
     "astroReviewsEmpty",
     "astroReviewReply",
-    "authSessionReplaced"
+    "authSessionReplaced",
+    "appUpdateAvailable",
+    "appUpdateAction",
+    "appUpdateReady",
+    "appUpdateRestart"
   ],
 
   "ta": [
@@ -1931,7 +1947,11 @@
     "astroReviewsSeeAll",
     "astroReviewsEmpty",
     "astroReviewReply",
-    "authSessionReplaced"
+    "authSessionReplaced",
+    "appUpdateAvailable",
+    "appUpdateAction",
+    "appUpdateReady",
+    "appUpdateRestart"
   ],
 
   "te": [
@@ -2318,6 +2338,10 @@
     "astroReviewsSeeAll",
     "astroReviewsEmpty",
     "astroReviewReply",
-    "authSessionReplaced"
+    "authSessionReplaced",
+    "appUpdateAvailable",
+    "appUpdateAction",
+    "appUpdateReady",
+    "appUpdateRestart"
   ]
 }

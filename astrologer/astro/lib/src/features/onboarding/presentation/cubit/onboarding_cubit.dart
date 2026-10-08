@@ -103,6 +103,14 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     ),
   );
 
+  /// Something outside the cubit changed the application (a document went
+  /// up from its own card): read it again without the loading state.
+  Future<void> refresh() async {
+    try {
+      await _refresh();
+    } catch (_) {}
+  }
+
   Future<bool> submit() async {
     emit(state.copyWith(saving: true, error: null, missing: const []));
     try {

@@ -1,4 +1,5 @@
 import 'package:customr/src/core/deeplink/deep_link_parser.dart';
+import 'package:customr/src/core/deeplink/pending_referral.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -26,6 +27,47 @@ void main() {
         expect(locationForRaw(input), expected);
       });
     });
+  });
+
+  test('an invite link carries its code and lands on referrals', () {
+    final link = Uri.parse('https://talkacharya.com/r/ABC123');
+    expect(referralCodeFromUri(link), 'ABC123');
+    expect(locationForUri(link), '/profile/referrals');
+    expect(referralCodeFromUri(Uri.parse('talkacharya://r/XY9')), 'XY9');
+    expect(referralCodeFromUri(Uri.parse('https://talkacharya.com/r/')), isNull);
+    expect(
+      referralCodeFromUri(Uri.parse('https://talkacharya.com/wallet')),
+      isNull,
+    );
+  });
+
+  test('the astrologer app\'s web paths are not this app\'s', () {
+    expect(
+      locationForRaw('https://talkacharya.com/astrologer/requests'),
+      isNull,
+    );
+    // the custom scheme in older pushes still opens a profile
+    expect(locationForRaw('talkacharya://astrologer/a1'), '/astrologers/a1');
+  });
+
+  test('an install from the invite page carries the code', () {
+    expect(referralCodeFromInstallReferrer('referral_code=ABC123'), 'ABC123');
+    expect(
+      referralCodeFromInstallReferrer(
+        'utm_source=invite&referral_code=XY-9_z&utm_medium=web',
+      ),
+      'XY-9_z',
+    );
+    // an ordinary install, or a code that is not one
+    expect(
+      referralCodeFromInstallReferrer(
+        'utm_source=google-play&utm_medium=organic',
+      ),
+      isNull,
+    );
+    expect(referralCodeFromInstallReferrer('referral_code=a b<c>'), isNull);
+    expect(referralCodeFromInstallReferrer(null), isNull);
+    expect(referralCodeFromInstallReferrer(''), isNull);
   });
 
   test('https App Links map the same way', () {

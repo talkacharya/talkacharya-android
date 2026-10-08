@@ -28,6 +28,12 @@ abstract class Astrologer with _$Astrologer {
     @Default(<AstrologerSkill>[]) List<AstrologerSkill> skills,
     @Default(<AstrologerLanguage>[]) List<AstrologerLanguage> languages,
     @Default(<AstrologerRate>[]) List<AstrologerRate> rates,
+
+    /// Per channel, when the astrologer said they will take it again; it is
+    /// off until then. Read through [nextOnlineFor].
+    @JsonKey(name: 'next_online')
+    @Default(<String, DateTime>{})
+    Map<String, DateTime> nextOnline,
     // detail-only
     @Default('') String bio,
     @JsonKey(name: 'avg_response_seconds') int? avgResponseSeconds,
@@ -66,6 +72,13 @@ abstract class Astrologer with _$Astrologer {
       if (r.channel == channel) return r;
     }
     return null;
+  }
+
+  /// When [channel] is back, in local time, while the astrologer has it
+  /// switched off until a time still ahead; null when it is not waiting.
+  DateTime? nextOnlineFor(String channel) {
+    final at = nextOnline[channel]?.toLocal();
+    return at != null && at.isAfter(DateTime.now()) ? at : null;
   }
 
   /// Percent off [channel] under the running offer; 0 when there is none or

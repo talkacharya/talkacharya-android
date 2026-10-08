@@ -1,19 +1,19 @@
 import '../core/notifications/local_notifications.dart';
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
-
 import '../features/consultations/presentation/room_presence.dart';
 import '../features/consultations/presentation/view/widgets/call_room.dart';
 import '../features/consultations/presentation/view/widgets/live_session_banner.dart';
 import '../core/config/flavor.dart';
 import '../core/deeplink/deep_link_parser.dart';
+import '../core/deeplink/pending_referral.dart';
 import '../core/deeplink/deep_link_service.dart';
 import '../core/di/service_locator.dart';
 import '../core/l10n/l10n.dart';
+import '../core/update/app_update_watcher.dart';
 import '../core/notifications/notification_router.dart';
 import '../core/notifications/push_device_registrar.dart';
 import '../core/profile/active_profile_store.dart';
@@ -62,16 +62,24 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
     _wireBackgroundServices();
   }
 
+  /// A link opened the app or arrived while it runs. An invite link's code is
+  /// kept first, so it survives until the person signs up.
+  void _onLink(Uri uri) {
+    final code = referralCodeFromUri(uri);
+    if (code != null) unawaited(getIt<PendingReferral>().save(code));
+    _handleLocation(locationForUri(uri));
+  }
+
   void _wireBackgroundServices() {
+    // Installed from an invite page: pick the code up from the Play Store.
+    unawaited(getIt<PendingReferral>().captureInstallReferrer());
     getIt<PushDeviceRegistrar>().start();
     getIt<RealtimeCoordinator>().start();
 
     final deepLinks = getIt<DeepLinkService>()..start();
     final notifRouter = getIt<NotificationRouter>()..start();
 
-    _subs.add(
-      deepLinks.uris.listen((uri) => _handleLocation(locationForUri(uri))),
-    );
+    _subs.add(deepLinks.uris.listen(_onLink));
     _subs.add(notifRouter.locations.listen(_handleLocation));
     _subs.add(CallTelecom.events.listen(_onTelecom));
 
@@ -90,7 +98,7 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
 
     // Cold-start entry points, resolved once after the first frame.
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _handleLocation(locationForUri(await deepLinks.initialLink() ?? Uri()));
+      _onLink(await deepLinks.initialLink() ?? Uri());
       _handleLocation(await notifRouter.initialLocation());
       // Answered from a headset or watch while the app was not running.
       final answered = await CallTelecom.takePendingAnswer();
@@ -160,9 +168,7 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
             a.user?.preferredLanguage != b.user?.preferredLanguage,
         builder: (context, state) {
           final pref = state.user?.preferredLanguage;
-          final locale =
-              (pref != null &&
-                  kSupportedLocales.any((l) => l.languageCode == pref))
+          final locale = (pref != null && isSupportedLanguage(pref))
               ? Locale(pref)
               : null; // null → follow the device language, then fall back to en
           return MaterialApp.router(
@@ -185,7 +191,12 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
                   : _router
                         .push(Routes.consultation(info.consultationId))
                         .ignore(),
-              child: LiveSessionBanner(child: child ?? const SizedBox.shrink()),
+              // Says so when the Play Store has a newer version.
+              child: AppUpdateWatcher(
+                child: LiveSessionBanner(
+                  child: child ?? const SizedBox.shrink(),
+                ),
+              ),
             ),
             localizationsDelegates: const [
               AppLocalizations.delegate,

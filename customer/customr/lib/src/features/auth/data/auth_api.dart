@@ -49,6 +49,7 @@ class AuthApi {
     String purpose = 'login',
     Map<String, dynamic>? device,
     Map<String, dynamic>? consent,
+    String? referralCode,
   }) {
     return _guard(
       () => _dio.post<Map<String, dynamic>>(
@@ -59,6 +60,7 @@ class AuthApi {
           'purpose': purpose,
           'device': ?device,
           'consent': ?consent,
+          'referral_code': ?referralCode,
         },
       ),
       AuthSession.fromJson,
@@ -70,11 +72,17 @@ class AuthApi {
     required String idToken,
     Map<String, dynamic>? device,
     Map<String, dynamic>? consent,
+    String? referralCode,
   }) {
     return _guard(
       () => _dio.post<Map<String, dynamic>>(
         ApiPaths.authFirebase,
-        data: {'id_token': idToken, 'device': ?device, 'consent': ?consent},
+        data: {
+          'id_token': idToken,
+          'device': ?device,
+          'consent': ?consent,
+          'referral_code': ?referralCode,
+        },
       ),
       AuthSession.fromJson,
     );

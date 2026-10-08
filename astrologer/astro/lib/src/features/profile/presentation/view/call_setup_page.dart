@@ -210,6 +210,11 @@ class _Row extends StatelessWidget {
             if (on != true) ...[
               const SizedBox(width: 8),
               FilledButton.tonal(
+                // The theme's buttons are full width, which a Row cannot give.
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size(0, 44),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                ),
                 onPressed: onFix,
                 child: Text(on == null ? l.callSetupCheck : l.callSetupFix),
               ),

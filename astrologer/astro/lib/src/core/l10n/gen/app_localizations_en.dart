@@ -3338,4 +3338,332 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authSessionReplaced =>
       'You were signed out because your account was signed in on another phone.';
+
+  @override
+  String get appUpdateAvailable => 'A new version of the app is available.';
+
+  @override
+  String get appUpdateAction => 'Update';
+
+  @override
+  String get appUpdateReady => 'The update is downloaded. Restart to finish.';
+
+  @override
+  String get appUpdateRestart => 'Restart';
+
+  @override
+  String get nextOnlineSet => 'Set next online';
+
+  @override
+  String nextOnlineBack(String when) {
+    return 'Back $when · Change';
+  }
+
+  @override
+  String nextOnlineSheetTitle(String channel) {
+    return 'When will you take $channel again?';
+  }
+
+  @override
+  String nextOnlineInfo(String channel) {
+    return '$channel stays off until then and comes back on by itself. Customers see when you will be back.';
+  }
+
+  @override
+  String get nextOnlineDay => 'Day';
+
+  @override
+  String get nextOnlineTime => 'Time';
+
+  @override
+  String get nextOnlineToday => 'Today';
+
+  @override
+  String get nextOnlineTomorrow => 'Tomorrow';
+
+  @override
+  String nextOnlineWhen(String day, String time) {
+    return '$day, $time';
+  }
+
+  @override
+  String get nextOnlinePickDate => 'Pick a date';
+
+  @override
+  String get nextOnlineCustomTime => 'Other time';
+
+  @override
+  String get nextOnlineConfirm => 'Set next online';
+
+  @override
+  String nextOnlineConfirmAt(String when) {
+    return 'Back $when';
+  }
+
+  @override
+  String nextOnlineTurnOn(String channel) {
+    return 'Turn $channel on now';
+  }
+
+  @override
+  String get nextOnlinePast => 'Pick a time that is still ahead';
+
+  @override
+  String nextOnlineDone(String channel, String when) {
+    return '$channel is off until $when';
+  }
+
+  @override
+  String nextOnlineCleared(String channel) {
+    return '$channel is on again';
+  }
+
+  @override
+  String incomingCallKind(String channel) {
+    return 'Incoming $channel request';
+  }
+
+  @override
+  String get incomingCallCustomer => 'Customer';
+
+  @override
+  String get incomingCallHint => 'A customer is waiting for you';
+
+  @override
+  String get incomingCallTest => 'Test call';
+
+  @override
+  String get incomingCallTestHint =>
+      'This is how a consultation rings your phone';
+
+  @override
+  String get incomingCallAccept => 'Accept';
+
+  @override
+  String get incomingCallDecline => 'Decline';
+
+  @override
+  String get pubTitle => 'Public profile';
+
+  @override
+  String get pubMenuSub => 'See your profile the way customers do';
+
+  @override
+  String get pubNote => 'This is how customers see your profile.';
+
+  @override
+  String get pubHidden => 'Your profile is hidden from customers right now.';
+
+  @override
+  String get pubEdit => 'Edit';
+
+  @override
+  String get pubOnline => 'Online now';
+
+  @override
+  String get pubOffline => 'Offline';
+
+  @override
+  String get pubPhotos => 'Photos';
+
+  @override
+  String pubPhotosWaiting(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more are waiting for review',
+      one: '1 more is waiting for review',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pubPhotosCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count photos',
+      one: '1 photo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pubPhotoOf(int index, int total) {
+    return '$index of $total';
+  }
+
+  @override
+  String get pubPhotosEmpty =>
+      'No photos on your profile yet. Customers trust a profile they can see.';
+
+  @override
+  String get pubAddPhotos => 'Add photos';
+
+  @override
+  String get pubManage => 'Manage photos';
+
+  @override
+  String get pubSeeAll => 'See all';
+
+  @override
+  String pubPerMinute(String price) {
+    return '$price/min';
+  }
+
+  @override
+  String get pubRatesEmpty => 'No rates set yet.';
+
+  @override
+  String get pubExpertise => 'Expertise';
+
+  @override
+  String get pubLanguages => 'Languages';
+
+  @override
+  String get pubNothingYet => 'Nothing added yet.';
+
+  @override
+  String get pubAbout => 'About';
+
+  @override
+  String get pubAboutEmpty =>
+      'Write a few lines about yourself, so customers know who they are talking to.';
+
+  @override
+  String get pubReadMore => 'Read more';
+
+  @override
+  String get pubReadLess => 'Show less';
+
+  @override
+  String get pubReviews => 'What clients say';
+
+  @override
+  String get pubReviewsEmpty =>
+      'Your well-rated, written reviews will show here.';
+
+  @override
+  String get kycAadhaar => 'Aadhaar card';
+
+  @override
+  String get kycBankProof => 'Bank proof';
+
+  @override
+  String get kycOtherDocument => 'A required document';
+
+  @override
+  String get kycAadhaarInvalid => 'Aadhaar has 12 digits';
+
+  @override
+  String get kycNumberNeeded => 'Enter the document number first';
+
+  @override
+  String get kycDocVerified => 'Verified';
+
+  @override
+  String get kycDocSentBack => 'Sent back: please upload it again';
+
+  @override
+  String get kycDocNeeded => 'Needed';
+
+  @override
+  String get kycDocOptional => 'Optional';
+
+  @override
+  String get kycDocWaiting => 'Waiting for review';
+
+  @override
+  String kycDocEndsIn(String digits) {
+    return 'ends in $digits';
+  }
+
+  @override
+  String get kycDocReplace => 'Replace';
+
+  @override
+  String kycDocNumber(String document) {
+    return '$document number';
+  }
+
+  @override
+  String kycDocNumberKeep(String digits) {
+    return 'Leave empty to keep the one ending in $digits';
+  }
+
+  @override
+  String get kycDocAddPhoto => 'Add a photo of it';
+
+  @override
+  String get kycDocReplacePhoto => 'Upload a new photo';
+
+  @override
+  String get wizDocsRequired => 'Add every document marked as needed';
+
+  @override
+  String get obStageDocuments => 'Documents being checked';
+
+  @override
+  String get obStageInterview => 'Interview';
+
+  @override
+  String get obStageDecision => 'Final decision';
+
+  @override
+  String get obFixTitle => 'Something needs your attention';
+
+  @override
+  String get obFixBody =>
+      'Our reviewer sent the items below back. Correct them and your application moves on.';
+
+  @override
+  String get obBankFixTitle => 'Your bank details need a correction';
+
+  @override
+  String get obBankFix => 'Correct bank details';
+
+  @override
+  String get obInterviewTitle => 'Your interview';
+
+  @override
+  String obInterviewWhen(String when) {
+    return '$when';
+  }
+
+  @override
+  String get obInterviewPhone => 'We will call you on your registered number.';
+
+  @override
+  String get obInterviewWhatsapp =>
+      'We will call you on WhatsApp on your registered number.';
+
+  @override
+  String get obInterviewLink =>
+      'Join with the meeting link below at that time.';
+
+  @override
+  String get obInterviewJoin => 'Open meeting link';
+
+  @override
+  String get obInterviewWaiting =>
+      'Your documents are in order. We will set a time for your interview and tell you.';
+
+  @override
+  String get obInterviewMissed =>
+      'We missed you at your interview. We will set a new time and tell you.';
+
+  @override
+  String obInterviewToday(String time) {
+    return 'Today, $time';
+  }
+
+  @override
+  String obInterviewTomorrow(String time) {
+    return 'Tomorrow, $time';
+  }
+
+  @override
+  String obInterviewOn(String date, String time) {
+    return '$date, $time';
+  }
 }

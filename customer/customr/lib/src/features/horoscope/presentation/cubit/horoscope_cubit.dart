@@ -36,9 +36,11 @@ class HoroscopeCubit extends Cubit<HoroscopeState> {
 
     final cached = force ? null : _repo.cached(sign, span);
     if (cached != null) {
+      if (isClosed) return;
       emit(state.copyWith(reading: AsyncValue.data(cached)));
       return;
     }
+    if (isClosed) return;
     emit(state.copyWith(reading: AsyncValue.loading(state.reading.value)));
     try {
       final h = await _repo.fetch(sign, span, force: force);

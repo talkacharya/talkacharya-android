@@ -140,6 +140,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         label: l.profileGroupPractice,
                         rows: [
                           MenuRow(
+                            icon: Icons.visibility_rounded,
+                            hue: AstroPalette.water,
+                            title: l.pubTitle,
+                            subtitle: l.pubMenuSub,
+                            onTap: () => context.push(Routes.profilePublic),
+                          ),
+                          MenuRow(
                             icon: Icons.edit_rounded,
                             title: l.profileEdit,
                             subtitle: l.profileEditSub,

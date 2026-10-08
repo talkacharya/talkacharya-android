@@ -1,18 +1,27 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/astro/onboarding_store.dart';
 import '../../../../core/config/config_repository.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/router/routes.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
+import '../../data/kyc_status.dart';
+import '../../data/onboarding_api.dart';
+import '../widgets/kyc_documents.dart';
 import '../widgets/onboarding_steps.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// The screen a not-yet-approved astrologer sees, per [OnboardingStage]:
 /// a step checklist, the under-review timeline, or a blocked state.
 class OnboardingGatePage extends StatefulWidget {
@@ -87,7 +96,7 @@ class _OnboardingGatePageState extends State<OnboardingGatePage> {
                             ),
                             OnboardingStage.underReview => _UnderReview(
                               key: const ValueKey('review'),
-                              onRefresh: _store.refresh,
+                              store: _store,
                             ),
                             OnboardingStage.suspended => _Blocked(
                               key: const ValueKey('suspended'),
@@ -429,29 +438,86 @@ class _StepRow extends StatelessWidget {
   }
 }
 
-class _UnderReview extends StatelessWidget {
-  const _UnderReview({required this.onRefresh, super.key});
+/// The application while a reviewer has it: which stage it is at, anything
+/// they sent back (fixed right here), and the interview once it has a time.
+class _UnderReview extends StatefulWidget {
+  const _UnderReview({required this.store, super.key});
 
-  final Future<void> Function() onRefresh;
+  final OnboardingStore store;
+
+  @override
+  State<_UnderReview> createState() => _UnderReviewState();
+}
+
+class _UnderReviewState extends State<_UnderReview> {
+  KycStatus? _status;
+  Timer? _poll;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+    // A reviewer's step usually arrives over the socket (the store refreshes
+    // and we reload with it); this is for when the socket is not up.
+    widget.store.addListener(_load);
+    _poll = Timer.periodic(
+      const Duration(seconds: 30),
+      (_) => widget.store.refresh(),
+    );
+  }
+
+  @override
+  void dispose() {
+    _poll?.cancel();
+    widget.store.removeListener(_load);
+    super.dispose();
+  }
+
+  Future<void> _load() async {
+    try {
+      final status = await getIt<OnboardingApi>().kycStatus();
+      if (mounted) setState(() => _status = status);
+    } catch (_) {
+      // Keep what is on screen; the next refresh tries again.
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
     final brand = context.brand;
     final theme = Theme.of(context);
+    final status = _status;
+    final stage = status?.stage ?? 'documents';
+    final withInterview = status?.interviewRequired ?? true;
+    // (label, done, current)
     final steps = [
       (l.obReviewSubmitted, true, false),
-      (l.obReviewChecking, false, true),
+      (l.obStageDocuments, stage != 'documents', stage == 'documents'),
+      if (withInterview)
+        (l.obStageInterview, stage == 'decision', stage == 'interview'),
+      (l.obStageDecision, false, stage == 'decision'),
       (l.obReviewLive, false, false),
     ];
+    final toFix = status?.actionable ?? const <KycDocumentState>[];
+    final bank = status?.bank;
+    final interview = status?.interview;
+    final needsFixing = toFix.isNotEmpty || (bank?.rejected ?? false);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const SizedBox(height: 24),
-        const Center(child: _PulsingOrb(icon: Icons.hourglass_top_rounded)),
+        Center(
+          child: _PulsingOrb(
+            icon: needsFixing
+                ? Icons.assignment_late_rounded
+                : Icons.hourglass_top_rounded,
+          ),
+        ),
         const SizedBox(height: 24),
         Text(
-          l.obReviewTitle,
+          needsFixing ? l.obFixTitle : l.obReviewTitle,
           textAlign: TextAlign.center,
           style: theme.textTheme.headlineMedium?.copyWith(
             color: brand.onCosmic,
@@ -459,13 +525,45 @@ class _UnderReview extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          l.obReviewBody,
+          needsFixing ? l.obFixBody : l.obReviewBody,
           textAlign: TextAlign.center,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: brand.onCosmicMuted,
           ),
         ),
         const SizedBox(height: 24),
+        if (needsFixing) ...[
+          KycDocumentList(documents: toFix, editable: false, onUploaded: _load),
+          if (bank != null && bank.rejected)
+            SettingsCard(
+              title: l.obBankFixTitle,
+              subtitle: bank.note.isEmpty ? null : bank.note,
+              icon: Icons.account_balance_rounded,
+              hue: AstroPalette.air,
+              child: BusyButton(
+                label: l.obBankFix,
+                icon: Icons.edit_rounded,
+                onPressed: () async {
+                  await context.push<void>(
+                    '${Routes.onboarding}/wizard?step=bank',
+                  );
+                  await _load();
+                },
+              ),
+            ),
+          const SizedBox(height: 6),
+        ],
+        if (interview != null && (interview.scheduled || stage == 'interview'))
+          _InterviewCard(interview: interview)
+        else if (stage == 'interview')
+          _Glass(
+            child: Text(
+              l.obInterviewWaiting,
+              style: TextStyle(color: brand.onCosmic, height: 1.4),
+            ),
+          ),
+        if (stage == 'interview' || (interview?.scheduled ?? false))
+          const SizedBox(height: 16),
         _Glass(
           child: Column(
             children: [
@@ -489,13 +587,96 @@ class _UnderReview extends StatelessWidget {
               borderRadius: BorderRadius.circular(Radii.md),
             ),
           ),
-          onPressed: onRefresh,
+          onPressed: widget.store.refresh,
           icon: const Icon(Icons.refresh_rounded),
           label: Text(l.obCheckStatus),
         ),
         const SizedBox(height: 8),
         const _SupportButton(),
       ],
+    );
+  }
+}
+
+/// When the interview is and how it will reach them.
+class _InterviewCard extends StatelessWidget {
+  const _InterviewCard({required this.interview});
+
+  final KycInterview interview;
+
+  String _when(BuildContext context, DateTime at) {
+    final l = context.l10n;
+    final time = TimeOfDay.fromDateTime(at).format(context);
+    final days = DateUtils.dateOnly(
+      at,
+    ).difference(DateUtils.dateOnly(DateTime.now())).inHours;
+    if (days.abs() < 12) return l.obInterviewToday(time);
+    if (days >= 12 && days < 36) return l.obInterviewTomorrow(time);
+    return l.obInterviewOn(DateFormat('d MMM', l.localeName).format(at), time);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final brand = context.brand;
+    final theme = Theme.of(context);
+    final at = interview.scheduledAt;
+    final missed = interview.status == 'no_show';
+    final how = switch (interview.mode) {
+      'whatsapp' => l.obInterviewWhatsapp,
+      'video_link' => l.obInterviewLink,
+      _ => l.obInterviewPhone,
+    };
+    return _Glass(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.event_available_rounded, color: brand.gold),
+              const SizedBox(width: 10),
+              Text(
+                l.obInterviewTitle,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: brand.onCosmic,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          if (!interview.scheduled || at == null)
+            Text(
+              missed ? l.obInterviewMissed : l.obInterviewWaiting,
+              style: TextStyle(color: brand.onCosmic, height: 1.4),
+            )
+          else ...[
+            Text(
+              l.obInterviewWhen(_when(context, at)),
+              style: theme.textTheme.headlineSmall?.copyWith(
+                color: brand.onCosmic,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              how,
+              style: TextStyle(color: brand.onCosmicMuted, height: 1.4),
+            ),
+            if (interview.mode == 'video_link' &&
+                interview.meetingLink.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              _GoldButton(
+                label: l.obInterviewJoin,
+                icon: Icons.open_in_new_rounded,
+                onTap: () => launchUrl(
+                  Uri.parse(interview.meetingLink),
+                  mode: LaunchMode.externalApplication,
+                ),
+              ),
+            ],
+          ],
+        ],
+      ),
     );
   }
 }

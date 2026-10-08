@@ -172,19 +172,23 @@ class KundaliCubit extends Cubit<KundaliState> {
     }
     _writeChart(key, AsyncValue.loading(current.value));
     try {
-      _writeChart(key, AsyncValue.data(await _repo.vargaChart(profileId, key)));
+      final res = await _repo.vargaChart(profileId, key);
+      _writeChart(key, AsyncValue.data(res));
     } catch (e) {
       _writeChart(key, AsyncValue.error(friendlyError(e), current.value));
     }
   }
 
-  void _writeChart(String key, AsyncValue<VargaChart> v) =>
-      emit(state.copyWith(charts: {...state.charts, key: v}));
+  void _writeChart(String key, AsyncValue<VargaChart> v) {
+    if (isClosed) return;
+    emit(state.copyWith(charts: {...state.charts, key: v}));
+  }
 
   /// The server writes reading prose in the user's language, so a language
   /// switch re-fetches every slice already loaded. Old values stay on screen
   /// until the new ones land.
   Future<void> reloadForLanguage() async {
+    if (isClosed) return;
     await Future.wait([
       if (state.overview.value != null) loadOverview(force: true),
       if (state.navamsa.value != null) loadNavamsa(force: true),
@@ -212,6 +216,7 @@ class KundaliCubit extends Cubit<KundaliState> {
   }
 
   Future<void> refresh() async {
+    if (isClosed) return;
     emit(const KundaliState());
     await Future.wait([loadOverview(force: true), loadTransits(force: true)]);
   }
@@ -226,10 +231,14 @@ class KundaliCubit extends Cubit<KundaliState> {
     if (!force && (current.status == AsyncStatus.data || current.isLoading)) {
       return;
     }
+    if (isClosed) return;
     write(AsyncValue.loading(current.value));
     try {
-      write(AsyncValue.data(await fetch()));
+      final res = await fetch();
+      if (isClosed) return;
+      write(AsyncValue.data(res));
     } catch (e) {
+      if (isClosed) return;
       write(AsyncValue.error(friendlyError(e), current.value));
     }
   }

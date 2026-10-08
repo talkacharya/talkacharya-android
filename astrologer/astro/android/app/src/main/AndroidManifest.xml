@@ -68,12 +68,17 @@
                 <data android:scheme="talkacharya"/>
             </intent-filter>
 
-            <!-- https App Links (verified) -->
+            <!-- https App Links (verified). The website and the customer app share
+                 this host: the astrologer app owns only /astrologer and what is
+                 under it (not /astrologers/…, which is a profile in the customer
+                 app). -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:scheme="https" android:host="@string/app_link_host"/>
+                <data android:path="/astrologer"/>
+                <data android:pathPrefix="/astrologer/"/>
             </intent-filter>
         </activity>
 

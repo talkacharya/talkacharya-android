@@ -9,11 +9,14 @@ extension L10nX on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
 }
 
-/// The launch language set (docs/i18n.md §1). `en` is the base + ultimate
-/// fallback; the other locales resolve to English for any key not yet translated.
-const kSupportedLocales = <Locale>[
-  Locale('en'),
-  Locale('hi'),
+/// The languages the app is offered in. Only the two that are fully
+/// translated and checked: the six in [kPlannedLocales] have their .arb files
+/// but hundreds of strings still in English, and a half-English screen reads
+/// as broken. Move a locale up here once its translation has been verified.
+const kSupportedLocales = <Locale>[Locale('en'), Locale('hi')];
+
+/// Translations in progress (docs/i18n.md §1) — not selectable yet.
+const kPlannedLocales = <Locale>[
   Locale('bn'),
   Locale('mr'),
   Locale('te'),
@@ -21,6 +24,10 @@ const kSupportedLocales = <Locale>[
   Locale('gu'),
   Locale('kn'),
 ];
+
+/// Whether the app can be shown in [code] today.
+bool isSupportedLanguage(String? code) =>
+    kSupportedLocales.any((l) => l.languageCode == code);
 
 /// Each language written in its own script — so the picker is legible to a
 /// speaker regardless of the app's current locale.

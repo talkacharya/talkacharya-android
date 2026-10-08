@@ -18,6 +18,10 @@ String? locationForUri(Uri uri) {
   switch (segments.first) {
     case 'home':
       return '/home';
+    case 'r':
+      // An invite link. The code is kept for the sign-up (see
+      // [referralCodeFromUri]); someone already signed in lands on referrals.
+      return '/profile/referrals';
     case 'wallet':
       return '/wallet';
     case 'notifications':
@@ -38,7 +42,11 @@ String? locationForUri(Uri uri) {
     case 'dispute':
       return id == null ? '/profile/help' : '/disputes/$id';
     case 'astrologers':
+      return id == null ? '/astrologers' : '/astrologers/$id';
     case 'astrologer':
+      // `talkacharya://astrologer/<id>` in old pushes. On the web that path
+      // belongs to the astrologer app and never reaches this one.
+      if (uri.scheme == 'http' || uri.scheme == 'https') return null;
       return id == null ? '/astrologers' : '/astrologers/$id';
     case 'consultations':
     case 'consultation':
@@ -129,6 +137,19 @@ String _storeLocation(List<String> rest, Map<String, String> query) {
     default:
       return '/store';
   }
+}
+
+/// The referral code in an invite link — `https://talkacharya.com/r/<code>` or
+/// `talkacharya://r/<code>` — or null when [uri] is not one.
+String? referralCodeFromUri(Uri uri) {
+  final segments = <String>[
+    if (uri.scheme != 'http' && uri.scheme != 'https' && uri.host.isNotEmpty)
+      uri.host,
+    ...uri.pathSegments.where((s) => s.isNotEmpty),
+  ];
+  if (segments.length < 2 || segments.first != 'r') return null;
+  final code = segments[1].trim();
+  return code.isEmpty ? null : code;
 }
 
 /// Same as [locationForUri] but tolerant of a raw string (e.g. an FCM

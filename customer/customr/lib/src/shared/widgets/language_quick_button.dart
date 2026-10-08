@@ -10,13 +10,18 @@ import '../../features/profile/data/profile_api.dart';
 import '../../core/l10n/api_error_l10n.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// App-bar shortcut to switch app language without diving into Profile.
 class LanguageQuickButton extends StatelessWidget {
   const LanguageQuickButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final languages = getIt<ConfigRepository>().value.languages;
+    // Only the languages the app itself is translated into.
+    final languages = [
+      for (final l in getIt<ConfigRepository>().value.languages)
+        if (isSupportedLanguage(l.code)) l,
+    ];
     if (languages.length < 2) return const SizedBox.shrink();
 
     return IconButton(

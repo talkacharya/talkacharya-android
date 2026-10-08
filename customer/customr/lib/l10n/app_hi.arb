@@ -3010,5 +3010,13 @@
   "astroReviewsSeeAll": "सभी रिव्यू देखें",
   "astroReviewsEmpty": "अभी दिखाने के लिए कोई रिव्यू नहीं है।",
   "astroReviewReply": "ज्योतिषी का जवाब",
-  "authSessionReplaced": "आपका अकाउंट किसी दूसरे फ़ोन पर लॉग इन हुआ, इसलिए इस फ़ोन से लॉग आउट कर दिया गया।"
+  "authSessionReplaced": "आपका अकाउंट किसी दूसरे फ़ोन पर लॉग इन हुआ, इसलिए इस फ़ोन से लॉग आउट कर दिया गया।",
+  "appUpdateAvailable": "ऐप का नया वर्ज़न उपलब्ध है।",
+  "appUpdateAction": "अपडेट करें",
+  "appUpdateReady": "अपडेट डाउनलोड हो गया। पूरा करने के लिए ऐप दोबारा खोलें।",
+  "appUpdateRestart": "दोबारा खोलें",
+  "astroNextOnlineToday": "आज, {time}",
+  "astroNextOnlineTomorrow": "कल, {time}",
+  "astroNextOnlineDate": "{date}, {time}",
+  "astroChannelBack": "{channel} {when} से उपलब्ध"
 }

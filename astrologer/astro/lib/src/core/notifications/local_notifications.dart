@@ -220,6 +220,30 @@ extension IncomingCallNotification on LocalNotifications {
     );
   }
 
+  /// The data of the consultation that is ringing right now, read back off
+  /// its notification; null when nothing is. This is how the app, opened by
+  /// that ring on a locked phone, learns what it was opened for.
+  Future<Map<String, dynamic>?> ringingCall() async {
+    try {
+      final active =
+          await plugin
+              .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin
+              >()
+              ?.getActiveNotifications() ??
+          const <ActiveNotification>[];
+      for (final n in active) {
+        if (n.id != LocalNotifications.callNotificationId) continue;
+        final payload = n.payload;
+        if (payload == null || payload.isEmpty) return null;
+        return jsonDecode(payload) as Map<String, dynamic>;
+      }
+    } on Object {
+      // Not Android, or the payload is not ours: nothing is ringing.
+    }
+    return null;
+  }
+
   /// Answered, declined, expired, or handled in the app — stop ringing.
   Future<void> cancelIncomingCall() =>
       plugin.cancel(LocalNotifications.callNotificationId);

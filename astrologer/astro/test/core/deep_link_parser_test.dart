@@ -32,10 +32,19 @@ void main() {
 
   group('locationForUri — https App Links', () {
     final cases = <String, String?>{
-      'https://talkacharya.com/requests': '/requests',
-      'https://dev.talkacharya.com/earnings': '/earnings',
-      'https://talkacharya.com/chats/xyz': '/chats/xyz',
-      'https://talkacharya.com/profile/kyc': '/profile/kyc',
+      // On the web this app lives under /astrologer: the site and the customer
+      // app share the domain.
+      'https://talkacharya.com/astrologer/requests': '/requests',
+      'https://dev.talkacharya.com/astrologer/earnings': '/earnings',
+      'https://talkacharya.com/astrologer/chats/xyz': '/chats/xyz',
+      'https://talkacharya.com/astrologer/profile/kyc': '/profile/kyc',
+      'https://talkacharya.com/astrologer/profile/calls': '/profile/calls',
+      'https://talkacharya.com/astrologer': '/home',
+      'https://talkacharya.com/astrologer/': '/home',
+      // not this app's: the site, and the customer app's paths
+      'https://talkacharya.com/requests': null,
+      'https://talkacharya.com/astrologers/abc': null,
+      'https://talkacharya.com/r/ABC123': null,
       'https://talkacharya.com/': null,
       'https://talkacharya.com': null,
     };

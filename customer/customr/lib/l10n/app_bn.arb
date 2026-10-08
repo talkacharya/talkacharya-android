@@ -1728,5 +1728,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "astroNextOnlineToday": "আজ, {time}",
+  "astroNextOnlineTomorrow": "আগামীকাল, {time}",
+  "astroNextOnlineDate": "{date}, {time}",
+  "astroChannelBack": "{channel} {when} থেকে উপলব্ধ"
 }

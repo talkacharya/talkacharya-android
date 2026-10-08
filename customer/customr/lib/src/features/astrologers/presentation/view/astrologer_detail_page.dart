@@ -17,11 +17,13 @@ import '../../../gifting/data/models/gift.dart';
 import '../../../gifting/presentation/view/gift_sheet.dart';
 import '../../data/astrologers_repository.dart';
 import '../../data/models/astrologer.dart';
+import '../next_online_label.dart';
 import 'widgets/astrologer_gallery.dart';
 import 'widgets/astrologer_reviews.dart';
 import 'widgets/waitlist_banner.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 class AstrologerDetailPage extends StatefulWidget {
   const AstrologerDetailPage({required this.astrologerId, super.key});
 
@@ -986,7 +988,11 @@ class _OfferPill extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.local_offer_rounded, size: 18, color: AstroPalette.fire.end),
+          Icon(
+            Icons.local_offer_rounded,
+            size: 18,
+            color: AstroPalette.fire.end,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
@@ -1080,6 +1086,25 @@ class _SectionTitle extends StatelessWidget {
 
 // --- actions -------------------------------------------------------------
 
+/// Says when [channel] is back and returns true, if the astrologer has it
+/// switched off until a time they gave.
+bool _toldWhenBack(BuildContext context, Astrologer a, String channel) {
+  final back = a.nextOnlineFor(channel);
+  if (back == null) return false;
+  final l = context.l10n;
+  final label = switch (channel) {
+    'voice' => l.channelVoice,
+    'video' => l.channelVideo,
+    _ => l.channelChat,
+  };
+  AppSnack.showTop(
+    context,
+    l.astroChannelBack(label, nextOnlineWhen(context, back)),
+    type: SnackType.info,
+  );
+  return true;
+}
+
 void _startChat(BuildContext context, Astrologer a) {
   final chat = a.rateFor('chat');
   if (chat == null || !a.isAvailable) {
@@ -1090,6 +1115,7 @@ void _startChat(BuildContext context, Astrologer a) {
     );
     return;
   }
+  if (_toldWhenBack(context, a, 'chat')) return;
   showBookConsultationSheet(
     context,
     astrologerId: a.id,
@@ -1110,6 +1136,7 @@ void _startVoice(BuildContext context, Astrologer a) {
     );
     return;
   }
+  if (_toldWhenBack(context, a, 'voice')) return;
   showBookConsultationSheet(
     context,
     astrologerId: a.id,
@@ -1131,6 +1158,7 @@ void _startVideo(BuildContext context, Astrologer a) {
     );
     return;
   }
+  if (_toldWhenBack(context, a, 'video')) return;
   showBookConsultationSheet(
     context,
     astrologerId: a.id,
@@ -1164,7 +1192,10 @@ class _HeaderCtas extends StatelessWidget {
     final l = context.l10n;
     final locale = Localizations.localeOf(context).toLanguageTag();
     final lead = a.leadRate;
-    final canChat = a.rateFor('chat') != null && a.isAvailable;
+    // Online, but with chat switched off until a time they gave.
+    final chatBack = a.isAvailable ? a.nextOnlineFor('chat') : null;
+    final canChat =
+        a.rateFor('chat') != null && a.isAvailable && chatBack == null;
     final priceLabel = lead == null
         ? null
         : Money.format(lead.perMinute, lead.currency, locale: locale);
@@ -1172,6 +1203,8 @@ class _HeaderCtas extends StatelessWidget {
         watchFollow(context, a.id, followEntryOf(a))?.following ?? false;
     final chatLabel = !a.isAvailable
         ? (following ? l.followNotifyingWhenOnline : l.astroNotifyWhenOnline)
+        : chatBack != null
+        ? l.astroChannelBack(l.channelChat, nextOnlineWhen(context, chatBack))
         : priceLabel != null
         ? '${l.astroChat} · ${l.astroPerMinute(priceLabel)}'
         : l.astroChat;
@@ -1181,14 +1214,16 @@ class _HeaderCtas extends StatelessWidget {
         Expanded(
           child: _PrimaryCta(
             label: chatLabel,
-            icon: a.isAvailable
+            icon: chatBack != null
+                ? Icons.schedule_rounded
+                : a.isAvailable
                 ? Icons.chat_bubble_rounded
                 : following
                 ? Icons.notifications_active_rounded
                 : Icons.notifications_none_rounded,
             enabled: canChat,
             // offline: "Notify me when online" = follow (online pushes)
-            onTap: canChat
+            onTap: canChat || chatBack != null
                 ? () => _startChat(context, a)
                 : !a.isAvailable
                 ? () => toggleFollow(

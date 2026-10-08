@@ -17,10 +17,12 @@ import '../../../home/presentation/cubit/tool_counts_cubit.dart';
 import '../../../notifications/presentation/bloc/notifications_cubit.dart';
 import '../../../requests/presentation/cubit/requests_cubit.dart';
 import '../../../waitlist/presentation/cubit/waitlist_cubit.dart';
+import '../../../requests/presentation/view/incoming_call_page.dart';
 import '../../../requests/presentation/view/widgets/incoming_request_sheet.dart';
 import '../../../consultations/presentation/room_presence.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Signed-in container: the 5 tab navigators (cross-faded, see
 /// [AnimatedBranchContainer]), a floating cosmic bottom nav, an offline banner,
 /// and realtime handling (incoming requests).
@@ -71,6 +73,8 @@ class _AppShellState extends State<AppShell> {
           unawaited(HapticFeedback.heavyImpact());
           return;
         }
+        // Already up as the full ringing screen (the phone was locked).
+        if (IncomingCallPage.showingFor == consultationId) return;
         showIncomingRequestSheet(
           context,
           consultationId: consultationId,

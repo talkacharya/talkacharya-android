@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
@@ -11,13 +10,14 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../profile/data/profile_api.dart';
 import '../../../profile/data/profile_models.dart';
-import '../../../profile/presentation/view/kyc_page.dart'
-    show kIfscPattern, kPanPattern;
+import '../../../profile/presentation/view/kyc_page.dart' show kIfscPattern;
 import '../cubit/onboarding_cubit.dart';
+import '../widgets/kyc_documents.dart';
 import '../widgets/onboarding_steps.dart';
 import '../../../../core/utils/haptic_service.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Guided onboarding: Profile → Expertise → Identity → Bank → Review.
 /// Completion is driven by the backend's `onboarding_gaps`; the wizard opens
 /// on [initialStep] (an [OnboardingStep] name) or the first unfinished step.
@@ -49,13 +49,11 @@ class _WizardViewState extends State<_WizardView> {
   bool _prefilled = false;
 
   final _profileForm = GlobalKey<FormState>();
-  final _panForm = GlobalKey<FormState>();
   final _bankForm = GlobalKey<FormState>();
 
   final _headline = TextEditingController();
   final _bio = TextEditingController();
   int _years = 0;
-  final _pan = TextEditingController();
   final _holder = TextEditingController();
   final _account = TextEditingController();
   final _accountConfirm = TextEditingController();
@@ -68,9 +66,6 @@ class _WizardViewState extends State<_WizardView> {
   List<RefOption> _skillOptions = const [];
   List<RefOption> _langOptions = const [];
 
-  Uint8List? _photo;
-  bool _replacePan = false;
-  bool _replacePhoto = false;
   bool _editBank = false;
 
   @override
@@ -97,7 +92,6 @@ class _WizardViewState extends State<_WizardView> {
     for (final c in [
       _headline,
       _bio,
-      _pan,
       _holder,
       _account,
       _accountConfirm,
@@ -161,14 +155,10 @@ class _WizardViewState extends State<_WizardView> {
           languageCodes: _langs.toList(),
         );
       case OnboardingStep.identity:
-        final needPan = cubit.state.gaps.contains('kyc:pan') || _replacePan;
-        if (needPan) {
-          if (!_panForm.currentState!.validate()) return;
-          ok = await cubit.uploadKyc(docType: 'pan', number: _pan.text.trim());
-          if (ok) _replacePan = false;
-        }
-        if (ok && cubit.state.gaps.contains('kyc:photo')) {
-          if (mounted) showToast(context, l.wizPhotoRequired);
+        // Each document goes up from its own card; all that is left to do
+        // here is not to move on while a required one is missing.
+        if (cubit.state.gaps.any(OnboardingStep.identity.closes)) {
+          showToast(context, l.wizDocsRequired);
           return;
         }
       case OnboardingStep.bank:
@@ -196,23 +186,6 @@ class _WizardViewState extends State<_WizardView> {
     if (ok && mounted) {
       _go(OnboardingStep.values[step.index + 1]);
     }
-  }
-
-  Future<void> _pickPhoto() async {
-    final cubit = context.read<OnboardingCubit>();
-    final x = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 1200,
-      imageQuality: 88,
-    );
-    if (x == null || !mounted) return;
-    final bytes = await x.readAsBytes();
-    setState(() => _photo = bytes);
-    final ok = await cubit.uploadKyc(
-      docType: 'photo',
-      file: (bytes: bytes, filename: x.name),
-    );
-    if (mounted) setState(() => _replacePhoto = !ok);
   }
 
   @override
@@ -459,60 +432,8 @@ class _WizardViewState extends State<_WizardView> {
   }
 
   Widget _identityStep(OnboardingState state) {
-    final l = context.l10n;
-    final panDone = !state.gaps.contains('kyc:pan');
-    final photoDone = !state.gaps.contains('kyc:photo');
-    return Column(
-      children: [
-        SettingsCard(
-          title: l.kycPan,
-          icon: Icons.credit_card_rounded,
-          child: panDone && !_replacePan
-              ? _DoneRow(
-                  label: l.wizPanDone,
-                  onReplace: () => setState(() => _replacePan = true),
-                )
-              : Form(
-                  key: _panForm,
-                  child: TextFormField(
-                    controller: _pan,
-                    maxLength: 10,
-                    textCapitalization: TextCapitalization.characters,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp('[A-Za-z0-9]')),
-                      TextInputFormatter.withFunction(
-                        (_, v) => v.copyWith(text: v.text.toUpperCase()),
-                      ),
-                    ],
-                    decoration: InputDecoration(
-                      labelText: l.kycPanLabel,
-                      hintText: 'ABCDE1234F',
-                      counterText: '',
-                    ),
-                    validator: (v) => kPanPattern.hasMatch((v ?? '').trim())
-                        ? null
-                        : l.kycPanInvalid,
-                  ),
-                ),
-        ),
-        SettingsCard(
-          title: l.kycPhoto,
-          subtitle: l.kycPhotoHint,
-          icon: Icons.face_rounded,
-          child: photoDone && !_replacePhoto
-              ? _DoneRow(
-                  label: l.wizPhotoDone,
-                  preview: _photo,
-                  onReplace: _pickPhoto,
-                )
-              : _PhotoPicker(
-                  preview: _photo,
-                  busy: state.saving,
-                  onPick: _pickPhoto,
-                ),
-        ),
-      ],
-    );
+    final cubit = context.read<OnboardingCubit>();
+    return KycDocumentsSection(editable: true, onChanged: cubit.refresh);
   }
 
   Widget _bankStep(OnboardingState state) {
@@ -598,12 +519,13 @@ class _WizardViewState extends State<_WizardView> {
     final l = context.l10n;
     final brand = context.brand;
     final remaining = {...state.gaps, ...state.missing};
-    const allGaps = [
+    // The fixed parts, plus whichever documents are still missing (the list
+    // of documents is the team's to change, so it is not written down here).
+    final allGaps = [
       'bio',
       'skills',
       'languages',
-      'kyc:pan',
-      'kyc:photo',
+      ...remaining.where(OnboardingStep.identity.closes),
       'bank_account',
     ];
     return Column(
@@ -766,12 +688,10 @@ class _DoneRow extends StatelessWidget {
     required this.label,
     required this.onReplace,
     this.replaceLabel,
-    this.preview,
   });
 
   final String label;
   final String? replaceLabel;
-  final Uint8List? preview;
   final VoidCallback onReplace;
 
   @override
@@ -779,17 +699,7 @@ class _DoneRow extends StatelessWidget {
     final brand = context.brand;
     return Row(
       children: [
-        if (preview != null)
-          ClipOval(
-            child: Image.memory(
-              preview!,
-              width: 44,
-              height: 44,
-              fit: BoxFit.cover,
-            ),
-          )
-        else
-          Icon(Icons.check_circle_rounded, color: brand.online, size: 28),
+        Icon(Icons.check_circle_rounded, color: brand.online, size: 28),
         const SizedBox(width: 12),
         Expanded(
           child: Text(
@@ -802,64 +712,6 @@ class _DoneRow extends StatelessWidget {
           child: Text(replaceLabel ?? context.l10n.wizReplace),
         ),
       ],
-    );
-  }
-}
-
-class _PhotoPicker extends StatelessWidget {
-  const _PhotoPicker({
-    required this.preview,
-    required this.busy,
-    required this.onPick,
-  });
-
-  final Uint8List? preview;
-  final bool busy;
-  final VoidCallback onPick;
-
-  @override
-  Widget build(BuildContext context) {
-    final brand = context.brand;
-    return Center(
-      child: InkWell(
-        onTap: busy ? null : onPick,
-        customBorder: const CircleBorder(),
-        child: Container(
-          width: 120,
-          height: 120,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: brand.sectionBg,
-            border: Border.all(color: brand.hairline, width: 2),
-            image: preview == null
-                ? null
-                : DecorationImage(
-                    image: MemoryImage(preview!),
-                    fit: BoxFit.cover,
-                  ),
-          ),
-          child: busy
-              ? const Center(child: CircularProgressIndicator())
-              : preview == null
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.add_a_photo_rounded,
-                      size: 32,
-                      color: brand.inkMuted,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      context.l10n.kycUploadPhoto,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: brand.inkMuted, fontSize: 12),
-                    ),
-                  ],
-                )
-              : null,
-        ),
-      ),
     );
   }
 }

@@ -22,12 +22,16 @@ import '../../../../../core/notifications/local_notifications.dart';
 import '../../../../../core/utils/haptic_service.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Full-width sheet shown when an `astro:` `consultation.requested` frame
 /// arrives: countdown ring, who's asking, and Accept / Decline. Accept opens
 /// the consultation room.
 /// Which request is already ringing, so a redelivered frame and its push
 /// don't stack two sheets on top of each other.
 String? _ringingFor;
+
+/// The request the sheet is up for, if it is up.
+String? get ringingRequestId => _ringingFor;
 
 Future<void> showIncomingRequestSheet(
   BuildContext context, {

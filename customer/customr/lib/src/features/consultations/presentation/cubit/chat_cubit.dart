@@ -42,16 +42,16 @@ class ChatCubit extends Cubit<ChatState> {
       // realtime channel is keyed on the thread, so subscribe only once we
       // know which thread this is.
       final conversation = await _repo.conversation(consultationId);
-      // Deliberately still loading: the room draws from the session inside the
-      // thread, so clearing it here shows the empty-state as a failure for the
-      // whole of the next request.
+      if (isClosed) return;
       emit(state.copyWith(conversation: conversation));
       await _loadLiveConsultation(conversation);
+      if (isClosed) return;
       emit(state.copyWith(loading: false));
       _frames = _realtime
           .channelFrames('conv:${conversation.id}')
           .listen(_onFrame, onError: (_) {});
     } catch (e) {
+      if (isClosed) return;
       emit(state.copyWith(loading: false, error: friendlyError(e)));
     }
     _startPolling();

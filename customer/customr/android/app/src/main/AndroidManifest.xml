@@ -70,12 +70,29 @@
 
             <!-- Android App Links (https). autoVerify against
                  https://<app_link_host>/.well-known/assetlinks.json (prod: talkacharya.com,
-                 dev/staging: dev.talkacharya.com). -->
+                 dev/staging: dev.talkacharya.com).
+                 The website and the astrologer app share this host, so only the
+                 customer's own paths are claimed: everything else on the site stays
+                 in the browser, and /astrologer/… goes to the astrologer app. Keep
+                 this list in step with core/deeplink/deep_link_parser.dart. -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:scheme="https" android:host="@string/app_link_host"/>
+                <data android:pathPrefix="/r/"/>
+                <data android:pathPrefix="/astrologers"/>
+                <data android:pathPrefix="/store"/>
+                <data android:pathPrefix="/product"/>
+                <data android:pathPrefix="/articles"/>
+                <data android:pathPrefix="/horoscope"/>
+                <data android:pathPrefix="/kundali"/>
+                <data android:pathPrefix="/matchmaking"/>
+                <data android:pathPrefix="/panchang"/>
+                <data android:pathPrefix="/predictions"/>
+                <data android:pathPrefix="/live"/>
+                <data android:pathPrefix="/consultations"/>
+                <data android:pathPrefix="/wallet"/>
             </intent-filter>
         </activity>
 

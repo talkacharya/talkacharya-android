@@ -7448,4 +7448,37 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get authSessionReplaced =>
       'आपका अकाउंट किसी दूसरे फ़ोन पर लॉग इन हुआ, इसलिए इस फ़ोन से लॉग आउट कर दिया गया।';
+
+  @override
+  String get appUpdateAvailable => 'ऐप का नया वर्ज़न उपलब्ध है।';
+
+  @override
+  String get appUpdateAction => 'अपडेट करें';
+
+  @override
+  String get appUpdateReady =>
+      'अपडेट डाउनलोड हो गया। पूरा करने के लिए ऐप दोबारा खोलें।';
+
+  @override
+  String get appUpdateRestart => 'दोबारा खोलें';
+
+  @override
+  String astroNextOnlineToday(String time) {
+    return 'आज, $time';
+  }
+
+  @override
+  String astroNextOnlineTomorrow(String time) {
+    return 'कल, $time';
+  }
+
+  @override
+  String astroNextOnlineDate(String date, String time) {
+    return '$date, $time';
+  }
+
+  @override
+  String astroChannelBack(String channel, String when) {
+    return '$channel $when से उपलब्ध';
+  }
 }

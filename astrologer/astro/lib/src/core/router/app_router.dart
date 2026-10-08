@@ -41,6 +41,7 @@ import '../../features/profile/presentation/view/profile_page.dart';
 import '../../features/profile/presentation/view/rates_page.dart';
 import '../../features/profile/presentation/view/reviews_page.dart';
 import '../../features/profile/presentation/view/working_hours_page.dart';
+import '../../features/requests/presentation/view/incoming_call_page.dart';
 import '../../features/requests/presentation/view/request_detail_page.dart';
 import '../../features/requests/presentation/view/requests_page.dart';
 import '../../features/shell/presentation/view/app_shell.dart';
@@ -51,6 +52,7 @@ import 'transitions.dart';
 import 'routes.dart';
 import '../../features/profile/presentation/view/sound_settings_page.dart';
 import '../../features/profile/presentation/view/call_setup_page.dart';
+import '../../features/profile/presentation/view/public_profile_page.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
 
@@ -113,6 +115,16 @@ GoRouter buildRouter(
         ],
       ),
 
+      GoRoute(
+        path: Routes.incomingCall,
+        parentNavigatorKey: _rootKey,
+        builder: (_, s) => IncomingCallPage(
+          data: switch (s.extra) {
+            final Map<String, dynamic> data => data,
+            _ => const {},
+          },
+        ),
+      ),
       GoRoute(
         path: Routes.goLive,
         parentNavigatorKey: _rootKey,
@@ -345,6 +357,7 @@ GoRouter buildRouter(
                 builder: (_, _) => const ProfilePage(),
                 routes: [
                   _leaf('edit', (_) => const EditProfilePage()),
+                  _leaf('public', (_) => const PublicProfilePage()),
                   _leaf('rates', (_) => const RatesPage()),
                   _leaf('working-hours', (_) => const WorkingHoursPage()),
                   _leaf('reviews', (_) => const ReviewsPage()),

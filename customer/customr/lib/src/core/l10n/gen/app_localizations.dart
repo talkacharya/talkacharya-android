@@ -12769,6 +12769,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You were signed out because your account was signed in on another phone.'**
   String get authSessionReplaced;
+
+  /// No description provided for @appUpdateAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'A new version of the app is available.'**
+  String get appUpdateAvailable;
+
+  /// No description provided for @appUpdateAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get appUpdateAction;
+
+  /// No description provided for @appUpdateReady.
+  ///
+  /// In en, this message translates to:
+  /// **'The update is downloaded. Restart to finish.'**
+  String get appUpdateReady;
+
+  /// No description provided for @appUpdateRestart.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart'**
+  String get appUpdateRestart;
+
+  /// No description provided for @astroNextOnlineToday.
+  ///
+  /// In en, this message translates to:
+  /// **'today, {time}'**
+  String astroNextOnlineToday(String time);
+
+  /// No description provided for @astroNextOnlineTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'tomorrow, {time}'**
+  String astroNextOnlineTomorrow(String time);
+
+  /// No description provided for @astroNextOnlineDate.
+  ///
+  /// In en, this message translates to:
+  /// **'{date}, {time}'**
+  String astroNextOnlineDate(String date, String time);
+
+  /// No description provided for @astroChannelBack.
+  ///
+  /// In en, this message translates to:
+  /// **'{channel} back {when}'**
+  String astroChannelBack(String channel, String when);
 }
 
 class _AppLocalizationsDelegate

@@ -13,9 +13,12 @@ import '../core/deeplink/deep_link_parser.dart';
 import '../core/deeplink/deep_link_service.dart';
 import '../core/di/service_locator.dart';
 import '../core/l10n/l10n.dart';
+import '../core/update/app_update_watcher.dart';
 import '../core/notifications/notification_router.dart';
 import '../core/notifications/push_device_registrar.dart';
+import '../core/realtime/realtime_client.dart';
 import '../core/realtime/realtime_coordinator.dart';
+import '../core/realtime/realtime_event.dart';
 import '../core/router/app_router.dart';
 import '../core/router/pending_deep_link.dart';
 import '../core/theme/app_theme.dart';
@@ -27,6 +30,8 @@ import '../features/consultations/presentation/room_presence.dart';
 import '../features/consultations/presentation/widgets/live_session_banner.dart';
 import '../features/notifications/presentation/bloc/notifications_cubit.dart';
 import '../features/requests/presentation/cubit/requests_cubit.dart';
+import '../features/requests/presentation/view/incoming_call_page.dart';
+import '../features/requests/presentation/view/widgets/incoming_request_sheet.dart';
 import 'package:talkacharya_call/talkacharya_call.dart';
 import '../features/consultations/presentation/view/consultation_room_page.dart';
 import '../core/router/routes.dart';
@@ -56,6 +61,7 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
   );
 
   final _subs = <StreamSubscription<dynamic>>[];
+  AppLifecycleListener? _lifecycle;
 
   @override
   void initState() {
@@ -96,6 +102,17 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
     _subs.add(notifRouter.locations.listen(_handle));
     _subs.add(getIt<LocalNotifications>().callActions.listen(_onCallAction));
     _subs.add(CallTelecom.events.listen(_onTelecom));
+    // An approval opens the app the moment it is given, not at the next launch.
+    _subs.add(
+      getIt<RealtimeClient>().events.listen((e) {
+        if (e is OnboardingUpdated) unawaited(onboarding.refresh());
+      }),
+    );
+    // A ring that wakes a locked phone opens the app; it should open onto
+    // the call, not onto whatever page was last on screen.
+    _lifecycle = AppLifecycleListener(
+      onResume: () => unawaited(_showRingingCall()),
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _handle(locationForUri(await deepLinks.initialLink() ?? Uri()));
@@ -103,7 +120,28 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
       // Answered from a headset or watch while the app was not running.
       final answered = await CallTelecom.takePendingAnswer();
       if (answered != null) await _acceptFromSystem(answered);
+      await _showRingingCall(coldStart: true);
     });
+  }
+
+  /// Puts the ringing screen up when a consultation is ringing this phone and
+  /// nothing in the app is showing it yet. On a cold start the session is
+  /// still loading, so it waits a little for the app to be past its gates.
+  Future<void> _showRingingCall({bool coldStart = false}) async {
+    for (var attempt = 0; attempt < (coldStart ? 20 : 1); attempt++) {
+      if (!mounted) return;
+      final data = await getIt<LocalNotifications>().ringingCall();
+      final id = '${data?['consultation_id'] ?? ''}';
+      if (data == null || id.isEmpty) return;
+      if (IncomingCallPage.showingFor == id || ringingRequestId == id) return;
+      if (getIt<AuthBloc>().state.status == AuthStatus.authenticated &&
+          getIt<OnboardingStore>().stage == OnboardingStage.approved) {
+        IncomingCallPage.showingFor = id;
+        _router.push(Routes.incomingCall, extra: data).ignore();
+        return;
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+    }
   }
 
   /// Accept or decline tapped on the ringing notification, with the app in
@@ -195,6 +233,7 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
     for (final s in _subs) {
       s.cancel();
     }
+    _lifecycle?.dispose();
     super.dispose();
   }
 
@@ -240,7 +279,12 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
                   _router.push(Routes.chatRoom(info.consultationId)).ignore();
                 }
               },
-              child: LiveSessionBanner(child: child ?? const SizedBox.shrink()),
+              // Says so when the Play Store has a newer version.
+              child: AppUpdateWatcher(
+                child: LiveSessionBanner(
+                  child: child ?? const SizedBox.shrink(),
+                ),
+              ),
             ),
             supportedLocales: kSupportedLocales,
             localizationsDelegates: const [

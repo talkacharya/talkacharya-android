@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../../../core/astro/models/astro_profile.dart';
 import '../../../core/constants/api_paths.dart';
 import '../../../core/network/api_exception.dart';
+import 'kyc_status.dart';
 
 class SubmitResult {
   const SubmitResult({required this.ok, this.missing = const []});
@@ -46,6 +47,19 @@ class OnboardingApi {
         },
       )).ensureOk();
       return AstroProfile.fromJson(res.data ?? const {});
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// The documents asked for, the bank account and the interview, each with
+  /// where it stands.
+  Future<KycStatus> kycStatus() async {
+    try {
+      final res = (await _dio.get<Map<String, dynamic>>(
+        ApiPaths.astroOnboardingKyc,
+      )).ensureOk();
+      return KycStatus.fromJson(res.data ?? const {});
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
     }

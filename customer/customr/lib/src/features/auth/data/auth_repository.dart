@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
 
+import '../../../core/deeplink/pending_referral.dart';
 import '../../../core/storage/token_storage.dart';
 import 'auth_api.dart';
 import 'models/auth_session.dart';
@@ -9,12 +10,21 @@ import 'models/otp_request_result.dart';
 
 /// Coordinates the auth API with token persistence. Blocs talk only to this.
 class AuthRepository {
-  AuthRepository({required AuthApi api, required TokenStorage tokens})
-    : _api = api,
-      _tokens = tokens;
+  AuthRepository({
+    required AuthApi api,
+    required TokenStorage tokens,
+    PendingReferral? referral,
+  }) : _api = api,
+       _tokens = tokens,
+       _referral = referral;
 
   final AuthApi _api;
   final TokenStorage _tokens;
+
+  /// The code from an invite link opened before signing in, if any. It goes
+  /// with the sign-in — the server credits the inviter when the account is
+  /// new — and is then forgotten.
+  final PendingReferral? _referral;
 
   Future<bool> hasSession() => _tokens.hasSession;
 
@@ -33,7 +43,9 @@ class AuthRepository {
       code: code,
       device: _devicePayload(),
       consent: consent,
+      referralCode: await _referral?.read(),
     );
+    await _referral?.clear();
     await _persist(session);
     await _cacheUser(session.user);
     return session.user;
@@ -48,7 +60,9 @@ class AuthRepository {
       idToken: idToken,
       device: _devicePayload(),
       consent: consent,
+      referralCode: await _referral?.read(),
     );
+    await _referral?.clear();
     await _persist(session);
     await _cacheUser(session.user);
     return session.user;

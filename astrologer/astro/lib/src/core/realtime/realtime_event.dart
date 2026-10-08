@@ -72,9 +72,9 @@ sealed class RealtimeEvent {
           animationKey: data['animation_key'] as String?,
         );
       case 'queue.updated':
-        return QueueUpdated(
-          waiting: (data['waiting'] as num?)?.toInt() ?? 0,
-        );
+        return QueueUpdated(waiting: (data['waiting'] as num?)?.toInt() ?? 0);
+      case 'onboarding.updated':
+        return const OnboardingUpdated();
       case 'system.reconnect_hint':
         return const ReconnectHint();
       default:
@@ -165,6 +165,12 @@ class GiftReceived extends RealtimeEvent {
 
 class InboxPing extends RealtimeEvent {
   const InboxPing();
+}
+
+/// A reviewer did something to this astrologer's application: a document
+/// verified or sent back, an interview set, a decision made.
+class OnboardingUpdated extends RealtimeEvent {
+  const OnboardingUpdated();
 }
 
 class ReconnectHint extends RealtimeEvent {

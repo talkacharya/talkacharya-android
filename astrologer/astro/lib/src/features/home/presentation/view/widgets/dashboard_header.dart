@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/astro/onboarding_store.dart';
 import '../../../../../core/availability/availability_coordinator.dart';
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/l10n/l10n.dart';
+import '../../../../../core/router/routes.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../core/utils/haptic_service.dart';
 import '../../../../auth/presentation/bloc/auth/auth_bloc.dart';
@@ -421,7 +423,7 @@ class _PresencePanel extends StatelessWidget {
 
         return AnimatedContainer(
           duration: const Duration(milliseconds: 260),
-          padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+          padding: const EdgeInsets.fromLTRB(14, 12, 12, 4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Radii.lg),
             color: on
@@ -433,53 +435,94 @@ class _PresencePanel extends StatelessWidget {
                   : Colors.white.withValues(alpha: 0.12),
             ),
           ),
-          child: Row(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
-                width: 14,
-                child: on
-                    ? const LiveDot()
-                    : Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: brand.onCosmicMuted.withValues(alpha: 0.6),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 14,
+                    child: on
+                        ? const LiveDot()
+                        : Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: brand.onCosmicMuted.withValues(alpha: 0.6),
+                            ),
+                          ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            color: brand.onCosmic,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        Text(
+                          hint,
+                          maxLines: 2,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: brand.onCosmicMuted,
+                            height: 1.25,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  _PresenceSliderButton(
+                    on: on,
+                    onChanged: (val) {
+                      HapticService.medium();
+                      coord.setEnabled(val);
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              // Going online is half of it: which types they take, until
+              // when, and their weekly hours sit one tap from the switch.
+              InkWell(
+                onTap: () => context.go(Routes.profileWorkingHours),
+                borderRadius: BorderRadius.circular(Radii.sm),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.schedule_rounded,
+                        size: 16,
+                        color: brand.onCosmicMuted,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          l.profileHours,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.labelLarge?.copyWith(
+                            color: brand.onCosmic,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: brand.onCosmic,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    Text(
-                      hint,
-                      maxLines: 2,
-                      style: theme.textTheme.bodySmall?.copyWith(
+                      Icon(
+                        Icons.chevron_right_rounded,
+                        size: 20,
                         color: brand.onCosmicMuted,
-                        height: 1.25,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 10),
-              _PresenceSliderButton(
-                on: on,
-                onChanged: (val) {
-                  HapticService.medium();
-                  coord.setEnabled(val);
-                },
               ),
             ],
           ),

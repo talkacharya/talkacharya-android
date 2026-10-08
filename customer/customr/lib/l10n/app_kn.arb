@@ -1728,5 +1728,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "astroNextOnlineToday": "ಇಂದು, {time}",
+  "astroNextOnlineTomorrow": "ನಾಳೆ, {time}",
+  "astroNextOnlineDate": "{date}, {time}",
+  "astroChannelBack": "{channel} {when} ರಿಂದ ಲಭ್ಯ"
 }

@@ -56,6 +56,7 @@ class HomeCubit extends Cubit<HomeState> {
   /// `GET /app/home` fills online / live / resume / promos in one call. If it
   /// fails, fall back to the per-endpoint fan-out so the feed still fills in.
   Future<void> _loadFeed() async {
+    if (isClosed) return;
     emit(
       state.copyWith(
         online: AsyncValue.loading(state.online.value),
@@ -64,6 +65,7 @@ class HomeCubit extends Cubit<HomeState> {
     );
     try {
       final feed = await _repo.homeFeed();
+      if (isClosed) return;
       emit(
         state.copyWith(
           online: AsyncValue.data(feed.astrologerRail),
@@ -75,6 +77,7 @@ class HomeCubit extends Cubit<HomeState> {
         ),
       );
     } catch (_) {
+      if (isClosed) return;
       emit(state.copyWith(promos: AsyncValue.data(_repo.promos())));
       await Future.wait([_loadOnline(), _loadLive(), _loadResume()]);
     }
@@ -133,11 +136,14 @@ class HomeCubit extends Cubit<HomeState> {
     required HomeState Function(HomeState, AsyncValue<T>) write,
     required Future<T> Function() fetch,
   }) async {
+    if (isClosed) return;
     emit(write(state, AsyncValue.loading(read(state).value)));
     try {
       final value = await fetch();
+      if (isClosed) return;
       emit(write(state, AsyncValue.data(value)));
     } catch (e) {
+      if (isClosed) return;
       emit(write(state, AsyncValue.error(friendlyError(e), read(state).value)));
     }
   }

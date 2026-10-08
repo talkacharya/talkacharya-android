@@ -31,12 +31,18 @@ class Routes {
 
   // profile sub-pages
   static const profileEdit = '/profile/edit';
+
+  /// The astrologer's own profile, as a customer sees it.
+  static const profilePublic = '/profile/public';
   static const profileRates = '/profile/rates';
   static const profileWorkingHours = '/profile/working-hours';
   static const profileReviews = '/profile/reviews';
   static const profileKyc = '/profile/kyc';
   static const profileSound = '/profile/sound';
   static const callSetup = '/profile/calls';
+
+  /// The ringing screen; the push's data goes in `extra`.
+  static const incomingCall = '/incoming-call';
   static const callSetupTested = '/profile/calls?tested=1';
   static const profileFeatured = '/profile/featured';
 

@@ -39,6 +39,7 @@ class PanchangCubit extends Cubit<PanchangState> {
 
   Future<void> init() async {
     final place = await _repo.savedPlace() ?? _fallback;
+    if (isClosed) return;
     emit(state.copyWith(place: place, placeResolved: true));
     if (place != null) await load();
   }
@@ -48,13 +49,14 @@ class PanchangCubit extends Cubit<PanchangState> {
     if (place == null) return;
     final gen = ++_generation;
     final cached = _repo.cached(place, state.date);
+    if (isClosed) return;
     emit(state.copyWith(day: AsyncValue.loading(cached)));
     try {
       final day = await _repo.day(place, state.date);
-      if (gen != _generation) return;
+      if (gen != _generation || isClosed) return;
       emit(state.copyWith(day: AsyncValue.data(day)));
     } catch (e) {
-      if (gen != _generation) return;
+      if (gen != _generation || isClosed) return;
       emit(state.copyWith(day: AsyncValue.error(friendlyError(e), cached)));
     }
   }

@@ -101,6 +101,14 @@ List<ToolGroup> buildToolGroups(BuildContext context) {
         l.dashActionRemedies,
         () => context.push(Routes.remedies),
       ),
+      // Among the eight Home keeps: which types are on, next-online times
+      // and the weekly hours are changed many times a day.
+      ToolAction(
+        AstroPalette.air,
+        Icons.schedule_rounded,
+        l.dashActionHours,
+        () => context.go(Routes.profileWorkingHours),
+      ),
       ToolAction(
         AstroPalette.health,
         Icons.speed_rounded,
@@ -202,12 +210,6 @@ List<ToolGroup> buildToolGroups(BuildContext context) {
         Icons.calendar_month_rounded,
         l.wsCalendar,
         () => context.push(Routes.calendar),
-      ),
-      ToolAction(
-        AstroPalette.air,
-        Icons.schedule_rounded,
-        l.dashActionHours,
-        () => context.go(Routes.profileWorkingHours),
       ),
       ToolAction(
         AstroPalette.money,

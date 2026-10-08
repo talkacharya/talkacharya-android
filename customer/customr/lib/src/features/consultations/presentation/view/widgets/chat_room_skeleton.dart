@@ -183,7 +183,8 @@ class _ChatRoomSkeletonState extends State<ChatRoomSkeleton>
               const SizedBox(width: 4),
             ],
             const SizedBox(width: 12),
-            _b(150, 12), // "You rated this session"
+            // Flexible: five stars and this bar are wider than a narrow card.
+            Flexible(child: _b(150, 12)), // "You rated this session"
           ],
         ),
         const SizedBox(height: 16),
@@ -191,7 +192,7 @@ class _ChatRoomSkeletonState extends State<ChatRoomSkeleton>
           children: [
             _b(22, 22, r: 6), // lock icon
             const SizedBox(width: 12),
-            _b(220, 14), // "Consultation ended..."
+            Flexible(child: _b(220, 14)), // "Consultation ended..."
           ],
         ),
         const SizedBox(height: 16),

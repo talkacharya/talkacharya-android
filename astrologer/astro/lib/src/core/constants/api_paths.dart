@@ -42,6 +42,7 @@ class ApiPaths {
   static const astroHeartbeat = '/astro/availability/heartbeat';
   static const astroOffline = '/astro/availability/offline';
   static const astroBreak = '/astro/availability/break';
+  static const astroNextOnline = '/astro/availability/next-online';
 
   // waitlist
   static const astroQueue = '/astro/queue';
@@ -124,6 +125,7 @@ class ApiPaths {
 
   /// The chats list: one thread per peer.
   static const conversations = '/conversations';
+
   /// This user's mute / archive / block settings for a thread.
   static String conversationPreferences(String id) =>
       '/conversations/$id/preferences';

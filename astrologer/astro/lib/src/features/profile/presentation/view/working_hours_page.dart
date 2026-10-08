@@ -8,8 +8,10 @@ import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../consultations/presentation/widgets/consultation_style.dart';
 import '../../data/profile_api.dart';
 import '../../data/profile_models.dart';
+import 'next_online_sheet.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 const _defaultStart = TimeOfDay(hour: 9, minute: 0);
 const _defaultEnd = TimeOfDay(hour: 21, minute: 0);
 
@@ -25,6 +27,9 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
   final _api = getIt<ProfileApi>();
 
   Set<String> _channels = {};
+  // Types switched off until a time the astrologer gave; saved at once
+  // from the sheet, not with the rest of the page.
+  Map<String, DateTime> _nextOnline = {};
   int _maxConcurrent = 1;
   final Map<int, WorkingWindow> _week = {};
 
@@ -65,6 +70,7 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
       final hours = results[1] as List<WorkingWindow>;
       setState(() {
         _channels = {...av.channels};
+        _nextOnline = {...av.nextOnline};
         _maxConcurrent = av.maxConcurrent;
         _week
           ..clear()
@@ -112,9 +118,50 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
       showToast(context, context.l10n.hoursNeedChannel);
       return;
     }
-    setState(
-      () => _channels.contains(ch) ? _channels.remove(ch) : _channels.add(ch),
+    setState(() {
+      if (!_channels.remove(ch)) {
+        _channels.add(ch);
+        // On by hand means on now; saving drops the time on the server too.
+        _nextOnline.remove(ch);
+      }
+    });
+  }
+
+  Future<void> _askNextOnline(String ch) async {
+    final choice = await showNextOnlineSheet(
+      context,
+      channel: ch,
+      current: _nextOnline[ch],
+      // DateTime counts Monday as 1, the schedule as 0.
+      dayStart: (day) => _week[day.weekday - 1]?.start,
     );
+    if (choice == null || !mounted) return;
+    final l = context.l10n;
+    final label = channelStyle(context, ch).label;
+    final at = choice.at;
+    final wasDirty = _dirty;
+    try {
+      final av = at == null
+          ? await _api.clearNextOnline(ch)
+          : await _api.setNextOnline(ch, at);
+      if (!mounted) return;
+      setState(() {
+        _nextOnline = {...av.nextOnline};
+        av.channels.contains(ch) ? _channels.add(ch) : _channels.remove(ch);
+        // This went to the server already: it is not an unsaved edit.
+        if (!wasDirty) _savedKey = _key;
+      });
+      showToast(
+        context,
+        at == null
+            ? l.nextOnlineCleared(label)
+            : l.nextOnlineDone(label, nextOnlineLabel(context, at)),
+      );
+    } on ApiException catch (e) {
+      if (mounted) {
+        showToast(context, e.isNetwork ? l.commonSaveFailed : e.message);
+      }
+    }
   }
 
   Future<void> _pickTime(int day, {required bool start}) async {
@@ -177,7 +224,9 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
                   _ChannelSwitch(
                     channel: ch,
                     value: _channels.contains(ch),
+                    nextOnline: _nextOnline[ch],
                     onChanged: () => _toggleChannel(ch),
+                    onNextOnline: () => _askNextOnline(ch),
                   ),
               ],
             ),
@@ -260,15 +309,24 @@ class _ChannelSwitch extends StatelessWidget {
     required this.channel,
     required this.value,
     required this.onChanged,
+    required this.onNextOnline,
+    this.nextOnline,
   });
 
   final String channel;
   final bool value;
   final VoidCallback onChanged;
 
+  /// When this type comes back by itself, while it is off until a set time.
+  final DateTime? nextOnline;
+  final VoidCallback onNextOnline;
+
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     final ch = channelStyle(context, channel);
+    final back = nextOnline;
+    final waiting = !value && back != null && back.isAfter(DateTime.now());
     return SwitchListTile(
       value: value,
       onChanged: (_) => onChanged(),
@@ -276,6 +334,38 @@ class _ChannelSwitch extends StatelessWidget {
       title: Text(
         ch.label,
         style: const TextStyle(fontWeight: FontWeight.w700),
+      ),
+      subtitle: Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: InkWell(
+          onTap: onNextOnline,
+          borderRadius: BorderRadius.circular(8),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.schedule_rounded,
+                  size: 15,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    waiting
+                        ? l.nextOnlineBack(nextOnlineLabel(context, back))
+                        : l.nextOnlineSet,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

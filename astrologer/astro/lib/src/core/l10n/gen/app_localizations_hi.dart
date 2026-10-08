@@ -3330,4 +3330,331 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get authSessionReplaced =>
       'आपका अकाउंट किसी दूसरे फ़ोन पर लॉग इन हुआ, इसलिए इस फ़ोन से लॉग आउट कर दिया गया।';
+
+  @override
+  String get appUpdateAvailable => 'ऐप का नया वर्ज़न उपलब्ध है।';
+
+  @override
+  String get appUpdateAction => 'अपडेट करें';
+
+  @override
+  String get appUpdateReady =>
+      'अपडेट डाउनलोड हो गया। पूरा करने के लिए ऐप दोबारा खोलें।';
+
+  @override
+  String get appUpdateRestart => 'दोबारा खोलें';
+
+  @override
+  String get nextOnlineSet => 'अगला ऑनलाइन समय चुनें';
+
+  @override
+  String nextOnlineBack(String when) {
+    return '$when वापस · बदलें';
+  }
+
+  @override
+  String nextOnlineSheetTitle(String channel) {
+    return '$channel फिर कब से लेंगे?';
+  }
+
+  @override
+  String nextOnlineInfo(String channel) {
+    return '$channel तब तक बंद रहेगा और समय होते ही अपने आप चालू हो जाएगा। ग्राहकों को दिखेगा कि आप कब लौटेंगे।';
+  }
+
+  @override
+  String get nextOnlineDay => 'दिन';
+
+  @override
+  String get nextOnlineTime => 'समय';
+
+  @override
+  String get nextOnlineToday => 'आज';
+
+  @override
+  String get nextOnlineTomorrow => 'कल';
+
+  @override
+  String nextOnlineWhen(String day, String time) {
+    return '$day, $time';
+  }
+
+  @override
+  String get nextOnlinePickDate => 'तारीख़ चुनें';
+
+  @override
+  String get nextOnlineCustomTime => 'कोई और समय';
+
+  @override
+  String get nextOnlineConfirm => 'अगला ऑनलाइन समय तय करें';
+
+  @override
+  String nextOnlineConfirmAt(String when) {
+    return '$when वापस';
+  }
+
+  @override
+  String nextOnlineTurnOn(String channel) {
+    return '$channel अभी चालू करें';
+  }
+
+  @override
+  String get nextOnlinePast => 'आगे का कोई समय चुनें';
+
+  @override
+  String nextOnlineDone(String channel, String when) {
+    return '$channel $when तक बंद है';
+  }
+
+  @override
+  String nextOnlineCleared(String channel) {
+    return '$channel फिर से चालू है';
+  }
+
+  @override
+  String incomingCallKind(String channel) {
+    return '$channel का अनुरोध आया है';
+  }
+
+  @override
+  String get incomingCallCustomer => 'ग्राहक';
+
+  @override
+  String get incomingCallHint => 'एक ग्राहक आपका इंतज़ार कर रहा है';
+
+  @override
+  String get incomingCallTest => 'टेस्ट कॉल';
+
+  @override
+  String get incomingCallTestHint => 'परामर्श आने पर आपका फ़ोन इसी तरह बजेगा';
+
+  @override
+  String get incomingCallAccept => 'स्वीकार करें';
+
+  @override
+  String get incomingCallDecline => 'अस्वीकार करें';
+
+  @override
+  String get pubTitle => 'सार्वजनिक प्रोफ़ाइल';
+
+  @override
+  String get pubMenuSub => 'देखें कि ग्राहकों को आपकी प्रोफ़ाइल कैसी दिखती है';
+
+  @override
+  String get pubNote => 'ग्राहकों को आपकी प्रोफ़ाइल ऐसी दिखती है।';
+
+  @override
+  String get pubHidden => 'आपकी प्रोफ़ाइल अभी ग्राहकों से छिपी हुई है।';
+
+  @override
+  String get pubEdit => 'बदलें';
+
+  @override
+  String get pubOnline => 'अभी ऑनलाइन';
+
+  @override
+  String get pubOffline => 'ऑफ़लाइन';
+
+  @override
+  String get pubPhotos => 'तस्वीरें';
+
+  @override
+  String pubPhotosWaiting(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count और तस्वीरें समीक्षा में हैं',
+      one: '1 और तस्वीर समीक्षा में है',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pubPhotosCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count तस्वीरें',
+      one: '1 तस्वीर',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pubPhotoOf(int index, int total) {
+    return '$total में से $index';
+  }
+
+  @override
+  String get pubPhotosEmpty =>
+      'आपकी प्रोफ़ाइल पर अभी कोई तस्वीर नहीं है। ग्राहक उसी प्रोफ़ाइल पर भरोसा करते हैं जिसे वे देख सकें।';
+
+  @override
+  String get pubAddPhotos => 'तस्वीरें जोड़ें';
+
+  @override
+  String get pubManage => 'तस्वीरें संभालें';
+
+  @override
+  String get pubSeeAll => 'सभी देखें';
+
+  @override
+  String pubPerMinute(String price) {
+    return '$price/मिनट';
+  }
+
+  @override
+  String get pubRatesEmpty => 'अभी कोई दर तय नहीं है।';
+
+  @override
+  String get pubExpertise => 'विशेषज्ञता';
+
+  @override
+  String get pubLanguages => 'भाषाएँ';
+
+  @override
+  String get pubNothingYet => 'अभी कुछ नहीं जोड़ा गया।';
+
+  @override
+  String get pubAbout => 'परिचय';
+
+  @override
+  String get pubAboutEmpty =>
+      'अपने बारे में कुछ पंक्तियाँ लिखें, ताकि ग्राहक जान सकें कि वे किससे बात कर रहे हैं।';
+
+  @override
+  String get pubReadMore => 'और पढ़ें';
+
+  @override
+  String get pubReadLess => 'कम दिखाएँ';
+
+  @override
+  String get pubReviews => 'ग्राहक क्या कहते हैं';
+
+  @override
+  String get pubReviewsEmpty =>
+      'आपकी अच्छी रेटिंग वाली, लिखी हुई समीक्षाएँ यहाँ दिखेंगी।';
+
+  @override
+  String get kycAadhaar => 'आधार कार्ड';
+
+  @override
+  String get kycBankProof => 'बैंक प्रमाण';
+
+  @override
+  String get kycOtherDocument => 'एक ज़रूरी दस्तावेज़';
+
+  @override
+  String get kycAadhaarInvalid => 'आधार में 12 अंक होते हैं';
+
+  @override
+  String get kycNumberNeeded => 'पहले दस्तावेज़ का नंबर डालें';
+
+  @override
+  String get kycDocVerified => 'सत्यापित';
+
+  @override
+  String get kycDocSentBack => 'वापस भेजा गया: कृपया दोबारा अपलोड करें';
+
+  @override
+  String get kycDocNeeded => 'ज़रूरी';
+
+  @override
+  String get kycDocOptional => 'वैकल्पिक';
+
+  @override
+  String get kycDocWaiting => 'समीक्षा का इंतज़ार';
+
+  @override
+  String kycDocEndsIn(String digits) {
+    return 'आख़िरी अंक $digits';
+  }
+
+  @override
+  String get kycDocReplace => 'बदलें';
+
+  @override
+  String kycDocNumber(String document) {
+    return '$document नंबर';
+  }
+
+  @override
+  String kycDocNumberKeep(String digits) {
+    return '$digits पर ख़त्म होने वाला नंबर रखना हो तो ख़ाली छोड़ें';
+  }
+
+  @override
+  String get kycDocAddPhoto => 'इसकी तस्वीर जोड़ें';
+
+  @override
+  String get kycDocReplacePhoto => 'नई तस्वीर अपलोड करें';
+
+  @override
+  String get wizDocsRequired => 'ज़रूरी बताए गए सभी दस्तावेज़ जोड़ें';
+
+  @override
+  String get obStageDocuments => 'दस्तावेज़ों की जाँच';
+
+  @override
+  String get obStageInterview => 'इंटरव्यू';
+
+  @override
+  String get obStageDecision => 'अंतिम निर्णय';
+
+  @override
+  String get obFixTitle => 'कुछ चीज़ों पर आपका ध्यान चाहिए';
+
+  @override
+  String get obFixBody =>
+      'हमारे समीक्षक ने नीचे दी गई चीज़ें वापस भेजी हैं। इन्हें ठीक करें, आपका आवेदन आगे बढ़ जाएगा।';
+
+  @override
+  String get obBankFixTitle => 'आपके बैंक विवरण में सुधार चाहिए';
+
+  @override
+  String get obBankFix => 'बैंक विवरण ठीक करें';
+
+  @override
+  String get obInterviewTitle => 'आपका इंटरव्यू';
+
+  @override
+  String obInterviewWhen(String when) {
+    return '$when';
+  }
+
+  @override
+  String get obInterviewPhone => 'हम आपके रजिस्टर्ड नंबर पर कॉल करेंगे।';
+
+  @override
+  String get obInterviewWhatsapp =>
+      'हम आपके रजिस्टर्ड नंबर पर व्हाट्सऐप कॉल करेंगे।';
+
+  @override
+  String get obInterviewLink => 'उस समय नीचे दिए मीटिंग लिंक से जुड़ें।';
+
+  @override
+  String get obInterviewJoin => 'मीटिंग लिंक खोलें';
+
+  @override
+  String get obInterviewWaiting =>
+      'आपके दस्तावेज़ ठीक हैं। हम इंटरव्यू का समय तय करके आपको बताएँगे।';
+
+  @override
+  String get obInterviewMissed =>
+      'आप इंटरव्यू में नहीं आ सके। हम नया समय तय करके आपको बताएँगे।';
+
+  @override
+  String obInterviewToday(String time) {
+    return 'आज, $time';
+  }
+
+  @override
+  String obInterviewTomorrow(String time) {
+    return 'कल, $time';
+  }
+
+  @override
+  String obInterviewOn(String date, String time) {
+    return '$date, $time';
+  }
 }

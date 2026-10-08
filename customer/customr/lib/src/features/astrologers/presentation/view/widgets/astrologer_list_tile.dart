@@ -11,9 +11,11 @@ import '../../../../../core/util/money.dart';
 import '../../../../follows/data/follows_api.dart';
 import '../../../../follows/presentation/widgets/follow_widgets.dart';
 import '../../../data/models/astrologer.dart';
+import '../../next_online_label.dart';
 import '../astrologer_detail_page.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Discovery row: rounded-rect photo with a bottom scrim carrying rating and
 /// price, name + follow heart on the right, and an icon-only CTA.
 class AstrologerListTile extends StatelessWidget {
@@ -35,6 +37,8 @@ class AstrologerListTile extends StatelessWidget {
     final rate =
         (channel != null ? a.rateFor(channel!) : null) ?? a.cheapestRate;
     final available = a.isAvailable;
+    // Online, but not taking this kind of consultation until a time they gave.
+    final back = available ? a.nextOnlineFor(channel ?? 'chat') : null;
     final langs = a.languages
         .take(3)
         .map(
@@ -154,11 +158,16 @@ class AstrologerListTile extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                [
-                                  if (a.yearsExperience > 0)
-                                    '${a.yearsExperience} yrs',
-                                  if (langs.isNotEmpty) langs,
-                                ].join('  ·  '),
+                                back != null
+                                    ? l.astroChannelBack(
+                                        _ctaLabel(l),
+                                        nextOnlineWhen(context, back),
+                                      )
+                                    : [
+                                        if (a.yearsExperience > 0)
+                                          '${a.yearsExperience} yrs',
+                                        if (langs.isNotEmpty) langs,
+                                      ].join('  ·  '),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: muted,

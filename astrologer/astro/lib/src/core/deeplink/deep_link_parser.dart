@@ -7,6 +7,14 @@ String? locationForUri(Uri uri) {
       uri.host,
     ...uri.pathSegments.where((s) => s.isNotEmpty),
   ];
+  // On the web every link to this app lives under /astrologer — the site and
+  // the customer app share the domain — so that prefix is not part of the
+  // destination: https://talkacharya.com/astrologer/requests/1 is requests/1.
+  if (uri.scheme == 'http' || uri.scheme == 'https') {
+    if (segments.isEmpty || segments.first != 'astrologer') return null;
+    segments.removeAt(0);
+    if (segments.isEmpty) return '/home';
+  }
   if (segments.isEmpty) return null;
 
   final id = segments.length > 1 ? segments[1] : null;

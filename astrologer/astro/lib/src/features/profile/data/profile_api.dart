@@ -176,6 +176,30 @@ class ProfileApi {
     ),
   );
 
+  /// Switches [channel] off until [at]; customers see when it is back.
+  Future<AvailabilitySettings> setNextOnline(String channel, DateTime at) =>
+      _guard(() async {
+        final res = await _ok(
+          _dio.post<Map<String, dynamic>>(
+            ApiPaths.astroNextOnline,
+            data: {'channel': channel, 'at': at.toUtc().toIso8601String()},
+          ),
+        );
+        return AvailabilitySettings.fromJson(res.data ?? const {});
+      });
+
+  /// Takes [channel] again now, dropping its next-online time.
+  Future<AvailabilitySettings> clearNextOnline(String channel) =>
+      _guard(() async {
+        final res = await _ok(
+          _dio.delete<Map<String, dynamic>>(
+            ApiPaths.astroNextOnline,
+            queryParameters: {'channel': channel},
+          ),
+        );
+        return AvailabilitySettings.fromJson(res.data ?? const {});
+      });
+
   Future<List<WorkingWindow>> workingHours() => _guard(() async {
     final res = await _ok(_dio.get<dynamic>(ApiPaths.astroWorkingHours));
     return _rows(res.data).map(WorkingWindow.fromJson).toList();

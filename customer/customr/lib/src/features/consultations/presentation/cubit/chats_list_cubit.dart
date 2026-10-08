@@ -37,14 +37,17 @@ class ChatsListCubit extends Cubit<ChatsListState> {
     }
     _lastLoad = DateTime.now();
     if (state.conversations.isEmpty) {
+      if (isClosed) return;
       emit(state.copyWith(loading: true, clearError: true));
     }
     try {
       final all = await _repo.conversations();
+      if (isClosed) return;
       emit(
         state.copyWith(loading: false, conversations: all, clearError: true),
       );
     } catch (e) {
+      if (isClosed) return;
       emit(state.copyWith(loading: false, error: friendlyError(e)));
     }
   }

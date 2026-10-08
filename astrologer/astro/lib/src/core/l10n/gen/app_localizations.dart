@@ -5791,6 +5791,540 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You were signed out because your account was signed in on another phone.'**
   String get authSessionReplaced;
+
+  /// No description provided for @appUpdateAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'A new version of the app is available.'**
+  String get appUpdateAvailable;
+
+  /// No description provided for @appUpdateAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get appUpdateAction;
+
+  /// No description provided for @appUpdateReady.
+  ///
+  /// In en, this message translates to:
+  /// **'The update is downloaded. Restart to finish.'**
+  String get appUpdateReady;
+
+  /// No description provided for @appUpdateRestart.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart'**
+  String get appUpdateRestart;
+
+  /// No description provided for @nextOnlineSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Set next online'**
+  String get nextOnlineSet;
+
+  /// No description provided for @nextOnlineBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back {when} · Change'**
+  String nextOnlineBack(String when);
+
+  /// No description provided for @nextOnlineSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'When will you take {channel} again?'**
+  String nextOnlineSheetTitle(String channel);
+
+  /// No description provided for @nextOnlineInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'{channel} stays off until then and comes back on by itself. Customers see when you will be back.'**
+  String nextOnlineInfo(String channel);
+
+  /// No description provided for @nextOnlineDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get nextOnlineDay;
+
+  /// No description provided for @nextOnlineTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get nextOnlineTime;
+
+  /// No description provided for @nextOnlineToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get nextOnlineToday;
+
+  /// No description provided for @nextOnlineTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get nextOnlineTomorrow;
+
+  /// No description provided for @nextOnlineWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'{day}, {time}'**
+  String nextOnlineWhen(String day, String time);
+
+  /// No description provided for @nextOnlinePickDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a date'**
+  String get nextOnlinePickDate;
+
+  /// No description provided for @nextOnlineCustomTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Other time'**
+  String get nextOnlineCustomTime;
+
+  /// No description provided for @nextOnlineConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Set next online'**
+  String get nextOnlineConfirm;
+
+  /// No description provided for @nextOnlineConfirmAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Back {when}'**
+  String nextOnlineConfirmAt(String when);
+
+  /// No description provided for @nextOnlineTurnOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn {channel} on now'**
+  String nextOnlineTurnOn(String channel);
+
+  /// No description provided for @nextOnlinePast.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a time that is still ahead'**
+  String get nextOnlinePast;
+
+  /// No description provided for @nextOnlineDone.
+  ///
+  /// In en, this message translates to:
+  /// **'{channel} is off until {when}'**
+  String nextOnlineDone(String channel, String when);
+
+  /// No description provided for @nextOnlineCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'{channel} is on again'**
+  String nextOnlineCleared(String channel);
+
+  /// No description provided for @incomingCallKind.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming {channel} request'**
+  String incomingCallKind(String channel);
+
+  /// No description provided for @incomingCallCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer'**
+  String get incomingCallCustomer;
+
+  /// No description provided for @incomingCallHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A customer is waiting for you'**
+  String get incomingCallHint;
+
+  /// No description provided for @incomingCallTest.
+  ///
+  /// In en, this message translates to:
+  /// **'Test call'**
+  String get incomingCallTest;
+
+  /// No description provided for @incomingCallTestHint.
+  ///
+  /// In en, this message translates to:
+  /// **'This is how a consultation rings your phone'**
+  String get incomingCallTestHint;
+
+  /// No description provided for @incomingCallAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get incomingCallAccept;
+
+  /// No description provided for @incomingCallDecline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get incomingCallDecline;
+
+  /// No description provided for @pubTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Public profile'**
+  String get pubTitle;
+
+  /// No description provided for @pubMenuSub.
+  ///
+  /// In en, this message translates to:
+  /// **'See your profile the way customers do'**
+  String get pubMenuSub;
+
+  /// No description provided for @pubNote.
+  ///
+  /// In en, this message translates to:
+  /// **'This is how customers see your profile.'**
+  String get pubNote;
+
+  /// No description provided for @pubHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile is hidden from customers right now.'**
+  String get pubHidden;
+
+  /// No description provided for @pubEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get pubEdit;
+
+  /// No description provided for @pubOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Online now'**
+  String get pubOnline;
+
+  /// No description provided for @pubOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get pubOffline;
+
+  /// No description provided for @pubPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get pubPhotos;
+
+  /// No description provided for @pubPhotosWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 more is waiting for review} other{{count} more are waiting for review}}'**
+  String pubPhotosWaiting(int count);
+
+  /// No description provided for @pubPhotosCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 photo} other{{count} photos}}'**
+  String pubPhotosCount(int count);
+
+  /// No description provided for @pubPhotoOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{index} of {total}'**
+  String pubPhotoOf(int index, int total);
+
+  /// No description provided for @pubPhotosEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No photos on your profile yet. Customers trust a profile they can see.'**
+  String get pubPhotosEmpty;
+
+  /// No description provided for @pubAddPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photos'**
+  String get pubAddPhotos;
+
+  /// No description provided for @pubManage.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage photos'**
+  String get pubManage;
+
+  /// No description provided for @pubSeeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get pubSeeAll;
+
+  /// No description provided for @pubPerMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'{price}/min'**
+  String pubPerMinute(String price);
+
+  /// No description provided for @pubRatesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No rates set yet.'**
+  String get pubRatesEmpty;
+
+  /// No description provided for @pubExpertise.
+  ///
+  /// In en, this message translates to:
+  /// **'Expertise'**
+  String get pubExpertise;
+
+  /// No description provided for @pubLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'Languages'**
+  String get pubLanguages;
+
+  /// No description provided for @pubNothingYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing added yet.'**
+  String get pubNothingYet;
+
+  /// No description provided for @pubAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get pubAbout;
+
+  /// No description provided for @pubAboutEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a few lines about yourself, so customers know who they are talking to.'**
+  String get pubAboutEmpty;
+
+  /// No description provided for @pubReadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Read more'**
+  String get pubReadMore;
+
+  /// No description provided for @pubReadLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get pubReadLess;
+
+  /// No description provided for @pubReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'What clients say'**
+  String get pubReviews;
+
+  /// No description provided for @pubReviewsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Your well-rated, written reviews will show here.'**
+  String get pubReviewsEmpty;
+
+  /// No description provided for @kycAadhaar.
+  ///
+  /// In en, this message translates to:
+  /// **'Aadhaar card'**
+  String get kycAadhaar;
+
+  /// No description provided for @kycBankProof.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank proof'**
+  String get kycBankProof;
+
+  /// No description provided for @kycOtherDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'A required document'**
+  String get kycOtherDocument;
+
+  /// No description provided for @kycAadhaarInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Aadhaar has 12 digits'**
+  String get kycAadhaarInvalid;
+
+  /// No description provided for @kycNumberNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the document number first'**
+  String get kycNumberNeeded;
+
+  /// No description provided for @kycDocVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get kycDocVerified;
+
+  /// No description provided for @kycDocSentBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent back: please upload it again'**
+  String get kycDocSentBack;
+
+  /// No description provided for @kycDocNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Needed'**
+  String get kycDocNeeded;
+
+  /// No description provided for @kycDocOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get kycDocOptional;
+
+  /// No description provided for @kycDocWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for review'**
+  String get kycDocWaiting;
+
+  /// No description provided for @kycDocEndsIn.
+  ///
+  /// In en, this message translates to:
+  /// **'ends in {digits}'**
+  String kycDocEndsIn(String digits);
+
+  /// No description provided for @kycDocReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get kycDocReplace;
+
+  /// No description provided for @kycDocNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'{document} number'**
+  String kycDocNumber(String document);
+
+  /// No description provided for @kycDocNumberKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave empty to keep the one ending in {digits}'**
+  String kycDocNumberKeep(String digits);
+
+  /// No description provided for @kycDocAddPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a photo of it'**
+  String get kycDocAddPhoto;
+
+  /// No description provided for @kycDocReplacePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload a new photo'**
+  String get kycDocReplacePhoto;
+
+  /// No description provided for @wizDocsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Add every document marked as needed'**
+  String get wizDocsRequired;
+
+  /// No description provided for @obStageDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents being checked'**
+  String get obStageDocuments;
+
+  /// No description provided for @obStageInterview.
+  ///
+  /// In en, this message translates to:
+  /// **'Interview'**
+  String get obStageInterview;
+
+  /// No description provided for @obStageDecision.
+  ///
+  /// In en, this message translates to:
+  /// **'Final decision'**
+  String get obStageDecision;
+
+  /// No description provided for @obFixTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Something needs your attention'**
+  String get obFixTitle;
+
+  /// No description provided for @obFixBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Our reviewer sent the items below back. Correct them and your application moves on.'**
+  String get obFixBody;
+
+  /// No description provided for @obBankFixTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your bank details need a correction'**
+  String get obBankFixTitle;
+
+  /// No description provided for @obBankFix.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct bank details'**
+  String get obBankFix;
+
+  /// No description provided for @obInterviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your interview'**
+  String get obInterviewTitle;
+
+  /// No description provided for @obInterviewWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'{when}'**
+  String obInterviewWhen(String when);
+
+  /// No description provided for @obInterviewPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'We will call you on your registered number.'**
+  String get obInterviewPhone;
+
+  /// No description provided for @obInterviewWhatsapp.
+  ///
+  /// In en, this message translates to:
+  /// **'We will call you on WhatsApp on your registered number.'**
+  String get obInterviewWhatsapp;
+
+  /// No description provided for @obInterviewLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Join with the meeting link below at that time.'**
+  String get obInterviewLink;
+
+  /// No description provided for @obInterviewJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Open meeting link'**
+  String get obInterviewJoin;
+
+  /// No description provided for @obInterviewWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Your documents are in order. We will set a time for your interview and tell you.'**
+  String get obInterviewWaiting;
+
+  /// No description provided for @obInterviewMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'We missed you at your interview. We will set a new time and tell you.'**
+  String get obInterviewMissed;
+
+  /// No description provided for @obInterviewToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today, {time}'**
+  String obInterviewToday(String time);
+
+  /// No description provided for @obInterviewTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow, {time}'**
+  String obInterviewTomorrow(String time);
+
+  /// No description provided for @obInterviewOn.
+  ///
+  /// In en, this message translates to:
+  /// **'{date}, {time}'**
+  String obInterviewOn(String date, String time);
 }
 
 class _AppLocalizationsDelegate

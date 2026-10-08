@@ -228,7 +228,8 @@ class ProfilePage extends StatelessWidget {
   // --- preferences ---------------------------------------------------------
 
   static String _languageName(RemoteConfig config, String? code) {
-    final c = code ?? 'en';
+    // A saved choice the app no longer offers is shown as what it runs in.
+    final c = isSupportedLanguage(code) ? code! : 'en';
     if (kLanguageNativeNames.containsKey(c)) return kLanguageNativeNames[c]!;
     for (final lang in config.languages) {
       if (lang.code == c) return lang.name;
@@ -242,8 +243,14 @@ class ProfilePage extends StatelessWidget {
     String? current,
   ) async {
     final l = context.l10n;
-    final codes = config.languages.isNotEmpty
-        ? config.languages.map((e) => e.code).toList()
+    // The server lists every language it has content in; the app offers only
+    // the ones it is itself translated into.
+    final offered = [
+      for (final e in config.languages)
+        if (isSupportedLanguage(e.code)) e.code,
+    ];
+    final codes = offered.isNotEmpty
+        ? offered
         : kSupportedLocales.map((e) => e.languageCode).toList();
     final picked = await showAppSheet<String>(
       context: context,
