@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../engine/chat_controller.dart';
 import '../models/chat_enums.dart';
@@ -96,30 +97,14 @@ class KundaliCard extends StatelessWidget {
     final isMatch = message.meta['share_kind'] == 'match';
     final open = onOpen;
     final canOpen = shared != null && open != null;
-    final fullName = (summary['full_name'] as String? ?? '').trim();
-    final label = (summary['label'] as String? ?? '').trim();
-    final name = (shared?.name.isNotEmpty ?? false)
-        ? shared!.name
-        : fullName.isNotEmpty
-        ? fullName
-        : (label.isNotEmpty ? label : 'Birth details');
-
-    final date = (summary['birth_date'] as String? ?? '').trim();
-    final time = (summary['birth_time'] as String? ?? '').trim();
-    final place = (summary['birth_place'] as String? ?? '').trim();
-    final rows = <(IconData, String)>[
-      if (date.isNotEmpty) (Icons.event_rounded, date),
-      if (time.isNotEmpty)
-        (Icons.schedule_rounded, time)
-      else if (summary['time_known'] == false)
-        (Icons.schedule_rounded, 'Birth time not known'),
-      if (place.isNotEmpty) (Icons.place_outlined, place),
-      if (isMatch && summary['total_points'] != null)
-        (
-          Icons.favorite_outline_rounded,
-          '${summary['total_points']} / ${summary['max_points'] ?? 36} gunas',
-        ),
-    ];
+    // A match is the two people it is between — never its score. That is the
+    // astrologer's to read from the report, not something to post in a thread.
+    final people = isMatch
+        ? [
+            ('Male', _personOf(summary['boy'])),
+            ('Female', _personOf(summary['girl'])),
+          ]
+        : [('', summary)];
 
     return Align(
       child: GestureDetector(
@@ -159,39 +144,11 @@ class KundaliCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              Text(
-                name,
-                style: TextStyle(
+              for (final (caption, person) in people)
+                _SharedPerson(
+                  caption: caption,
+                  person: person,
                   color: scheme.onPrimaryContainer,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              for (final (icon, text) in rows)
-                Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: Row(
-                    children: [
-                      Icon(
-                        icon,
-                        size: 13,
-                        color: scheme.onPrimaryContainer.withValues(alpha: 0.8),
-                      ),
-                      const SizedBox(width: 6),
-                      Flexible(
-                        child: Text(
-                          text,
-                          style: TextStyle(
-                            color: scheme.onPrimaryContainer.withValues(
-                              alpha: 0.9,
-                            ),
-                            fontSize: 13,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               if (canOpen) ...[
                 const SizedBox(height: 10),
@@ -251,6 +208,103 @@ class KundaliCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+Map<String, dynamic> _personOf(Object? raw) =>
+    (raw as Map?)?.cast<String, dynamic>() ?? const {};
+
+/// One person on a shared-details card: who they are and when and where they
+/// were born. The same block draws a lone birth profile and each side of a
+/// match, where [caption] says which side.
+class _SharedPerson extends StatelessWidget {
+  const _SharedPerson({
+    required this.caption,
+    required this.person,
+    required this.color,
+  });
+
+  final String caption;
+  final Map<String, dynamic> person;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    String text(String key) => (person[key] as String? ?? '').trim();
+
+    final fullName = text('full_name');
+    final name = fullName.isNotEmpty
+        ? fullName
+        : (text('label').isNotEmpty ? text('label') : 'Birth details');
+    final born = DateTime.tryParse(text('birth_date'));
+    final date = born == null
+        ? text('birth_date')
+        : DateFormat('d MMM yyyy').format(born);
+    final time = text('birth_time');
+    final country = text('country_code').toUpperCase();
+    final place = [
+      text('birth_place'),
+      country,
+    ].where((p) => p.isNotEmpty).join(' · ');
+
+    final rows = <(IconData, String)>[
+      if (date.isNotEmpty) (Icons.event_rounded, date),
+      if (time.isNotEmpty)
+        (Icons.schedule_rounded, time)
+      else if (person['time_known'] == false)
+        (Icons.schedule_rounded, 'Birth time not known'),
+      if (place.isNotEmpty) (Icons.place_outlined, place),
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (caption.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2),
+              child: Text(
+                caption,
+                style: TextStyle(
+                  color: color.withValues(alpha: 0.7),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.3,
+                ),
+              ),
+            ),
+          Text(
+            name,
+            style: TextStyle(
+              color: color,
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          for (final (icon, value) in rows)
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Row(
+                children: [
+                  Icon(icon, size: 13, color: color.withValues(alpha: 0.8)),
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      value,
+                      style: TextStyle(
+                        color: color.withValues(alpha: 0.9),
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }

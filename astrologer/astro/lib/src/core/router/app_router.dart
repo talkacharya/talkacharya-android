@@ -59,6 +59,21 @@ import '../../features/profile/presentation/view/public_profile_page.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
 
+/// Whether [location] is inside the bottom-nav shell — a tab, or a page under
+/// one — rather than a full-screen page that sits above the tabs.
+bool isShellLocation(GoRouter router, String location) {
+  final uri = Uri.tryParse(location);
+  if (uri == null) return false;
+  final matches = router.configuration.findMatch(uri).matches;
+  return matches.isNotEmpty && matches.first is ShellRouteMatch;
+}
+
+/// Whether the tabs are at the bottom of what is on screen now.
+bool shellIsUp(GoRouter router) {
+  final matches = router.routerDelegate.currentConfiguration.matches;
+  return matches.isNotEmpty && matches.first is ShellRouteMatch;
+}
+
 GoRoute _leaf(String path, Widget Function(GoRouterState) child) =>
     GoRoute(path: path, builder: (_, s) => child(s));
 
@@ -105,9 +120,10 @@ GoRouter buildRouter(
         return atOnboarding || lessons ? null : Routes.onboarding;
       }
 
-      if (atLogin || atSplash || atOnboarding) {
-        return pending.take() ?? Routes.home;
-      }
+      // Always Home first. A stashed link is opened from there by the app
+      // (`_open` in app.dart), so a full-screen page lands above the tabs
+      // with a way back, instead of replacing them.
+      if (atLogin || atSplash || atOnboarding) return Routes.home;
       return null;
     },
     routes: [

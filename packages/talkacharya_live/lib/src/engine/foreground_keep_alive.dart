@@ -6,7 +6,7 @@ void _liveServiceEntry() {
   FlutterForegroundTask.setTaskHandler(_IdleLiveTask());
 }
 
-/// The service only has to *exist* (it holds the microphone and camera "while in use" grant
+/// The service only has to *exist* (it holds the microphone "while in use" grant
 /// and keeps the process alive); all live logic stays in the main isolate.
 class _IdleLiveTask extends TaskHandler {
   @override
@@ -60,12 +60,11 @@ class ForegroundServiceLiveKeepAlive {
       }
       await FlutterForegroundTask.startService(
         serviceId: 4712,
-        serviceTypes: video
-            ? const [
-                ForegroundServiceTypes.microphone,
-                ForegroundServiceTypes.camera,
-              ]
-            : const [ForegroundServiceTypes.microphone],
+        // Microphone only: the camera works while the app is open and the
+        // picture pauses when the host backgrounds it (the voice carries on).
+        // Claiming `camera` needs FOREGROUND_SERVICE_CAMERA in the manifest —
+        // without it the whole start throws on Android 14+.
+        serviceTypes: const [ForegroundServiceTypes.microphone],
         notificationTitle: title,
         notificationText: text,
         callback: _liveServiceEntry,

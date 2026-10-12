@@ -68,6 +68,7 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
     super.initState();
     getIt<AuthBloc>().add(const AuthStarted());
     unawaited(getIt<OnboardingStore>().load());
+    _router.routerDelegate.addListener(_onRouteChanged);
     _wireBackgroundServices();
   }
 
@@ -212,24 +213,63 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
     if (accepted != null) _handle(Routes.chatRoom(id));
   }
 
+  /// Signed in and past onboarding: the tabs can be shown.
+  bool get _ready =>
+      getIt<AuthBloc>().state.status == AuthStatus.authenticated &&
+      getIt<OnboardingStore>().stage == OnboardingStage.approved;
+
   void _handle(String? location) {
     if (location == null || location.isEmpty) return;
-    if (getIt<AuthBloc>().state.status == AuthStatus.authenticated &&
-        getIt<OnboardingStore>().stage == OnboardingStage.approved) {
-      // During a call, `go` would tear the room down and drop the call —
-      // stack the destination on top instead.
-      if (getIt<RoomPresence>().callOnScreen) {
-        _router.push(location).ignore();
-        return;
-      }
-      _router.go(location);
+    if (_ready) {
+      _open(location);
     } else {
       getIt<PendingDeepLink>().set(location);
     }
   }
 
+  /// Where a link or a notification tap lands. A tab opens as itself; a
+  /// full-screen page (a room, a request) opens *above* the tabs, never in
+  /// place of them, so back always has somewhere to go.
+  void _open(String location) {
+    // During a call, `go` would tear the room down and drop the call —
+    // stack the destination on top instead.
+    if (getIt<RoomPresence>().callOnScreen) {
+      _router.push(location).ignore();
+      return;
+    }
+    if (isShellLocation(_router, location)) {
+      _router.go(location);
+      return;
+    }
+    if (!shellIsUp(_router)) {
+      // Nothing under it yet (a cold start, or a page opened on its own):
+      // bring Home up first. `_onRouteChanged` pushes this once it is there —
+      // a `go` and a `push` issued together race, and the push can win.
+      getIt<PendingDeepLink>().set(location);
+      _router.go(Routes.home);
+      return;
+    }
+    final stack = _router.routerDelegate.currentConfiguration.matches;
+    // Already looking at it: don't stack a second copy.
+    if (stack.last.matchedLocation == Uri.tryParse(location)?.path) return;
+    _router.push(location).ignore();
+  }
+
+  /// Opens a stashed link once the tabs are on screen to open it from.
+  void _onRouteChanged() {
+    final pending = getIt<PendingDeepLink>();
+    if (!pending.hasPending || !_ready || !shellIsUp(_router)) return;
+    // Not from inside the router's own notification.
+    scheduleMicrotask(() {
+      if (!mounted || !_ready || !shellIsUp(_router)) return;
+      final location = pending.take();
+      if (location != null) _open(location);
+    });
+  }
+
   @override
   void dispose() {
+    _router.routerDelegate.removeListener(_onRouteChanged);
     for (final s in _subs) {
       s.cancel();
     }
