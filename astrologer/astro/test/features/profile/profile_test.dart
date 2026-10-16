@@ -64,10 +64,8 @@ void main() {
     test('AvailabilitySettings and Review parse', () {
       final a = AvailabilitySettings.fromJson({
         'channels_enabled': ['chat', 'voice'],
-        'max_concurrent_chats': 3,
       });
       expect(a.channels, ['chat', 'voice']);
-      expect(a.maxConcurrent, 3);
 
       final r = _review('r1', 9, reply: '  ');
       expect(r.rating, 5, reason: 'clamped');

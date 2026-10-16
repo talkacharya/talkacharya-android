@@ -12,9 +12,10 @@ import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Height of every slide, whatever its kind. Fixed so the [PageView] doesn't
 /// jump as slides of different content swipe past.
-const double _railHeight = 188;
+const double _railHeight = 156;
 
 /// Auto-advancing promo rail. Renders whatever [PromoSlide] kind the feed sends
 /// — a styled text card, a full-bleed image, an inline video, or a custom
@@ -247,7 +248,7 @@ class _MediaPromoCard extends StatelessWidget {
               ),
             if (hasOverlay)
               Padding(
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.all(14),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -479,7 +480,7 @@ class _RichPromoCard extends StatelessWidget {
                   child: CustomPaint(painter: _PromoSparkles()),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 16, 16),
+                  padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
                   child: Row(
                     children: [
                       Expanded(
@@ -493,7 +494,7 @@ class _RichPromoCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: theme.textTheme.titleLarge?.copyWith(
                                 color: Colors.white,
-                                fontSize: 19,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w800,
                                 height: 1.15,
                               ),
@@ -508,9 +509,9 @@ class _RichPromoCard extends StatelessWidget {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 8),
                             Container(
-                              padding: const EdgeInsets.fromLTRB(14, 7, 10, 7),
+                              padding: const EdgeInsets.fromLTRB(12, 5, 8, 5),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(999),
@@ -539,8 +540,8 @@ class _RichPromoCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Container(
-                        width: 62,
-                        height: 62,
+                        width: 50,
+                        height: 50,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.white.withValues(alpha: 0.16),

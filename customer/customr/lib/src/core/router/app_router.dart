@@ -129,6 +129,8 @@ import 'go_router_refresh.dart';
 import 'pending_deep_link.dart';
 import 'routes.dart';
 import 'transitions.dart';
+import '../../features/assistant/presentation/assistant_pages.dart';
+import '../../features/support/presentation/view/support_messages_page.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
 
@@ -204,7 +206,7 @@ GoRouter buildRouter(
       if (goingToLogin || goingToSplash) {
         return profileStore.loginGatePending
             ? Routes.selectProfile
-            : (pending.take() ?? Routes.home);
+            : (pending.take() ?? Routes.astrologers);
       }
       return null;
     },
@@ -235,6 +237,32 @@ GoRouter buildRouter(
         path: '/consultations',
         parentNavigatorKey: _rootKey,
         builder: (_, _) => const ConsultationsListPage(),
+      ),
+      GoRoute(
+        path: Routes.support,
+        parentNavigatorKey: _rootKey,
+        builder: (_, s) =>
+            SupportMessagesPage(topic: s.uri.queryParameters['topic']),
+      ),
+      GoRoute(
+        path: Routes.assistant,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const AssistantInboxPage(),
+        routes: [
+          GoRoute(
+            path: 'to/:astrologerId',
+            parentNavigatorKey: _rootKey,
+            builder: (_, s) => AssistantRoomPage(
+              astrologerId: s.pathParameters['astrologerId'],
+            ),
+          ),
+          GoRoute(
+            path: ':id',
+            parentNavigatorKey: _rootKey,
+            builder: (_, s) =>
+                AssistantRoomPage(threadId: s.pathParameters['id']),
+          ),
+        ],
       ),
       GoRoute(
         path: Routes.consultationPattern,
@@ -269,187 +297,7 @@ GoRouter buildRouter(
         ),
       ),
 
-      // Store — remedies shop, poojas, digital goods and consult-before-buying.
-      // Full-screen, above the bottom nav; every screen is deep-linkable.
-      GoRoute(
-        path: Routes.store,
-        parentNavigatorKey: _rootKey,
-        builder: (_, _) => BlocProvider(
-          create: (_) => StoreHomeCubit(getIt())..load(),
-          child: const StoreHomePage(),
-        ),
-        routes: [
-          GoRoute(
-            path: 'products',
-            parentNavigatorKey: _rootKey,
-            builder: (_, s) => BlocProvider(
-              key: ValueKey('store-products-${s.uri.query}'),
-              create: (_) => ProductListCubit(
-                getIt(),
-                initial: ProductQuery.fromParams(s.uri.queryParameters),
-              )..init(),
-              child: ProductListPage(
-                focusSearch: s.uri.queryParameters['focus'] == 'search',
-              ),
-            ),
-            routes: [
-              GoRoute(
-                path: ':slug',
-                parentNavigatorKey: _rootKey,
-                builder: (_, s) => BlocProvider(
-                  key: ValueKey(
-                    'store-product-${s.pathParameters['slug']}-'
-                    '${s.uri.queryParameters['rec']}',
-                  ),
-                  create: (_) => ProductDetailCubit(
-                    repo: getIt(),
-                    cart: getIt<CartCubit>(),
-                    slug: s.pathParameters['slug']!,
-                    recommendationId: s.uri.queryParameters['rec'],
-                    realtime: getIt<RealtimeClient>().events,
-                  )..load(),
-                  child: const ProductDetailPage(),
-                ),
-                routes: [
-                  GoRoute(
-                    path: 'consult',
-                    parentNavigatorKey: _rootKey,
-                    builder: (_, s) => BlocProvider(
-                      create: (_) => ConsultOptionsCubit(
-                        repo: getIt(),
-                        slug: s.pathParameters['slug']!,
-                        product: s.extra is ProductDetail
-                            ? s.extra as ProductDetail
-                            : null,
-                      )..load(),
-                      child: const ConsultAstrologerPage(),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          GoRoute(
-            path: 'collections/:slug',
-            parentNavigatorKey: _rootKey,
-            builder: (_, s) => BlocProvider(
-              key: ValueKey('store-collection-${s.pathParameters['slug']}'),
-              create: (_) => CollectionCubit(
-                repo: getIt(),
-                slug: s.pathParameters['slug']!,
-              )..load(),
-              child: const CollectionPage(),
-            ),
-          ),
-          GoRoute(
-            path: 'cart',
-            parentNavigatorKey: _rootKey,
-            builder: (_, _) => BlocProvider.value(
-              value: getIt<CartCubit>(),
-              child: const CartPage(),
-            ),
-          ),
-          GoRoute(
-            path: 'checkout',
-            parentNavigatorKey: _rootKey,
-            builder: (_, _) => BlocProvider(
-              create: (_) => CheckoutCubit(
-                repo: getIt(),
-                cart: getIt<CartCubit>(),
-                payments: _storePayments(),
-              )..init(),
-              child: const CheckoutPage(),
-            ),
-          ),
-          GoRoute(
-            path: 'addresses',
-            parentNavigatorKey: _rootKey,
-            builder: (_, _) => BlocProvider(
-              create: (_) => AddressesCubit(getIt())..load(),
-              child: const AddressesPage(),
-            ),
-            routes: [
-              GoRoute(
-                path: 'new',
-                parentNavigatorKey: _rootKey,
-                builder: (_, _) => const AddressFormPage(),
-              ),
-              GoRoute(
-                path: ':id/edit',
-                parentNavigatorKey: _rootKey,
-                builder: (_, s) => AddressFormPage(
-                  initial: s.extra is Address ? s.extra as Address : null,
-                  addressId: s.pathParameters['id'],
-                ),
-              ),
-            ],
-          ),
-          GoRoute(
-            path: 'orders',
-            parentNavigatorKey: _rootKey,
-            builder: (_, s) => BlocProvider(
-              create: (_) => OrdersCubit(
-                getIt(),
-                realtime: getIt<RealtimeClient>().events,
-              ),
-              child: OrdersPage(
-                initialTab: s.uri.queryParameters['tab'] == 'poojas' ? 1 : 0,
-              ),
-            ),
-            routes: [
-              GoRoute(
-                path: ':id',
-                parentNavigatorKey: _rootKey,
-                builder: (_, s) => BlocProvider(
-                  key: ValueKey('store-order-${s.pathParameters['id']}'),
-                  create: (_) => OrderDetailCubit(
-                    repo: getIt(),
-                    payments: _storePayments(),
-                    id: s.pathParameters['id']!,
-                    realtime: getIt<RealtimeClient>().events,
-                  )..load(),
-                  child: OrderDetailPage(
-                    justPlaced: s.uri.queryParameters['placed'] == '1',
-                  ),
-                ),
-                routes: [
-                  GoRoute(
-                    path: 'lines/:lineId/return',
-                    parentNavigatorKey: _rootKey,
-                    builder: (_, s) => ReturnRequestPage(
-                      orderId: s.pathParameters['id']!,
-                      lineId: s.pathParameters['lineId']!,
-                      line: s.extra is OrderLine ? s.extra as OrderLine : null,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          GoRoute(
-            path: 'consults',
-            parentNavigatorKey: _rootKey,
-            builder: (_, _) => BlocProvider(
-              create: (_) => ConsultsCubit(getIt())..load(),
-              child: const ConsultsPage(),
-            ),
-            routes: [
-              GoRoute(
-                path: ':id',
-                parentNavigatorKey: _rootKey,
-                builder: (_, s) => BlocProvider(
-                  key: ValueKey('store-consult-${s.pathParameters['id']}'),
-                  create: (_) => ConsultDetailCubit(
-                    repo: getIt(),
-                    id: s.pathParameters['id']!,
-                  )..load(),
-                  child: const ConsultDetailPage(),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+
 
       // Wallet — full-screen, above the bottom nav. Reached from the home
       // header chip and the Profile page, not a tab.
@@ -763,6 +611,31 @@ GoRouter buildRouter(
             AstrologerReviewsPage(astrologerId: s.pathParameters['id']!),
       ),
 
+      // Live is full screen: pushed above the shell, so the bottom bar never
+      // sits over the reels or a live room. The bar's Live button pushes it.
+      GoRoute(
+        parentNavigatorKey: _rootKey,
+        path: Routes.live,
+        builder: (_, _) => BlocProvider(
+          create: (_) => LiveListCubit(getIt<LivestreamApi>()),
+          child: const LivePage(),
+        ),
+        routes: [
+          // Before `:id`, or the feed reads as a stream called "feed".
+          GoRoute(
+            parentNavigatorKey: _rootKey,
+            path: 'feed',
+            builder: (_, s) =>
+                LiveFeedPage(startAt: s.uri.queryParameters['at']),
+          ),
+          GoRoute(
+            parentNavigatorKey: _rootKey,
+            path: ':id',
+            builder: (_, s) => LiveRoomPage(streamId: s.pathParameters['id']!),
+          ),
+        ],
+      ),
+
       StatefulShellRoute(
         builder: (_, _, shell) => AppShell(navigationShell: shell),
         // Cross-fade between tabs instead of the instant IndexedStack swap.
@@ -793,20 +666,184 @@ GoRouter buildRouter(
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: Routes.live,
-                builder: (_, _) => BlocProvider(
-                  create: (_) => LiveListCubit(getIt<LivestreamApi>()),
-                  child: const LivePage(),
+                path: Routes.store,
+                // `?category=<slug>` opens with that category picked in the rail.
+                builder: (_, s) => BlocProvider(
+                  create: (_) => StoreHomeCubit(
+                    getIt(),
+                    initialCategory: s.uri.queryParameters['category'],
+                  )..load(),
+                  child: const StoreHomePage(),
                 ),
                 routes: [
-                  // Before `:id`, or the feed reads as a stream called "feed".
-                  _leaf(
-                    'feed',
-                    (s) => LiveFeedPage(startAt: s.uri.queryParameters['at']),
+                  GoRoute(
+                    path: 'products',
+                    parentNavigatorKey: _rootKey,
+                    builder: (_, s) => BlocProvider(
+                      key: ValueKey('store-products-${s.uri.query}'),
+                      create: (_) => ProductListCubit(
+                        getIt(),
+                        initial: ProductQuery.fromParams(s.uri.queryParameters),
+                      )..init(),
+                      child: ProductListPage(
+                        focusSearch: s.uri.queryParameters['focus'] == 'search',
+                      ),
+                    ),
+                    routes: [
+                      GoRoute(
+                        path: ':slug',
+                        parentNavigatorKey: _rootKey,
+                        builder: (_, s) => BlocProvider(
+                          key: ValueKey(
+                            'store-product-${s.pathParameters['slug']}-'
+                            '${s.uri.queryParameters['rec']}',
+                          ),
+                          create: (_) => ProductDetailCubit(
+                            repo: getIt(),
+                            cart: getIt<CartCubit>(),
+                            slug: s.pathParameters['slug']!,
+                            recommendationId: s.uri.queryParameters['rec'],
+                            realtime: getIt<RealtimeClient>().events,
+                          )..load(),
+                          child: const ProductDetailPage(),
+                        ),
+                        routes: [
+                          GoRoute(
+                            path: 'consult',
+                            parentNavigatorKey: _rootKey,
+                            builder: (_, s) => BlocProvider(
+                              create: (_) => ConsultOptionsCubit(
+                                repo: getIt(),
+                                slug: s.pathParameters['slug']!,
+                                product: s.extra is ProductDetail
+                                    ? s.extra as ProductDetail
+                                    : null,
+                              )..load(),
+                              child: const ConsultAstrologerPage(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  _leaf(
-                    ':id',
-                    (s) => LiveRoomPage(streamId: s.pathParameters['id']!),
+                  GoRoute(
+                    path: 'collections/:slug',
+                    parentNavigatorKey: _rootKey,
+                    builder: (_, s) => BlocProvider(
+                      key: ValueKey('store-collection-${s.pathParameters['slug']}'),
+                      create: (_) => CollectionCubit(
+                        repo: getIt(),
+                        slug: s.pathParameters['slug']!,
+                      )..load(),
+                      child: const CollectionPage(),
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'cart',
+                    parentNavigatorKey: _rootKey,
+                    builder: (_, _) => BlocProvider.value(
+                      value: getIt<CartCubit>(),
+                      child: const CartPage(),
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'checkout',
+                    parentNavigatorKey: _rootKey,
+                    builder: (_, _) => BlocProvider(
+                      create: (_) => CheckoutCubit(
+                        repo: getIt(),
+                        cart: getIt<CartCubit>(),
+                        payments: _storePayments(),
+                      )..init(),
+                      child: const CheckoutPage(),
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'addresses',
+                    parentNavigatorKey: _rootKey,
+                    builder: (_, _) => BlocProvider(
+                      create: (_) => AddressesCubit(getIt())..load(),
+                      child: const AddressesPage(),
+                    ),
+                    routes: [
+                      GoRoute(
+                        path: 'new',
+                        parentNavigatorKey: _rootKey,
+                        builder: (_, _) => const AddressFormPage(),
+                      ),
+                      GoRoute(
+                        path: ':id/edit',
+                        parentNavigatorKey: _rootKey,
+                        builder: (_, s) => AddressFormPage(
+                          initial: s.extra is Address ? s.extra as Address : null,
+                          addressId: s.pathParameters['id'],
+                        ),
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'orders',
+                    parentNavigatorKey: _rootKey,
+                    builder: (_, s) => BlocProvider(
+                      create: (_) => OrdersCubit(
+                        getIt(),
+                        realtime: getIt<RealtimeClient>().events,
+                      ),
+                      child: OrdersPage(
+                        initialTab: s.uri.queryParameters['tab'] == 'poojas' ? 1 : 0,
+                      ),
+                    ),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        parentNavigatorKey: _rootKey,
+                        builder: (_, s) => BlocProvider(
+                          key: ValueKey('store-order-${s.pathParameters['id']}'),
+                          create: (_) => OrderDetailCubit(
+                            repo: getIt(),
+                            payments: _storePayments(),
+                            id: s.pathParameters['id']!,
+                            realtime: getIt<RealtimeClient>().events,
+                          )..load(),
+                          child: OrderDetailPage(
+                            justPlaced: s.uri.queryParameters['placed'] == '1',
+                          ),
+                        ),
+                        routes: [
+                          GoRoute(
+                            path: 'lines/:lineId/return',
+                            parentNavigatorKey: _rootKey,
+                            builder: (_, s) => ReturnRequestPage(
+                              orderId: s.pathParameters['id']!,
+                              lineId: s.pathParameters['lineId']!,
+                              line: s.extra is OrderLine ? s.extra as OrderLine : null,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'consults',
+                    parentNavigatorKey: _rootKey,
+                    builder: (_, _) => BlocProvider(
+                      create: (_) => ConsultsCubit(getIt())..load(),
+                      child: const ConsultsPage(),
+                    ),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        parentNavigatorKey: _rootKey,
+                        builder: (_, s) => BlocProvider(
+                          key: ValueKey('store-consult-${s.pathParameters['id']}'),
+                          create: (_) => ConsultDetailCubit(
+                            repo: getIt(),
+                            id: s.pathParameters['id']!,
+                          )..load(),
+                          child: const ConsultDetailPage(),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

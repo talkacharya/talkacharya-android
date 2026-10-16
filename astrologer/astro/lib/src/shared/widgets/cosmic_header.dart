@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Deep-space header for a bottom-nav tab: large title, optional subtitle,
 /// trailing [actions] (render them in [BrandColors.onCosmic]), and an optional
 /// [bottom] slot (search field, [PillTabBar], …). Same visual language as the
@@ -12,8 +13,12 @@ class CosmicTabHeader extends StatelessWidget {
     this.subtitle,
     this.actions = const [],
     this.bottom,
+    this.leading,
     super.key,
   });
+
+  /// Before the title — a back button on a page pushed above the tabs.
+  final Widget? leading;
 
   final String title;
   final String? subtitle;
@@ -47,6 +52,7 @@ class CosmicTabHeader extends StatelessWidget {
                     children: [
                       Row(
                         children: [
+                          ?leading,
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

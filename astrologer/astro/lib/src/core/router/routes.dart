@@ -64,6 +64,21 @@ class Routes {
   static const offers = '/offers';
   static const gallery = '/gallery';
   static const feedback = '/feedback';
+
+  /// Support, opened on the rate-change topic.
+  static const feedbackRates = '/feedback?topic=rates';
+
+  /// Assistant chat: the free, text-only line customers write in.
+  static const assistant = '/assistant';
+
+  /// The astrologer's own store: setup, listings, orders and bookings.
+  static const myStore = '/my-store';
+  static const myStoreOrders = '/my-store?tab=orders';
+  static const myStoreSetup = '/my-store/setup';
+  static const myStoreNewListing = '/my-store/listings/new';
+  static String myStoreListing(String id) => '/my-store/listings/$id';
+  static String myStoreOrder(String id) => '/my-store/orders/$id';
+  static String assistantRoom(String id) => '/assistant/$id';
   static const quickReplies = '/quick-replies';
   static const calendar = '/calendar';
 
@@ -79,6 +94,10 @@ class Routes {
 
   static const waitlist = '/waitlist';
   static const callHistory = '/call-history';
+
+  /// Every finished session as a card with follow-ups (kundali, remedy,
+  /// assistant chat, note).
+  static const history = '/history';
 
   /// Reports customers raised on the astrologer's sessions.
   static const reports = '/reports';

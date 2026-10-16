@@ -21,6 +21,7 @@ import '../../../wallet/presentation/cubit/wallet_cubit.dart';
 import '../../data/profile_api.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// How far the stats card tucks up into the header.
 const double _kStatsOverlap = 34;
 
@@ -178,25 +179,22 @@ class ProfilePage extends StatelessWidget {
                       onTap: () => _shareApp(context),
                     ),
                   ]),
-                  _Group(l.profileGroupLegal, [
-                    if (config.support.termsUrl.isNotEmpty)
-                      _MenuRow(
-                        icon: Icons.description_outlined,
-                        label: l.profileTerms,
-                        onTap: () => _open(config.support.termsUrl),
-                      ),
-                    if (config.support.privacyUrl.isNotEmpty)
-                      _MenuRow(
-                        icon: Icons.privacy_tip_outlined,
-                        label: l.profilePrivacy,
-                        onTap: () => _open(config.support.privacyUrl),
-                      ),
-                    _MenuRow(
-                      icon: Icons.article_outlined,
-                      label: l.profileLicenses,
-                      onTap: () => showLicensePage(context: context),
-                    ),
-                  ]),
+                  if (config.support.termsUrl.isNotEmpty ||
+                      config.support.privacyUrl.isNotEmpty)
+                    _Group(l.profileGroupLegal, [
+                      if (config.support.termsUrl.isNotEmpty)
+                        _MenuRow(
+                          icon: Icons.description_outlined,
+                          label: l.profileTerms,
+                          onTap: () => _open(config.support.termsUrl),
+                        ),
+                      if (config.support.privacyUrl.isNotEmpty)
+                        _MenuRow(
+                          icon: Icons.privacy_tip_outlined,
+                          label: l.profilePrivacy,
+                          onTap: () => _open(config.support.privacyUrl),
+                        ),
+                    ]),
                   _Group(null, [
                     _MenuRow(
                       icon: Icons.logout_rounded,
@@ -215,7 +213,7 @@ class ProfilePage extends StatelessWidget {
                   ]),
                   const SizedBox(height: 20),
                   const _AppVersion(),
-                  const SizedBox(height: 140),
+                  const SizedBox(height: 50),
                 ],
               ),
             ),

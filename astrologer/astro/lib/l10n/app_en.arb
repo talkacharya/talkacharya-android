@@ -434,17 +434,6 @@
   "editDiscard": "Discard",
   "editKeepEditing": "Keep editing",
   "ratesSubtitle": "What customers pay per minute. Changes apply to new sessions.",
-  "ratesAllowed": "Allowed {min} – {max}",
-  "@ratesAllowed": {
-    "placeholders": {
-      "min": {
-        "type": "String"
-      },
-      "max": {
-        "type": "String"
-      }
-    }
-  },
   "ratesYouEarn": "You earn about {amount}/min after the {fee}% platform fee",
   "@ratesYouEarn": {
     "placeholders": {
@@ -456,29 +445,9 @@
       }
     }
   },
-  "ratesSuggested": "Suggested {amount}",
-  "@ratesSuggested": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "ratesNotOffered": "Not offered on the platform yet",
-  "ratesSaveCount": "{count, plural, =1{Save 1 change} other{Save {count} changes}}",
-  "@ratesSaveCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "ratesUpdated": "Rates updated",
   "hoursChannels": "Consultation types",
   "hoursChannelsHint": "Customers can only request the types you accept.",
   "hoursNeedChannel": "Keep at least one consultation type on",
-  "hoursConcurrent": "Chats at the same time",
-  "hoursConcurrentHint": "How many chat sessions you can handle at once",
   "hoursSchedule": "Weekly schedule",
   "hoursScheduleHint": "Shown to customers as your usual hours. You still go online yourself.",
   "hoursOff": "Off",
@@ -2027,8 +1996,8 @@
   "wsAddPhoto": "Add photo",
   "wsPhotoRemoveTitle": "Remove this photo?",
   "wsGalleryRules": "Use your own photos: you at work, your certificates, poojas you've performed. No phone numbers or other contact details in the picture.",
-  "wsFeedback": "Feedback",
-  "wsFeedbackSubtitle": "Tell us what's broken or what would help. We read every message.",
+  "wsFeedback": "Support",
+  "wsFeedbackSubtitle": "Write to our team — a rate change, a problem, an idea. We read every message and reply here.",
   "wsFeedbackBug": "Something's broken",
   "wsFeedbackSuggestion": "Suggestion",
   "wsFeedbackPayments": "Payments",
@@ -2296,31 +2265,91 @@
   "appUpdateRestart": "Restart",
   "nextOnlineSet": "Set next online",
   "nextOnlineBack": "Back {when} · Change",
-  "@nextOnlineBack": {"placeholders": {"when": {"type": "String"}}},
+  "@nextOnlineBack": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "nextOnlineSheetTitle": "When will you take {channel} again?",
-  "@nextOnlineSheetTitle": {"placeholders": {"channel": {"type": "String"}}},
+  "@nextOnlineSheetTitle": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
   "nextOnlineInfo": "{channel} stays off until then and comes back on by itself. Customers see when you will be back.",
-  "@nextOnlineInfo": {"placeholders": {"channel": {"type": "String"}}},
+  "@nextOnlineInfo": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
   "nextOnlineDay": "Day",
   "nextOnlineTime": "Time",
   "nextOnlineToday": "Today",
   "nextOnlineTomorrow": "Tomorrow",
   "nextOnlineWhen": "{day}, {time}",
-  "@nextOnlineWhen": {"placeholders": {"day": {"type": "String"}, "time": {"type": "String"}}},
+  "@nextOnlineWhen": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "nextOnlinePickDate": "Pick a date",
   "nextOnlineCustomTime": "Other time",
   "nextOnlineConfirm": "Set next online",
   "nextOnlineConfirmAt": "Back {when}",
-  "@nextOnlineConfirmAt": {"placeholders": {"when": {"type": "String"}}},
+  "@nextOnlineConfirmAt": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "nextOnlineTurnOn": "Turn {channel} on now",
-  "@nextOnlineTurnOn": {"placeholders": {"channel": {"type": "String"}}},
+  "@nextOnlineTurnOn": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
   "nextOnlinePast": "Pick a time that is still ahead",
   "nextOnlineDone": "{channel} is off until {when}",
-  "@nextOnlineDone": {"placeholders": {"channel": {"type": "String"}, "when": {"type": "String"}}},
+  "@nextOnlineDone": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      },
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "nextOnlineCleared": "{channel} is on again",
-  "@nextOnlineCleared": {"placeholders": {"channel": {"type": "String"}}},
+  "@nextOnlineCleared": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
   "incomingCallKind": "Incoming {channel} request",
-  "@incomingCallKind": {"placeholders": {"channel": {"type": "String"}}},
+  "@incomingCallKind": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
   "incomingCallCustomer": "Customer",
   "incomingCallHint": "A customer is waiting for you",
   "incomingCallTest": "Test call",
@@ -2336,17 +2365,44 @@
   "pubOffline": "Offline",
   "pubPhotos": "Photos",
   "pubPhotosWaiting": "{count, plural, =1{1 more is waiting for review} other{{count} more are waiting for review}}",
-  "@pubPhotosWaiting": {"placeholders": {"count": {"type": "int"}}},
+  "@pubPhotosWaiting": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pubPhotosCount": "{count, plural, =1{1 photo} other{{count} photos}}",
-  "@pubPhotosCount": {"placeholders": {"count": {"type": "int"}}},
+  "@pubPhotosCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "pubPhotoOf": "{index} of {total}",
-  "@pubPhotoOf": {"placeholders": {"index": {"type": "int"}, "total": {"type": "int"}}},
+  "@pubPhotoOf": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "pubPhotosEmpty": "No photos on your profile yet. Customers trust a profile they can see.",
   "pubAddPhotos": "Add photos",
   "pubManage": "Manage photos",
   "pubSeeAll": "See all",
   "pubPerMinute": "{price}/min",
-  "@pubPerMinute": {"placeholders": {"price": {"type": "String"}}},
+  "@pubPerMinute": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
   "pubRatesEmpty": "No rates set yet.",
   "pubExpertise": "Expertise",
   "pubLanguages": "Languages",
@@ -2368,12 +2424,30 @@
   "kycDocOptional": "Optional",
   "kycDocWaiting": "Waiting for review",
   "kycDocEndsIn": "ends in {digits}",
-  "@kycDocEndsIn": {"placeholders": {"digits": {"type": "String"}}},
+  "@kycDocEndsIn": {
+    "placeholders": {
+      "digits": {
+        "type": "String"
+      }
+    }
+  },
   "kycDocReplace": "Replace",
   "kycDocNumber": "{document} number",
-  "@kycDocNumber": {"placeholders": {"document": {"type": "String"}}},
+  "@kycDocNumber": {
+    "placeholders": {
+      "document": {
+        "type": "String"
+      }
+    }
+  },
   "kycDocNumberKeep": "Leave empty to keep the one ending in {digits}",
-  "@kycDocNumberKeep": {"placeholders": {"digits": {"type": "String"}}},
+  "@kycDocNumberKeep": {
+    "placeholders": {
+      "digits": {
+        "type": "String"
+      }
+    }
+  },
   "kycDocAddPhoto": "Add a photo of it",
   "kycDocReplacePhoto": "Upload a new photo",
   "wizDocsRequired": "Add every document marked as needed",
@@ -2386,7 +2460,13 @@
   "obBankFix": "Correct bank details",
   "obInterviewTitle": "Your interview",
   "obInterviewWhen": "{when}",
-  "@obInterviewWhen": {"placeholders": {"when": {"type": "String"}}},
+  "@obInterviewWhen": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "obInterviewPhone": "We will call you on your registered number.",
   "obInterviewWhatsapp": "We will call you on WhatsApp on your registered number.",
   "obInterviewLink": "Join with the meeting link below at that time.",
@@ -2394,11 +2474,32 @@
   "obInterviewWaiting": "Your documents are in order. We will set a time for your interview and tell you.",
   "obInterviewMissed": "We missed you at your interview. We will set a new time and tell you.",
   "obInterviewToday": "Today, {time}",
-  "@obInterviewToday": {"placeholders": {"time": {"type": "String"}}},
+  "@obInterviewToday": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "obInterviewTomorrow": "Tomorrow, {time}",
-  "@obInterviewTomorrow": {"placeholders": {"time": {"type": "String"}}},
+  "@obInterviewTomorrow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "obInterviewOn": "{date}, {time}",
-  "@obInterviewOn": {"placeholders": {"date": {"type": "String"}, "time": {"type": "String"}}},
+  "@obInterviewOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "reportsTitle": "Session reports",
   "reportsMenuSub": "What customers reported, and your side of it",
   "reportsSubtitle": "When a customer reports a session, you see it here and can give your side before our team decides.",
@@ -2411,10 +2512,22 @@
   "reportsCleared": "No action taken",
   "reportsDecided": "Decided",
   "reportsWaitingTitle": "{count, plural, =1{1 report needs your reply} other{{count} reports need your reply}}",
-  "@reportsWaitingTitle": {"placeholders": {"count": {"type": "int"}}},
+  "@reportsWaitingTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "reportsWaitingBody": "Our team decides after hearing from you, or when the time runs out.",
   "reportsReplyBy": "Reply by {when}",
-  "@reportsReplyBy": {"placeholders": {"when": {"type": "String"}}},
+  "@reportsReplyBy": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "reportsTypeBilling": "About the charge",
   "reportsTypeConduct": "About conduct",
   "reportsTypeQuality": "About the quality of the session",
@@ -2423,17 +2536,35 @@
   "reportsTypeOther": "A report",
   "reportsHeroReplyBody": "Tell us what happened in this session. Our team reads both sides before deciding.",
   "reportsHeroReplyBy": "Tell us what happened in this session by {when}. Our team reads both sides before deciding.",
-  "@reportsHeroReplyBy": {"placeholders": {"when": {"type": "String"}}},
+  "@reportsHeroReplyBy": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "reportsHeroReviewBody": "Our team is looking into it. You will be told as soon as it is decided.",
   "reportsHeroClearedBody": "Our team looked into it and took no action against you.",
   "reportsHeroDecidedBody": "Our team has decided this report. The outcome is below.",
   "reportsSaidTitle": "What {name} said",
-  "@reportsSaidTitle": {"placeholders": {"name": {"type": "String"}}},
+  "@reportsSaidTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "reportsFactSession": "Session",
   "reportsFactLength": "Length",
   "reportsFactBilled": "Billed",
   "reportsMinutes": "{count} min",
-  "@reportsMinutes": {"placeholders": {"count": {"type": "int"}}},
+  "@reportsMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "reportsMySideTitle": "Your side",
   "reportsMySideHint": "Say what happened, in your own words.",
   "reportsReplyHint": "For example: how long the session ran, what you covered, what went wrong and why.",
@@ -2442,21 +2573,45 @@
   "reportsReplyTooShort": "Write at least a sentence about what happened",
   "reportsReplySent": "Your reply has been sent to our team",
   "reportsSentAt": "Sent {when}",
-  "@reportsSentAt": {"placeholders": {"when": {"type": "String"}}},
+  "@reportsSentAt": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "reportsNoReply": "No reply was given before this was decided.",
   "reportsOutcomeTitle": "What was decided",
   "reportsOutcomeNone": "No action was taken against you.",
   "reportsOutcomeRefund": "The customer was refunded. Your earning for this session is unchanged.",
   "reportsOutcomePenalty": "The customer was refunded, and {amount} was deducted from your earnings.",
-  "@reportsOutcomePenalty": {"placeholders": {"amount": {"type": "String"}}},
+  "@reportsOutcomePenalty": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "reportsOutcomeNote": "Note from our team",
   "delAccTitle": "Delete account",
   "delAccHeroTitle": "Delete your account",
   "delAccStepNow": "You are signed out on every phone right away.",
   "delAccStepWait": "Your account is erased after {days} days.",
-  "@delAccStepWait": {"placeholders": {"days": {"type": "int"}}},
+  "@delAccStepWait": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "delAccStepCancel": "Changed your mind? Sign in again within {days} days and the deletion is cancelled.",
-  "@delAccStepCancel": {"placeholders": {"days": {"type": "int"}}},
+  "@delAccStepCancel": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "delAccRemovedTitle": "What is removed",
   "delAccRemoved1": "Your name, phone number, photo and other profile details",
   "delAccRemoved3": "Your devices and notifications",
@@ -2467,7 +2622,13 @@
   "delAccReasonTitle": "Why are you leaving?",
   "delAccReasonHint": "Optional. It helps us do better.",
   "delAccUnderstand": "I understand this cannot be undone after {days} days",
-  "@delAccUnderstand": {"placeholders": {"days": {"type": "int"}}},
+  "@delAccUnderstand": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "delAccButton": "Delete my account",
   "delAccSheetTitle": "Delete your account?",
   "delAccSheetBody": "You will be signed out on every phone right now.",
@@ -2592,5 +2753,289 @@
   "trainGateStart": "Start training",
   "trainGateContinue": "Continue training",
   "trainWhileWaiting": "Watch the training meanwhile",
-  "trainWhileWaitingBody": "Lessons you finish now are counted once you are approved."
+  "trainWhileWaitingBody": "Lessons you finish now are counted once you are approved.",
+  "ratesSetByPlatformTitle": "Your rates are set by TalkAcharya",
+  "ratesSetByPlatformBody": "We set them from your performance — rating, repeat customers, how quickly you answer. Doing well and want a higher rate? Request a change and our team will look at it.",
+  "ratesRequestChange": "Request a rate change",
+  "ratesNotSetYet": "Not set yet — our team will set it",
+  "wsFeedbackRates": "Rate change",
+  "wsFeedbackRatesHint": "Which rate would you like changed, and why? E.g. your rating, repeat customers, experience.",
+  "assistantTitle": "Assistant chats",
+  "assistantInboxSubtitle": "Free messages customers send from your profile",
+  "assistantWaitingCount": "{count, plural, =1{1 customer waiting for your reply} other{{count} customers waiting for your reply}}",
+  "@assistantWaitingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "assistantInboxEmptyTitle": "No messages yet",
+  "assistantInboxEmptyBody": "When a customer messages you from your profile, it shows up here.",
+  "assistantYouPrefix": "You: ",
+  "assistantRoomSubtitleAstro": "Assistant chat · free for the customer",
+  "assistantHintAstro": "Write a reply",
+  "assistantEmptyTitleAstro": "Nothing here yet",
+  "assistantEmptyBodyAstro": "This customer's messages will show up here.",
+  "assistantIntroAstro": "A free chat the customer started from your profile. It is not a paid consultation — for a full reading, ask them to start one.",
+  "assistantWaitForReply": "Waiting for a reply before more messages can be sent.",
+  "assistantBlocked": "Messages are turned off in this chat.",
+  "assistantDisabled": "Assistant chat is not available right now.",
+  "assistantNotSent": "Not sent · Tap for options",
+  "assistantRetry": "Try again",
+  "assistantDiscard": "Delete message",
+  "assistantToday": "Today",
+  "assistantYesterday": "Yesterday",
+  "msTitle": "My store",
+  "msSubtitle": "Your products, services and orders",
+  "msSubtitleNew": "Sell your own products and services",
+  "msEditStore": "Store details",
+  "msTabListings": "Listings",
+  "msTabOrders": "Orders",
+  "msTabBookings": "Bookings",
+  "msAddListing": "Add",
+  "msUnavailableTitle": "Selling isn't open yet",
+  "msUnavailableBody": "You'll be able to sell your own products and services here soon.",
+  "msIntroTitle": "Your own store on TalkAcharya",
+  "msIntroBody": "Sell what you trust — energised rudraksha, yantras, gemstones — and the poojas and rituals you perform. Customers find them in the store and on your profile.",
+  "msStep1Title": "Set up your store",
+  "msStep1Body": "A name and the address your parcels are picked up from. Our team approves it.",
+  "msStep2Title": "List products and services",
+  "msStep2Body": "Photos from your phone, a description, price and stock. Photos are cropped to fit automatically.",
+  "msStep3Title": "Quick review, then live",
+  "msStep3Body": "We check each listing for promises of results before it goes live.",
+  "msStep4Title": "Get paid with your earnings",
+  "msStep4Body": "Ship orders or perform the booked service; your share joins your payouts.",
+  "msSetUpStore": "Set up my store",
+  "msPendingTitle": "Waiting for approval",
+  "msPendingBody": "Our team is checking your store. You can prepare listings meanwhile — they go live once both are approved.",
+  "msSuspendedTitle": "Your store is paused",
+  "msSuspendedBody": "Your listings aren't shown to customers. Write to support to know more.",
+  "msNoListingsTitle": "Nothing listed yet",
+  "msNoListingsBody": "Tap Add to list your first product or service.",
+  "msOrdersAfterApproval": "Orders and bookings appear here once your store is approved.",
+  "msNoOrdersTitle": "No orders yet",
+  "msNoOrdersBody": "When a customer buys something you sell, it shows up here.",
+  "msNoBookingsTitle": "No bookings yet",
+  "msNoBookingsBody": "Services customers book from you show up here.",
+  "msOrdersToDo": "To do",
+  "msOrdersEarlier": "Earlier",
+  "msStatusDraft": "Draft",
+  "msStatusInReview": "In review",
+  "msStatusLive": "Live",
+  "msStatusChanges": "Changes needed",
+  "msOutOfStock": "Out of stock",
+  "msStockCount": "{count} in stock",
+  "@msStockCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "msSoldCount": "{count, plural, =0{Not sold yet} =1{1 sold} other{{count} sold}}",
+  "@msSoldCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "msTeamSaid": "Our team said",
+  "msOrderAwaiting": "Needs your OK",
+  "msOrderNew": "New",
+  "msOrderPreparing": "Preparing",
+  "msOrderShipped": "Shipped",
+  "msOrderDelivered": "Delivered",
+  "msOrderCompleted": "Completed",
+  "msOrderCancelled": "Cancelled",
+  "msOrderReturned": "Returned",
+  "msBookingToDo": "To perform",
+  "msBookingPerformed": "Performed",
+  "msBookingProofShared": "Proof shared",
+  "msBookingDone": "Completed",
+  "msBookingCancelled": "Cancelled",
+  "msBookingFor": "For {date}",
+  "@msBookingFor": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "msMarkPerformed": "Mark performed",
+  "msShareProof": "Share photo / video",
+  "msProofPhoto": "A photo",
+  "msProofVideo": "A video",
+  "msProofShared": "Shared with the customer",
+  "msSetupSubtitle": "Customers see the name; the address is only for pickups.",
+  "msStoreSection": "Your store",
+  "msStoreName": "Store name",
+  "msStoreAbout": "About your store",
+  "msStoreAboutHint": "What you sell and why customers can trust it",
+  "msPickupSection": "Pickup address",
+  "msPickupHint": "Where the courier collects parcels. Not shown to customers.",
+  "msAddressLine1": "House / shop, street",
+  "msAddressLine2": "Area, landmark (optional)",
+  "msCity": "City",
+  "msState": "State",
+  "msPin": "PIN code",
+  "msPinInvalid": "Enter a 6-digit PIN code",
+  "msPickupPhone": "Phone for the courier",
+  "msSetupNote": "TalkAcharya invoices customers and handles GST, so you don't need a GSTIN. Your share is paid with your earnings.",
+  "msSendForApproval": "Send for approval",
+  "msStoreOpened": "Your store is open",
+  "msStoreSentForApproval": "Sent — we'll let you know once it's approved",
+  "msRequired": "Required",
+  "msNewListing": "New listing",
+  "msEditListing": "Edit listing",
+  "msStopSelling": "Stop selling",
+  "msStoppedSelling": "Taken off sale — it's a draft again",
+  "msDelete": "Delete",
+  "msDeleteTitle": "Delete this listing?",
+  "msDeleteBody": "It leaves your store. Orders already placed are not affected.",
+  "msSaveDraft": "Save draft",
+  "msSaveChanges": "Save changes",
+  "msSendForReview": "Send for review",
+  "msSentForReview": "Sent for review — we'll tell you when it's live",
+  "msFixChecklist": "Saved. Finish the list above to send it for review.",
+  "msBackToReview": "Saved. It's off sale until our team checks the changes.",
+  "msLiveEditTitle": "This will go back to review",
+  "msLiveEditBody": "You changed what customers read or see. The listing comes off sale until our team checks it again. Price and stock changes don't need a review.",
+  "msLiveEditGo": "Save and send",
+  "msPhotos": "Photos",
+  "msPhotosHint": "Up to {count}. Any size — they're cropped to fit. The first is the cover.",
+  "@msPhotosHint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "msPhotoLimit": "Up to {count} photos per listing",
+  "@msPhotoLimit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "msPhotoCamera": "Take a photo",
+  "msPhotoGallery": "Choose from gallery",
+  "msAddPhoto": "Add photo",
+  "msCover": "Cover",
+  "msMakeCover": "Make it the cover",
+  "msRemovePhoto": "Remove photo",
+  "msWhatSection": "What you're selling",
+  "msType": "Type",
+  "msKindProduct": "Product",
+  "msKindService": "Service",
+  "msCategory": "Category",
+  "msTitleField": "Name",
+  "msTitleHintProduct": "e.g. Five Mukhi Rudraksha, Nepal",
+  "msTitleHintService": "e.g. Navgraha Shanti Pooja",
+  "msSubtitleField": "One line under the name (optional)",
+  "msDescription": "Description",
+  "msDescHintProduct": "What it is, where it comes from, how it's prepared or energised",
+  "msDescHintService": "What you do, where, how long it takes, what the customer receives",
+  "msSignificance": "Traditional significance (optional)",
+  "msHowToUse": "How to wear / use (optional)",
+  "msHowPerformed": "How it's performed (optional)",
+  "msClaimsRule": "Don't promise results or cures (\"guaranteed wealth\", \"cures illness\"). Listings that do are sent back.",
+  "msDetailsSection": "Details",
+  "msPriceSection": "Price and stock",
+  "msPriceHint": "Customers pay this, taxes included. Changes apply at once.",
+  "msPrice": "Price",
+  "msPriceInvalid": "Enter a price",
+  "msMrp": "MRP (optional)",
+  "msMrpHint": "Shown struck through",
+  "msMrpBelowPrice": "Can't be below the price",
+  "msStock": "In stock",
+  "msStockHint": "0 = out of stock",
+  "msWeight": "Packed weight",
+  "msWeightHint": "For delivery charges",
+  "msLeadProduct": "Ships within",
+  "msLeadService": "Performed within",
+  "msDays": "days",
+  "msDraftExplain": "Only you can see this. Send it for review when it's ready.",
+  "msReviewExplain": "Our team is checking it. You'll get a notification when it's live.",
+  "msLiveExplain": "Customers can buy this now. Price and stock changes apply at once.",
+  "msChecklistTitle": "Before you send it",
+  "msCheckPhoto": "Add at least one photo",
+  "msCheckDescription": "Describe it in a few lines",
+  "msCheckPrice": "Set a price",
+  "msCheckWeight": "Enter the packed weight",
+  "msOrder": "Order",
+  "msOrderNumber": "Order {number}",
+  "@msOrderNumber": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "msItems": "Items",
+  "msOrderTotal": "Total",
+  "msShipTo": "Ship to",
+  "msCopyAddress": "Copy address",
+  "msCopied": "Copied",
+  "msShipment": "Shipment",
+  "msStartPreparing": "Start preparing",
+  "msMarkShipped": "Mark shipped",
+  "msShipTitle": "Shipping details",
+  "msShipHint": "The customer gets these to track the parcel.",
+  "msCourier": "Courier",
+  "msAwb": "AWB / tracking number",
+  "msTrackingLink": "Tracking link (optional)",
+  "msCancelOrder": "Cancel order",
+  "msCancelOrderTitle": "Cancel this order?",
+  "msCancelReason": "Reason (the customer sees it)",
+  "histTitle": "Consultation history",
+  "histSubtitle": "Every session, with the customer's details and ways to follow up.",
+  "histSearch": "Search name, phone or session ID",
+  "histFilterAll": "All",
+  "histFilterFavourites": "Favourites",
+  "histEmptyTitle": "No sessions yet",
+  "histEmptyBody": "Finished chats and calls show up here.",
+  "histEmptyFilter": "Nothing matches",
+  "histLoadMore": "Load more",
+  "histLoading": "Loading…",
+  "histPerformance": "Your performance",
+  "histNoteTitle": "Private note",
+  "histNoteHint": "Only you can see this — e.g. career question, follow up after Diwali",
+  "histCancel": "Cancel",
+  "histSave": "Save",
+  "histFirstSession": "First session",
+  "histSessionNumber": "Session {n}",
+  "@histSessionNumber": {"placeholders": {"n": {"type": "int"}}},
+  "histRepeatClient": "Repeat client",
+  "histFavourite": "Favourite",
+  "histCustomer": "Customer",
+  "histBirthDate": "Date of birth",
+  "histBirthPlace": "Place of birth",
+  "histGender": "Gender",
+  "histGenderMale": "Male",
+  "histGenderFemale": "Female",
+  "histDuration": "Duration",
+  "histEarned": "You earned",
+  "histRating": "Rating",
+  "histStatusCompleted": "Completed",
+  "histStatusCancelled": "Cancelled",
+  "histStatusMissed": "Missed",
+  "histStatusDeclined": "Declined",
+  "histStatusNoShow": "No show",
+  "histStatusFailed": "Failed",
+  "histTagPickedFast": "Picked on time (≤15s)",
+  "histTagPickedLate": "Picked late",
+  "histTagShort": "Short session (<2 min)",
+  "histTagEndedCustomer": "Customer ended",
+  "histTagEndedYou": "You ended",
+  "histTagEndedBalance": "Ended: low balance",
+  "histTagEndedDisconnect": "Disconnected",
+  "histTagRemedy": "Remedy suggested",
+  "histOpenKundali": "Open kundali",
+  "histSendRemedy": "Send remedy",
+  "histChatAssistant": "Chat assistant",
+  "histOpenChat": "Open chat",
+  "dashActionHistory": "History"
 }

@@ -11,7 +11,6 @@ import '../../../data/models/horoscope.dart';
 import '../../../data/models/zodiac.dart';
 import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
-import 'zodiac_wheel.dart';
 import 'package:customr/src/core/l10n/l10n.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
@@ -38,8 +37,7 @@ class HoroscopeCard extends StatelessWidget {
             onTap: () => _pickSign(context, cubit, sign),
           ),
         ),
-        const SizedBox(height: 12),
-        const ZodiacWheel(),
+        // The sign is picked from the chip above (a bottom sheet).
         const SizedBox(height: 12),
         Padding(
           padding: HomeGaps.sidePad,

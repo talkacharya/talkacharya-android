@@ -60,7 +60,7 @@ class SectionHeader extends StatelessWidget {
         children: [
           Container(
             width: 4,
-            height: subtitle == null ? 22 : 36,
+            height: subtitle == null ? 18 : 32,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
               gradient: hue.linear(
@@ -80,7 +80,7 @@ class SectionHeader extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.titleLarge?.copyWith(
-                    fontSize: 20,
+                    fontSize: 17,
                     fontWeight: FontWeight.w700,
                     height: 1.15,
                   ),
@@ -195,8 +195,6 @@ class SectionSwitcher extends StatelessWidget {
     );
   }
 }
-
-
 
 /// Shimmer tuned to the warm palette.
 class HomeShimmer extends StatelessWidget {

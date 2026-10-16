@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/router/routes.dart';
 import '../../../../core/util/money.dart';
 import '../../../../shared/widgets/app_snack.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
@@ -110,10 +112,11 @@ class _ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     final sections = <Widget>[
       _StatsCard(a: a),
+      if (a.assistantState != 'off') _AssistantCard(a: a),
       if (a.skills.isNotEmpty) _SkillsCard(skills: a.skills),
       if (a.bio.isNotEmpty) _AboutSection(bio: a.bio, languages: a.languages),
       if (a.gallery.isNotEmpty) AstrologerGallery(photos: a.gallery),
-      if (a.topReviews.isNotEmpty) AstrologerReviewsCard(astrologer: a),
+      AstrologerReviewsCard(astrologer: a),
       if (a.rates.isNotEmpty) _RatesCard(rates: a.rates, astrologer: a),
       const _TrustRow(),
     ];
@@ -576,8 +579,6 @@ class _StatsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = context.l10n;
     final brand = context.brand;
-    final followers =
-        watchFollow(context, a.id, followEntryOf(a))?.followersCount ?? 0;
 
     final all = <(IconData, AstroHue, String, String)>[
       (
@@ -588,12 +589,12 @@ class _StatsCard extends StatelessWidget {
             ? l.astroReviewsCount(a.ratingCount)
             : l.astroStatRating,
       ),
-      if (followers > 0)
+      if (a.consultationMinutes > 0)
         (
-          Icons.people_alt_rounded,
+          Icons.timer_rounded,
           AstroPalette.love,
-          compactFollowers(followers),
-          l.astroStatFollowers,
+          _compact(a.consultationMinutes),
+          l.astroStatMinutes,
         ),
       if (a.yearsExperience > 0)
         (
@@ -845,6 +846,10 @@ class _RatesCard extends StatelessWidget {
     final theme = Theme.of(context);
     final brand = context.brand;
     final locale = Localizations.localeOf(context).toLanguageTag();
+    // VIDEO-OFF: video calls are switched off for now, so its price is not
+    // listed. To bring it back, drop this filter.
+    final rates = this.rates.where((r) => r.channel != 'video').toList();
+    if (rates.isEmpty) return const SizedBox.shrink();
     final cheapest = rates
         .map((r) => r.perMinute)
         .reduce((a, b) => a < b ? a : b);
@@ -1116,6 +1121,113 @@ class _TrustRow extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// A free, text-only line to the astrologer, outside a consultation. It opens
+/// after the customer's first consultation with them; until then the card says
+/// so, and how to get there.
+class _AssistantCard extends StatelessWidget {
+  const _AssistantCard({required this.a});
+
+  final Astrologer a;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    final brand = context.brand;
+    final locked = a.assistantState == 'locked';
+    final thread = a.assistantThread;
+    return Pressable(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            if (locked) {
+              AppSnack.showTop(
+                context,
+                l.assistantLockedSnack(a.name),
+                type: SnackType.info,
+              );
+            } else {
+              context.push(
+                thread != null
+                    ? Routes.assistantRoom(thread)
+                    : Routes.assistantWith(a.id),
+              );
+            }
+          },
+          child: _Card(
+            child: Row(
+              children: [
+                HueIcon(
+                  hue: locked ? AstroPalette.air : AstroPalette.career,
+                  icon: locked ? Icons.lock_rounded : Icons.forum_rounded,
+                  size: 44,
+                  iconSize: 22,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              locked
+                                  ? l.assistantLockedTitle
+                                  : l.assistantCardTitle,
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 1,
+                            ),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: BrandColors.goldGradient,
+                              ),
+                              borderRadius: BorderRadius.circular(99),
+                            ),
+                            child: Text(
+                              l.assistantFree,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: const Color(0xFF3A1703),
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        locked
+                            ? l.assistantLockedBody(a.name)
+                            : l.assistantCardBody(a.name),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: brand.inkMuted,
+                          height: 1.3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Icon(Icons.chevron_right_rounded, color: brand.inkMuted),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

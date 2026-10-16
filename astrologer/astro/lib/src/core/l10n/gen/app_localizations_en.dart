@@ -847,36 +847,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'What customers pay per minute. Changes apply to new sessions.';
 
   @override
-  String ratesAllowed(String min, String max) {
-    return 'Allowed $min – $max';
-  }
-
-  @override
   String ratesYouEarn(String amount, String fee) {
     return 'You earn about $amount/min after the $fee% platform fee';
   }
-
-  @override
-  String ratesSuggested(String amount) {
-    return 'Suggested $amount';
-  }
-
-  @override
-  String get ratesNotOffered => 'Not offered on the platform yet';
-
-  @override
-  String ratesSaveCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Save $count changes',
-      one: 'Save 1 change',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get ratesUpdated => 'Rates updated';
 
   @override
   String get hoursChannels => 'Consultation types';
@@ -887,13 +860,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hoursNeedChannel => 'Keep at least one consultation type on';
-
-  @override
-  String get hoursConcurrent => 'Chats at the same time';
-
-  @override
-  String get hoursConcurrentHint =>
-      'How many chat sessions you can handle at once';
 
   @override
   String get hoursSchedule => 'Weekly schedule';
@@ -2731,11 +2697,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Use your own photos: you at work, your certificates, poojas you\'ve performed. No phone numbers or other contact details in the picture.';
 
   @override
-  String get wsFeedback => 'Feedback';
+  String get wsFeedback => 'Support';
 
   @override
   String get wsFeedbackSubtitle =>
-      'Tell us what\'s broken or what would help. We read every message.';
+      'Write to our team — a rate change, a problem, an idea. We read every message and reply here.';
 
   @override
   String get wsFeedbackBug => 'Something\'s broken';
@@ -4123,4 +4089,773 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get trainWhileWaitingBody =>
       'Lessons you finish now are counted once you are approved.';
+
+  @override
+  String get ratesSetByPlatformTitle => 'Your rates are set by TalkAcharya';
+
+  @override
+  String get ratesSetByPlatformBody =>
+      'We set them from your performance — rating, repeat customers, how quickly you answer. Doing well and want a higher rate? Request a change and our team will look at it.';
+
+  @override
+  String get ratesRequestChange => 'Request a rate change';
+
+  @override
+  String get ratesNotSetYet => 'Not set yet — our team will set it';
+
+  @override
+  String get wsFeedbackRates => 'Rate change';
+
+  @override
+  String get wsFeedbackRatesHint =>
+      'Which rate would you like changed, and why? E.g. your rating, repeat customers, experience.';
+
+  @override
+  String get assistantTitle => 'Assistant chats';
+
+  @override
+  String get assistantInboxSubtitle =>
+      'Free messages customers send from your profile';
+
+  @override
+  String assistantWaitingCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count customers waiting for your reply',
+      one: '1 customer waiting for your reply',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get assistantInboxEmptyTitle => 'No messages yet';
+
+  @override
+  String get assistantInboxEmptyBody =>
+      'When a customer messages you from your profile, it shows up here.';
+
+  @override
+  String get assistantYouPrefix => 'You: ';
+
+  @override
+  String get assistantRoomSubtitleAstro =>
+      'Assistant chat · free for the customer';
+
+  @override
+  String get assistantHintAstro => 'Write a reply';
+
+  @override
+  String get assistantEmptyTitleAstro => 'Nothing here yet';
+
+  @override
+  String get assistantEmptyBodyAstro =>
+      'This customer\'s messages will show up here.';
+
+  @override
+  String get assistantIntroAstro =>
+      'A free chat the customer started from your profile. It is not a paid consultation — for a full reading, ask them to start one.';
+
+  @override
+  String get assistantWaitForReply =>
+      'Waiting for a reply before more messages can be sent.';
+
+  @override
+  String get assistantBlocked => 'Messages are turned off in this chat.';
+
+  @override
+  String get assistantDisabled => 'Assistant chat is not available right now.';
+
+  @override
+  String get assistantNotSent => 'Not sent · Tap for options';
+
+  @override
+  String get assistantRetry => 'Try again';
+
+  @override
+  String get assistantDiscard => 'Delete message';
+
+  @override
+  String get assistantToday => 'Today';
+
+  @override
+  String get assistantYesterday => 'Yesterday';
+
+  @override
+  String get msTitle => 'My store';
+
+  @override
+  String get msSubtitle => 'Your products, services and orders';
+
+  @override
+  String get msSubtitleNew => 'Sell your own products and services';
+
+  @override
+  String get msEditStore => 'Store details';
+
+  @override
+  String get msTabListings => 'Listings';
+
+  @override
+  String get msTabOrders => 'Orders';
+
+  @override
+  String get msTabBookings => 'Bookings';
+
+  @override
+  String get msAddListing => 'Add';
+
+  @override
+  String get msUnavailableTitle => 'Selling isn\'t open yet';
+
+  @override
+  String get msUnavailableBody =>
+      'You\'ll be able to sell your own products and services here soon.';
+
+  @override
+  String get msIntroTitle => 'Your own store on TalkAcharya';
+
+  @override
+  String get msIntroBody =>
+      'Sell what you trust — energised rudraksha, yantras, gemstones — and the poojas and rituals you perform. Customers find them in the store and on your profile.';
+
+  @override
+  String get msStep1Title => 'Set up your store';
+
+  @override
+  String get msStep1Body =>
+      'A name and the address your parcels are picked up from. Our team approves it.';
+
+  @override
+  String get msStep2Title => 'List products and services';
+
+  @override
+  String get msStep2Body =>
+      'Photos from your phone, a description, price and stock. Photos are cropped to fit automatically.';
+
+  @override
+  String get msStep3Title => 'Quick review, then live';
+
+  @override
+  String get msStep3Body =>
+      'We check each listing for promises of results before it goes live.';
+
+  @override
+  String get msStep4Title => 'Get paid with your earnings';
+
+  @override
+  String get msStep4Body =>
+      'Ship orders or perform the booked service; your share joins your payouts.';
+
+  @override
+  String get msSetUpStore => 'Set up my store';
+
+  @override
+  String get msPendingTitle => 'Waiting for approval';
+
+  @override
+  String get msPendingBody =>
+      'Our team is checking your store. You can prepare listings meanwhile — they go live once both are approved.';
+
+  @override
+  String get msSuspendedTitle => 'Your store is paused';
+
+  @override
+  String get msSuspendedBody =>
+      'Your listings aren\'t shown to customers. Write to support to know more.';
+
+  @override
+  String get msNoListingsTitle => 'Nothing listed yet';
+
+  @override
+  String get msNoListingsBody =>
+      'Tap Add to list your first product or service.';
+
+  @override
+  String get msOrdersAfterApproval =>
+      'Orders and bookings appear here once your store is approved.';
+
+  @override
+  String get msNoOrdersTitle => 'No orders yet';
+
+  @override
+  String get msNoOrdersBody =>
+      'When a customer buys something you sell, it shows up here.';
+
+  @override
+  String get msNoBookingsTitle => 'No bookings yet';
+
+  @override
+  String get msNoBookingsBody =>
+      'Services customers book from you show up here.';
+
+  @override
+  String get msOrdersToDo => 'To do';
+
+  @override
+  String get msOrdersEarlier => 'Earlier';
+
+  @override
+  String get msStatusDraft => 'Draft';
+
+  @override
+  String get msStatusInReview => 'In review';
+
+  @override
+  String get msStatusLive => 'Live';
+
+  @override
+  String get msStatusChanges => 'Changes needed';
+
+  @override
+  String get msOutOfStock => 'Out of stock';
+
+  @override
+  String msStockCount(int count) {
+    return '$count in stock';
+  }
+
+  @override
+  String msSoldCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sold',
+      one: '1 sold',
+      zero: 'Not sold yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get msTeamSaid => 'Our team said';
+
+  @override
+  String get msOrderAwaiting => 'Needs your OK';
+
+  @override
+  String get msOrderNew => 'New';
+
+  @override
+  String get msOrderPreparing => 'Preparing';
+
+  @override
+  String get msOrderShipped => 'Shipped';
+
+  @override
+  String get msOrderDelivered => 'Delivered';
+
+  @override
+  String get msOrderCompleted => 'Completed';
+
+  @override
+  String get msOrderCancelled => 'Cancelled';
+
+  @override
+  String get msOrderReturned => 'Returned';
+
+  @override
+  String get msBookingToDo => 'To perform';
+
+  @override
+  String get msBookingPerformed => 'Performed';
+
+  @override
+  String get msBookingProofShared => 'Proof shared';
+
+  @override
+  String get msBookingDone => 'Completed';
+
+  @override
+  String get msBookingCancelled => 'Cancelled';
+
+  @override
+  String msBookingFor(String date) {
+    return 'For $date';
+  }
+
+  @override
+  String get msMarkPerformed => 'Mark performed';
+
+  @override
+  String get msShareProof => 'Share photo / video';
+
+  @override
+  String get msProofPhoto => 'A photo';
+
+  @override
+  String get msProofVideo => 'A video';
+
+  @override
+  String get msProofShared => 'Shared with the customer';
+
+  @override
+  String get msSetupSubtitle =>
+      'Customers see the name; the address is only for pickups.';
+
+  @override
+  String get msStoreSection => 'Your store';
+
+  @override
+  String get msStoreName => 'Store name';
+
+  @override
+  String get msStoreAbout => 'About your store';
+
+  @override
+  String get msStoreAboutHint => 'What you sell and why customers can trust it';
+
+  @override
+  String get msPickupSection => 'Pickup address';
+
+  @override
+  String get msPickupHint =>
+      'Where the courier collects parcels. Not shown to customers.';
+
+  @override
+  String get msAddressLine1 => 'House / shop, street';
+
+  @override
+  String get msAddressLine2 => 'Area, landmark (optional)';
+
+  @override
+  String get msCity => 'City';
+
+  @override
+  String get msState => 'State';
+
+  @override
+  String get msPin => 'PIN code';
+
+  @override
+  String get msPinInvalid => 'Enter a 6-digit PIN code';
+
+  @override
+  String get msPickupPhone => 'Phone for the courier';
+
+  @override
+  String get msSetupNote =>
+      'TalkAcharya invoices customers and handles GST, so you don\'t need a GSTIN. Your share is paid with your earnings.';
+
+  @override
+  String get msSendForApproval => 'Send for approval';
+
+  @override
+  String get msStoreOpened => 'Your store is open';
+
+  @override
+  String get msStoreSentForApproval =>
+      'Sent — we\'ll let you know once it\'s approved';
+
+  @override
+  String get msRequired => 'Required';
+
+  @override
+  String get msNewListing => 'New listing';
+
+  @override
+  String get msEditListing => 'Edit listing';
+
+  @override
+  String get msStopSelling => 'Stop selling';
+
+  @override
+  String get msStoppedSelling => 'Taken off sale — it\'s a draft again';
+
+  @override
+  String get msDelete => 'Delete';
+
+  @override
+  String get msDeleteTitle => 'Delete this listing?';
+
+  @override
+  String get msDeleteBody =>
+      'It leaves your store. Orders already placed are not affected.';
+
+  @override
+  String get msSaveDraft => 'Save draft';
+
+  @override
+  String get msSaveChanges => 'Save changes';
+
+  @override
+  String get msSendForReview => 'Send for review';
+
+  @override
+  String get msSentForReview =>
+      'Sent for review — we\'ll tell you when it\'s live';
+
+  @override
+  String get msFixChecklist =>
+      'Saved. Finish the list above to send it for review.';
+
+  @override
+  String get msBackToReview =>
+      'Saved. It\'s off sale until our team checks the changes.';
+
+  @override
+  String get msLiveEditTitle => 'This will go back to review';
+
+  @override
+  String get msLiveEditBody =>
+      'You changed what customers read or see. The listing comes off sale until our team checks it again. Price and stock changes don\'t need a review.';
+
+  @override
+  String get msLiveEditGo => 'Save and send';
+
+  @override
+  String get msPhotos => 'Photos';
+
+  @override
+  String msPhotosHint(int count) {
+    return 'Up to $count. Any size — they\'re cropped to fit. The first is the cover.';
+  }
+
+  @override
+  String msPhotoLimit(int count) {
+    return 'Up to $count photos per listing';
+  }
+
+  @override
+  String get msPhotoCamera => 'Take a photo';
+
+  @override
+  String get msPhotoGallery => 'Choose from gallery';
+
+  @override
+  String get msAddPhoto => 'Add photo';
+
+  @override
+  String get msCover => 'Cover';
+
+  @override
+  String get msMakeCover => 'Make it the cover';
+
+  @override
+  String get msRemovePhoto => 'Remove photo';
+
+  @override
+  String get msWhatSection => 'What you\'re selling';
+
+  @override
+  String get msType => 'Type';
+
+  @override
+  String get msKindProduct => 'Product';
+
+  @override
+  String get msKindService => 'Service';
+
+  @override
+  String get msCategory => 'Category';
+
+  @override
+  String get msTitleField => 'Name';
+
+  @override
+  String get msTitleHintProduct => 'e.g. Five Mukhi Rudraksha, Nepal';
+
+  @override
+  String get msTitleHintService => 'e.g. Navgraha Shanti Pooja';
+
+  @override
+  String get msSubtitleField => 'One line under the name (optional)';
+
+  @override
+  String get msDescription => 'Description';
+
+  @override
+  String get msDescHintProduct =>
+      'What it is, where it comes from, how it\'s prepared or energised';
+
+  @override
+  String get msDescHintService =>
+      'What you do, where, how long it takes, what the customer receives';
+
+  @override
+  String get msSignificance => 'Traditional significance (optional)';
+
+  @override
+  String get msHowToUse => 'How to wear / use (optional)';
+
+  @override
+  String get msHowPerformed => 'How it\'s performed (optional)';
+
+  @override
+  String get msClaimsRule =>
+      'Don\'t promise results or cures (\"guaranteed wealth\", \"cures illness\"). Listings that do are sent back.';
+
+  @override
+  String get msDetailsSection => 'Details';
+
+  @override
+  String get msPriceSection => 'Price and stock';
+
+  @override
+  String get msPriceHint =>
+      'Customers pay this, taxes included. Changes apply at once.';
+
+  @override
+  String get msPrice => 'Price';
+
+  @override
+  String get msPriceInvalid => 'Enter a price';
+
+  @override
+  String get msMrp => 'MRP (optional)';
+
+  @override
+  String get msMrpHint => 'Shown struck through';
+
+  @override
+  String get msMrpBelowPrice => 'Can\'t be below the price';
+
+  @override
+  String get msStock => 'In stock';
+
+  @override
+  String get msStockHint => '0 = out of stock';
+
+  @override
+  String get msWeight => 'Packed weight';
+
+  @override
+  String get msWeightHint => 'For delivery charges';
+
+  @override
+  String get msLeadProduct => 'Ships within';
+
+  @override
+  String get msLeadService => 'Performed within';
+
+  @override
+  String get msDays => 'days';
+
+  @override
+  String get msDraftExplain =>
+      'Only you can see this. Send it for review when it\'s ready.';
+
+  @override
+  String get msReviewExplain =>
+      'Our team is checking it. You\'ll get a notification when it\'s live.';
+
+  @override
+  String get msLiveExplain =>
+      'Customers can buy this now. Price and stock changes apply at once.';
+
+  @override
+  String get msChecklistTitle => 'Before you send it';
+
+  @override
+  String get msCheckPhoto => 'Add at least one photo';
+
+  @override
+  String get msCheckDescription => 'Describe it in a few lines';
+
+  @override
+  String get msCheckPrice => 'Set a price';
+
+  @override
+  String get msCheckWeight => 'Enter the packed weight';
+
+  @override
+  String get msOrder => 'Order';
+
+  @override
+  String msOrderNumber(String number) {
+    return 'Order $number';
+  }
+
+  @override
+  String get msItems => 'Items';
+
+  @override
+  String get msOrderTotal => 'Total';
+
+  @override
+  String get msShipTo => 'Ship to';
+
+  @override
+  String get msCopyAddress => 'Copy address';
+
+  @override
+  String get msCopied => 'Copied';
+
+  @override
+  String get msShipment => 'Shipment';
+
+  @override
+  String get msStartPreparing => 'Start preparing';
+
+  @override
+  String get msMarkShipped => 'Mark shipped';
+
+  @override
+  String get msShipTitle => 'Shipping details';
+
+  @override
+  String get msShipHint => 'The customer gets these to track the parcel.';
+
+  @override
+  String get msCourier => 'Courier';
+
+  @override
+  String get msAwb => 'AWB / tracking number';
+
+  @override
+  String get msTrackingLink => 'Tracking link (optional)';
+
+  @override
+  String get msCancelOrder => 'Cancel order';
+
+  @override
+  String get msCancelOrderTitle => 'Cancel this order?';
+
+  @override
+  String get msCancelReason => 'Reason (the customer sees it)';
+
+  @override
+  String get histTitle => 'Consultation history';
+
+  @override
+  String get histSubtitle =>
+      'Every session, with the customer\'s details and ways to follow up.';
+
+  @override
+  String get histSearch => 'Search name, phone or session ID';
+
+  @override
+  String get histFilterAll => 'All';
+
+  @override
+  String get histFilterFavourites => 'Favourites';
+
+  @override
+  String get histEmptyTitle => 'No sessions yet';
+
+  @override
+  String get histEmptyBody => 'Finished chats and calls show up here.';
+
+  @override
+  String get histEmptyFilter => 'Nothing matches';
+
+  @override
+  String get histLoadMore => 'Load more';
+
+  @override
+  String get histLoading => 'Loading…';
+
+  @override
+  String get histPerformance => 'Your performance';
+
+  @override
+  String get histNoteTitle => 'Private note';
+
+  @override
+  String get histNoteHint =>
+      'Only you can see this — e.g. career question, follow up after Diwali';
+
+  @override
+  String get histCancel => 'Cancel';
+
+  @override
+  String get histSave => 'Save';
+
+  @override
+  String get histFirstSession => 'First session';
+
+  @override
+  String histSessionNumber(int n) {
+    return 'Session $n';
+  }
+
+  @override
+  String get histRepeatClient => 'Repeat client';
+
+  @override
+  String get histFavourite => 'Favourite';
+
+  @override
+  String get histCustomer => 'Customer';
+
+  @override
+  String get histBirthDate => 'Date of birth';
+
+  @override
+  String get histBirthPlace => 'Place of birth';
+
+  @override
+  String get histGender => 'Gender';
+
+  @override
+  String get histGenderMale => 'Male';
+
+  @override
+  String get histGenderFemale => 'Female';
+
+  @override
+  String get histDuration => 'Duration';
+
+  @override
+  String get histEarned => 'You earned';
+
+  @override
+  String get histRating => 'Rating';
+
+  @override
+  String get histStatusCompleted => 'Completed';
+
+  @override
+  String get histStatusCancelled => 'Cancelled';
+
+  @override
+  String get histStatusMissed => 'Missed';
+
+  @override
+  String get histStatusDeclined => 'Declined';
+
+  @override
+  String get histStatusNoShow => 'No show';
+
+  @override
+  String get histStatusFailed => 'Failed';
+
+  @override
+  String get histTagPickedFast => 'Picked on time (≤15s)';
+
+  @override
+  String get histTagPickedLate => 'Picked late';
+
+  @override
+  String get histTagShort => 'Short session (<2 min)';
+
+  @override
+  String get histTagEndedCustomer => 'Customer ended';
+
+  @override
+  String get histTagEndedYou => 'You ended';
+
+  @override
+  String get histTagEndedBalance => 'Ended: low balance';
+
+  @override
+  String get histTagEndedDisconnect => 'Disconnected';
+
+  @override
+  String get histTagRemedy => 'Remedy suggested';
+
+  @override
+  String get histOpenKundali => 'Open kundali';
+
+  @override
+  String get histSendRemedy => 'Send remedy';
+
+  @override
+  String get histChatAssistant => 'Chat assistant';
+
+  @override
+  String get histOpenChat => 'Open chat';
+
+  @override
+  String get dashActionHistory => 'History';
 }

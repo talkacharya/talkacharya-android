@@ -25,6 +25,7 @@ import 'widgets/talk_again_rail.dart';
 import 'widgets/trust_footer.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// The customer home feed: a collapsing cosmic hero, a floating tools dock, then
 /// colour-coded sections. Every section is an independent [AsyncValue] slice on
 /// [HomeCubit], so the feed renders and retries section-by-section — a slow or
@@ -74,54 +75,55 @@ class _HomeViewState extends State<_HomeView> {
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
         backgroundColor: brand.canvas,
-        body: BlocListener<BirthProfilesCubit, BirthProfilesState>(
-          // The resolved profile (explicit active, else the user's primary) drives
-          // horoscope + panchang; reload when it lands or changes.
-          listenWhen: (a, b) =>
-              a.activeProfileId != b.activeProfileId ||
-              a.resolvedProfile?.id != b.resolvedProfile?.id,
-          listener: (context, _) => _load(),
-          child: RefreshIndicator(
-            onRefresh: _refresh,
-            color: AstroPalette.romance[1],
-            edgeOffset: 64,
-            child: BlocBuilder<HomeCubit, HomeState>(
-              // Only rebuild the entire scroll structure when section
-              // *visibility* changes (a section appears or disappears).
-              // State changes that only affect a section's internal content
-              // (horoscope data, panchang data, promos, sign, wallet) are
-              // handled by that section's own context.select/BlocBuilder,
-              // so they don't need to rebuild the whole list.
-              buildWhen: (a, b) =>
-                  (a.resume.value != null) != (b.resume.value != null) ||
-                  (a.online.isLoading || (a.online.value?.isNotEmpty ?? false)) !=
-                      (b.online.isLoading ||
-                          (b.online.value?.isNotEmpty ?? false)) ||
-                  (a.live.isLoading || (a.live.value?.isNotEmpty ?? false)) !=
-                      (b.live.isLoading ||
-                          (b.live.value?.isNotEmpty ?? false)) ||
-                  (a.talkAgain.value?.isNotEmpty ?? false) !=
-                      (b.talkAgain.value?.isNotEmpty ?? false) ||
-                  (a.articles.isLoading ||
-                          (a.articles.value?.isNotEmpty ?? false)) !=
-                      (b.articles.isLoading ||
-                          (b.articles.value?.isNotEmpty ?? false)),
-              builder: (context, state) => CustomScrollView(
-                // cacheExtent: how far off-screen Flutter pre-builds sliver
-                // children. 250 is the default; raising it slightly lets
-                // items paint before the user reaches them, eliminating the
-                // blank-then-appear flicker on fast scrolls.
-                cacheExtent: 400,
-                slivers: [
-                  const HomeTopBar(),
-                  SliverPadding(
-                    padding: const EdgeInsets.only(bottom: 150),
-                    sliver: SliverList.list(children: _sections(state)),
+        body: Stack(
+          children: [
+            BlocListener<BirthProfilesCubit, BirthProfilesState>(
+              // The resolved profile (explicit active, else the user's primary) drives
+              // horoscope + panchang; reload when it lands or changes.
+              listenWhen: (a, b) =>
+                  a.activeProfileId != b.activeProfileId ||
+                  a.resolvedProfile?.id != b.resolvedProfile?.id,
+              listener: (context, _) => _load(),
+              child: RefreshIndicator(
+                onRefresh: _refresh,
+                color: AstroPalette.romance[1],
+                edgeOffset: 64,
+                child: BlocBuilder<HomeCubit, HomeState>(
+                  buildWhen: (a, b) =>
+                      (a.resume.value != null) != (b.resume.value != null) ||
+                      (a.online.isLoading ||
+                              (a.online.value?.isNotEmpty ?? false)) !=
+                          (b.online.isLoading ||
+                              (b.online.value?.isNotEmpty ?? false)) ||
+                      (a.live.isLoading || (a.live.value?.isNotEmpty ?? false)) !=
+                          (b.live.isLoading ||
+                              (b.live.value?.isNotEmpty ?? false)) ||
+                      (a.talkAgain.value?.isNotEmpty ?? false) !=
+                          (b.talkAgain.value?.isNotEmpty ?? false) ||
+                      (a.articles.isLoading ||
+                              (a.articles.value?.isNotEmpty ?? false)) !=
+                          (b.articles.isLoading ||
+                              (b.articles.value?.isNotEmpty ?? false)),
+                  builder: (context, state) => CustomScrollView(
+                    cacheExtent: 400,
+                    slivers: [
+                      const HomeTopBar(),
+                      SliverPadding(
+                        padding: const EdgeInsets.fromLTRB(0, 14, 0, 110),
+                        sliver: SliverList.list(children: _sections(state)),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+            const Positioned(
+              left: 16,
+              right: 16,
+              bottom: 12,
+              child: HomeFloatingCtaBar(),
+            ),
+          ],
         ),
       ),
     );
@@ -138,6 +140,7 @@ class _HomeViewState extends State<_HomeView> {
         state.online.isLoading || (state.online.value?.isNotEmpty ?? false);
 
     final sections = <Widget>[
+      const QuickActionsRow(),
       if (hasResume) const ResumeCard(),
       if (hasOnline) const OnlineNowStrip(),
       const PromoCarousel(),
@@ -147,8 +150,7 @@ class _HomeViewState extends State<_HomeView> {
       const HoroscopeCard(),
       const PanchangStrip(),
       const FreeToolsGrid(),
-      if (getIt<ConfigRepository>().value.features.store)
-        const StoreHomeRail(),
+      if (getIt<ConfigRepository>().value.features.store) const StoreHomeRail(),
       if (hasTalkAgain) const TalkAgainRail(),
       if (hasArticles) const ArticlesRail(),
       const RechargePacksStrip(),
@@ -156,20 +158,10 @@ class _HomeViewState extends State<_HomeView> {
       const TrustFooter(),
     ];
 
-
-    final children = <Widget>[const HomeHeroPanel(dock: QuickActionsRow())];
+    final children = <Widget>[];
     for (var i = 0; i < sections.length; i++) {
-      children
-        ..add(const SizedBox(height: 26))
-        ..add(
-          // Cascade sections into view on first render; keyed by type so a
-          // pull-to-refresh (which re-emits state) doesn't replay the stagger.
-          FadeSlideIn(
-            key: ValueKey(sections[i].runtimeType),
-            delay: Duration(milliseconds: 45 * (i > 7 ? 7 : i)),
-            child: sections[i],
-          ),
-        );
+      if (i > 0) children.add(const SizedBox(height: 20));
+      children.add(sections[i]);
     }
     return children;
   }

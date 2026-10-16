@@ -20,6 +20,8 @@ abstract class Astrologer with _$Astrologer {
     @JsonKey(name: 'rating_avg') @Default(0) double ratingAvg,
     @JsonKey(name: 'rating_count') @Default(0) int ratingCount,
     @JsonKey(name: 'consultations_count') @Default(0) int consultationsCount,
+    // Minutes of finished consultations (detail endpoint only).
+    @JsonKey(name: 'consultation_minutes') @Default(0) int consultationMinutes,
     @JsonKey(name: 'followers_count') @Default(0) int followersCount,
 
     /// Whether the signed-in viewer follows this astrologer (false for guests).
@@ -61,12 +63,31 @@ abstract class Astrologer with _$Astrologer {
     @JsonKey(name: 'top_reviews')
     @Default(<AstrologerReview>[])
     List<AstrologerReview> topReviews,
+
+    /// How many reviews gave each number of stars, keyed "5" … "1" (detail
+    /// only).
+    @JsonKey(name: 'rating_breakdown')
+    @Default(<String, int>{})
+    Map<String, int> ratingBreakdown,
+
+    /// Free assistant chat for this viewer: `{state: open|locked|off, thread}`
+    /// (detail only). Locked until their first consultation together.
+    @Default(<String, dynamic>{}) Map<String, dynamic> assistant,
   }) = _Astrologer;
 
   const Astrologer._();
 
   factory Astrologer.fromJson(Map<String, dynamic> json) =>
       _$AstrologerFromJson(json);
+
+  /// `open`, `locked` (no consultation together yet) or `off`.
+  String get assistantState => '${assistant['state'] ?? 'off'}';
+
+  /// Their assistant thread, once there is one.
+  String? get assistantThread {
+    final t = assistant['thread'];
+    return t is String && t.isNotEmpty ? t : null;
+  }
 
   bool get isVerified =>
       verificationLevel.isNotEmpty && verificationLevel != 'none';
@@ -104,8 +125,9 @@ abstract class Astrologer with _$Astrologer {
   bool takes(String channel) => stateOf(channel) == ChannelState.open;
 
   /// Chat, voice, video — those being taken, in that order.
+  /// VIDEO-OFF: video calls are switched off for now; chat and voice only.
   List<String> get openChannels => [
-    for (final c in const ['chat', 'voice', 'video'])
+    for (final c in const ['chat', 'voice' /*, 'video' */])
       if (takes(c)) c,
   ];
 
@@ -119,7 +141,8 @@ abstract class Astrologer with _$Astrologer {
   /// The soonest any switched-off channel comes back, if one has a time.
   DateTime? get soonestBack {
     DateTime? first;
-    for (final c in const ['chat', 'voice', 'video']) {
+    // VIDEO-OFF: video calls are switched off for now.
+    for (final c in const ['chat', 'voice' /*, 'video' */]) {
       final at = nextOnlineFor(c);
       if (at != null && (first == null || at.isBefore(first))) first = at;
     }

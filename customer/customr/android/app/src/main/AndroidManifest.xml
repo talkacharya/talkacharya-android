@@ -81,6 +81,7 @@
                 <data android:scheme="https" android:host="@string/app_link_host"/>
                 <data android:pathPrefix="/r/"/>
                 <data android:pathPrefix="/astrologers"/>
+                <data android:pathPrefix="/assistant"/>
                 <data android:pathPrefix="/store"/>
                 <data android:pathPrefix="/product"/>
                 <data android:pathPrefix="/articles"/>

@@ -37,6 +37,8 @@ String? locationForUri(Uri uri) {
       return id == null ? '/articles' : '/articles/$id';
     case 'help':
     case 'support':
+      // talkacharya://support/messages — a reply from the team.
+      if (id == 'messages') return '/support';
       return '/profile/help';
     case 'disputes':
     case 'dispute':
@@ -51,6 +53,9 @@ String? locationForUri(Uri uri) {
     case 'consultations':
     case 'consultation':
       return id == null ? null : '/consultations/$id';
+    case 'assistant':
+      // A free, text-only chat with an astrologer.
+      return id == null ? '/assistant' : '/assistant/$id';
     case 'kundali':
       // talkacharya://kundali/<id>[/<section>] — e.g. .../transits, .../sade-sati
       if (id == null) return null;

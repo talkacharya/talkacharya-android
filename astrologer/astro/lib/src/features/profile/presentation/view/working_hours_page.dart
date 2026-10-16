@@ -30,7 +30,6 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
   // Types switched off until a time the astrologer gave; saved at once
   // from the sheet, not with the rest of the page.
   Map<String, DateTime> _nextOnline = {};
-  int _maxConcurrent = 1;
   final Map<int, WorkingWindow> _week = {};
 
   // Snapshot of the saved state, for dirty-checking.
@@ -48,7 +47,6 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
 
   String get _key => [
     (_channels.toList()..sort()).join(','),
-    _maxConcurrent,
     for (var d = 0; d < 7; d++)
       _week[d] == null ? '-' : _week[d]!.toJson().values.join('/'),
   ].join('|');
@@ -71,7 +69,6 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
       setState(() {
         _channels = {...av.channels};
         _nextOnline = {...av.nextOnline};
-        _maxConcurrent = av.maxConcurrent;
         _week
           ..clear()
           // One window per day in this editor; keep the first if several.
@@ -99,7 +96,6 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
     try {
       await _api.setAvailability(
         channels: kChannels.where(_channels.contains).toList(),
-        maxConcurrent: _maxConcurrent,
       );
       await _api.setWorkingHours([for (var d = 0; d < 7; d++) ?_week[d]]);
       _savedKey = _key;
@@ -231,21 +227,6 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
               ],
             ),
           ),
-          if (_channels.contains('chat'))
-            SettingsCard(
-              title: l.hoursConcurrent,
-              subtitle: l.hoursConcurrentHint,
-              icon: Icons.dynamic_feed_rounded,
-              hue: AstroPalette.money,
-              trailing: _Stepper(
-                value: _maxConcurrent,
-                min: 1,
-                max: 10,
-                onChanged: (v) => setState(() => _maxConcurrent = v),
-              ),
-              padding: EdgeInsets.zero,
-              child: const SizedBox.shrink(),
-            ),
           SettingsCard(
             title: l.hoursSchedule,
             subtitle: l.hoursScheduleHint,
@@ -366,51 +347,6 @@ class _ChannelSwitch extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _Stepper extends StatelessWidget {
-  const _Stepper({
-    required this.value,
-    required this.min,
-    required this.max,
-    required this.onChanged,
-  });
-
-  final int value;
-  final int min;
-  final int max;
-  final ValueChanged<int> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.brand.tint,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            visualDensity: VisualDensity.compact,
-            onPressed: value > min ? () => onChanged(value - 1) : null,
-            icon: const Icon(Icons.remove_rounded),
-          ),
-          Text(
-            '$value',
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-          ),
-          IconButton(
-            visualDensity: VisualDensity.compact,
-            onPressed: value < max ? () => onChanged(value + 1) : null,
-            icon: const Icon(Icons.add_rounded),
-          ),
-        ],
       ),
     );
   }

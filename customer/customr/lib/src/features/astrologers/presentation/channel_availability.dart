@@ -7,7 +7,8 @@ import '../data/models/astrologer.dart';
 import 'next_online_label.dart';
 
 /// The three ways to consult, in the order the app offers them.
-const kConsultChannels = ['chat', 'voice', 'video'];
+/// VIDEO-OFF: video calls are switched off for now; chat and voice only.
+const kConsultChannels = ['chat', 'voice' /*, 'video' */];
 
 AstroHue channelHue(String channel) => switch (channel) {
   'chat' => AstroPalette.career,

@@ -4,6 +4,7 @@ import 'package:customr/src/core/realtime/realtime_event.dart';
 import 'package:customr/src/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:customr/src/features/consultations/data/consultation_api.dart';
 import 'package:customr/src/features/store/data/models/cart.dart';
+import 'package:customr/src/features/store/data/models/catalog.dart';
 import 'package:customr/src/features/store/data/models/checkout.dart';
 import 'package:customr/src/features/store/data/models/consult.dart';
 import 'package:customr/src/features/store/data/models/order.dart';
@@ -14,6 +15,7 @@ import 'package:customr/src/features/store/presentation/cubit/cart_cubit.dart';
 import 'package:customr/src/features/store/presentation/cubit/checkout_cubit.dart';
 import 'package:customr/src/features/store/presentation/cubit/consult_cubits.dart';
 import 'package:customr/src/features/store/presentation/cubit/order_cubits.dart';
+import 'package:customr/src/features/store/presentation/cubit/store_home_cubit.dart';
 import 'package:customr/src/features/store/presentation/cubit/store_payment.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -308,6 +310,52 @@ void main() {
 
       expect(outcome, isA<ConsultAstrologerBusy>());
       verify(() => repo.consultOptions('p1')).called(2);
+    });
+  });
+
+  group('StoreHomeCubit', () {
+    setUp(() {
+      registerFallbackValue(const ProductQuery());
+      when(() => repo.home(force: any(named: 'force'))).thenAnswer(
+        (_) async => const StoreHome(
+          categories: [StoreCategory(slug: 'rudraksha', name: 'Rudraksha')],
+        ),
+      );
+      when(() => repo.consults()).thenAnswer((_) async => const []);
+      when(() => repo.products(any(), limit: any(named: 'limit'))).thenAnswer(
+        (_) async => const ProductPage(
+          count: 1,
+          items: [
+            ProductCard(
+              id: '1',
+              slug: 'p-1',
+              title: 'P',
+              seller: SellerRef(code: 'a'),
+            ),
+          ],
+        ),
+      );
+    });
+
+    test('picking a category in the rail loads it once and keeps it', () async {
+      final cubit = StoreHomeCubit(repo);
+      await cubit.load();
+      expect(cubit.state.selected, isNull);
+
+      await cubit.select('rudraksha');
+      expect(cubit.state.products['rudraksha']?.value?.items, hasLength(1));
+      await cubit.select(null);
+      await cubit.select('rudraksha');
+      verify(() => repo.products(any(), limit: any(named: 'limit'))).called(1);
+      await cubit.close();
+    });
+
+    test('a store link can open on a category', () async {
+      final cubit = StoreHomeCubit(repo, initialCategory: 'rudraksha');
+      await cubit.load();
+      expect(cubit.state.selected, 'rudraksha');
+      expect(cubit.state.products['rudraksha']?.hasValue, isTrue);
+      await cubit.close();
     });
   });
 }

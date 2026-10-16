@@ -20,10 +20,10 @@ import 'home_shared.dart';
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 /// Height the quick-actions dock tucks up into the hero.
-const double kHeroDockOverlap = 36;
+const double kHeroDockOverlap = 30;
 
 /// Height of the scrolling hero panel below the pinned top bar.
-const double kHeroPanelHeight = 238;
+const double kHeroPanelHeight = 204;
 
 const double _kTopBarHeight = 64;
 
@@ -115,181 +115,69 @@ class _HomeTopBarState extends State<HomeTopBar> {
   }
 }
 
-/// The scrolling hero: tagline, who's online, Chat / Call — with the quick-actions
-/// [dock] floating over its rounded bottom edge.
-class HomeHeroPanel extends StatelessWidget {
-  const HomeHeroPanel({required this.dock, super.key});
-
-  final Widget dock;
+/// Floating bottom bar containing Chat Now and Call Now buttons above the bottom nav bar.
+class HomeFloatingCtaBar extends StatelessWidget {
+  const HomeFloatingCtaBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(
-          height: kHeroPanelHeight,
-          child: ClipRRect(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                _NebulaSlice(top: false),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                    20,
-                    4,
-                    20,
-                    kHeroDockOverlap + 18,
-                  ),
-                  child: _HeroContent(),
-                ),
-              ],
+    final l = context.l10n;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1E1335).withValues(alpha: 0.94),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF0F081D).withValues(alpha: 0.4),
+            blurRadius: 18,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: _HeroCta(
+              label: l.homeChatNow,
+              icon: Icons.chat_bubble_rounded,
+              filled: true,
+              onTap: () => context.go(
+                Routes.astrologersWith(channel: 'chat', sort: 'recommended'),
+              ),
             ),
           ),
-        ),
-        PullUp(by: kHeroDockOverlap, child: dock),
-      ],
+          const SizedBox(width: 10),
+          Expanded(
+            child: _HeroCta(
+              label: l.homeCallNow,
+              icon: Icons.phone_in_talk_rounded,
+              filled: false,
+              onTap: () => context.go(
+                Routes.astrologersWith(channel: 'voice', sort: 'recommended'),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
-/// One continuous nebula spanning status bar + top bar + hero panel; each part
-/// shows its own slice so the seam is invisible.
 class _NebulaSlice extends StatelessWidget {
   const _NebulaSlice({required this.top});
   final bool top;
 
   @override
   Widget build(BuildContext context) {
-    final total =
-        MediaQuery.paddingOf(context).top + _kTopBarHeight + kHeroPanelHeight;
+    final total = MediaQuery.paddingOf(context).top + _kTopBarHeight;
     return ClipRect(
       child: OverflowBox(
-        alignment: top ? Alignment.topCenter : Alignment.bottomCenter,
+        alignment: Alignment.topCenter,
         minHeight: total,
         maxHeight: total,
         child: const CosmicBackdrop(),
-      ),
-    );
-  }
-}
-
-class _HeroContent extends StatelessWidget {
-  const _HeroContent();
-
-  @override
-  Widget build(BuildContext context) {
-    final l = context.l10n;
-    final theme = Theme.of(context);
-    final online = context.select((HomeCubit c) => c.state.online);
-    final people = online.value ?? const <Astrologer>[];
-    final available = people.where((a) => a.isReachable).toList();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Text(
-          l.homeGuidanceTagline,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: theme.textTheme.headlineSmall?.copyWith(
-            color: Colors.white,
-            fontSize: 26,
-            height: 1.15,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(height: 12),
-        _OnlineRow(available: available),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: _HeroCta(
-                label: l.homeChatNow,
-                icon: Icons.chat_bubble_rounded,
-                filled: true,
-                onTap: () => context.go(
-                  Routes.astrologersWith(channel: 'chat', sort: 'recommended'),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _HeroCta(
-                label: l.homeCallNow,
-                icon: Icons.phone_in_talk_rounded,
-                filled: false,
-                onTap: () => context.go(
-                  Routes.astrologersWith(channel: 'voice', sort: 'recommended'),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-/// Pulsing dot + "N online" + a stack of the first few online faces.
-class _OnlineRow extends StatelessWidget {
-  const _OnlineRow({required this.available});
-  final List<Astrologer> available;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = context.l10n;
-    final theme = Theme.of(context);
-    final faces = available.take(4).toList();
-    return InkWell(
-      onTap: () => context.go(Routes.astrologersWith(sort: 'recommended')),
-      borderRadius: BorderRadius.circular(999),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(10, 5, 12, 5),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (faces.isNotEmpty) ...[
-              SizedBox(
-                width: 22.0 + (faces.length - 1) * 15,
-                height: 22,
-                child: Stack(
-                  children: [
-                    for (var i = 0; i < faces.length; i++)
-                      Positioned(
-                        left: i * 15,
-                        child: _MiniFace(astrologer: faces[i], index: i),
-                      ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
-            ],
-            const LiveDot(),
-            const SizedBox(width: 6),
-            Text(
-              available.isEmpty
-                  ? l.homeOnlineNow
-                  : l.homeOnlineCount(available.length),
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Icon(
-              Icons.chevron_right_rounded,
-              size: 18,
-              color: Colors.white.withValues(alpha: 0.8),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -396,11 +284,11 @@ class _HeroCta extends StatelessWidget {
             child: InkWell(
               onTap: onTap,
               child: SizedBox(
-                height: 50,
+                height: 42,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(icon, size: 19, color: fg),
+                    Icon(icon, size: 17, color: fg),
                     const SizedBox(width: 8),
                     Flexible(
                       child: Text(

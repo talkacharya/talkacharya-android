@@ -9,6 +9,7 @@ import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Astrologers broadcasting right now. Hidden entirely when nobody is live.
 /// Redesigned with pulsing LIVE badge and gradient avatar ring.
 class LiveNowRail extends StatelessWidget {
@@ -30,7 +31,7 @@ class LiveNowRail extends StatelessWidget {
             children: [
               SectionHeader(
                 title: context.l10n.homeLiveNowTitle,
-                onSeeAll: () => context.go(Routes.live),
+                onSeeAll: () => context.push(Routes.live),
               ),
               const SizedBox(height: 12),
               SizedBox(
@@ -61,7 +62,7 @@ class _LiveTile extends StatelessWidget {
     final theme = Theme.of(context);
     final brand = context.brand;
     return InkWell(
-      onTap: () => context.go(Routes.liveRoom(stream.id)),
+      onTap: () => context.push(Routes.liveRoom(stream.id)),
       borderRadius: BorderRadius.circular(14),
       child: SizedBox(
         width: 70,

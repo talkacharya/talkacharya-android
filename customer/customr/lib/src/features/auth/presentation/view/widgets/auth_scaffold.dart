@@ -114,14 +114,11 @@ class _Logo extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Container(
-      width: 104,
-      height: 104,
-      padding: const EdgeInsets.all(4),
+      width: 108,
+      height: 108,
       decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        // The logo is drawn on this cream; keeping it in dark mode too lets
-        // the mark read as one badge instead of a pale square.
-        color: const Color(0xFFFFF8F4),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(26),
         border: Border.all(color: scheme.primary.withValues(alpha: 0.35)),
         boxShadow: [
           BoxShadow(
@@ -131,7 +128,8 @@ class _Logo extends StatelessWidget {
           ),
         ],
       ),
-      child: ClipOval(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
         child: Image.asset(
           'assets/icons/logo.jpeg',
           fit: BoxFit.cover,

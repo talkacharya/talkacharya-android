@@ -1,14 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
 import '../../../consultations/data/models/conversation.dart';
 import '../../../consultations/presentation/widgets/consultation_style.dart';
 import '../../../notifications/presentation/view/notification_bell.dart';
+import '../../../assistant/data/assistant_api.dart';
+import '../../../assistant/presentation/assistant_pages.dart';
 import '../cubit/chats_cubit.dart';
 
+import 'package:talkacharya_assistant/talkacharya_assistant.dart';
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 import '../../../../shared/widgets/cosmic_header.dart';
 
@@ -51,7 +57,14 @@ class _ChatsPageState extends State<ChatsPage> {
               CosmicTabHeader(
                 title: l.navChats,
                 subtitle: l.chatsSubtitle(state.totalUnread),
-                actions: [NotificationBell(color: brand.onCosmic)],
+                actions: [
+                  IconButton(
+                    tooltip: l.histTitle,
+                    icon: Icon(Icons.history_rounded, color: brand.onCosmic),
+                    onPressed: () => context.push(Routes.history),
+                  ),
+                  NotificationBell(color: brand.onCosmic),
+                ],
                 bottom: CosmicSearchField(
                   hint: l.chatsSearch,
                   onChanged: _cubit.search,
@@ -97,8 +110,12 @@ class _ChatsPageState extends State<ChatsPage> {
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),
           children: empty != null
-              ? [SizedBox(height: box.maxHeight - 36, child: empty)]
+              ? [
+                  const _AssistantEntry(),
+                  SizedBox(height: box.maxHeight - 36, child: empty),
+                ]
               : [
+                  const _AssistantEntry(),
                   if (live.isNotEmpty)
                     _Section(title: l.requestsLiveNow, items: live, live: true),
                   if (recent.isNotEmpty)
@@ -110,9 +127,7 @@ class _ChatsPageState extends State<ChatsPage> {
                         clipBehavior: Clip.antiAlias,
                         child: ListTile(
                           leading: const Icon(Icons.archive_outlined),
-                          title: Text(
-                            l.chatArchivedRow(state.archived.length),
-                          ),
+                          title: Text(l.chatArchivedRow(state.archived.length)),
                           // Archived threads still take messages, so their
                           // unread count stays visible from out here.
                           trailing: _archivedUnread(state) > 0
@@ -269,5 +284,106 @@ Future<void> _rowActions(BuildContext context, Conversation c) async {
   );
   if (error != null) {
     messenger.showSnackBar(SnackBar(content: Text(error)));
+  }
+}
+
+/// The way into the assistant chats — free, text-only messages customers send
+/// from the profile — with how many wait on a reply. Hidden until there is one.
+class _AssistantEntry extends StatefulWidget {
+  const _AssistantEntry();
+
+  @override
+  State<_AssistantEntry> createState() => _AssistantEntryState();
+}
+
+class _AssistantEntryState extends State<_AssistantEntry> {
+  List<AssistantThread> _threads = const [];
+  StreamSubscription<AssistantIncoming>? _sub;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+    _sub = assistantIncoming().listen((_) => _load());
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _load() async {
+    try {
+      final rows = await getIt<AssistantApi>().threads();
+      if (mounted) setState(() => _threads = rows);
+    } catch (_) {
+      // The row simply stays as it was; the inbox page says what went wrong.
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_threads.isEmpty) return const SizedBox.shrink();
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    final brand = context.brand;
+    final waiting = _threads.where((t) => t.awaitingYou).length;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      child: Pressable(
+        child: Card(
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () async {
+              await context.push(Routes.assistant);
+              unawaited(_load());
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Row(
+                children: [
+                  const HueIcon(
+                    hue: AstroPalette.career,
+                    icon: Icons.forum_rounded,
+                    size: 44,
+                    iconSize: 22,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l.assistantTitle,
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        Text(
+                          waiting > 0
+                              ? l.assistantWaitingCount(waiting)
+                              : l.assistantInboxSubtitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: waiting > 0 ? brand.gold : brand.inkMuted,
+                            fontWeight: waiting > 0 ? FontWeight.w700 : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (waiting > 0)
+                    Badge(label: Text('$waiting'))
+                  else
+                    Icon(Icons.chevron_right_rounded, color: brand.inkMuted),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

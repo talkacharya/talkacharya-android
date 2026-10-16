@@ -74,6 +74,13 @@ class ApiPaths {
   static const astroPhotos = '/astro/profile/photos';
   static String astroPhoto(String id) => '/astro/profile/photos/$id';
   static const astroFeedback = '/astro/feedback';
+
+  /// Assistant chat: the free, text-only line customers write in.
+  static const astroAssistantThreads = '/astro/assistant/threads';
+  static String astroAssistantThread(String id) =>
+      '/astro/assistant/threads/$id';
+  static String astroAssistantMessages(String id) =>
+      '/astro/assistant/threads/$id/messages';
   static const astroTestRing = '/astro/test-ring';
   static const astroFollowers = '/astro/followers';
   static const astroReferrals = '/astro/referrals';
@@ -86,6 +93,29 @@ class ApiPaths {
   static const astroPoojaCalendar = '/astro/store/pooja-calendar';
   static const astroPoojaBookings = '/astro/store/pooja-bookings';
 
+  // the astrologer's own store: setup, listings (seller/* for orders)
+  static const astroStoreSeller = '/astro/store/seller';
+  static const astroCatalogOptions = '/astro/store/catalog/options';
+  static const astroListings = '/astro/store/catalog/products';
+  static String astroListing(String id) => '/astro/store/catalog/products/$id';
+  static String astroListingMedia(String id) =>
+      '/astro/store/catalog/products/$id/media';
+  static String astroListingMediaItem(String id, int mediaId) =>
+      '/astro/store/catalog/products/$id/media/$mediaId';
+  static String astroListingMediaOrder(String id) =>
+      '/astro/store/catalog/products/$id/media/order';
+  static String astroListingSubmit(String id) =>
+      '/astro/store/catalog/products/$id/submit';
+  static String astroListingWithdraw(String id) =>
+      '/astro/store/catalog/products/$id/withdraw';
+  static const sellerOrders = '/seller/orders';
+  static String sellerOrder(String id) => '/seller/orders/$id';
+  static String sellerOrderAction(String id, String action) =>
+      '/seller/orders/$id/$action';
+  static const sellerBookings = '/seller/bookings';
+  static String sellerBookingAction(String id, String action) =>
+      '/seller/bookings/$id/$action';
+
   // remedies that cost nothing to follow
   static const astroRemedyLibrary = '/astro/remedy-library';
   static const astroRemedyAdvice = '/astro/remedy-advice';
@@ -93,6 +123,7 @@ class ApiPaths {
 
   // consultations (astrologer-scoped)
   static const astroConsultations = '/astro/consultations';
+  static const astroConsultationHistory = '/astro/consultations/history';
   static const astroConsultationRequests = '/astro/consultations/requests';
   static String astroConsultation(String id) => '/astro/consultations/$id';
   static String astroAccept(String id) => '/astro/consultations/$id/accept';

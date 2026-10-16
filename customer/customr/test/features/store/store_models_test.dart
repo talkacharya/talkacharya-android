@@ -188,4 +188,47 @@ void main() {
     expect(a.length, 3 + 32);
     expect(a, isNot(b));
   });
+
+  group('server-cut pictures', () {
+    test('a tile uses its square cut, the gallery its padded one', () {
+      final card = ProductCard.fromJson({
+        ..._product('1', 'a'),
+        'image': 'https://x/p_card.webp',
+        'images': {
+          'thumb': 'https://x/p_thumb.webp',
+          'card': 'https://x/p_card.webp',
+        },
+      });
+      expect(card.image, 'https://x/p_card.webp');
+      expect(card.thumb, 'https://x/p_thumb.webp');
+
+      final media = ProductMedia.fromJson({
+        'kind': 'image',
+        'url': 'https://x/p_large.webp',
+        'images': {
+          'thumb': 'https://x/p_thumb.webp',
+          'original': 'https://x/p.jpg',
+        },
+      });
+      expect(media.thumbUrl, 'https://x/p_thumb.webp');
+      expect(media.zoomUrl, 'https://x/p.jpg');
+    });
+
+    test('an older server without cuts still shows the picture', () {
+      final card = ProductCard.fromJson({
+        ..._product('1', 'a'),
+        'image': 'https://x/p.jpg',
+      });
+      expect(card.thumb, 'https://x/p.jpg');
+      final media = ProductMedia.fromJson({'url': 'https://x/p.jpg'});
+      expect(media.thumbUrl, 'https://x/p.jpg');
+      expect(media.zoomUrl, 'https://x/p.jpg');
+      final cat = StoreCategory.fromJson({
+        'slug': 'r',
+        'name': 'R',
+        'image': 'https://x/c.webp',
+      });
+      expect(cat.thumb, 'https://x/c.webp');
+    });
+  });
 }

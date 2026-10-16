@@ -15,6 +15,7 @@ import '../cubit/help_cubit.dart';
 import '../widgets/dispute_ui.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Help & support hub (`/profile/help`): report a session, track reports,
 /// contact the team, FAQs.
 class HelpPage extends StatelessWidget {
@@ -30,7 +31,13 @@ class HelpPage extends StatelessWidget {
         builder: (context, state) => RefreshIndicator(
           onRefresh: () => context.read<HelpCubit>().load(),
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 40),
+            // The floating bottom bar sits over the end of the list.
+            padding: EdgeInsets.fromLTRB(
+              16,
+              8,
+              16,
+              120 + MediaQuery.paddingOf(context).bottom,
+            ),
             children: FadeSlideIn.list([
               const _Hero(),
               _Section(
@@ -245,6 +252,10 @@ class _SessionRow extends StatelessWidget {
                 style: FilledButton.styleFrom(
                   visualDensity: VisualDensity.compact,
                   padding: const EdgeInsets.symmetric(horizontal: 14),
+                  // The theme's buttons are full width (Size.fromHeight);
+                  // inside a row that asks for infinite width and the row
+                  // fails to lay out — only the avatar was drawn.
+                  minimumSize: const Size(0, 36),
                 ),
                 child: Text(l.helpReportAction),
               ),
@@ -346,6 +357,13 @@ class _ContactCard extends StatelessWidget {
     final l = context.l10n;
     final support = getIt<ConfigRepository>().value.support;
     final rows = <Widget>[
+      _ContactRow(
+        icon: Icons.edit_note_rounded,
+        hue: AstroPalette.money,
+        label: l.supWriteToUs,
+        value: l.supWriteToUsSub,
+        onTap: () => context.push(Routes.support),
+      ),
       if (support.whatsapp.isNotEmpty)
         _ContactRow(
           icon: Icons.chat_rounded,

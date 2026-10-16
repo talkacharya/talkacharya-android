@@ -10,11 +10,13 @@ import '../../features/auth/data/auth_repository.dart';
 import '../../features/auth/data/firebase_phone_auth.dart';
 import '../../features/auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../features/astrologers/data/astrologers_api.dart';
+import '../../features/astrologers/data/astrologer_local_store.dart';
 import '../../features/astrologers/data/astrologers_repository.dart';
 import '../../features/astrologers/presentation/cubit/discovery_cubit.dart';
 import '../../features/articles/data/articles_api.dart';
 import '../../features/articles/data/articles_repository.dart';
 import '../../features/birthprofiles/data/birth_profiles_api.dart';
+import '../../features/birthprofiles/data/birth_profiles_local_store.dart';
 import '../../features/birthprofiles/data/birth_profiles_repository.dart';
 import '../../features/birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
 import '../../features/consultations/data/consultation_api.dart';
@@ -49,6 +51,7 @@ import '../../features/wallet/data/wallet_repository.dart';
 import '../../features/wallet/presentation/cubit/transactions_cubit.dart';
 import '../../features/wallet/presentation/cubit/wallet_cubit.dart';
 import '../payments/razorpay_service.dart';
+import '../search/global_search_repository.dart';
 import '../../features/home/data/home_repository.dart';
 import '../../features/home/data/horoscope_sign_store.dart';
 import '../../features/home/presentation/cubit/home_cubit.dart';
@@ -74,6 +77,8 @@ import '../router/pending_deep_link.dart';
 import '../storage/token_storage.dart';
 import '../deeplink/pending_referral.dart';
 import 'package:talkacharya_call/talkacharya_call.dart';
+import '../../features/assistant/data/assistant_api.dart';
+import '../../features/support/data/support_messages.dart';
 
 final getIt = GetIt.instance;
 
@@ -132,9 +137,12 @@ Future<void> configureDependencies(AppConfig config) async {
 
   // --- birth profiles ------------------------------------------------------
   getIt
+    ..registerLazySingleton<BirthProfilesLocalStore>(
+      () => BirthProfilesLocalStore(getIt()),
+    )
     ..registerLazySingleton<BirthProfilesApi>(() => BirthProfilesApi(dio))
     ..registerLazySingleton<BirthProfilesRepository>(
-      () => BirthProfilesRepository(getIt()),
+      () => BirthProfilesRepository(getIt(), getIt()),
     )
     ..registerLazySingleton<BirthProfilesCubit>(
       () => BirthProfilesCubit(repo: getIt(), store: getIt()),
@@ -162,9 +170,11 @@ Future<void> configureDependencies(AppConfig config) async {
 
   // --- discovery + home feed ---------------------------------------------
   getIt
+    ..registerLazySingleton<AstrologerLocalStore>(() => AstrologerLocalStore(getIt()))
     ..registerLazySingleton<AstrologersApi>(() => AstrologersApi(dio))
+    ..registerLazySingleton<AssistantApi>(() => AssistantApi(dio))
     ..registerLazySingleton<AstrologersRepository>(
-      () => AstrologersRepository(getIt()),
+      () => AstrologersRepository(getIt(), getIt()),
     )
     ..registerLazySingleton<FollowsApi>(() => FollowsApi(dio))
     ..registerLazySingleton<FollowsRepository>(() => FollowsRepository(getIt()))
@@ -175,6 +185,13 @@ Future<void> configureDependencies(AppConfig config) async {
     ..registerLazySingleton<ArticlesApi>(() => ArticlesApi(dio))
     ..registerLazySingleton<ArticlesRepository>(
       () => ArticlesRepository(getIt()),
+    )
+    ..registerLazySingleton<GlobalSearchRepository>(
+      () => GlobalSearchRepository(
+        astrologersRepo: getIt(),
+        profilesRepo: getIt(),
+        articlesRepo: getIt(),
+      ),
     )
     ..registerLazySingleton<HomeApi>(() => HomeApi(dio))
     ..registerSingleton<HoroscopeSignStore>(HoroscopeSignStore(getIt()))
@@ -273,6 +290,7 @@ Future<void> configureDependencies(AppConfig config) async {
   // --- help & disputes -----------------------------------------------------
   getIt
     ..registerLazySingleton<SupportApi>(() => SupportApi(dio))
+    ..registerLazySingleton<SupportMessagesApi>(() => SupportMessagesApi(dio))
     ..registerLazySingleton<SupportRepository>(
       () => SupportRepository(api: getIt(), consultations: getIt()),
     );

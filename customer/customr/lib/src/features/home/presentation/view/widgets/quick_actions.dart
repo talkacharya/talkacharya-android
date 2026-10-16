@@ -7,6 +7,7 @@ import '../../../../../core/router/routes.dart';
 import 'home_shared.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Floating dock of the four core tools, tucked up into the hero. Each tool owns a
 /// colour family so the row reads as four distinct doors, not one brand hue.
 class QuickActionsRow extends StatelessWidget {
@@ -46,16 +47,16 @@ class QuickActionsRow extends StatelessWidget {
     return Padding(
       padding: HomeGaps.sidePad,
       child: Container(
-        padding: const EdgeInsets.fromLTRB(6, 14, 6, 12),
+        padding: const EdgeInsets.fromLTRB(4, 10, 4, 8),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(26),
+          borderRadius: BorderRadius.circular(22),
           border: Border.all(color: brand.hairline),
           boxShadow: [
             BoxShadow(
-              color: brand.cosmicStart.withValues(alpha: 0.16),
-              blurRadius: 26,
-              offset: const Offset(0, 12),
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -87,7 +88,7 @@ class _QuickActionTile extends StatelessWidget {
             padding: const EdgeInsets.all(5),
             child: ClipOval(child: Image.asset(a.image!, fit: BoxFit.cover)),
           )
-        : Icon(a.icon, color: Colors.white, size: 28);
+        : Icon(a.icon, color: Colors.white, size: 22);
 
     return Pressable(
       child: InkWell(
@@ -98,14 +99,14 @@ class _QuickActionTile extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              HueIcon(hue: a.hue, size: 58, child: glyph),
-              const SizedBox(height: 9),
+              HueIcon(hue: a.hue, size: 44, child: glyph),
+              const SizedBox(height: 6),
               Text(
                 a.label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.labelMedium?.copyWith(
+                style: theme.textTheme.labelSmall?.copyWith(
                   fontWeight: FontWeight.w800,
                 ),
               ),

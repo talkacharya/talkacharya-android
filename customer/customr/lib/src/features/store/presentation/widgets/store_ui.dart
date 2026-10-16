@@ -13,6 +13,7 @@ import '../../data/models/product.dart';
 import '../cubit/cart_cubit.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// The customer's store currency (their preferred wallet currency).
 String storeCurrency(BuildContext context) =>
     (context.read<AuthBloc>().state.user?.preferredCurrency ?? 'INR')
@@ -315,25 +316,171 @@ class ProductTile extends StatelessWidget {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 9, 10, 11),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      p.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        height: 1.2,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 9, 10, 11),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        p.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          height: 1.2,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    RatingLine(avg: p.ratingAvg, count: p.ratingCount),
-                    const SizedBox(height: 4),
-                    PriceTag(price: p.priceFrom, compareAt: p.compareAt),
+                      const Spacer(),
+                      if (p.ratingCount > 0) ...[
+                        RatingLine(avg: p.ratingAvg, count: p.ratingCount),
+                        const SizedBox(height: 4),
+                      ],
+                      PriceTag(price: p.priceFrom, compareAt: p.compareAt),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A smaller tile for the store's two-up pane beside the category rail:
+/// the square picture with its discount on it, two lines of title, rating and
+/// price. The picture is the server's square cut, so every tile lines up.
+class CompactProductTile extends StatelessWidget {
+  const CompactProductTile({required this.product, super.key});
+
+  final ProductCard product;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final brand = context.brand;
+    final l = context.l10n;
+    final p = product;
+    final discount = p.discountPercent;
+    final price = p.priceFrom;
+    return Pressable(
+      child: Material(
+        color: theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+          side: BorderSide(color: brand.hairline),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () => context.push(Routes.storeProduct(p.slug)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AspectRatio(
+                aspectRatio: 1,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    StoreImage(url: p.image, slug: p.type, radius: 0),
+                    if (discount != null)
+                      Positioned(
+                        left: 0,
+                        top: 8,
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(6, 2, 8, 2),
+                          decoration: const BoxDecoration(
+                            color: Color(0xFFCC0C39),
+                            borderRadius: BorderRadius.horizontal(
+                              right: Radius.circular(6),
+                            ),
+                          ),
+                          child: Text(
+                            l.storeOff(discount),
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ),
+                    if (p.isService || p.needsAstrologer)
+                      Positioned(
+                        right: 6,
+                        bottom: 6,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.92),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            p.isService
+                                ? Icons.temple_hindu_rounded
+                                : Icons.videocam_rounded,
+                            size: 14,
+                            color: p.isService
+                                ? AstroPalette.fire.end
+                                : AstroPalette.career.end,
+                          ),
+                        ),
+                      ),
                   ],
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 7, 8, 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        p.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          height: 1.2,
+                        ),
+                      ),
+                      const Spacer(),
+                      if (p.ratingCount > 0)
+                        RatingLine(avg: p.ratingAvg, count: p.ratingCount),
+                      const SizedBox(height: 2),
+                      if (price == null)
+                        Text(
+                          l.storeUnavailable,
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: brand.inkMuted,
+                          ),
+                        )
+                      else
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: storeMoney(context, price),
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              if (discount != null)
+                                TextSpan(
+                                  text:
+                                      '  ${storeMoney(context, p.compareAt!)}',
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: brand.inkMuted,
+                                    decoration: TextDecoration.lineThrough,
+                                  ),
+                                ),
+                            ],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -388,7 +535,7 @@ const kProductGrid = SliverGridDelegateWithFixedCrossAxisCount(
   crossAxisCount: 2,
   mainAxisSpacing: 12,
   crossAxisSpacing: 12,
-  childAspectRatio: 0.62,
+  childAspectRatio: 0.57,
 );
 
 /// A plain surface card with the app's hairline border.

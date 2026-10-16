@@ -138,20 +138,6 @@ class ProfileApi {
     return _rows(res.data).map(RateBand.fromJson).toList();
   });
 
-  Future<void> setRate(String channel, String currency, double amount) =>
-      _guard(
-        () => _ok(
-          _dio.put<void>(
-            ApiPaths.astroRates,
-            data: {
-              'channel': channel,
-              'currency': currency,
-              'per_minute_amount': amount.toStringAsFixed(2),
-            },
-          ),
-        ),
-      );
-
   // --- availability & hours -------------------------------------------------
 
   Future<AvailabilitySettings> availability() => _guard(() async {
@@ -161,17 +147,11 @@ class ProfileApi {
     return AvailabilitySettings.fromJson(res.data ?? const {});
   });
 
-  Future<void> setAvailability({
-    required List<String> channels,
-    required int maxConcurrent,
-  }) => _guard(
+  Future<void> setAvailability({required List<String> channels}) => _guard(
     () => _ok(
       _dio.put<void>(
         ApiPaths.astroAvailability,
-        data: {
-          'channels_enabled': channels,
-          'max_concurrent_chats': maxConcurrent,
-        },
+        data: {'channels_enabled': channels},
       ),
     ),
   );

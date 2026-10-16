@@ -136,7 +136,18 @@ class ChatController extends Cubit<ChatSessionState> {
       );
     }
     try {
-      final history = await _t.history(limit: _kOpenPage);
+      final maxSeq =
+          cached.fold<int>(0, (max, m) => m.seq > max ? m.seq : max);
+
+      final List<ChatMessage> history;
+      if (maxSeq > 0) {
+        // Delta sync: fetch ONLY new messages received after maxSeq
+        history = await _t.history(afterSeq: maxSeq, limit: 50);
+      } else {
+        // First time on this device: fetch latest page
+        history = await _t.history(limit: _kOpenPage);
+      }
+
       unawaited(_remember(history));
       final merged = [...state.messages];
       for (final m in history) {
@@ -150,9 +161,10 @@ class ChatController extends Cubit<ChatSessionState> {
           loading: false,
           error: null,
           messages: _sorted(merged),
-          // The server's newest page is short: this is the entire thread, and
-          // the cache cannot be hiding anything above it.
-          hasMoreOlder: history.length >= _kOpenPage,
+          // The server's newest page is short: this is the entire thread
+          hasMoreOlder: maxSeq > 0
+              ? state.hasMoreOlder
+              : (history.length >= _kOpenPage),
         ),
       );
     } catch (e) {

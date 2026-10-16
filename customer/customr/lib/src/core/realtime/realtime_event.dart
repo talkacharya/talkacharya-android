@@ -62,6 +62,8 @@ sealed class RealtimeEvent {
           verdict: data['verdict']?.toString() ?? '',
           recommendationId: data['recommendation']?.toString(),
         );
+      case 'assistant.message':
+        return AssistantFrame(data);
       default:
         // Anything else on `user:` (notifications, activity) → just nudge the inbox.
         return const InboxPing();
@@ -127,6 +129,13 @@ class NewChatMessage extends RealtimeEvent {
 
 class InboxPing extends RealtimeEvent {
   const InboxPing();
+}
+
+/// A message in an assistant chat (the free, text-only line to an
+/// astrologer). [data] is `{thread, message}`; the room parses it.
+class AssistantFrame extends RealtimeEvent {
+  const AssistantFrame(this.data);
+  final Map<String, dynamic> data;
 }
 
 /// A store order changed (paid, shipped, delivered, refunded …) — refetch it.

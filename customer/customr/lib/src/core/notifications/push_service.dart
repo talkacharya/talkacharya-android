@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../firebase_options.dart';
 import 'local_notifications.dart';
+import 'package:talkacharya_assistant/talkacharya_assistant.dart';
 
 /// FCM background isolate entrypoint.
 ///
@@ -34,7 +35,10 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 /// to the app's DI or its localizations — can call it too. The label is
 /// English here by necessity; the app is en/hi+ and the notification only
 /// lives as long as the connect window.
-Future<void> ringForCall(LocalNotifications local, Map<String, dynamic> data) async {
+Future<void> ringForCall(
+  LocalNotifications local,
+  Map<String, dynamic> data,
+) async {
   final seconds = int.tryParse('${data['expires_in'] ?? ''}') ?? 60;
   final who = '${data['astrologer_name'] ?? ''}'.trim();
   final channel = '${data['channel'] ?? 'voice'}';
@@ -152,6 +156,10 @@ class PushService {
     // in that room, the message is already on screen; elsewhere in the app
     // with the socket up, the in-app toast has just said it. Only with the
     // socket down does the foreground need the tray.
+    // An assistant message for the room that is open: already on screen.
+    if (AssistantPresence.isOpen('${message.data['assistant_thread'] ?? ''}')) {
+      return;
+    }
     final thread = '${message.data['thread'] ?? ''}';
     if (thread.isNotEmpty && (_roomOpen(thread) || _realtimeOnline())) return;
     final n = message.notification;

@@ -17,6 +17,9 @@ void main() {
       'talkacharya://disputes': '/profile/help',
       'talkacharya://astrologers/abc-123': '/astrologers/abc-123',
       'talkacharya://consultations/c-9': '/consultations/c-9',
+      'talkacharya://assistant/t-1': '/assistant/t-1',
+      'talkacharya://support/messages': '/support',
+      'https://talkacharya.com/assistant/t-1': '/assistant/t-1',
       'talkacharya://predictions/p-2': '/predictions/p-2',
       'talkacharya://predictions': '/predictions',
       'talkacharya://livestreams/s-1': '/live/s-1',
@@ -34,7 +37,10 @@ void main() {
     expect(referralCodeFromUri(link), 'ABC123');
     expect(locationForUri(link), '/profile/referrals');
     expect(referralCodeFromUri(Uri.parse('talkacharya://r/XY9')), 'XY9');
-    expect(referralCodeFromUri(Uri.parse('https://talkacharya.com/r/')), isNull);
+    expect(
+      referralCodeFromUri(Uri.parse('https://talkacharya.com/r/')),
+      isNull,
+    );
     expect(
       referralCodeFromUri(Uri.parse('https://talkacharya.com/wallet')),
       isNull,

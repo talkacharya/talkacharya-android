@@ -10028,6 +10028,12 @@ abstract class AppLocalizations {
   /// **'Followers'**
   String get astroStatFollowers;
 
+  /// Astrologer profile stat: total minutes of finished consultations.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes of consultation'**
+  String get astroStatMinutes;
+
   /// No description provided for @prefsFollowAlerts.
   ///
   /// In en, this message translates to:
@@ -13165,6 +13171,408 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something was not allowed. You can turn it on in your phone\'s settings; without it, calls of that kind will not work.'**
   String get primerBlockedNote;
+
+  /// No description provided for @assistantTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Assistant chats'**
+  String get assistantTitle;
+
+  /// No description provided for @assistantInboxSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Free messages with astrologers'**
+  String get assistantInboxSubtitle;
+
+  /// No description provided for @assistantRepliesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 new reply} other{{count} new replies}}'**
+  String assistantRepliesCount(int count);
+
+  /// No description provided for @assistantInboxEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get assistantInboxEmptyTitle;
+
+  /// No description provided for @assistantInboxEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Open an astrologer\'s profile and tap “Ask a quick question” to send them a free message.'**
+  String get assistantInboxEmptyBody;
+
+  /// No description provided for @assistantYouPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'You: '**
+  String get assistantYouPrefix;
+
+  /// No description provided for @assistantRoomSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Free chat · replies when they can'**
+  String get assistantRoomSubtitle;
+
+  /// No description provided for @assistantHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type your question'**
+  String get assistantHint;
+
+  /// No description provided for @assistantEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask a quick question'**
+  String get assistantEmptyTitle;
+
+  /// No description provided for @assistantEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Write to the astrologer for free. They will reply here when they can.'**
+  String get assistantEmptyBody;
+
+  /// No description provided for @assistantIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'This free chat is for quick questions. For a detailed reading, start a chat or call consultation.'**
+  String get assistantIntro;
+
+  /// No description provided for @assistantWaitForReply.
+  ///
+  /// In en, this message translates to:
+  /// **'You have sent a few messages. You can write again once the astrologer replies.'**
+  String get assistantWaitForReply;
+
+  /// No description provided for @assistantBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages are turned off in this chat.'**
+  String get assistantBlocked;
+
+  /// No description provided for @assistantDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Free messages are not available right now.'**
+  String get assistantDisabled;
+
+  /// No description provided for @assistantNotSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sent · Tap for options'**
+  String get assistantNotSent;
+
+  /// No description provided for @assistantRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get assistantRetry;
+
+  /// No description provided for @assistantDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete message'**
+  String get assistantDiscard;
+
+  /// No description provided for @assistantToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get assistantToday;
+
+  /// No description provided for @assistantYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get assistantYesterday;
+
+  /// No description provided for @assistantLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open this chat. Check your connection and try again.'**
+  String get assistantLoadFailed;
+
+  /// No description provided for @assistantCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask a quick question'**
+  String get assistantCardTitle;
+
+  /// No description provided for @assistantFree.
+  ///
+  /// In en, this message translates to:
+  /// **'FREE'**
+  String get assistantFree;
+
+  /// No description provided for @assistantCardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Message {name} for free. For a full reading, start a consultation.'**
+  String assistantCardBody(String name);
+
+  /// No description provided for @astroReviewsNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No reviews yet. Reviews appear here after customers rate their consultation.'**
+  String get astroReviewsNone;
+
+  /// No description provided for @assistantLockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Free chat after your first consultation'**
+  String get assistantLockedTitle;
+
+  /// No description provided for @assistantLockedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Have one consultation with {name} and you can message them for free afterwards.'**
+  String assistantLockedBody(String name);
+
+  /// No description provided for @assistantLockedSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Free messages with {name} open once your first consultation with them ends.'**
+  String assistantLockedSnack(String name);
+
+  /// No description provided for @storeTopPicks.
+  ///
+  /// In en, this message translates to:
+  /// **'Top picks'**
+  String get storeTopPicks;
+
+  /// No description provided for @storeTopCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Top categories for you'**
+  String get storeTopCategories;
+
+  /// No description provided for @storeShopByType.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop by type'**
+  String get storeShopByType;
+
+  /// No description provided for @storePopularIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular in {name}'**
+  String storePopularIn(String name);
+
+  /// No description provided for @storeViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get storeViewAll;
+
+  /// No description provided for @storeViewAllCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{View 1 item} other{View all {count} items}}'**
+  String storeViewAllCount(int count);
+
+  /// No description provided for @storeCategoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here yet — check back soon.'**
+  String get storeCategoryEmpty;
+
+  /// No description provided for @storeMyPoojas.
+  ///
+  /// In en, this message translates to:
+  /// **'Pooja bookings'**
+  String get storeMyPoojas;
+
+  /// No description provided for @storeMyAdviceShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Astrologer advice'**
+  String get storeMyAdviceShort;
+
+  /// No description provided for @storeMrp.
+  ///
+  /// In en, this message translates to:
+  /// **'M.R.P.'**
+  String get storeMrp;
+
+  /// No description provided for @storeYouSave.
+  ///
+  /// In en, this message translates to:
+  /// **'You save {amount}'**
+  String storeYouSave(String amount);
+
+  /// No description provided for @storeSimilar.
+  ///
+  /// In en, this message translates to:
+  /// **'You may also like'**
+  String get storeSimilar;
+
+  /// No description provided for @storeSellerAstrologerProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'See the astrologer\'s profile'**
+  String get storeSellerAstrologerProfile;
+
+  /// No description provided for @supTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Write to us'**
+  String get supTitle;
+
+  /// No description provided for @supHeroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re here to help'**
+  String get supHeroTitle;
+
+  /// No description provided for @supHeroBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us what happened. A real person reads every message and replies here.'**
+  String get supHeroBody;
+
+  /// No description provided for @supWhatAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'What is it about?'**
+  String get supWhatAbout;
+
+  /// No description provided for @supTopicPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet & payments'**
+  String get supTopicPayment;
+
+  /// No description provided for @supTopicConsultation.
+  ///
+  /// In en, this message translates to:
+  /// **'A consultation'**
+  String get supTopicConsultation;
+
+  /// No description provided for @supTopicOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'A store order'**
+  String get supTopicOrder;
+
+  /// No description provided for @supTopicAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'My account'**
+  String get supTopicAccount;
+
+  /// No description provided for @supTopicApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Something isn\'t working'**
+  String get supTopicApp;
+
+  /// No description provided for @supTopicOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Something else'**
+  String get supTopicOther;
+
+  /// No description provided for @supHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us what happened — dates, amounts or the astrologer\'s name help us sort it faster.'**
+  String get supHint;
+
+  /// No description provided for @supReplyPromise.
+  ///
+  /// In en, this message translates to:
+  /// **'We usually reply within a day.'**
+  String get supReplyPromise;
+
+  /// No description provided for @supSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get supSend;
+
+  /// No description provided for @supPickTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick what it\'s about first'**
+  String get supPickTopic;
+
+  /// No description provided for @supTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write a little more so we can help.'**
+  String get supTooShort;
+
+  /// No description provided for @supSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent — we\'ll reply here and let you know'**
+  String get supSent;
+
+  /// No description provided for @supEarlier.
+  ///
+  /// In en, this message translates to:
+  /// **'Your messages'**
+  String get supEarlier;
+
+  /// No description provided for @supAnswered.
+  ///
+  /// In en, this message translates to:
+  /// **'Replied'**
+  String get supAnswered;
+
+  /// No description provided for @supWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for reply'**
+  String get supWaiting;
+
+  /// No description provided for @supTeamReplied.
+  ///
+  /// In en, this message translates to:
+  /// **'TalkAcharya replied'**
+  String get supTeamReplied;
+
+  /// No description provided for @supBoxTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Need help?'**
+  String get supBoxTitle;
+
+  /// No description provided for @supBoxBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments, a consultation, an order — write to us and we\'ll sort it out.'**
+  String get supBoxBody;
+
+  /// No description provided for @supBoxPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Write your message…'**
+  String get supBoxPlaceholder;
+
+  /// No description provided for @supBoxReplied.
+  ///
+  /// In en, this message translates to:
+  /// **'We replied to your message'**
+  String get supBoxReplied;
+
+  /// No description provided for @supBoxMoreHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & FAQs'**
+  String get supBoxMoreHelp;
+
+  /// No description provided for @supWriteToUs.
+  ///
+  /// In en, this message translates to:
+  /// **'Write to us'**
+  String get supWriteToUs;
+
+  /// No description provided for @supWriteToUsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'We reply here in the app'**
+  String get supWriteToUsSub;
 }
 
 class _AppLocalizationsDelegate

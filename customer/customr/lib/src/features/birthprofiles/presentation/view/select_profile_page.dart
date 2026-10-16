@@ -25,17 +25,17 @@ class _SelectProfilePageState extends State<SelectProfilePage> {
 
   void _choose(String id) {
     context.read<BirthProfilesCubit>().select(id);
-    context.go(Routes.home);
+    context.go(Routes.astrologers);
   }
 
   Future<void> _create() async {
     final created = await context.push<Object?>(Routes.selectProfileNew);
-    if (created != null && mounted) context.go(Routes.home);
+    if (created != null && mounted) context.go(Routes.astrologers);
   }
 
   void _skip() {
     context.read<BirthProfilesCubit>().skipSelection();
-    context.go(Routes.home);
+    context.go(Routes.astrologers);
   }
 
   @override

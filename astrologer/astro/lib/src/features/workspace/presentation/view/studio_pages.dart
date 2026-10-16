@@ -209,6 +209,7 @@ class _GalleryPageState extends State<GalleryPage> {
 
 /// Categories the backend accepts for feedback.
 const kFeedbackCategories = [
+  'rates',
   'bug',
   'suggestion',
   'payments',
@@ -217,6 +218,7 @@ const kFeedbackCategories = [
 ];
 
 String feedbackCategoryLabel(AppLocalizations l, String key) => switch (key) {
+  'rates' => l.wsFeedbackRates,
   'bug' => l.wsFeedbackBug,
   'suggestion' => l.wsFeedbackSuggestion,
   'payments' => l.wsFeedbackPayments,
@@ -224,9 +226,13 @@ String feedbackCategoryLabel(AppLocalizations l, String key) => switch (key) {
   _ => l.wsFeedbackOther,
 };
 
-/// Tell the platform something, and read what it said back.
+/// Write to support — a rate change, a problem, an idea — and read what
+/// they said back. Each message is stored and the support team is emailed.
 class FeedbackPage extends StatefulWidget {
-  const FeedbackPage({super.key});
+  const FeedbackPage({this.initialTopic, super.key});
+
+  /// A category to open on, e.g. `rates` from the Rates page.
+  final String? initialTopic;
 
   @override
   State<FeedbackPage> createState() => _FeedbackPageState();
@@ -234,7 +240,9 @@ class FeedbackPage extends StatefulWidget {
 
 class _FeedbackPageState extends State<FeedbackPage> {
   final _message = TextEditingController();
-  String _category = 'suggestion';
+  late String _category = kFeedbackCategories.contains(widget.initialTopic)
+      ? widget.initialTopic!
+      : 'suggestion';
   bool _sending = false;
 
   /// Sent along so a bug report says which build it came from. Read once, up
@@ -308,7 +316,11 @@ class _FeedbackPageState extends State<FeedbackPage> {
             maxLines: 8,
             maxLength: 4000,
             textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(hintText: l.wsFeedbackHint),
+            decoration: InputDecoration(
+              hintText: _category == 'rates'
+                  ? l.wsFeedbackRatesHint
+                  : l.wsFeedbackHint,
+            ),
           ),
           BusyButton(
             label: l.wsFeedbackSend,

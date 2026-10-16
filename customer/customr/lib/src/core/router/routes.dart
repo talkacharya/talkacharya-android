@@ -46,6 +46,12 @@ class Routes {
   static String astrologerStarting(String id, String channel) =>
       '/astrologers/$id?start=$channel';
   static String astrologerReviews(String id) => '/astrologers/$id/reviews';
+
+  /// Assistant chat: free, text-only messages to an astrologer.
+  static const assistant = '/assistant';
+  static String assistantRoom(String threadId) => '/assistant/$threadId';
+  static String assistantWith(String astrologerId) =>
+      '/assistant/to/$astrologerId';
   static String liveRoom(String id) => '/live/$id';
 
   /// Swipe through every live astrologer, optionally opening on one.
@@ -87,6 +93,10 @@ class Routes {
 
   /// Help & support hub; reports are full-screen so deep links land cleanly.
   static const help = '/profile/help';
+
+  /// Writing to the support team, and their replies.
+  static const support = '/support';
+  static String supportAbout(String topic) => '/support?topic=$topic';
   static String dispute(String id) => '/disputes/$id';
   static const disputePattern = '/disputes/:id';
   static String reportIssue(String consultationId) =>
@@ -133,5 +143,5 @@ class Routes {
   static String storeConsult(String id) => '/store/consults/$id';
 
   /// Order of the branches — index maps to the bottom-nav destinations.
-  static const branchRoots = [home, astrologers, live, profile];
+  static const branchRoots = [home, astrologers, store, profile];
 }

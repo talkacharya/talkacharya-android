@@ -1,7 +1,7 @@
 name: astro
 description: "TalkAcharya — astrologer app (consultations, availability, earnings)."
 publish_to: 'none'
-version: 1.1.5+15
+version: 1.1.7+17
 
 environment:
   sdk: ^3.11.0
@@ -35,6 +35,8 @@ dependencies:
 
   talkacharya_predictions:
     path: ../../packages/talkacharya_predictions
+  talkacharya_assistant:
+    path: ../../packages/talkacharya_assistant
 
   # models / codegen
   freezed_annotation: ^3.1.0

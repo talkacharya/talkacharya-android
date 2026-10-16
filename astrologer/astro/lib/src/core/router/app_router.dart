@@ -16,6 +16,7 @@ import '../../features/kundali/presentation/view/consultation_kundali_page.dart'
 import '../../features/performance/presentation/view/performance_page.dart';
 import '../../features/performance/presentation/view/win_back_page.dart';
 import '../../features/call_history/presentation/view/call_history_page.dart';
+import '../../features/history/presentation/history_page.dart';
 import '../../features/remedies/presentation/view/advise_remedy_page.dart';
 import '../../features/remedies/data/remedies_api.dart';
 import '../../features/remedies/presentation/view/pooja_pages.dart';
@@ -56,6 +57,11 @@ import '../../features/profile/presentation/view/sound_settings_page.dart';
 import '../../features/profile/presentation/view/call_setup_page.dart';
 import '../../features/profile/presentation/view/delete_account_page.dart';
 import '../../features/profile/presentation/view/public_profile_page.dart';
+import '../../features/assistant/presentation/assistant_pages.dart';
+import '../../features/my_store/presentation/listing_editor_page.dart';
+import '../../features/my_store/presentation/my_store_page.dart';
+import '../../features/my_store/presentation/seller_order_page.dart';
+import '../../features/my_store/presentation/store_setup_page.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
 
@@ -200,7 +206,56 @@ GoRouter buildRouter(
       GoRoute(
         path: Routes.feedback,
         parentNavigatorKey: _rootKey,
-        builder: (_, _) => const FeedbackPage(),
+        builder: (_, s) =>
+            FeedbackPage(initialTopic: s.uri.queryParameters['topic']),
+      ),
+      GoRoute(
+        path: Routes.myStore,
+        parentNavigatorKey: _rootKey,
+        builder: (_, s) => MyStorePage(
+          initialTab: switch (s.uri.queryParameters['tab']) {
+            'orders' => 1,
+            'bookings' => 2,
+            _ => 0,
+          },
+        ),
+        routes: [
+          GoRoute(
+            path: 'setup',
+            parentNavigatorKey: _rootKey,
+            builder: (_, _) => const StoreSetupPage(),
+          ),
+          GoRoute(
+            path: 'listings/new',
+            parentNavigatorKey: _rootKey,
+            builder: (_, _) => const ListingEditorPage(),
+          ),
+          GoRoute(
+            path: 'listings/:id',
+            parentNavigatorKey: _rootKey,
+            builder: (_, s) =>
+                ListingEditorPage(listingId: s.pathParameters['id']),
+          ),
+          GoRoute(
+            path: 'orders/:id',
+            parentNavigatorKey: _rootKey,
+            builder: (_, s) =>
+                SellerOrderPage(orderId: s.pathParameters['id']!),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: Routes.assistant,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const AssistantInboxPage(),
+        routes: [
+          GoRoute(
+            path: ':id',
+            parentNavigatorKey: _rootKey,
+            builder: (_, s) =>
+                AssistantRoomPage(threadId: s.pathParameters['id']!),
+          ),
+        ],
       ),
       GoRoute(
         path: Routes.quickReplies,
@@ -254,6 +309,11 @@ GoRouter buildRouter(
         path: Routes.callHistory,
         parentNavigatorKey: _rootKey,
         builder: (_, _) => const CallHistoryPage(),
+      ),
+      GoRoute(
+        path: Routes.history,
+        parentNavigatorKey: _rootKey,
+        builder: (_, _) => const HistoryPage(),
       ),
       GoRoute(
         path: Routes.reports,

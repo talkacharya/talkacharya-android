@@ -34,20 +34,33 @@ class BirthProfilesCubit extends Cubit<BirthProfilesState> {
   Future<void> load({bool force = false}) async {
     if (state.status == BpStatus.loading) return;
     if (state.status == BpStatus.ready && !force) return;
-    emit(state.copyWith(status: BpStatus.loading, clearError: true));
+
+    await _repo.localStore.init();
+    final cachedProfiles = _repo.localStore.profiles;
+    final hasCached = cachedProfiles.isNotEmpty;
+
+    if (isClosed) return;
+    emit(
+      state.copyWith(
+        status: hasCached ? BpStatus.ready : BpStatus.loading,
+        profiles: hasCached ? cachedProfiles : state.profiles,
+        clearError: true,
+      ),
+    );
+
     try {
       final profiles = await _repo.list();
-      // If the active id no longer resolves (deleted elsewhere), drop it.
-      // We don't auto-pick a replacement here — that would clear the post-login
-      // profile gate. Screens that just need "the user's chart" read
-      // `state.resolvedProfile`, which falls back to the primary on its own.
+      if (isClosed) return;
       final activeId = _store.activeProfileId;
       if (activeId != null && !profiles.any((p) => p.id == activeId)) {
         await _store.setActive(null);
       }
       emit(state.copyWith(status: BpStatus.ready, profiles: profiles));
     } catch (e) {
-      emit(state.copyWith(status: BpStatus.error, error: friendlyError(e)));
+      if (isClosed) return;
+      if (state.profiles.isEmpty) {
+        emit(state.copyWith(status: BpStatus.error, error: friendlyError(e)));
+      }
     }
   }
 

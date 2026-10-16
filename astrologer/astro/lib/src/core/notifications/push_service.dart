@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../firebase_options.dart';
 import 'local_notifications.dart';
+import 'package:talkacharya_assistant/talkacharya_assistant.dart';
 
 /// FCM background isolate entrypoint.
 ///
@@ -166,6 +167,10 @@ class PushService {
     // in that room, the message is already on screen; elsewhere in the app
     // with the socket up, the in-app toast has just said it. Only with the
     // socket down does the foreground need the tray.
+    // An assistant message for the room that is open: already on screen.
+    if (AssistantPresence.isOpen('${message.data['assistant_thread'] ?? ''}')) {
+      return;
+    }
     final thread = '${message.data['thread'] ?? ''}';
     if (thread.isNotEmpty && (_roomOpen(thread) || _realtimeOnline())) return;
     final n = message.notification;

@@ -1,14 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:animations/animations.dart';
 
 import '../../../../../core/l10n/l10n.dart';
-import '../../../../../core/router/routes.dart';
 import '../../../../../core/util/money.dart';
-import '../../../../follows/data/follows_api.dart';
 import '../../../../follows/presentation/widgets/follow_widgets.dart';
 import '../../../data/models/astrologer.dart';
 import '../../channel_availability.dart';
@@ -17,15 +14,15 @@ import '../astrologer_detail_page.dart';
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 /// Discovery row: rounded-rect photo with a bottom scrim carrying rating and
-/// price, name + follow heart on the right, and an icon-only CTA.
+/// price, name + follow heart on the right. The whole card opens the profile.
 class AstrologerListTile extends StatelessWidget {
   const AstrologerListTile({required this.astrologer, this.channel, super.key});
 
   final Astrologer astrologer;
   final String? channel;
 
-  static const double _photoW = 104;
-  static const double _photoH = 116;
+  static const double _photoW = 84;
+  static const double _photoH = 92;
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +37,6 @@ class AstrologerListTile extends StatelessWidget {
     // Online, but not taking the kind of consultation this list is for.
     final wanted = channel ?? 'chat';
     final closedLine = available ? channelClosedLine(context, a, wanted) : null;
-    // What the button offers: the wanted kind when it is on, else whatever is.
-    final offered = a.takes(wanted) ? wanted : a.openChannels.firstOrNull;
     final langs = a.languages
         .take(3)
         .map(
@@ -49,7 +44,6 @@ class AstrologerListTile extends StatelessWidget {
         )
         .join(', ');
     final muted = theme.textTheme.labelMedium?.copyWith(color: brand.inkMuted);
-    void open() => context.push(Routes.astrologer(a.id));
 
     // compact "₹16/m" so it fits beside the rating on the photo
     final priceText = rate == null
@@ -198,33 +192,6 @@ class AstrologerListTile extends StatelessWidget {
                                 ),
                             ],
                           ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: !available
-                                ? _NotifyCta(astrologer: a)
-                                : Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      // Which ways are open with them now.
-                                      ChannelGlyphs(astrologer: a),
-                                      const SizedBox(width: 3),
-                                      _Cta(
-                                        available: offered != null,
-                                        icon: a.isQueueable
-                                            ? Icons.hourglass_top_rounded
-                                            : offered == null
-                                            ? Icons.schedule_rounded
-                                            : channelIcon(offered),
-                                        tooltip: a.isQueueable
-                                            ? l.waitlistJoin
-                                            : offered == null
-                                            ? (closedLine ?? _ctaLabel(l))
-                                            : channelLabel(l, offered),
-                                        onTap: openContainer,
-                                      ),
-                                    ],
-                                  ),
-                          ),
                         ],
                       ),
                     ),
@@ -237,12 +204,6 @@ class AstrologerListTile extends StatelessWidget {
       ),
     );
   }
-
-  String _ctaLabel(AppLocalizations l) => switch (channel) {
-    'voice' => l.channelCall,
-    'video' => l.channelVideo,
-    _ => l.channelChat,
-  };
 }
 
 /// Rounded-rect photo (or tinted initial fallback) with a bottom gradient mask
@@ -384,92 +345,3 @@ class _PhotoBox extends StatelessWidget {
 
 /// Offline astrologer: bell icon follows them (online pushes); active bell
 /// once followed — tapping again unfollows.
-class _NotifyCta extends StatelessWidget {
-  const _NotifyCta({required this.astrologer});
-
-  final Astrologer astrologer;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = context.l10n;
-    final a = astrologer;
-    final following =
-        watchFollow(context, a.id, followEntryOf(a))?.following ?? false;
-    final pending = watchFollowPending(context, a.id);
-    return _Cta(
-      available: false,
-      highlighted: following,
-      icon: following
-          ? Icons.notifications_active_rounded
-          : Icons.notifications_none_rounded,
-      tooltip: following ? l.followNotifying : l.homeNotifyMeBtn,
-      onTap: pending
-          ? null
-          : () => toggleFollow(
-              context,
-              astrologerId: a.id,
-              astrologerName: a.name,
-              source: FollowSource.card,
-              fallback: followEntryOf(a),
-            ),
-    );
-  }
-}
-
-/// Outlined, icon-only CTA — green when the astrologer can take a session now.
-class _Cta extends StatelessWidget {
-  const _Cta({
-    required this.available,
-    required this.icon,
-    required this.tooltip,
-    required this.onTap,
-    this.highlighted = false,
-  });
-
-  final bool available;
-  final IconData icon;
-  final String tooltip; // also the accessibility label
-  final VoidCallback? onTap;
-
-  /// Offline but followed — tinted so the bell reads as switched on.
-  final bool highlighted;
-
-  @override
-  Widget build(BuildContext context) {
-    final brand = context.brand;
-    final color = available
-        ? brand.online
-        : highlighted
-        ? AstroPalette.love.end
-        : brand.inkMuted;
-    return Tooltip(
-      message: tooltip,
-      child: SizedBox(
-        width: 40,
-        height: 36,
-        child: OutlinedButton(
-          onPressed: onTap,
-          style: OutlinedButton.styleFrom(
-            foregroundColor: color,
-            backgroundColor: available
-                ? brand.online.withValues(alpha: 0.06)
-                : null,
-            side: BorderSide(
-              color: color.withValues(
-                alpha: available || highlighted ? 0.9 : 0.4,
-              ),
-            ),
-            padding: EdgeInsets.zero,
-            minimumSize: const Size(40, 36),
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            visualDensity: VisualDensity.compact,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          child: Icon(icon, size: 18),
-        ),
-      ),
-    );
-  }
-}

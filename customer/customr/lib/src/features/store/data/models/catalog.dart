@@ -9,6 +9,7 @@ class StoreCategory extends Equatable {
     required this.name,
     this.description = '',
     this.image,
+    this.thumb,
     this.icon = '',
     this.parent,
     this.displayOrder = 0,
@@ -17,7 +18,12 @@ class StoreCategory extends Equatable {
   final String slug;
   final String name;
   final String description;
+
+  /// Square tile, cut by the server.
   final String? image;
+
+  /// Smaller square for the side rail.
+  final String? thumb;
   final String icon;
   final String? parent;
   final int displayOrder;
@@ -27,6 +33,7 @@ class StoreCategory extends Equatable {
     name: jStr(j['name']),
     description: jStr(j['description']),
     image: jStrOrNull(j['image']),
+    thumb: jStrOrNull(jMap(j['images'])['thumb']) ?? jStrOrNull(j['image']),
     icon: jStr(j['icon']),
     parent: jStrOrNull(j['parent']),
     displayOrder: jInt(j['display_order']),

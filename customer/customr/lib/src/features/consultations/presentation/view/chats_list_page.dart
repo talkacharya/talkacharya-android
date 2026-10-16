@@ -5,11 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
+import '../../../../core/router/routes.dart';
+import '../../../assistant/data/assistant_api.dart';
+import '../../../assistant/presentation/assistant_pages.dart';
 import '../../data/models/conversation.dart';
 import '../cubit/chats_list_cubit.dart';
 
+import 'package:talkacharya_assistant/talkacharya_assistant.dart';
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// The "Chats" tab: live consultations first, then recent ones. Tap to open the
 /// room. Fed by the app-level [ChatsListCubit] so the bottom-nav badge and this
 /// page stay in sync.
@@ -108,6 +114,7 @@ class _ChatsListPageState extends State<ChatsListPage>
             child: CustomScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               slivers: [
+                const SliverToBoxAdapter(child: _AssistantEntry()),
                 if (placeholder != null)
                   SliverFillRemaining(hasScrollBody: false, child: placeholder)
                 else ...[
@@ -506,11 +513,7 @@ String _previewText(AppLocalizations l10n, Conversation c) {
 
 /// Peer avatar with cached-image loading and a graceful initial fallback.
 class _Avatar extends StatelessWidget {
-  const _Avatar({
-    required this.name,
-    required this.url,
-    required this.scheme,
-  });
+  const _Avatar({required this.name, required this.url, required this.scheme});
 
   final String name;
   final String? url;
@@ -600,6 +603,112 @@ class _ChatTileSkeleton extends StatelessWidget {
           SizedBox(width: 12),
           SkeletonBox(width: 16, height: 16, radius: 4),
         ],
+      ),
+    );
+  }
+}
+
+/// The way into the customer's assistant chats (free, text-only messages to
+/// astrologers), with how many have a reply waiting. Hidden until there is one.
+class _AssistantEntry extends StatefulWidget {
+  const _AssistantEntry();
+
+  @override
+  State<_AssistantEntry> createState() => _AssistantEntryState();
+}
+
+class _AssistantEntryState extends State<_AssistantEntry> {
+  List<AssistantThread> _threads = const [];
+  StreamSubscription<AssistantIncoming>? _sub;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+    _sub = assistantIncoming().listen((_) => _load());
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _load() async {
+    try {
+      final rows = await getIt<AssistantApi>().threads();
+      if (mounted) setState(() => _threads = rows);
+    } catch (_) {
+      // Stays as it was; the inbox page says what went wrong.
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_threads.isEmpty) return const SizedBox.shrink();
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    final brand = context.brand;
+    final replies = _threads.where((t) => t.awaitingYou).length;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+      child: Pressable(
+        child: Material(
+          color: theme.colorScheme.surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: BorderSide(color: brand.hairline),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () async {
+              await context.push(Routes.assistant);
+              unawaited(_load());
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Row(
+                children: [
+                  const HueIcon(
+                    hue: AstroPalette.career,
+                    icon: Icons.forum_rounded,
+                    size: 44,
+                    iconSize: 22,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l.assistantTitle,
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        Text(
+                          replies > 0
+                              ? l.assistantRepliesCount(replies)
+                              : l.assistantInboxSubtitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: replies > 0 ? brand.gold : brand.inkMuted,
+                            fontWeight: replies > 0 ? FontWeight.w700 : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (replies > 0)
+                    _UnreadBadge(replies)
+                  else
+                    Icon(Icons.chevron_right_rounded, color: brand.inkMuted),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

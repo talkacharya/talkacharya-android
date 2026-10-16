@@ -114,11 +114,12 @@ class _ChatShellState extends State<ChatShell> {
               title: Text(l10n.roomSwitchVoice),
               onTap: () => Navigator.pop(sheetContext, 'voice'),
             ),
-            ListTile(
-              leading: const Icon(Icons.videocam_rounded),
-              title: Text(l10n.roomSwitchVideo),
-              onTap: () => Navigator.pop(sheetContext, 'video'),
-            ),
+            // VIDEO-OFF: video calls are switched off for now.
+            // ListTile(
+            //   leading: const Icon(Icons.videocam_rounded),
+            //   title: Text(l10n.roomSwitchVideo),
+            //   onTap: () => Navigator.pop(sheetContext, 'video'),
+            // ),
             const SizedBox(height: 8),
           ],
         ),

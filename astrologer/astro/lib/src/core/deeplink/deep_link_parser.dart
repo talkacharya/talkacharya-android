@@ -29,8 +29,21 @@ String? locationForUri(Uri uri) {
       return '/earnings';
     case 'chats':
       return id == null ? '/chats' : '/chats/$id';
+    case 'my-store':
+      // talkacharya://my-store[/products/<id>|/orders/<id>] — their own store.
+      final rest = segments.length > 2 ? segments[2] : null;
+      if (id == 'products' && rest != null) return '/my-store/listings/$rest';
+      if (id == 'orders' && rest != null) return '/my-store/orders/$rest';
+      return '/my-store';
+    case 'assistant':
+      // The free, text-only chats customers write in.
+      return id == null ? '/assistant' : '/assistant/$id';
     case 'notifications':
       return '/notifications';
+    case 'feedback':
+    case 'support':
+      // "Support replied" push: their messages to the team, with the answer.
+      return '/feedback';
     case 'onboarding':
       return '/onboarding';
     case 'consultations':

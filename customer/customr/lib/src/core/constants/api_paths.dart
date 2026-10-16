@@ -45,9 +45,18 @@ class ApiPaths {
 
   static const astrologers = '/app/astrologers';
   static String astrologer(String id) => '/app/astrologers/$id';
-  static String astrologerReviews(String id) =>
-      '/app/astrologers/$id/reviews';
+  static String astrologerReviews(String id) => '/app/astrologers/$id/reviews';
   static String astrologerFollow(String id) => '/app/astrologers/$id/follow';
+
+  // Assistant chat: free, text-only messages to an astrologer.
+  // Writing to support (apps.support).
+  static const supportMessages = '/app/support/messages';
+  static const supportMessagesSeen = '/app/support/messages/seen';
+
+  static const assistantThreads = '/app/assistant/threads';
+  static String assistantThread(String id) => '/app/assistant/threads/$id';
+  static String assistantMessages(String id) =>
+      '/app/assistant/threads/$id/messages';
   static const meFollowing = '/app/me/following';
   static const followAlerts = '/app/follows/alerts';
   static const home = '/app/home';
@@ -148,8 +157,7 @@ class ApiPaths {
   static String livestream(String id) => '/app/livestreams/$id';
 
   /// Ask a live host for a private reading — joins their consultation queue.
-  static String livestreamConsult(String id) =>
-      '/app/livestreams/$id/consult';
+  static String livestreamConsult(String id) => '/app/livestreams/$id/consult';
 
   // store — /app/store/... (products, poojas, orders, consult before buying)
   static const storeHome = '/app/store/home';

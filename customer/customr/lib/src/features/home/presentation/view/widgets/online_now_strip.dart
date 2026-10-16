@@ -38,16 +38,16 @@ class OnlineNowStrip extends StatelessWidget {
           onSeeAll: () =>
               context.go(Routes.astrologersWith(sort: 'recommended')),
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 10),
         SizedBox(
-          height: 98,
+          height: 80,
           child: loading
               ? const _StoriesSkeleton()
               : ListView.separated(
                   scrollDirection: Axis.horizontal,
                   padding: HomeGaps.sidePad,
                   itemCount: show.take(12).length,
-                  separatorBuilder: (_, _) => const SizedBox(width: 14),
+                  separatorBuilder: (_, _) => const SizedBox(width: 10),
                   itemBuilder: (context, i) => _Story(astrologer: show[i]),
                 ),
         ),
@@ -73,7 +73,7 @@ class _Story extends StatelessWidget {
         onTap: () => context.push(Routes.astrologer(a.id)),
         borderRadius: BorderRadius.circular(16),
         child: SizedBox(
-          width: 68,
+          width: 58,
           child: Column(
             children: [
               Stack(
@@ -109,7 +109,7 @@ class _Story extends StatelessWidget {
                         name: a.name,
                         url: a.avatar,
                         hue: hue,
-                        size: 56,
+                        size: 44,
                       ),
                     ),
                   ),
@@ -118,12 +118,12 @@ class _Story extends StatelessWidget {
                       right: 3,
                       bottom: 3,
                       child: Container(
-                        width: 14,
-                        height: 14,
+                        width: 12,
+                        height: 12,
                         decoration: BoxDecoration(
                           color: brand.online,
                           shape: BoxShape.circle,
-                          border: Border.all(color: surface, width: 2.5),
+                          border: Border.all(color: surface, width: 2),
                         ),
                       ),
                     ),
@@ -133,12 +133,12 @@ class _Story extends StatelessWidget {
                       right: 3,
                       bottom: 3,
                       child: Container(
-                        width: 14,
-                        height: 14,
+                        width: 12,
+                        height: 12,
                         decoration: BoxDecoration(
                           color: const Color(0xFFFBBF24),
                           shape: BoxShape.circle,
-                          border: Border.all(color: surface, width: 2.5),
+                          border: Border.all(color: surface, width: 2),
                         ),
                       ),
                     ),
@@ -163,13 +163,13 @@ class _Story extends StatelessWidget {
                     ),
                 ],
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 4),
               Text(
                 a.name.split(' ').first,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.labelMedium?.copyWith(
+                style: theme.textTheme.labelSmall?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -194,7 +194,7 @@ class _StoriesSkeleton extends StatelessWidget {
         separatorBuilder: (_, _) => const SizedBox(width: 14),
         itemBuilder: (_, _) => const Column(
           children: [
-            SkeletonBox(width: 66, height: 66, radius: 33),
+            SkeletonBox(width: 54, height: 54, radius: 27),
             SizedBox(height: 8),
             SkeletonBox(width: 44, height: 9),
           ],

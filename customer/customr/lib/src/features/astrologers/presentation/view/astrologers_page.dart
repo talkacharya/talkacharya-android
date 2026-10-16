@@ -13,14 +13,6 @@ import '../cubit/discovery_cubit.dart';
 import 'widgets/astrologer_list_tile.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
-const _channelKeys = <String>['', 'chat', 'voice', 'video'];
-const _sortKeys = <String>[
-  'recommended',
-  'rating',
-  'experience',
-  'consultations',
-  'newest',
-];
 
 const double _searchBarHeight = 68;
 
@@ -66,6 +58,7 @@ class _DiscoveryView extends StatefulWidget {
 
 class _DiscoveryViewState extends State<_DiscoveryView> {
   final _scroll = ScrollController();
+  final _searchFocusNode = FocusNode();
   late final _searchController = TextEditingController(
     text: widget.initialQuery.search ?? '',
   );
@@ -75,8 +68,6 @@ class _DiscoveryViewState extends State<_DiscoveryView> {
   void initState() {
     super.initState();
     _scroll.addListener(_onScroll);
-    // The cubit is a fresh instance from the BlocProvider above; kick off the
-    // first fetch as soon as it's mounted.
     context.read<DiscoveryCubit>().applyQuery(widget.initialQuery);
   }
 
@@ -85,6 +76,7 @@ class _DiscoveryViewState extends State<_DiscoveryView> {
     _debounce?.cancel();
     _scroll.dispose();
     _searchController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -96,8 +88,6 @@ class _DiscoveryViewState extends State<_DiscoveryView> {
   }
 
   void _onSearchChanged(String value) {
-    // No setState here: _SearchField reads the controller via
-    // ValueListenableBuilder and updates its own clear button.
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 400), () {
       if (mounted) context.read<DiscoveryCubit>().search(value);
@@ -108,8 +98,6 @@ class _DiscoveryViewState extends State<_DiscoveryView> {
     _debounce?.cancel();
     _searchController.clear();
     context.read<DiscoveryCubit>().search(null);
-    // No setState: _SearchField's ValueListenableBuilder sees the clear and
-    // hides the X button on its own.
   }
 
   @override
@@ -123,14 +111,12 @@ class _DiscoveryViewState extends State<_DiscoveryView> {
       child: Scaffold(
         backgroundColor: brand.canvas,
         body: BlocConsumer<DiscoveryCubit, DiscoveryState>(
-          // Only after a filter/search change — not after an infinite-scroll page.
           listenWhen: (a, b) =>
               b.status == DiscoveryStatus.ready &&
               !b.isEmpty &&
               (a.status == DiscoveryStatus.refiltering ||
                   a.status == DiscoveryStatus.loading),
           listener: (_, _) {
-            // Jump back to the list top when a new filter's results land.
             if (_scroll.hasClients && _scroll.offset > 400) {
               _scroll.jumpTo(0);
             }
@@ -146,6 +132,7 @@ class _DiscoveryViewState extends State<_DiscoveryView> {
                 state: state,
                 search: _SearchField(
                   controller: _searchController,
+                  focusNode: _searchFocusNode,
                   onChanged: _onSearchChanged,
                   onSubmitted: cubit.search,
                   onClear: _clearSearch,
@@ -185,7 +172,7 @@ class _DiscoveryViewState extends State<_DiscoveryView> {
         SliverFillRemaining(
           hasScrollBody: false,
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 120),
+            padding: const EdgeInsets.only(bottom: 50),
             child: state.query.following
                 ? EmptyState(
                     icon: Icons.favorite_border_rounded,
@@ -212,7 +199,6 @@ class _DiscoveryViewState extends State<_DiscoveryView> {
               astrologer: state.items[i],
               channel: state.query.channel,
             );
-            // Stagger only the first screenful; later pages just append.
             return i < 6
                 ? FadeSlideIn(
                     key: ValueKey('${state.query.hashCode}-$i'),
@@ -235,8 +221,6 @@ class _DiscoveryViewState extends State<_DiscoveryView> {
 
 // --- header -------------------------------------------------------------------------
 
-/// Cosmic collapsing header: big title + live count, with the search field pinned
-/// as its bottom so it's always one tap away.
 class _Header extends StatelessWidget {
   const _Header({required this.state, required this.search});
 
@@ -264,8 +248,6 @@ class _Header extends StatelessWidget {
         l.navAstrologers,
         style: theme.textTheme.titleLarge?.copyWith(color: Colors.white),
       ),
-      // The nebula sits outside the FlexibleSpaceBar so it stays visible behind
-      // the collapsed bar instead of fading to a flat colour.
       flexibleSpace: Stack(
         fit: StackFit.expand,
         children: [
@@ -354,83 +336,245 @@ class _Header extends StatelessWidget {
   }
 }
 
-class _SearchField extends StatelessWidget {
+class _SearchField extends StatefulWidget {
   const _SearchField({
     required this.controller,
+    required this.focusNode,
     required this.onChanged,
     required this.onSubmitted,
     required this.onClear,
   });
 
   final TextEditingController controller;
+  final FocusNode focusNode;
   final ValueChanged<String> onChanged;
   final ValueChanged<String> onSubmitted;
   final VoidCallback onClear;
+
+  @override
+  State<_SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<_SearchField> {
+  final _layerLink = LayerLink();
+  OverlayEntry? _overlayEntry;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.focusNode.addListener(_onFocusChange);
+  }
+
+  @override
+  void dispose() {
+    widget.focusNode.removeListener(_onFocusChange);
+    _removeOverlay();
+    super.dispose();
+  }
+
+  void _onFocusChange() {
+    if (widget.focusNode.hasFocus) {
+      _showOverlay();
+    } else {
+      _removeOverlay();
+    }
+  }
+
+  void _removeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+  void _showOverlay() {
+    _removeOverlay();
+    final cubit = context.read<DiscoveryCubit>();
+    final recents = cubit.recentSearches;
+    if (recents.isEmpty) return;
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) {
+        final theme = Theme.of(context);
+        final brand = context.brand;
+        final list = cubit.recentSearches;
+        if (list.isEmpty) return const SizedBox.shrink();
+
+        return Positioned(
+          width: MediaQuery.of(context).size.width - 32,
+          child: CompositedTransformFollower(
+            link: _layerLink,
+            showWhenUnlinked: false,
+            offset: const Offset(0, 54),
+            child: Material(
+              elevation: 8,
+              borderRadius: BorderRadius.circular(16),
+              color: theme.colorScheme.surface,
+              shadowColor: Colors.black38,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: brand.hairline),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 4, 12, 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Recent Searches',
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: brand.inkMuted,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              cubit.clearRecentSearches();
+                              _removeOverlay();
+                            },
+                            child: const Text('Clear All', style: TextStyle(fontSize: 12)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(height: 1),
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxHeight: 220),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: list.length,
+                        itemBuilder: (context, i) {
+                          final term = list[i];
+                          return ListTile(
+                            dense: true,
+                            leading: Icon(
+                              Icons.history_rounded,
+                              size: 18,
+                              color: brand.inkMuted,
+                            ),
+                            title: Text(
+                              term,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(
+                                Icons.close_rounded,
+                                size: 16,
+                                color: brand.inkMuted,
+                              ),
+                              onPressed: () {
+                                cubit.removeRecentSearch(term);
+                                _showOverlay();
+                              },
+                            ),
+                            onTap: () {
+                              widget.controller.text = term;
+                              widget.focusNode.unfocus();
+                              widget.onSubmitted(term);
+                              _removeOverlay();
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    Overlay.of(context).insert(_overlayEntry!);
+  }
 
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
     final theme = Theme.of(context);
     final brand = context.brand;
-    return Container(
-      height: 50,
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: [
-          BoxShadow(
-            color: brand.cosmicStart.withValues(alpha: 0.35),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          const SizedBox(width: 6),
-          const HueIcon(
-            hue: AstroPalette.career,
-            icon: Icons.search_rounded,
-            size: 36,
-            iconSize: 19,
-          ),
-          Expanded(
-            child: TextField(
-              controller: controller,
-              onChanged: onChanged,
-              onSubmitted: onSubmitted,
-              textInputAction: TextInputAction.search,
-              style: theme.textTheme.bodyLarge,
-              decoration: InputDecoration(
-                hintText: l.astroSearchHint,
-                hintStyle: theme.textTheme.bodyMedium?.copyWith(
-                  color: brand.inkMuted,
+
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              color: brand.cosmicStart.withValues(alpha: 0.35),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            const SizedBox(width: 6),
+            const HueIcon(
+              hue: AstroPalette.career,
+              icon: Icons.search_rounded,
+              size: 36,
+              iconSize: 19,
+            ),
+            Expanded(
+              child: TextField(
+                focusNode: widget.focusNode,
+                controller: widget.controller,
+                onChanged: (v) {
+                  widget.onChanged(v);
+                  if (widget.focusNode.hasFocus && v.isEmpty) {
+                    _showOverlay();
+                  } else {
+                    _removeOverlay();
+                  }
+                },
+                onSubmitted: (v) {
+                  widget.onSubmitted(v);
+                  widget.focusNode.unfocus();
+                  _removeOverlay();
+                },
+                textInputAction: TextInputAction.search,
+                style: theme.textTheme.bodyLarge,
+                decoration: InputDecoration(
+                  hintText: l.astroSearchHint,
+                  hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                    color: brand.inkMuted,
+                  ),
+                  isDense: true,
+                  filled: false,
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                 ),
-                isDense: true,
-                filled: false,
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
               ),
             ),
-          ),
-          // ValueListenableBuilder reacts to the controller directly — no
-          // setState in the parent page needed to toggle the clear button.
-          ValueListenableBuilder<TextEditingValue>(
-            valueListenable: controller,
-            builder: (context, value, _) {
-              if (value.text.isEmpty) return const SizedBox.shrink();
-              return IconButton(
-                tooltip:
-                    MaterialLocalizations.of(context).deleteButtonTooltip,
-                icon: Icon(Icons.close_rounded, color: brand.inkMuted),
-                onPressed: onClear,
-              );
-            },
-          ),
-          const SizedBox(width: 4),
-        ],
+            ValueListenableBuilder<TextEditingValue>(
+              valueListenable: widget.controller,
+              builder: (context, value, _) {
+                if (value.text.isEmpty) return const SizedBox.shrink();
+                return IconButton(
+                  tooltip:
+                      MaterialLocalizations.of(context).deleteButtonTooltip,
+                  icon: Icon(Icons.close_rounded, color: brand.inkMuted),
+                  onPressed: () {
+                    widget.onClear();
+                    _showOverlay();
+                  },
+                );
+              },
+            ),
+            const SizedBox(width: 4),
+          ],
+        ),
       ),
     );
   }
@@ -449,27 +593,16 @@ class _FilterHeaderDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => _height;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlaps) {
-    final brand = context.brand;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: brand.canvas,
-        boxShadow: overlaps
-            ? [
-                BoxShadow(
-                  color: brand.cosmicStart.withValues(alpha: 0.08),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ]
-            : null,
-      ),
-      child: const Column(
-        children: [
-          Expanded(child: _FilterBar()),
-          _RefilterBar(),
-        ],
-      ),
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return const Column(
+      children: [
+        Expanded(child: _FilterChipRail()),
+        Divider(height: 1),
+      ],
     );
   }
 
@@ -477,299 +610,72 @@ class _FilterHeaderDelegate extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(covariant _FilterHeaderDelegate oldDelegate) => false;
 }
 
-/// Thin gradient progress line shown while re-filtering with results on screen.
-class _RefilterBar extends StatelessWidget {
-  const _RefilterBar();
+class _FilterChipRail extends StatelessWidget {
+  const _FilterChipRail();
 
   @override
   Widget build(BuildContext context) {
-    final refiltering = context.select(
-      (DiscoveryCubit c) => c.state.status == DiscoveryStatus.refiltering,
-    );
-    return SizedBox(
-      height: 2,
-      child: refiltering
-          ? LinearProgressIndicator(
-              minHeight: 2,
-              backgroundColor: Colors.transparent,
-              color: AstroPalette.romance[1],
-            )
-          : null,
-    );
-  }
-}
-
-class _FilterBar extends StatelessWidget {
-  const _FilterBar();
-
-  static AstroHue _channelHue(String key) => switch (key) {
-    'chat' => AstroPalette.career,
-    'voice' => AstroPalette.health,
-    'video' => AstroPalette.love,
-    _ => AstroPalette.money,
-  };
-
-  static IconData _channelIcon(String key) => switch (key) {
-    'chat' => Icons.chat_bubble_rounded,
-    'voice' => Icons.phone_in_talk_rounded,
-    'video' => Icons.videocam_rounded,
-    _ => Icons.auto_awesome_rounded,
-  };
-
-  static String _channelLabel(AppLocalizations l, String key) => switch (key) {
-    'chat' => l.channelChat,
-    'voice' => l.channelCall,
-    'video' => l.channelVideo,
-    _ => l.channelAll,
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    final l = context.l10n;
     final cubit = context.read<DiscoveryCubit>();
     final query = context.select((DiscoveryCubit c) => c.state.query);
-    final channel = query.channel ?? '';
-    final sort = query.sort ?? 'recommended';
+    final theme = Theme.of(context);
+    final brand = context.brand;
 
-    return ListView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
-      children: [
-        for (final key in _channelKeys) ...[
-          _HueChip(
-            label: _channelLabel(l, key),
-            icon: _channelIcon(key),
-            hue: _channelHue(key),
-            selected: key == channel,
-            onTap: () => cubit.setChannel(key.isEmpty ? null : key),
-          ),
-          const SizedBox(width: 8),
-        ],
-        _HueChip(
-          label: l.followingFilter,
-          icon: query.following
-              ? Icons.favorite_rounded
-              : Icons.favorite_border_rounded,
-          hue: AstroPalette.love,
-          selected: query.following,
-          onTap: () =>
-              cubit.applyQuery(query.copyWith(following: !query.following)),
-        ),
-        const SizedBox(width: 8),
-        _HueChip(
-          label: _sortLabel(l, sort),
-          icon: Icons.swap_vert_rounded,
-          hue: AstroPalette.air,
-          selected: false,
-          trailing: Icons.expand_more_rounded,
-          onTap: () => _pickSort(context, cubit, sort),
-        ),
-        if (query.skill != null) ...[
-          const SizedBox(width: 8),
-          _HueChip(
-            label: _titleCase(query.skill!),
-            icon: Icons.local_offer_rounded,
-            hue: AstroPalette.fire,
-            selected: true,
-            trailing: Icons.close_rounded,
-            onTap: () => cubit.applyQuery(query.copyWith(skill: null)),
-          ),
-        ],
-      ],
-    );
-  }
+    final channels = [
+      (null, 'All', Icons.auto_awesome_rounded),
+      ('chat', 'Chat', Icons.chat_bubble_rounded),
+      ('voice', 'Call', Icons.phone_in_talk_rounded),
+      ('video', 'Video call', Icons.videocam_rounded),
+    ];
 
-  Future<void> _pickSort(
-    BuildContext context,
-    DiscoveryCubit cubit,
-    String current,
-  ) async {
-    final l = context.l10n;
-    final picked = await showAppSheet<String>(
-      context: context,
-      title: l.astroSortBy,
-      builder: (sheet) => ListView(
-        shrinkWrap: true,
+    return Container(
+      color: brand.canvas,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         children: [
-          for (final key in _sortKeys)
+          for (final item in channels) ...[
             Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: _SortOption(
-                label: _sortLabel(l, key),
-                icon: _sortIcon(key),
-                hue: _sortHue(key),
-                selected: key == current,
-                onTap: () => Navigator.pop(sheet, key),
+              padding: const EdgeInsets.only(right: 8),
+              child: FilterChip(
+                showCheckmark: false,
+                avatar: Icon(
+                  item.$3,
+                  size: 16,
+                  color: query.channel == item.$1
+                      ? Colors.white
+                      : theme.colorScheme.onSurfaceVariant,
+                ),
+                label: Text(item.$2),
+                selected: query.channel == item.$1,
+                selectedColor: brand.cosmicStart,
+                labelStyle: TextStyle(
+                  color: query.channel == item.$1
+                      ? Colors.white
+                      : theme.colorScheme.onSurface,
+                  fontWeight: query.channel == item.$1
+                      ? FontWeight.w700
+                      : FontWeight.w500,
+                  fontSize: 13,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                side: BorderSide(
+                  color: query.channel == item.$1
+                      ? brand.cosmicStart
+                      : brand.hairline,
+                ),
+                onSelected: (_) => cubit.setChannel(item.$1),
               ),
             ),
+          ],
         ],
       ),
     );
-    if (picked != null && picked != current) {
-      unawaited(cubit.setSort(picked));
-    }
-  }
-
-  static String _sortLabel(AppLocalizations l, String key) => switch (key) {
-    'rating' => l.astroSortTopRated,
-    'experience' => l.astroSortExperienced,
-    'consultations' => l.astroSortConsulted,
-    'newest' => l.astroSortNew,
-    _ => l.astroSortRecommended,
-  };
-
-  static IconData _sortIcon(String key) => switch (key) {
-    'rating' => Icons.star_rounded,
-    'experience' => Icons.workspace_premium_rounded,
-    'consultations' => Icons.groups_rounded,
-    'newest' => Icons.fiber_new_rounded,
-    _ => Icons.auto_awesome_rounded,
-  };
-
-  static AstroHue _sortHue(String key) => switch (key) {
-    'rating' => AstroPalette.money,
-    'experience' => AstroPalette.health,
-    'consultations' => AstroPalette.love,
-    'newest' => AstroPalette.air,
-    _ => AstroPalette.career,
-  };
-
-  static String _titleCase(String slug) => slug
-      .split(RegExp(r'[-_ ]'))
-      .where((w) => w.isNotEmpty)
-      .map((w) => w[0].toUpperCase() + w.substring(1))
-      .join(' ');
-}
-
-class _HueChip extends StatelessWidget {
-  const _HueChip({
-    required this.label,
-    required this.icon,
-    required this.hue,
-    required this.selected,
-    required this.onTap,
-    this.trailing,
-  });
-
-  final String label;
-  final IconData icon;
-  final AstroHue hue;
-  final bool selected;
-  final VoidCallback onTap;
-  final IconData? trailing;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final fg = selected ? Colors.white : hue.end;
-    return Semantics(
-      button: true,
-      selected: selected,
-      child: GestureDetector(
-        onTap: () {
-          HapticFeedback.selectionClick();
-          onTap();
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 220),
-          curve: Curves.easeOutCubic,
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(999),
-            gradient: selected ? hue.linear() : null,
-            color: selected ? null : hue.tint(0.09),
-            border: Border.all(
-              color: selected ? Colors.transparent : hue.tint(0.28),
-            ),
-            boxShadow: selected
-                ? [
-                    BoxShadow(
-                      color: hue.start.withValues(alpha: 0.35),
-                      blurRadius: 10,
-                      offset: const Offset(0, 3),
-                    ),
-                  ]
-                : null,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 15, color: fg),
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: selected ? Colors.white : null,
-                  fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
-                ),
-              ),
-              if (trailing != null) ...[
-                const SizedBox(width: 2),
-                Icon(trailing, size: 16, color: fg),
-              ],
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }
 
-class _SortOption extends StatelessWidget {
-  const _SortOption({
-    required this.label,
-    required this.icon,
-    required this.hue,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String label;
-  final IconData icon;
-  final AstroHue hue;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Material(
-      color: selected ? hue.tint(0.12) : theme.colorScheme.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          color: selected ? hue.end : context.brand.hairline,
-          width: selected ? 1.4 : 1,
-        ),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            children: [
-              HueIcon(hue: hue, icon: icon, size: 38, iconSize: 19),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  label,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              if (selected) Icon(Icons.check_circle_rounded, color: hue.end),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// --- footer / skeleton ---------------------------------------------------------------
+// --- footer -------------------------------------------------------------------------
 
 class _Footer extends StatelessWidget {
   const _Footer({required this.state, required this.onRetry});
@@ -779,9 +685,12 @@ class _Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.l10n;
-    final theme = Theme.of(context);
-
+    if (state.status == DiscoveryStatus.loadingMore) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 24),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
     if (state.loadMoreError) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -789,70 +698,37 @@ class _Footer extends StatelessWidget {
           child: TextButton.icon(
             onPressed: onRetry,
             icon: const Icon(Icons.refresh_rounded, size: 18),
-            label: Text(l.astroLoadMoreFailed),
+            label: Text(context.l10n.commonRetry),
           ),
         ),
       );
     }
-    if (state.status == DiscoveryStatus.loadingMore) {
-      return Padding(
-        padding: const EdgeInsets.all(20),
-        child: Center(
-          child: SizedBox(
-            width: 22,
-            height: 22,
-            child: CircularProgressIndicator(
-              strokeWidth: 2.4,
-              color: AstroPalette.romance[1],
-            ),
-          ),
-        ),
-      );
-    }
-    if (state.hasMore) return const SizedBox(height: 24);
-    if (state.items.length <= 3) return const SizedBox(height: 8);
-    return Padding(
-      padding: const EdgeInsets.only(top: 22),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.auto_awesome_rounded,
-            size: 14,
-            color: AstroPalette.money.start,
-          ),
-          const SizedBox(width: 6),
-          Text(
-            l.astroThatsEveryone,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: context.brand.inkMuted,
-            ),
-          ),
-        ],
-      ),
-    );
+    return const SizedBox.shrink();
   }
 }
+
+// --- skeletons ----------------------------------------------------------------------
 
 class _ResultsSkeleton extends StatelessWidget {
   const _ResultsSkeleton();
 
   @override
   Widget build(BuildContext context) {
-    final brand = context.brand;
     return SliverPadding(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 140),
-      sliver: SliverList.separated(
-        itemCount: 5,
-        separatorBuilder: (_, _) => const SizedBox(height: 10),
-        itemBuilder: (_, i) => Shimmer.fromColors(
-          baseColor: brand.shimmerBase,
-          highlightColor: brand.shimmerHighlight,
-          child: Container(
-            height: 96,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+      sliver: SliverList.builder(
+        itemCount: 4,
+        itemBuilder: (context, _) => Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Shimmer.fromColors(
+            baseColor: context.brand.shimmerBase,
+            highlightColor: context.brand.shimmerHighlight,
+            child: Container(
+              height: 124,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
             ),
           ),
         ),

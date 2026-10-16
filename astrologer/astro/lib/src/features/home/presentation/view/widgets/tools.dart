@@ -89,6 +89,12 @@ List<ToolGroup> buildToolGroups(BuildContext context) {
         badge: unread,
       ),
       ToolAction(
+        AstroPalette.air,
+        Icons.history_rounded,
+        l.dashActionHistory,
+        () => context.push(Routes.history),
+      ),
+      ToolAction(
         AstroPalette.career,
         Icons.insights_rounded,
         l.dashActionPredictions,
@@ -245,6 +251,18 @@ List<ToolGroup> buildToolGroups(BuildContext context) {
         l.dashActionAlerts,
         () => context.push(Routes.notifications),
         badge: alerts,
+      ),
+      ToolAction(
+        AstroPalette.career,
+        Icons.forum_rounded,
+        l.assistantTitle,
+        () => context.push(Routes.assistant),
+      ),
+      ToolAction(
+        AstroPalette.money,
+        Icons.storefront_rounded,
+        l.msTitle,
+        () => context.push(Routes.myStore),
       ),
       ToolAction(
         AstroPalette.career,

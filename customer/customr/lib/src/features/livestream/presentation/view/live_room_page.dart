@@ -585,11 +585,12 @@ class _ComposerState extends State<_Composer> {
               title: Text(l.roomSwitchVoice),
               onTap: () => Navigator.pop(sheetContext, 'voice'),
             ),
-            ListTile(
-              leading: const Icon(Icons.videocam_rounded),
-              title: Text(l.roomSwitchVideo),
-              onTap: () => Navigator.pop(sheetContext, 'video'),
-            ),
+            // VIDEO-OFF: video calls are switched off for now.
+            // ListTile(
+            //   leading: const Icon(Icons.videocam_rounded),
+            //   title: Text(l.roomSwitchVideo),
+            //   onTap: () => Navigator.pop(sheetContext, 'video'),
+            // ),
             const SizedBox(height: 8),
           ],
         ),

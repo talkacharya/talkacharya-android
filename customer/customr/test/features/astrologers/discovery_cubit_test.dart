@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:customr/src/features/astrologers/data/astrologers_api.dart';
 import 'package:customr/src/features/astrologers/data/astrologers_repository.dart';
 import 'package:customr/src/features/astrologers/data/models/astrologer.dart';
@@ -24,6 +26,48 @@ void main() {
     ).thenAnswer(
       (_) async => AstrologerPage(items: [_a('1'), _a('2')], nextCursor: 'c2'),
     );
+    // Nothing cached on this phone unless a test says so.
+    when(() => repo.localMatches(any())).thenAnswer((_) async => const []);
+    when(() => repo.saveRecentSearch(any())).thenAnswer((_) async {});
+  });
+
+  test(
+    'cached matches show at once, then the server page replaces them',
+    () async {
+      when(
+        () => repo.localMatches(any()),
+      ).thenAnswer((_) async => [_a('stale'), _a('2')]);
+      final server = Completer<AstrologerPage>();
+      when(
+        () => repo.list(
+          query: any(named: 'query'),
+          cursor: any(named: 'cursor'),
+        ),
+      ).thenAnswer((_) => server.future);
+
+      final cubit = DiscoveryCubit(repo);
+      final done = cubit.applyQuery(const AstrologerQuery(search: 'ka'));
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state.items.map((a) => a.id), ['stale', '2']);
+
+      server.complete(
+        AstrologerPage(items: [_a('2'), _a('1')], nextCursor: null),
+      );
+      await done;
+      // The server's order, and the cached-only one gone.
+      expect(cubit.state.items.map((a) => a.id), ['2', '1']);
+      await cubit.close();
+    },
+  );
+
+  test('typing saves one recent search, after the pause', () async {
+    final cubit = DiscoveryCubit(repo);
+    unawaited(cubit.search('k'));
+    unawaited(cubit.search('ka'));
+    await cubit.search('kark');
+    verify(() => repo.saveRecentSearch('kark')).called(1);
+    verifyNever(() => repo.saveRecentSearch('k'));
+    await cubit.close();
   });
 
   test('applyQuery loads page 1 and exposes the query', () async {

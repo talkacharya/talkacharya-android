@@ -53,6 +53,18 @@ class ArticleSummary extends Equatable {
     authorName: '${j['author_name'] ?? ''}',
   );
 
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'slug': slug,
+        'title': title,
+        'excerpt': excerpt,
+        'category': category.name,
+        'hero_image': heroImage,
+        if (publishedAt != null) 'published_at': publishedAt!.toIso8601String(),
+        'reading_minutes': readingMinutes,
+        'author_name': authorName,
+      };
+
   @override
   List<Object?> get props => [slug, title, category, heroImage, publishedAt];
 }

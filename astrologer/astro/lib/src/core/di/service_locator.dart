@@ -57,6 +57,9 @@ import '../realtime/realtime_coordinator.dart';
 import '../router/pending_deep_link.dart';
 import '../storage/token_storage.dart';
 import 'package:talkacharya_call/talkacharya_call.dart';
+import '../../features/assistant/data/assistant_api.dart';
+import '../../features/history/data/history_api.dart';
+import '../../features/my_store/data/my_store_api.dart';
 
 final getIt = GetIt.instance;
 
@@ -211,6 +214,9 @@ Future<void> configureDependencies(AppConfig config) async {
     ..registerLazySingleton<RemediesApi>(() => RemediesApi(dio))
     ..registerLazySingleton<WaitlistApi>(() => WaitlistApi(dio))
     ..registerLazySingleton<WorkspaceApi>(() => WorkspaceApi(dio))
+    ..registerLazySingleton<AssistantApi>(() => AssistantApi(dio))
+    ..registerLazySingleton<HistoryApi>(() => HistoryApi(dio))
+    ..registerLazySingleton<MyStoreApi>(() => MyStoreApi(dio))
     ..registerLazySingleton<TrainingApi>(() => TrainingApi(dio))
     ..registerLazySingleton<ReportsApi>(() => ReportsApi(dio))
     ..registerLazySingleton<ClientChartsApi>(() => ClientChartsApi(dio))

@@ -93,13 +93,11 @@ class WorkingWindow extends Equatable {
 class AvailabilitySettings extends Equatable {
   const AvailabilitySettings({
     required this.channels,
-    required this.maxConcurrent,
     this.nextOnline = const {},
   });
 
   /// The types taken right now.
   final List<String> channels;
-  final int maxConcurrent;
 
   /// Per type, when the astrologer said they will take it again. It is off
   /// (so not in [channels]) until then, and comes back by itself.
@@ -110,7 +108,6 @@ class AvailabilitySettings extends Equatable {
         channels: (j['channels_enabled'] as List? ?? const [])
             .map((e) => e.toString())
             .toList(),
-        maxConcurrent: (j['max_concurrent_chats'] as num?)?.toInt() ?? 1,
         nextOnline: {
           for (final e in (j['next_online'] as Map? ?? const {}).entries)
             '${e.key}': ?DateTime.tryParse('${e.value}')?.toLocal(),
@@ -118,7 +115,7 @@ class AvailabilitySettings extends Equatable {
       );
 
   @override
-  List<Object?> get props => [channels, maxConcurrent, nextOnline];
+  List<Object?> get props => [channels, nextOnline];
 }
 
 class Review extends Equatable {

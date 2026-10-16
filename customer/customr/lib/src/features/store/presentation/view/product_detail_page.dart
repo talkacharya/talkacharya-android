@@ -1,19 +1,24 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
+import '../../data/models/catalog.dart';
 import '../../data/models/consult.dart';
 import '../../data/models/product.dart';
+import '../../data/store_repository.dart';
 import '../cubit/product_detail_cubit.dart';
 import '../widgets/consult_widgets.dart';
 import '../widgets/product_inputs_form.dart';
 import '../widgets/store_ui.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// `/store/products/:slug` — everything needed to decide and buy.
 class ProductDetailPage extends StatelessWidget {
   const ProductDetailPage({super.key});
@@ -42,13 +47,16 @@ class ProductDetailPage extends StatelessWidget {
                 context.read<ProductDetailCubit>().load(silent: true),
             child: CustomScrollView(
               slivers: [
-                _GalleryBar(product: p),
+                _Toolbar(product: p),
+                SliverToBoxAdapter(child: _Gallery(product: p)),
                 SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                   sliver: SliverList.list(
                     children: _sections(context, state, p),
                   ),
                 ),
+                SliverToBoxAdapter(child: _SimilarProducts(product: p)),
+                const SliverToBoxAdapter(child: SizedBox(height: 24)),
               ],
             ),
           ),
@@ -165,27 +173,25 @@ class ProductDetailPage extends StatelessWidget {
 
 // --- gallery ------------------------------------------------------------------------
 
-class _GalleryBar extends StatefulWidget {
-  const _GalleryBar({required this.product});
+class _Toolbar extends StatelessWidget {
+  const _Toolbar({required this.product});
   final ProductDetail product;
 
   @override
-  State<_GalleryBar> createState() => _GalleryBarState();
-}
-
-class _GalleryBarState extends State<_GalleryBar> {
-  int _page = 0;
-
-  @override
   Widget build(BuildContext context) {
-    final p = widget.product;
-    final images = p.images;
-    final brand = context.brand;
+    final p = product;
     return SliverAppBar(
       pinned: true,
-      expandedHeight: 340,
-      backgroundColor: brand.canvas,
+      backgroundColor: context.brand.canvas,
       surfaceTintColor: Colors.transparent,
+      title: Text(
+        p.title,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: Theme.of(
+          context,
+        ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+      ),
       actions: [
         IconButton(
           tooltip: context.l10n.commonShare,
@@ -197,47 +203,366 @@ class _GalleryBarState extends State<_GalleryBar> {
         const CartButton(),
         const SizedBox(width: 4),
       ],
-      flexibleSpace: FlexibleSpaceBar(
-        background: Stack(
-          fit: StackFit.expand,
-          children: [
-            if (images.isEmpty)
-              StoreImage(url: null, slug: p.card.type, radius: 0, iconSize: 72)
-            else
-              PageView.builder(
-                itemCount: images.length,
-                onPageChanged: (i) => setState(() => _page = i),
-                itemBuilder: (_, i) => StoreImage(
-                  url: images[i].url,
-                  slug: p.card.type,
-                  radius: 0,
-                ),
-              ),
-            if (images.length > 1)
-              Positioned(
-                bottom: 14,
-                left: 0,
-                right: 0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (var i = 0; i < images.length; i++)
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        margin: const EdgeInsets.symmetric(horizontal: 3),
-                        width: i == _page ? 18 : 7,
-                        height: 7,
-                        decoration: BoxDecoration(
-                          color: i == _page
-                              ? Colors.white
-                              : Colors.white.withValues(alpha: 0.55),
-                          borderRadius: BorderRadius.circular(999),
+    );
+  }
+}
+
+/// The pictures: a square, on white, the whole product in frame (the server
+/// pads every photo to the same square), a counter, and a strip of thumbnails
+/// under it. Tapping opens them full screen with pinch-zoom on the original.
+class _Gallery extends StatefulWidget {
+  const _Gallery({required this.product});
+  final ProductDetail product;
+
+  @override
+  State<_Gallery> createState() => _GalleryState();
+}
+
+class _GalleryState extends State<_Gallery> {
+  final _pages = PageController();
+  int _page = 0;
+
+  @override
+  void dispose() {
+    _pages.dispose();
+    super.dispose();
+  }
+
+  void _go(int i) => _pages.animateToPage(
+    i,
+    duration: const Duration(milliseconds: 260),
+    curve: Curves.easeOutCubic,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final p = widget.product;
+    final images = p.images;
+    final brand = context.brand;
+    final theme = Theme.of(context);
+    return Column(
+      children: [
+        AspectRatio(
+          aspectRatio: 1,
+          child: ColoredBox(
+            color: Colors.white,
+            child: images.isEmpty
+                ? StoreImage(
+                    url: null,
+                    slug: p.card.type,
+                    radius: 0,
+                    iconSize: 72,
+                  )
+                : Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      PageView.builder(
+                        controller: _pages,
+                        itemCount: images.length,
+                        onPageChanged: (i) => setState(() => _page = i),
+                        itemBuilder: (context, i) => GestureDetector(
+                          onTap: () => _openViewer(context, images, i),
+                          child: Hero(
+                            tag: 'store-media-${p.slug}-$i',
+                            child: CachedNetworkImage(
+                              imageUrl: images[i].url,
+                              fit: BoxFit.contain,
+                              placeholder: (_, _) => const Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                              errorWidget: (_, _, _) => StoreImage(
+                                url: null,
+                                slug: p.card.type,
+                                radius: 0,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                  ],
+                      if (images.length > 1)
+                        Positioned(
+                          right: 12,
+                          top: 12,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 9,
+                              vertical: 3,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withValues(alpha: 0.55),
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: Text(
+                              '${_page + 1}/${images.length}',
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ),
+                      Positioned(
+                        right: 12,
+                        bottom: 12,
+                        child: Icon(
+                          Icons.zoom_out_map_rounded,
+                          size: 20,
+                          color: Colors.black.withValues(alpha: 0.35),
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
+        ),
+        if (images.length > 1)
+          SizedBox(
+            height: 72,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
+              itemCount: images.length,
+              separatorBuilder: (_, _) => const SizedBox(width: 8),
+              itemBuilder: (context, i) {
+                final on = i == _page;
+                return GestureDetector(
+                  onTap: () => _go(i),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
+                    width: 56,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: on ? brand.gold : brand.hairline,
+                        width: on ? 2 : 1,
+                      ),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: CachedNetworkImage(
+                      imageUrl: images[i].thumbUrl,
+                      fit: BoxFit.cover,
+                      errorWidget: (_, _, _) => const SizedBox.shrink(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+      ],
+    );
+  }
+
+  Future<void> _openViewer(
+    BuildContext context,
+    List<ProductMedia> images,
+    int start,
+  ) async {
+    final slug = widget.product.slug;
+    final at = await Navigator.of(context).push<int>(
+      PageRouteBuilder(
+        opaque: false,
+        barrierColor: Colors.black,
+        pageBuilder: (_, _, _) => _ZoomViewer(
+          images: images,
+          start: start,
+          heroPrefix: 'store-media-$slug',
+        ),
+        transitionsBuilder: (_, anim, _, child) =>
+            FadeTransition(opacity: anim, child: child),
+      ),
+    );
+    if (at != null && at != _page && mounted) _pages.jumpToPage(at);
+  }
+}
+
+/// Full screen, black, pinch to zoom the original upload; swipe between
+/// pictures; returns the one it closed on so the gallery follows.
+class _ZoomViewer extends StatefulWidget {
+  const _ZoomViewer({
+    required this.images,
+    required this.start,
+    required this.heroPrefix,
+  });
+
+  final List<ProductMedia> images;
+  final int start;
+  final String heroPrefix;
+
+  @override
+  State<_ZoomViewer> createState() => _ZoomViewerState();
+}
+
+class _ZoomViewerState extends State<_ZoomViewer> {
+  late final _pages = PageController(initialPage: widget.start);
+  late int _page = widget.start;
+  bool _zoomed = false;
+
+  @override
+  void dispose() {
+    _pages.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final images = widget.images;
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: [
+          PageView.builder(
+            controller: _pages,
+            physics: _zoomed
+                ? const NeverScrollableScrollPhysics()
+                : const PageScrollPhysics(),
+            itemCount: images.length,
+            onPageChanged: (i) => setState(() => _page = i),
+            itemBuilder: (context, i) => _ZoomPage(
+              url: images[i].zoomUrl,
+              fallback: images[i].url,
+              hero: '${widget.heroPrefix}-$i',
+              onZoom: (z) {
+                if (z != _zoomed) setState(() => _zoomed = z);
+              },
+            ),
+          ),
+          SafeArea(
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.close_rounded, color: Colors.white),
+                  onPressed: () => Navigator.of(context).pop(_page),
+                ),
+                const Spacer(),
+                if (images.length > 1)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16),
+                    child: Text(
+                      '${_page + 1}/${images.length}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          if (images.length > 1)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: SafeArea(
+                child: SizedBox(
+                  height: 64,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 6,
+                    ),
+                    itemCount: images.length,
+                    separatorBuilder: (_, _) => const SizedBox(width: 8),
+                    itemBuilder: (context, i) => GestureDetector(
+                      onTap: () => _pages.jumpToPage(i),
+                      child: Container(
+                        width: 52,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: i == _page ? Colors.white : Colors.white24,
+                            width: i == _page ? 2 : 1,
+                          ),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: CachedNetworkImage(
+                          imageUrl: images[i].thumbUrl,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-          ],
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ZoomPage extends StatefulWidget {
+  const _ZoomPage({
+    required this.url,
+    required this.fallback,
+    required this.hero,
+    required this.onZoom,
+  });
+
+  final String url;
+  final String fallback;
+  final String hero;
+  final ValueChanged<bool> onZoom;
+
+  @override
+  State<_ZoomPage> createState() => _ZoomPageState();
+}
+
+class _ZoomPageState extends State<_ZoomPage> {
+  final _transform = TransformationController();
+
+  @override
+  void dispose() {
+    _transform.dispose();
+    super.dispose();
+  }
+
+  void _toggle(TapDownDetails d) {
+    final zoomed = _transform.value.getMaxScaleOnAxis() > 1.01;
+    if (zoomed) {
+      _transform.value = Matrix4.identity();
+    } else {
+      final p = d.localPosition;
+      _transform.value = Matrix4.identity()
+        ..translateByDouble(-p.dx * 1.5, -p.dy * 1.5, 0, 1)
+        ..scaleByDouble(2.5, 2.5, 1, 1);
+    }
+    widget.onZoom(!zoomed);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    TapDownDetails? last;
+    return GestureDetector(
+      onDoubleTapDown: (d) => last = d,
+      onDoubleTap: () {
+        if (last != null) _toggle(last!);
+      },
+      child: InteractiveViewer(
+        transformationController: _transform,
+        minScale: 1,
+        maxScale: 5,
+        onInteractionEnd: (_) =>
+            widget.onZoom(_transform.value.getMaxScaleOnAxis() > 1.01),
+        child: Center(
+          child: Hero(
+            tag: widget.hero,
+            child: CachedNetworkImage(
+              imageUrl: widget.url,
+              fit: BoxFit.contain,
+              placeholder: (_, _) => CachedNetworkImage(
+                imageUrl: widget.fallback,
+                fit: BoxFit.contain,
+              ),
+              errorWidget: (_, _, _) => CachedNetworkImage(
+                imageUrl: widget.fallback,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -304,16 +629,10 @@ class _Header extends StatelessWidget {
         ],
         const SizedBox(height: 8),
         RatingLine(avg: p.card.ratingAvg, count: p.card.ratingCount),
-        const SizedBox(height: 10),
-        PriceTag(
+        const SizedBox(height: 12),
+        _PriceBlock(
           price: state.price,
           compareAt: v?.compareAt ?? p.card.compareAt,
-          large: true,
-        ),
-        const SizedBox(height: 2),
-        Text(
-          l.storeTaxInclusive,
-          style: theme.textTheme.labelSmall?.copyWith(color: brand.inkMuted),
         ),
         if (v != null && !v.inStock) ...[
           const SizedBox(height: 8),
@@ -323,6 +642,155 @@ class _Header extends StatelessWidget {
           StoreStatusChip(label: l.storeOnlyLeft(v!.stockLeft!), tone: 'warn'),
         ],
       ],
+    );
+  }
+}
+
+/// "-23%  ₹499" in big type, "M.R.P.: ₹649" struck through and what is
+/// saved under it, then "Inclusive of all taxes".
+class _PriceBlock extends StatelessWidget {
+  const _PriceBlock({required this.price, required this.compareAt});
+
+  final double? price;
+  final double? compareAt;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    final brand = context.brand;
+    final p = price;
+    if (p == null) {
+      return Text(
+        l.storeUnavailable,
+        style: theme.textTheme.titleMedium?.copyWith(color: brand.inkMuted),
+      );
+    }
+    final off = discountOf(p, compareAt);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            if (off != null) ...[
+              Text(
+                '-$off%',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  color: const Color(0xFFCC0C39),
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(width: 10),
+            ],
+            Text(
+              storeMoney(context, p),
+              style: theme.textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.w800,
+                color: brand.ink,
+              ),
+            ),
+          ],
+        ),
+        if (off != null) ...[
+          const SizedBox(height: 2),
+          Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(text: '${l.storeMrp}: '),
+                TextSpan(
+                  text: storeMoney(context, compareAt!),
+                  style: const TextStyle(
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+              ],
+            ),
+            style: theme.textTheme.bodySmall?.copyWith(color: brand.inkMuted),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            l.storeYouSave(storeMoney(context, compareAt! - p)),
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: brand.online,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ],
+        const SizedBox(height: 2),
+        Text(
+          l.storeTaxInclusive,
+          style: theme.textTheme.labelSmall?.copyWith(color: brand.inkMuted),
+        ),
+      ],
+    );
+  }
+}
+
+/// More from the same category, at the end of the page — the next thing to
+/// look at instead of a dead end. Hidden when there is nothing else.
+class _SimilarProducts extends StatefulWidget {
+  const _SimilarProducts({required this.product});
+  final ProductDetail product;
+
+  @override
+  State<_SimilarProducts> createState() => _SimilarProductsState();
+}
+
+class _SimilarProductsState extends State<_SimilarProducts> {
+  List<ProductCard> _items = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    final p = widget.product;
+    if (p.card.category.isEmpty) return;
+    try {
+      final page = await getIt<StoreRepository>().products(
+        ProductQuery(category: p.card.category),
+        limit: 12,
+      );
+      if (!mounted) return;
+      setState(
+        () => _items = page.items.where((c) => c.slug != p.slug).toList(),
+      );
+    } catch (_) {
+      // A bonus row: nothing shown if it cannot load.
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_items.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: StoreSectionTitle(context.l10n.storeSimilar),
+          ),
+          SizedBox(
+            // 140 wide: the square picture plus title and price.
+            height: 226,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: _items.length,
+              separatorBuilder: (_, _) => const SizedBox(width: 10),
+              itemBuilder: (_, i) => SizedBox(
+                width: 140,
+                child: CompactProductTile(product: _items[i]),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -780,6 +1248,17 @@ class _SellerCard extends StatelessWidget {
           ),
           subtitle: Text(l.storeSellerInfo, style: muted),
           children: [
+            if (s.astrologerId != null)
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: TextButton.icon(
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                  onPressed: () =>
+                      context.push(Routes.astrologer(s.astrologerId!)),
+                  icon: const Icon(Icons.person_rounded, size: 18),
+                  label: Text(l.storeSellerAstrologerProfile),
+                ),
+              ),
             if (s.legalName.isNotEmpty)
               Text(s.legalName, style: theme.textTheme.bodyMedium),
             if (s.addressLine.isNotEmpty) Text(s.addressLine, style: muted),
@@ -904,15 +1383,25 @@ class _BuyBar extends StatelessWidget {
             const SizedBox(width: 10),
           ],
           if (!blocked && !soldOut && !product.isService) ...[
-            Expanded(
+            // Add to cart as a cart icon: "Add" alone didn't say to what.
+            Tooltip(
+              message: l.storeAddToCart,
               child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(52),
+                  minimumSize: const Size(52, 52),
+                  fixedSize: const Size(56, 52),
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
                 onPressed: state.adding
                     ? null
                     : () => _add(context, buyNow: false),
-                child: Text(l.storeAddToCart, maxLines: 1),
+                child: Semantics(
+                  label: l.storeAddToCart,
+                  child: const Icon(Icons.add_shopping_cart_rounded, size: 24),
+                ),
               ),
             ),
             const SizedBox(width: 10),

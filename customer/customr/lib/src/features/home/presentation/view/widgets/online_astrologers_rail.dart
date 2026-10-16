@@ -14,7 +14,8 @@ const _channels = <(String, String, IconData, AstroHue)>[
   ('', 'All', Icons.people_rounded, AstroPalette.money),
   ('chat', 'Chat', Icons.chat_bubble_rounded, AstroPalette.career),
   ('voice', 'Call', Icons.phone_in_talk_rounded, AstroPalette.health),
-  ('video', 'Video', Icons.videocam_rounded, AstroPalette.love),
+  // VIDEO-OFF: video calls are switched off for now.
+  // ('video', 'Video', Icons.videocam_rounded, AstroPalette.love),
 ];
 
 /// The core marketplace surface — recommended astrologers, channel-filterable

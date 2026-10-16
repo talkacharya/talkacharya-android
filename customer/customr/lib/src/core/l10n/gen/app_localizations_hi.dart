@@ -474,9 +474,9 @@ class AppLocalizationsHi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count reviews',
-      one: '1 review',
-      zero: 'No reviews yet',
+      other: '$count रिव्यू',
+      one: '1 रिव्यू',
+      zero: 'अभी कोई रिव्यू नहीं',
     );
     return '$_temp0';
   }
@@ -5833,6 +5833,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get astroStatFollowers => 'फ़ॉलोअर्स';
 
   @override
+  String get astroStatMinutes => 'मिनट परामर्श';
+
+  @override
   String get prefsFollowAlerts => 'फ़ॉलो किए गए ज्योतिषी';
 
   @override
@@ -7685,4 +7688,240 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get primerBlockedNote =>
       'कुछ की अनुमति नहीं मिली। आप इसे फ़ोन की सेटिंग में चालू कर सकते हैं; इसके बिना उस तरह की कॉल नहीं चलेंगी।';
+
+  @override
+  String get assistantTitle => 'असिस्टेंट चैट';
+
+  @override
+  String get assistantInboxSubtitle => 'ज्योतिषियों से मुफ़्त संदेश';
+
+  @override
+  String assistantRepliesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count नए जवाब',
+      one: '1 नया जवाब',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get assistantInboxEmptyTitle => 'अभी कोई संदेश नहीं';
+
+  @override
+  String get assistantInboxEmptyBody =>
+      'किसी ज्योतिषी की प्रोफ़ाइल खोलें और “छोटा सवाल पूछें” पर टैप करके उन्हें मुफ़्त संदेश भेजें।';
+
+  @override
+  String get assistantYouPrefix => 'आप: ';
+
+  @override
+  String get assistantRoomSubtitle => 'मुफ़्त चैट · समय मिलने पर जवाब देंगे';
+
+  @override
+  String get assistantHint => 'अपना सवाल लिखें';
+
+  @override
+  String get assistantEmptyTitle => 'छोटा सवाल पूछें';
+
+  @override
+  String get assistantEmptyBody =>
+      'ज्योतिषी को मुफ़्त में लिखें। समय मिलने पर वे यहीं जवाब देंगे।';
+
+  @override
+  String get assistantIntro =>
+      'यह मुफ़्त चैट छोटे सवालों के लिए है। विस्तार से रीडिंग के लिए चैट या कॉल परामर्श शुरू करें।';
+
+  @override
+  String get assistantWaitForReply =>
+      'आपने कुछ संदेश भेज दिए हैं। ज्योतिषी के जवाब के बाद आप फिर लिख सकेंगे।';
+
+  @override
+  String get assistantBlocked => 'इस चैट में संदेश बंद हैं।';
+
+  @override
+  String get assistantDisabled => 'मुफ़्त संदेश अभी उपलब्ध नहीं हैं।';
+
+  @override
+  String get assistantNotSent => 'नहीं भेजा गया · विकल्पों के लिए टैप करें';
+
+  @override
+  String get assistantRetry => 'फिर से कोशिश करें';
+
+  @override
+  String get assistantDiscard => 'संदेश हटाएँ';
+
+  @override
+  String get assistantToday => 'आज';
+
+  @override
+  String get assistantYesterday => 'कल';
+
+  @override
+  String get assistantLoadFailed =>
+      'यह चैट नहीं खुल पाई। कनेक्शन जाँचें और फिर कोशिश करें।';
+
+  @override
+  String get assistantCardTitle => 'छोटा सवाल पूछें';
+
+  @override
+  String get assistantFree => 'मुफ़्त';
+
+  @override
+  String assistantCardBody(String name) {
+    return '$name को मुफ़्त संदेश भेजें। पूरी रीडिंग के लिए परामर्श शुरू करें।';
+  }
+
+  @override
+  String get astroReviewsNone =>
+      'अभी कोई रिव्यू नहीं। ग्राहक परामर्श को रेट करते हैं, तो रिव्यू यहाँ दिखते हैं।';
+
+  @override
+  String get assistantLockedTitle => 'पहले परामर्श के बाद मुफ़्त चैट';
+
+  @override
+  String assistantLockedBody(String name) {
+    return '$name के साथ एक परामर्श करें, उसके बाद आप उन्हें मुफ़्त संदेश भेज सकेंगे।';
+  }
+
+  @override
+  String assistantLockedSnack(String name) {
+    return '$name के साथ पहला परामर्श खत्म होते ही मुफ़्त संदेश खुल जाएँगे।';
+  }
+
+  @override
+  String get storeTopPicks => 'टॉप पिक्स';
+
+  @override
+  String get storeTopCategories => 'आपके लिए खास श्रेणियाँ';
+
+  @override
+  String get storeShopByType => 'प्रकार के अनुसार खरीदें';
+
+  @override
+  String storePopularIn(String name) {
+    return '$name में लोकप्रिय';
+  }
+
+  @override
+  String get storeViewAll => 'सभी देखें';
+
+  @override
+  String storeViewAllCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'सभी $count आइटम देखें',
+      one: '1 आइटम देखें',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storeCategoryEmpty => 'अभी यहाँ कुछ नहीं — जल्द ही देखें।';
+
+  @override
+  String get storeMyPoojas => 'पूजा बुकिंग';
+
+  @override
+  String get storeMyAdviceShort => 'ज्योतिषी की सलाह';
+
+  @override
+  String get storeMrp => 'एम.आर.पी.';
+
+  @override
+  String storeYouSave(String amount) {
+    return 'आप $amount बचाते हैं';
+  }
+
+  @override
+  String get storeSimilar => 'आपको ये भी पसंद आ सकते हैं';
+
+  @override
+  String get storeSellerAstrologerProfile => 'ज्योतिषी की प्रोफ़ाइल देखें';
+
+  @override
+  String get supTitle => 'हमें लिखें';
+
+  @override
+  String get supHeroTitle => 'हम मदद के लिए हैं';
+
+  @override
+  String get supHeroBody =>
+      'बताइए क्या हुआ। हर संदेश एक असली व्यक्ति पढ़ता है और यहीं जवाब देता है।';
+
+  @override
+  String get supWhatAbout => 'किस बारे में है?';
+
+  @override
+  String get supTopicPayment => 'वॉलेट और भुगतान';
+
+  @override
+  String get supTopicConsultation => 'कोई परामर्श';
+
+  @override
+  String get supTopicOrder => 'स्टोर ऑर्डर';
+
+  @override
+  String get supTopicAccount => 'मेरा अकाउंट';
+
+  @override
+  String get supTopicApp => 'कुछ काम नहीं कर रहा';
+
+  @override
+  String get supTopicOther => 'कुछ और';
+
+  @override
+  String get supHint =>
+      'बताइए क्या हुआ — तारीख, रकम या ज्योतिषी का नाम लिखने से हम जल्दी सुलझा पाएँगे।';
+
+  @override
+  String get supReplyPromise => 'हम आमतौर पर एक दिन में जवाब देते हैं।';
+
+  @override
+  String get supSend => 'भेजें';
+
+  @override
+  String get supPickTopic => 'पहले चुनें कि किस बारे में है';
+
+  @override
+  String get supTooShort => 'कृपया थोड़ा और लिखें ताकि हम मदद कर सकें।';
+
+  @override
+  String get supSent => 'भेज दिया — हम यहीं जवाब देंगे और आपको बताएँगे';
+
+  @override
+  String get supEarlier => 'आपके संदेश';
+
+  @override
+  String get supAnswered => 'जवाब मिला';
+
+  @override
+  String get supWaiting => 'जवाब का इंतज़ार';
+
+  @override
+  String get supTeamReplied => 'TalkAcharya ने जवाब दिया';
+
+  @override
+  String get supBoxTitle => 'मदद चाहिए?';
+
+  @override
+  String get supBoxBody =>
+      'भुगतान, परामर्श, ऑर्डर — हमें लिखें, हम सुलझा देंगे।';
+
+  @override
+  String get supBoxPlaceholder => 'अपना संदेश लिखें…';
+
+  @override
+  String get supBoxReplied => 'हमने आपके संदेश का जवाब दिया है';
+
+  @override
+  String get supBoxMoreHelp => 'मदद और सवाल-जवाब';
+
+  @override
+  String get supWriteToUs => 'हमें लिखें';
+
+  @override
+  String get supWriteToUsSub => 'हम यहीं ऐप में जवाब देते हैं';
 }

@@ -5718,6 +5718,9 @@ class AppLocalizationsGu extends AppLocalizations {
   String get astroStatFollowers => 'અનુયાયીઓ';
 
   @override
+  String get astroStatMinutes => 'Minutes of consultation';
+
+  @override
   String get prefsFollowAlerts => 'જ્યોતિષીઓને તમે અનુસરો છો';
 
   @override
@@ -7591,4 +7594,240 @@ class AppLocalizationsGu extends AppLocalizations {
   @override
   String get primerBlockedNote =>
       'Something was not allowed. You can turn it on in your phone\'s settings; without it, calls of that kind will not work.';
+
+  @override
+  String get assistantTitle => 'Assistant chats';
+
+  @override
+  String get assistantInboxSubtitle => 'Free messages with astrologers';
+
+  @override
+  String assistantRepliesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count new replies',
+      one: '1 new reply',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get assistantInboxEmptyTitle => 'No messages yet';
+
+  @override
+  String get assistantInboxEmptyBody =>
+      'Open an astrologer\'s profile and tap “Ask a quick question” to send them a free message.';
+
+  @override
+  String get assistantYouPrefix => 'You: ';
+
+  @override
+  String get assistantRoomSubtitle => 'Free chat · replies when they can';
+
+  @override
+  String get assistantHint => 'Type your question';
+
+  @override
+  String get assistantEmptyTitle => 'Ask a quick question';
+
+  @override
+  String get assistantEmptyBody =>
+      'Write to the astrologer for free. They will reply here when they can.';
+
+  @override
+  String get assistantIntro =>
+      'This free chat is for quick questions. For a detailed reading, start a chat or call consultation.';
+
+  @override
+  String get assistantWaitForReply =>
+      'You have sent a few messages. You can write again once the astrologer replies.';
+
+  @override
+  String get assistantBlocked => 'Messages are turned off in this chat.';
+
+  @override
+  String get assistantDisabled => 'Free messages are not available right now.';
+
+  @override
+  String get assistantNotSent => 'Not sent · Tap for options';
+
+  @override
+  String get assistantRetry => 'Try again';
+
+  @override
+  String get assistantDiscard => 'Delete message';
+
+  @override
+  String get assistantToday => 'Today';
+
+  @override
+  String get assistantYesterday => 'Yesterday';
+
+  @override
+  String get assistantLoadFailed =>
+      'Couldn\'t open this chat. Check your connection and try again.';
+
+  @override
+  String get assistantCardTitle => 'Ask a quick question';
+
+  @override
+  String get assistantFree => 'FREE';
+
+  @override
+  String assistantCardBody(String name) {
+    return 'Message $name for free. For a full reading, start a consultation.';
+  }
+
+  @override
+  String get astroReviewsNone =>
+      'No reviews yet. Reviews appear here after customers rate their consultation.';
+
+  @override
+  String get assistantLockedTitle => 'Free chat after your first consultation';
+
+  @override
+  String assistantLockedBody(String name) {
+    return 'Have one consultation with $name and you can message them for free afterwards.';
+  }
+
+  @override
+  String assistantLockedSnack(String name) {
+    return 'Free messages with $name open once your first consultation with them ends.';
+  }
+
+  @override
+  String get storeTopPicks => 'Top picks';
+
+  @override
+  String get storeTopCategories => 'Top categories for you';
+
+  @override
+  String get storeShopByType => 'Shop by type';
+
+  @override
+  String storePopularIn(String name) {
+    return 'Popular in $name';
+  }
+
+  @override
+  String get storeViewAll => 'View all';
+
+  @override
+  String storeViewAllCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'View all $count items',
+      one: 'View 1 item',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get storeCategoryEmpty => 'Nothing here yet — check back soon.';
+
+  @override
+  String get storeMyPoojas => 'Pooja bookings';
+
+  @override
+  String get storeMyAdviceShort => 'Astrologer advice';
+
+  @override
+  String get storeMrp => 'M.R.P.';
+
+  @override
+  String storeYouSave(String amount) {
+    return 'You save $amount';
+  }
+
+  @override
+  String get storeSimilar => 'You may also like';
+
+  @override
+  String get storeSellerAstrologerProfile => 'See the astrologer\'s profile';
+
+  @override
+  String get supTitle => 'Write to us';
+
+  @override
+  String get supHeroTitle => 'We\'re here to help';
+
+  @override
+  String get supHeroBody =>
+      'Tell us what happened. A real person reads every message and replies here.';
+
+  @override
+  String get supWhatAbout => 'What is it about?';
+
+  @override
+  String get supTopicPayment => 'Wallet & payments';
+
+  @override
+  String get supTopicConsultation => 'A consultation';
+
+  @override
+  String get supTopicOrder => 'A store order';
+
+  @override
+  String get supTopicAccount => 'My account';
+
+  @override
+  String get supTopicApp => 'Something isn\'t working';
+
+  @override
+  String get supTopicOther => 'Something else';
+
+  @override
+  String get supHint =>
+      'Tell us what happened — dates, amounts or the astrologer\'s name help us sort it faster.';
+
+  @override
+  String get supReplyPromise => 'We usually reply within a day.';
+
+  @override
+  String get supSend => 'Send';
+
+  @override
+  String get supPickTopic => 'Pick what it\'s about first';
+
+  @override
+  String get supTooShort => 'Please write a little more so we can help.';
+
+  @override
+  String get supSent => 'Sent — we\'ll reply here and let you know';
+
+  @override
+  String get supEarlier => 'Your messages';
+
+  @override
+  String get supAnswered => 'Replied';
+
+  @override
+  String get supWaiting => 'Waiting for reply';
+
+  @override
+  String get supTeamReplied => 'TalkAcharya replied';
+
+  @override
+  String get supBoxTitle => 'Need help?';
+
+  @override
+  String get supBoxBody =>
+      'Payments, a consultation, an order — write to us and we\'ll sort it out.';
+
+  @override
+  String get supBoxPlaceholder => 'Write your message…';
+
+  @override
+  String get supBoxReplied => 'We replied to your message';
+
+  @override
+  String get supBoxMoreHelp => 'Help & FAQs';
+
+  @override
+  String get supWriteToUs => 'Write to us';
+
+  @override
+  String get supWriteToUsSub => 'We reply here in the app';
 }

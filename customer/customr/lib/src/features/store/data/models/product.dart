@@ -46,6 +46,7 @@ class ProductCard extends Equatable {
     this.fulfilment = Fulfilment.physical,
     this.category = '',
     this.image,
+    this.thumb,
     this.priceFrom,
     this.compareAt,
     this.ratingAvg = 0,
@@ -62,7 +63,12 @@ class ProductCard extends Equatable {
   final String type;
   final Fulfilment fulfilment;
   final String category;
+
+  /// The square card picture, cut to size by the server.
   final String? image;
+
+  /// A small square (cart rows, recently viewed); falls back to [image].
+  final String? thumb;
   final double? priceFrom;
   final double? compareAt;
   final double ratingAvg;
@@ -87,6 +93,7 @@ class ProductCard extends Equatable {
     fulfilment: Fulfilment.parse(jStrOrNull(j['fulfilment'])),
     category: jStr(j['category']),
     image: jStrOrNull(j['image']),
+    thumb: jStrOrNull(jMap(j['images'])['thumb']) ?? jStrOrNull(j['image']),
     priceFrom: jNumOrNull(j['price_from']),
     compareAt: jNumOrNull(j['compare_at']),
     ratingAvg: jNum(j['rating_avg']),
@@ -107,19 +114,40 @@ int? discountOf(double? price, double? mrp) {
 }
 
 class ProductMedia extends Equatable {
-  const ProductMedia({required this.url, this.kind = 'image', this.alt = ''});
+  const ProductMedia({
+    required this.url,
+    this.kind = 'image',
+    this.alt = '',
+    this.thumb,
+    this.original,
+  });
 
+  /// The gallery picture: a square with the whole product on white.
   final String url;
   final String kind;
   final String alt;
 
+  /// Small square for the thumbnail strip.
+  final String? thumb;
+
+  /// The upload as it was, for pinch-zoom.
+  final String? original;
+
   bool get isVideo => kind == 'video';
 
-  factory ProductMedia.fromJson(Json j) => ProductMedia(
-    url: jStr(j['url']),
-    kind: jStr(j['kind'], 'image'),
-    alt: jStr(j['alt']),
-  );
+  String get thumbUrl => thumb ?? url;
+  String get zoomUrl => original ?? url;
+
+  factory ProductMedia.fromJson(Json j) {
+    final images = jMap(j['images']);
+    return ProductMedia(
+      url: jStr(j['url']),
+      kind: jStr(j['kind'], 'image'),
+      alt: jStr(j['alt']),
+      thumb: jStrOrNull(images['thumb']),
+      original: jStrOrNull(images['original']),
+    );
+  }
 
   @override
   List<Object?> get props => [url, kind];
@@ -409,10 +437,14 @@ class SellerInfo extends Equatable {
     this.supportPhone = '',
     this.grievanceOfficer = const {},
     this.logo,
+    this.astrologerId,
   });
 
   final String code;
   final String kind;
+
+  /// Set when an astrologer sells this from their own store.
+  final String? astrologerId;
   final String displayName;
   final String legalName;
   final Json address;
@@ -437,6 +469,7 @@ class SellerInfo extends Equatable {
     supportPhone: jStr(j['support_phone']),
     grievanceOfficer: jMap(j['grievance_officer']),
     logo: jStrOrNull(j['logo']),
+    astrologerId: jStrOrNull(j['astrologer_id']),
   );
 
   @override

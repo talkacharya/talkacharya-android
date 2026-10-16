@@ -77,6 +77,8 @@ sealed class RealtimeEvent {
         return const OnboardingUpdated();
       case 'system.reconnect_hint':
         return const ReconnectHint();
+      case 'assistant.message':
+        return AssistantFrame(data);
       default:
         return const InboxPing();
     }
@@ -165,6 +167,13 @@ class GiftReceived extends RealtimeEvent {
 
 class InboxPing extends RealtimeEvent {
   const InboxPing();
+}
+
+/// A message in an assistant chat (the free, text-only line from a customer).
+/// [data] is `{thread, message}`; the room parses it.
+class AssistantFrame extends RealtimeEvent {
+  const AssistantFrame(this.data);
+  final Map<String, dynamic> data;
 }
 
 /// A reviewer did something to this astrologer's application: a document

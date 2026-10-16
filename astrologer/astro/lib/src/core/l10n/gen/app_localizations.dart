@@ -1574,41 +1574,11 @@ abstract class AppLocalizations {
   /// **'What customers pay per minute. Changes apply to new sessions.'**
   String get ratesSubtitle;
 
-  /// No description provided for @ratesAllowed.
-  ///
-  /// In en, this message translates to:
-  /// **'Allowed {min} – {max}'**
-  String ratesAllowed(String min, String max);
-
   /// No description provided for @ratesYouEarn.
   ///
   /// In en, this message translates to:
   /// **'You earn about {amount}/min after the {fee}% platform fee'**
   String ratesYouEarn(String amount, String fee);
-
-  /// No description provided for @ratesSuggested.
-  ///
-  /// In en, this message translates to:
-  /// **'Suggested {amount}'**
-  String ratesSuggested(String amount);
-
-  /// No description provided for @ratesNotOffered.
-  ///
-  /// In en, this message translates to:
-  /// **'Not offered on the platform yet'**
-  String get ratesNotOffered;
-
-  /// No description provided for @ratesSaveCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{Save 1 change} other{Save {count} changes}}'**
-  String ratesSaveCount(int count);
-
-  /// No description provided for @ratesUpdated.
-  ///
-  /// In en, this message translates to:
-  /// **'Rates updated'**
-  String get ratesUpdated;
 
   /// No description provided for @hoursChannels.
   ///
@@ -1627,18 +1597,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Keep at least one consultation type on'**
   String get hoursNeedChannel;
-
-  /// No description provided for @hoursConcurrent.
-  ///
-  /// In en, this message translates to:
-  /// **'Chats at the same time'**
-  String get hoursConcurrent;
-
-  /// No description provided for @hoursConcurrentHint.
-  ///
-  /// In en, this message translates to:
-  /// **'How many chat sessions you can handle at once'**
-  String get hoursConcurrentHint;
 
   /// No description provided for @hoursSchedule.
   ///
@@ -4775,13 +4733,13 @@ abstract class AppLocalizations {
   /// No description provided for @wsFeedback.
   ///
   /// In en, this message translates to:
-  /// **'Feedback'**
+  /// **'Support'**
   String get wsFeedback;
 
   /// No description provided for @wsFeedbackSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Tell us what\'s broken or what would help. We read every message.'**
+  /// **'Write to our team — a rate change, a problem, an idea. We read every message and reply here.'**
   String get wsFeedbackSubtitle;
 
   /// No description provided for @wsFeedbackBug.
@@ -7093,6 +7051,1410 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Lessons you finish now are counted once you are approved.'**
   String get trainWhileWaitingBody;
+
+  /// No description provided for @ratesSetByPlatformTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your rates are set by TalkAcharya'**
+  String get ratesSetByPlatformTitle;
+
+  /// No description provided for @ratesSetByPlatformBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We set them from your performance — rating, repeat customers, how quickly you answer. Doing well and want a higher rate? Request a change and our team will look at it.'**
+  String get ratesSetByPlatformBody;
+
+  /// No description provided for @ratesRequestChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Request a rate change'**
+  String get ratesRequestChange;
+
+  /// No description provided for @ratesNotSetYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set yet — our team will set it'**
+  String get ratesNotSetYet;
+
+  /// No description provided for @wsFeedbackRates.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate change'**
+  String get wsFeedbackRates;
+
+  /// No description provided for @wsFeedbackRatesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Which rate would you like changed, and why? E.g. your rating, repeat customers, experience.'**
+  String get wsFeedbackRatesHint;
+
+  /// No description provided for @assistantTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Assistant chats'**
+  String get assistantTitle;
+
+  /// No description provided for @assistantInboxSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Free messages customers send from your profile'**
+  String get assistantInboxSubtitle;
+
+  /// No description provided for @assistantWaitingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 customer waiting for your reply} other{{count} customers waiting for your reply}}'**
+  String assistantWaitingCount(int count);
+
+  /// No description provided for @assistantInboxEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get assistantInboxEmptyTitle;
+
+  /// No description provided for @assistantInboxEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'When a customer messages you from your profile, it shows up here.'**
+  String get assistantInboxEmptyBody;
+
+  /// No description provided for @assistantYouPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'You: '**
+  String get assistantYouPrefix;
+
+  /// No description provided for @assistantRoomSubtitleAstro.
+  ///
+  /// In en, this message translates to:
+  /// **'Assistant chat · free for the customer'**
+  String get assistantRoomSubtitleAstro;
+
+  /// No description provided for @assistantHintAstro.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a reply'**
+  String get assistantHintAstro;
+
+  /// No description provided for @assistantEmptyTitleAstro.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here yet'**
+  String get assistantEmptyTitleAstro;
+
+  /// No description provided for @assistantEmptyBodyAstro.
+  ///
+  /// In en, this message translates to:
+  /// **'This customer\'s messages will show up here.'**
+  String get assistantEmptyBodyAstro;
+
+  /// No description provided for @assistantIntroAstro.
+  ///
+  /// In en, this message translates to:
+  /// **'A free chat the customer started from your profile. It is not a paid consultation — for a full reading, ask them to start one.'**
+  String get assistantIntroAstro;
+
+  /// No description provided for @assistantWaitForReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for a reply before more messages can be sent.'**
+  String get assistantWaitForReply;
+
+  /// No description provided for @assistantBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages are turned off in this chat.'**
+  String get assistantBlocked;
+
+  /// No description provided for @assistantDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Assistant chat is not available right now.'**
+  String get assistantDisabled;
+
+  /// No description provided for @assistantNotSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sent · Tap for options'**
+  String get assistantNotSent;
+
+  /// No description provided for @assistantRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get assistantRetry;
+
+  /// No description provided for @assistantDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete message'**
+  String get assistantDiscard;
+
+  /// No description provided for @assistantToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get assistantToday;
+
+  /// No description provided for @assistantYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get assistantYesterday;
+
+  /// No description provided for @msTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My store'**
+  String get msTitle;
+
+  /// No description provided for @msSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your products, services and orders'**
+  String get msSubtitle;
+
+  /// No description provided for @msSubtitleNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell your own products and services'**
+  String get msSubtitleNew;
+
+  /// No description provided for @msEditStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Store details'**
+  String get msEditStore;
+
+  /// No description provided for @msTabListings.
+  ///
+  /// In en, this message translates to:
+  /// **'Listings'**
+  String get msTabListings;
+
+  /// No description provided for @msTabOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get msTabOrders;
+
+  /// No description provided for @msTabBookings.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookings'**
+  String get msTabBookings;
+
+  /// No description provided for @msAddListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get msAddListing;
+
+  /// No description provided for @msUnavailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Selling isn\'t open yet'**
+  String get msUnavailableTitle;
+
+  /// No description provided for @msUnavailableBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll be able to sell your own products and services here soon.'**
+  String get msUnavailableBody;
+
+  /// No description provided for @msIntroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your own store on TalkAcharya'**
+  String get msIntroTitle;
+
+  /// No description provided for @msIntroBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell what you trust — energised rudraksha, yantras, gemstones — and the poojas and rituals you perform. Customers find them in the store and on your profile.'**
+  String get msIntroBody;
+
+  /// No description provided for @msStep1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up your store'**
+  String get msStep1Title;
+
+  /// No description provided for @msStep1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'A name and the address your parcels are picked up from. Our team approves it.'**
+  String get msStep1Body;
+
+  /// No description provided for @msStep2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'List products and services'**
+  String get msStep2Title;
+
+  /// No description provided for @msStep2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos from your phone, a description, price and stock. Photos are cropped to fit automatically.'**
+  String get msStep2Body;
+
+  /// No description provided for @msStep3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick review, then live'**
+  String get msStep3Title;
+
+  /// No description provided for @msStep3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'We check each listing for promises of results before it goes live.'**
+  String get msStep3Body;
+
+  /// No description provided for @msStep4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Get paid with your earnings'**
+  String get msStep4Title;
+
+  /// No description provided for @msStep4Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Ship orders or perform the booked service; your share joins your payouts.'**
+  String get msStep4Body;
+
+  /// No description provided for @msSetUpStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up my store'**
+  String get msSetUpStore;
+
+  /// No description provided for @msPendingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for approval'**
+  String get msPendingTitle;
+
+  /// No description provided for @msPendingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Our team is checking your store. You can prepare listings meanwhile — they go live once both are approved.'**
+  String get msPendingBody;
+
+  /// No description provided for @msSuspendedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your store is paused'**
+  String get msSuspendedTitle;
+
+  /// No description provided for @msSuspendedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listings aren\'t shown to customers. Write to support to know more.'**
+  String get msSuspendedBody;
+
+  /// No description provided for @msNoListingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing listed yet'**
+  String get msNoListingsTitle;
+
+  /// No description provided for @msNoListingsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap Add to list your first product or service.'**
+  String get msNoListingsBody;
+
+  /// No description provided for @msOrdersAfterApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders and bookings appear here once your store is approved.'**
+  String get msOrdersAfterApproval;
+
+  /// No description provided for @msNoOrdersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No orders yet'**
+  String get msNoOrdersTitle;
+
+  /// No description provided for @msNoOrdersBody.
+  ///
+  /// In en, this message translates to:
+  /// **'When a customer buys something you sell, it shows up here.'**
+  String get msNoOrdersBody;
+
+  /// No description provided for @msNoBookingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No bookings yet'**
+  String get msNoBookingsTitle;
+
+  /// No description provided for @msNoBookingsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Services customers book from you show up here.'**
+  String get msNoBookingsBody;
+
+  /// No description provided for @msOrdersToDo.
+  ///
+  /// In en, this message translates to:
+  /// **'To do'**
+  String get msOrdersToDo;
+
+  /// No description provided for @msOrdersEarlier.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier'**
+  String get msOrdersEarlier;
+
+  /// No description provided for @msStatusDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft'**
+  String get msStatusDraft;
+
+  /// No description provided for @msStatusInReview.
+  ///
+  /// In en, this message translates to:
+  /// **'In review'**
+  String get msStatusInReview;
+
+  /// No description provided for @msStatusLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Live'**
+  String get msStatusLive;
+
+  /// No description provided for @msStatusChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes needed'**
+  String get msStatusChanges;
+
+  /// No description provided for @msOutOfStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of stock'**
+  String get msOutOfStock;
+
+  /// No description provided for @msStockCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} in stock'**
+  String msStockCount(int count);
+
+  /// No description provided for @msSoldCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Not sold yet} =1{1 sold} other{{count} sold}}'**
+  String msSoldCount(int count);
+
+  /// No description provided for @msTeamSaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Our team said'**
+  String get msTeamSaid;
+
+  /// No description provided for @msOrderAwaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs your OK'**
+  String get msOrderAwaiting;
+
+  /// No description provided for @msOrderNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get msOrderNew;
+
+  /// No description provided for @msOrderPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing'**
+  String get msOrderPreparing;
+
+  /// No description provided for @msOrderShipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipped'**
+  String get msOrderShipped;
+
+  /// No description provided for @msOrderDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get msOrderDelivered;
+
+  /// No description provided for @msOrderCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get msOrderCompleted;
+
+  /// No description provided for @msOrderCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get msOrderCancelled;
+
+  /// No description provided for @msOrderReturned.
+  ///
+  /// In en, this message translates to:
+  /// **'Returned'**
+  String get msOrderReturned;
+
+  /// No description provided for @msBookingToDo.
+  ///
+  /// In en, this message translates to:
+  /// **'To perform'**
+  String get msBookingToDo;
+
+  /// No description provided for @msBookingPerformed.
+  ///
+  /// In en, this message translates to:
+  /// **'Performed'**
+  String get msBookingPerformed;
+
+  /// No description provided for @msBookingProofShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Proof shared'**
+  String get msBookingProofShared;
+
+  /// No description provided for @msBookingDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get msBookingDone;
+
+  /// No description provided for @msBookingCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get msBookingCancelled;
+
+  /// No description provided for @msBookingFor.
+  ///
+  /// In en, this message translates to:
+  /// **'For {date}'**
+  String msBookingFor(String date);
+
+  /// No description provided for @msMarkPerformed.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark performed'**
+  String get msMarkPerformed;
+
+  /// No description provided for @msShareProof.
+  ///
+  /// In en, this message translates to:
+  /// **'Share photo / video'**
+  String get msShareProof;
+
+  /// No description provided for @msProofPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'A photo'**
+  String get msProofPhoto;
+
+  /// No description provided for @msProofVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'A video'**
+  String get msProofVideo;
+
+  /// No description provided for @msProofShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared with the customer'**
+  String get msProofShared;
+
+  /// No description provided for @msSetupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers see the name; the address is only for pickups.'**
+  String get msSetupSubtitle;
+
+  /// No description provided for @msStoreSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Your store'**
+  String get msStoreSection;
+
+  /// No description provided for @msStoreName.
+  ///
+  /// In en, this message translates to:
+  /// **'Store name'**
+  String get msStoreName;
+
+  /// No description provided for @msStoreAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About your store'**
+  String get msStoreAbout;
+
+  /// No description provided for @msStoreAboutHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What you sell and why customers can trust it'**
+  String get msStoreAboutHint;
+
+  /// No description provided for @msPickupSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Pickup address'**
+  String get msPickupSection;
+
+  /// No description provided for @msPickupHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Where the courier collects parcels. Not shown to customers.'**
+  String get msPickupHint;
+
+  /// No description provided for @msAddressLine1.
+  ///
+  /// In en, this message translates to:
+  /// **'House / shop, street'**
+  String get msAddressLine1;
+
+  /// No description provided for @msAddressLine2.
+  ///
+  /// In en, this message translates to:
+  /// **'Area, landmark (optional)'**
+  String get msAddressLine2;
+
+  /// No description provided for @msCity.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get msCity;
+
+  /// No description provided for @msState.
+  ///
+  /// In en, this message translates to:
+  /// **'State'**
+  String get msState;
+
+  /// No description provided for @msPin.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN code'**
+  String get msPin;
+
+  /// No description provided for @msPinInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a 6-digit PIN code'**
+  String get msPinInvalid;
+
+  /// No description provided for @msPickupPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone for the courier'**
+  String get msPickupPhone;
+
+  /// No description provided for @msSetupNote.
+  ///
+  /// In en, this message translates to:
+  /// **'TalkAcharya invoices customers and handles GST, so you don\'t need a GSTIN. Your share is paid with your earnings.'**
+  String get msSetupNote;
+
+  /// No description provided for @msSendForApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Send for approval'**
+  String get msSendForApproval;
+
+  /// No description provided for @msStoreOpened.
+  ///
+  /// In en, this message translates to:
+  /// **'Your store is open'**
+  String get msStoreOpened;
+
+  /// No description provided for @msStoreSentForApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent — we\'ll let you know once it\'s approved'**
+  String get msStoreSentForApproval;
+
+  /// No description provided for @msRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get msRequired;
+
+  /// No description provided for @msNewListing.
+  ///
+  /// In en, this message translates to:
+  /// **'New listing'**
+  String get msNewListing;
+
+  /// No description provided for @msEditListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit listing'**
+  String get msEditListing;
+
+  /// No description provided for @msStopSelling.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop selling'**
+  String get msStopSelling;
+
+  /// No description provided for @msStoppedSelling.
+  ///
+  /// In en, this message translates to:
+  /// **'Taken off sale — it\'s a draft again'**
+  String get msStoppedSelling;
+
+  /// No description provided for @msDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get msDelete;
+
+  /// No description provided for @msDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this listing?'**
+  String get msDeleteTitle;
+
+  /// No description provided for @msDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It leaves your store. Orders already placed are not affected.'**
+  String get msDeleteBody;
+
+  /// No description provided for @msSaveDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Save draft'**
+  String get msSaveDraft;
+
+  /// No description provided for @msSaveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get msSaveChanges;
+
+  /// No description provided for @msSendForReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Send for review'**
+  String get msSendForReview;
+
+  /// No description provided for @msSentForReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent for review — we\'ll tell you when it\'s live'**
+  String get msSentForReview;
+
+  /// No description provided for @msFixChecklist.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved. Finish the list above to send it for review.'**
+  String get msFixChecklist;
+
+  /// No description provided for @msBackToReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved. It\'s off sale until our team checks the changes.'**
+  String get msBackToReview;
+
+  /// No description provided for @msLiveEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This will go back to review'**
+  String get msLiveEditTitle;
+
+  /// No description provided for @msLiveEditBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You changed what customers read or see. The listing comes off sale until our team checks it again. Price and stock changes don\'t need a review.'**
+  String get msLiveEditBody;
+
+  /// No description provided for @msLiveEditGo.
+  ///
+  /// In en, this message translates to:
+  /// **'Save and send'**
+  String get msLiveEditGo;
+
+  /// No description provided for @msPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get msPhotos;
+
+  /// No description provided for @msPhotosHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to {count}. Any size — they\'re cropped to fit. The first is the cover.'**
+  String msPhotosHint(int count);
+
+  /// No description provided for @msPhotoLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to {count} photos per listing'**
+  String msPhotoLimit(int count);
+
+  /// No description provided for @msPhotoCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get msPhotoCamera;
+
+  /// No description provided for @msPhotoGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get msPhotoGallery;
+
+  /// No description provided for @msAddPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photo'**
+  String get msAddPhoto;
+
+  /// No description provided for @msCover.
+  ///
+  /// In en, this message translates to:
+  /// **'Cover'**
+  String get msCover;
+
+  /// No description provided for @msMakeCover.
+  ///
+  /// In en, this message translates to:
+  /// **'Make it the cover'**
+  String get msMakeCover;
+
+  /// No description provided for @msRemovePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove photo'**
+  String get msRemovePhoto;
+
+  /// No description provided for @msWhatSection.
+  ///
+  /// In en, this message translates to:
+  /// **'What you\'re selling'**
+  String get msWhatSection;
+
+  /// No description provided for @msType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get msType;
+
+  /// No description provided for @msKindProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Product'**
+  String get msKindProduct;
+
+  /// No description provided for @msKindService.
+  ///
+  /// In en, this message translates to:
+  /// **'Service'**
+  String get msKindService;
+
+  /// No description provided for @msCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get msCategory;
+
+  /// No description provided for @msTitleField.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get msTitleField;
+
+  /// No description provided for @msTitleHintProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Five Mukhi Rudraksha, Nepal'**
+  String get msTitleHintProduct;
+
+  /// No description provided for @msTitleHintService.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Navgraha Shanti Pooja'**
+  String get msTitleHintService;
+
+  /// No description provided for @msSubtitleField.
+  ///
+  /// In en, this message translates to:
+  /// **'One line under the name (optional)'**
+  String get msSubtitleField;
+
+  /// No description provided for @msDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get msDescription;
+
+  /// No description provided for @msDescHintProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'What it is, where it comes from, how it\'s prepared or energised'**
+  String get msDescHintProduct;
+
+  /// No description provided for @msDescHintService.
+  ///
+  /// In en, this message translates to:
+  /// **'What you do, where, how long it takes, what the customer receives'**
+  String get msDescHintService;
+
+  /// No description provided for @msSignificance.
+  ///
+  /// In en, this message translates to:
+  /// **'Traditional significance (optional)'**
+  String get msSignificance;
+
+  /// No description provided for @msHowToUse.
+  ///
+  /// In en, this message translates to:
+  /// **'How to wear / use (optional)'**
+  String get msHowToUse;
+
+  /// No description provided for @msHowPerformed.
+  ///
+  /// In en, this message translates to:
+  /// **'How it\'s performed (optional)'**
+  String get msHowPerformed;
+
+  /// No description provided for @msClaimsRule.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t promise results or cures (\"guaranteed wealth\", \"cures illness\"). Listings that do are sent back.'**
+  String get msClaimsRule;
+
+  /// No description provided for @msDetailsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get msDetailsSection;
+
+  /// No description provided for @msPriceSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Price and stock'**
+  String get msPriceSection;
+
+  /// No description provided for @msPriceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers pay this, taxes included. Changes apply at once.'**
+  String get msPriceHint;
+
+  /// No description provided for @msPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get msPrice;
+
+  /// No description provided for @msPriceInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a price'**
+  String get msPriceInvalid;
+
+  /// No description provided for @msMrp.
+  ///
+  /// In en, this message translates to:
+  /// **'MRP (optional)'**
+  String get msMrp;
+
+  /// No description provided for @msMrpHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown struck through'**
+  String get msMrpHint;
+
+  /// No description provided for @msMrpBelowPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t be below the price'**
+  String get msMrpBelowPrice;
+
+  /// No description provided for @msStock.
+  ///
+  /// In en, this message translates to:
+  /// **'In stock'**
+  String get msStock;
+
+  /// No description provided for @msStockHint.
+  ///
+  /// In en, this message translates to:
+  /// **'0 = out of stock'**
+  String get msStockHint;
+
+  /// No description provided for @msWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Packed weight'**
+  String get msWeight;
+
+  /// No description provided for @msWeightHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For delivery charges'**
+  String get msWeightHint;
+
+  /// No description provided for @msLeadProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Ships within'**
+  String get msLeadProduct;
+
+  /// No description provided for @msLeadService.
+  ///
+  /// In en, this message translates to:
+  /// **'Performed within'**
+  String get msLeadService;
+
+  /// No description provided for @msDays.
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get msDays;
+
+  /// No description provided for @msDraftExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'Only you can see this. Send it for review when it\'s ready.'**
+  String get msDraftExplain;
+
+  /// No description provided for @msReviewExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'Our team is checking it. You\'ll get a notification when it\'s live.'**
+  String get msReviewExplain;
+
+  /// No description provided for @msLiveExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers can buy this now. Price and stock changes apply at once.'**
+  String get msLiveExplain;
+
+  /// No description provided for @msChecklistTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you send it'**
+  String get msChecklistTitle;
+
+  /// No description provided for @msCheckPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one photo'**
+  String get msCheckPhoto;
+
+  /// No description provided for @msCheckDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe it in a few lines'**
+  String get msCheckDescription;
+
+  /// No description provided for @msCheckPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a price'**
+  String get msCheckPrice;
+
+  /// No description provided for @msCheckWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the packed weight'**
+  String get msCheckWeight;
+
+  /// No description provided for @msOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get msOrder;
+
+  /// No description provided for @msOrderNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Order {number}'**
+  String msOrderNumber(String number);
+
+  /// No description provided for @msItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Items'**
+  String get msItems;
+
+  /// No description provided for @msOrderTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get msOrderTotal;
+
+  /// No description provided for @msShipTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Ship to'**
+  String get msShipTo;
+
+  /// No description provided for @msCopyAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy address'**
+  String get msCopyAddress;
+
+  /// No description provided for @msCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get msCopied;
+
+  /// No description provided for @msShipment.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipment'**
+  String get msShipment;
+
+  /// No description provided for @msStartPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Start preparing'**
+  String get msStartPreparing;
+
+  /// No description provided for @msMarkShipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark shipped'**
+  String get msMarkShipped;
+
+  /// No description provided for @msShipTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping details'**
+  String get msShipTitle;
+
+  /// No description provided for @msShipHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The customer gets these to track the parcel.'**
+  String get msShipHint;
+
+  /// No description provided for @msCourier.
+  ///
+  /// In en, this message translates to:
+  /// **'Courier'**
+  String get msCourier;
+
+  /// No description provided for @msAwb.
+  ///
+  /// In en, this message translates to:
+  /// **'AWB / tracking number'**
+  String get msAwb;
+
+  /// No description provided for @msTrackingLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracking link (optional)'**
+  String get msTrackingLink;
+
+  /// No description provided for @msCancelOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel order'**
+  String get msCancelOrder;
+
+  /// No description provided for @msCancelOrderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel this order?'**
+  String get msCancelOrderTitle;
+
+  /// No description provided for @msCancelReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason (the customer sees it)'**
+  String get msCancelReason;
+
+  /// No description provided for @histTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Consultation history'**
+  String get histTitle;
+
+  /// No description provided for @histSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Every session, with the customer\'s details and ways to follow up.'**
+  String get histSubtitle;
+
+  /// No description provided for @histSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search name, phone or session ID'**
+  String get histSearch;
+
+  /// No description provided for @histFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get histFilterAll;
+
+  /// No description provided for @histFilterFavourites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favourites'**
+  String get histFilterFavourites;
+
+  /// No description provided for @histEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No sessions yet'**
+  String get histEmptyTitle;
+
+  /// No description provided for @histEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished chats and calls show up here.'**
+  String get histEmptyBody;
+
+  /// No description provided for @histEmptyFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing matches'**
+  String get histEmptyFilter;
+
+  /// No description provided for @histLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get histLoadMore;
+
+  /// No description provided for @histLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get histLoading;
+
+  /// No description provided for @histPerformance.
+  ///
+  /// In en, this message translates to:
+  /// **'Your performance'**
+  String get histPerformance;
+
+  /// No description provided for @histNoteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Private note'**
+  String get histNoteTitle;
+
+  /// No description provided for @histNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Only you can see this — e.g. career question, follow up after Diwali'**
+  String get histNoteHint;
+
+  /// No description provided for @histCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get histCancel;
+
+  /// No description provided for @histSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get histSave;
+
+  /// No description provided for @histFirstSession.
+  ///
+  /// In en, this message translates to:
+  /// **'First session'**
+  String get histFirstSession;
+
+  /// No description provided for @histSessionNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Session {n}'**
+  String histSessionNumber(int n);
+
+  /// No description provided for @histRepeatClient.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat client'**
+  String get histRepeatClient;
+
+  /// No description provided for @histFavourite.
+  ///
+  /// In en, this message translates to:
+  /// **'Favourite'**
+  String get histFavourite;
+
+  /// No description provided for @histCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer'**
+  String get histCustomer;
+
+  /// No description provided for @histBirthDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth'**
+  String get histBirthDate;
+
+  /// No description provided for @histBirthPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Place of birth'**
+  String get histBirthPlace;
+
+  /// No description provided for @histGender.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get histGender;
+
+  /// No description provided for @histGenderMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get histGenderMale;
+
+  /// No description provided for @histGenderFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get histGenderFemale;
+
+  /// No description provided for @histDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get histDuration;
+
+  /// No description provided for @histEarned.
+  ///
+  /// In en, this message translates to:
+  /// **'You earned'**
+  String get histEarned;
+
+  /// No description provided for @histRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating'**
+  String get histRating;
+
+  /// No description provided for @histStatusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get histStatusCompleted;
+
+  /// No description provided for @histStatusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get histStatusCancelled;
+
+  /// No description provided for @histStatusMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get histStatusMissed;
+
+  /// No description provided for @histStatusDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get histStatusDeclined;
+
+  /// No description provided for @histStatusNoShow.
+  ///
+  /// In en, this message translates to:
+  /// **'No show'**
+  String get histStatusNoShow;
+
+  /// No description provided for @histStatusFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get histStatusFailed;
+
+  /// No description provided for @histTagPickedFast.
+  ///
+  /// In en, this message translates to:
+  /// **'Picked on time (≤15s)'**
+  String get histTagPickedFast;
+
+  /// No description provided for @histTagPickedLate.
+  ///
+  /// In en, this message translates to:
+  /// **'Picked late'**
+  String get histTagPickedLate;
+
+  /// No description provided for @histTagShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Short session (<2 min)'**
+  String get histTagShort;
+
+  /// No description provided for @histTagEndedCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer ended'**
+  String get histTagEndedCustomer;
+
+  /// No description provided for @histTagEndedYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You ended'**
+  String get histTagEndedYou;
+
+  /// No description provided for @histTagEndedBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended: low balance'**
+  String get histTagEndedBalance;
+
+  /// No description provided for @histTagEndedDisconnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected'**
+  String get histTagEndedDisconnect;
+
+  /// No description provided for @histTagRemedy.
+  ///
+  /// In en, this message translates to:
+  /// **'Remedy suggested'**
+  String get histTagRemedy;
+
+  /// No description provided for @histOpenKundali.
+  ///
+  /// In en, this message translates to:
+  /// **'Open kundali'**
+  String get histOpenKundali;
+
+  /// No description provided for @histSendRemedy.
+  ///
+  /// In en, this message translates to:
+  /// **'Send remedy'**
+  String get histSendRemedy;
+
+  /// No description provided for @histChatAssistant.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat assistant'**
+  String get histChatAssistant;
+
+  /// No description provided for @histOpenChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Open chat'**
+  String get histOpenChat;
+
+  /// No description provided for @dashActionHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get dashActionHistory;
 }
 
 class _AppLocalizationsDelegate

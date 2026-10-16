@@ -847,36 +847,9 @@ class AppLocalizationsHi extends AppLocalizations {
       'ग्राहक प्रति मिनट कितना चुकाते हैं। बदलाव नए सत्रों पर लागू होंगे।';
 
   @override
-  String ratesAllowed(String min, String max) {
-    return 'अनुमत $min – $max';
-  }
-
-  @override
   String ratesYouEarn(String amount, String fee) {
     return '$fee% प्लेटफ़ॉर्म शुल्क के बाद आपकी कमाई लगभग $amount/मिनट';
   }
-
-  @override
-  String ratesSuggested(String amount) {
-    return 'सुझाव $amount';
-  }
-
-  @override
-  String get ratesNotOffered => 'प्लेटफ़ॉर्म पर अभी उपलब्ध नहीं';
-
-  @override
-  String ratesSaveCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count बदलाव सहेजें',
-      one: '1 बदलाव सहेजें',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get ratesUpdated => 'दरें अपडेट हो गईं';
 
   @override
   String get hoursChannels => 'परामर्श के प्रकार';
@@ -887,12 +860,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get hoursNeedChannel => 'कम से कम एक प्रकार चालू रखें';
-
-  @override
-  String get hoursConcurrent => 'एक साथ चैट';
-
-  @override
-  String get hoursConcurrentHint => 'आप एक साथ कितने चैट सत्र संभाल सकते हैं';
 
   @override
   String get hoursSchedule => 'साप्ताहिक समय';
@@ -2726,11 +2693,11 @@ class AppLocalizationsHi extends AppLocalizations {
       'अपनी ही तस्वीरें लगाएँ: काम करते हुए, आपके प्रमाणपत्र, आपकी करवाई पूजाएँ। तस्वीर में फ़ोन नंबर या कोई संपर्क जानकारी न हो।';
 
   @override
-  String get wsFeedback => 'फ़ीडबैक';
+  String get wsFeedback => 'सहायता';
 
   @override
   String get wsFeedbackSubtitle =>
-      'बताइए क्या ठीक नहीं चल रहा या किससे मदद मिलेगी। हम हर संदेश पढ़ते हैं।';
+      'हमारी टीम को लिखें — दर में बदलाव, कोई समस्या, कोई सुझाव। हम हर संदेश पढ़ते हैं और यहीं जवाब देते हैं।';
 
   @override
   String get wsFeedbackBug => 'कुछ ठीक नहीं चल रहा';
@@ -4112,4 +4079,771 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get trainWhileWaitingBody =>
       'अभी पूरे किए पाठ मंज़ूरी के बाद गिने जाएँगे।';
+
+  @override
+  String get ratesSetByPlatformTitle => 'आपकी दरें TalkAcharya तय करता है';
+
+  @override
+  String get ratesSetByPlatformBody =>
+      'हम इन्हें आपके प्रदर्शन से तय करते हैं — रेटिंग, दोबारा आने वाले ग्राहक, आप कितनी जल्दी जवाब देते हैं। अच्छा कर रहे हैं और ज़्यादा दर चाहते हैं? बदलाव का अनुरोध करें, हमारी टीम देखेगी।';
+
+  @override
+  String get ratesRequestChange => 'दर बदलने का अनुरोध करें';
+
+  @override
+  String get ratesNotSetYet => 'अभी तय नहीं — हमारी टीम तय करेगी';
+
+  @override
+  String get wsFeedbackRates => 'दर में बदलाव';
+
+  @override
+  String get wsFeedbackRatesHint =>
+      'कौन-सी दर बदलवाना चाहते हैं, और क्यों? जैसे आपकी रेटिंग, दोबारा आने वाले ग्राहक, अनुभव।';
+
+  @override
+  String get assistantTitle => 'असिस्टेंट चैट';
+
+  @override
+  String get assistantInboxSubtitle =>
+      'ग्राहक आपकी प्रोफ़ाइल से मुफ़्त संदेश भेजते हैं';
+
+  @override
+  String assistantWaitingCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ग्राहक आपके जवाब का इंतज़ार कर रहे हैं',
+      one: '1 ग्राहक आपके जवाब का इंतज़ार कर रहा है',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get assistantInboxEmptyTitle => 'अभी कोई संदेश नहीं';
+
+  @override
+  String get assistantInboxEmptyBody =>
+      'जब कोई ग्राहक आपकी प्रोफ़ाइल से संदेश भेजेगा, वह यहाँ दिखेगा।';
+
+  @override
+  String get assistantYouPrefix => 'आप: ';
+
+  @override
+  String get assistantRoomSubtitleAstro =>
+      'असिस्टेंट चैट · ग्राहक के लिए मुफ़्त';
+
+  @override
+  String get assistantHintAstro => 'जवाब लिखें';
+
+  @override
+  String get assistantEmptyTitleAstro => 'अभी यहाँ कुछ नहीं';
+
+  @override
+  String get assistantEmptyBodyAstro => 'इस ग्राहक के संदेश यहाँ दिखेंगे।';
+
+  @override
+  String get assistantIntroAstro =>
+      'ग्राहक ने आपकी प्रोफ़ाइल से यह मुफ़्त चैट शुरू की है। यह पेड परामर्श नहीं है — पूरी रीडिंग के लिए उनसे परामर्श शुरू करने को कहें।';
+
+  @override
+  String get assistantWaitForReply =>
+      'और संदेश भेजने से पहले जवाब का इंतज़ार है।';
+
+  @override
+  String get assistantBlocked => 'इस चैट में संदेश बंद हैं।';
+
+  @override
+  String get assistantDisabled => 'असिस्टेंट चैट अभी उपलब्ध नहीं है।';
+
+  @override
+  String get assistantNotSent => 'नहीं भेजा गया · विकल्पों के लिए टैप करें';
+
+  @override
+  String get assistantRetry => 'फिर से कोशिश करें';
+
+  @override
+  String get assistantDiscard => 'संदेश हटाएँ';
+
+  @override
+  String get assistantToday => 'आज';
+
+  @override
+  String get assistantYesterday => 'कल';
+
+  @override
+  String get msTitle => 'मेरा स्टोर';
+
+  @override
+  String get msSubtitle => 'आपके प्रोडक्ट, सेवाएँ और ऑर्डर';
+
+  @override
+  String get msSubtitleNew => 'अपने प्रोडक्ट और सेवाएँ बेचें';
+
+  @override
+  String get msEditStore => 'स्टोर की जानकारी';
+
+  @override
+  String get msTabListings => 'लिस्टिंग';
+
+  @override
+  String get msTabOrders => 'ऑर्डर';
+
+  @override
+  String get msTabBookings => 'बुकिंग';
+
+  @override
+  String get msAddListing => 'जोड़ें';
+
+  @override
+  String get msUnavailableTitle => 'बिक्री अभी शुरू नहीं हुई';
+
+  @override
+  String get msUnavailableBody =>
+      'जल्द ही आप यहाँ अपने प्रोडक्ट और सेवाएँ बेच सकेंगे।';
+
+  @override
+  String get msIntroTitle => 'TalkAcharya पर आपका अपना स्टोर';
+
+  @override
+  String get msIntroBody =>
+      'जिस पर आपको भरोसा है वह बेचें — अभिमंत्रित रुद्राक्ष, यंत्र, रत्न — और वे पूजाएँ व अनुष्ठान जो आप करते हैं। ग्राहक इन्हें स्टोर और आपकी प्रोफ़ाइल पर पाएँगे।';
+
+  @override
+  String get msStep1Title => 'अपना स्टोर बनाएँ';
+
+  @override
+  String get msStep1Body =>
+      'एक नाम और वह पता जहाँ से पार्सल उठाए जाएँगे। हमारी टीम इसे स्वीकृत करती है।';
+
+  @override
+  String get msStep2Title => 'प्रोडक्ट और सेवाएँ जोड़ें';
+
+  @override
+  String get msStep2Body =>
+      'फ़ोन से फ़ोटो, विवरण, कीमत और स्टॉक। फ़ोटो अपने-आप सही आकार में कट जाती हैं।';
+
+  @override
+  String get msStep3Title => 'छोटी जाँच, फिर लाइव';
+
+  @override
+  String get msStep3Body =>
+      'लाइव होने से पहले हम हर लिस्टिंग में नतीजों के वादे जाँचते हैं।';
+
+  @override
+  String get msStep4Title => 'कमाई के साथ भुगतान';
+
+  @override
+  String get msStep4Body =>
+      'ऑर्डर भेजें या बुक की गई सेवा करें; आपका हिस्सा आपके पेआउट में जुड़ता है।';
+
+  @override
+  String get msSetUpStore => 'मेरा स्टोर बनाएँ';
+
+  @override
+  String get msPendingTitle => 'स्वीकृति का इंतज़ार';
+
+  @override
+  String get msPendingBody =>
+      'हमारी टीम आपका स्टोर देख रही है। तब तक आप लिस्टिंग तैयार कर सकते हैं — दोनों स्वीकृत होने पर लाइव होंगी।';
+
+  @override
+  String get msSuspendedTitle => 'आपका स्टोर रुका हुआ है';
+
+  @override
+  String get msSuspendedBody =>
+      'आपकी लिस्टिंग ग्राहकों को नहीं दिख रही। जानकारी के लिए सहायता को लिखें।';
+
+  @override
+  String get msNoListingsTitle => 'अभी कुछ नहीं जोड़ा';
+
+  @override
+  String get msNoListingsBody =>
+      'पहला प्रोडक्ट या सेवा जोड़ने के लिए ‘जोड़ें’ पर टैप करें।';
+
+  @override
+  String get msOrdersAfterApproval =>
+      'स्टोर स्वीकृत होने के बाद ऑर्डर और बुकिंग यहाँ दिखेंगी।';
+
+  @override
+  String get msNoOrdersTitle => 'अभी कोई ऑर्डर नहीं';
+
+  @override
+  String get msNoOrdersBody =>
+      'जब कोई ग्राहक आपका सामान खरीदेगा, वह यहाँ दिखेगा।';
+
+  @override
+  String get msNoBookingsTitle => 'अभी कोई बुकिंग नहीं';
+
+  @override
+  String get msNoBookingsBody =>
+      'ग्राहक आपसे जो सेवाएँ बुक करेंगे, वे यहाँ दिखेंगी।';
+
+  @override
+  String get msOrdersToDo => 'करना है';
+
+  @override
+  String get msOrdersEarlier => 'पहले के';
+
+  @override
+  String get msStatusDraft => 'ड्राफ़्ट';
+
+  @override
+  String get msStatusInReview => 'जाँच में';
+
+  @override
+  String get msStatusLive => 'लाइव';
+
+  @override
+  String get msStatusChanges => 'बदलाव ज़रूरी';
+
+  @override
+  String get msOutOfStock => 'स्टॉक ख़त्म';
+
+  @override
+  String msStockCount(int count) {
+    return '$count स्टॉक में';
+  }
+
+  @override
+  String msSoldCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count बिके',
+      one: '1 बिका',
+      zero: 'अभी बिका नहीं',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get msTeamSaid => 'हमारी टीम ने कहा';
+
+  @override
+  String get msOrderAwaiting => 'आपकी मंज़ूरी चाहिए';
+
+  @override
+  String get msOrderNew => 'नया';
+
+  @override
+  String get msOrderPreparing => 'तैयार हो रहा';
+
+  @override
+  String get msOrderShipped => 'भेजा गया';
+
+  @override
+  String get msOrderDelivered => 'पहुँच गया';
+
+  @override
+  String get msOrderCompleted => 'पूरा';
+
+  @override
+  String get msOrderCancelled => 'रद्द';
+
+  @override
+  String get msOrderReturned => 'लौटाया गया';
+
+  @override
+  String get msBookingToDo => 'करना है';
+
+  @override
+  String get msBookingPerformed => 'हो गई';
+
+  @override
+  String get msBookingProofShared => 'प्रमाण भेजा';
+
+  @override
+  String get msBookingDone => 'पूरी';
+
+  @override
+  String get msBookingCancelled => 'रद्द';
+
+  @override
+  String msBookingFor(String date) {
+    return '$date के लिए';
+  }
+
+  @override
+  String get msMarkPerformed => 'हो गई चिह्नित करें';
+
+  @override
+  String get msShareProof => 'फ़ोटो / वीडियो भेजें';
+
+  @override
+  String get msProofPhoto => 'एक फ़ोटो';
+
+  @override
+  String get msProofVideo => 'एक वीडियो';
+
+  @override
+  String get msProofShared => 'ग्राहक को भेज दिया';
+
+  @override
+  String get msSetupSubtitle =>
+      'ग्राहक नाम देखते हैं; पता सिर्फ़ पिकअप के लिए है।';
+
+  @override
+  String get msStoreSection => 'आपका स्टोर';
+
+  @override
+  String get msStoreName => 'स्टोर का नाम';
+
+  @override
+  String get msStoreAbout => 'स्टोर के बारे में';
+
+  @override
+  String get msStoreAboutHint => 'आप क्या बेचते हैं और ग्राहक भरोसा क्यों करें';
+
+  @override
+  String get msPickupSection => 'पिकअप का पता';
+
+  @override
+  String get msPickupHint =>
+      'जहाँ से कूरियर पार्सल लेगा। ग्राहकों को नहीं दिखता।';
+
+  @override
+  String get msAddressLine1 => 'मकान / दुकान, गली';
+
+  @override
+  String get msAddressLine2 => 'इलाका, लैंडमार्क (वैकल्पिक)';
+
+  @override
+  String get msCity => 'शहर';
+
+  @override
+  String get msState => 'राज्य';
+
+  @override
+  String get msPin => 'पिन कोड';
+
+  @override
+  String get msPinInvalid => '6 अंकों का पिन कोड डालें';
+
+  @override
+  String get msPickupPhone => 'कूरियर के लिए फ़ोन';
+
+  @override
+  String get msSetupNote =>
+      'TalkAcharya ग्राहकों को बिल देता है और GST संभालता है, इसलिए आपको GSTIN की ज़रूरत नहीं। आपका हिस्सा आपकी कमाई के साथ मिलता है।';
+
+  @override
+  String get msSendForApproval => 'स्वीकृति के लिए भेजें';
+
+  @override
+  String get msStoreOpened => 'आपका स्टोर खुल गया';
+
+  @override
+  String get msStoreSentForApproval =>
+      'भेज दिया — स्वीकृत होते ही आपको बताएँगे';
+
+  @override
+  String get msRequired => 'ज़रूरी';
+
+  @override
+  String get msNewListing => 'नई लिस्टिंग';
+
+  @override
+  String get msEditListing => 'लिस्टिंग बदलें';
+
+  @override
+  String get msStopSelling => 'बिक्री रोकें';
+
+  @override
+  String get msStoppedSelling => 'बिक्री से हटा दिया — फिर से ड्राफ़्ट है';
+
+  @override
+  String get msDelete => 'हटाएँ';
+
+  @override
+  String get msDeleteTitle => 'यह लिस्टिंग हटाएँ?';
+
+  @override
+  String get msDeleteBody =>
+      'यह आपके स्टोर से हट जाएगी। पहले के ऑर्डर पर असर नहीं होगा।';
+
+  @override
+  String get msSaveDraft => 'ड्राफ़्ट सेव करें';
+
+  @override
+  String get msSaveChanges => 'बदलाव सेव करें';
+
+  @override
+  String get msSendForReview => 'जाँच के लिए भेजें';
+
+  @override
+  String get msSentForReview => 'जाँच के लिए भेजा — लाइव होते ही बताएँगे';
+
+  @override
+  String get msFixChecklist =>
+      'सेव हो गया। जाँच के लिए भेजने से पहले ऊपर की सूची पूरी करें।';
+
+  @override
+  String get msBackToReview =>
+      'सेव हो गया। टीम के बदलाव देखने तक यह बिक्री से हटा है।';
+
+  @override
+  String get msLiveEditTitle => 'यह फिर से जाँच में जाएगा';
+
+  @override
+  String get msLiveEditBody =>
+      'आपने वह बदला है जो ग्राहक पढ़ते या देखते हैं। टीम की दोबारा जाँच तक लिस्टिंग बिक्री से हट जाएगी। कीमत और स्टॉक बदलने पर जाँच नहीं होती।';
+
+  @override
+  String get msLiveEditGo => 'सेव करें और भेजें';
+
+  @override
+  String get msPhotos => 'फ़ोटो';
+
+  @override
+  String msPhotosHint(int count) {
+    return '$count तक। कोई भी आकार — अपने-आप कट जाती हैं। पहली फ़ोटो कवर है।';
+  }
+
+  @override
+  String msPhotoLimit(int count) {
+    return 'एक लिस्टिंग में $count फ़ोटो तक';
+  }
+
+  @override
+  String get msPhotoCamera => 'फ़ोटो खींचें';
+
+  @override
+  String get msPhotoGallery => 'गैलरी से चुनें';
+
+  @override
+  String get msAddPhoto => 'फ़ोटो जोड़ें';
+
+  @override
+  String get msCover => 'कवर';
+
+  @override
+  String get msMakeCover => 'इसे कवर बनाएँ';
+
+  @override
+  String get msRemovePhoto => 'फ़ोटो हटाएँ';
+
+  @override
+  String get msWhatSection => 'आप क्या बेच रहे हैं';
+
+  @override
+  String get msType => 'प्रकार';
+
+  @override
+  String get msKindProduct => 'प्रोडक्ट';
+
+  @override
+  String get msKindService => 'सेवा';
+
+  @override
+  String get msCategory => 'श्रेणी';
+
+  @override
+  String get msTitleField => 'नाम';
+
+  @override
+  String get msTitleHintProduct => 'जैसे पंचमुखी रुद्राक्ष, नेपाल';
+
+  @override
+  String get msTitleHintService => 'जैसे नवग्रह शांति पूजा';
+
+  @override
+  String get msSubtitleField => 'नाम के नीचे एक लाइन (वैकल्पिक)';
+
+  @override
+  String get msDescription => 'विवरण';
+
+  @override
+  String get msDescHintProduct =>
+      'यह क्या है, कहाँ से आता है, कैसे तैयार या अभिमंत्रित होता है';
+
+  @override
+  String get msDescHintService =>
+      'आप क्या करते हैं, कहाँ, कितना समय लगता है, ग्राहक को क्या मिलता है';
+
+  @override
+  String get msSignificance => 'पारंपरिक महत्व (वैकल्पिक)';
+
+  @override
+  String get msHowToUse => 'कैसे पहनें / उपयोग करें (वैकल्पिक)';
+
+  @override
+  String get msHowPerformed => 'कैसे की जाती है (वैकल्पिक)';
+
+  @override
+  String get msClaimsRule =>
+      'नतीजों या इलाज का वादा न करें (\"पक्का धन लाभ\", \"बीमारी ठीक\")। ऐसी लिस्टिंग लौटा दी जाती है।';
+
+  @override
+  String get msDetailsSection => 'विवरण';
+
+  @override
+  String get msPriceSection => 'कीमत और स्टॉक';
+
+  @override
+  String get msPriceHint =>
+      'ग्राहक यही देते हैं, टैक्स सहित। बदलाव तुरंत लागू होते हैं।';
+
+  @override
+  String get msPrice => 'कीमत';
+
+  @override
+  String get msPriceInvalid => 'कीमत डालें';
+
+  @override
+  String get msMrp => 'एम.आर.पी. (वैकल्पिक)';
+
+  @override
+  String get msMrpHint => 'कटा हुआ दिखेगा';
+
+  @override
+  String get msMrpBelowPrice => 'कीमत से कम नहीं हो सकता';
+
+  @override
+  String get msStock => 'स्टॉक में';
+
+  @override
+  String get msStockHint => '0 = स्टॉक ख़त्म';
+
+  @override
+  String get msWeight => 'पैक वज़न';
+
+  @override
+  String get msWeightHint => 'डिलीवरी शुल्क के लिए';
+
+  @override
+  String get msLeadProduct => 'इतने दिन में भेजेंगे';
+
+  @override
+  String get msLeadService => 'इतने दिन में करेंगे';
+
+  @override
+  String get msDays => 'दिन';
+
+  @override
+  String get msDraftExplain =>
+      'यह सिर्फ़ आपको दिखता है। तैयार होने पर जाँच के लिए भेजें।';
+
+  @override
+  String get msReviewExplain =>
+      'हमारी टीम इसे देख रही है। लाइव होने पर सूचना मिलेगी।';
+
+  @override
+  String get msLiveExplain =>
+      'ग्राहक इसे अभी खरीद सकते हैं। कीमत और स्टॉक बदलाव तुरंत लागू होते हैं।';
+
+  @override
+  String get msChecklistTitle => 'भेजने से पहले';
+
+  @override
+  String get msCheckPhoto => 'कम से कम एक फ़ोटो जोड़ें';
+
+  @override
+  String get msCheckDescription => 'कुछ लाइनों में विवरण लिखें';
+
+  @override
+  String get msCheckPrice => 'कीमत तय करें';
+
+  @override
+  String get msCheckWeight => 'पैक वज़न डालें';
+
+  @override
+  String get msOrder => 'ऑर्डर';
+
+  @override
+  String msOrderNumber(String number) {
+    return 'ऑर्डर $number';
+  }
+
+  @override
+  String get msItems => 'सामान';
+
+  @override
+  String get msOrderTotal => 'कुल';
+
+  @override
+  String get msShipTo => 'यहाँ भेजें';
+
+  @override
+  String get msCopyAddress => 'पता कॉपी करें';
+
+  @override
+  String get msCopied => 'कॉपी हो गया';
+
+  @override
+  String get msShipment => 'शिपमेंट';
+
+  @override
+  String get msStartPreparing => 'तैयार करना शुरू करें';
+
+  @override
+  String get msMarkShipped => 'भेजा गया चिह्नित करें';
+
+  @override
+  String get msShipTitle => 'शिपिंग विवरण';
+
+  @override
+  String get msShipHint => 'ग्राहक इनसे पार्सल ट्रैक करेगा।';
+
+  @override
+  String get msCourier => 'कूरियर';
+
+  @override
+  String get msAwb => 'AWB / ट्रैकिंग नंबर';
+
+  @override
+  String get msTrackingLink => 'ट्रैकिंग लिंक (वैकल्पिक)';
+
+  @override
+  String get msCancelOrder => 'ऑर्डर रद्द करें';
+
+  @override
+  String get msCancelOrderTitle => 'यह ऑर्डर रद्द करें?';
+
+  @override
+  String get msCancelReason => 'कारण (ग्राहक देखेगा)';
+
+  @override
+  String get histTitle => 'परामर्श इतिहास';
+
+  @override
+  String get histSubtitle =>
+      'हर सेशन — ग्राहक की जानकारी और आगे बात करने के तरीके।';
+
+  @override
+  String get histSearch => 'नाम, फ़ोन या सेशन ID खोजें';
+
+  @override
+  String get histFilterAll => 'सभी';
+
+  @override
+  String get histFilterFavourites => 'पसंदीदा';
+
+  @override
+  String get histEmptyTitle => 'अभी कोई सेशन नहीं';
+
+  @override
+  String get histEmptyBody => 'पूरे हुए चैट और कॉल यहाँ दिखेंगे।';
+
+  @override
+  String get histEmptyFilter => 'कुछ नहीं मिला';
+
+  @override
+  String get histLoadMore => 'और दिखाएँ';
+
+  @override
+  String get histLoading => 'लोड हो रहा है…';
+
+  @override
+  String get histPerformance => 'आपका प्रदर्शन';
+
+  @override
+  String get histNoteTitle => 'निजी नोट';
+
+  @override
+  String get histNoteHint =>
+      'यह सिर्फ़ आप देख सकते हैं — जैसे: करियर का सवाल, दिवाली के बाद बात करें';
+
+  @override
+  String get histCancel => 'रद्द करें';
+
+  @override
+  String get histSave => 'सेव करें';
+
+  @override
+  String get histFirstSession => 'पहला सेशन';
+
+  @override
+  String histSessionNumber(int n) {
+    return 'सेशन $n';
+  }
+
+  @override
+  String get histRepeatClient => 'पुराना ग्राहक';
+
+  @override
+  String get histFavourite => 'पसंदीदा';
+
+  @override
+  String get histCustomer => 'ग्राहक';
+
+  @override
+  String get histBirthDate => 'जन्म तिथि';
+
+  @override
+  String get histBirthPlace => 'जन्म स्थान';
+
+  @override
+  String get histGender => 'लिंग';
+
+  @override
+  String get histGenderMale => 'पुरुष';
+
+  @override
+  String get histGenderFemale => 'महिला';
+
+  @override
+  String get histDuration => 'अवधि';
+
+  @override
+  String get histEarned => 'आपकी कमाई';
+
+  @override
+  String get histRating => 'रेटिंग';
+
+  @override
+  String get histStatusCompleted => 'पूरा';
+
+  @override
+  String get histStatusCancelled => 'रद्द';
+
+  @override
+  String get histStatusMissed => 'छूट गया';
+
+  @override
+  String get histStatusDeclined => 'अस्वीकार';
+
+  @override
+  String get histStatusNoShow => 'नहीं आए';
+
+  @override
+  String get histStatusFailed => 'विफल';
+
+  @override
+  String get histTagPickedFast => 'समय पर उठाया (≤15 सेकंड)';
+
+  @override
+  String get histTagPickedLate => 'देर से उठाया';
+
+  @override
+  String get histTagShort => 'छोटा सेशन (<2 मिनट)';
+
+  @override
+  String get histTagEndedCustomer => 'ग्राहक ने खत्म किया';
+
+  @override
+  String get histTagEndedYou => 'आपने खत्म किया';
+
+  @override
+  String get histTagEndedBalance => 'बैलेंस खत्म होने से बंद';
+
+  @override
+  String get histTagEndedDisconnect => 'कनेक्शन टूटा';
+
+  @override
+  String get histTagRemedy => 'उपाय सुझाया';
+
+  @override
+  String get histOpenKundali => 'कुंडली खोलें';
+
+  @override
+  String get histSendRemedy => 'उपाय भेजें';
+
+  @override
+  String get histChatAssistant => 'चैट असिस्टेंट';
+
+  @override
+  String get histOpenChat => 'चैट खोलें';
+
+  @override
+  String get dashActionHistory => 'इतिहास';
 }

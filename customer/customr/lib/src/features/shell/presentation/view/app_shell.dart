@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,10 +20,11 @@ import '../../../consultations/presentation/view/waitlist_sheets.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
-/// The signed-in container: an [IndexedStack] of the 4 tab navigators driven by
+/// The signed-in container: an [IndexedStack] of the 3 tab navigators driven by
 /// go_router's [StatefulNavigationShell], a floating rounded bottom nav, an
 /// offline banner, and realtime toast handling. Horizontal swipes between tabs.
-/// Chats ("Orders") is reached from the Profile page, not a tab.
+/// Chats ("Orders") is reached from the Profile page, not a tab; Live is pushed
+/// full screen from the bar.
 class AppShell extends StatefulWidget {
   const AppShell({required this.navigationShell, super.key});
 
@@ -123,6 +123,9 @@ class _AppShellState extends State<AppShell> {
         context.read<NotificationsCubit>().bump();
       case WalletUpdated():
       case ReconnectHint():
+      // An assistant reply: the room on screen shows it, the push says it
+      // anywhere else.
+      case AssistantFrame():
         break;
     }
   }
@@ -148,6 +151,23 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
+  // The bar shows five buttons; Live isn't a tab but a full-screen page pushed
+  // above the shell, so the bar's positions and the shell's branches differ.
+  static const _liveSlot = 3;
+
+  int get _selectedSlot {
+    final branch = widget.navigationShell.currentIndex;
+    return branch >= _liveSlot ? branch + 1 : branch;
+  }
+
+  void _onNavTap(int slot) {
+    if (slot == _liveSlot) {
+      context.push(Routes.live);
+      return;
+    }
+    _goBranch(slot > _liveSlot ? slot - 1 : slot);
+  }
+
   void _onHorizontalDragEnd(DragEndDetails details) {
     // Basic swipe detection logic
     final double velocity = details.primaryVelocity ?? 0;
@@ -168,8 +188,9 @@ class _AppShellState extends State<AppShell> {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
+    final brand = context.brand;
     return Scaffold(
-      extendBody: true,
+      extendBody: false,
       body: Column(
         children: [
           const _OfflineBanner(),
@@ -185,182 +206,55 @@ class _AppShellState extends State<AppShell> {
           ),
         ],
       ),
-      bottomNavigationBar: _FloatingNavBar(
-        currentIndex: widget.navigationShell.currentIndex,
-        onTap: _goBranch,
-        destinations: [
-          _NavDest(Icons.home_outlined, Icons.home_rounded, l.navHome),
-          _NavDest(
-            Icons.groups_outlined,
-            Icons.groups_rounded,
-            l.navAstrologers,
-          ),
-          _NavDest(Icons.live_tv_outlined, Icons.live_tv_rounded, l.navLive),
-          _NavDest(
-            Icons.person_outline_rounded,
-            Icons.person_rounded,
-            l.navProfile,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _NavDest {
-  const _NavDest(this.icon, this.selectedIcon, this.label);
-  final IconData icon;
-  final IconData selectedIcon;
-  final String label;
-}
-
-/// Floating cosmic pill — the same deep-space gradient as the page headers. Every
-/// tab shows icon over label; the selected one sits in a gold pill.
-class _FloatingNavBar extends StatelessWidget {
-  const _FloatingNavBar({
-    required this.currentIndex,
-    required this.onTap,
-    required this.destinations,
-  });
-
-  final int currentIndex;
-  final ValueChanged<int> onTap;
-  final List<_NavDest> destinations;
-
-  @override
-  Widget build(BuildContext context) {
-    final brand = context.brand;
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(26),
-            boxShadow: [
-              BoxShadow(
-                color: brand.cosmicStart.withValues(alpha: 0.35),
-                blurRadius: 22,
-                offset: const Offset(0, 8),
-              ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              brand.cosmicStart,
+              brand.cosmicEnd,
+              const Color(0xFF3B0F5C),
             ],
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(26),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-              child: Container(
-                height: 66,
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(26),
-                  gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      brand.cosmicStart.withValues(alpha: 0.85),
-                      brand.cosmicEnd.withValues(alpha: 0.85),
-                      const Color(0xFF3B0F5C).withValues(alpha: 0.85),
-                    ],
-                  ),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.08),
-                  ),
-                ),
-                child: Material(
-                  type: MaterialType.transparency,
-                  child: Row(
-                    children: [
-                      for (var i = 0; i < destinations.length; i++)
-                        Expanded(
-                          child: _NavCell(
-                            dest: destinations[i],
-                            selected: i == currentIndex,
-                            onTap: () {
-                              HapticFeedback.selectionClick();
-                              onTap(i);
-                            },
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
         ),
-      ),
-    );
-  }
-}
-
-class _NavCell extends StatelessWidget {
-  const _NavCell({
-    required this.dest,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final _NavDest dest;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    const selectedFg = Color(0xFF3A1703);
-    final idle = Colors.white.withValues(alpha: 0.62);
-    return Semantics(
-      button: true,
-      selected: selected,
-      label: dest.label,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        splashColor: Colors.white.withValues(alpha: 0.08),
-        highlightColor: Colors.white.withValues(alpha: 0.04),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 220),
-              curve: Curves.easeOutCubic,
-              width: selected ? 52 : 40,
-              height: 30,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(999),
-                gradient: selected
-                    ? const LinearGradient(colors: BrandColors.goldGradient)
-                    : null,
-                boxShadow: selected
-                    ? [
-                        BoxShadow(
-                          color: BrandColors.goldGradient.last.withValues(
-                            alpha: 0.45,
-                          ),
-                          blurRadius: 10,
-                          offset: const Offset(0, 3),
-                        ),
-                      ]
-                    : null,
-              ),
-              child: Icon(
-                selected ? dest.selectedIcon : dest.icon,
-                size: 21,
-                color: selected ? selectedFg : idle,
-              ),
+        child: BottomNavigationBar(
+          currentIndex: _selectedSlot,
+          onTap: _onNavTap,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          selectedItemColor: const Color(0xFFFFB02E),
+          unselectedItemColor: Colors.white.withValues(alpha: 0.62),
+          selectedFontSize: 11,
+          unselectedFontSize: 11,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w800),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
+          items: [
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.home_outlined),
+              activeIcon: const Icon(Icons.home_rounded),
+              label: l.navHome,
             ),
-            const SizedBox(height: 3),
-            Text(
-              dest.label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: selected ? Colors.white : idle,
-                fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
-                fontSize: 11,
-                height: 1.1,
-              ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.groups_outlined),
+              activeIcon: const Icon(Icons.groups_rounded),
+              label: l.navAstrologers,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.auto_awesome_outlined),
+              activeIcon: const Icon(Icons.auto_awesome_rounded),
+              label: l.remediesTitle,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.live_tv_outlined),
+              activeIcon: const Icon(Icons.live_tv_rounded),
+              label: l.navLive,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.person_outline_rounded),
+              activeIcon: const Icon(Icons.person_rounded),
+              label: l.navProfile,
             ),
           ],
         ),

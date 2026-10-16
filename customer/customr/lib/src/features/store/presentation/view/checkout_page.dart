@@ -289,6 +289,7 @@ class _AddressSection extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(child: Text(l.storeNoAddressesBody)),
             FilledButton.tonal(
+              style: FilledButton.styleFrom(minimumSize: const Size(0, 40)),
               onPressed: () => _add(context),
               child: Text(l.storeAddAddress),
             ),

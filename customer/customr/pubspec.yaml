@@ -1,7 +1,7 @@
 name: customr
 description: "TalkAcharya — customer app (astrology consultation marketplace)."
 publish_to: 'none'
-version: 1.1.5+15
+version: 1.1.9+19
 
 environment:
   sdk: ^3.11.0
@@ -89,6 +89,8 @@ dependencies:
   # shared paid-predictions layer (models + labels + widgets)
   talkacharya_predictions:
     path: ../../packages/talkacharya_predictions
+  talkacharya_assistant:
+    path: ../../packages/talkacharya_assistant
 
   # models / codegen
   freezed_annotation: ^3.1.0
@@ -131,14 +133,14 @@ flutter_launcher_icons:
 # `dart run flutter_native_splash:create` — branded launch screen (incl. Android 12+
 # SplashScreen API) so cold start shows the logo instead of a blank white window.
 flutter_native_splash:
-  color: "#FFF8F4"
+  color: "#FFFFFF"
   image: assets/icons/logo.jpeg
   color_dark: "#17120E"
   image_dark: assets/icons/logo.jpeg
   android_12:
-    color: "#FFF8F4"
+    color: "#FFFFFF"
     image: assets/icons/logo.jpeg
-    icon_background_color: "#FFF8F4"
+    icon_background_color: "#FFFFFF"
     color_dark: "#17120E"
     image_dark: assets/icons/logo.jpeg
     icon_background_color_dark: "#17120E"
@@ -147,7 +149,7 @@ flutter_native_splash:
 
 flutter:
   uses-material-design: true
-  generate: true   # gen-l10n from lib/l10n/*.arb — see l10n.yaml
+  generate: true
 
   assets:
     - assets/images/
