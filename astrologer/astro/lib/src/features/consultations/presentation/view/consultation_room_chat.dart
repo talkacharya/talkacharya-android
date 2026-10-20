@@ -10,9 +10,7 @@ class _RoomView extends StatelessWidget {
       builder: (context, state) {
         final c = state.consultation;
         if (state.loading) {
-          return const Scaffold(
-            body: Center(child: ChatRoomSkeleton()),
-          );
+          return const Scaffold(body: Center(child: ChatRoomSkeleton()));
         }
         if (c == null) {
           return Scaffold(
@@ -119,11 +117,15 @@ class _ChatRoomState extends State<_ChatRoom> {
                     ),
                   ),
                   if (ended)
-                    Text(
-                      l.roomEndedTitle,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    // "typing…" still shows: the free follow-up after a
+                    // session is a conversation too.
+                    ChatHeaderStatus(
+                      idle: Text(
+                        l.roomEndedTitle,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     )
                   else
@@ -488,4 +490,3 @@ class _AutoTranslateToggle extends StatelessWidget {
     );
   }
 }
-

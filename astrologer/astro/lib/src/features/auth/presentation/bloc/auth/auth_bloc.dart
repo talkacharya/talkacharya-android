@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/network/api_exception.dart';
+import '../../../../consultations/data/room_snapshots.dart';
 import '../../../data/auth_repository.dart';
 import '../../../data/models/auth_user.dart';
 
@@ -67,6 +68,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // session they are trying to leave.
     try {
       await getIt<ChatMediaStore>().clear();
+      await RoomSnapshots(getIt()).clear();
     } catch (_) {}
     emit(const AuthState.unauthenticated());
   }

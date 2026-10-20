@@ -103,6 +103,11 @@ class ChatController extends Cubit<ChatSessionState> {
   static const _kOpenPage = 60;
   static const _kOlderPage = 40;
 
+  /// Catching up after the room was away: pages of this many, forward from the
+  /// newest message the phone has, up to [_kCatchUpPages] of them.
+  static const _kCatchUpPage = 100;
+  static const _kCatchUpPages = 5;
+
   final _rng = Random();
   StreamSubscription<Map<String, dynamic>>? _frames;
   StreamSubscription<Map<String, dynamic>>? _typingFrames;
@@ -154,17 +159,29 @@ class ChatController extends Cubit<ChatSessionState> {
     try {
       final maxSeq = cached.fold<int>(0, (max, m) => m.seq > max ? m.seq : max);
 
-      final List<ChatMessage> history;
+      var history = <ChatMessage>[];
+      // Whether what is on screen and what just came join up with no hole.
+      var joined = true;
       if (maxSeq > 0) {
-        // Delta sync: fetch ONLY new messages received after maxSeq
-        history = await _t.history(afterSeq: maxSeq, limit: 50);
+        // Delta sync: everything after the newest message on the phone — all of
+        // it, a page at a time. One page used to be all it took, so a room more
+        // than a page behind opened without its newest messages.
+        final caught = await _fetchAfter(maxSeq, maxPages: _kCatchUpPages);
+        history = caught.messages;
+        if (!caught.complete) {
+          // Too far behind to walk forward: open on the newest page instead.
+          // The device's older copy stays on disk; scrolling up fills the gap
+          // from the server, since the cache never answers across a hole.
+          history = await _t.history(limit: _kOpenPage);
+          joined = false;
+        }
       } else {
         // First time on this device: fetch latest page
         history = await _t.history(limit: _kOpenPage);
       }
 
       unawaited(_remember(history));
-      final merged = [...state.messages];
+      final merged = joined ? [...state.messages] : <ChatMessage>[];
       for (final m in history) {
         _mergeInto(merged, m);
       }
@@ -177,7 +194,9 @@ class ChatController extends Cubit<ChatSessionState> {
           error: null,
           messages: _sorted(merged),
           // The server's newest page is short: this is the entire thread
-          hasMoreOlder: maxSeq > 0
+          hasMoreOlder: !joined
+              ? true
+              : maxSeq > 0
               ? state.hasMoreOlder
               : (history.length >= _kOpenPage),
         ),
@@ -303,12 +322,32 @@ class ChatController extends Cubit<ChatSessionState> {
 
   Future<void> _backfill() async {
     try {
-      final fresh = await _t.history(afterSeq: state.lastSeq, limit: 100);
-      for (final m in fresh) {
+      // Every message missed while the socket was down, not just the first page.
+      final caught = await _fetchAfter(state.lastSeq, maxPages: 20);
+      for (final m in caught.messages) {
         _merge(m);
       }
-      if (fresh.isNotEmpty) _bumpSeen();
+      if (caught.messages.isNotEmpty) _bumpSeen();
     } catch (_) {}
+  }
+
+  /// Messages after [afterSeq], oldest first, a page at a time until the server
+  /// runs out — or [maxPages] pages, when [complete] says there is more.
+  Future<({List<ChatMessage> messages, bool complete})> _fetchAfter(
+    int afterSeq, {
+    required int maxPages,
+  }) async {
+    final out = <ChatMessage>[];
+    var from = afterSeq;
+    for (var page = 0; page < maxPages; page++) {
+      final batch = await _t.history(afterSeq: from, limit: _kCatchUpPage);
+      out.addAll(batch);
+      if (batch.length < _kCatchUpPage) return (messages: out, complete: true);
+      final last = batch.fold<int>(from, (m, x) => x.seq > m ? x.seq : m);
+      if (last <= from) return (messages: out, complete: true);
+      from = last;
+    }
+    return (messages: out, complete: false);
   }
 
   // --- poll fallback (only while the socket is down) --------------------

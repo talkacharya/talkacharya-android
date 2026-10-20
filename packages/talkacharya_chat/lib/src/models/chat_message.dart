@@ -13,6 +13,10 @@ abstract class ChatAttachment with _$ChatAttachment {
     @Default('') String contentType,
     @Default(0) int sizeBytes,
     @Default(0) int durationSeconds,
+    // A photo's shape as shown (0 = unknown: older photos, or still uploading).
+    // The bubble is drawn at this shape before the picture loads.
+    @Default(0) int width,
+    @Default(0) int height,
     @Default('') String url,
     // client-only: local file path while an optimistic upload is in flight
     @Default('') String localPath,
@@ -32,6 +36,8 @@ abstract class ChatAttachment with _$ChatAttachment {
     contentType: j['content_type'] as String? ?? '',
     sizeBytes: (j['size_bytes'] as num?)?.toInt() ?? 0,
     durationSeconds: (j['duration_seconds'] as num?)?.toInt() ?? 0,
+    width: (j['width'] as num?)?.toInt() ?? 0,
+    height: (j['height'] as num?)?.toInt() ?? 0,
     url: j['url'] as String? ?? '',
     available: j['available'] as bool? ?? true,
     expiresAt: DateTime.tryParse('${j['expires_at'] ?? ''}'),
@@ -46,6 +52,8 @@ abstract class ChatAttachment with _$ChatAttachment {
     'content_type': contentType,
     'size_bytes': sizeBytes,
     'duration_seconds': durationSeconds,
+    'width': width,
+    'height': height,
     'url': url,
     'available': available,
     'expires_at': expiresAt?.toIso8601String(),
@@ -181,6 +189,7 @@ abstract class ChatMessage with _$ChatMessage {
       name: _sharedName(shareSummary),
     );
   }
+
   String get systemEvent => meta['event'] as String? ?? '';
   String get dedupeKey =>
       clientMessageId.isNotEmpty ? 'c:$clientMessageId' : 'i:$id';
@@ -197,7 +206,6 @@ abstract class ChatMessage with _$ChatMessage {
   bool hasTranslationFor(String lang) =>
       translations.containsKey(lang.split('-').first);
 }
-
 
 /// The target of a shared-details card. [id] is the birth profile's id, or the
 /// match's; [consultationId] is the session it was shared in, which is what
@@ -224,9 +232,10 @@ String _sharedName(Map<String, dynamic> summary) {
   }
 
   if (summary['boy'] != null || summary['girl'] != null) {
-    return [nameOf(summary['boy']), nameOf(summary['girl'])]
-        .where((n) => n.isNotEmpty)
-        .join(' & ');
+    return [
+      nameOf(summary['boy']),
+      nameOf(summary['girl']),
+    ].where((n) => n.isNotEmpty).join(' & ');
   }
   return nameOf(summary);
 }

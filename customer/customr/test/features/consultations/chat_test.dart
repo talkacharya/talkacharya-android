@@ -11,7 +11,25 @@ import 'package:customr/src/features/consultations/presentation/view/widgets/qui
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class _MockRepo extends Mock implements ConsultationRepository {}
+class _MockRepo extends Mock implements ConsultationRepository {
+  // The room's network reads go through the same stubs the tests set up; no
+  // snapshot unless a test gives one.
+  ({Conversation? conversation, Consultation? consultation}) snap = (
+    conversation: null,
+    consultation: null,
+  );
+
+  @override
+  Future<({Conversation? conversation, Consultation? consultation})> snapshot(
+    String id,
+  ) async => snap;
+
+  @override
+  Future<Conversation> freshConversation(String id) => conversation(id);
+
+  @override
+  Future<Consultation> freshDetail(String id) => detail(id);
+}
 
 class _FakeRealtime extends Fake implements RealtimeClient {
   final frames = StreamController<Map<String, dynamic>>.broadcast();
@@ -56,6 +74,48 @@ void main() {
 
   ChatCubit build() =>
       ChatCubit(repo: repo, realtime: realtime, consultationId: 'c1');
+
+  group('opening a room', () {
+    const thread = Conversation(
+      id: 't1',
+      astrologerId: 'a1',
+      peerName: 'Ravi',
+      window: SendingWindow(canSend: true, consultationId: 'c1'),
+      lastConsultationId: 'c1',
+    );
+
+    test('a chat opens on its snapshot before the server answers', () async {
+      final slow = Completer<Conversation>();
+      repo.snap = (conversation: thread, consultation: _active());
+      when(() => repo.conversation('c1')).thenAnswer((_) => slow.future);
+      final cubit = build();
+      unawaited(cubit.init());
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state.loading, isFalse);
+      expect(cubit.state.consultation?.id, 'c1');
+      slow.complete(thread);
+      await Future<void>.delayed(Duration.zero);
+      await cubit.close();
+    });
+
+    test('a call that may be live waits for the server', () async {
+      final slow = Completer<Conversation>();
+      repo.snap = (
+        conversation: thread,
+        consultation: _active().copyWith(channel: 'voice'),
+      );
+      when(() => repo.conversation('c1')).thenAnswer((_) => slow.future);
+      final cubit = build();
+      unawaited(cubit.init());
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state.loading, isTrue);
+      expect(cubit.state.consultation, isNull);
+      slow.complete(thread);
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(cubit.state.loading, isFalse);
+      await cubit.close();
+    });
+  });
 
   group('a session asked for from inside the room', () {
     Consultation pending() => const Consultation(
@@ -398,30 +458,39 @@ void main() {
     await cubit.close();
   });
 
-  test('a hold that ran out clears too, so nothing counts down forever', () async {
-    final cubit = build();
-    await cubit.init();
-    realtime.frames.add({
-      'type': 'billing.awaiting_payment',
-      'data': {'until': DateTime.now().toIso8601String()},
-    });
-    await Future<void>.delayed(Duration.zero);
-    expect(cubit.state.awaitingPayment, isTrue);
+  test(
+    'a hold that ran out clears too, so nothing counts down forever',
+    () async {
+      final cubit = build();
+      await cubit.init();
+      realtime.frames.add({
+        'type': 'billing.awaiting_payment',
+        'data': {'until': DateTime.now().toIso8601String()},
+      });
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state.awaitingPayment, isTrue);
 
-    realtime.frames.add({'type': 'billing.payment_grace_expired', 'data': {}});
-    await Future<void>.delayed(Duration.zero);
-    expect(cubit.state.awaitingPayment, isFalse);
-    await cubit.close();
-  });
+      realtime.frames.add({
+        'type': 'billing.payment_grace_expired',
+        'data': {},
+      });
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state.awaitingPayment, isFalse);
+      await cubit.close();
+    },
+  );
 
   group('QuickTopUp.amountFor', () {
-    test('rounds to an amount a person would pick, never below the minimum', () {
-      // ₹25/min for 10 minutes = 250 -> a round 300, not 250.
-      expect(QuickTopUp.amountFor(25, 10), 300);
-      expect(QuickTopUp.amountFor(25, 25), 700);
-      // A cheap astrologer must not produce a sub-minimum top-up.
-      expect(QuickTopUp.amountFor(2, 10, minimum: 100), 100);
-    });
+    test(
+      'rounds to an amount a person would pick, never below the minimum',
+      () {
+        // ₹25/min for 10 minutes = 250 -> a round 300, not 250.
+        expect(QuickTopUp.amountFor(25, 10), 300);
+        expect(QuickTopUp.amountFor(25, 25), 700);
+        // A cheap astrologer must not produce a sub-minimum top-up.
+        expect(QuickTopUp.amountFor(2, 10, minimum: 100), 100);
+      },
+    );
   });
 
   test('switching to a call hands back the new session', () async {
@@ -517,7 +586,9 @@ void main() {
     realtime.frames.add({
       'type': 'billing.awaiting_payment',
       'data': {
-        'until': DateTime.now().add(const Duration(minutes: 2)).toIso8601String(),
+        'until': DateTime.now()
+            .add(const Duration(minutes: 2))
+            .toIso8601String(),
       },
     });
     await Future<void>.delayed(const Duration(milliseconds: 2100));

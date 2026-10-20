@@ -208,6 +208,45 @@ class _Sounds implements ChatSounds {
 }
 
 void main() {
+  group('catching up after being away', () {
+    ChatMessage msg(int seq) =>
+        ChatMessage(id: 'm$seq', seq: seq, body: 'message $seq');
+
+    ChatController room(_PagingTransport t, _MemStore store) => ChatController(
+      threadId: 'c1',
+      transport: t,
+      realtime: _FakeRealtime(),
+      identity: _Identity(),
+      store: store,
+      tts: _NoTts(),
+      stt: _NoStt(),
+    );
+
+    test('opens with every message since last time, not one page', () async {
+      final store = _MemStore([for (var i = 1; i <= 10; i++) msg(i)]);
+      final t = _PagingTransport([for (var i = 1; i <= 260; i++) msg(i)]);
+      final c = room(t, store);
+      await c.start();
+      expect(c.state.messages.last.seq, 260);
+      expect(c.state.messages.map((m) => m.seq).toSet().length, 260);
+      await c.close();
+    });
+
+    test('far behind, it opens on the newest page with no hole', () async {
+      final store = _MemStore([for (var i = 1; i <= 10; i++) msg(i)]);
+      final t = _PagingTransport([for (var i = 1; i <= 900; i++) msg(i)]);
+      final c = room(t, store);
+      await c.start();
+      final seqs = c.state.messages.map((m) => m.seq).toList();
+      expect(seqs.last, 900);
+      // contiguous: the old cached ten are not shown above a gap
+      expect(seqs.first, greaterThan(10));
+      expect(seqs.last - seqs.first + 1, seqs.length);
+      expect(c.state.hasMoreOlder, isTrue);
+      await c.close();
+    });
+  });
+
   _receiptAndOrderTests();
 
   test(
@@ -865,4 +904,48 @@ void _receiptAndOrderTests() {
       await c.close();
     });
   });
+}
+
+/// A server that honours `afterSeq`, `beforeSeq` and `limit` like the real one.
+class _PagingTransport extends _FakeTransport {
+  _PagingTransport(this.all);
+  final List<ChatMessage> all;
+
+  @override
+  Future<List<ChatMessage>> history({
+    int afterSeq = 0,
+    int? beforeSeq,
+    int limit = 50,
+  }) async {
+    if (beforeSeq != null) {
+      final older = all.where((m) => m.seq < beforeSeq).toList();
+      return older.sublist(older.length > limit ? older.length - limit : 0);
+    }
+    if (afterSeq > 0) {
+      return all.where((m) => m.seq > afterSeq).take(limit).toList();
+    }
+    return all.sublist(all.length > limit ? all.length - limit : 0);
+  }
+}
+
+class _MemStore extends ChatStore {
+  _MemStore(this.rows);
+  final List<ChatMessage> rows;
+
+  @override
+  Future<List<ChatMessage>> newest(String threadId, {int limit = 60}) async =>
+      rows.length > limit ? rows.sublist(rows.length - limit) : rows;
+
+  @override
+  Future<List<ChatMessage>?> before(
+    String threadId,
+    int beforeSeq, {
+    int limit = 40,
+  }) async => null;
+
+  @override
+  Future<void> save(String threadId, List<ChatMessage> messages) async {}
+
+  @override
+  Future<void> clear(String threadId) async {}
 }

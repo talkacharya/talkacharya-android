@@ -251,6 +251,8 @@ const _fast = CallTimings(
   reofferCooldown: Duration(milliseconds: 10),
   stats: Duration(milliseconds: 50),
   networkSettle: Duration(milliseconds: 10),
+  disconnectGrace: Duration(milliseconds: 5),
+  recoverEvery: Duration(seconds: 1),
 );
 
 /// Long enough that nothing in a test reaches it by waiting — so a recovery
@@ -421,6 +423,77 @@ void main() {
       expect(sounds.played, ['ring', 'stop']);
       await c.close();
       expect(sounds.played.where((x) => x == 'ring'), hasLength(1));
+    });
+  });
+
+  group('a shaky line', () {
+    Future<({_Side cust, _Side astro})> connected(CallTimings t) async {
+      final hub = _Hub();
+      final cust = _side('customer', hub, timings: t);
+      final astro = _side('astrologer', hub, timings: t);
+      await cust.c.start();
+      await astro.c.start();
+      await _settle();
+      cust.engine.last.ice.add(RtcIceState.connected);
+      await _settle(20);
+      return (cust: cust, astro: astro);
+    }
+
+    test('a blink ICE recovers from by itself shows nothing', () async {
+      const t = CallTimings(
+        hello: Duration(milliseconds: 40),
+        reofferCooldown: Duration(milliseconds: 10),
+        stats: Duration(milliseconds: 50),
+        disconnectGrace: Duration(milliseconds: 200),
+      );
+      final s = await connected(t);
+      final reportsBefore = s.cust.backend.reports.length;
+      s.cust.engine.last.ice.add(RtcIceState.disconnected);
+      await _settle(50);
+      expect(s.cust.c.state.phase, CallPhase.connected);
+      s.cust.engine.last.ice.add(RtcIceState.connected);
+      await _settle(300);
+      expect(s.cust.c.state.phase, CallPhase.connected);
+      expect(
+        s.cust.backend.reports.skip(reportsBefore),
+        isNot(contains(CallNetState.reconnecting)),
+      );
+      await s.cust.c.close();
+      await s.astro.c.close();
+    });
+
+    test('recovery keeps trying until the line comes back', () async {
+      const t = CallTimings(
+        hello: Duration(milliseconds: 40),
+        reconnectAfter: Duration(milliseconds: 10),
+        reofferCooldown: Duration(milliseconds: 10),
+        stats: Duration(seconds: 5),
+        disconnectGrace: Duration(milliseconds: 5),
+        recoverEvery: Duration(milliseconds: 40),
+      );
+      final s = await connected(t);
+      final peer = s.cust.engine.last;
+      final offersBefore = peer.offers.length;
+      peer.ice.add(RtcIceState.disconnected);
+      await _settle(250);
+      expect(s.cust.c.state.phase, CallPhase.reconnecting);
+      // not one restart but several, while it stays down
+      expect(peer.offers.length - offersBefore, greaterThan(2));
+      expect(
+        peer.offers.skip(offersBefore),
+        everyElement(isTrue),
+      ); // ICE restarts
+      peer.ice.add(RtcIceState.connected);
+      await _settle(20);
+      final settled = peer.offers.length;
+      await _settle(200);
+      expect(
+        peer.offers.length,
+        settled,
+        reason: 'stops retrying once connected',
+      );
+      await s.cust.c.close();
+      await s.astro.c.close();
     });
   });
 

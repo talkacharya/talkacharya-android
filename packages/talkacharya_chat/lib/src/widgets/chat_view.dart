@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +13,6 @@ import 'pinned_bar.dart';
 import 'message_bubble.dart';
 import 'message_grouping.dart';
 import 'swipe_to_reply.dart';
-import 'typing_indicator.dart';
 
 /// The full chat surface: connection banner + message list (with day separators,
 /// scroll-up pagination, typing indicator) + composer. Drop it in a Scaffold
@@ -76,11 +78,25 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
   /// animate only those. Cleared after the post-frame callback fires.
   final Set<String> _newKeys = {};
 
+  /// Where each message on screen (or just off it) is, by its number: what a
+  /// tap on a reply or a pin scrolls to exactly, instead of a guess.
+  final Map<int, BuildContext> _mounted = {};
+
+  /// The message just jumped to, lit up for a moment so the eye finds it.
+  int? _flashSeq;
+  Timer? _flashTimer;
+
   @override
   void initState() {
     super.initState();
     _scroll.addListener(_onScroll);
     WidgetsBinding.instance.addObserver(this);
+    // What is already on screen when the room mounts — loaded before it, from
+    // the phone. Without this the first message after it was never "new":
+    // no scroll down for one's own, no count for theirs.
+    final open = context.read<ChatController>().state;
+    _knownKeys.addAll(open.messages.map((m) => m.dedupeKey));
+    _maxSeq = open.lastSeq;
     final now = WidgetsBinding.instance.lifecycleState;
     if (now != null) {
       context.read<ChatController>().setForeground(
@@ -101,13 +117,18 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _flashTimer?.cancel();
     _scroll.dispose();
     super.dispose();
   }
 
   void _onScroll() {
-    // reverse:true — hitting the max extent means we've scrolled to the top.
-    if (_scroll.position.pixels >= _scroll.position.maxScrollExtent - 200) {
+    // reverse:true — the max extent is the top. Ask for the older page about
+    // two screens before getting there, so it is in place by the time the
+    // reader is, rather than them stopping at a spinner.
+    final position = _scroll.position;
+    final ahead = max(1200.0, position.viewportDimension * 2);
+    if (position.pixels >= position.maxScrollExtent - ahead) {
       context.read<ChatController>().loadOlder();
     }
     // ...and offset 0 is the newest message.
@@ -135,8 +156,16 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
   // the bottom. Use addPostFrameCallback so the list has settled before we
   // measure — this prevents the layout-first-then-jerk problem.
   // ---------------------------------------------------------------------------
-  void _handleNewMessages(int arrived) {
+  void _handleNewMessages(int arrived, {required bool mine}) {
     if (!_scroll.hasClients) return;
+    // Something this person just sent: they want to see it go, wherever they
+    // were reading — as in every messenger.
+    if (mine) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _toBottom();
+      });
+      return;
+    }
     if (_away) {
       setState(() => _missed += arrived);
     } else {
@@ -169,7 +198,6 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
           a.messages.length != b.messages.length ||
           a.loading != b.loading ||
           a.loadingOlder != b.loadingOlder ||
-          a.otherTyping != b.otherTyping ||
           a.replyingTo != b.replyingTo,
       listener: (context, state) {
         final jump = state.jumpToSeq;
@@ -181,12 +209,15 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
         // anything shown. An older page loading above is neither animated nor
         // counted as "new messages". The very first fill animates nothing.
         var arrived = 0;
+        var mine = false;
+        final me = context.read<ChatController>().identity.role;
         if (_knownKeys.isNotEmpty) {
           for (final m in state.messages) {
             if (_knownKeys.contains(m.dedupeKey)) continue;
             if (m.seq <= 0 || m.seq > _maxSeq) {
               _newKeys.add(m.dedupeKey);
               arrived++;
+              if (m.seq <= 0 && m.senderRole == me) mine = true;
             }
           }
         }
@@ -194,7 +225,7 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
           ..clear()
           ..addAll(state.messages.map((m) => m.dedupeKey));
         if (state.lastSeq > _maxSeq) _maxSeq = state.lastSeq;
-        if (arrived > 0) _handleNewMessages(arrived);
+        if (arrived > 0) _handleNewMessages(arrived, mine: mine);
       },
       builder: (context, state) {
         if (state.loading && state.messages.isEmpty) {
@@ -249,7 +280,6 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
                       final row = rows[i];
                       return switch (row) {
                         _FooterRow() => widget.footer!,
-                        _TypingRow() => const TypingIndicator(),
                         _DateRow(:final label) => _DaySeparator(label: label),
                         _MsgRow(
                           :final message,
@@ -261,6 +291,10 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
                           // widget when the list grows.
                           _MessageEntry(
                             key: ValueKey(message.dedupeKey),
+                            seq: message.seq,
+                            registry: _mounted,
+                            highlight:
+                                _flashSeq != null && _flashSeq == message.seq,
                             animate: _newKeys.contains(message.dedupeKey),
                             child: _SeenReporter(
                               seq: message.seq,
@@ -324,22 +358,52 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
     );
   }
 
-  /// Newest-first rows (list is reverse:true) with day separators + a typing row.
-  void _scrollToSeq(int seq, ChatSessionState state) {
+  /// Scroll to message [seq] and light it up. A bubble already built is
+  /// scrolled to exactly; one far off is approached by estimate first (rows
+  /// have no fixed height), then found and scrolled to once it is built.
+  Future<void> _scrollToSeq(int seq, ChatSessionState state) async {
     final rows = _rows(state);
     final index = rows.indexWhere((r) => r is _MsgRow && r.message.seq == seq);
-    if (index < 0 || !_scroll.hasClients) return;
-    _scroll.animateTo(
-      (index * 72.0).clamp(0.0, _scroll.position.maxScrollExtent),
-      duration: const Duration(milliseconds: 280),
-      curve: Curves.easeOutCubic,
-    );
+    if (index < 0) return;
+    for (var attempt = 0; attempt < 6; attempt++) {
+      if (!mounted || !_scroll.hasClients) return;
+      final ctx = _mounted[seq];
+      if (ctx != null && ctx.mounted) {
+        await Scrollable.ensureVisible(
+          ctx,
+          alignment: 0.4,
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic,
+        );
+        _flash(seq);
+        return;
+      }
+      final position = _scroll.position;
+      final perRow = rows.isEmpty
+          ? 72.0
+          : (position.maxScrollExtent + position.viewportDimension) /
+                rows.length;
+      _scroll.jumpTo(
+        (index * perRow).clamp(0.0, position.maxScrollExtent).toDouble(),
+      );
+      await WidgetsBinding.instance.endOfFrame;
+    }
   }
+
+  void _flash(int seq) {
+    if (!mounted) return;
+    _flashTimer?.cancel();
+    setState(() => _flashSeq = seq);
+    _flashTimer = Timer(const Duration(milliseconds: 1400), () {
+      if (mounted) setState(() => _flashSeq = null);
+    });
+  }
+
+  /// Newest-first rows (list is reverse:true) with day separators.
 
   List<_Row> _rows(ChatSessionState state) {
     final out = <_Row>[];
     if (widget.footer != null) out.add(const _FooterRow());
-    if (state.otherTyping) out.add(const _TypingRow());
     final msgs = state.messages;
     for (var i = msgs.length - 1; i >= 0; i--) {
       final m = msgs[i];
@@ -417,10 +481,25 @@ class _PinnedBarBridge extends StatelessWidget {
 /// When [animate] is false (for existing messages on a re-render) this is a
 /// zero-cost transparent passthrough — no AnimationController is created.
 class _MessageEntry extends StatefulWidget {
-  const _MessageEntry({required this.child, required this.animate, super.key});
+  const _MessageEntry({
+    required this.child,
+    required this.animate,
+    required this.seq,
+    required this.registry,
+    this.highlight = false,
+    super.key,
+  });
 
   final Widget child;
   final bool animate;
+
+  /// This message's number, and the map it says where it is in (see
+  /// `_ChatViewState._mounted`). 0 = not sent yet: nothing jumps to it.
+  final int seq;
+  final Map<int, BuildContext> registry;
+
+  /// Lit for a moment after a jump to it.
+  final bool highlight;
 
   @override
   State<_MessageEntry> createState() => _MessageEntryState();
@@ -432,9 +511,30 @@ class _MessageEntryState extends State<_MessageEntry>
   Animation<double>? _opacity;
   Animation<Offset>? _slide;
 
+  void _register() {
+    if (widget.seq > 0) widget.registry[widget.seq] = context;
+  }
+
+  void _unregister(int seq) {
+    if (seq > 0 && identical(widget.registry[seq], context)) {
+      widget.registry.remove(seq);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _MessageEntry old) {
+    super.didUpdateWidget(old);
+    // An unsent message gets its number from the server.
+    if (old.seq != widget.seq) {
+      _unregister(old.seq);
+      _register();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _register();
     if (widget.animate) {
       _ctrl = AnimationController(
         vsync: this,
@@ -452,20 +552,31 @@ class _MessageEntryState extends State<_MessageEntry>
 
   @override
   void dispose() {
+    _unregister(widget.seq);
     _ctrl?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final lit = AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      decoration: BoxDecoration(
+        color: widget.highlight
+            ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.12)
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: widget.child,
+    );
     final ctrl = _ctrl;
-    if (ctrl == null) return widget.child; // no animation — just render
+    if (ctrl == null) return lit; // no animation — just render
     return SizeTransition(
       sizeFactor: _opacity!,
       axisAlignment: 1.0, // 1.0 aligns child to the bottom as it grows
       child: FadeTransition(
         opacity: _opacity!,
-        child: SlideTransition(position: _slide!, child: widget.child),
+        child: SlideTransition(position: _slide!, child: lit),
       ),
     );
   }
@@ -501,10 +612,6 @@ class _DateRow extends _Row {
   const _DateRow(this.label);
 
   final String label;
-}
-
-class _TypingRow extends _Row {
-  const _TypingRow();
 }
 
 class _DaySeparator extends StatelessWidget {
@@ -595,7 +702,12 @@ class _LiveMessage extends StatelessWidget {
 
 /// A compact "online · typing… · last seen" line for the app's AppBar.
 class ChatHeaderStatus extends StatelessWidget {
-  const ChatHeaderStatus({super.key});
+  const ChatHeaderStatus({this.idle, super.key});
+
+  /// Shown instead of online / last seen when the other side isn't typing —
+  /// e.g. a finished session's "ended". Typing always shows: the free
+  /// follow-up after a session is still a conversation.
+  final Widget? idle;
 
   @override
   Widget build(BuildContext context) {
@@ -606,6 +718,7 @@ class ChatHeaderStatus extends StatelessWidget {
           a.connection != b.connection,
       builder: (context, state) {
         final scheme = Theme.of(context).colorScheme;
+        if (!state.otherTyping && idle != null) return idle!;
         final (String text, Color color) = state.otherTyping
             ? ('typing…', scheme.primary)
             : state.presence.otherOnline

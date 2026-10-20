@@ -169,8 +169,8 @@ class _MessageBubbleState extends State<MessageBubble> {
                           : () => _openImage(context, Image.network(a.url)),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxHeight: 260),
+                        child: PhotoFrame(
+                          attachment: a,
                           child: a.localPath.isNotEmpty
                               ? Image.file(
                                   File(a.localPath),
@@ -283,18 +283,17 @@ class _MessageBubbleState extends State<MessageBubble> {
 
   void _menu(BuildContext context, {required bool mine}) {
     if (_tapPosition == null) return;
-    
-    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
-    
+
+    final RenderBox overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
+
     showMenu<String>(
       context: context,
       position: RelativeRect.fromRect(
         _tapPosition! & const Size(40, 40),
         Offset.zero & overlay.size,
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 6,
       items: [
         if (m.seq > 0)
@@ -313,7 +312,10 @@ class _MessageBubbleState extends State<MessageBubble> {
             value: 'pin',
             child: Row(
               children: [
-                Icon(_pinned ? Icons.push_pin : Icons.push_pin_outlined, size: 20),
+                Icon(
+                  _pinned ? Icons.push_pin : Icons.push_pin_outlined,
+                  size: 20,
+                ),
                 const SizedBox(width: 12),
                 Text(_pinned ? 'Unpin' : 'Pin'),
               ],
@@ -341,7 +343,9 @@ class _MessageBubbleState extends State<MessageBubble> {
               ],
             ),
           ),
-        if (!mine && m.body.isNotEmpty && !m.hasTranslationFor(c.identity.language))
+        if (!mine &&
+            m.body.isNotEmpty &&
+            !m.hasTranslationFor(c.identity.language))
           const PopupMenuItem(
             value: 'translate',
             child: Row(
@@ -448,7 +452,6 @@ class _MessageBubbleState extends State<MessageBubble> {
       ),
     );
   }
-
 }
 
 /// Full screen, pinch to zoom.
@@ -467,6 +470,39 @@ void _openImage(BuildContext context, Widget image) {
   );
 }
 
+/// A chat photo's box, sized from the photo's own shape before a pixel of it
+/// has loaded — so a bubble is drawn once, at its final size, and the messages
+/// around it never move when the picture arrives. Very tall or very wide
+/// photos are cropped to a sane box; a photo of unknown shape gets a 4:5 one.
+class PhotoFrame extends StatelessWidget {
+  const PhotoFrame({required this.attachment, required this.child, super.key});
+
+  final ChatAttachment attachment;
+  final Widget child;
+
+  static const maxWidth = 240.0;
+  static const maxHeight = 280.0;
+
+  static Size sizeOf(ChatAttachment a) {
+    final known = a.width > 0 && a.height > 0;
+    final aspect = known ? (a.width / a.height).clamp(0.6, 1.8) : 0.8;
+    var w = maxWidth;
+    var h = w / aspect;
+    if (h > maxHeight) {
+      h = maxHeight;
+      w = h * aspect;
+    }
+    return Size(w, h);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final size = sizeOf(attachment);
+    // Tight constraints: the picture inside (BoxFit.cover) fills the box.
+    return SizedBox(width: size.width, height: size.height, child: child);
+  }
+}
+
 /// A chat photo read off the device — downloaded once, the first time it is
 /// shown, and never fetched from the server again.
 class _DevicePhoto extends StatelessWidget {
@@ -480,11 +516,9 @@ class _DevicePhoto extends StatelessWidget {
   final ChatMediaStore store;
   final Color tint;
 
-  static const _box = Size(220, 160);
-
   Widget _placeholder(Widget child) => Container(
-    width: _box.width,
-    height: _box.height,
+    width: PhotoFrame.sizeOf(attachment).width,
+    height: PhotoFrame.sizeOf(attachment).height,
     decoration: BoxDecoration(
       color: tint.withValues(alpha: 0.10),
       borderRadius: BorderRadius.circular(10),
@@ -502,8 +536,8 @@ class _DevicePhoto extends StatelessWidget {
         onTap: () => _openImage(context, Image.file(File(path))),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 260),
+          child: PhotoFrame(
+            attachment: attachment,
             child: Image.file(
               File(path),
               fit: BoxFit.cover,
@@ -600,8 +634,10 @@ IconData systemIcon(ChatMessage m) {
           ? Icons.videocam_rounded
           : (call ? Icons.call_rounded : Icons.chat_bubble_rounded),
     'ended' => call ? Icons.call_end_rounded : Icons.check_circle_outline,
-    'rejected' || 'cancelled' || 'expired' || 'no_show' =>
-      call ? Icons.phone_missed_rounded : Icons.block_rounded,
+    'rejected' ||
+    'cancelled' ||
+    'expired' ||
+    'no_show' => call ? Icons.phone_missed_rounded : Icons.block_rounded,
     'ending_soon' => Icons.hourglass_bottom_rounded,
     _ => Icons.info_outline_rounded,
   };

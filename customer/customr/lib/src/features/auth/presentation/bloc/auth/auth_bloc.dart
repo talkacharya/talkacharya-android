@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../../../core/network/api_exception.dart';
+import '../../../../consultations/data/consultation_repository.dart';
 import '../../../data/auth_repository.dart';
 import '../../../data/models/auth_user.dart';
 
@@ -63,6 +64,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // session they are trying to leave.
     try {
       await getIt<FloorChatStore>().clearEverything();
+      await getIt<ConsultationRepository>().clearSnapshots();
     } catch (_) {}
     // And the photos and voice notes kept alongside it.
     try {

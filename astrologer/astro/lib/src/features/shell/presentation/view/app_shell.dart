@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:talkacharya_call/talkacharya_call.dart';
 import 'package:talkacharya_sounds/talkacharya_sounds.dart';
 
 import '../../../../core/di/service_locator.dart';
@@ -66,6 +67,19 @@ class _AppShellState extends State<AppShell> {
     super.dispose();
   }
 
+  /// The call this phone holds for a consultation that is over, room open or
+  /// not: minimized, nobody else would end it, and it would sit under the mini
+  /// bar "connecting" to a session that is gone.
+  void _settleCall(String consultationId, {required bool ended}) {
+    final hub = getIt<CallHub>();
+    if (!hub.isFor(consultationId)) return;
+    if (ended) {
+      unawaited(hub.controller?.onConsultationEnded());
+    } else {
+      unawaited(hub.release());
+    }
+  }
+
   void _onRealtime(RealtimeEvent event) {
     if (!mounted) return;
     switch (event) {
@@ -106,10 +120,14 @@ class _AppShellState extends State<AppShell> {
         // Withdrawn, timed out or a no-show: the tray, the lock-screen ringing
         // page and Android's ringing call all stop (the sheet closes itself).
         unawaited(stopRingFor(getIt<LocalNotifications>(), consultationId));
+        _settleCall(consultationId, ended: false);
       case InboxPing():
         context.read<NotificationsCubit>().bump();
       case ConsultationEvent(:final kind, :final consultationId):
         context.read<NotificationsCubit>().bump();
+        if (consultationId != null && (kind == 'ended' || kind == 'rejected')) {
+          _settleCall(consultationId, ended: kind == 'ended');
+        }
         // Answered or declined — here or on the astrologer's other phone.
         if ((kind == 'accepted' || kind == 'rejected') &&
             consultationId != null) {

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'consultation_api.dart';
+import 'room_snapshots.dart';
 import 'models/consultation.dart';
 import 'models/conversation.dart';
 import 'models/queue_entry.dart';
@@ -9,9 +10,13 @@ import 'models/queue_entry.dart';
 /// The live chat stream is owned by `talkacharya_chat`'s `ChatController` via
 /// `DioChatTransport` — not this repo.
 class ConsultationRepository {
-  ConsultationRepository(this._api);
+  ConsultationRepository(this._api, [this._snapshots]);
 
   final ConsultationApi _api;
+
+  /// Where each room's last known state is kept between launches. Null in
+  /// tests: rooms then open from the network only.
+  final RoomSnapshots? _snapshots;
   final _conversationCache = <String, Conversation>{};
   final _detailCache = <String, Consultation>{};
 
@@ -79,17 +84,80 @@ class ConsultationRepository {
     String? birthProfileId,
     String? matchId,
   }) async {
-    final c = await _api.share(id, birthProfileId: birthProfileId, matchId: matchId);
+    final c = await _api.share(
+      id,
+      birthProfileId: birthProfileId,
+      matchId: matchId,
+    );
     _cacheConsultation(c);
     return c;
   }
 
+  /// What the room looked like last time — this launch's copy if there is
+  /// one, else the phone's — or nulls. Never touches the network.
+  Future<({Conversation? conversation, Consultation? consultation})> snapshot(
+    String id,
+  ) async {
+    var conversation = _conversationCache[id];
+    if (conversation == null) {
+      final json = await _snapshots?.conversation(id);
+      if (json != null) conversation = Conversation.fromMap(json);
+    }
+    final sessionId = conversation == null
+        ? null
+        : conversation.window.consultationId ??
+              conversation.pendingConsultationId ??
+              conversation.lastConsultationId;
+    Consultation? consultation;
+    if (sessionId != null) {
+      consultation = _detailCache[sessionId];
+      if (consultation == null) {
+        final json = await _snapshots?.consultation(sessionId);
+        if (json != null) consultation = Consultation.fromMap(json);
+      }
+    }
+    return (conversation: conversation, consultation: consultation);
+  }
+
+  /// The thread from the server (and remembered for next time).
+  Future<Conversation> freshConversation(String id) async {
+    final json = await _api.conversationJson(id);
+    final fresh = Conversation.fromMap(json);
+    _cacheConversation(fresh);
+    unawaited(
+      _snapshots?.putConversation({
+        id,
+        fresh.id,
+        ?fresh.lastConsultationId,
+        ?fresh.pendingConsultationId,
+      }, json),
+    );
+    return fresh;
+  }
+
+  /// The session from the server (and remembered for next time).
+  Future<Consultation> freshDetail(String id) async {
+    final json = await _api.detailJson(id);
+    final fresh = Consultation.fromMap(json);
+    _cacheConsultation(fresh);
+    unawaited(_snapshots?.putConsultation(fresh.id, json));
+    return fresh;
+  }
+
+  /// Forget every room kept on this phone (sign-out).
+  Future<void> clearSnapshots() async => _snapshots?.clear();
+
   Future<Consultation> detail(String id) async {
     final cached = _detailCache[id];
     if (cached != null) {
-      unawaited(_api.detail(id).then((fresh) {
-        _cacheConsultation(fresh);
-      }).catchError((_) {}));
+      unawaited(
+        _api
+            .detail(id)
+            .then((fresh) {
+              _cacheConsultation(fresh);
+            })
+            .catchError((_) {}),
+      );
       return cached;
     }
     final fresh = await _api.detail(id);
@@ -112,9 +180,14 @@ class ConsultationRepository {
   Future<Conversation> conversation(String id) async {
     final cached = _conversationCache[id];
     if (cached != null) {
-      unawaited(_api.conversation(id).then((fresh) {
-        _cacheConversation(fresh);
-      }).catchError((_) {}));
+      unawaited(
+        _api
+            .conversation(id)
+            .then((fresh) {
+              _cacheConversation(fresh);
+            })
+            .catchError((_) {}),
+      );
       return cached;
     }
     final fresh = await _api.conversation(id);

@@ -37,24 +37,60 @@ class ChatCubit extends Cubit<ChatState> {
 
   Future<void> init() async {
     emit(state.copyWith(loading: true, clearError: true));
+
+    // Open on what the room looked like last time, at once — then the server's
+    // copy replaces it. Not for a call that may still be ringing or live: an
+    // old copy of one could start a call that is no longer there, so that
+    // waits for the server, as before.
+    final snap = await _repo.snapshot(consultationId);
+    if (isClosed) return;
+    final early = snap.consultation;
+    if (snap.conversation != null &&
+        early != null &&
+        (early.channel == 'chat' || early.status.isTerminal)) {
+      emit(
+        state.copyWith(
+          conversation: snap.conversation,
+          consultation: early,
+          loading: false,
+        ),
+      );
+      _listen(snap.conversation!.id);
+    }
+
     try {
       // `consultationId` may be either id — the server resolves both — but the
       // realtime channel is keyed on the thread, so subscribe only once we
       // know which thread this is.
-      final conversation = await _repo.conversation(consultationId);
+      final conversation = await _repo.freshConversation(consultationId);
       if (isClosed) return;
       emit(state.copyWith(conversation: conversation));
-      await _loadLiveConsultation(conversation);
+      await _loadLiveConsultation(conversation, fresh: true);
       if (isClosed) return;
       emit(state.copyWith(loading: false));
-      _frames = _realtime
-          .channelFrames('conv:${conversation.id}')
-          .listen(_onFrame, onError: (_) {});
+      _listen(conversation.id);
     } catch (e) {
       if (isClosed) return;
-      emit(state.copyWith(loading: false, error: friendlyError(e)));
+      // Offline with a snapshot on screen is a readable room, not a failure.
+      if (state.consultation != null) {
+        emit(state.copyWith(loading: false));
+      } else {
+        emit(state.copyWith(loading: false, error: friendlyError(e)));
+      }
     }
     _startPolling();
+  }
+
+  String? _listeningTo;
+
+  /// The thread's realtime frames, subscribed once per thread.
+  void _listen(String threadId) {
+    if (_listeningTo == threadId) return;
+    _listeningTo = threadId;
+    unawaited(_frames?.cancel());
+    _frames = _realtime
+        .channelFrames('conv:$threadId')
+        .listen(_onFrame, onError: (_) {});
   }
 
   /// The session this room is about: the live one when there is one, then
@@ -64,7 +100,10 @@ class ChatCubit extends Cubit<ChatState> {
   /// The pending one matters most on a call: the window does not count a
   /// ringing call as live, so this used to fall through to the last ended chat
   /// and the customer watched a finished conversation while the phone rang.
-  Future<void> _loadLiveConsultation(Conversation conversation) async {
+  Future<void> _loadLiveConsultation(
+    Conversation conversation, {
+    bool fresh = false,
+  }) async {
     final id =
         conversation.window.consultationId ??
         conversation.pendingConsultationId ??
@@ -76,14 +115,18 @@ class ChatCubit extends Cubit<ChatState> {
       return;
     }
     try {
-      emit(state.copyWith(consultation: await _repo.detail(id), clearError: true));
+      final c = fresh ? await _repo.freshDetail(id) : await _repo.detail(id);
+      if (isClosed) return;
+      emit(state.copyWith(consultation: c, clearError: true));
     } catch (e) {
-      // Surfaced, not swallowed: the room cannot draw without this, so the
-      // customer is about to see a failure either way and deserves the reason.
-      emit(state.copyWith(error: friendlyError(e)));
+      if (isClosed) return;
+      // A room already on screen (its snapshot) stays readable; with nothing
+      // to draw the failure is surfaced — the customer deserves the reason.
+      if (state.consultation == null) {
+        emit(state.copyWith(error: friendlyError(e)));
+      }
     }
   }
-
 
   /// Take on a session that was just started from inside this room.
   ///

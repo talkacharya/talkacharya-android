@@ -10,6 +10,7 @@ import '../../features/auth/data/firebase_phone_auth.dart';
 import '../../features/auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../features/chats/presentation/cubit/chats_cubit.dart';
 import '../../features/consultations/data/consultation_api.dart';
+import '../../features/consultations/data/room_snapshots.dart';
 import '../../features/consultations/presentation/room_presence.dart';
 import '../../features/consultations/data/consultation_repository.dart';
 import '../../features/earnings/data/earnings_api.dart';
@@ -176,7 +177,9 @@ Future<void> configureDependencies(AppConfig config) async {
 
   // --- features ------------------------------------------------------
   getIt
-    ..registerLazySingleton<ConsultationApi>(() => ConsultationApi(dio))
+    ..registerLazySingleton<ConsultationApi>(
+      () => ConsultationApi(dio, RoomSnapshots(getIt())),
+    )
     ..registerLazySingleton<ConsultationRepository>(
       () => ConsultationRepository(getIt()),
     )

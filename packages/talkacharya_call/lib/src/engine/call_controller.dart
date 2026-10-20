@@ -20,6 +20,8 @@ class CallTimings {
     this.stats = const Duration(seconds: 2),
     this.networkSettle = const Duration(milliseconds: 400),
     this.ringbackLimit = const Duration(seconds: 100),
+    this.disconnectGrace = const Duration(milliseconds: 1500),
+    this.recoverEvery = const Duration(seconds: 3),
   });
 
   /// Re-announce presence while not connected.
@@ -41,6 +43,16 @@ class CallTimings {
   /// expires on the server after 90 s; if the news of that never reaches this
   /// phone (no socket, the room closed while minimized), the tone still stops.
   final Duration ringbackLimit;
+
+  /// How long ICE may say `disconnected` before the call shows (and reports)
+  /// reconnecting. Mobile links blink for a second all the time and ICE
+  /// recovers on its own; showing each blink — a banner, a tone, billing
+  /// paused — is what makes a fine call feel broken. `failed` is not waited on.
+  final Duration disconnectGrace;
+
+  /// While reconnecting, how often to try again. One attempt is not enough: the
+  /// network that broke the call often loses that very message too.
+  final Duration recoverEvery;
 }
 
 /// Runs one 1:1 voice call over self-hosted WebRTC.
@@ -157,7 +169,21 @@ class CallController extends Cubit<CallState> {
   Timer? _reconnectTimer;
   Timer? _statsTimer;
   Timer? _networkDebounce;
+  Timer? _disconnectTimer;
+  Timer? _recoverLoop;
   bool _proximityHeld = false;
+
+  /// ICE gave up before the first connection: the next offer restarts ICE
+  /// instead of repeating candidates that already failed.
+  bool _iceFailedEarly = false;
+
+  /// What ICE said last — the blink timer asks whether it is still down.
+  RtcIceState? _lastIce;
+
+  /// Signaling frames are handled one at a time, in arrival order. Handled
+  /// concurrently, two quick hellos built two peers and the answer to the first
+  /// offer landed on the second — a failed connect and a 5 s wait for a retry.
+  Future<void> _signalChain = Future<void>.value();
 
   /// Latest transport sample, sent along with the next heartbeat.
   int? _lastRttMs;
@@ -356,7 +382,7 @@ class CallController extends Cubit<CallState> {
 
     _signalSub = _signaling
         .frames(join.signalingChannel)
-        .listen(_onSignal, onError: (_) {});
+        .listen(_queueSignal, onError: (_) {});
     _networkSub = _connectivity.changes.listen(
       (_) => _onNetworkChanged(),
       onError: (_) {},
@@ -562,6 +588,14 @@ class CallController extends Cubit<CallState> {
   void _sendHello({String? to}) =>
       unawaited(_publish({'t': 'hello', 'to': ?to}));
 
+  void _queueSignal(Map<String, dynamic> msg) {
+    _signalChain = _signalChain.then((_) => _onSignal(msg)).catchError((
+      Object e,
+    ) {
+      _diagnostics.log('signal handling failed: $e');
+    });
+  }
+
   Future<void> _onSignal(Map<String, dynamic> msg) async {
     if (_closed) return;
     final from = msg['from'];
@@ -585,7 +619,7 @@ class CallController extends Cubit<CallState> {
           (msg['c'] as Map?)?.cast<String, dynamic>(),
         );
       case 'media':
-        emit(state.copyWith(peerCameraOn: msg['video'] == true));
+        _emitIfOpen(state.copyWith(peerCameraOn: msg['video'] == true));
       case 'quality':
         final q = (msg['q'] as num?)?.toInt() ?? 0;
         if (q > 0) _emitIfOpen(state.copyWith(peerQuality: q));
@@ -603,7 +637,7 @@ class CallController extends Cubit<CallState> {
         await _newPeer(remoteSid);
         await _offer();
       } else if (state.phase != CallPhase.connected && _offerCooledDown) {
-        await _offer(iceRestart: _everConnected);
+        await _offer(iceRestart: _everConnected || _iceFailedEarly);
       }
     } else {
       if (_remoteSid != null && _remoteSid != remoteSid) {
@@ -728,9 +762,14 @@ class CallController extends Cubit<CallState> {
 
   void _onIceState(RtcIceState ice) {
     if (_closed) return;
+    _lastIce = ice;
     switch (ice) {
       case RtcIceState.connected:
         _reconnectTimer?.cancel();
+        _disconnectTimer?.cancel();
+        _disconnectTimer = null;
+        _stopRecoverLoop();
+        _iceFailedEarly = false;
         _diagnostics.log(_everConnected ? 'ice: recovered' : 'ice: connected');
         _everConnected = true;
         emit(
@@ -747,25 +786,59 @@ class CallController extends Cubit<CallState> {
         unawaited(_report(CallNetState.connected));
       case RtcIceState.disconnected:
       case RtcIceState.failed:
-        if (!_everConnected) return; // still negotiating — hellos keep retrying
+        if (!_everConnected) {
+          // Still negotiating — hellos keep retrying; a failure makes the next
+          // offer an ICE restart.
+          if (ice == RtcIceState.failed) _iceFailedEarly = true;
+          return;
+        }
         _diagnostics.log(
           'ice: ${ice.name}'
           '${state.relayed ? ' (relayed)' : ''} rtt=${_lastRttMs}ms '
           'loss=$_lastLossPct%',
         );
-        if (state.phase != CallPhase.reconnecting) {
-          emit(state.copyWith(phase: CallPhase.reconnecting));
-          unawaited(_report(CallNetState.reconnecting));
+        if (ice == RtcIceState.failed) {
+          _disconnectTimer?.cancel();
+          _disconnectTimer = null;
+          _enterReconnecting();
+          _reconnectTimer?.cancel();
+          _reconnectTimer = Timer(Duration.zero, _recover);
+        } else if (state.phase != CallPhase.reconnecting &&
+            _disconnectTimer == null) {
+          // A blink, most of the time: give ICE its moment before anyone sees it.
+          _disconnectTimer = Timer(timings.disconnectGrace, () {
+            _disconnectTimer = null;
+            if (_closed || _lastIce == RtcIceState.connected) return;
+            _enterReconnecting();
+            _reconnectTimer?.cancel();
+            _reconnectTimer = Timer(timings.reconnectAfter, _recover);
+          });
         }
-        _reconnectTimer?.cancel();
-        _reconnectTimer = Timer(
-          ice == RtcIceState.failed ? Duration.zero : timings.reconnectAfter,
-          _recover,
-        );
       case RtcIceState.checking:
       case RtcIceState.closed:
         break;
     }
+  }
+
+  /// The call shows, sounds and reports that it is recovering, and keeps trying.
+  void _enterReconnecting() {
+    if (_closed) return;
+    if (state.phase != CallPhase.reconnecting) {
+      emit(state.copyWith(phase: CallPhase.reconnecting));
+      unawaited(_report(CallNetState.reconnecting));
+    }
+    _recoverLoop ??= Timer.periodic(timings.recoverEvery, (_) {
+      if (_closed || state.phase != CallPhase.reconnecting) {
+        _stopRecoverLoop();
+        return;
+      }
+      unawaited(_recover());
+    });
+  }
+
+  void _stopRecoverLoop() {
+    _recoverLoop?.cancel();
+    _recoverLoop = null;
   }
 
   /// ICE restart from the initiator; the other side asks for one with a hello.
@@ -854,10 +927,9 @@ class CallController extends Cubit<CallState> {
           state.phase != CallPhase.reconnecting) {
         return; // ended, failed — nothing to recover
       }
-      if (state.phase != CallPhase.reconnecting) {
-        emit(state.copyWith(phase: CallPhase.reconnecting));
-        unawaited(_report(CallNetState.reconnecting));
-      }
+      _disconnectTimer?.cancel();
+      _disconnectTimer = null;
+      _enterReconnecting();
       _reconnectTimer?.cancel();
       unawaited(_recover(force: true));
     });
@@ -878,12 +950,22 @@ class CallController extends Cubit<CallState> {
       // it, the other side hung up before the signaling 'bye' arrived, etc.).
       // Without this the heartbeat loop keeps hammering /call/state forever on
       // an already-ended call — we saw this filling the log every few seconds.
-      if (body != null && body['status'] == 'ended' && !_closed) {
-        _diagnostics.log('server: consultation ended (heartbeat response)');
+      final status = body?['status'];
+      if (_finishedStatuses.contains(status) && !_closed) {
+        _diagnostics.log('server: consultation $status (heartbeat response)');
         unawaited(onConsultationEnded());
       }
     } catch (_) {}
   }
+
+  /// Consultation statuses after which there is no call left to run.
+  static const _finishedStatuses = {
+    'ended',
+    'no_show',
+    'cancelled',
+    'expired',
+    'rejected',
+  };
 
   void _heartbeat() {
     if (_closed) return;
@@ -1068,6 +1150,8 @@ class CallController extends Cubit<CallState> {
     _reconnectTimer?.cancel();
     _statsTimer?.cancel();
     _networkDebounce?.cancel();
+    _disconnectTimer?.cancel();
+    _stopRecoverLoop();
     _ringbackLimitTimer?.cancel();
     await step(() async => _signalSub?.cancel());
     await step(() async => _localVideoSub?.cancel());

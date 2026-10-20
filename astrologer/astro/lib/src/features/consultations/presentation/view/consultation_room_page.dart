@@ -24,6 +24,7 @@ import '../widgets/astro_thread_card.dart';
 import '../../data/call_adapters.dart';
 import '../../data/chat_adapters.dart';
 import '../../data/consultation_api.dart';
+import '../../data/room_snapshots.dart';
 import '../../data/models/consultation.dart';
 import '../../data/models/conversation.dart';
 import '../cubit/chat_cubit.dart';
@@ -63,9 +64,7 @@ class _ConsultationRoomPageState extends State<ConsultationRoomPage> {
       future: _thread,
       builder: (context, snap) {
         if (snap.connectionState != ConnectionState.done) {
-          return const Scaffold(
-            body: Center(child: ChatRoomSkeleton()),
-          );
+          return const Scaffold(body: Center(child: ChatRoomSkeleton()));
         }
         final thread = snap.data;
         if (thread == null) {
@@ -100,6 +99,7 @@ class _RoomScope extends StatelessWidget {
             api: getIt<ConsultationApi>(),
             realtime: getIt<RealtimeClient>(),
             threadId: threadId,
+            snapshots: RoomSnapshots(getIt()),
           )..init(),
         ),
         BlocProvider(
@@ -214,4 +214,3 @@ Future<bool> confirmEndConsultation(BuildContext context) async {
   if (!ended && context.mounted) showToast(context, l.roomEndFailed);
   return ended;
 }
-

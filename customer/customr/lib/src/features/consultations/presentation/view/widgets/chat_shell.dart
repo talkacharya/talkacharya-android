@@ -24,6 +24,7 @@ import 'share_details_sheet.dart';
 import 'thread_session_card.dart';
 
 import 'chat_room_skeleton.dart';
+
 /// The chat room, whatever state the session in it is in. The thread is the
 /// whole surface: its own lines say what happened (asked, joined, ended,
 /// declined), and [ThreadSessionCard] as its last row says what is happening
@@ -215,13 +216,17 @@ class _ChatShellState extends State<ChatShell> {
                     ),
                   ),
                   if (finished)
-                    Text(
-                      l10n.roomEndedTitle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: scheme.onSurfaceVariant,
+                    // "typing…" still shows here: the free follow-up after a
+                    // session is a conversation too.
+                    ChatHeaderStatus(
+                      idle: Text(
+                        l10n.roomEndedTitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: scheme.onSurfaceVariant,
+                        ),
                       ),
                     )
                   else

@@ -1,14 +1,20 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 
 import '../../../core/constants/api_paths.dart';
 import '../../../core/network/api_exception.dart';
 import 'models/consultation.dart';
 import 'models/conversation.dart';
+import 'room_snapshots.dart';
 import 'models/saved_reply.dart';
 import 'models/consultation_share.dart';
 
 class ConsultationApi {
-  ConsultationApi(this._dio);
+  ConsultationApi(this._dio, [this._snapshots]);
+
+  /// Where each room's last answer is kept for next time (null in tests).
+  final RoomSnapshots? _snapshots;
   final Dio _dio;
 
   /// [status] and [channel] are comma-separated lists; call history is this
@@ -34,11 +40,27 @@ class ConsultationApi {
   /// Resolves a thread. Takes either id — the server accepts a consultation's
   /// too, which is what a push or a deep link carries.
   Future<Conversation> conversation(String id) async {
+    final json = await conversationJson(id);
+    final c = Conversation.fromJson(json);
+    unawaited(
+      _snapshots?.putConversation({
+        id,
+        c.id,
+        ?c.lastConsultationId,
+        ?c.pendingConsultationId,
+      }, json),
+    );
+    return c;
+  }
+
+  /// The thread as the server sent it — kept on the phone as the room's
+  /// snapshot (see `RoomSnapshots`).
+  Future<Map<String, dynamic>> conversationJson(String id) async {
     try {
       final res = (await _dio.get<Map<String, dynamic>>(
         ApiPaths.conversation(id),
       )).ensureOk();
-      return Conversation.fromJson(res.data ?? const {});
+      return res.data ?? const {};
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
     }
@@ -99,7 +121,10 @@ class ConsultationApi {
 
   /// A PDF (or plain text, where the server cannot make one) of the thread,
   /// or of one session in it.
-  Future<List<int>> transcript(String threadId, {String? consultationId}) async {
+  Future<List<int>> transcript(
+    String threadId, {
+    String? consultationId,
+  }) async {
     final res = await _dio.get<List<int>>(
       ApiPaths.transcript(threadId),
       queryParameters: {'consultation': ?consultationId},
@@ -109,10 +134,17 @@ class ConsultationApi {
   }
 
   Future<Consultation> detail(String id) async {
+    final json = await detailJson(id);
+    final c = Consultation.fromJson(json);
+    unawaited(_snapshots?.putConsultation(c.id, json));
+    return c;
+  }
+
+  Future<Map<String, dynamic>> detailJson(String id) async {
     final res = await _dio.get<Map<String, dynamic>>(
       ApiPaths.astroConsultation(id),
     );
-    return Consultation.fromJson(res.data ?? const {});
+    return res.data ?? const {};
   }
 
   Future<Consultation> accept(String id) => _act(ApiPaths.astroAccept(id));

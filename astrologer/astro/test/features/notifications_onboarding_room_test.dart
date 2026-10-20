@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:astro/src/core/l10n/l10n.dart';
 import 'package:astro/src/core/realtime/realtime_client.dart';
 import 'package:astro/src/features/consultations/data/consultation_api.dart';
+import 'package:astro/src/features/consultations/data/room_snapshots.dart';
 import 'package:astro/src/features/consultations/data/models/consultation.dart';
 import 'package:astro/src/features/consultations/data/models/conversation.dart';
 import 'package:astro/src/features/consultations/presentation/cubit/chat_cubit.dart';
@@ -10,10 +11,12 @@ import 'package:astro/src/features/consultations/presentation/view/consultation_
 import 'package:astro/src/features/notifications/presentation/view/notifications_page.dart';
 import 'package:astro/src/features/onboarding/presentation/widgets/onboarding_steps.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 class _MockApi extends Mock implements ConsultationApi {}
 
 class _MockRealtime extends Mock implements RealtimeClient {}
@@ -113,6 +116,48 @@ void main() {
     tearDown(() => frames.close());
 
     ChatCubit build() => ChatCubit(api: api, realtime: rt, threadId: 'c1');
+
+    test(
+      'a chat room opens on its snapshot before the server answers',
+      () async {
+        FlutterSecureStorage.setMockInitialValues({});
+        final snaps = RoomSnapshots(const FlutterSecureStorage());
+        await snaps.putConversation(
+          {'c1'},
+          {
+            'id': 't1',
+            'peer': {'id': 'u1', 'name': 'Asha'},
+            'last_consultation': 'c1',
+            'window': {
+              'can_send': true,
+              'reason': 'consultation',
+              'consultation': 'c1',
+            },
+          },
+        );
+        await snaps.putConsultation('c1', {
+          'id': 'c1',
+          'status': 'active',
+          'channel': 'chat',
+          'customer_name': 'Asha',
+        });
+        final slow = Completer<Conversation>();
+        when(() => api.conversation('c1')).thenAnswer((_) => slow.future);
+        final cubit = ChatCubit(
+          api: api,
+          realtime: rt,
+          threadId: 'c1',
+          snapshots: snaps,
+        );
+        unawaited(cubit.init());
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        expect(cubit.state.loading, isFalse);
+        expect(cubit.state.consultation?.id, 'c1');
+        slow.complete(_thread());
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        await cubit.close();
+      },
+    );
 
     test('parses started_at and tracks the customer runway', () async {
       final cubit = build();

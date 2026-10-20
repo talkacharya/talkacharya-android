@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/realtime/realtime_client.dart';
 import '../../data/consultation_api.dart';
+import '../../data/room_snapshots.dart';
 import '../../data/models/consultation.dart';
 import '../../data/models/conversation.dart';
 import '../../../../core/network/friendly_error.dart';
@@ -80,12 +81,17 @@ class ChatCubit extends Cubit<ChatState> {
     required ConsultationApi api,
     required RealtimeClient realtime,
     required this.threadId,
+    RoomSnapshots? snapshots,
   }) : _api = api,
        _realtime = realtime,
+       _snapshots = snapshots,
        super(const ChatState());
 
   final ConsultationApi _api;
   final RealtimeClient _realtime;
+
+  /// The room as it was last time, on the phone. Null in tests.
+  final RoomSnapshots? _snapshots;
 
   /// Either id resolves — the server accepts a consultation's too — but the
   /// realtime channel is keyed on the thread.
@@ -100,18 +106,57 @@ class ChatCubit extends Cubit<ChatState> {
     _poll?.cancel();
     await _frames?.cancel();
     if (!state.loading) emit(state.copyWith(loading: true, error: null));
+    if (state.consultation == null) await _openOnSnapshot();
     try {
+      // The API keeps each answer as the room's snapshot for next time.
       final conversation = await _api.conversation(threadId);
+      if (isClosed) return;
       emit(state.copyWith(conversation: conversation));
       await _loadSession(conversation);
+      if (isClosed) return;
+      await _frames?.cancel();
       _frames = _realtime
           .channelFrames('conv:${conversation.id}')
           .listen(_onFrame, onError: (_) {});
       emit(state.copyWith(loading: false));
     } catch (e) {
-      emit(state.copyWith(loading: false, error: friendlyError(e)));
+      if (isClosed) return;
+      // Offline with the snapshot on screen: still a readable room.
+      emit(
+        state.consultation != null
+            ? state.copyWith(loading: false)
+            : state.copyWith(loading: false, error: friendlyError(e)),
+      );
     }
     _poll = Timer.periodic(const Duration(seconds: 8), (_) => _refreshDetail());
+  }
+
+  /// Open on the room as it was last time, before the server answers. A call
+  /// that may still be ringing or live is left to the server: an old copy of
+  /// one would offer to join a call that is no longer there.
+  Future<void> _openOnSnapshot() async {
+    final convJson = await _snapshots?.conversation(threadId);
+    if (convJson == null || isClosed) return;
+    final conversation = Conversation.fromJson(convJson);
+    final id =
+        conversation.window.consultationId ??
+        conversation.pendingConsultationId ??
+        conversation.lastConsultationId;
+    if (id == null) return;
+    final consJson = await _snapshots?.consultation(id);
+    if (consJson == null || isClosed) return;
+    final consultation = Consultation.fromJson(consJson);
+    if (consultation.channel != 'chat' && !consultation.isTerminal) return;
+    emit(
+      state.copyWith(
+        conversation: conversation,
+        consultation: consultation,
+        loading: false,
+      ),
+    );
+    _frames = _realtime
+        .channelFrames('conv:${conversation.id}')
+        .listen(_onFrame, onError: (_) {});
   }
 
   /// The session the room is about: the live one, then one the customer is
@@ -124,7 +169,9 @@ class ChatCubit extends Cubit<ChatState> {
         conversation.lastConsultationId;
     if (id == null) return;
     try {
-      emit(state.copyWith(consultation: await _api.detail(id)));
+      final c = await _api.detail(id);
+      if (isClosed) return;
+      emit(state.copyWith(consultation: c));
     } catch (_) {
       // the thread still opens; only the session chrome is missing
     }

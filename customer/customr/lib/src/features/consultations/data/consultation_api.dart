@@ -106,7 +106,10 @@ class ConsultationApi {
 
   /// A PDF (or plain text, where the server cannot make one) of the thread,
   /// or of one session in it.
-  Future<List<int>> transcript(String threadId, {String? consultationId}) async {
+  Future<List<int>> transcript(
+    String threadId, {
+    String? consultationId,
+  }) async {
     final res = await _dio.get<List<int>>(
       ApiPaths.transcript(threadId),
       queryParameters: {'consultation': ?consultationId},
@@ -115,13 +118,18 @@ class ConsultationApi {
     return res.data ?? const [];
   }
 
-  Future<Consultation> detail(String id) async {
+  Future<Consultation> detail(String id) async =>
+      Consultation.fromMap(await detailJson(id));
+
+  /// The session as the server sent it — kept on the phone as the room's
+  /// snapshot (see `RoomSnapshots`).
+  Future<Map<String, dynamic>> detailJson(String id) async {
     try {
       final res = await _dio.get<Map<String, dynamic>>(
         ApiPaths.consultation(id),
       );
       _raise(res);
-      return Consultation.fromMap(res.data ?? const {});
+      return res.data ?? const {};
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
     }
@@ -152,13 +160,16 @@ class ConsultationApi {
     return Consultation.fromMap(res.data ?? const {});
   }
 
-  Future<Conversation> conversation(String id) async {
+  Future<Conversation> conversation(String id) async =>
+      Conversation.fromMap(await conversationJson(id));
+
+  Future<Map<String, dynamic>> conversationJson(String id) async {
     try {
       final res = await _dio.get<Map<String, dynamic>>(
         ApiPaths.conversation(id),
       );
       _raise(res);
-      return Conversation.fromMap(res.data ?? const {});
+      return res.data ?? const {};
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
     }

@@ -21,6 +21,7 @@ import '../../features/birthprofiles/data/birth_profiles_repository.dart';
 import '../../features/birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
 import '../../features/consultations/data/consultation_api.dart';
 import '../../features/consultations/data/consultation_repository.dart';
+import '../../features/consultations/data/room_snapshots.dart';
 import '../../features/consultations/presentation/cubit/chats_list_cubit.dart';
 import '../../features/gifting/data/gifting_api.dart';
 import '../../features/livestream/data/livestream_api.dart';
@@ -165,12 +166,14 @@ Future<void> configureDependencies(AppConfig config) async {
     ..registerLazySingleton<HoroscopeRepository>(() => HoroscopeRepository(dio))
     ..registerLazySingleton<ConsultationApi>(() => ConsultationApi(dio))
     ..registerLazySingleton<ConsultationRepository>(
-      () => ConsultationRepository(getIt()),
+      () => ConsultationRepository(getIt(), RoomSnapshots(getIt())),
     );
 
   // --- discovery + home feed ---------------------------------------------
   getIt
-    ..registerLazySingleton<AstrologerLocalStore>(() => AstrologerLocalStore(getIt()))
+    ..registerLazySingleton<AstrologerLocalStore>(
+      () => AstrologerLocalStore(getIt()),
+    )
     ..registerLazySingleton<AstrologersApi>(() => AstrologersApi(dio))
     ..registerLazySingleton<AssistantApi>(() => AssistantApi(dio))
     ..registerLazySingleton<AstrologersRepository>(
