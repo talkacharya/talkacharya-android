@@ -46,7 +46,9 @@ String tuneOpus(String sdp, {int? maxAverageBitrate}) {
   for (final line in lines) {
     final existing = fmtp.firstMatch(line);
     if (existing != null && payloads.contains(existing.group(1))) {
-      out.add('a=fmtp:${existing.group(1)} ${_merge(existing.group(2)!, wanted)}');
+      out.add(
+        'a=fmtp:${existing.group(1)} ${_merge(existing.group(2)!, wanted)}',
+      );
       tuned.add(existing.group(1)!);
       continue;
     }

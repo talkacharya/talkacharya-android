@@ -2711,6 +2711,12 @@ class AppLocalizationsTe extends AppLocalizations {
   String get roomRatingThanks => 'మీ అభిప్రాయానికి ధన్యవాదాలు!';
 
   @override
+  String get roomReviewHint => 'Tell others how it went (optional)';
+
+  @override
+  String get roomReviewSubmit => 'Submit review';
+
+  @override
   String get roomBackHome => 'ఇంటికి తిరిగి వెళ్లండి';
 
   @override
@@ -6427,6 +6433,14 @@ class AppLocalizationsTe extends AppLocalizations {
   String get storePaymentFailed => 'Payment didn\'t go through. Try again.';
 
   @override
+  String get storePaymentCancelledCart =>
+      'Payment cancelled — no order was placed. Your items are still in the cart.';
+
+  @override
+  String get storePaymentFailedCart =>
+      'Payment didn\'t go through — no order was placed. Your items are still in the cart; try again.';
+
+  @override
   String get storePaymentDone => 'Payment received';
 
   @override
@@ -7844,4 +7858,66 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get supWriteToUsSub => 'We reply here in the app';
+
+  @override
+  String get addrMapTitle => 'Pick delivery location';
+
+  @override
+  String get addrSearchHint => 'Search area, street, building…';
+
+  @override
+  String get addrUseMyLocation => 'Use my current location';
+
+  @override
+  String get addrLocating => 'Finding the address…';
+
+  @override
+  String get addrNotFound =>
+      'Couldn\'t read the address here. Move the pin, or confirm and type it.';
+
+  @override
+  String get addrConfirmLocation => 'Confirm location';
+
+  @override
+  String get addrPinHint => 'Move the map to put the pin on your door';
+
+  @override
+  String get addrSearchEmpty => 'No matches. Try a nearby landmark or area.';
+
+  @override
+  String get addrLocationOff =>
+      'Location is off. Turn it on, or search for your address.';
+
+  @override
+  String get addrLocationDenied =>
+      'Allow location to find you on the map, or search instead.';
+
+  @override
+  String get addrOnMap => 'Delivering to this spot';
+
+  @override
+  String get addrNoPin =>
+      'Pin your location on the map so the courier finds you easily';
+
+  @override
+  String get addrPinOnMap => 'Pin on map';
+
+  @override
+  String get addrHouse => 'House / flat no., floor, building';
+
+  @override
+  String get addrArea => 'Area, street, locality';
+
+  @override
+  String get addrPickContact => 'Pick from contacts';
+
+  @override
+  String get addrReceiver => 'Who receives it';
+
+  @override
+  String get addrDetailsTitle => 'Address details';
+
+  @override
+  String get addrFilledFromMap =>
+      'Filled from the map — check it and add your house or flat number.';
 }

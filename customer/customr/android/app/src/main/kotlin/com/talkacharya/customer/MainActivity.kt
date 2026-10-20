@@ -57,6 +57,7 @@ class MainActivity : FlutterActivity() {
                 when (call.method) {
                     "setActive" -> {
                         videoCallActive = call.argument<Boolean>("active") ?: false
+                        updateAutoEnter()
                         result.success(null)
                     }
                     "enter" -> result.success(enterPip())
@@ -121,8 +122,9 @@ class MainActivity : FlutterActivity() {
 
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        // Leaving the app during a video call shrinks it to a corner instead of
-        // hiding the astrologer behind whatever the user opened next.
+        // Leaving the app while the camera is live (a video call, or the
+        // astrologer's own live stream) shrinks it to a corner. Anything else —
+        // a voice call included — just goes to the background as usual.
         if (videoCallActive) enterPip()
     }
 
@@ -141,6 +143,32 @@ class MainActivity : FlutterActivity() {
         proximityChannel = null
         releaseProximity()
         super.onDestroy()
+    }
+
+    /**
+     * Android 12+: let the system shrink the window by itself on the home
+     * gesture — but only while [videoCallActive]. Switched off again the moment
+     * the camera session ends, so nothing else ever opens as a window (and any
+     * auto-enter left behind by an older build is cleared on the next call).
+     */
+    private fun updateAutoEnter() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || !pipSupported()) return
+        try {
+            setPictureInPictureParams(
+                PictureInPictureParams.Builder()
+                    .setAspectRatio(Rational(9, 16))
+                    .setAutoEnterEnabled(videoCallActive)
+                    .build()
+            )
+        } catch (e: IllegalStateException) {
+            // Activity going away — nothing to update.
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Back in the app: make sure a stale auto-enter can't outlive its session.
+        updateAutoEnter()
     }
 
     private fun pipSupported(): Boolean =

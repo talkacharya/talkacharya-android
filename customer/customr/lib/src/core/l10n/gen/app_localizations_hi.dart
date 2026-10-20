@@ -2698,6 +2698,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get roomRatingThanks => 'आपकी राय के लिए धन्यवाद!';
 
   @override
+  String get roomReviewHint => 'दूसरों को बताएँ कि कैसा रहा (वैकल्पिक)';
+
+  @override
+  String get roomReviewSubmit => 'रिव्यू भेजें';
+
+  @override
   String get roomBackHome => 'होम पर वापस';
 
   @override
@@ -6512,6 +6518,14 @@ class AppLocalizationsHi extends AppLocalizations {
   String get storePaymentFailed => 'भुगतान नहीं हो पाया। फिर कोशिश करें।';
 
   @override
+  String get storePaymentCancelledCart =>
+      'भुगतान रद्द हुआ — कोई ऑर्डर नहीं बना। आपके आइटम कार्ट में ही हैं।';
+
+  @override
+  String get storePaymentFailedCart =>
+      'भुगतान नहीं हो पाया — कोई ऑर्डर नहीं बना। आइटम कार्ट में ही हैं, फिर कोशिश करें।';
+
+  @override
   String get storePaymentDone => 'भुगतान प्राप्त हुआ';
 
   @override
@@ -7924,4 +7938,66 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get supWriteToUsSub => 'हम यहीं ऐप में जवाब देते हैं';
+
+  @override
+  String get addrMapTitle => 'डिलीवरी की जगह चुनें';
+
+  @override
+  String get addrSearchHint => 'इलाका, गली, इमारत खोजें…';
+
+  @override
+  String get addrUseMyLocation => 'मेरी अभी की जगह';
+
+  @override
+  String get addrLocating => 'पता ढूँढ रहे हैं…';
+
+  @override
+  String get addrNotFound =>
+      'यहाँ का पता नहीं मिला। पिन खिसकाएँ, या पक्का करके खुद लिखें।';
+
+  @override
+  String get addrConfirmLocation => 'जगह पक्की करें';
+
+  @override
+  String get addrPinHint => 'पिन को अपने दरवाज़े पर लाने के लिए नक्शा खिसकाएँ';
+
+  @override
+  String get addrSearchEmpty =>
+      'कुछ नहीं मिला। पास का कोई लैंडमार्क या इलाका लिखें।';
+
+  @override
+  String get addrLocationOff => 'लोकेशन बंद है। चालू करें, या अपना पता खोजें।';
+
+  @override
+  String get addrLocationDenied =>
+      'नक्शे पर आपको ढूँढने के लिए लोकेशन की अनुमति दें, या पता खोजें।';
+
+  @override
+  String get addrOnMap => 'इसी जगह डिलीवरी';
+
+  @override
+  String get addrNoPin =>
+      'नक्शे पर अपनी जगह पिन करें ताकि कूरियर आसानी से पहुँचे';
+
+  @override
+  String get addrPinOnMap => 'नक्शे पर पिन करें';
+
+  @override
+  String get addrHouse => 'मकान / फ़्लैट नं., मंज़िल, इमारत';
+
+  @override
+  String get addrArea => 'इलाका, गली, मोहल्ला';
+
+  @override
+  String get addrPickContact => 'कॉन्टैक्ट से चुनें';
+
+  @override
+  String get addrReceiver => 'कौन लेगा';
+
+  @override
+  String get addrDetailsTitle => 'पते की जानकारी';
+
+  @override
+  String get addrFilledFromMap =>
+      'नक्शे से भरा गया — जाँच लें और अपना मकान या फ़्लैट नंबर जोड़ें।';
 }

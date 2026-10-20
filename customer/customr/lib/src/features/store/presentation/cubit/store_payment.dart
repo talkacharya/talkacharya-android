@@ -21,7 +21,7 @@ class GatewayPaid extends GatewayOutcome {
   final StoreOrder order;
 }
 
-/// The customer closed the Razorpay sheet. The order stays pending until it expires.
+/// The customer closed the Razorpay sheet.
 class GatewayCancelled extends GatewayOutcome {
   const GatewayCancelled();
 }
@@ -69,6 +69,15 @@ class StorePaymentFlow {
       case final RazorpaySuccess s:
         return _confirm(orderId, s);
     }
+  }
+
+  /// No payment: release the order's stock and wallet hold now (the expiry job
+  /// does it anyway if this call doesn't get through) and show the freed balance.
+  Future<void> abandon(String orderId) async {
+    try {
+      await _repo.abandonPayment(orderId);
+    } catch (_) {}
+    await _wallet.refreshBalance();
   }
 
   Future<GatewayOutcome> _confirm(String orderId, RazorpaySuccess s) async {

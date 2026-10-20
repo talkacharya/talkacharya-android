@@ -31,7 +31,11 @@ const String kAppName = 'TalkAcharya';
 /// phone call does, so someone can open a kundali or answer another chat
 /// without hanging up on the astrologer they are paying by the minute.
 class CallRoom extends StatefulWidget {
-  const CallRoom({required this.consultation, required this.lowBalance, super.key});
+  const CallRoom({
+    required this.consultation,
+    required this.lowBalance,
+    super.key,
+  });
 
   final Consultation consultation;
   final bool lowBalance;
@@ -170,6 +174,13 @@ class _CallRoomState extends State<CallRoom> {
   void dispose() {
     unawaited(_callSub?.cancel());
     _hub.roomClosed(_id);
+    // Made here but never handed to the hub (the room went away before its first
+    // frame): nobody else will ever close it, and its ringback would play on.
+    if (!identical(_hub.controller, _call)) {
+      unawaited(_call.close());
+      super.dispose();
+      return;
+    }
     // A call that is over or terminal has nothing left to run in the background.
     if (_hub.isFor(_id) &&
         (_call.state.phase == CallPhase.ended ||
@@ -272,38 +283,38 @@ class ShareChip extends StatelessWidget {
 
 /// Localised copy for the shared call screen.
 CallStrings callStrings(AppLocalizations l) => CallStrings(
-      calling: l.callCalling,
-      ringing: l.callRinging,
-      connecting: l.callConnecting,
-      reconnecting: l.callReconnecting,
-      callEnded: l.callEnded,
-      poorConnection: l.callPoorConnection,
-      peerPoorConnection: l.callPeerPoorConnection,
-      bothPoorConnection: l.callBothPoorConnection,
-      mute: l.callMute,
-      speaker: l.callSpeaker,
-      camera: l.callCamera,
-      flipCamera: l.callFlipCamera,
-      cameraOff: l.callCameraOff,
-      videoPausedWeakConnection: l.callVideoPausedWeak,
-      peerCameraOff: l.callPeerCameraOff,
-      endCall: l.callEnd,
-      encrypted: l.callEncrypted,
-      micTitle: l.callMicTitle,
-      micBody: l.callMicBody,
-      micBlockedBody: l.callMicBlockedBody,
-      openSettings: l.callOpenSettings,
-      tryAgain: l.callTryAgain,
-      failedTitle: l.callFailedTitle,
-      endConfirmTitle: l.callEndConfirmTitle,
-      endConfirmBody: l.callEndConfirmBody,
-      endConfirmYes: l.callEndConfirmYes,
-      endConfirmNo: l.callEndConfirmNo,
-      minimize: l.callMinimize,
-      tapToReturn: l.callTapToReturn,
-      waiting: l.callWaiting,
-      audio: l.callAudio,
-      earpiece: l.callEarpiece,
-      wiredHeadset: l.callWiredHeadset,
-      bluetoothHeadset: l.callBluetooth,
-    );
+  calling: l.callCalling,
+  ringing: l.callRinging,
+  connecting: l.callConnecting,
+  reconnecting: l.callReconnecting,
+  callEnded: l.callEnded,
+  poorConnection: l.callPoorConnection,
+  peerPoorConnection: l.callPeerPoorConnection,
+  bothPoorConnection: l.callBothPoorConnection,
+  mute: l.callMute,
+  speaker: l.callSpeaker,
+  camera: l.callCamera,
+  flipCamera: l.callFlipCamera,
+  cameraOff: l.callCameraOff,
+  videoPausedWeakConnection: l.callVideoPausedWeak,
+  peerCameraOff: l.callPeerCameraOff,
+  endCall: l.callEnd,
+  encrypted: l.callEncrypted,
+  micTitle: l.callMicTitle,
+  micBody: l.callMicBody,
+  micBlockedBody: l.callMicBlockedBody,
+  openSettings: l.callOpenSettings,
+  tryAgain: l.callTryAgain,
+  failedTitle: l.callFailedTitle,
+  endConfirmTitle: l.callEndConfirmTitle,
+  endConfirmBody: l.callEndConfirmBody,
+  endConfirmYes: l.callEndConfirmYes,
+  endConfirmNo: l.callEndConfirmNo,
+  minimize: l.callMinimize,
+  tapToReturn: l.callTapToReturn,
+  waiting: l.callWaiting,
+  audio: l.callAudio,
+  earpiece: l.callEarpiece,
+  wiredHeadset: l.callWiredHeadset,
+  bluetoothHeadset: l.callBluetooth,
+);

@@ -6,6 +6,7 @@ import '../models/live_join.dart';
 import '../models/live_state.dart';
 import '../ports/live_ports.dart';
 import 'live_cubit_base.dart';
+import 'screen_awake.dart';
 
 /// Watching one stream: join, play, chat, heartbeat, leave.
 ///
@@ -61,7 +62,7 @@ class LiveViewerCubit extends LiveCubitBase {
     if (closed) return;
     emitIfOpen(state.copyWith(phase: LivePhase.live));
 
-    unawaited(WakelockPlus.enable());
+    unawaited(keepScreenOn());
 
     _heartbeat = Timer.periodic(heartbeatEvery, (_) => _beat());
     unawaited(_loadHistory());

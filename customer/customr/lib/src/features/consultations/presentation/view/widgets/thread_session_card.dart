@@ -60,6 +60,7 @@ class _ThreadSessionCardState extends State<ThreadSessionCard> {
   int _rating = 0;
   bool _ratingBusy = false;
   bool _justRated = false;
+  final _reviewText = TextEditingController();
 
   bool _starting = false;
   bool _cancelling = false;
@@ -80,6 +81,7 @@ class _ThreadSessionCardState extends State<ThreadSessionCard> {
 
   @override
   void dispose() {
+    _reviewText.dispose();
     super.dispose();
   }
 
@@ -349,9 +351,9 @@ class _ThreadSessionCardState extends State<ThreadSessionCard> {
                 minimumSize: const Size.fromHeight(44),
               ),
               onPressed: () async {
-                final error = await context
-                    .read<ChatCubit>()
-                    .setPreferences(blocked: false);
+                final error = await context.read<ChatCubit>().setPreferences(
+                  blocked: false,
+                );
                 if (error != null) _fail(error);
               },
               child: Text(l10n.chatUnblock(c.astrologerName)),
@@ -371,7 +373,8 @@ class _ThreadSessionCardState extends State<ThreadSessionCard> {
   }
 
   /// "How was it?" once, then "you rated it 4/5" every time after. A tap on a
-  /// star is the rating — there is no second button to find.
+  /// star picks the rating and opens an optional line of words; one button sends
+  /// both, because a review can't be changed once it's in.
   Widget _ratingRow(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
@@ -413,7 +416,9 @@ class _ThreadSessionCardState extends State<ThreadSessionCard> {
             for (var i = 1; i <= 5; i++)
               IconButton(
                 tooltip: '$i',
-                onPressed: _ratingBusy ? null : () => _rate(i),
+                onPressed: _ratingBusy
+                    ? null
+                    : () => setState(() => _rating = i),
                 icon: Icon(
                   i <= _rating ? Icons.star_rounded : Icons.star_border_rounded,
                   size: 32,
@@ -422,17 +427,44 @@ class _ThreadSessionCardState extends State<ThreadSessionCard> {
               ),
           ],
         ),
+        if (_rating > 0) ...[
+          const SizedBox(height: 4),
+          TextField(
+            controller: _reviewText,
+            enabled: !_ratingBusy,
+            minLines: 2,
+            maxLines: 4,
+            maxLength: 1000,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: InputDecoration(
+              hintText: l10n.roomReviewHint,
+              counterText: '',
+            ),
+          ),
+          const SizedBox(height: 8),
+          FilledButton(
+            onPressed: _ratingBusy ? null : _rate,
+            child: _ratingBusy
+                ? const SizedBox.square(
+                    dimension: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : Text(l10n.roomReviewSubmit),
+          ),
+        ],
       ],
     );
   }
 
-  Future<void> _rate(int stars) async {
-    setState(() {
-      _rating = stars;
-      _ratingBusy = true;
-    });
+  Future<void> _rate() async {
+    final stars = _rating;
+    if (stars < 1) return;
+    setState(() => _ratingBusy = true);
     try {
-      await context.read<ChatCubit>().submitReview(stars);
+      await context.read<ChatCubit>().submitReview(
+        stars,
+        text: _reviewText.text.trim(),
+      );
       if (mounted) setState(() => _justRated = true);
     } catch (_) {
       // The cubit surfaces the reason; the stars stay tappable to try again.
@@ -523,7 +555,6 @@ class _ThreadSessionCardState extends State<ThreadSessionCard> {
         ? l10n.roomFollowUpHours(left.inHours)
         : l10n.roomFollowUpMinutes(left.inMinutes.clamp(1, 59));
   }
-
 }
 
 // --- clock helpers -----------------------------------------------------------

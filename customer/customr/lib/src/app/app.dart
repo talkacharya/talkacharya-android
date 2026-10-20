@@ -135,7 +135,16 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
         _router.push(location).ignore();
         return;
       }
-      _router.go(location);
+      if (Routes.isShellRoute(location)) {
+        _router.go(location);
+      } else {
+        final currentLoc =
+            _router.routerDelegate.currentConfiguration.uri.toString();
+        if (!Routes.isShellRoute(currentLoc)) {
+          _router.go(Routes.home);
+        }
+        _router.push(location).ignore();
+      }
     } else {
       getIt<PendingDeepLink>().set(location);
     }

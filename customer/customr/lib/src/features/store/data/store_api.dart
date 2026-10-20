@@ -11,6 +11,7 @@ import 'models/catalog.dart';
 import 'models/checkout.dart';
 import 'models/consult.dart';
 import 'models/order.dart';
+import 'models/place.dart';
 import 'models/product.dart';
 import 'models/store_json.dart';
 
@@ -226,6 +227,40 @@ class StoreApi {
   Future<void> deleteAddress(String id) =>
       _send('DELETE', ApiPaths.storeAddress(id), (_) {});
 
+  // --- the address map ---------------------------------------------------------------
+
+  Future<List<PlaceSuggestion>> searchPlaces(
+    String q, {
+    double? lat,
+    double? lng,
+    String session = '',
+  }) => _get(
+    ApiPaths.storePlacesSearch,
+    (d) => jList(d, PlaceSuggestion.fromJson),
+    query: {
+      'q': q,
+      'lat': ?lat,
+      'lng': ?lng,
+      if (session.isNotEmpty) 'session': session,
+    },
+  );
+
+  Future<FoundPlace> placeDetails(String placeId, {String session = ''}) =>
+      _get(
+        ApiPaths.storePlacesDetails,
+        (d) => FoundPlace.fromJson(jMap(d)),
+        query: {
+          'place_id': placeId,
+          if (session.isNotEmpty) 'session': session,
+        },
+      );
+
+  Future<FoundPlace> placeAt(double lat, double lng) => _get(
+    ApiPaths.storePlacesReverse,
+    (d) => FoundPlace.fromJson(jMap(d)),
+    query: {'lat': lat, 'lng': lng},
+  );
+
   // --- checkout ----------------------------------------------------------------------
 
   Future<CheckoutQuote> quote({String? addressId, bool useWallet = true}) =>
@@ -283,6 +318,14 @@ class StoreApi {
     ApiPaths.storeOrderVerify(orderId),
     (d) => StoreOrder.fromJson(jMap(d)),
     body: {'razorpay_payment_id': paymentId, 'razorpay_signature': signature},
+  );
+
+  /// The payment sheet was closed or failed: the server releases the order's
+  /// stock and wallet hold now. The cart still has the items.
+  Future<StoreOrder> abandonPayment(String orderId) => _send(
+    'POST',
+    ApiPaths.storeOrderAbandon(orderId),
+    (d) => StoreOrder.fromJson(jMap(d)),
   );
 
   Future<StorePayment> retryPayment(String orderId) => _send(

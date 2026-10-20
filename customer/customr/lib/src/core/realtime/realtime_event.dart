@@ -39,14 +39,23 @@ sealed class RealtimeEvent {
               '',
           preview: data['preview'] as String? ?? '',
           senderRole: data['sender_role'] as String? ?? '',
+          seq: (data['seq'] as num?)?.toInt() ?? 0,
         );
       case 'consultation.requested':
       case 'consultation.accepted':
       case 'consultation.started':
       case 'consultation.ended':
+      // A request that ends without a call: the app has to stop ringing back
+      // even with the room closed (minimized while waiting).
+      case 'consultation.rejected':
+      case 'consultation.expired':
+      case 'consultation.cancelled':
+      case 'consultation.no_show':
         return ConsultationEvent(
           kind: type.split('.').last,
-          consultationId: _nested(data, 'consultation', 'id'),
+          consultationId:
+              _nested(data, 'consultation', 'id') ??
+              data['consultation']?.toString(),
         );
       case 'system.reconnect_hint':
         return const ReconnectHint();
@@ -112,7 +121,9 @@ class QueueRemoved extends RealtimeEvent {
 
 class ConsultationEvent extends RealtimeEvent {
   const ConsultationEvent({required this.kind, this.consultationId});
-  final String kind; // requested | accepted | started | ended
+
+  /// requested | accepted | started | ended | rejected | expired | cancelled | no_show
+  final String kind;
   final String? consultationId;
 }
 
@@ -121,10 +132,14 @@ class NewChatMessage extends RealtimeEvent {
     required this.consultationId,
     required this.preview,
     required this.senderRole,
+    this.seq = 0,
   });
   final String consultationId;
   final String preview;
   final String senderRole;
+
+  /// The message's number in its thread — what "delivered" is reported up to.
+  final int seq;
 }
 
 class InboxPing extends RealtimeEvent {

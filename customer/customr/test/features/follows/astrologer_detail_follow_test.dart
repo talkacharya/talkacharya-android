@@ -16,6 +16,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 class _MockConfig extends Mock implements ConfigRepository {}
 
 class _MockAstroRepo extends Mock implements AstrologersRepository {}
@@ -32,6 +33,7 @@ Astrologer _astro({required bool online}) => Astrologer(
   yearsExperience: 12,
   consultationsCount: 4200,
   followersCount: 1500,
+  consultationMinutes: 1500,
   repeatClientRate: 0.62,
   bio: 'Twelve years of practice.',
   rates: const [
@@ -113,15 +115,14 @@ void main() {
           ..resetDevicePixelRatio();
       });
 
-      testWidgets('header Follow pill follows and updates the count', (
-        tester,
-      ) async {
+      testWidgets('header Follow pill follows', (tester) async {
         when(
           () => astroRepo.detail('a1'),
         ).thenAnswer((_) async => _astro(online: true));
         await pump(tester, locale);
         expect(tester.takeException(), isNull);
-        expect(find.text('1.5k'), findsOneWidget); // followers stat
+        // The stat row shows minutes consulted, not followers.
+        expect(find.text('1.5k'), findsOneWidget);
 
         await tester.tap(find.byIcon(Icons.person_add_alt_1_rounded).first);
         await tester.pump();

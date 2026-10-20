@@ -6,6 +6,7 @@ import 'models/catalog.dart';
 import 'models/checkout.dart';
 import 'models/consult.dart';
 import 'models/order.dart';
+import 'models/place.dart';
 import 'models/product.dart';
 import 'models/store_json.dart';
 import 'store_api.dart';
@@ -99,6 +100,18 @@ class StoreRepository {
 
   Future<void> deleteAddress(String id) => _api.deleteAddress(id);
 
+  Future<List<PlaceSuggestion>> searchPlaces(
+    String q, {
+    double? lat,
+    double? lng,
+    String session = '',
+  }) => _api.searchPlaces(q, lat: lat, lng: lng, session: session);
+
+  Future<FoundPlace> placeDetails(String placeId, {String session = ''}) =>
+      _api.placeDetails(placeId, session: session);
+
+  Future<FoundPlace> placeAt(double lat, double lng) => _api.placeAt(lat, lng);
+
   // --- checkout ----------------------------------------------------------------------
 
   Future<CheckoutQuote> quote({String? addressId, bool useWallet = true}) =>
@@ -124,6 +137,9 @@ class StoreRepository {
 
   Future<StorePayment> retryPayment(String orderId) =>
       _api.retryPayment(orderId);
+
+  Future<StoreOrder> abandonPayment(String orderId) =>
+      _api.abandonPayment(orderId);
 
   /// A fresh checkout attempt key: same key → the backend returns the same order.
   static String newCheckoutKey([Random? random]) {

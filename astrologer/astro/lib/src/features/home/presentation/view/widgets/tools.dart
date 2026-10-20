@@ -129,12 +129,6 @@ List<ToolGroup> buildToolGroups(BuildContext context) {
         () => context.push(Routes.matchmaking),
       ),
       ToolAction(
-        AstroPalette.fire,
-        Icons.temple_hindu_rounded,
-        l.poojaTool,
-        () => context.push(Routes.poojaCalendar),
-      ),
-      ToolAction(
         AstroPalette.air,
         Icons.quickreply_rounded,
         l.wsReplies,

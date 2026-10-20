@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- The delivery-address map's "use my location". Asked only there. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <!-- voice + video calls (self-hosted WebRTC): mic, camera, audio routing,
          bluetooth headsets, and a foreground service so a call survives screen-lock /
          app switch. A video call needs the camera FGS type on Android 14+. -->
@@ -98,6 +101,10 @@
 
         <!-- app_links owns deep-link handling; keep Flutter's off to avoid double routing. -->
         <meta-data android:name="flutter_deeplinking_enabled" android:value="false"/>
+        <!-- Maps SDK key (delivery-address map), from MAPS_API_KEY at build time. -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${mapsApiKey}"/>
 
         <!-- FCM: channel + small status-bar icon for backend-sent notifications. -->
         <meta-data

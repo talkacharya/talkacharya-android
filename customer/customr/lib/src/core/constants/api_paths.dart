@@ -175,12 +175,17 @@ class ApiPaths {
   static String storeCartItem(String id) => '/app/store/cart/items/$id';
   static const storeAddresses = '/app/store/addresses';
   static String storeAddress(String id) => '/app/store/addresses/$id';
+  static const storePlacesSearch = '/app/store/places/search';
+  static const storePlacesDetails = '/app/store/places/details';
+  static const storePlacesReverse = '/app/store/places/reverse';
   static const storeCheckoutQuote = '/app/store/checkout/quote';
   static const storeCheckout = '/app/store/checkout';
   static const storeOrders = '/app/store/orders';
   static String storeOrder(String id) => '/app/store/orders/$id';
   static String storeOrderVerify(String id) =>
       '/app/store/orders/$id/verify-payment';
+  static String storeOrderAbandon(String id) =>
+      '/app/store/orders/$id/abandon-payment';
   static String storeOrderRetry(String id) =>
       '/app/store/orders/$id/retry-payment';
   static String storeOrderCancel(String id) => '/app/store/orders/$id/cancel';

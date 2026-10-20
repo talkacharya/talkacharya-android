@@ -204,9 +204,24 @@ GoRouter buildRouter(
       }
 
       if (goingToLogin || goingToSplash) {
-        return profileStore.loginGatePending
-            ? Routes.selectProfile
-            : (pending.take() ?? Routes.astrologers);
+        if (profileStore.loginGatePending) return Routes.selectProfile;
+        final target = pending.take();
+        if (target != null && target.isNotEmpty) {
+          if (Routes.isShellRoute(target)) {
+            return target;
+          }
+          // For top-level detail routes (e.g., assistant, notifications,
+          // consultations), land on AppShell first so it sits beneath,
+          // then push the target onto the root navigator.
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            final ctx = _rootKey.currentContext;
+            if (ctx != null && ctx.mounted) {
+              ctx.push(target).ignore();
+            }
+          });
+          return Routes.home;
+        }
+        return Routes.astrologers;
       }
       return null;
     },

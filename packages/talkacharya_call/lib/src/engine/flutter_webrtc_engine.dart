@@ -56,7 +56,8 @@ class FlutterWebRtcEngine implements RtcEngine {
         // makes voices sound like a 1990s phone call. 16kHz is sufficient for
         // speech; Opus internally resamples to 48kHz in its encode path.
         'sampleRate': 16000,
-        'channelCount': 1, // mono voice — no stereo needed, halves jitter-buffer load
+        'channelCount':
+            1, // mono voice — no stereo needed, halves jitter-buffer load
       },
       'video': video ? _videoConstraints : false,
     });
@@ -220,7 +221,10 @@ class _WebRtcPeer implements RtcPeer {
     await _pc.setRemoteDescription(RTCSessionDescription(sdp, 'offer'));
     _remoteSet = true;
     final answer = await _pc.createAnswer(_mediaConstraints);
-    final tuned = tuneOpus(answer.sdp ?? '', maxAverageBitrate: _maxAudioBitrate);
+    final tuned = tuneOpus(
+      answer.sdp ?? '',
+      maxAverageBitrate: _maxAudioBitrate,
+    );
     await _pc.setLocalDescription(RTCSessionDescription(tuned, answer.type));
     return tuned;
   }

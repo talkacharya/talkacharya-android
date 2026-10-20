@@ -585,9 +585,8 @@ class _StatsCard extends StatelessWidget {
         Icons.star_rounded,
         AstroPalette.money,
         a.ratingAvg > 0 ? a.ratingAvg.toStringAsFixed(1) : '—',
-        a.ratingCount > 0
-            ? l.astroReviewsCount(a.ratingCount)
-            : l.astroStatRating,
+        // The average only: how many people rated isn't shown.
+        l.astroStatRating,
       ),
       if (a.consultationMinutes > 0)
         (

@@ -4,10 +4,9 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simple_pip_mode/pip_widget.dart';
-import 'package:simple_pip_mode/simple_pip.dart';
 
 import '../engine/call_controller.dart';
+import '../engine/call_pip.dart';
 import '../engine/call_telecom.dart';
 import '../ports/call_ports.dart';
 import '../models/call_state.dart';
@@ -157,16 +156,24 @@ class CallScreen extends StatefulWidget {
 }
 
 class _CallScreenState extends State<CallScreen> {
+  /// True while the app's minimize is running. Its own way of leaving (a
+  /// `maybePop`, say) comes back through this screen's back handling, which
+  /// would otherwise minimize again — forever. That second time it is a pop.
+  bool _minimizing = false;
+
+  void _minimize(VoidCallback onMinimize) {
+    if (_minimizing) return;
+    _minimizing = true;
+    try {
+      onMinimize();
+    } finally {
+      // The pop it asked for arrives a moment later; let it through first.
+      WidgetsBinding.instance.addPostFrameCallback((_) => _minimizing = false);
+    }
+  }
+
   static const _bgTop = Color(0xFF140B2E);
   static const _bgBottom = Color(0xFF2A1454);
-
-  final _simplePip = SimplePip();
-
-  @override
-  void initState() {
-    super.initState();
-    _simplePip.setAutoPipMode();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -196,115 +203,133 @@ class _CallScreenState extends State<CallScreen> {
             a.peerName != b.peerName,
         builder: (context, state) {
           final controller = context.read<CallController>();
-          final minimize = widget.onMinimize;
+          final onMinimize = widget.onMinimize;
+          final minimize = onMinimize == null
+              ? null
+              : () => _minimize(onMinimize);
           final canMinimize =
               minimize != null && state.phase != CallPhase.ended;
-          
-          return PipWidget(
-            pipBuilder: (context) {
-              if (!state.video) {
-                return const ColoredBox(
-                  color: _bgTop,
-                  child: Center(
-                    child: Icon(Icons.phone, color: Colors.white, size: 48),
+
+          // In picture-in-picture (video calls only — see CallPip) the window is
+          // a thumbnail: just the other person's face.
+          return ValueListenableBuilder<bool>(
+            valueListenable: CallPip.inPip,
+            builder: (context, inPip, _) {
+              if (inPip) {
+                if (!state.video) {
+                  return const ColoredBox(
+                    color: _bgTop,
+                    child: Center(
+                      child: Icon(Icons.phone, color: Colors.white, size: 48),
+                    ),
+                  );
+                }
+                return Scaffold(
+                  backgroundColor: _bgTop,
+                  body: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      if (state.showRemoteVideo)
+                        CallVideoView(
+                          stream: state.remoteVideo,
+                          mirror: false,
+                          cover: true,
+                        )
+                      else
+                        const ColoredBox(color: _bgTop),
+                    ],
                   ),
                 );
               }
-              return Scaffold(
-                backgroundColor: _bgTop,
-                body: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    if (state.showRemoteVideo)
-                      CallVideoView(
-                        stream: state.remoteVideo,
-                        mirror: false,
-                        cover: true,
-                      )
-                    else
-                      const ColoredBox(color: _bgTop),
-                  ],
-                ),
-              );
-            },
-            builder: (context) => PopScope(
-              canPop: !state.phase.isLive && !canMinimize,
-              onPopInvokedWithResult: (didPop, _) async {
-                if (didPop) return;
-                if (canMinimize) {
-                  minimize();
-                  return;
-                }
-                if (!state.phase.isLive) return;
-                if (await _confirmEnd(context)) await controller.hangUp();
-              },
-              child: Scaffold(
-                backgroundColor: _bgTop,
-                body: DecoratedBox(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [_bgTop, _bgBottom],
+              return PopScope(
+                canPop: !state.phase.isLive && !canMinimize,
+                onPopInvokedWithResult: (didPop, _) async {
+                  if (didPop) return;
+                  if (_minimizing) {
+                    // The minimize asked to leave: leave.
+                    Navigator.of(context).pop();
+                    return;
+                  }
+                  if (canMinimize) {
+                    minimize();
+                    return;
+                  }
+                  if (!state.phase.isLive) return;
+                  if (await _confirmEnd(context)) await controller.hangUp();
+                },
+                child: Scaffold(
+                  backgroundColor: _bgTop,
+                  body: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [_bgTop, _bgBottom],
+                      ),
+                    ),
+                    child: SafeArea(
+                      child: switch (state.phase) {
+                        CallPhase.permissionDenied => _PermissionView(
+                          strings: widget.strings,
+                          blocked: state.permanentlyDenied,
+                          onSettings: controller.openSettings,
+                          onRetry: controller.retry,
+                        ),
+                        CallPhase.failed => _FailedView(
+                          strings: widget.strings,
+                          message: state.error,
+                          onRetry: controller.retry,
+                        ),
+                        _ when state.video => _VideoView(
+                          state: state,
+                          peerName: state.peerName.isNotEmpty
+                              ? state.peerName
+                              : widget.peerName,
+                          avatarUrl: widget.peerAvatarUrl,
+                          strings: widget.strings,
+                          statusOverride: widget.statusOverride,
+                          top: widget.top,
+                          overlay: widget.overlay,
+                          halo: halo,
+                          onMute: controller.toggleMute,
+                          onCamera: controller.toggleCamera,
+                          onFlip: controller.switchCamera,
+                          onEnd: () => _end(context, state, controller),
+                          onMinimize: canMinimize ? minimize : null,
+                        ),
+                        _ => _LiveView(
+                          state: state,
+                          peerName: state.peerName.isNotEmpty
+                              ? state.peerName
+                              : widget.peerName,
+                          avatarUrl: widget.peerAvatarUrl,
+                          strings: widget.strings,
+                          statusOverride: widget.statusOverride,
+                          top: widget.top,
+                          overlay: widget.overlay,
+                          halo: halo,
+                          onMute: controller.toggleMute,
+                          // A toggle while the choice is phone-or-speaker; a
+                          // picker once a headset makes it a real choice.
+                          onSpeaker: () => state.canPickAudioRoute
+                              ? _pickAudioRoute(
+                                  context,
+                                  state,
+                                  controller,
+                                  widget.strings,
+                                )
+                              : controller.toggleSpeaker(),
+                          onEnd: () => _end(context, state, controller),
+                          onMinimize: canMinimize ? minimize : null,
+                        ),
+                      },
                     ),
                   ),
-                  child: SafeArea(
-                    child: switch (state.phase) {
-                      CallPhase.permissionDenied => _PermissionView(
-                        strings: widget.strings,
-                        blocked: state.permanentlyDenied,
-                        onSettings: controller.openSettings,
-                        onRetry: controller.retry,
-                      ),
-                      CallPhase.failed => _FailedView(
-                        strings: widget.strings,
-                        message: state.error,
-                        onRetry: controller.retry,
-                      ),
-                      _ when state.video => _VideoView(
-                        state: state,
-                        peerName: state.peerName.isNotEmpty
-                            ? state.peerName
-                            : widget.peerName,
-                        avatarUrl: widget.peerAvatarUrl,
-                        strings: widget.strings,
-                        statusOverride: widget.statusOverride,
-                        top: widget.top,
-                        overlay: widget.overlay,
-                        halo: halo,
-                        onMute: controller.toggleMute,
-                        onCamera: controller.toggleCamera,
-                        onFlip: controller.switchCamera,
-                        onEnd: () => _end(context, state, controller),
-                        onMinimize: canMinimize ? minimize : null,
-                      ),
-                      _ => _LiveView(
-                        state: state,
-                        peerName: state.peerName.isNotEmpty
-                            ? state.peerName
-                            : widget.peerName,
-                        avatarUrl: widget.peerAvatarUrl,
-                        strings: widget.strings,
-                        statusOverride: widget.statusOverride,
-                        top: widget.top,
-                        overlay: widget.overlay,
-                        halo: halo,
-                        onMute: controller.toggleMute,
-                      // A toggle while the choice is phone-or-speaker; a
-                      // picker once a headset makes it a real choice.
-                      onSpeaker: () => state.canPickAudioRoute
-                          ? _pickAudioRoute(context, state, controller, widget.strings)
-                          : controller.toggleSpeaker(),
-                      onEnd: () => _end(context, state, controller),
-                      onMinimize: canMinimize ? minimize : null,
-                    ),
-                  },
-                ),
-              ),
-            ), // closes Scaffold
-          ), // closes PopScope
-        ); // closes PipWidget
-      },
+                ), // closes Scaffold
+              ); // closes PopScope
+            },
+          );
+        },
       ),
     );
   }
@@ -502,7 +527,9 @@ class _LiveView extends StatelessWidget {
                         ? Icons.phone_in_talk_rounded
                         : Icons.volume_down_rounded,
                 },
-                label: state.canPickAudioRoute ? strings.audio : strings.speaker,
+                label: state.canPickAudioRoute
+                    ? strings.audio
+                    : strings.speaker,
                 active: state.speakerOn || state.bluetooth,
                 onTap: onSpeaker,
               ),
@@ -654,7 +681,8 @@ class _VideoViewState extends State<_VideoView> {
                             : widget.halo,
                         pulsing: s.phase != CallPhase.connected,
                       ),
-                      if (s.phase == CallPhase.connected && !s.peerCameraOn) ...[
+                      if (s.phase == CallPhase.connected &&
+                          !s.peerCameraOn) ...[
                         const SizedBox(height: 18),
                         _Pill(
                           icon: Icons.videocam_off_rounded,
@@ -854,10 +882,8 @@ class _ChromeLayerState extends State<_ChromeLayer>
   }
 
   @override
-  Widget build(BuildContext context) => FadeTransition(
-    opacity: _c,
-    child: widget.child,
-  );
+  Widget build(BuildContext context) =>
+      FadeTransition(opacity: _c, child: widget.child);
 }
 
 /// Our own picture: a rounded tile, mirrored for the front camera, replaced by a

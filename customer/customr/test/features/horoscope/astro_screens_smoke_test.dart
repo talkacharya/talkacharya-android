@@ -22,6 +22,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
+import '../../helpers/birth_profiles_store.dart';
+
 class _MockMatchRepo extends Mock implements MatchmakingRepository {}
 
 class _MockConfig extends Mock implements ConfigRepository {}
@@ -228,6 +231,7 @@ void main() {
           birthDate: '1994-07-15',
         );
         when(bpRepo.list).thenAnswer((_) async => [me, her]);
+        stubLocalStore(bpRepo);
         final profiles = BirthProfilesCubit(repo: bpRepo, store: store);
         final matchRepo = _MockMatchRepo();
         when(matchRepo.history).thenAnswer((_) async => [_match()]);

@@ -99,13 +99,6 @@ class AstrologerReviewsCard extends StatelessWidget {
                             ),
                         ],
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        l.astroReviewsCount(a.ratingCount),
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: brand.inkMuted,
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -147,7 +140,7 @@ class AstrologerReviewsCard extends StatelessWidget {
   }
 }
 
-/// One row of the breakdown: "5 ★", a bar for its share, and the count.
+/// One row of the breakdown: "5 ★" and a bar for its share (no counts shown).
 class _BreakdownBar extends StatelessWidget {
   const _BreakdownBar({
     required this.stars,
@@ -185,11 +178,6 @@ class _BreakdownBar extends StatelessWidget {
                 color: AstrologerReviewsCard._star,
               ),
             ),
-          ),
-          const SizedBox(width: 8),
-          SizedBox(
-            width: 28,
-            child: Text('$count', style: muted, textAlign: TextAlign.end),
           ),
         ],
       ),

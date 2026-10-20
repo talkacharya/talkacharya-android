@@ -22,6 +22,17 @@ if (hasReleaseKeystore) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
+// Google Maps SDK key for the delivery-address map: MAPS_API_KEY in
+// android/local.properties (gitignored) or in the environment (CI). Restrict it to
+// this app's package + signing SHA-1 and to "Maps SDK for Android" in Cloud Console.
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+val mapsApiKey: String =
+    localProperties.getProperty("MAPS_API_KEY") ?: System.getenv("MAPS_API_KEY") ?: ""
+
 android {
     namespace = "com.talkacharya.customer"
     compileSdk = flutter.compileSdkVersion
@@ -54,6 +65,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["mapsApiKey"] = mapsApiKey
     }
 
     flavorDimensions += "env"

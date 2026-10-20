@@ -19,6 +19,8 @@ class Address extends Equatable {
     this.country = 'IN',
     this.gstin = '',
     this.isDefault = false,
+    this.latitude,
+    this.longitude,
   });
 
   final String id;
@@ -35,6 +37,12 @@ class Address extends Equatable {
   final String country;
   final String gstin;
   final bool isDefault;
+
+  /// Where the pin was put on the map; null for an address typed without it.
+  final double? latitude;
+  final double? longitude;
+
+  bool get hasPin => latitude != null && longitude != null;
 
   bool get isSaved => id.isNotEmpty;
 
@@ -62,6 +70,8 @@ class Address extends Equatable {
     country: jStr(j['country'], 'IN'),
     gstin: jStr(j['gstin']),
     isDefault: jBool(j['is_default']),
+    latitude: jNumOrNull(j['latitude']),
+    longitude: jNumOrNull(j['longitude']),
   );
 
   Json toJson() => {
@@ -77,6 +87,9 @@ class Address extends Equatable {
     'country': country,
     'gstin': gstin,
     'is_default': isDefault,
+    // The API keeps 6 decimals (~10 cm); more is refused.
+    if (hasPin) 'latitude': latitude!.toStringAsFixed(6),
+    if (hasPin) 'longitude': longitude!.toStringAsFixed(6),
   };
 
   Address copyWith({bool? isDefault}) => Address(
@@ -94,6 +107,8 @@ class Address extends Equatable {
     country: country,
     gstin: gstin,
     isDefault: isDefault ?? this.isDefault,
+    latitude: latitude,
+    longitude: longitude,
   );
 
   /// Indian states and union territories, as the backend recognises them.

@@ -125,23 +125,16 @@ class _CallOverlayHostState extends State<CallOverlayHost> {
                             ],
                           ),
                         ),
-                        if (pip)
+                        // Only a call takes the window over. With none (the
+                        // astrologer's live stream is what went to a corner)
+                        // the page underneath draws itself — covering it here
+                        // left a blank window with a hang-up icon.
+                        if (pip && state != null && info != null)
                           Positioned.fill(
-                            child: (state != null && info != null)
-                                ? _PipView(
-                                    state: state,
-                                    peerName: info.peerName,
-                                  )
-                                : const ColoredBox(
-                                    color: Color(0xFF140B2E),
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.call_end_rounded,
-                                        color: Colors.white54,
-                                        size: 48,
-                                      ),
-                                    ),
-                                  ),
+                            child: _PipView(
+                              state: state,
+                              peerName: info.peerName,
+                            ),
                           ),
                       ],
                     ),

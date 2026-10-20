@@ -287,14 +287,19 @@ class _RailItem extends StatelessWidget {
             ),
             child: Stack(
               children: [
+                // Full rail width, so the picture and label sit in the middle
+                // (a Stack child otherwise shrinks to its content, flush left).
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(6, 10, 4, 9),
+                  padding: const EdgeInsets.fromLTRB(5, 10, 5, 9),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      AnimatedScale(
-                        scale: selected ? 1.06 : 1,
-                        duration: const Duration(milliseconds: 180),
-                        child: leading,
+                      Center(
+                        child: AnimatedScale(
+                          scale: selected ? 1.06 : 1,
+                          duration: const Duration(milliseconds: 180),
+                          child: leading,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(

@@ -8,14 +8,11 @@ import '../../../../../core/router/routes.dart';
 import '../../../../../core/util/async_value.dart';
 import '../../../../../core/util/money.dart';
 import '../../../../../shared/widgets/language_quick_button.dart';
-import '../../../../astrologers/data/models/astrologer.dart';
 import '../../../../auth/data/models/auth_user.dart';
 import '../../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../../../notifications/presentation/view/notification_bell.dart';
 import '../../../../wallet/data/models/wallet_balance.dart';
 import '../../../../wallet/presentation/cubit/wallet_cubit.dart';
-import '../../cubit/home_cubit.dart';
-import 'home_shared.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
@@ -125,14 +122,14 @@ class HomeFloatingCtaBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1335).withValues(alpha: 0.94),
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+        // color: const Color(0xFF1E1335).withValues(alpha: 0.94),
+        // borderRadius: BorderRadius.circular(22),
+        // border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF0F081D).withValues(alpha: 0.4),
             blurRadius: 18,
-            offset: const Offset(0, 6),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -182,57 +179,6 @@ class _NebulaSlice extends StatelessWidget {
     );
   }
 }
-
-class _MiniFace extends StatelessWidget {
-  const _MiniFace({required this.astrologer, required this.index});
-  final Astrologer astrologer;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    const hues = [
-      AstroPalette.love,
-      AstroPalette.career,
-      AstroPalette.health,
-      AstroPalette.money,
-    ];
-    final hue = hues[index % hues.length];
-    final url = astrologer.avatar;
-    final initial = astrologer.name.trim().isEmpty
-        ? '★'
-        : astrologer.name.trim().characters.first.toUpperCase();
-    return Container(
-      width: 22,
-      height: 22,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: hue.linear(),
-        border: Border.all(color: context.brand.cosmicStart, width: 1.5),
-      ),
-      clipBehavior: Clip.antiAlias,
-      alignment: Alignment.center,
-      child: (url != null && url.isNotEmpty)
-          ? Image.network(
-              url,
-              fit: BoxFit.cover,
-              width: 22,
-              height: 22,
-              errorBuilder: (_, _, _) => _initialText(initial),
-            )
-          : _initialText(initial),
-    );
-  }
-
-  Widget _initialText(String s) => Text(
-    s,
-    style: const TextStyle(
-      color: Colors.white,
-      fontSize: 10,
-      fontWeight: FontWeight.w800,
-    ),
-  );
-}
-
 class _HeroCta extends StatelessWidget {
   const _HeroCta({
     required this.label,

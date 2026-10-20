@@ -4755,6 +4755,18 @@ abstract class AppLocalizations {
   /// **'Thanks for the feedback!'**
   String get roomRatingThanks;
 
+  /// No description provided for @roomReviewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell others how it went (optional)'**
+  String get roomReviewHint;
+
+  /// No description provided for @roomReviewSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit review'**
+  String get roomReviewSubmit;
+
   /// No description provided for @roomBackHome.
   ///
   /// In en, this message translates to:
@@ -11228,6 +11240,18 @@ abstract class AppLocalizations {
   /// **'Payment didn\'t go through. Try again.'**
   String get storePaymentFailed;
 
+  /// No description provided for @storePaymentCancelledCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment cancelled — no order was placed. Your items are still in the cart.'**
+  String get storePaymentCancelledCart;
+
+  /// No description provided for @storePaymentFailedCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment didn\'t go through — no order was placed. Your items are still in the cart; try again.'**
+  String get storePaymentFailedCart;
+
   /// No description provided for @storePaymentDone.
   ///
   /// In en, this message translates to:
@@ -13573,6 +13597,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We reply here in the app'**
   String get supWriteToUsSub;
+
+  /// No description provided for @addrMapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick delivery location'**
+  String get addrMapTitle;
+
+  /// No description provided for @addrSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search area, street, building…'**
+  String get addrSearchHint;
+
+  /// No description provided for @addrUseMyLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Use my current location'**
+  String get addrUseMyLocation;
+
+  /// No description provided for @addrLocating.
+  ///
+  /// In en, this message translates to:
+  /// **'Finding the address…'**
+  String get addrLocating;
+
+  /// No description provided for @addrNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t read the address here. Move the pin, or confirm and type it.'**
+  String get addrNotFound;
+
+  /// No description provided for @addrConfirmLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm location'**
+  String get addrConfirmLocation;
+
+  /// No description provided for @addrPinHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Move the map to put the pin on your door'**
+  String get addrPinHint;
+
+  /// No description provided for @addrSearchEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No matches. Try a nearby landmark or area.'**
+  String get addrSearchEmpty;
+
+  /// No description provided for @addrLocationOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Location is off. Turn it on, or search for your address.'**
+  String get addrLocationOff;
+
+  /// No description provided for @addrLocationDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow location to find you on the map, or search instead.'**
+  String get addrLocationDenied;
+
+  /// No description provided for @addrOnMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivering to this spot'**
+  String get addrOnMap;
+
+  /// No description provided for @addrNoPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin your location on the map so the courier finds you easily'**
+  String get addrNoPin;
+
+  /// No description provided for @addrPinOnMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin on map'**
+  String get addrPinOnMap;
+
+  /// No description provided for @addrHouse.
+  ///
+  /// In en, this message translates to:
+  /// **'House / flat no., floor, building'**
+  String get addrHouse;
+
+  /// No description provided for @addrArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Area, street, locality'**
+  String get addrArea;
+
+  /// No description provided for @addrPickContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick from contacts'**
+  String get addrPickContact;
+
+  /// No description provided for @addrReceiver.
+  ///
+  /// In en, this message translates to:
+  /// **'Who receives it'**
+  String get addrReceiver;
+
+  /// No description provided for @addrDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Address details'**
+  String get addrDetailsTitle;
+
+  /// No description provided for @addrFilledFromMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Filled from the map — check it and add your house or flat number.'**
+  String get addrFilledFromMap;
 }
 
 class _AppLocalizationsDelegate

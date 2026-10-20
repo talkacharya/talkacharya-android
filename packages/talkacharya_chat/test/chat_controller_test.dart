@@ -78,9 +78,13 @@ class _FakeTransport implements ChatTransport {
   Future<void> unpin(int seq) async => pinned.remove(seq);
 
   @override
-  Future<void> markRead(int upToSeq) async {}
+  Future<void> markRead(int upToSeq) async => reads.add(upToSeq);
   @override
-  Future<void> markDelivered(int upToSeq) async {}
+  Future<void> markDelivered(int upToSeq) async => delivers.add(upToSeq);
+
+  /// Receipts this phone sent, in order.
+  final reads = <int>[];
+  final delivers = <int>[];
   @override
   Future<void> sendTyping(bool isTyping) async {}
 
@@ -204,6 +208,8 @@ class _Sounds implements ChatSounds {
 }
 
 void main() {
+  _receiptAndOrderTests();
+
   test(
     'sounds: sent once, incoming only for new messages from the other side',
     () async {
@@ -751,4 +757,112 @@ class _MemOutbox extends ChatOutbox {
   Future<void> save(String consultationId, List<ChatMessage> unsent) async {
     store[consultationId] = unsent.map(ChatOutbox.encode).toList();
   }
+}
+
+/// Receipts follow what the user can see; unsent messages carry no number.
+void _receiptAndOrderTests() {
+  group('receipts and order', () {
+    Map<String, dynamic> theirs(int seq, String body) => {
+      'type': 'message.new',
+      'data': {
+        'id': 'a$seq',
+        'seq': seq,
+        'sender_role': 'astrologer',
+        'body': body,
+        'client_message_id': 'ac$seq',
+      },
+    };
+
+    test(
+      'a message on its way has no number and sits below the rest',
+      () async {
+        final t = _FakeTransport()..failSend = true;
+        final rt = _FakeRealtime();
+        final c = _make(t, rt);
+        await c.start();
+        await c.sendText('still going');
+        expect(c.state.messages.single.seq, 0);
+
+        // A real message arriving meanwhile is not mistaken for it, and the
+        // unsent one stays at the bottom.
+        rt.emit(theirs(1, 'namaste'));
+        await Future<void>.delayed(Duration.zero);
+        expect(c.state.messages.map((m) => m.body), ['namaste', 'still going']);
+        expect(c.state.lastSeq, 1);
+        await c.close();
+      },
+    );
+
+    test(
+      'in view: an arrival is read; behind another app: only delivered',
+      () async {
+        final t = _FakeTransport();
+        final rt = _FakeRealtime();
+        final c = _make(t, rt);
+        await c.start();
+
+        rt.emit(theirs(1, 'one'));
+        await Future<void>.delayed(const Duration(milliseconds: 400));
+        expect(t.reads, [1]);
+
+        c.setForeground(false);
+        rt.emit(theirs(2, 'two'));
+        await Future<void>.delayed(const Duration(milliseconds: 400));
+        expect(t.delivers, [2]);
+        expect(t.reads, [1]);
+
+        // Back in front: what arrived meanwhile is read now, once.
+        c.setForeground(true);
+        await Future<void>.delayed(const Duration(milliseconds: 400));
+        expect(t.reads, [1, 2]);
+        c.markSeen(2);
+        await Future<void>.delayed(const Duration(milliseconds: 400));
+        expect(t.reads, [1, 2]);
+        await c.close();
+      },
+    );
+
+    test('my own messages never send receipts', () async {
+      final t = _FakeTransport();
+      final rt = _FakeRealtime();
+      final c = _make(t, rt);
+      await c.start();
+      await c.sendText('hello');
+      c.markSeen(c.state.lastSeq);
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+      expect(t.reads, isEmpty);
+      expect(t.delivers, isEmpty);
+      await c.close();
+    });
+
+    test('a receipt ticks my message straight away', () async {
+      final t = _FakeTransport();
+      final rt = _FakeRealtime();
+      final c = _make(t, rt);
+      await c.start();
+      await c.sendText('hello');
+      final mine = c.state.messages.single;
+      expect(mine.deliveredAt, isNull);
+
+      rt.emit({
+        'type': 'message.receipt',
+        'data': {
+          'state': 'delivered',
+          'up_to_seq': mine.seq,
+          'by': 'astrologer',
+        },
+      });
+      await Future<void>.delayed(Duration.zero);
+      expect(c.state.messages.single.deliveredAt, isNotNull);
+      expect(c.state.messages.single.readAt, isNull);
+
+      rt.emit({
+        'type': 'message.receipt',
+        'data': {'state': 'read', 'up_to_seq': mine.seq, 'by': 'astrologer'},
+      });
+      await Future<void>.delayed(Duration.zero);
+      expect(c.state.messages.single.readAt, isNotNull);
+      await c.close();
+    });
+  });
 }

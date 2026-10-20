@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.VibrationAttributes;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.os.VibratorManager;
@@ -46,12 +47,18 @@ public class TalkacharyaSoundsPlugin implements FlutterPlugin, MethodChannel.Met
 
     private MethodChannel channel;
     private Context context;
-    private final Handler main = new Handler(Looper.getMainLooper());
 
-    private Ringtone ringtone;
-    private Runnable ringtoneRelooper;
-    private ToneGenerator ringback;
-    private boolean vibrating;
+    // The loops are the process's, not this engine's: the plugin is made once per
+    // Flutter engine (the app's, the push isolate's), and a ring started by one
+    // must stop when any of them says stop — a loop no instance can reach any
+    // more would ring until the app is killed. All of it runs on the main thread.
+    private static final Handler main = new Handler(Looper.getMainLooper());
+    private static Ringtone ringtone;
+    private static Runnable ringtoneRelooper;
+    private static ToneGenerator ringback;
+    private static boolean vibrating;
+    /** The engine that started the loop now playing, so only its going away ends it. */
+    private static TalkacharyaSoundsPlugin owner;
 
     private SoundPool pool;
     private final Map<String, Integer> effects = new HashMap<>();
@@ -66,7 +73,8 @@ public class TalkacharyaSoundsPlugin implements FlutterPlugin, MethodChannel.Met
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
-        stopAll();
+        // A push isolate finishing must not cut off the app's own ringback.
+        if (owner == this) stopAll();
         if (pool != null) {
             pool.release();
             pool = null;
@@ -115,6 +123,7 @@ public class TalkacharyaSoundsPlugin implements FlutterPlugin, MethodChannel.Met
 
     private void startRinging() {
         stopAll();
+        owner = this;
         int mode = ringerMode();
         if (mode == AudioManager.RINGER_MODE_SILENT) return;
         startVibration(RING_VIBRATION, 1);
@@ -150,6 +159,7 @@ public class TalkacharyaSoundsPlugin implements FlutterPlugin, MethodChannel.Met
 
     private void startRingback() {
         stopAll();
+        owner = this;
         if (ringerMode() == AudioManager.RINGER_MODE_SILENT) return;
         ringback = new ToneGenerator(AudioManager.STREAM_VOICE_CALL, 70);
         // Plays the network ringing cadence until stopTone().
@@ -214,8 +224,24 @@ public class TalkacharyaSoundsPlugin implements FlutterPlugin, MethodChannel.Met
     private void startVibration(long[] pattern, int repeat) {
         Vibrator v = vibrator();
         if (v == null || !v.hasVibrator()) return;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            v.vibrate(VibrationEffect.createWaveform(pattern, repeat));
+        // Tagged as a ringtone (a repeating pattern) or a notification: from
+        // Android 10 a vibration without a usage is dropped while the app is in
+        // the background — a locked phone — so an untagged ring would be silent.
+        boolean ring = repeat >= 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            v.vibrate(
+                VibrationEffect.createWaveform(pattern, repeat),
+                VibrationAttributes.createForUsage(
+                    ring ? VibrationAttributes.USAGE_RINGTONE : VibrationAttributes.USAGE_NOTIFICATION));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(
+                VibrationEffect.createWaveform(pattern, repeat),
+                new AudioAttributes.Builder()
+                    .setUsage(ring
+                        ? AudioAttributes.USAGE_NOTIFICATION_RINGTONE
+                        : AudioAttributes.USAGE_NOTIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build());
         } else {
             v.vibrate(pattern, repeat);
         }
@@ -225,22 +251,26 @@ public class TalkacharyaSoundsPlugin implements FlutterPlugin, MethodChannel.Met
     // --- stop -------------------------------------------------------------
 
     private void stopAll() {
+        owner = null;
         if (ringtoneRelooper != null) {
             main.removeCallbacks(ringtoneRelooper);
             ringtoneRelooper = null;
         }
+        // Each part on its own: one that throws must not leave the others playing.
         if (ringtone != null) {
-            ringtone.stop();
+            try { ringtone.stop(); } catch (RuntimeException ignored) { }
             ringtone = null;
         }
         if (ringback != null) {
-            ringback.stopTone();
-            ringback.release();
+            try { ringback.stopTone(); } catch (RuntimeException ignored) { }
+            try { ringback.release(); } catch (RuntimeException ignored) { }
             ringback = null;
         }
         if (vibrating) {
-            Vibrator v = vibrator();
-            if (v != null) v.cancel();
+            try {
+                Vibrator v = vibrator();
+                if (v != null) v.cancel();
+            } catch (RuntimeException ignored) { }
             vibrating = false;
         }
     }

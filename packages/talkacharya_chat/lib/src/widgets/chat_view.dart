@@ -53,9 +53,14 @@ class ChatView extends StatefulWidget {
   State<ChatView> createState() => _ChatViewState();
 }
 
-class _ChatViewState extends State<ChatView> {
+class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
   final _scroll = ScrollController();
-  int _lastCount = 0;
+
+  /// Every message key the list has shown, and the newest number among them:
+  /// what is new on the next change is what isn't in here, and it arrived at
+  /// the bottom when it is unsent or newer than [_maxSeq] (not an older page).
+  final Set<String> _knownKeys = {};
+  int _maxSeq = 0;
 
   /// How far up the list counts as "not at the bottom". Generous, so the
   /// button does not flicker in and out while someone reads the last screen.
@@ -75,10 +80,27 @@ class _ChatViewState extends State<ChatView> {
   void initState() {
     super.initState();
     _scroll.addListener(_onScroll);
+    WidgetsBinding.instance.addObserver(this);
+    final now = WidgetsBinding.instance.lifecycleState;
+    if (now != null) {
+      context.read<ChatController>().setForeground(
+        now == AppLifecycleState.resumed,
+      );
+    }
+  }
+
+  /// Read receipts follow what the user can see: a room behind another app
+  /// (or a minimized call) still receives, but doesn't read.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    context.read<ChatController>().setForeground(
+      state == AppLifecycleState.resumed,
+    );
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _scroll.dispose();
     super.dispose();
   }
@@ -142,10 +164,9 @@ class _ChatViewState extends State<ChatView> {
     //    widgets with their own buildWhen, so they don't cascade here.
     return BlocConsumer<ChatController, ChatSessionState>(
       listenWhen: (a, b) =>
-      a.messages.length != b.messages.length ||
-          a.jumpToSeq != b.jumpToSeq,
+          a.messages.length != b.messages.length || a.jumpToSeq != b.jumpToSeq,
       buildWhen: (a, b) =>
-      a.messages.length != b.messages.length ||
+          a.messages.length != b.messages.length ||
           a.loading != b.loading ||
           a.loadingOlder != b.loadingOlder ||
           a.otherTyping != b.otherTyping ||
@@ -156,16 +177,24 @@ class _ChatViewState extends State<ChatView> {
           _scrollToSeq(jump, state);
           context.read<ChatController>().jumpHandled();
         }
-        final arrived = state.messages.length - _lastCount;
-        if (arrived > 0) {
-          // Record the keys of newly appeared messages for their entry animation.
-          final start = state.messages.length - arrived;
-          for (var i = start; i < state.messages.length; i++) {
-            _newKeys.add(state.messages[i].dedupeKey);
+        // New at the bottom = not shown before, and unsent or newer than
+        // anything shown. An older page loading above is neither animated nor
+        // counted as "new messages". The very first fill animates nothing.
+        var arrived = 0;
+        if (_knownKeys.isNotEmpty) {
+          for (final m in state.messages) {
+            if (_knownKeys.contains(m.dedupeKey)) continue;
+            if (m.seq <= 0 || m.seq > _maxSeq) {
+              _newKeys.add(m.dedupeKey);
+              arrived++;
+            }
           }
-          _handleNewMessages(arrived);
         }
-        _lastCount = state.messages.length;
+        _knownKeys
+          ..clear()
+          ..addAll(state.messages.map((m) => m.dedupeKey));
+        if (state.lastSeq > _maxSeq) _maxSeq = state.lastSeq;
+        if (arrived > 0) _handleNewMessages(arrived);
       },
       builder: (context, state) {
         if (state.loading && state.messages.isEmpty) {
@@ -173,6 +202,13 @@ class _ChatViewState extends State<ChatView> {
         }
 
         final rows = _rows(state);
+        // Where each message sits now, so the list keeps a bubble's widget when
+        // a new message pushes it up one row instead of rebuilding every
+        // bubble on screen (images reloading, players resetting).
+        final indexOf = <String, int>{
+          for (var i = 0; i < rows.length; i++)
+            if (rows[i] case _MsgRow(:final message)) message.dedupeKey: i,
+        };
 
         // Clear entry-animation keys after this frame so subsequent rebuilds
         // (receipts, etc.) don't re-trigger the animation on existing messages.
@@ -195,6 +231,8 @@ class _ChatViewState extends State<ChatView> {
                     reverse: true,
                     padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
                     itemCount: rows.length + (state.loadingOlder ? 1 : 0),
+                    findChildIndexCallback: (key) =>
+                        key is ValueKey<String> ? indexOf[key.value] : null,
                     itemBuilder: (context, i) {
                       if (i >= rows.length) {
                         return const Padding(
@@ -214,40 +252,48 @@ class _ChatViewState extends State<ChatView> {
                         _TypingRow() => const TypingIndicator(),
                         _DateRow(:final label) => _DaySeparator(label: label),
                         _MsgRow(
-                            :final message,
-                            :final continuesAbove,
-                            :final continuesBelow,
+                          :final message,
+                          :final continuesAbove,
+                          :final continuesBelow,
                         ) =>
-                        // ValueKey on _MessageEntry gives the list a stable
-                        // identity so it reuses rather than recreates the
-                        // widget when the list grows.
-                        _MessageEntry(
-                          key: ValueKey(message.dedupeKey),
-                          animate: _newKeys.contains(message.dedupeKey),
-                          child: _SeenReporter(
-                            seq: message.seq,
-                            controller: c,
-                            child: SwipeToReply(
-                              enabled:
-                              widget.composerEnabled &&
-                                  (!message.isSystem || message.isKundaliRef),
-                              reverse: message.senderRole == c.identity.role,
-                              onReply: () => c.replyTo(message),
-                              child: MessageBubble(
-                                // Stable key inside SwipeToReply too, so the
-                                // bubble state (_showOriginal etc.) survives
-                                // a parent rebuild.
-                                key: ValueKey('bubble:${message.dedupeKey}'),
-                                message: message,
-                                controller: c,
-                                continuesAbove: continuesAbove,
-                                continuesBelow: continuesBelow,
-                                systemLabel: widget.systemLabel,
-                                onOpenShared: widget.onOpenShared,
+                          // ValueKey on _MessageEntry gives the list a stable
+                          // identity so it reuses rather than recreates the
+                          // widget when the list grows.
+                          _MessageEntry(
+                            key: ValueKey(message.dedupeKey),
+                            animate: _newKeys.contains(message.dedupeKey),
+                            child: _SeenReporter(
+                              seq: message.seq,
+                              mine: message.senderRole == c.identity.role,
+                              controller: c,
+                              // The list rebuilds only when messages come or go;
+                              // each bubble follows its own message, so ticks,
+                              // "sending…", "failed" and translations change in
+                              // place the moment they change.
+                              child: _LiveMessage(
+                                initial: message,
+                                builder: (live) => SwipeToReply(
+                                  enabled:
+                                      widget.composerEnabled &&
+                                      (!live.isSystem || live.isKundaliRef),
+                                  reverse: live.senderRole == c.identity.role,
+                                  onReply: () => c.replyTo(live),
+                                  child: MessageBubble(
+                                    // Stable key inside SwipeToReply too, so the
+                                    // bubble state (_showOriginal etc.) survives
+                                    // a parent rebuild.
+                                    key: ValueKey('bubble:${live.dedupeKey}'),
+                                    message: live,
+                                    controller: c,
+                                    continuesAbove: continuesAbove,
+                                    continuesBelow: continuesBelow,
+                                    systemLabel: widget.systemLabel,
+                                    onOpenShared: widget.onOpenShared,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
                       };
                     },
                   ),
@@ -323,9 +369,7 @@ class _ChatViewState extends State<ChatView> {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final that = DateTime(local.year, local.month, local.day);
-    final diff = today
-        .difference(that)
-        .inDays;
+    final diff = today.difference(that).inDays;
     if (diff == 0) return 'Today';
     if (diff == 1) return 'Yesterday';
     if (diff < 7) return DateFormat('EEEE').format(local);
@@ -438,7 +482,8 @@ class _FooterRow extends _Row {
 }
 
 class _MsgRow extends _Row {
-  const _MsgRow(this.message, {
+  const _MsgRow(
+    this.message, {
     this.continuesAbove = false,
     this.continuesBelow = false,
   });
@@ -469,9 +514,7 @@ class _DaySeparator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme
-        .of(context)
-        .colorScheme;
+    final scheme = Theme.of(context).colorScheme;
     return Center(
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
@@ -495,14 +538,19 @@ class _DaySeparator extends StatelessWidget {
 
 /// Reports a message as "seen" to the controller when it's built (i.e. on
 /// screen), which drives delivered + read receipts.
+/// Tells the controller when one of the other side's messages is laid out —
+/// on screen, or just about to be. The controller decides whether that counts
+/// as read (room in view) or only delivered.
 class _SeenReporter extends StatefulWidget {
   const _SeenReporter({
     required this.seq,
+    required this.mine,
     required this.controller,
     required this.child,
   });
 
   final int seq;
+  final bool mine;
   final ChatController controller;
   final Widget child;
 
@@ -514,11 +562,35 @@ class _SeenReporterState extends State<_SeenReporter> {
   @override
   void initState() {
     super.initState();
-    if (widget.seq > 0) widget.controller.markSeen(widget.seq);
+    if (widget.seq > 0 && !widget.mine) widget.controller.markSeen(widget.seq);
   }
 
   @override
   Widget build(BuildContext context) => widget.child;
+}
+
+/// One message, followed in the controller's state by its key: rebuilds when
+/// that message changes (a receipt, a send confirmed or failed, a translation)
+/// and not when any other one does.
+class _LiveMessage extends StatelessWidget {
+  const _LiveMessage({required this.initial, required this.builder});
+
+  final ChatMessage initial;
+  final Widget Function(ChatMessage message) builder;
+
+  @override
+  Widget build(BuildContext context) {
+    final key = initial.dedupeKey;
+    return BlocSelector<ChatController, ChatSessionState, ChatMessage>(
+      selector: (s) {
+        for (final m in s.messages) {
+          if (m.dedupeKey == key) return m;
+        }
+        return initial;
+      },
+      builder: (context, message) => builder(message),
+    );
+  }
 }
 
 /// A compact "online · typing… · last seen" line for the app's AppBar.
@@ -529,22 +601,20 @@ class ChatHeaderStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ChatController, ChatSessionState>(
       buildWhen: (a, b) =>
-      a.otherTyping != b.otherTyping ||
+          a.otherTyping != b.otherTyping ||
           a.presence != b.presence ||
           a.connection != b.connection,
       builder: (context, state) {
-        final scheme = Theme
-            .of(context)
-            .colorScheme;
+        final scheme = Theme.of(context).colorScheme;
         final (String text, Color color) = state.otherTyping
             ? ('typing…', scheme.primary)
             : state.presence.otherOnline
             ? ('online', const Color(0xFF2E7D32))
             : state.presence.otherLastSeen != null
             ? (
-        'last seen ${_ago(state.presence.otherLastSeen!)}',
-        scheme.onSurfaceVariant,
-        )
+                'last seen ${_ago(state.presence.otherLastSeen!)}',
+                scheme.onSurfaceVariant,
+              )
             : ('', scheme.onSurfaceVariant);
         if (text.isEmpty) return const SizedBox.shrink();
         return Text(
@@ -581,9 +651,7 @@ class _ToBottomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme
-        .of(context)
-        .colorScheme;
+    final scheme = Theme.of(context).colorScheme;
     return Material(
       elevation: 3,
       color: scheme.surface,
@@ -619,7 +687,6 @@ class _ToBottomButton extends StatelessWidget {
     );
   }
 }
-
 
 class ChatSkeletonLoader extends StatefulWidget {
   const ChatSkeletonLoader({super.key});
@@ -657,8 +724,7 @@ class _ChatRoomSkeletonState extends State<ChatSkeletonLoader>
   late final AnimationController _c = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1400),
-  )
-    ..repeat();
+  )..repeat();
 
   @override
   void dispose() {
@@ -682,21 +748,19 @@ class _ChatRoomSkeletonState extends State<ChatSkeletonLoader>
       backgroundColor: _bg,
       body: AnimatedBuilder(
         animation: _c,
-        builder: (context, child) =>
-            ShaderMask(
-              blendMode: BlendMode.srcATop,
-              shaderCallback: (rect) =>
-                  LinearGradient(
-                    begin: Alignment(-1.5 + 3 * _c.value, -0.3),
-                    end: Alignment(-0.5 + 3 * _c.value, 0.3),
-                    colors: const [
-                      Color(0x00FFFFFF),
-                      Color(0x66FFFFFF),
-                      Color(0x00FFFFFF),
-                    ],
-                  ).createShader(rect),
-              child: child,
-            ),
+        builder: (context, child) => ShaderMask(
+          blendMode: BlendMode.srcATop,
+          shaderCallback: (rect) => LinearGradient(
+            begin: Alignment(-1.5 + 3 * _c.value, -0.3),
+            end: Alignment(-0.5 + 3 * _c.value, 0.3),
+            colors: const [
+              Color(0x00FFFFFF),
+              Color(0x66FFFFFF),
+              Color(0x00FFFFFF),
+            ],
+          ).createShader(rect),
+          child: child,
+        ),
         child: SafeArea(
           child: Column(
             children: [
@@ -725,31 +789,30 @@ class _ChatRoomSkeletonState extends State<ChatSkeletonLoader>
     );
   }
 
-  Widget _appBar() =>
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
+  Widget _appBar() => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    child: Row(
+      children: [
+        _b(24, 24, r: 12),
+        const SizedBox(width: 20),
+        _b(46, 46, r: 23), // avatar
+        const SizedBox(width: 12),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _b(24, 24, r: 12),
-            const SizedBox(width: 20),
-            _b(46, 46, r: 23), // avatar
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _b(140, 16), // name
-                const SizedBox(height: 7),
-                _b(100, 11), // consultation status
-              ],
-            ),
-            const Spacer(),
-            _b(24, 24, r: 12), // search
-            const SizedBox(width: 22),
-            _b(6, 24, r: 3), // more
-            const SizedBox(width: 8),
+            _b(140, 16), // name
+            const SizedBox(height: 7),
+            _b(100, 11), // consultation status
           ],
         ),
-      );
+        const Spacer(),
+        _b(24, 24, r: 12), // search
+        const SizedBox(width: 22),
+        _b(6, 24, r: 3), // more
+        const SizedBox(width: 8),
+      ],
+    ),
+  );
 
   Widget _bubble(bool mine, double width) {
     final bar = mine ? _sentBar : _recvBar;
@@ -791,65 +854,63 @@ class _ChatRoomSkeletonState extends State<ChatSkeletonLoader>
     );
   }
 
-  Widget _ratingCard() =>
-      Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16),
-        padding: const EdgeInsets.fromLTRB(18, 18, 18, 14),
-        decoration: BoxDecoration(
-          color: _card,
-          borderRadius: BorderRadius.circular(28),
-          border: Border.all(color: _cardBorder),
-        ),
-        child: Column(
+  Widget _ratingCard() => Container(
+    margin: const EdgeInsets.symmetric(horizontal: 16),
+    padding: const EdgeInsets.fromLTRB(18, 18, 18, 14),
+    decoration: BoxDecoration(
+      color: _card,
+      borderRadius: BorderRadius.circular(28),
+      border: Border.all(color: _cardBorder),
+    ),
+    child: Column(
+      children: [
+        Row(
           children: [
-            Row(
-              children: [
-                for (var i = 0; i < 5; i++) ...[
-                  _b(22, 22, r: 5, color: _cardBorder), // stars
-                  const SizedBox(width: 4),
-                ],
-                const SizedBox(width: 12),
-                _b(150, 12), // "You rated this session"
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                _b(22, 22, r: 6), // lock icon
-                const SizedBox(width: 12),
-                _b(220, 14), // "Consultation ended..."
-              ],
-            ),
-            const SizedBox(height: 16),
-            Container(
-              height: 56,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: _sent,
-                borderRadius: BorderRadius.circular(28),
-              ),
-              child: Center(child: _b(140, 14, color: _sentBar)),
-            ),
-            const SizedBox(height: 12),
-            _b(210, 10), // "Chat again with ..."
+            for (var i = 0; i < 5; i++) ...[
+              _b(22, 22, r: 5, color: _cardBorder), // stars
+              const SizedBox(width: 4),
+            ],
+            const SizedBox(width: 12),
+            _b(150, 12), // "You rated this session"
           ],
         ),
-      );
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            _b(22, 22, r: 6), // lock icon
+            const SizedBox(width: 12),
+            _b(220, 14), // "Consultation ended..."
+          ],
+        ),
+        const SizedBox(height: 16),
+        Container(
+          height: 56,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: _sent,
+            borderRadius: BorderRadius.circular(28),
+          ),
+          child: Center(child: _b(140, 14, color: _sentBar)),
+        ),
+        const SizedBox(height: 12),
+        _b(210, 10), // "Chat again with ..."
+      ],
+    ),
+  );
 
-  Widget _composer() =>
-      Container(
-        decoration: const BoxDecoration(
-          border: Border(top: BorderSide(color: _cardBorder)),
-        ),
-        padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-        child: Row(
-          children: [
-            _b(28, 28, r: 7),
-            const SizedBox(width: 14),
-            Expanded(child: _b(double.infinity, 52, r: 26)),
-            const SizedBox(width: 10),
-            _b(52, 52, r: 26),
-          ],
-        ),
-      );
+  Widget _composer() => Container(
+    decoration: const BoxDecoration(
+      border: Border(top: BorderSide(color: _cardBorder)),
+    ),
+    padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+    child: Row(
+      children: [
+        _b(28, 28, r: 7),
+        const SizedBox(width: 14),
+        Expanded(child: _b(double.infinity, 52, r: 26)),
+        const SizedBox(width: 10),
+        _b(52, 52, r: 26),
+      ],
+    ),
+  );
 }

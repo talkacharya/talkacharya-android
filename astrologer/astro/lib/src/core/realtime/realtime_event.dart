@@ -45,7 +45,9 @@ sealed class RealtimeEvent {
       case 'consultation.rejected':
         return ConsultationEvent(
           kind: type.split('.').last,
-          consultationId: _nested(data, 'consultation', 'id'),
+          consultationId:
+              _nested(data, 'consultation', 'id') ??
+              data['consultation']?.toString(),
         );
       case 'chat.new_message':
         return NewChatMessage(
@@ -54,6 +56,7 @@ sealed class RealtimeEvent {
               data['consultation']?.toString() ??
               '',
           preview: data['preview'] as String? ?? '',
+          seq: (data['seq'] as num?)?.toInt() ?? 0,
         );
       case 'billing.tick':
         return BillingTick(
@@ -137,9 +140,16 @@ class ConsultationEvent extends RealtimeEvent {
 }
 
 class NewChatMessage extends RealtimeEvent {
-  const NewChatMessage({required this.consultationId, required this.preview});
+  const NewChatMessage({
+    required this.consultationId,
+    required this.preview,
+    this.seq = 0,
+  });
   final String consultationId;
   final String preview;
+
+  /// The message's number in its thread — what "delivered" is reported up to.
+  final int seq;
 }
 
 class BillingTick extends RealtimeEvent {

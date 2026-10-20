@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../firebase_options.dart';
+import 'chat_delivery.dart';
 import 'local_notifications.dart';
 import 'package:talkacharya_assistant/talkacharya_assistant.dart';
 
@@ -23,10 +24,49 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   } catch (_) {}
+  // A chat message reached the phone: that is the sender's second tick.
+  if ('${message.data['thread'] ?? ''}'.isNotEmpty) {
+    await reportChatDeliveredFromPush(message.data);
+  }
+  // "ring": "0" — the call this phone is ringing for is over (it connected on
+  // another phone, timed out, or the consultation ended).
+  if (message.data['ring'] == '0') {
+    final local = LocalNotifications();
+    await local.init();
+    await stopRingFor(
+      local,
+      '${message.data['consultation_id'] ?? ''}',
+      reason: '${message.data['reason'] ?? ''}',
+    );
+    return;
+  }
   if (message.data['ring'] != '1') return;
   final local = LocalNotifications();
   await local.init();
   await ringForCall(local, message.data);
+}
+
+/// A ring that is no longer wanted — the request was withdrawn or ran out, or
+/// it was answered or declined on another phone. Stops the tray's ringing
+/// notification (only if it is this one's) and Android's ringing call.
+///
+/// [reason] `accepted` / `connected` also reaches the phone that did the
+/// answering, possibly before its own answer has gone through; there Android's
+/// call is about to become the live one, so it is only dropped on a phone whose
+/// tray is still ringing for it — one that never answered.
+Future<void> stopRingFor(
+  LocalNotifications local,
+  String consultationId, {
+  String reason = '',
+}) async {
+  if (consultationId.isEmpty) return;
+  final ringing = await local.ringingCall();
+  final ringingHere = '${ringing?['consultation_id'] ?? ''}' == consultationId;
+  if (ringingHere) await local.cancelIncomingCall();
+  final answeredSomewhere = reason == 'accepted' || reason == 'connected';
+  if (ringingHere || !answeredSomewhere) {
+    await CallTelecom.declineIncoming(consultationId);
+  }
 }
 
 /// Raise the ringing notification for a call the astrologer just accepted.
@@ -144,6 +184,16 @@ class PushService {
   }
 
   void _onForegroundMessage(RemoteMessage message) {
+    if (message.data['ring'] == '0') {
+      unawaited(
+        stopRingFor(
+          _local,
+          '${message.data['consultation_id'] ?? ''}',
+          reason: '${message.data['reason'] ?? ''}',
+        ),
+      );
+      return;
+    }
     if (message.data['ring'] == '1') {
       // With the socket up, the room screen is already reacting to the
       // `call.ringing` realtime event; a notification on top would only
@@ -161,6 +211,11 @@ class PushService {
       return;
     }
     final thread = '${message.data['thread'] ?? ''}';
+    // Outside its room the message is "delivered" from here (the room does
+    // its own delivered/read). Harmless if the realtime frame said it first.
+    if (thread.isNotEmpty && !_roomOpen(thread)) {
+      unawaited(reportChatDeliveredFromPush(message.data));
+    }
     if (thread.isNotEmpty && (_roomOpen(thread) || _realtimeOnline())) return;
     final n = message.notification;
     _local.show(

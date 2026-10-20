@@ -226,6 +226,10 @@ class _LiveCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   FilledButton(
+                    style: FilledButton.styleFrom(
+                      minimumSize: const Size(0, 40),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                    ),
                     onPressed: () => context.push(Routes.liveFeed(stream.id)),
                     child: Text(l.liveWatch),
                   ),

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +9,9 @@ import 'package:go_router/go_router.dart';
 import 'package:talkacharya_sounds/talkacharya_sounds.dart';
 
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/notifications/chat_delivery.dart';
+import '../../../../core/notifications/local_notifications.dart';
+import '../../../../core/notifications/push_service.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/network/connectivity_service.dart';
 import '../../../../core/permissions/permissions_primer.dart';
@@ -87,15 +92,35 @@ class _AppShellState extends State<AppShell> {
           channel: channel,
           question: question,
         );
-      case NewChatMessage(:final consultationId):
+      case NewChatMessage(:final consultationId, :final seq):
         // The room sits on the root navigator, above this shell, so the shell's
         // own location never names it: the router check always said "elsewhere"
         // and played a notification tone over the open conversation.
         final here = getIt<RoomPresence>().isOpen(consultationId);
-        if (!here) AppSounds.notify();
+        if (!here) {
+          // On this phone, outside the room: the sender's second tick.
+          unawaited(reportChatDelivered(getIt<Dio>(), consultationId, seq));
+          AppSounds.notify();
+        }
+      case RequestRemoved(:final consultationId):
+        // Withdrawn, timed out or a no-show: the tray, the lock-screen ringing
+        // page and Android's ringing call all stop (the sheet closes itself).
+        unawaited(stopRingFor(getIt<LocalNotifications>(), consultationId));
       case InboxPing():
-      case ConsultationEvent():
         context.read<NotificationsCubit>().bump();
+      case ConsultationEvent(:final kind, :final consultationId):
+        context.read<NotificationsCubit>().bump();
+        // Answered or declined — here or on the astrologer's other phone.
+        if ((kind == 'accepted' || kind == 'rejected') &&
+            consultationId != null) {
+          unawaited(
+            stopRingFor(
+              getIt<LocalNotifications>(),
+              consultationId,
+              reason: kind,
+            ),
+          );
+        }
       default:
         break;
     }

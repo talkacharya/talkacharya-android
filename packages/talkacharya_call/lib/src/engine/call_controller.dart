@@ -19,6 +19,7 @@ class CallTimings {
     this.reofferCooldown = const Duration(seconds: 5),
     this.stats = const Duration(seconds: 2),
     this.networkSettle = const Duration(milliseconds: 400),
+    this.ringbackLimit = const Duration(seconds: 100),
   });
 
   /// Re-announce presence while not connected.
@@ -35,6 +36,11 @@ class CallTimings {
   /// Mobile hand-offs arrive as a burst of events; this collapses them into
   /// one restart on the network the phone actually ended up on.
   final Duration networkSettle;
+
+  /// The longest ringback ever plays. A request the astrologer never answers
+  /// expires on the server after 90 s; if the news of that never reaches this
+  /// phone (no socket, the room closed while minimized), the tone still stops.
+  final Duration ringbackLimit;
 }
 
 /// Runs one 1:1 voice call over self-hosted WebRTC.
@@ -115,6 +121,15 @@ class CallController extends Cubit<CallState> {
   /// consultation still waits to be accepted) until audio first flows.
   final bool _wantsRingback;
   bool _ringing = false;
+
+  /// Set the moment the call is being ended, before any network round-trip:
+  /// the tone must stop when the user (or the server) ends it, not when the
+  /// teardown that follows finally finishes.
+  bool _ringbackOff = false;
+
+  /// Ringback played at some point: an unanswered call still ends with the end tone.
+  bool _rangBack = false;
+  Timer? _ringbackLimitTimer;
   bool _connectedOnce = false;
   final String keepAliveTitle;
   final CallTimings timings;
@@ -189,10 +204,32 @@ class CallController extends Cubit<CallState> {
 
   void _syncRingback(CallPhase phase) {
     final want =
-        _wantsRingback && !_connectedOnce && _ringbackPhases.contains(phase);
+        _wantsRingback &&
+        !_ringbackOff &&
+        !_closed &&
+        !_connectedOnce &&
+        _ringbackPhases.contains(phase);
     if (want == _ringing) return;
     _ringing = want;
-    want ? _sounds.startRingback() : _sounds.stopRingback();
+    if (want) {
+      _rangBack = true;
+      _sounds.startRingback();
+      _ringbackLimitTimer?.cancel();
+      _ringbackLimitTimer = Timer(timings.ringbackLimit, () {
+        _diagnostics.log('ringback: stopped at the limit');
+        _silenceRingback();
+      });
+    } else {
+      _ringbackLimitTimer?.cancel();
+      _ringbackLimitTimer = null;
+      _sounds.stopRingback();
+    }
+  }
+
+  /// Stop the ringback now and for good — whatever phase comes next.
+  void _silenceRingback() {
+    _ringbackOff = true;
+    _syncRingback(state.phase);
   }
 
   // --- proximity ---------------------------------------------------------------
@@ -215,7 +252,6 @@ class CallController extends Cubit<CallState> {
     final from = change.currentState.phase;
     final to = change.nextState.phase;
     if (from == to) return;
-    final wasRinging = _ringing;
     if (to == CallPhase.connected && !_connectedOnce) {
       _connectedOnce = true;
       _syncRingback(to);
@@ -227,12 +263,11 @@ class CallController extends Cubit<CallState> {
     // is silent and indistinguishable from the call having died.
     if (to == CallPhase.reconnecting) {
       _sounds.reconnecting();
-    } else if (to == CallPhase.connected &&
-        from == CallPhase.reconnecting) {
+    } else if (to == CallPhase.connected && from == CallPhase.reconnecting) {
       _sounds.reconnected();
     }
     _syncRingback(to);
-    if (to == CallPhase.ended && (wasRinging || from != CallPhase.idle)) {
+    if (to == CallPhase.ended && (_rangBack || from != CallPhase.idle)) {
       _sounds.ended();
     }
   }
@@ -342,9 +377,7 @@ class CallController extends Cubit<CallState> {
         video: video,
       ),
     );
-    if (video) {
-      unawaited(WakelockPlus.enable());
-    }
+    if (video) unawaited(_keepScreenOn());
 
     emit(state.copyWith(phase: CallPhase.waitingPeer, peerName: join.peerName));
     _sendHello();
@@ -353,6 +386,14 @@ class CallController extends Cubit<CallState> {
       Duration(seconds: max(3, join.heartbeatSeconds)),
       (_) => _heartbeat(),
     );
+  }
+
+  /// Keep the screen lit through a video call. A device (or a test) without
+  /// the plugin just doesn't — never a reason for the call itself to fail.
+  Future<void> _keepScreenOn() async {
+    try {
+      await WakelockPlus.enable();
+    } catch (_) {}
   }
 
   /// Re-announce presence until the peer answers, quickly at first.
@@ -407,6 +448,7 @@ class CallController extends Cubit<CallState> {
   /// The user ends the call: tell the peer, the backend, then tear down.
   Future<void> hangUp() async {
     if (state.phase == CallPhase.ended) return;
+    _silenceRingback();
     await _publish({'t': 'bye'});
     unawaited(_report(CallNetState.disconnected));
     try {
@@ -418,6 +460,7 @@ class CallController extends Cubit<CallState> {
   /// The consultation ended server-side (balance ran out, peer ended, ops…).
   Future<void> onConsultationEnded() async {
     if (state.phase == CallPhase.ended) return;
+    _silenceRingback();
     await _publish({'t': 'bye'});
     await _teardown(CallEndReason.consultationEnded);
   }
@@ -688,9 +731,7 @@ class CallController extends Cubit<CallState> {
     switch (ice) {
       case RtcIceState.connected:
         _reconnectTimer?.cancel();
-        _diagnostics.log(
-          _everConnected ? 'ice: recovered' : 'ice: connected',
-        );
+        _diagnostics.log(_everConnected ? 'ice: recovered' : 'ice: connected');
         _everConnected = true;
         emit(
           state.copyWith(
@@ -844,7 +885,6 @@ class CallController extends Cubit<CallState> {
     } catch (_) {}
   }
 
-
   void _heartbeat() {
     if (_closed) return;
     unawaited(
@@ -987,6 +1027,36 @@ class CallController extends Cubit<CallState> {
   Future<void> _teardown(CallEndReason reason) async {
     if (_closed) return;
     _closed = true;
+    // Before anything that can wait or fail.
+    _silenceRingback();
+    try {
+      await _release(reason);
+    } catch (e) {
+      _diagnostics.log('teardown step failed: $e');
+    } finally {
+      if (!isClosed) {
+        emit(
+          state.copyWith(
+            phase: CallPhase.ended,
+            endReason: reason,
+            clearLocalVideo: true,
+            clearRemoteVideo: true,
+          ),
+        );
+      }
+    }
+  }
+
+  /// Everything a finished call lets go of. Each step is on its own: one that
+  /// throws must not keep the next (the microphone, Telecom, the screen lock)
+  /// held.
+  Future<void> _release(CallEndReason reason) async {
+    Future<void> step(Future<void> Function() f) async {
+      try {
+        await f();
+      } catch (_) {}
+    }
+
     // The last breadcrumb, and the one that says how the call actually went.
     _diagnostics.log(
       'call ended: ${reason.name}, connected=$_everConnected '
@@ -998,18 +1068,15 @@ class CallController extends Cubit<CallState> {
     _reconnectTimer?.cancel();
     _statsTimer?.cancel();
     _networkDebounce?.cancel();
-    await _signalSub?.cancel();
-    await _localVideoSub?.cancel();
-    await _networkSub?.cancel();
-    await _telecomSub?.cancel();
-    await _dropPeer();
-    try {
-      await _engine.release();
-    } catch (_) {}
-    unawaited(_keepAlive.stop());
-    try {
-      await WakelockPlus.disable();
-    } catch (_) {}
+    _ringbackLimitTimer?.cancel();
+    await step(() async => _signalSub?.cancel());
+    await step(() async => _localVideoSub?.cancel());
+    await step(() async => _networkSub?.cancel());
+    await step(() async => _telecomSub?.cancel());
+    await step(_dropPeer);
+    await step(_engine.release);
+    unawaited(step(_keepAlive.stop));
+    await step(WakelockPlus.disable);
     // Or the OS goes on believing this phone is in a call — blocking the next
     // one and holding the audio route.
     unawaited(CallTelecom.end());
@@ -1018,16 +1085,6 @@ class CallController extends Cubit<CallState> {
     if (_proximityHeld) {
       _proximityHeld = false;
       unawaited(CallProximity.setActive(active: false));
-    }
-    if (!isClosed) {
-      emit(
-        state.copyWith(
-          phase: CallPhase.ended,
-          endReason: reason,
-          clearLocalVideo: true,
-          clearRemoteVideo: true,
-        ),
-      );
     }
   }
 

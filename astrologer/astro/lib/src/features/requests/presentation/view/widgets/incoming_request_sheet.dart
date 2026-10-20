@@ -19,6 +19,9 @@ import '../../cubit/requests_cubit.dart';
 import 'decline_reason_sheet.dart';
 import 'request_card.dart';
 import '../../../../../core/notifications/local_notifications.dart';
+import '../../../../../core/notifications/push_service.dart';
+import '../../../../../core/realtime/realtime_client.dart';
+import '../../../../../core/realtime/realtime_event.dart';
 import '../../../../../core/utils/haptic_service.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
@@ -88,17 +91,24 @@ class _IncomingRequestSheet extends StatefulWidget {
   State<_IncomingRequestSheet> createState() => _IncomingRequestSheetState();
 }
 
-class _IncomingRequestSheetState extends State<_IncomingRequestSheet> {
+class _IncomingRequestSheetState extends State<_IncomingRequestSheet>
+    with WidgetsBindingObserver {
   final _total = kAcceptTimeout.inSeconds;
   late int _left = _total;
   Timer? _timer;
   bool _ringing = true;
+
+  /// Ringing from the notification tray (app off screen) rather than in person.
+  bool _fromTray = false;
   bool _busy = false;
   Consultation? _detail;
+  StreamSubscription<RealtimeEvent>? _gone;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _gone = getIt<RealtimeClient>().events.listen(_onRealtime);
     _alert();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) => _tick());
     _loadDetail();
@@ -120,7 +130,47 @@ class _IncomingRequestSheetState extends State<_IncomingRequestSheet> {
     }
   }
 
+  /// The customer withdrew, it timed out on the server, or it was answered or
+  /// declined on the astrologer's other phone: stop ringing and go, instead of
+  /// ringing on for a request that is no longer there.
+  void _onRealtime(RealtimeEvent e) {
+    if (!mounted || _busy) return;
+    final id = switch (e) {
+      RequestRemoved(:final consultationId) => consultationId,
+      ConsultationEvent(:final kind, :final consultationId)
+          when kind == 'accepted' || kind == 'rejected' =>
+        consultationId,
+      _ => null,
+    };
+    if (id != widget.consultationId) return;
+    _timer?.cancel();
+    _stopAlert();
+    context.read<RequestsCubit>().expireLocally(widget.consultationId);
+    Navigator.of(context).pop();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (!_ringing) return;
+    if (state == AppLifecycleState.resumed && _fromTray) {
+      _alert();
+    } else if (state == AppLifecycleState.paused && !_fromTray) {
+      // Locked or left mid-ring: hand the ring to the tray.
+      AppSounds.stop();
+      unawaited(_ringFromTray());
+    }
+  }
+
   void _alert() {
+    // Off screen — a locked phone, another app in front — Android doesn't let
+    // a backgrounded app vibrate or wake the screen for its own sounds, and
+    // nobody would see this sheet. The tray's ringing notification does all
+    // of it, so it rings there.
+    if (!appOnScreen()) {
+      unawaited(_ringFromTray());
+      return;
+    }
+    _fromTray = false;
     // The phone's ringtone + vibration (silent/vibrate mode respected) until the
     // astrologer acts or the request expires — like an incoming call.
     HapticService.heavy();
@@ -142,6 +192,22 @@ class _IncomingRequestSheetState extends State<_IncomingRequestSheet> {
     unawaited(getIt<LocalNotifications>().cancelIncomingCall());
   }
 
+  /// Ring from the tray, unless a push is already ringing there for this one.
+  Future<void> _ringFromTray() async {
+    _fromTray = true;
+    final local = getIt<LocalNotifications>();
+    final ringing = await local.ringingCall();
+    if (!mounted || !_ringing) return;
+    if ('${ringing?['consultation_id'] ?? ''}' == widget.consultationId) return;
+    await ringForRequest(local, {
+      'ring': '1',
+      'consultation_id': widget.consultationId,
+      'channel': widget.channel,
+      'customer_name': _detail?.customerName ?? '',
+      'expires_in': '${_left.clamp(1, 600)}',
+    });
+  }
+
   void _stopAlert() {
     if (_ringing) AppSounds.stop();
     _ringing = false;
@@ -157,6 +223,8 @@ class _IncomingRequestSheetState extends State<_IncomingRequestSheet> {
 
   @override
   void dispose() {
+    unawaited(_gone?.cancel());
+    WidgetsBinding.instance.removeObserver(this);
     _timer?.cancel();
     _stopAlert();
     super.dispose();

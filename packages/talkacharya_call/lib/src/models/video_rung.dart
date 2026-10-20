@@ -26,11 +26,7 @@ class VideoRung {
 /// moving scene, and leave headroom for the audio: on a paid consultation the
 /// voice is the product and the picture is the comfort.
 const kVideoLadder = <VideoRung>[
-  VideoRung(
-    label: '540p',
-    maxBitrateBps: 800000,
-    maxFramerate: 24,
-  ),
+  VideoRung(label: '540p', maxBitrateBps: 800000, maxFramerate: 24),
   VideoRung(
     label: '360p',
     scaleDownBy: 1.5,

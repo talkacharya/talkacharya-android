@@ -5,8 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:simple_pip_mode/pip_widget.dart';
-import 'package:simple_pip_mode/simple_pip.dart';
 import 'package:talkacharya_live/talkacharya_live.dart';
 
 import '../../../../core/di/service_locator.dart';
@@ -24,6 +22,7 @@ import '../../data/models/live_stream_summary.dart';
 import 'widgets/live_chat_image.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Watching a live stream (`/live/{id}`, deep link `talkacharya://livestreams/{id}`).
 ///
 /// The picture comes from our own media server; the chat, viewer count and gift
@@ -98,28 +97,15 @@ class LiveRoomBody extends StatefulWidget {
 }
 
 class _LiveRoomBodyState extends State<LiveRoomBody> {
-  final _simplePip = SimplePip();
-
-  @override
-  void initState() {
-    super.initState();
-    _simplePip.setAutoPipMode();
-  }
-
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<LiveViewerCubit>();
     final hostName = widget.stream?.hostName ?? '';
     return BlocBuilder<LiveViewerCubit, LiveState>(
       builder: (context, state) {
-        return PipWidget(
-          pipBuilder: (context) {
-            return Scaffold(
-              backgroundColor: const Color(0xFF120A26),
-              body: _Stage(state: state, hostName: hostName),
-            );
-          },
-          builder: (context) => PopScope(
+        // No picture-in-picture for a viewer: only a video call shrinks to a
+        // corner when the app is left.
+        return PopScope(
           canPop: !state.phase.isOn,
           onPopInvokedWithResult: (didPop, _) async {
             if (didPop) return;
@@ -155,7 +141,6 @@ class _LiveRoomBodyState extends State<LiveRoomBody> {
                   },
                 ),
               ],
-            ),
             ),
           ),
         );

@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simple_pip_mode/pip_widget.dart';
-import 'package:simple_pip_mode/simple_pip.dart';
+import 'package:talkacharya_call/talkacharya_call.dart';
 import 'package:talkacharya_live/talkacharya_live.dart';
 
 import 'go_live_page.dart';
@@ -34,18 +33,18 @@ class HostRoomPage extends StatefulWidget {
 
 class _HostRoomPageState extends State<HostRoomPage> {
   late final LiveHostCubit _cubit;
-  final _simplePip = SimplePip();
 
   @override
   void initState() {
     super.initState();
-    _simplePip.setAutoPipMode();
     _cubit = buildHostCubit(context, widget.streamId);
     unawaited(_cubit.goLive());
   }
 
   @override
   void dispose() {
+    // Leaving the room: the app no longer follows the user out as a window.
+    unawaited(CallPip.setActive(active: false));
     _cubit.close();
     super.dispose();
   }
@@ -57,91 +56,92 @@ class _HostRoomPageState extends State<HostRoomPage> {
       child: BlocProvider.value(
         value: _cubit,
         child: BlocConsumer<LiveHostCubit, LiveState>(
-          listenWhen: (a, b) =>
-              a.phase != b.phase && b.phase == LivePhase.ended,
+          listenWhen: (a, b) => a.phase != b.phase,
           listener: (context, state) {
-            if (state.endReason == LiveEndReason.hostEnded &&
+            // Picture-in-picture only while on air (the camera is live): going
+            // home mid-stream keeps the host's video in a corner.
+            unawaited(CallPip.setActive(active: state.phase.isOn));
+            if (state.phase == LivePhase.ended &&
+                state.endReason == LiveEndReason.hostEnded &&
                 Navigator.of(context).canPop()) {
               Navigator.of(context).pop();
             }
           },
           builder: (context, state) {
-            return PipWidget(
-              pipBuilder: (context) {
-                return Scaffold(
-                  backgroundColor: const Color(0xFF12102A),
-                  body: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      if (state.showLocalVideo)
-                        LiveVideoView(
-                          track: state.localVideo,
-                          mirror: state.frontCamera,
-                        )
-                      else
-                        const ColoredBox(color: Color(0xFF12102A)),
-                    ],
+            return ValueListenableBuilder<bool>(
+              valueListenable: CallPip.inPip,
+              builder: (context, inPip, _) {
+                if (inPip) {
+                  // A thumbnail: just the camera.
+                  return Scaffold(
+                    backgroundColor: const Color(0xFF12102A),
+                    body: state.showLocalVideo
+                        ? LiveVideoView(
+                            track: state.localVideo,
+                            mirror: state.frontCamera,
+                          )
+                        : const ColoredBox(color: Color(0xFF12102A)),
+                  );
+                }
+                return PopScope(
+                  canPop: !state.phase.isOn,
+                  onPopInvokedWithResult: (didPop, _) async {
+                    if (didPop || !state.phase.isOn) return;
+                    if (await confirmHostEnd(context)) {
+                      await _cubit.endStream();
+                    }
+                  },
+                  child: Scaffold(
+                    backgroundColor: const Color(0xFF12102A),
+                    body: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        if (state.showLocalVideo)
+                          LiveVideoView(
+                            track: state.localVideo,
+                            mirror: state.frontCamera,
+                          )
+                        else
+                          const ColoredBox(color: Color(0xFF12102A)),
+                        SafeArea(
+                          child: switch (state.phase) {
+                            LivePhase.permissionDenied => PermissionView(
+                              blocked: state.permanentlyDenied,
+                              onSettings: _cubit.openSettings,
+                              onRetry: _cubit.retry,
+                              onClose: () => Navigator.of(context).pop(),
+                            ),
+                            LivePhase.failed => FailedView(
+                              message: state.error,
+                              onRetry: _cubit.retry,
+                              onClose: () => Navigator.of(context).pop(),
+                            ),
+                            LivePhase.ended => EndedView(
+                              state: state,
+                              onClose: () => Navigator.of(context).pop(),
+                            ),
+                            LivePhase.preparing ||
+                            LivePhase.joining => const ConnectingView(),
+                            _ => OnAirView(
+                              state: state,
+                              title: widget.title,
+                              onEnd: () async {
+                                if (await confirmHostEnd(context)) {
+                                  await _cubit.endStream();
+                                }
+                              },
+                            ),
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
-              builder: (context) => PopScope(
-                canPop: !state.phase.isOn,
-                onPopInvokedWithResult: (didPop, _) async {
-                  if (didPop || !state.phase.isOn) return;
-                  if (await confirmHostEnd(context)) {
-                    await _cubit.endStream();
-                  }
-                },
-                child: Scaffold(
-                backgroundColor: const Color(0xFF12102A),
-                body: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    if (state.showLocalVideo)
-                      LiveVideoView(
-                        track: state.localVideo,
-                        mirror: state.frontCamera,
-                      )
-                    else
-                      const ColoredBox(color: Color(0xFF12102A)),
-                    SafeArea(
-                      child: switch (state.phase) {
-                        LivePhase.permissionDenied => PermissionView(
-                          blocked: state.permanentlyDenied,
-                          onSettings: _cubit.openSettings,
-                          onRetry: _cubit.retry,
-                          onClose: () => Navigator.of(context).pop(),
-                        ),
-                        LivePhase.failed => FailedView(
-                          message: state.error,
-                          onRetry: _cubit.retry,
-                          onClose: () => Navigator.of(context).pop(),
-                        ),
-                        LivePhase.ended => EndedView(
-                          state: state,
-                          onClose: () => Navigator.of(context).pop(),
-                        ),
-                        LivePhase.preparing || LivePhase.joining => const ConnectingView(),
-                        _ => OnAirView(
-                          state: state,
-                          title: widget.title,
-                          onEnd: () async {
-                            if (await confirmHostEnd(context)) {
-                              await _cubit.endStream();
-                            }
-                          },
-                        ),
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
+            );
+          },
+        ),
       ),
     );
   }
 }
-

@@ -16,6 +16,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
+import '../../helpers/birth_profiles_store.dart';
+
 class MockKundaliCubit extends MockCubit<KundaliState> implements KundaliCubit {
   /// Pages kick off `load*` calls in initState; unstubbed they'd return null
   /// where a Future is expected. Treat them as already-complete no-ops.
@@ -260,6 +263,7 @@ Future<MockKundaliCubit> pumpKundaliPage(
   when(() => cubit.reloadForLanguage()).thenAnswer((_) async {});
   final bpRepo = _MockBpRepo();
   when(() => bpRepo.list()).thenAnswer((_) async => const []);
+  stubLocalStore(bpRepo);
   await tester.pumpWidget(
     MultiBlocProvider(
       providers: [

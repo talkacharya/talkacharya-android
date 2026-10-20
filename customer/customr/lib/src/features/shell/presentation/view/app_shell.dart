@@ -1,12 +1,16 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:talkacharya_call/talkacharya_call.dart';
 import 'package:talkacharya_sounds/talkacharya_sounds.dart';
 
 import '../../../../core/di/service_locator.dart';
+import '../../../../core/notifications/chat_delivery.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/network/connectivity_service.dart';
 import '../../../../core/permissions/permissions_primer.dart';
@@ -55,19 +59,41 @@ class _AppShellState extends State<AppShell> {
     super.dispose();
   }
 
+  /// The call this phone holds for a consultation that has just ended, whether
+  /// or not its room is open: a request minimized while waiting has no room to
+  /// hear that it was declined or ran out, and would ring back on its own.
+  void _settleCall(String kind, String? consultationId) {
+    final hub = getIt<CallHub>();
+    if (consultationId == null || !hub.isFor(consultationId)) return;
+    if (kind == 'ended') {
+      unawaited(hub.controller?.onConsultationEnded());
+    } else if (const {
+      'rejected',
+      'expired',
+      'cancelled',
+      'no_show',
+    }.contains(kind)) {
+      unawaited(hub.release());
+    }
+  }
+
   void _onRealtime(RealtimeEvent event) {
     if (!mounted) return;
     switch (event) {
       case InboxPing():
-      case ConsultationEvent():
         context.read<NotificationsCubit>().bump();
-      case NewChatMessage(:final consultationId, :final preview):
+      case ConsultationEvent(:final kind, :final consultationId):
+        context.read<NotificationsCubit>().bump();
+        _settleCall(kind, consultationId);
+      case NewChatMessage(:final consultationId, :final preview, :final seq):
         // The room is pushed on the root navigator, above this shell, so the
         // shell's own location never names it — asking the router here always
         // said "not in the room" and interrupted people mid-conversation with a
         // toast (and a second tone) for the message already on their screen.
         final here = getIt<RoomPresence>().isOpen(consultationId);
         if (!here) {
+          // On this phone, outside the room: the sender's second tick.
+          unawaited(reportChatDelivered(getIt<Dio>(), consultationId, seq));
           AppSounds.notify();
           _toast(
             preview.isEmpty ? 'New message' : preview,

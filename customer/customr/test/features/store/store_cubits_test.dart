@@ -162,6 +162,40 @@ void main() {
     });
 
     test(
+      'a cancelled payment places no order: back to review, cart kept',
+      () async {
+        when(
+          () => repo.placeOrder(
+            addressId: any(named: 'addressId'),
+            useWallet: any(named: 'useWallet'),
+            note: any(named: 'note'),
+            idempotencyKey: any(named: 'idempotencyKey'),
+          ),
+        ).thenAnswer((_) async => _order(payment: _payment));
+        when(
+          () => payments.pay(
+            orderId: any(named: 'orderId'),
+            payment: any(named: 'payment'),
+            payer: any(named: 'payer'),
+          ),
+        ).thenAnswer((_) async => const GatewayCancelled());
+        when(() => payments.abandon(any())).thenAnswer((_) async {});
+        await cart.load();
+        final c = build();
+        await c.init();
+        final key = c.state.attemptKey;
+        await c.placeOrder(_payer);
+
+        expect(c.state.stage, CheckoutStage.review);
+        expect(c.state.outcome, isA<GatewayCancelled>());
+        expect(c.state.order, isNull);
+        expect(c.state.attemptKey, isNot(key));
+        expect(cart.state.cart.value!.isEmpty, isFalse);
+        verify(() => payments.abandon(any())).called(1);
+      },
+    );
+
+    test(
       'same attempt reuses the idempotency key; changing wallet rotates it',
       () async {
         final c = build();

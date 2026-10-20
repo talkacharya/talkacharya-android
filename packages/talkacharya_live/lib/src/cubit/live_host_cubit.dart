@@ -8,6 +8,7 @@ import '../models/live_chat_message.dart';
 import '../ports/live_ports.dart';
 import '../engine/foreground_keep_alive.dart';
 import 'live_cubit_base.dart';
+import 'screen_awake.dart';
 
 /// Hosting one stream: go live, publish camera + mic, moderate, end.
 ///
@@ -93,12 +94,14 @@ class LiveHostCubit extends LiveCubitBase {
         startedAt: DateTime.now(),
       ),
     );
-    unawaited(WakelockPlus.enable());
-    unawaited(_keepAlive.start(
-      title: 'Live Stream',
-      text: 'You are currently live',
-      video: true,
-    ));
+    unawaited(keepScreenOn());
+    unawaited(
+      _keepAlive.start(
+        title: 'Live Stream',
+        text: 'You are currently live',
+        video: true,
+      ),
+    );
     unawaited(_loadHistory());
   }
 
@@ -205,16 +208,16 @@ class LiveHostCubit extends LiveCubitBase {
   Future<void> translateMessage(String messageId) async {
     final index = state.messages.indexWhere((m) => m.id == messageId);
     if (index == -1) return;
-    
+
     final message = state.messages[index];
     if (message.text.isEmpty) return;
-    
-    // Auto-translation implementation simulation for UI completeness 
+
+    // Auto-translation implementation simulation for UI completeness
     // since live chat translation backend endpoint doesn't exist yet.
     final updated = message.copyWith(text: '[Translated] ${message.text}');
     final newMessages = List<LiveChatMessage>.from(state.messages);
     newMessages[index] = updated;
-    
+
     emitIfOpen(state.copyWith(messages: newMessages));
   }
 

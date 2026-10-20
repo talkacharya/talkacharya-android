@@ -11,6 +11,7 @@ import '../../../../consultations/presentation/widgets/consultation_style.dart';
 import '../../../../consultations/presentation/widgets/shared_details.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Backend `CONSULTATIONS["ACCEPT_TIMEOUT_SECONDS"]` — a request auto-expires
 /// this long after it was made.
 const kAcceptTimeout = Duration(seconds: 90);

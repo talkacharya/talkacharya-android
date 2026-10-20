@@ -19,6 +19,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 class _MockConfig extends Mock implements ConfigRepository {}
 
 class _MockRepo extends Mock implements FollowsRepository {}
@@ -115,7 +116,7 @@ void main() {
           ..resetDevicePixelRatio();
       });
 
-      testWidgets('list cards: heart follows, offline "Notify me" follows', (
+      testWidgets('list cards: the heart follows (no buttons under the card)', (
         tester,
       ) async {
         await tester.pumpWidget(
@@ -144,13 +145,9 @@ void main() {
         expect(follow.state.of('a1')?.following, isTrue);
         expect(find.byIcon(Icons.favorite_rounded), findsOneWidget);
 
-        await tester.tap(find.byIcon(Icons.notifications_none_rounded));
-        await tester.pumpAndSettle();
-        verify(
-          () =>
-              repo.setFollowing('a2', follow: true, source: FollowSource.card),
-        ).called(1);
-        expect(find.byIcon(Icons.notifications_active_rounded), findsOneWidget);
+        // The card is kept light: following is the heart alone, offline or
+        // not — the old "Notify me" button under an offline card is gone.
+        expect(find.byIcon(Icons.notifications_none_rounded), findsNothing);
         expect(tester.takeException(), isNull);
       });
 

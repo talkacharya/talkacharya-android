@@ -198,6 +198,7 @@ class _Engine implements RtcEngine {
     if (micThrows) throw StateError('native track disposed');
     micEnabled = enabled;
   }
+
   @override
   Future<void> setCameraEnabled(bool enabled) async => cameraEnabled = enabled;
   @override
@@ -370,6 +371,59 @@ void main() {
     expect(sounds.played, ['ring', 'stop', 'ended']);
   });
 
+  group('ringback always stops', () {
+    CallController caller(
+      _Sounds sounds, {
+      CallBackend? backend,
+      RtcEngine? engine,
+      CallTimings timings = _fast,
+    }) => CallController(
+      backend: backend ?? _Backend('customer'),
+      signaling: _Hub(),
+      engine: engine ?? _Engine(),
+      permissions: _Perms(MediaPermission.granted, null),
+      timings: timings,
+      sessionId: 'customer-sid',
+      sounds: sounds,
+      ringback: true,
+    );
+
+    test('hanging up silences it before the network answers', () async {
+      final sounds = _Sounds();
+      final backend = _SlowBackend();
+      final c = caller(sounds, backend: backend);
+      expect(sounds.played, ['ring']);
+      final done = c.hangUp();
+      await Future<void>.delayed(Duration.zero);
+      // the server hasn't answered the cancel yet — the tone is already off
+      expect(sounds.played, ['ring', 'stop']);
+      backend.answer.complete();
+      await done;
+      expect(c.state.phase, CallPhase.ended);
+      expect(sounds.played.where((x) => x == 'ring'), hasLength(1));
+      await c.close();
+    });
+
+    test('a failing teardown step still ends the call and the tone', () async {
+      final sounds = _Sounds();
+      final c = caller(sounds, engine: _BrokenEngine());
+      await c.close();
+      expect(sounds.played, ['ring', 'stop', 'ended']);
+    });
+
+    test('it gives up on its own when nobody ever answers', () async {
+      final sounds = _Sounds();
+      final c = caller(
+        sounds,
+        timings: const CallTimings(ringbackLimit: Duration(milliseconds: 30)),
+      );
+      await Future<void>.delayed(const Duration(milliseconds: 80));
+      expect(sounds.played, ['ring', 'stop']);
+      await c.close();
+      expect(sounds.played.where((x) => x == 'ring'), hasLength(1));
+    });
+  });
+
   test('sounds: a room that never rang stays silent when closed', () async {
     final sounds = _Sounds();
     final astro = _side('astrologer', _Hub(), sounds: sounds);
@@ -457,42 +511,45 @@ void main() {
     await astro.c.close();
   });
 
-  test('a network switch restarts ICE without waiting for the timeout', () async {
-    final hub = _Hub();
-    final net = _Network();
-    // Both the reconnect timeout and the re-offer cooldown are 30s here, so an
-    // ICE restart inside a few ms can only have come from the network change.
-    final cust = _side(
-      'customer',
-      hub,
-      connectivity: net,
-      timings: _slowReconnect,
-    );
-    final astro = _side('astrologer', hub, timings: _slowReconnect);
-    await cust.c.start();
-    await astro.c.start();
-    await _settle();
-    cust.engine.last.ice.add(RtcIceState.connected);
-    await _settle(20);
-    expect(cust.c.state.phase, CallPhase.connected);
-    final offersBefore = cust.engine.last.offers.length;
+  test(
+    'a network switch restarts ICE without waiting for the timeout',
+    () async {
+      final hub = _Hub();
+      final net = _Network();
+      // Both the reconnect timeout and the re-offer cooldown are 30s here, so an
+      // ICE restart inside a few ms can only have come from the network change.
+      final cust = _side(
+        'customer',
+        hub,
+        connectivity: net,
+        timings: _slowReconnect,
+      );
+      final astro = _side('astrologer', hub, timings: _slowReconnect);
+      await cust.c.start();
+      await astro.c.start();
+      await _settle();
+      cust.engine.last.ice.add(RtcIceState.connected);
+      await _settle(20);
+      expect(cust.c.state.phase, CallPhase.connected);
+      final offersBefore = cust.engine.last.offers.length;
 
-    net.change(); // walked out of Wi-Fi onto mobile data
-    await _settle(40);
+      net.change(); // walked out of Wi-Fi onto mobile data
+      await _settle(40);
 
-    expect(cust.c.state.phase, CallPhase.reconnecting);
-    expect(cust.backend.reports.last, CallNetState.reconnecting);
-    expect(cust.engine.last.offers.length, greaterThan(offersBefore));
-    expect(cust.engine.last.offers.last, isTrue); // an ICE-restart offer
+      expect(cust.c.state.phase, CallPhase.reconnecting);
+      expect(cust.backend.reports.last, CallNetState.reconnecting);
+      expect(cust.engine.last.offers.length, greaterThan(offersBefore));
+      expect(cust.engine.last.offers.last, isTrue); // an ICE-restart offer
 
-    cust.engine.last.ice.add(RtcIceState.connected);
-    await _settle(20);
-    expect(cust.c.state.phase, CallPhase.connected);
+      cust.engine.last.ice.add(RtcIceState.connected);
+      await _settle(20);
+      expect(cust.c.state.phase, CallPhase.connected);
 
-    await cust.c.close();
-    await astro.c.close();
-    await net.dispose();
-  });
+      await cust.c.close();
+      await astro.c.close();
+      await net.dispose();
+    },
+  );
 
   test('a network blip before the call connects is ignored', () async {
     final hub = _Hub();
@@ -512,35 +569,38 @@ void main() {
     await net.dispose();
   });
 
-  test('a cellular call holds the consultation, and releasing it resumes', () async {
-    final hub = _Hub();
-    final telecom = StreamController<CallTelecomEvent>.broadcast();
-    final cust = _side('customer', hub, telecomEvents: telecom.stream);
-    final astro = _side('astrologer', hub);
-    await cust.c.start();
-    await astro.c.start();
-    await _settle();
-    cust.engine.last.ice.add(RtcIceState.connected);
-    await _settle(20);
-    expect(cust.c.state.muted, isFalse);
+  test(
+    'a cellular call holds the consultation, and releasing it resumes',
+    () async {
+      final hub = _Hub();
+      final telecom = StreamController<CallTelecomEvent>.broadcast();
+      final cust = _side('customer', hub, telecomEvents: telecom.stream);
+      final astro = _side('astrologer', hub);
+      await cust.c.start();
+      await astro.c.start();
+      await _settle();
+      cust.engine.last.ice.add(RtcIceState.connected);
+      await _settle(20);
+      expect(cust.c.state.muted, isFalse);
 
-    // Someone rings the phone: Telecom takes the line for the cellular call.
-    telecom.add(const TelecomHold());
-    await _settle(20);
-    expect(cust.c.state.muted, isTrue);
-    expect(cust.engine.micEnabled, isFalse);
-    // Held, not ended — the consultation is still up and still billed.
-    expect(cust.c.state.phase, CallPhase.connected);
+      // Someone rings the phone: Telecom takes the line for the cellular call.
+      telecom.add(const TelecomHold());
+      await _settle(20);
+      expect(cust.c.state.muted, isTrue);
+      expect(cust.engine.micEnabled, isFalse);
+      // Held, not ended — the consultation is still up and still billed.
+      expect(cust.c.state.phase, CallPhase.connected);
 
-    telecom.add(const TelecomUnhold());
-    await _settle(20);
-    expect(cust.c.state.muted, isFalse);
-    expect(cust.engine.micEnabled, isTrue);
+      telecom.add(const TelecomUnhold());
+      await _settle(20);
+      expect(cust.c.state.muted, isFalse);
+      expect(cust.engine.micEnabled, isTrue);
 
-    await cust.c.close();
-    await astro.c.close();
-    await telecom.close();
-  });
+      await cust.c.close();
+      await astro.c.close();
+      await telecom.close();
+    },
+  );
 
   test('a telecom disconnect ends the consultation', () async {
     final hub = _Hub();
@@ -810,27 +870,30 @@ void main() {
     await astro.c.close();
   });
 
-  test('a camera the user turned off is never turned back on for them', () async {
-    final hub = _Hub();
-    final cust = _side('customer', hub, video: true);
-    final astro = _side('astrologer', hub, video: true);
-    await cust.c.start();
-    await astro.c.start();
-    await _settle();
-    cust.engine.last.ice.add(RtcIceState.connected);
-    await _settle(20);
+  test(
+    'a camera the user turned off is never turned back on for them',
+    () async {
+      final hub = _Hub();
+      final cust = _side('customer', hub, video: true);
+      final astro = _side('astrologer', hub, video: true);
+      await cust.c.start();
+      await astro.c.start();
+      await _settle();
+      cust.engine.last.ice.add(RtcIceState.connected);
+      await _settle(20);
 
-    await cust.c.toggleCamera(); // the user's own choice
-    expect(cust.c.state.cameraOn, isFalse);
+      await cust.c.toggleCamera(); // the user's own choice
+      expect(cust.c.state.cameraOn, isFalse);
 
-    // A long stretch of a perfectly good connection must not undo it.
-    await _settle(400);
-    expect(cust.c.state.cameraOn, isFalse);
-    expect(cust.c.state.videoPausedForNetwork, isFalse);
+      // A long stretch of a perfectly good connection must not undo it.
+      await _settle(400);
+      expect(cust.c.state.cameraOn, isFalse);
+      expect(cust.c.state.videoPausedForNetwork, isFalse);
 
-    await cust.c.close();
-    await astro.c.close();
-  });
+      await cust.c.close();
+      await astro.c.close();
+    },
+  );
 
   test('a voice call is never touched by video adaptation', () async {
     final hub = _Hub();
@@ -845,7 +908,10 @@ void main() {
     await _settle(250);
 
     expect(cust.c.state.quality, 1); // it noticed
-    expect(cust.c.state.videoPausedForNetwork, isFalse); // but had nothing to do
+    expect(
+      cust.c.state.videoPausedForNetwork,
+      isFalse,
+    ); // but had nothing to do
     expect(cust.c.state.phase, CallPhase.connected);
 
     await cust.c.close();
@@ -1168,4 +1234,17 @@ void main() {
       await astro.c.close();
     });
   });
+}
+
+class _SlowBackend extends _Backend {
+  _SlowBackend() : super('customer');
+  final answer = Completer<void>();
+
+  @override
+  Future<void> endConsultation() => answer.future;
+}
+
+class _BrokenEngine extends _Engine {
+  @override
+  Future<void> release() async => throw StateError('camera already gone');
 }

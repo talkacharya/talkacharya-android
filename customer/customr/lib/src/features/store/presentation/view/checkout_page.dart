@@ -13,6 +13,7 @@ import 'addresses_pages.dart';
 import '../widgets/store_ui.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// `/store/checkout` — pops the order id once an order exists (paid or not).
 class CheckoutPage extends StatelessWidget {
   const CheckoutPage({super.key});
@@ -27,18 +28,21 @@ class CheckoutPage extends StatelessWidget {
         if (state.error != null && state.stage == CheckoutStage.review) {
           storeToast(context, state.error!);
         }
-        final order = state.order;
-        if (state.stage == CheckoutStage.placed && order != null) {
+        // Payment closed or failed: still here, the cart untouched.
+        if (state.stage == CheckoutStage.review) {
           switch (state.outcome) {
             case GatewayCancelled():
-              storeToast(context, l.storePaymentCancelled);
+              storeToast(context, l.storePaymentCancelledCart);
             case GatewayFailed(:final message):
               storeToast(
                 context,
-                message.isEmpty ? l.storePaymentFailed : message,
+                message.isEmpty ? l.storePaymentFailedCart : message,
               );
             case _:
           }
+        }
+        final order = state.order;
+        if (state.stage == CheckoutStage.placed && order != null) {
           context.pop(order.id);
         }
       },

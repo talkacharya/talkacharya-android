@@ -9,8 +9,10 @@ class AppChatSounds implements ChatSounds {
   const AppChatSounds();
   @override
   void incoming() => AppSounds.effect(SoundEffect.messageIn);
+
+  // Sending is silent: the tick on the bubble already says it went.
   @override
-  void sent() => AppSounds.effect(SoundEffect.messageOut);
+  void sent() {}
 }
 
 /// Call tones: ringback while the other side rings, connect and hang-up tones.

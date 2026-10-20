@@ -173,7 +173,7 @@ class CallState extends Equatable {
     audioRoutes: audioRoutes ?? this.audioRoutes,
     videoPausedForNetwork: videoPausedForNetwork ?? this.videoPausedForNetwork,
     quality: quality ?? this.quality,
-      peerQuality: peerQuality ?? this.peerQuality,
+    peerQuality: peerQuality ?? this.peerQuality,
     relayed: relayed ?? this.relayed,
     connectedAt: connectedAt ?? this.connectedAt,
     endReason: endReason ?? this.endReason,

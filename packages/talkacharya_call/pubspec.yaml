@@ -17,7 +17,6 @@ dependencies:
   flutter_foreground_task: ^10.0.0
   connectivity_plus: ^6.1.1
   wakelock_plus: any
-  simple_pip_mode: ^1.1.0
 
 dev_dependencies:
   flutter_test:

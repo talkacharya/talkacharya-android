@@ -9,6 +9,7 @@ import 'src/core/config/flavor.dart';
 import 'src/core/network/friendly_error.dart';
 import 'src/core/di/service_locator.dart';
 import 'src/core/firebase/firebase_setup.dart';
+import 'src/core/notifications/chat_delivery.dart';
 import 'src/core/notifications/local_notifications.dart';
 import 'src/core/notifications/push_service.dart';
 import 'src/features/auth/presentation/bloc/auth/auth_bloc.dart';
@@ -16,6 +17,7 @@ import 'package:talkacharya_call/talkacharya_call.dart';
 import 'src/core/sounds/app_sound_adapters.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 class _AppBlocObserver extends BlocObserver {
   const _AppBlocObserver();
 
@@ -60,6 +62,8 @@ Future<void> bootstrap(Flavor flavor) async {
   ErrorWidget.builder = (details) => AppErrorWidget(details: details);
 
   await configureDependencies(config);
+  // For the push isolate, which reports chat deliveries without the app's DI.
+  unawaited(rememberApiBase(config.apiBaseUrl));
   getIt<AuthBloc>().stream.listen((s) => FirebaseSetup.setUser(s.user?.id));
 
   await getIt<LocalNotifications>().init();

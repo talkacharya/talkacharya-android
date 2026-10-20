@@ -134,7 +134,13 @@ class CheckoutCubit extends Cubit<CheckoutState> {
   Future<void> placeOrder(PayerInfo payer) async {
     final q = state.quote.value;
     if (q == null || !q.ok || state.stage != CheckoutStage.review) return;
-    emit(state.copyWith(stage: CheckoutStage.placing, clearError: true));
+    emit(
+      state.copyWith(
+        stage: CheckoutStage.placing,
+        clearError: true,
+        clearOutcome: true,
+      ),
+    );
 
     final StoreOrder order;
     try {
@@ -162,12 +168,12 @@ class CheckoutCubit extends Cubit<CheckoutState> {
       return;
     }
 
-    // The order exists: the server has emptied the cart.
-    _cart.markOrdered();
     _repo.invalidate();
 
     final payment = order.payment;
     if (!order.awaitingPayment || payment == null || payment.amount <= 0) {
+      // Paid from the wallet: the server has taken the items out of the cart.
+      _cart.markOrdered();
       emit(state.copyWith(stage: CheckoutStage.placed, order: order));
       return;
     }
@@ -178,6 +184,24 @@ class CheckoutCubit extends Cubit<CheckoutState> {
       payment: payment,
       payer: payer,
     );
+    if (outcome is GatewayCancelled || outcome is GatewayFailed) {
+      // Like any shop: no payment, no order. The server lets go of the stock
+      // and wallet hold, the items stay in the cart, and the customer is back
+      // on this screen to try again.
+      await _payments.abandon(order.id);
+      emit(
+        state.copyWith(
+          stage: CheckoutStage.review,
+          outcome: outcome,
+          attemptKey: StoreRepository.newCheckoutKey(),
+          clearOrder: true,
+        ),
+      );
+      await requote();
+      return;
+    }
+    // Paid, or paid and still being confirmed: the server empties the cart.
+    _cart.markOrdered();
     emit(
       state.copyWith(
         stage: CheckoutStage.placed,
@@ -256,6 +280,8 @@ class CheckoutState extends Equatable {
     GatewayOutcome? outcome,
     String? error,
     bool clearError = false,
+    bool clearOrder = false,
+    bool clearOutcome = false,
   }) => CheckoutState(
     attemptKey: attemptKey ?? this.attemptKey,
     addresses: addresses ?? this.addresses,
@@ -264,8 +290,8 @@ class CheckoutState extends Equatable {
     note: note ?? this.note,
     quote: quote ?? this.quote,
     stage: stage ?? this.stage,
-    order: order ?? this.order,
-    outcome: outcome ?? this.outcome,
+    order: clearOrder ? null : (order ?? this.order),
+    outcome: clearOutcome ? null : (outcome ?? this.outcome),
     error: clearError ? null : (error ?? this.error),
   );
 

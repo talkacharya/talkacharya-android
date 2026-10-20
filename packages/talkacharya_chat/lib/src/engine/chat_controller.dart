@@ -78,6 +78,7 @@ class ChatController extends Cubit<ChatSessionState> {
       await _media?.keep(uploaded, path);
     } catch (_) {}
   }
+
   bool get canRecordVoice => _recorder != null;
 
   DateTime? _recordingSince;
@@ -112,13 +113,28 @@ class ChatController extends Cubit<ChatSessionState> {
   Timer? _otherTypingClear;
   Timer? _seenDebounce;
   bool _sentTyping = false;
+
+  /// The newest of the other side's messages this phone has in the room.
   int _seenTarget = 0;
+
+  /// What the server has already been told: read up to, delivered up to.
+  int _readSent = 0;
+  int _deliveredSent = 0;
+
+  /// Whether the room is actually in front of the user. A room left open
+  /// behind another app (or a minimized call) receives messages — that is
+  /// "delivered" — but nobody is reading them.
+  bool _foreground = true;
 
   // --- lifecycle ---------------------------------------------------------
 
   Future<void> start() async {
     emit(state.copyWith(loading: true, error: null));
-    final pending = await _loadOutbox();
+    // Unsent messages carry no number until the server gives them one (older
+    // builds stored a guessed one, which collided with real arrivals).
+    final pending = [
+      for (final m in await _loadOutbox()) m.seq > 0 ? m.copyWith(seq: 0) : m,
+    ];
 
     // What the customer read last time, straight off the device. Older
     // messages never change, so this is the whole room for all but the tail —
@@ -136,8 +152,7 @@ class ChatController extends Cubit<ChatSessionState> {
       );
     }
     try {
-      final maxSeq =
-          cached.fold<int>(0, (max, m) => m.seq > max ? m.seq : max);
+      final maxSeq = cached.fold<int>(0, (max, m) => m.seq > max ? m.seq : max);
 
       final List<ChatMessage> history;
       if (maxSeq > 0) {
@@ -217,13 +232,12 @@ class ChatController extends Cubit<ChatSessionState> {
     switch (type) {
       case 'message.new':
         final m = ChatMessage.fromMap(data);
-        if (m.senderRole != _id.role &&
-            m.senderRole != ParticipantRole.system &&
-            !_has(m)) {
-          _sounds.incoming();
-        }
+        final theirs =
+            m.senderRole != _id.role && m.senderRole != ParticipantRole.system;
+        if (theirs && !_has(m)) _sounds.incoming();
         _merge(m);
-        _bumpSeen();
+        // On this phone now: delivered at once, read if the room is in view.
+        if (theirs) markSeen(m.seq);
       case 'message.pinned':
       case 'message.unpinned':
         unawaited(loadPins());
@@ -320,7 +334,7 @@ class ChatController extends Cubit<ChatSessionState> {
       ChatMessage(
         id: cmid,
         clientMessageId: cmid,
-        seq: state.lastSeq + 1,
+        seq: 0, // the server numbers it; 0 until then
         senderRole: _id.role,
         body: body,
         sourceLanguage: _id.language.split('-').first,
@@ -431,7 +445,9 @@ class ChatController extends Cubit<ChatSessionState> {
 
   /// Stop and send. A recording too short to be speech is thrown away rather
   /// than sent — that is a slipped finger, not a message.
-  Future<void> sendVoiceNote({Duration minimum = const Duration(seconds: 1)}) async {
+  Future<void> sendVoiceNote({
+    Duration minimum = const Duration(seconds: 1),
+  }) async {
     final recorder = _recorder;
     if (recorder == null || !state.recording) return;
     final since = _recordingSince;
@@ -440,7 +456,9 @@ class ChatController extends Cubit<ChatSessionState> {
 
     final path = await recorder.stop();
     if (path == null || path.isEmpty) return;
-    final held = since == null ? Duration.zero : DateTime.now().difference(since);
+    final held = since == null
+        ? Duration.zero
+        : DateTime.now().difference(since);
     if (held < minimum) return;
 
     final cmid = _clientId();
@@ -448,7 +466,7 @@ class ChatController extends Cubit<ChatSessionState> {
       ChatMessage(
         id: cmid,
         clientMessageId: cmid,
-        seq: state.lastSeq + 1,
+        seq: 0, // the server numbers it; 0 until then
         senderRole: _id.role,
         type: 'audio',
         createdAt: DateTime.now(),
@@ -478,7 +496,10 @@ class ChatController extends Cubit<ChatSessionState> {
 
   Future<void> _dispatchVoice(String cmid, String path, int seconds) async {
     try {
-      final uploaded = await _t.uploadAttachment(path, durationSeconds: seconds);
+      final uploaded = await _t.uploadAttachment(
+        path,
+        durationSeconds: seconds,
+      );
       await _keepSent(uploaded, path);
       final server = await _t.send(
         attachmentIds: [uploaded.id],
@@ -509,7 +530,7 @@ class ChatController extends Cubit<ChatSessionState> {
         ChatMessage(
           id: cmid,
           clientMessageId: cmid,
-          seq: state.lastSeq + 1,
+          seq: 0, // the server numbers it; 0 until then
           senderRole: _id.role,
           type: 'image',
           createdAt: DateTime.now(),
@@ -684,30 +705,71 @@ class ChatController extends Cubit<ChatSessionState> {
     }
   }
 
-  // --- receipts (driven by the list as messages become visible) --------
+  // --- receipts ------------------------------------------------------
+  //
+  // "Delivered" is this phone having the message; "read" is the room being in
+  // front of the user while it is there. Both go up to a sequence number, and
+  // each is sent once per advance.
 
+  /// The other side's message [seq] is here (it arrived, or its bubble was
+  /// laid out). Read if the room is in view, delivered otherwise.
   void markSeen(int seq) {
-    if (seq <= _seenTarget) return;
-    _seenTarget = seq;
-    _seenDebounce?.cancel();
-    _seenDebounce = Timer(const Duration(milliseconds: 500), _flushSeen);
+    if (seq > _seenTarget) _seenTarget = seq;
+    _scheduleReceipts();
+  }
+
+  /// The app came to the front or went behind something. Coming back reads
+  /// whatever arrived meanwhile.
+  void setForeground(bool foreground) {
+    if (_foreground == foreground) return;
+    _foreground = foreground;
+    if (foreground) _scheduleReceipts();
   }
 
   void _bumpSeen() => markSeen(state.lastSeq);
 
+  void _scheduleReceipts() {
+    _seenDebounce?.cancel();
+    _seenDebounce = Timer(const Duration(milliseconds: 300), _flushSeen);
+  }
+
+  bool _hasTheirsAbove(int from, int upTo) => state.messages.any(
+    (m) =>
+        m.senderRole != _id.role &&
+        !m.isSystem &&
+        m.seq > from &&
+        m.seq <= upTo,
+  );
+
   void _flushSeen() {
+    if (isClosed) return;
     final target = _seenTarget;
     if (target <= 0) return;
-    final incoming = state.messages.where(
-      (m) =>
-          m.senderRole != _id.role &&
-          !m.isSystem &&
-          m.seq > 0 &&
-          m.seq <= target,
-    );
-    if (incoming.isEmpty) return;
-    unawaited(_t.markDelivered(target));
-    unawaited(_t.markRead(target));
+    if (_foreground) {
+      if (target <= _readSent || !_hasTheirsAbove(_readSent, target)) return;
+      final readBefore = _readSent;
+      final deliveredBefore = _deliveredSent;
+      _readSent = target;
+      // Read implies delivered.
+      if (target > _deliveredSent) _deliveredSent = target;
+      _t.markRead(target).catchError((_) {
+        // Not told: let the next look try again.
+        if (_readSent == target) {
+          _readSent = readBefore;
+          _deliveredSent = deliveredBefore;
+        }
+      });
+    } else {
+      if (target <= _deliveredSent ||
+          !_hasTheirsAbove(_deliveredSent, target)) {
+        return;
+      }
+      final before = _deliveredSent;
+      _deliveredSent = target;
+      _t.markDelivered(target).catchError((_) {
+        if (_deliveredSent == target) _deliveredSent = before;
+      });
+    }
   }
 
   void _applyReceipt(Map<String, dynamic> data) {
@@ -849,10 +911,15 @@ class ChatController extends Cubit<ChatSessionState> {
     );
   }
 
+  /// Confirmed messages in the server's order; unsent ones after them, in the
+  /// order they were written — the way a messenger shows a message still on
+  /// its way.
   List<ChatMessage> _sorted(List<ChatMessage> l) {
     final copy = [...l]
       ..sort((a, b) {
-        if (a.seq != 0 && b.seq != 0) return a.seq.compareTo(b.seq);
+        final ap = a.seq <= 0, bp = b.seq <= 0;
+        if (ap != bp) return ap ? 1 : -1;
+        if (!ap) return a.seq.compareTo(b.seq);
         final at = a.createdAt ?? DateTime(2000);
         final bt = b.createdAt ?? DateTime(2000);
         return at.compareTo(bt);

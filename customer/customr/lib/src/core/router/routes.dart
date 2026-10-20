@@ -144,4 +144,16 @@ class Routes {
 
   /// Order of the branches — index maps to the bottom-nav destinations.
   static const branchRoots = [home, astrologers, store, profile];
+
+  /// Checks whether [location] is a tab route or nested sub-route within [AppShell].
+  static bool isShellRoute(String location) {
+    final path = location.split('?').first;
+    return path == home ||
+        path == astrologers ||
+        path.startsWith('/astrologers/') ||
+        path == store ||
+        path.startsWith('/store/') ||
+        path == profile ||
+        path.startsWith('/profile/');
+  }
 }

@@ -229,10 +229,7 @@ class CallTelecom {
   }) async {
     if (!_android) return false;
     _listen();
-    return await _invoke('start', {
-          'callId': callId,
-          'peerName': peerName,
-        }) ??
+    return await _invoke('start', {'callId': callId, 'peerName': peerName}) ??
         false;
   }
 

@@ -8,6 +8,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../helpers/birth_profiles_store.dart';
+
 class _MockRepo extends Mock implements BirthProfilesRepository {}
 
 class _MockStorage extends Mock implements FlutterSecureStorage {}
@@ -58,6 +60,9 @@ void main() {
     ).thenAnswer((_) async {});
     when(() => storage.delete(key: any(named: 'key'))).thenAnswer((_) async {});
     store = ActiveProfileStore(storage);
+    // The on-device copy of the list: empty here, so every load goes to the
+    // server like a first run.
+    stubLocalStore(repo);
   });
 
   BirthProfilesCubit build() => BirthProfilesCubit(repo: repo, store: store);
@@ -143,9 +148,9 @@ void main() {
     'update replaces the profile in place, keeps the active id',
     build: () {
       when(repo.list).thenAnswer((_) async => [_p('1'), _p('2')]);
-      when(() => repo.update('2', any())).thenAnswer(
-        (_) async => _p('2', relation: 'spouse'),
-      );
+      when(
+        () => repo.update('2', any()),
+      ).thenAnswer((_) async => _p('2', relation: 'spouse'));
       return build();
     },
     act: (c) async {

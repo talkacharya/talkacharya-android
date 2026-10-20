@@ -71,7 +71,9 @@ class CallHub extends ChangeNotifier {
       // A live video call follows the user out of the app as a picture-in-picture
       // window; anything else (voice, or a call that is over) must not.
       unawaited(CallPip.setActive(active: info.video && state.phase.isLive));
-      if (state.phase == CallPhase.ended) unawaited(release());
+      // Expanded, the call screen is showing the ending and its room releases
+      // the call when it closes; only a minimized call has nobody to do it.
+      if (state.phase == CallPhase.ended && !_expanded) unawaited(release());
     });
     _safeNotify();
     if (previous != null && !identical(previous, controller)) {
