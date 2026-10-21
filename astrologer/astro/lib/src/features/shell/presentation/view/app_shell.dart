@@ -211,8 +211,8 @@ class _NavDest {
   final int badge;
 }
 
-/// Floating cosmic pill — same as the customer app's nav. Every tab shows icon
-/// over label; the selected one sits in a gold pill.
+/// The bottom bar — the customer app's own: a full-width cosmic strip, icon
+/// over label, the selected tab in gold. Counts sit on the icons.
 class _FloatingNavBar extends StatelessWidget {
   const _FloatingNavBar({
     required this.currentIndex,
@@ -224,141 +224,45 @@ class _FloatingNavBar extends StatelessWidget {
   final ValueChanged<int> onTap;
   final List<_NavDest> destinations;
 
+  Widget _icon(IconData icon, int badge) => Badge.count(
+    count: badge,
+    isLabelVisible: badge > 0,
+    backgroundColor: const Color(0xFFE5484D),
+    child: Icon(icon),
+  );
+
   @override
   Widget build(BuildContext context) {
     final brand = context.brand;
-    final radius = BorderRadius.circular(26);
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: radius,
-            boxShadow: [
-              BoxShadow(
-                color: brand.cosmicStart.withValues(alpha: 0.35),
-                blurRadius: 22,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: radius,
-            child: Container(
-              height: 66,
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              decoration: BoxDecoration(
-                borderRadius: radius,
-                gradient: LinearGradient(
-                  colors: [
-                    brand.cosmicStart,
-                    brand.cosmicEnd,
-                    const Color(0xFF3B0F5C),
-                  ],
-                ),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-              ),
-              child: Material(
-                type: MaterialType.transparency,
-                child: Row(
-                  children: [
-                    for (var i = 0; i < destinations.length; i++)
-                      Expanded(
-                        child: _NavCell(
-                          dest: destinations[i],
-                          selected: i == currentIndex,
-                          onTap: () => onTap(i),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [brand.cosmicStart, brand.cosmicEnd, const Color(0xFF3B0F5C)],
         ),
       ),
-    );
-  }
-}
-
-class _NavCell extends StatelessWidget {
-  const _NavCell({
-    required this.dest,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final _NavDest dest;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    const selectedFg = Color(0xFF3A1703);
-    final idle = Colors.white.withValues(alpha: 0.62);
-    return Semantics(
-      button: true,
-      selected: selected,
-      label: dest.badge > 0 ? '${dest.label}, ${dest.badge}' : dest.label,
-      child: InkWell(
+      child: BottomNavigationBar(
+        currentIndex: currentIndex,
         onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        splashColor: Colors.white.withValues(alpha: 0.08),
-        highlightColor: Colors.white.withValues(alpha: 0.04),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 220),
-              curve: Curves.easeOutCubic,
-              width: selected ? 52 : 40,
-              height: 30,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(999),
-                gradient: selected
-                    ? const LinearGradient(colors: BrandColors.goldGradient)
-                    : null,
-                boxShadow: selected
-                    ? [
-                        BoxShadow(
-                          color: BrandColors.goldGradient.last.withValues(
-                            alpha: 0.45,
-                          ),
-                          blurRadius: 10,
-                          offset: const Offset(0, 3),
-                        ),
-                      ]
-                    : null,
-              ),
-              child: Center(
-                child: Badge(
-                  isLabelVisible: dest.badge > 0,
-                  label: Text(dest.badge > 99 ? '99+' : '${dest.badge}'),
-                  backgroundColor: context.brand.live,
-                  offset: const Offset(4, -4),
-                  child: Icon(
-                    selected ? dest.selectedIcon : dest.icon,
-                    size: 21,
-                    color: selected ? selectedFg : idle,
-                  ),
-                ),
-              ),
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        selectedItemColor: const Color(0xFFFFB02E),
+        unselectedItemColor: Colors.white.withValues(alpha: 0.62),
+        selectedFontSize: 11,
+        unselectedFontSize: 11,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w800),
+        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
+        items: [
+          for (final d in destinations)
+            BottomNavigationBarItem(
+              icon: _icon(d.icon, d.badge),
+              activeIcon: _icon(d.selectedIcon, d.badge),
+              label: d.label,
+              tooltip: d.badge > 0 ? '${d.label}, ${d.badge}' : d.label,
             ),
-            const SizedBox(height: 3),
-            Text(
-              dest.label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                color: selected ? Colors.white : idle,
-                fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
-                fontSize: 11,
-                height: 1.1,
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }

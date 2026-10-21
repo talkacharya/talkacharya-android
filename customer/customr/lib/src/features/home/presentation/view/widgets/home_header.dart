@@ -139,7 +139,8 @@ class HomeFloatingCtaBar extends StatelessWidget {
             child: _HeroCta(
               label: l.homeChatNow,
               icon: Icons.chat_bubble_rounded,
-              filled: true,
+              colors: BrandColors.goldGradient,
+              fg: const Color(0xFF3A1703),
               onTap: () => context.go(
                 Routes.astrologersWith(channel: 'chat', sort: 'recommended'),
               ),
@@ -150,7 +151,10 @@ class HomeFloatingCtaBar extends StatelessWidget {
             child: _HeroCta(
               label: l.homeCallNow,
               icon: Icons.phone_in_talk_rounded,
-              filled: false,
+              // Solid too, in the app's call green: the see-through glass it
+              // had read as disabled over the cards behind it.
+              colors: const [Color(0xFF1FB58F), Color(0xFF0E8F72)],
+              fg: Colors.white,
               onTap: () => context.go(
                 Routes.astrologersWith(channel: 'voice', sort: 'recommended'),
               ),
@@ -179,38 +183,38 @@ class _NebulaSlice extends StatelessWidget {
     );
   }
 }
+
 class _HeroCta extends StatelessWidget {
   const _HeroCta({
     required this.label,
     required this.icon,
-    required this.filled,
+    required this.colors,
+    required this.fg,
     required this.onTap,
   });
 
   final String label;
   final IconData icon;
-  final bool filled;
+
+  /// The button's fill, left to right, and the colour on it.
+  final List<Color> colors;
+  final Color fg;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final fg = filled ? const Color(0xFF3A1703) : Colors.white;
     return Pressable(
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          boxShadow: filled
-              ? [
-                  BoxShadow(
-                    color: BrandColors.goldGradient.last.withValues(
-                      alpha: 0.45,
-                    ),
-                    blurRadius: 18,
-                    offset: const Offset(0, 6),
-                  ),
-                ]
-              : null,
+          boxShadow: [
+            BoxShadow(
+              color: colors.last.withValues(alpha: 0.45),
+              blurRadius: 18,
+              offset: const Offset(0, 6),
+            ),
+          ],
         ),
         child: Material(
           borderRadius: BorderRadius.circular(16),
@@ -218,14 +222,8 @@ class _HeroCta extends StatelessWidget {
           color: Colors.transparent,
           child: Ink(
             decoration: BoxDecoration(
-              gradient: filled
-                  ? const LinearGradient(colors: BrandColors.goldGradient)
-                  : null,
-              color: filled ? null : Colors.white.withValues(alpha: 0.12),
+              gradient: LinearGradient(colors: colors),
               borderRadius: BorderRadius.circular(16),
-              border: filled
-                  ? null
-                  : Border.all(color: Colors.white.withValues(alpha: 0.35)),
             ),
             child: InkWell(
               onTap: onTap,
