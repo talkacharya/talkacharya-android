@@ -107,6 +107,26 @@ class _ViewerBackend implements LiveViewerBackend {
     sent.add(text);
     images.add(imagePath);
   }
+
+  /// What `GET .../calls` answers next (and `POST .../calls`).
+  LiveViewerCalls callsReply = const LiveViewerCalls();
+  final requested = <LiveCallMode>[];
+  final connected = <String>[];
+  final endedCalls = <String>[];
+
+  @override
+  Future<LiveViewerCalls> calls() async => callsReply;
+  @override
+  Future<LiveViewerCalls> requestCall(LiveCallMode mode) async {
+    requested.add(mode);
+    return callsReply;
+  }
+
+  @override
+  Future<void> callConnected(String requestId) async =>
+      connected.add(requestId);
+  @override
+  Future<void> endCall(String requestId) async => endedCalls.add(requestId);
 }
 
 class _HostBackend implements LiveHostBackend {
@@ -156,6 +176,35 @@ class _HostBackend implements LiveHostBackend {
     bool pin = true,
     bool hide = false,
   }) async {}
+
+  LiveHostCalls callsReply = const LiveHostCalls();
+  final endedCalls = <String>[];
+  final mutes = <String, bool>{};
+
+  @override
+  Future<LiveHostCalls> calls() async => callsReply;
+  @override
+  Future<void> endCall(String requestId) async => endedCalls.add(requestId);
+  @override
+  Future<void> muteCall(String requestId, {required bool muted}) async =>
+      mutes[requestId] = muted;
+}
+
+class _Audio implements LiveCallAudio {
+  String? token;
+  bool? mic;
+  bool disconnected = false;
+
+  @override
+  Future<void> connect({required String url, required String token}) async {
+    this.token = token;
+    mic = true;
+  }
+
+  @override
+  Future<void> setMicrophoneEnabled(bool enabled) async => mic = enabled;
+  @override
+  Future<void> disconnect() async => disconnected = true;
 }
 
 class _Perms implements LivePermissions {
@@ -163,6 +212,8 @@ class _Perms implements LivePermissions {
   final LiveMediaPermission result;
   @override
   Future<LiveMediaPermission> requestCameraAndMicrophone() async => result;
+  @override
+  Future<LiveMediaPermission> requestMicrophone() async => result;
   @override
   Future<void> openSettings() async {}
 }
@@ -571,6 +622,201 @@ void main() {
       });
       await Future<void>.delayed(Duration.zero);
       expect(cubit.state.waitingCount, 4);
+      await cubit.close();
+    });
+  });
+
+  // --- calls during the stream ---------------------------------------------
+
+  group('live calls', () {
+    const turn = LiveCallRequest(
+      id: 'r1',
+      mode: LiveCallMode.public,
+      status: LiveCallStatus.connecting,
+      consultationId: 'c1',
+    );
+
+    LiveViewerCubit viewer(
+      _ViewerBackend backend,
+      _Engine engine,
+      _Hub hub, {
+      _Audio? audio,
+      LiveMediaPermission mic = LiveMediaPermission.granted,
+    }) => LiveViewerCubit(
+      backend: backend,
+      engine: engine,
+      signaling: hub,
+      userId: 'me',
+      permissions: _Perms(mic),
+      callAudio: () => audio ?? _Audio(),
+      micRetryEvery: const Duration(milliseconds: 1),
+    );
+
+    test('a public caller speaks in the stream and goes on air', () async {
+      final hub = _Hub();
+      final engine = _Engine();
+      final backend = _ViewerBackend();
+      final cubit = viewer(backend, engine, hub);
+      await cubit.start();
+      backend.callsReply = const LiveViewerCalls(
+        mine: turn,
+        media: LiveCallMedia(
+          mode: LiveCallMode.public,
+          url: 'wss://media.test',
+          room: 'live_1',
+        ),
+      );
+
+      await cubit.requestCall(LiveCallMode.public);
+
+      expect(backend.requested, [LiveCallMode.public]);
+      expect(engine.mic, isTrue, reason: 'their microphone, in the stream');
+      expect(backend.connected, ['r1']);
+      await cubit.close();
+    });
+
+    test('a private caller speaks only in the two-person room', () async {
+      final hub = _Hub();
+      final engine = _Engine();
+      final backend = _ViewerBackend();
+      final audio = _Audio();
+      final cubit = viewer(backend, engine, hub, audio: audio);
+      await cubit.start();
+      backend.callsReply = const LiveViewerCalls(
+        mine: LiveCallRequest(
+          id: 'r1',
+          mode: LiveCallMode.private,
+          status: LiveCallStatus.connecting,
+          consultationId: 'c1',
+        ),
+        media: LiveCallMedia(
+          mode: LiveCallMode.private,
+          url: 'wss://media.test',
+          room: 'livecall_x',
+          token: 'private-tok',
+        ),
+      );
+
+      await cubit.requestCall(LiveCallMode.private);
+
+      expect(audio.token, 'private-tok');
+      expect(engine.mic, isNull, reason: 'nothing goes into the stream');
+      expect(backend.connected, ['r1']);
+
+      // The call ends: off air, and the screen is asked for a rating.
+      backend.callsReply = const LiveViewerCalls();
+      hub.push('live:1', 'live.call', {'on_air': null, 'waiting': 0});
+      await _settle();
+      expect(audio.disconnected, isTrue);
+      expect(cubit.state.myCall, isNull);
+      expect(cubit.state.endedCall?.consultationId, 'c1');
+      await cubit.close();
+    });
+
+    test('no microphone, no place in the line', () async {
+      final backend = _ViewerBackend();
+      final cubit = viewer(
+        backend,
+        _Engine(),
+        _Hub(),
+        mic: LiveMediaPermission.denied,
+      );
+      await cubit.start();
+
+      await cubit.requestCall(LiveCallMode.public);
+
+      expect(backend.requested, isEmpty);
+      expect(cubit.state.error, 'microphone');
+      await cubit.close();
+    });
+
+    test('a viewer not in the line does not look anything up', () async {
+      final hub = _Hub();
+      final backend = _ViewerBackend();
+      final cubit = viewer(backend, _Engine(), hub);
+      await cubit.start();
+      backend.callsReply = const LiveViewerCalls(mine: turn);
+
+      hub.push('live:1', 'live.call', {
+        'on_air': {
+          'id': 'r9',
+          'mode': 'public',
+          'caller': {'id': 'u9', 'name': 'Rahul'},
+        },
+        'waiting': 2,
+      });
+      await _settle();
+
+      expect(cubit.state.onAir?.callerName, 'Rahul');
+      expect(cubit.state.callsWaiting, 2);
+      expect(cubit.state.myCall, isNull);
+      await cubit.close();
+    });
+
+    test('in a private call the host is heard only in its room', () async {
+      final hub = _Hub();
+      final engine = _Engine();
+      final backend = _HostBackend();
+      final audio = _Audio();
+      final cubit = LiveHostCubit(
+        backend: backend,
+        permissions: _Perms(),
+        engine: engine,
+        signaling: hub,
+        userId: 'astro',
+        callAudio: () => audio,
+      );
+      await cubit.goLive();
+      backend.callsReply = const LiveHostCalls(
+        line: [
+          LiveCallRequest(
+            id: 'r1',
+            mode: LiveCallMode.private,
+            status: LiveCallStatus.active,
+          ),
+        ],
+        media: LiveCallMedia(
+          mode: LiveCallMode.private,
+          url: 'wss://media.test',
+          room: 'livecall_x',
+          token: 'host-private',
+        ),
+      );
+
+      hub.push('live:1', 'live.call', {
+        'on_air': {'id': 'r1', 'mode': 'private'},
+        'waiting': 0,
+      });
+      await _settle();
+      expect(engine.mic, isFalse, reason: 'off the stream');
+      expect(audio.token, 'host-private');
+      expect(cubit.state.onAir?.mode, LiveCallMode.private);
+
+      backend.callsReply = const LiveHostCalls();
+      hub.push('live:1', 'live.call', {'on_air': null, 'waiting': 0});
+      await _settle();
+      expect(audio.disconnected, isTrue);
+      expect(engine.mic, isTrue, reason: 'back on the stream');
+      await cubit.close();
+    });
+
+    test('the host ends and mutes calls', () async {
+      final backend = _HostBackend();
+      final cubit = LiveHostCubit(
+        backend: backend,
+        permissions: _Perms(),
+        engine: _Engine(),
+        signaling: _Hub(),
+        userId: 'astro',
+        callAudio: _Audio.new,
+      );
+      await cubit.goLive();
+
+      await cubit.muteCaller('r1', muted: true);
+      await cubit.endCall('r1');
+
+      expect(backend.mutes, {'r1': true});
+      expect(backend.endedCalls, ['r1']);
       await cubit.close();
     });
   });

@@ -60,7 +60,7 @@ class _AstrologerDetailPageState extends State<AstrologerDetailPage> {
     if (channel != null && !_autoStarted) {
       _autoStarted = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) _start(context, a, channel, turn: true);
+        if (mounted) startConsultation(context, a, channel, turn: true);
       });
     }
     return a;
@@ -89,7 +89,9 @@ class _AstrologerDetailPageState extends State<AstrologerDetailPage> {
                 title: l.astroProfileTitle,
                 child: ErrorView(
                   message: l.astroCouldntLoadOne,
-                  onRetry: () => setState(() => _future = _load()),
+                  onRetry: () => setState(() {
+                    _future = _load();
+                  }),
                 ),
               );
             }
@@ -146,11 +148,15 @@ class _ProfileView extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           _Header(a: a),
+          // Live right now: the way in is the stream (calls there, too).
+          if (a.liveStreamId != null)
+            SliverToBoxAdapter(child: _LiveNowBanner(a: a)),
           SliverToBoxAdapter(
             child: WaitlistBanner(
               astrologerId: a.id,
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              onStart: (channel) => _start(context, a, channel, turn: true),
+              onStart: (channel) =>
+                  startConsultation(context, a, channel, turn: true),
             ),
           ),
           SliverPadding(
@@ -599,7 +605,7 @@ class _StatsCard extends StatelessWidget {
         (
           Icons.workspace_premium_rounded,
           AstroPalette.career,
-          '${a.yearsExperience} yrs',
+          l.astroYears(a.yearsExperience),
           l.astroStatExperience,
         ),
       if (a.consultationsCount > 0)
@@ -1002,9 +1008,9 @@ class _RatesCard extends StatelessWidget {
     );
   }
 
-  /// Whether the astrologer, though online, is not taking this channel now.
-  bool _closed(AstrologerRate rate) =>
-      astrologer.isAvailable && !astrologer.takes(rate.channel);
+  /// Whether the astrologer is not taking this channel now, and says when
+  /// it is back or that it is off (see [Astrologer.showsClosed]).
+  bool _closed(AstrologerRate rate) => astrologer.showsClosed(rate.channel);
 
   static List<AstrologerRate> _ordered(List<AstrologerRate> rates) {
     const order = {'chat': 0, 'voice': 1, 'video': 2};
@@ -1272,11 +1278,11 @@ class _SectionTitle extends StatelessWidget {
 // --- actions -------------------------------------------------------------
 
 /// Book [channel] with [a] — or, when that is not possible right now, say
-/// why in terms the customer can act on.
+/// why in terms the customer can act on. Also the discovery list's button.
 ///
 /// [turn] is a waitlist turn being taken: the astrologer is free for this
 /// customer even if the page still remembers them as busy.
-void _start(
+void startConsultation(
   BuildContext context,
   Astrologer a,
   String channel, {
@@ -1386,7 +1392,10 @@ class _HeaderCtas extends StatelessWidget {
       );
     } else if (a.isQueueable) {
       // With someone: the way in is a place in line.
-      label = a.queueWaiting > 0
+      final wait = waitLine(context, a);
+      label = wait != null
+          ? '${l.waitlistJoin} · $wait'
+          : a.queueWaiting > 0
           ? '${l.waitlistJoin} · ${l.waitlistWaitingCount(a.queueWaiting)}'
           : l.waitlistJoin;
       icon = Icons.hourglass_top_rounded;
@@ -1399,7 +1408,7 @@ class _HeaderCtas extends StatelessWidget {
       );
       label = '${channelVerb(l, lead)} · ${l.astroPerMinute(price)}';
       icon = channelIcon(lead);
-      onTap = () => _start(context, a, lead);
+      onTap = () => startConsultation(context, a, lead);
     } else {
       // Online, but with every way of consulting switched off.
       label = back != null
@@ -1433,9 +1442,9 @@ class _HeaderCtas extends StatelessWidget {
               icon: channelIcon(c),
               color: channelHue(c).start,
               tooltip: channelClosedLine(context, a, c) ?? channelLabel(l, c),
-              closed: a.isAvailable && !a.takes(c),
+              closed: a.showsClosed(c),
               waiting: a.stateOf(c) == ChannelState.backLater,
-              onTap: () => _start(context, a, c),
+              onTap: () => startConsultation(context, a, c),
             ),
           ],
         const SizedBox(width: 8),
@@ -1672,6 +1681,74 @@ class _ChromeOnly extends StatelessWidget {
         ),
         SliverFillRemaining(hasScrollBody: false, child: child),
       ],
+    );
+  }
+}
+
+/// "{name} is live! — Join now": while they are on air, the stream is where
+/// they are, and requests from here wait in their waitlist until it ends.
+class _LiveNowBanner extends StatelessWidget {
+  const _LiveNowBanner({required this.a});
+
+  final Astrologer a;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final id = a.liveStreamId!;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      child: Material(
+        borderRadius: BorderRadius.circular(18),
+        clipBehavior: Clip.antiAlias,
+        child: Ink(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFFFFB02E), Color(0xFFF0541E)],
+            ),
+          ),
+          child: InkWell(
+            onTap: () => context.push(Routes.liveRoom(id)),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(14, 10, 10, 10),
+              child: Row(
+                children: [
+                  const Icon(Icons.sensors_rounded, color: Colors.white),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      l.astroLiveNow(a.name),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 7,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      l.astroLiveJoin,
+                      style: const TextStyle(
+                        color: Color(0xFFF0541E),
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

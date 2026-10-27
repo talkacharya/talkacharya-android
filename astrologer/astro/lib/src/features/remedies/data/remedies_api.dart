@@ -227,6 +227,101 @@ class RemedyAdvice extends Equatable {
   List<Object?> get props => [id, customerName, category, title, body];
 }
 
+/// One product order or pooja booking a customer made through this
+/// astrologer's suggestion, with their share and where it stands.
+class RecommendedSale extends Equatable {
+  const RecommendedSale({
+    required this.id,
+    required this.product,
+    required this.customerName,
+    required this.status,
+    this.variant = '',
+    this.kind = '',
+    this.quantity = 1,
+    this.amount = 0,
+    this.commissionPercent = 0,
+    this.commission = 0,
+    this.ownProduct = false,
+    this.earningStatus,
+    this.orderedAt,
+  });
+
+  final String id;
+  final String product;
+  final String variant;
+
+  /// physical / service / digital.
+  final String kind;
+  final int quantity;
+  final String customerName;
+  final double amount;
+  final double commissionPercent;
+  final double commission;
+
+  /// Their own product: it earns as a store sale, not as a suggestion.
+  final bool ownProduct;
+
+  /// ordered / on_the_way / delivered / booked / performed / cancelled /
+  /// returned.
+  final String status;
+
+  /// Once the share has reached earnings: clearing / ready / processing /
+  /// credited... (null before).
+  final String? earningStatus;
+  final DateTime? orderedAt;
+
+  factory RecommendedSale.fromJson(Map<String, dynamic> j) => RecommendedSale(
+    id: '${j['id'] ?? ''}',
+    product: '${j['product'] ?? ''}',
+    variant: '${j['variant'] ?? ''}',
+    kind: '${j['kind'] ?? ''}',
+    quantity: (j['quantity'] as num?)?.toInt() ?? 1,
+    customerName: '${j['customer_name'] ?? ''}',
+    amount: double.tryParse('${j['amount']}') ?? 0,
+    commissionPercent: double.tryParse('${j['commission_percent']}') ?? 0,
+    commission: double.tryParse('${j['commission']}') ?? 0,
+    ownProduct: j['own_product'] == true,
+    status: '${j['status'] ?? ''}',
+    earningStatus: j['earning_status'] as String?,
+    orderedAt: DateTime.tryParse('${j['ordered_at']}'),
+  );
+
+  @override
+  List<Object?> get props => [id, status, earningStatus, commission];
+}
+
+/// What the suggestions sold, and the totals.
+class RecommendedSales extends Equatable {
+  const RecommendedSales({
+    this.items = const [],
+    this.expected = 0,
+    this.earned = 0,
+  });
+
+  final List<RecommendedSale> items;
+
+  /// Shares still on their way (the order not yet delivered / performed).
+  final double expected;
+
+  /// Shares already in earnings.
+  final double earned;
+
+  factory RecommendedSales.fromJson(Map<String, dynamic>? j) {
+    final totals = (j?['totals'] as Map?)?.cast<String, dynamic>() ?? const {};
+    return RecommendedSales(
+      items: [
+        for (final r in (j?['results'] as List?) ?? const [])
+          RecommendedSale.fromJson((r as Map).cast<String, dynamic>()),
+      ],
+      expected: double.tryParse('${totals['commission_expected']}') ?? 0,
+      earned: double.tryParse('${totals['commission_earned']}') ?? 0,
+    );
+  }
+
+  @override
+  List<Object?> get props => [items, expected, earned];
+}
+
 /// Suggesting store products to customers — `/astro/store/…` — and advising
 /// remedies that cost nothing.
 class RemediesApi {
@@ -268,6 +363,14 @@ class RemediesApi {
       for (final e in res.data as List? ?? const [])
         PoojaDate.fromJson((e as Map).cast<String, dynamic>()),
     ];
+  }
+
+  /// Everything sold through this astrologer's suggestions.
+  Future<RecommendedSales> recommendedSales() async {
+    final res = (await _dio.get<Map<String, dynamic>>(
+      ApiPaths.astroRecommendedSales,
+    )).ensureOk();
+    return RecommendedSales.fromJson(res.data);
   }
 
   Future<List<PoojaBooking>> poojaBookings() async {

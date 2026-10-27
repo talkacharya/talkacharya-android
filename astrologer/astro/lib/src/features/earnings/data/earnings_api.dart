@@ -83,6 +83,36 @@ class EarningsApi {
     return res.data ?? const [];
   }
 
+  /// `GET /astro/earnings/statement`: a payout's statement ([payoutId]), or
+  /// the one of the cycle running now. Service by service, and what came off.
+  Future<EarningsStatement> statement({String? payoutId}) async {
+    final res = await _ok(
+      _dio.get<Map<String, dynamic>>(
+        ApiPaths.astroEarningsStatement,
+        queryParameters: {'payout': ?payoutId},
+      ),
+    );
+    return EarningsStatement.fromJson(res.data ?? const {});
+  }
+
+  /// `GET /astro/earnings/statement/items`: the earnings behind a statement,
+  /// one [service] or all, each with its own breakdown.
+  Future<List<StatementItem>> statementItems({
+    String? payoutId,
+    String? service,
+  }) async {
+    final res = await _ok(
+      _dio.get<Map<String, dynamic>>(
+        ApiPaths.astroEarningsStatementItems,
+        queryParameters: {'payout': ?payoutId, 'service': ?service},
+      ),
+    );
+    return [
+      for (final r in (res.data?['results'] as List?) ?? const [])
+        StatementItem.fromJson((r as Map).cast<String, dynamic>()),
+    ];
+  }
+
   /// Awaits [call] and throws on a 4xx (see [EnsureOk]).
   Future<Response<T>> _ok<T>(Future<Response<T>> call) async =>
       (await call).ensureOk();

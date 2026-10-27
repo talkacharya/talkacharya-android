@@ -8,6 +8,7 @@ import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// One advanced report — `report` is ashtakavarga | shadbala | kp | jaimini.
 class AdvancedReportPage extends StatefulWidget {
   const AdvancedReportPage({
@@ -98,7 +99,9 @@ class _AdvancedReportPageState extends State<AdvancedReportPage> {
             _ => const <Widget>[],
           },
           onRefresh: () async {
-            setState(() => _future = _fetch());
+            setState(() {
+              _future = _fetch();
+            });
             await _future.catchError((Object _) => Object());
           },
           animate: data != null,
@@ -110,7 +113,9 @@ class _AdvancedReportPageState extends State<AdvancedReportPage> {
               ? [
                   ErrorView(
                     message: l.kAdvLoadError,
-                    onRetry: () => setState(() => _future = _fetch()),
+                    onRetry: () => setState(() {
+                      _future = _fetch();
+                    }),
                   ),
                 ]
               : switch (widget.report) {

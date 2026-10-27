@@ -10,7 +10,7 @@ class _RoomView extends StatelessWidget {
       builder: (context, state) {
         final c = state.consultation;
         if (state.loading) {
-          return const Scaffold(body: Center(child: ChatRoomSkeleton()));
+          return const ChatSkeleton.page();
         }
         if (c == null) {
           return Scaffold(

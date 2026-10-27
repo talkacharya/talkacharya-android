@@ -48,6 +48,7 @@ class Paged<T> extends Equatable {
 class EarningsState extends Equatable {
   const EarningsState({
     this.summary = const AsyncValue.idle(),
+    this.statement = const AsyncValue.idle(),
     this.kind,
     this.ledger = const Paged(),
     this.payouts = const Paged(),
@@ -56,6 +57,9 @@ class EarningsState extends Equatable {
   });
 
   final AsyncValue<PayoutSummary> summary;
+
+  /// The cycle running now: service by service, what comes off, the payout.
+  final AsyncValue<EarningsStatement> statement;
 
   /// Ledger filter (an [EarningKinds] value); `null` = all.
   final String? kind;
@@ -66,6 +70,7 @@ class EarningsState extends Equatable {
 
   EarningsState copyWith({
     AsyncValue<PayoutSummary>? summary,
+    AsyncValue<EarningsStatement>? statement,
     Object? kind = _s,
     Paged<EarningEntry>? ledger,
     Paged<Payout>? payouts,
@@ -73,6 +78,7 @@ class EarningsState extends Equatable {
     AsyncValue<List<TaxDocument>>? documents,
   }) => EarningsState(
     summary: summary ?? this.summary,
+    statement: statement ?? this.statement,
     kind: kind == _s ? this.kind : kind as String?,
     ledger: ledger ?? this.ledger,
     payouts: payouts ?? this.payouts,
@@ -82,7 +88,15 @@ class EarningsState extends Equatable {
   static const _s = Object();
 
   @override
-  List<Object?> get props => [summary, kind, ledger, payouts, gifts, documents];
+  List<Object?> get props => [
+    summary,
+    statement,
+    kind,
+    ledger,
+    payouts,
+    gifts,
+    documents,
+  ];
 }
 
 /// Earnings tab: balance summary, the earnings ledger (filterable, paged),
@@ -93,6 +107,7 @@ class EarningsCubit extends Cubit<EarningsState> {
 
   Future<void> load() => Future.wait([
     _loadSummary(),
+    loadStatement(),
     _loadLedger(),
     _loadPayouts(),
     _loadGifts(),
@@ -109,6 +124,25 @@ class EarningsCubit extends Cubit<EarningsState> {
         emit(
           state.copyWith(
             summary: AsyncValue.error(friendlyError(e), state.summary.value),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> loadStatement() async {
+    emit(state.copyWith(statement: AsyncValue.loading(state.statement.value)));
+    try {
+      final s = await _api.statement();
+      if (!isClosed) emit(state.copyWith(statement: AsyncValue.data(s)));
+    } catch (e) {
+      if (!isClosed) {
+        emit(
+          state.copyWith(
+            statement: AsyncValue.error(
+              friendlyError(e),
+              state.statement.value,
+            ),
           ),
         );
       }
@@ -209,7 +243,9 @@ class EarningsCubit extends Cubit<EarningsState> {
   }
 
   Future<void> _loadGifts() async {
-    emit(state.copyWith(gifts: state.gifts.copyWith(loading: true, error: false)));
+    emit(
+      state.copyWith(gifts: state.gifts.copyWith(loading: true, error: false)),
+    );
     try {
       final page = await _api.giftsReceived();
       if (isClosed) return;

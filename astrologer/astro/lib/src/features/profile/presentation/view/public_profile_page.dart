@@ -90,7 +90,9 @@ class _PublicProfilePageState extends State<PublicProfilePage> {
 
   Future<void> _reload() async {
     final next = _load();
-    setState(() => _future = next);
+    setState(() {
+      _future = next;
+    });
     await next.catchError((_) => _future);
   }
 

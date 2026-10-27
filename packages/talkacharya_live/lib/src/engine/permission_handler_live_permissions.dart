@@ -14,6 +14,10 @@ class PermissionHandlerLivePermissions implements LivePermissions {
     return _ask(Permission.microphone);
   }
 
+  @override
+  Future<LiveMediaPermission> requestMicrophone() =>
+      _ask(Permission.microphone);
+
   Future<LiveMediaPermission> _ask(Permission permission) async {
     var status = await permission.status;
     if (!status.isGranted) status = await permission.request();

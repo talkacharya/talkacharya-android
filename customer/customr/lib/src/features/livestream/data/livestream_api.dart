@@ -64,13 +64,50 @@ class LivestreamApi {
     }
   }
 
-  /// Ask the host for a private consultation. Returns the queue position.
-  Future<int> consultPrivately(String id, String channel) async {
-    final res = await _dio.post<Map<String, dynamic>>(
-      ApiPaths.livestreamConsult(id),
-      data: {'channel': channel},
-    );
-    return (res.data?['position'] as num?)?.toInt() ?? 0;
+  /// `GET .../calls` — what calling costs here, the call on air, this
+  /// viewer's place and, on their turn, how to come on air.
+  Future<LiveViewerCalls> calls(String id) async {
+    try {
+      final res = await _dio.get<Map<String, dynamic>>(
+        '${ApiPaths.livestream(id)}/calls',
+      );
+      return LiveViewerCalls.fromJson(res.data);
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// `POST .../calls` — join the line for a public or private call.
+  Future<LiveViewerCalls> requestCall(String id, LiveCallMode mode) async {
+    try {
+      final res = await _dio.post<Map<String, dynamic>>(
+        '${ApiPaths.livestream(id)}/calls',
+        data: {'mode': mode.name},
+      );
+      return LiveViewerCalls.fromJson(res.data);
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// `POST .../calls/{request}/connected` — the microphone is live.
+  Future<void> callConnected(String id, String requestId) async {
+    try {
+      await _dio.post<void>(
+        '${ApiPaths.livestream(id)}/calls/$requestId/connected',
+      );
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// `POST .../calls/{request}/end` — leave the line, or hang up.
+  Future<void> endCall(String id, String requestId) async {
+    try {
+      await _dio.post<void>('${ApiPaths.livestream(id)}/calls/$requestId/end');
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
   }
 
   Future<void> leave(String id) async {

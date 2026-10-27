@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/astro/onboarding_store.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
@@ -14,9 +13,10 @@ import '../../data/earnings_models.dart';
 import '../../data/received_gift.dart';
 import '../cubit/earnings_cubit.dart';
 import '../widgets/earnings_widgets.dart';
+import '../widgets/earnings_trend_card.dart';
+import '../widgets/statement_widgets.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
-import '../../../../shared/widgets/cosmic_header.dart';
 
 class EarningsPage extends StatelessWidget {
   const EarningsPage({super.key});
@@ -50,229 +50,177 @@ class _EarningsViewState extends State<_EarningsView>
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
+    final theme = Theme.of(context);
     final brand = context.brand;
-    final summary = context.select((EarningsCubit c) => c.state.summary);
     return Scaffold(
-      body: Column(
-        children: [
-          CosmicTabHeader(
-            title: l.navEarnings,
-            actions: [NotificationBell(color: brand.onCosmic)],
-            bottom: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _BalanceHero(summary: summary.value),
-                const SizedBox(height: 16),
-                PillTabBar(
-                  controller: _tabs,
-                  labels: [
-                    l.earnTabLedger,
-                    l.earnTabPayouts,
-                    l.earnTabGifts,
-                    l.earnTabDocuments,
-                  ],
-                ),
-              ],
-            ),
+      appBar: AppBar(
+        title: Text(
+          l.navEarnings,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w800,
           ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabs,
-              children: const [
-                _LedgerTab(),
-                _PayoutsTab(),
-                _GiftsTab(),
-                _DocumentsTab(),
-              ],
-            ),
-          ),
+        ),
+        centerTitle: false,
+        actions: [
+          NotificationBell(color: theme.colorScheme.onSurface),
+          const SizedBox(width: 4),
+        ],
+        bottom: TabBar(
+          controller: _tabs,
+          isScrollable: true,
+          tabAlignment: TabAlignment.start,
+          labelStyle: const TextStyle(fontWeight: FontWeight.w800),
+          unselectedLabelColor: brand.inkMuted,
+          dividerColor: brand.hairline,
+          tabs: [
+            Tab(text: l.earnTabCycle),
+            Tab(text: l.earnTabPayouts),
+            Tab(text: l.earnTabGifts),
+            Tab(text: l.earnTabDocuments),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabs,
+        children: const [
+          _CycleTab(),
+          _PayoutsTab(),
+          _GiftsTab(),
+          _DocumentsTab(),
         ],
       ),
     );
   }
 }
 
-/// Gold available balance, clearing + lifetime tiles, and the payout terms.
-class _BalanceHero extends StatelessWidget {
-  const _BalanceHero({required this.summary});
+/// The cycle running now, in one compact card: the payout and when, its status,
+/// and three small figures under it — what is still clearing, lifetime, the cycle.
+class _PayoutSummary extends StatelessWidget {
+  const _PayoutSummary({required this.statement, required this.summary});
 
+  final EarningsStatement statement;
   final PayoutSummary? summary;
 
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    final brand = context.brand;
     final theme = Theme.of(context);
-    final s = summary;
-    final commission = getIt<OnboardingStore>().profile?.commission;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l.dashAvailable,
-          style: theme.textTheme.labelLarge?.copyWith(
-            color: brand.onCosmicMuted,
+    final brand = context.brand;
+    final st = statement;
+    final accent = theme.colorScheme.primary;
+
+    Widget stat(String label, String value) => Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.labelSmall?.copyWith(color: brand.inkMuted),
           ),
-        ),
-        SizedBox(
-          height: 44,
-          child: s == null
-              ? const Align(
-                  alignment: Alignment.centerLeft,
-                  child: _DarkSkeleton(width: 160, height: 32),
-                )
-              : ShaderMask(
-                  shaderCallback: (r) => const LinearGradient(
-                    colors: BrandColors.goldGradient,
-                  ).createShader(r),
-                  child: TweenAnimationBuilder<double>(
-                    tween: Tween(end: s.available),
-                    duration: const Duration(milliseconds: 600),
-                    curve: Curves.easeOutCubic,
-                    builder: (_, v, _) => Text(
-                      Money.format(v.roundToDouble(), s.currency),
-                      style: theme.textTheme.displaySmall?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ),
-        ),
-        const SizedBox(height: 10),
-        Row(
-          children: [
-            Expanded(
-              child: _GlassStat(
-                icon: Icons.hourglass_top_rounded,
-                label: l.earnClearing,
-                value: s == null ? null : Money.format(s.pending, s.currency),
-              ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.w800,
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _GlassStat(
-                icon: Icons.auto_graph_rounded,
-                label: l.earnLifetime,
-                value: s == null ? null : Money.format(s.lifetime, s.currency),
-              ),
-            ),
+          ),
+        ],
+      ),
+    );
+
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            accent.withValues(alpha: 0.10),
+            accent.withValues(alpha: 0.03),
           ],
         ),
-        if (commission != null) ...[
-          const SizedBox(height: 10),
-          Text(
-            l.earnCycle(
-              commission.payoutCycleDays,
-              _trimPct(commission.platformPercentage),
-            ),
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: brand.onCosmicMuted,
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-
-  static String _trimPct(String raw) {
-    final v = double.tryParse(raw);
-    if (v == null) return raw;
-    return v == v.roundToDouble() ? v.toStringAsFixed(0) : '$v';
-  }
-}
-
-class _GlassStat extends StatelessWidget {
-  const _GlassStat({
-    required this.icon,
-    required this.label,
-    required this.value,
-  });
-
-  final IconData icon;
-  final String label;
-  final String? value;
-
-  @override
-  Widget build(BuildContext context) {
-    final brand = context.brand;
-    return Container(
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.07),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: accent.withValues(alpha: 0.16)),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Icon(icon, size: 18, color: brand.glowAccent),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(color: brand.onCosmicMuted, fontSize: 12),
-                ),
-                if (value == null)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 3),
-                    child: _DarkSkeleton(width: 70, height: 14),
-                  )
-                else
-                  Text(
-                    value!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: brand.onCosmic,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 15,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      st.paysOn != null
+                          ? l.earnNextPayout(shortDate(context, st.paysOn!))
+                          : l.dashAvailable,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: brand.inkMuted,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-              ],
-            ),
+                    const SizedBox(height: 2),
+                    TweenAnimationBuilder<double>(
+                      tween: Tween(end: st.totals.payout),
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeOutCubic,
+                      builder: (_, v, _) => Text(
+                        Money.format(v, st.currency),
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              StatementStatusChip(status: st.status),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Divider(height: 1, color: brand.hairline),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              stat(
+                l.earnClearing,
+                Money.format(st.totals.clearing, st.currency),
+              ),
+              stat(
+                l.earnLifetime,
+                summary == null
+                    ? '—'
+                    : Money.format(summary!.lifetime, summary!.currency),
+              ),
+              stat(l.earnPaidEveryLabel, l.earnDays(st.cycleDays)),
+            ],
           ),
         ],
       ),
     );
   }
-}
-
-/// Faint placeholder block for the dark header.
-class _DarkSkeleton extends StatelessWidget {
-  const _DarkSkeleton({required this.width, required this.height});
-
-  final double width;
-  final double height;
-
-  @override
-  Widget build(BuildContext context) => Container(
-    width: width,
-    height: height,
-    decoration: BoxDecoration(
-      color: Colors.white.withValues(alpha: 0.10),
-      borderRadius: BorderRadius.circular(6),
-    ),
-  );
 }
 
 // --- tabs --------------------------------------------------------------------
 
-/// Scrollable tab body: pull-to-refresh, optional header, centred empty /
+/// Scrollable tab body: pull-to-refresh, centred empty /
 /// error states, and a load-more trigger near the bottom.
 class _TabList extends StatelessWidget {
   const _TabList({
     required this.children,
-    this.header,
     this.placeholder,
     this.onNearEnd,
     this.footerLoading = false,
   });
 
   final List<Widget> children;
-  final Widget? header;
 
   /// Shown instead of [children] (skeleton / empty / error).
   final Widget? placeholder;
@@ -293,13 +241,9 @@ class _TabList extends StatelessWidget {
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.only(top: 12, bottom: 24),
             children: [
-              ?header,
               if (placeholder != null)
                 SizedBox(
-                  height: (box.maxHeight - (header == null ? 36 : 96)).clamp(
-                    240,
-                    double.infinity,
-                  ),
+                  height: (box.maxHeight - 36).clamp(240, double.infinity),
                   child: placeholder,
                 )
               else ...[
@@ -397,120 +341,66 @@ class _GroupCard extends StatelessWidget {
   }
 }
 
-class _LedgerTab extends StatelessWidget {
-  const _LedgerTab();
+/// The cycle running now: where the money came from, service by service, and
+/// what comes off it down to the payout. Each service opens its items.
+class _CycleTab extends StatelessWidget {
+  const _CycleTab();
 
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
     final cubit = context.read<EarningsCubit>();
-    final (kind, ledger) = context.select(
-      (EarningsCubit c) => (c.state.kind, c.state.ledger),
-    );
-
-    final groups = <String, List<EarningEntry>>{};
-    for (final e in ledger.items) {
-      final key = e.createdAt == null ? '' : TimeFormat.day(l, e.createdAt!);
-      groups.putIfAbsent(key, () => []).add(e);
-    }
+    final statement = context.select((EarningsCubit c) => c.state.statement);
+    final summary = context.select((EarningsCubit c) => c.state.summary);
+    final st = statement.value;
 
     Widget? placeholder;
-    if (ledger.items.isEmpty) {
-      placeholder = ledger.loading
-          ? const _ListSkeleton()
-          : ledger.error
-          ? ErrorView(message: l.earnLoadError, onRetry: cubit.load)
-          : kind != null
-          ? EmptyState(
-              icon: Icons.filter_alt_off_rounded,
-              hue: AstroPalette.air,
-              title: l.earnLedgerFilteredEmpty,
-            )
-          : EmptyState(
-              icon: Icons.receipt_long_rounded,
-              hue: AstroPalette.money,
-              title: l.earnLedgerEmptyTitle,
-              message: l.earnLedgerEmptyBody,
-            );
+    if (st == null) {
+      placeholder = statement.isError
+          ? ErrorView(message: l.earnLoadError, onRetry: cubit.loadStatement)
+          : const _ListSkeleton();
     }
 
-    return _TabList(
-      header: _KindFilter(value: kind, onChanged: cubit.setKind),
-      placeholder: placeholder,
-      onNearEnd: cubit.loadMoreLedger,
-      footerLoading: ledger.loadingMore,
-      children: [
-        for (final MapEntry(key: day, value: list) in groups.entries)
-          _GroupCard(
-            label: day,
-            children: [
-              for (final e in list)
-                EarningEntryTile(
-                  entry: e,
-                  onTap: e.consultationId == null
-                      ? null
-                      : () => context.push(
-                          Routes.requestDetail(e.consultationId!),
-                        ),
-                ),
-            ],
-          ),
-      ],
-    );
-  }
-}
-
-class _KindFilter extends StatelessWidget {
-  const _KindFilter({required this.value, required this.onChanged});
-
-  final String? value;
-  final ValueChanged<String?> onChanged;
-
-  static const _kinds = <String?>[
-    null,
-    EarningKinds.consultation,
-    EarningKinds.gift,
-    EarningKinds.prediction,
-    EarningKinds.storeSale,
-    EarningKinds.affiliate,
-    EarningKinds.bonus,
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    final l = context.l10n;
-    final scheme = Theme.of(context).colorScheme;
-    return SizedBox(
-      height: 48,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-        itemCount: _kinds.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 8),
-        itemBuilder: (context, i) {
-          final k = _kinds[i];
-          final style = k == null ? null : earningKindStyle(context, k);
-          final selected = k == value;
-          return ChoiceChip(
-            selected: selected,
-            showCheckmark: false,
-            avatar: style == null
-                ? null
-                : Icon(
-                    style.icon,
-                    size: 16,
-                    color: selected ? scheme.onPrimary : style.hue.end,
+    Widget card(String title, Widget child, {Widget? trailing}) => Card(
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
-            label: Text(style?.label ?? l.earnKindAll),
-            labelStyle: TextStyle(
-              fontWeight: FontWeight.w700,
-              color: selected ? scheme.onPrimary : null,
+                ),
+                ?trailing,
+              ],
             ),
-            selectedColor: scheme.primary,
-            onSelected: (_) => onChanged(k),
-          );
-        },
+            const SizedBox(height: 4),
+            child,
+          ],
+        ),
       ),
+    );
+
+    return _TabList(
+      placeholder: placeholder,
+      children: st == null
+          ? const []
+          : [
+              _PayoutSummary(statement: st, summary: summary.value),
+              EarningsTrendCard(currency: st.currency),
+              card(l.earnFromTitle, StatementServicesCard(statement: st)),
+              card(
+                l.earnDeductionsTitle,
+                StatementDeductionsCard(statement: st),
+              ),
+            ],
     );
   }
 }

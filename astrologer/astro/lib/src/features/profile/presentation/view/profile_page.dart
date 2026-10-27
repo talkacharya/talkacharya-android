@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,8 +11,8 @@ import '../../../../core/config/config_repository.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/language_quick_button.dart';
-import '../../../../shared/widgets/report_height.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../../../home/presentation/view/widgets/profile_strength_card.dart';
@@ -23,8 +22,8 @@ import '../widgets/verification_badge.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
-/// Profile tab: identity hero (photo, name, verification, stats), profile
-/// strength, and grouped settings.
+/// Profile tab under a plain app bar: a compact identity card (photo, name,
+/// verification, stats), profile strength, and grouped settings.
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -34,9 +33,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final _store = getIt<OnboardingStore>();
-
-  // The header's expanded height, as it last measured itself.
-  double _headerBody = _ProfileHeaderDelegate.initialBodyHeight;
 
   @override
   void initState() {
@@ -124,9 +120,24 @@ class _ProfilePageState extends State<ProfilePage> {
     final l = context.l10n;
     final user = context.select((AuthBloc b) => b.state.user);
     final support = getIt<ConfigRepository>().value.support;
+    final theme = Theme.of(context);
+    final ink = theme.colorScheme.onSurface;
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        title: Text(
+          l.navProfile,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        actions: [
+          LanguageQuickButton(color: ink),
+          NotificationBell(color: ink),
+          const SizedBox(width: 4),
+        ],
+      ),
       body: RefreshIndicator(
-        edgeOffset: 120,
         onRefresh: _store.refresh,
         child: ListenableBuilder(
           listenable: _store,
@@ -135,22 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
             return CustomScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               slivers: [
-                // Pinned: it folds into a bar (photo, name, rating, bell) as
-                // the page scrolls, the way Home's header does.
-                SliverPersistentHeader(
-                  pinned: true,
-                  delegate: _ProfileHeaderDelegate(
-                    profile: p,
-                    topPad: MediaQuery.paddingOf(context).top,
-                    bodyHeight: _headerBody,
-                    onBodyMeasured: (h) {
-                      if (mounted && (h - _headerBody).abs() > 0.5) {
-                        setState(() => _headerBody = h);
-                      }
-                    },
-                  ),
-                ),
-                const SliverToBoxAdapter(child: SizedBox(height: 18)),
+                SliverToBoxAdapter(child: _IdentityCard(profile: p)),
                 const SliverToBoxAdapter(child: ProfileStrengthCard()),
                 SliverPadding(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
@@ -362,79 +358,18 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-/// The profile's identity hero as a pinned, collapsing header. The expanded
-/// height is not hard-coded: the content reports its real height after layout
-/// and the page feeds it back as [bodyHeight].
-class _ProfileHeaderDelegate extends SliverPersistentHeaderDelegate {
-  _ProfileHeaderDelegate({
-    required this.profile,
-    required this.topPad,
-    required this.bodyHeight,
-    required this.onBodyMeasured,
-  });
-
-  final AstroProfile? profile;
-  final double topPad;
-
-  /// Expanded content height below [topPad], as last measured.
-  final double bodyHeight;
-  final ValueChanged<double> onBodyMeasured;
-
-  /// First-frame estimate, replaced by the measured height right after.
-  static const initialBodyHeight = 230.0;
-
-  static const _bar = 60.0; // collapsed content height
-
-  @override
-  double get minExtent => topPad + _bar;
-
-  @override
-  double get maxExtent => topPad + (bodyHeight > _bar ? bodyHeight : _bar);
-
-  @override
-  bool shouldRebuild(covariant _ProfileHeaderDelegate old) =>
-      old.profile != profile ||
-      old.topPad != topPad ||
-      old.bodyHeight != bodyHeight;
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlaps) {
-    final range = maxExtent - minExtent;
-    final t = range <= 0 ? 1.0 : (shrinkOffset / range).clamp(0.0, 1.0);
-    return _ProfileHero(
-      profile: profile,
-      t: t,
-      topPad: topPad,
-      height: maxExtent,
-      onBodyMeasured: onBodyMeasured,
-    );
-  }
-}
-
-class _ProfileHero extends StatefulWidget {
-  const _ProfileHero({
-    required this.profile,
-    required this.t,
-    required this.topPad,
-    required this.height,
-    required this.onBodyMeasured,
-  });
+/// Who they are, in one light card: photo (tap to change), name, headline,
+/// verification, and four numbers under a hairline.
+class _IdentityCard extends StatefulWidget {
+  const _IdentityCard({required this.profile});
 
   final AstroProfile? profile;
 
-  /// 0 = expanded, 1 = collapsed.
-  final double t;
-  final double topPad;
-
-  /// Fully expanded height, including [topPad].
-  final double height;
-  final ValueChanged<double> onBodyMeasured;
-
   @override
-  State<_ProfileHero> createState() => _ProfileHeroState();
+  State<_IdentityCard> createState() => _IdentityCardState();
 }
 
-class _ProfileHeroState extends State<_ProfileHero> {
+class _IdentityCardState extends State<_IdentityCard> {
   bool _uploading = false;
 
   Future<void> _changePhoto() async {
@@ -460,262 +395,67 @@ class _ProfileHeroState extends State<_ProfileHero> {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.l10n;
     final brand = context.brand;
     final theme = Theme.of(context);
     final user = context.select((AuthBloc b) => b.state.user);
     final p = widget.profile;
-    final banner = p?.banner;
-    final t = widget.t;
-    final topPad = widget.topPad;
 
-    final expandedOpacity = (1 - t * 1.8).clamp(0.0, 1.0);
-    final collapsedOpacity = ((t - 0.55) / 0.45).clamp(0.0, 1.0);
-    final radius = BorderRadius.vertical(bottom: Radius.circular(28 - 8 * t));
-    final rated = p != null && p.ratingCount > 0;
-
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
-      child: DecoratedBox(
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
         decoration: BoxDecoration(
-          borderRadius: radius,
-          boxShadow: brand.shadowCosmic,
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(Radii.lg),
+          border: Border.all(color: brand.hairline),
         ),
-        child: ClipRRect(
-          borderRadius: radius,
-          child: Stack(
-            children: [
-              const Positioned.fill(child: CosmicBackdrop()),
-              // The cover fades out as the header folds: at bar height it is
-              // only a smear behind the name.
-              if (banner != null)
-                Positioned.fill(
-                  child: Opacity(
-                    opacity: expandedOpacity,
-                    child: ShaderMask(
-                      blendMode: BlendMode.dstIn,
-                      shaderCallback: (r) => LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.white.withValues(alpha: 0.55),
-                          Colors.white.withValues(alpha: 0),
-                        ],
-                        stops: const [0, 0.7],
-                      ).createShader(r),
-                      child: Image.network(
-                        banner,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) => const SizedBox.shrink(),
-                      ),
-                    ),
-                  ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                _AvatarButton(
+                  name: user?.shortName ?? '',
+                  url: user?.avatar,
+                  busy: _uploading,
+                  onTap: _uploading ? null : _changePhoto,
                 ),
-
-              // Expanded content: fades out and drifts up. Laid out at full
-              // height and clipped as the header shrinks, so it never reflows.
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                height: widget.height,
-                child: IgnorePointer(
-                  ignoring: t > 0.5,
-                  child: Opacity(
-                    opacity: expandedOpacity,
-                    child: Transform.translate(
-                      offset: Offset(0, -24 * t),
-                      child: OverflowBox(
-                        alignment: Alignment.topCenter,
-                        minHeight: 0,
-                        maxHeight: double.infinity,
-                        child: ReportHeight(
-                          onChanged: (h) => widget.onBodyMeasured(h - topPad),
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(20, topPad + 4, 8, 20),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      l.navProfile,
-                                      style: theme.textTheme.titleLarge
-                                          ?.copyWith(color: brand.onCosmic),
-                                    ),
-                                    const Spacer(),
-                                    NotificationBell(color: brand.onCosmic),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    _AvatarButton(
-                                      name: user?.shortName ?? '',
-                                      url: user?.avatar,
-                                      busy: _uploading,
-                                      onTap: _uploading ? null : _changePhoto,
-                                    ),
-                                    const SizedBox(width: 16),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            user?.shortName ?? '',
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: theme.textTheme.headlineSmall
-                                                ?.copyWith(
-                                                  color: brand.onCosmic,
-                                                ),
-                                          ),
-                                          if ((p?.headline ?? '').isNotEmpty)
-                                            Text(
-                                              p!.headline,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: theme.textTheme.bodySmall
-                                                  ?.copyWith(
-                                                    color: brand.onCosmicMuted,
-                                                  ),
-                                            ),
-                                          if (p != null) ...[
-                                            const SizedBox(height: 6),
-                                            VerificationBadge(
-                                              level: p.verificationLevel,
-                                              onDark: true,
-                                            ),
-                                          ],
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 16),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 12),
-                                  child: _StatStrip(profile: p),
-                                ),
-                              ],
-                            ),
-                          ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        user?.shortName ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
-                    ),
+                      if ((p?.headline ?? '').isNotEmpty)
+                        Text(
+                          p!.headline,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: brand.inkMuted,
+                          ),
+                        ),
+                      if (p != null) ...[
+                        const SizedBox(height: 6),
+                        VerificationBadge(level: p.verificationLevel),
+                      ],
+                    ],
                   ),
                 ),
-              ),
-
-              // Collapsed bar: fades in near the end of the collapse.
-              Positioned(
-                top: topPad,
-                left: 0,
-                right: 0,
-                height: _ProfileHeaderDelegate._bar,
-                child: IgnorePointer(
-                  ignoring: t < 0.5,
-                  child: Opacity(
-                    opacity: collapsedOpacity,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 8, 0),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(2.5),
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                colors: BrandColors.goldGradient,
-                              ),
-                            ),
-                            child: HueAvatar(
-                              name: user?.shortName ?? '',
-                              url: user?.avatar,
-                              hue: AstroPalette.career,
-                              size: 34,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          // The bar is a fixed 60 tall: at very large text
-                          // sizes the name and rating shrink to fit.
-                          Expanded(
-                            child: LayoutBuilder(
-                              builder: (context, box) => FittedBox(
-                                fit: BoxFit.scaleDown,
-                                alignment: Alignment.centerLeft,
-                                child: SizedBox(
-                                  width: box.maxWidth,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        user?.shortName ?? '',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: theme.textTheme.titleMedium
-                                            ?.copyWith(
-                                              color: brand.onCosmic,
-                                              fontWeight: FontWeight.w800,
-                                            ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          if (rated) ...[
-                                            Icon(
-                                              Icons.star_rounded,
-                                              size: 14,
-                                              color: brand.gold,
-                                            ),
-                                            const SizedBox(width: 3),
-                                            Text(
-                                              p.ratingAvg.toStringAsFixed(1),
-                                              style: theme.textTheme.bodySmall
-                                                  ?.copyWith(
-                                                    color: brand.onCosmic,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                            ),
-                                            const SizedBox(width: 8),
-                                          ],
-                                          if (p != null)
-                                            Flexible(
-                                              child: Text(
-                                                verificationLabel(
-                                                  l,
-                                                  p.verificationLevel,
-                                                ),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: theme.textTheme.bodySmall
-                                                    ?.copyWith(
-                                                      color:
-                                                          brand.onCosmicMuted,
-                                                    ),
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          LanguageQuickButton(color: brand.onCosmic),
-                          NotificationBell(color: brand.onCosmic),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Divider(height: 1, color: brand.hairline),
+            const SizedBox(height: 10),
+            _StatStrip(profile: p),
+          ],
         ),
       ),
     );
@@ -735,62 +475,62 @@ class _AvatarButton extends StatelessWidget {
   final bool busy;
   final VoidCallback? onTap;
 
+  static const _size = 60.0;
+
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    final brand = context.brand;
+    final scheme = Theme.of(context).colorScheme;
     return Semantics(
       button: true,
       label: l.profileChangePhoto,
       child: GestureDetector(
         onTap: onTap,
         child: Stack(
+          clipBehavior: Clip.none,
           children: [
-            Container(
-              padding: const EdgeInsets.all(3),
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(colors: BrandColors.goldGradient),
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  HueAvatar(
-                    name: name,
-                    url: url,
-                    hue: AstroPalette.career,
-                    size: 78,
-                  ),
-                  if (busy)
-                    const SizedBox.square(
-                      dimension: 78,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0x88000000),
-                        ),
-                        child: Center(
-                          child: CircularProgressIndicator(color: Colors.white),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                HueAvatar(
+                  name: name,
+                  url: url,
+                  hue: AstroPalette.career,
+                  size: _size,
+                ),
+                if (busy)
+                  const SizedBox.square(
+                    dimension: _size,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0x88000000),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(18),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          color: Colors.white,
                         ),
                       ),
                     ),
-                ],
-              ),
+                  ),
+              ],
             ),
             Positioned(
-              right: 0,
-              bottom: 0,
+              right: -2,
+              bottom: -2,
               child: Container(
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  color: brand.glowAccent,
+                  color: scheme.primary,
                   shape: BoxShape.circle,
-                  border: Border.all(color: brand.cosmicStart, width: 2),
+                  border: Border.all(color: scheme.surface, width: 2),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.photo_camera_rounded,
-                  size: 14,
-                  color: Color(0xFF3A1703),
+                  size: 12,
+                  color: scheme.onPrimary,
                 ),
               ),
             ),
@@ -810,6 +550,7 @@ class _StatStrip extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = context.l10n;
     final brand = context.brand;
+    final theme = Theme.of(context);
     final p = profile;
     final cells = [
       (
@@ -820,45 +561,33 @@ class _StatStrip extends StatelessWidget {
       ('${p?.followersCount ?? 0}', l.dashStatFollowers),
       ('${p?.yearsExperience ?? 0}', l.profileStatYears),
     ];
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.07),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
-      ),
-      child: Row(
-        children: [
-          for (var i = 0; i < cells.length; i++) ...[
-            if (i > 0)
-              Container(
-                width: 1,
-                height: 28,
-                color: Colors.white.withValues(alpha: 0.12),
-              ),
-            Expanded(
-              child: Column(
-                children: [
-                  Text(
-                    cells[i].$1,
-                    style: TextStyle(
-                      color: brand.onCosmic,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 17,
-                    ),
+    return Row(
+      children: [
+        for (var i = 0; i < cells.length; i++) ...[
+          if (i > 0) Container(width: 1, height: 26, color: brand.hairline),
+          Expanded(
+            child: Column(
+              children: [
+                Text(
+                  cells[i].$1,
+                  maxLines: 1,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w800,
                   ),
-                  Text(
-                    cells[i].$2,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: brand.onCosmicMuted, fontSize: 11),
+                ),
+                Text(
+                  cells[i].$2,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: brand.inkMuted,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ],
-      ),
+      ],
     );
   }
 }

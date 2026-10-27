@@ -32,7 +32,6 @@ import '../room_presence.dart';
 import '../widgets/consultation_style.dart';
 import '../widgets/call_chart_panel.dart';
 import '../widgets/quick_replies.dart';
-import '../widgets/chat_room_skeleton.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 part 'consultation_room_chat.dart';
@@ -64,7 +63,7 @@ class _ConsultationRoomPageState extends State<ConsultationRoomPage> {
       future: _thread,
       builder: (context, snap) {
         if (snap.connectionState != ConnectionState.done) {
-          return const Scaffold(body: Center(child: ChatRoomSkeleton()));
+          return const ChatSkeleton.page();
         }
         final thread = snap.data;
         if (thread == null) {

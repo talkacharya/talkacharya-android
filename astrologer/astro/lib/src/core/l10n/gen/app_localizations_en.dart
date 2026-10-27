@@ -57,6 +57,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get presenceOfflineHint => 'Go online to start receiving requests';
 
   @override
+  String get presenceAllWaitingHint =>
+      'Chat and calls are off until their next-online time';
+
+  @override
   String presenceFollowersHint(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4858,4 +4862,453 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dashActionHistory => 'History';
+
+  @override
+  String hostCallPublic(String name) {
+    return 'Public call with $name';
+  }
+
+  @override
+  String hostCallPrivate(String name) {
+    return 'Private call with $name';
+  }
+
+  @override
+  String hostCallConnecting(String name) {
+    return '$name is coming on air…';
+  }
+
+  @override
+  String get hostCallPrivateHint => 'Viewers can\'t hear either of you';
+
+  @override
+  String get hostCallPublicHint => 'Everyone watching hears you both';
+
+  @override
+  String get hostCallMute => 'Mute';
+
+  @override
+  String get hostCallUnmute => 'Unmute';
+
+  @override
+  String get hostCallEnd => 'End';
+
+  @override
+  String get hostCallSkip => 'Skip';
+
+  @override
+  String hostCallWaiting(int count) {
+    return '$count waiting';
+  }
+
+  @override
+  String get hostCallLineTitle => 'Call line';
+
+  @override
+  String get hostCallLineEmpty => 'Nobody is waiting';
+
+  @override
+  String get hostCallRemove => 'Remove';
+
+  @override
+  String get hostCallModePublic => 'Public';
+
+  @override
+  String get hostCallModePrivate => 'Private';
+
+  @override
+  String get earnTabCycle => 'This cycle';
+
+  @override
+  String earnNextPayout(String date) {
+    return 'Next payout · $date';
+  }
+
+  @override
+  String get earnEstimated => 'Estimated — final on payout day';
+
+  @override
+  String earnPaidEvery(int days) {
+    return 'Paid every $days days';
+  }
+
+  @override
+  String get earnFromTitle => 'Where it came from';
+
+  @override
+  String get earnDeductionsTitle => 'What came off';
+
+  @override
+  String get earnCustomersPaid => 'Customers paid';
+
+  @override
+  String get earnPlatformFee => 'Platform fee';
+
+  @override
+  String get earnGstOnFee => 'GST on platform fee';
+
+  @override
+  String get earnGateway => 'Gateway charge';
+
+  @override
+  String get earnYourShare => 'Your share';
+
+  @override
+  String get earnTds => 'TDS';
+
+  @override
+  String get earnPayoutLine => 'Payout';
+
+  @override
+  String earnClearingNote(String amount) {
+    return '$amount still in the refund window — paid in a later cycle';
+  }
+
+  @override
+  String earnOnHoldNote(String amount) {
+    return '$amount on hold';
+  }
+
+  @override
+  String get earnNothingYet => 'Nothing earned in this cycle yet';
+
+  @override
+  String earnItemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items',
+      one: '1 item',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get earnSvcConsultation => 'Consultations';
+
+  @override
+  String get earnSvcGift => 'Gifts';
+
+  @override
+  String get earnSvcPrediction => 'Predictions';
+
+  @override
+  String get earnSvcStore => 'Store sales';
+
+  @override
+  String get earnSvcRecommendation => 'Store recommendations';
+
+  @override
+  String get earnSvcBonus => 'Bonuses';
+
+  @override
+  String get earnSvcRefund => 'Refunds';
+
+  @override
+  String get earnSvcFine => 'Fines';
+
+  @override
+  String get earnLiveCall => 'Live call';
+
+  @override
+  String get earnStatusUpcoming => 'Upcoming';
+
+  @override
+  String get earnStatusClearing => 'Clearing';
+
+  @override
+  String get earnStatusReady => 'Ready';
+
+  @override
+  String get earnStatusOnHold => 'On hold';
+
+  @override
+  String get earnStatusProcessing => 'Processing';
+
+  @override
+  String get earnStatusCredited => 'Credited';
+
+  @override
+  String get earnStatusFailed => 'Failed';
+
+  @override
+  String earnClearsOn(String date) {
+    return 'Ready on $date';
+  }
+
+  @override
+  String earnMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String get earnViewItems => 'See every item';
+
+  @override
+  String get salesTitle => 'Sales from your suggestions';
+
+  @override
+  String salesCardBody(int count, String amount) {
+    return '$count orders · $amount earned';
+  }
+
+  @override
+  String get salesEarned => 'Earned';
+
+  @override
+  String get salesOnTheWay => 'On the way';
+
+  @override
+  String get salesEmpty => 'Nothing sold through your suggestions yet';
+
+  @override
+  String salesYourShare(String percent) {
+    return 'Your share $percent%';
+  }
+
+  @override
+  String get salesOwnProduct => 'Your own product — paid as a store sale';
+
+  @override
+  String get salesStatusOrdered => 'Ordered';
+
+  @override
+  String get salesStatusOnTheWay => 'On the way';
+
+  @override
+  String get salesStatusDelivered => 'Delivered';
+
+  @override
+  String get salesStatusBooked => 'Booked';
+
+  @override
+  String get salesStatusPerformed => 'Performed';
+
+  @override
+  String get salesStatusCancelled => 'Cancelled';
+
+  @override
+  String get salesStatusReturned => 'Returned';
+
+  @override
+  String get lwStepKind => 'What';
+
+  @override
+  String get lwStepPhotos => 'Photos';
+
+  @override
+  String get lwStepDescribe => 'Describe';
+
+  @override
+  String get lwStepDetails => 'Details';
+
+  @override
+  String get lwStepPrice => 'Price';
+
+  @override
+  String get lwStepPreview => 'Review';
+
+  @override
+  String lwStepOf(int n, int total) {
+    return 'Step $n of $total';
+  }
+
+  @override
+  String get lwKindTitle => 'What are you listing?';
+
+  @override
+  String get lwKindProduct => 'A product';
+
+  @override
+  String get lwKindProductHint =>
+      'Rudraksha, gemstones, yantras, samagri — shipped to the customer';
+
+  @override
+  String get lwKindService => 'A service';
+
+  @override
+  String get lwKindServiceHint =>
+      'Poojas, havan, chadhava — you perform it for them';
+
+  @override
+  String get lwCategoryTitle => 'Which category?';
+
+  @override
+  String get lwTypeTitle => 'Which kind?';
+
+  @override
+  String get lwNoCategories => 'Nothing is open for this yet';
+
+  @override
+  String get lwPhotosTitle => 'Add photos';
+
+  @override
+  String get lwPhotosBody =>
+      'Clear, bright photos sell. Each one uploads as soon as you pick it. The first is the cover — hold and drag to reorder.';
+
+  @override
+  String lwUploading(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String get lwUploadFailed => 'Not sent — tap to retry';
+
+  @override
+  String get lwDescribeTitle => 'Tell customers about it';
+
+  @override
+  String get lwVoiceHint => 'Tap the mic to speak instead of typing';
+
+  @override
+  String get lwListening => 'Listening… tap to stop';
+
+  @override
+  String get lwVoiceUnavailable => 'Speaking isn\'t available on this phone';
+
+  @override
+  String lwClaimsFound(String words) {
+    return 'Take out promises like: $words';
+  }
+
+  @override
+  String get lwDetailsTitle => 'A few details';
+
+  @override
+  String get lwPriceTitleProduct => 'Price & stock';
+
+  @override
+  String get lwPriceTitleService => 'Packages & price';
+
+  @override
+  String lwDiscount(int percent) {
+    return '$percent% off';
+  }
+
+  @override
+  String lwYouGet(String amount) {
+    return 'You get ≈ $amount';
+  }
+
+  @override
+  String lwYouGetHint(String fee) {
+    return 'After the platform fee ($fee%) and GST on it';
+  }
+
+  @override
+  String lwPackage(int n) {
+    return 'Package $n';
+  }
+
+  @override
+  String get lwPackageName => 'Package name';
+
+  @override
+  String get lwPackageNames => 'Names in the sankalp';
+
+  @override
+  String get lwPackageIncludes => 'What\'s included';
+
+  @override
+  String get lwPackageIncludesHint => 'Pooja + video, prasad…';
+
+  @override
+  String get lwPackageAdd => 'Add a package';
+
+  @override
+  String get lwPackageRemove => 'Remove package';
+
+  @override
+  String get lwPresetSingle => 'Single';
+
+  @override
+  String get lwPresetFamily => 'Family';
+
+  @override
+  String get lwPresetGrand => 'Grand';
+
+  @override
+  String get lwPreviewTitle => 'Check it the way a customer will see it';
+
+  @override
+  String get lwEdit => 'Edit';
+
+  @override
+  String lwFrom(String price) {
+    return 'From $price';
+  }
+
+  @override
+  String get lwNext => 'Next';
+
+  @override
+  String get lwBack => 'Back';
+
+  @override
+  String get lwSaving => 'Saving…';
+
+  @override
+  String lwSavedAt(String time) {
+    return 'Saved $time';
+  }
+
+  @override
+  String get lwOffline => 'Offline — kept on this phone';
+
+  @override
+  String get lwSaveFailed => 'Couldn\'t save — trying again';
+
+  @override
+  String get lwSavedOnPhone => 'Kept on this phone';
+
+  @override
+  String get lwRestored => 'We kept what you were typing';
+
+  @override
+  String get lwNeedKind => 'Choose a product or a service';
+
+  @override
+  String get lwNeedCategory => 'Choose a category';
+
+  @override
+  String get lwNeedType => 'Choose which kind';
+
+  @override
+  String get lwPhotosUploading => 'Wait for the photos to finish uploading';
+
+  @override
+  String get lwFixProblems => 'A few things to fix — they\'re marked';
+
+  @override
+  String get earnPaidEveryLabel => 'Paid every';
+
+  @override
+  String earnDays(int days) {
+    return '$days days';
+  }
+
+  @override
+  String get homeScorecard => 'Scorecard';
+
+  @override
+  String homeTodayLine(int sessions, String talk, String online) {
+    String _temp0 = intl.Intl.pluralLogic(
+      sessions,
+      locale: localeName,
+      other: '$sessions sessions',
+      one: '1 session',
+    );
+    return '$_temp0 · $talk talk · $online online';
+  }
+
+  @override
+  String dashProfileLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count things left to add',
+      one: '1 thing left to add',
+    );
+    return '$_temp0';
+  }
 }

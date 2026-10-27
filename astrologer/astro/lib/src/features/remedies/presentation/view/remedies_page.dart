@@ -11,6 +11,7 @@ import '../../../../core/util/time_format.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../performance/presentation/widgets/perf_format.dart';
 import '../../data/remedies_api.dart';
+import 'recommended_sales_page.dart';
 
 /// Label + colour for where a suggestion has got to.
 ({String label, Color color}) remedyStatusStyle(
@@ -121,6 +122,21 @@ class _RemediesPageState extends State<RemediesPage> {
     } else {
       body = [
         _Summary(items: items),
+        const SizedBox(height: 10),
+        // What the suggestions sold, and the astrologer's share of each.
+        Card(
+          margin: EdgeInsets.zero,
+          child: ListTile(
+            leading: const Icon(Icons.payments_rounded),
+            title: Text(l.salesTitle),
+            trailing: const Icon(Icons.chevron_right_rounded),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const RecommendedSalesPage(),
+              ),
+            ),
+          ),
+        ),
         const SizedBox(height: 14),
         ...FadeSlideIn.list([
           for (final s in items) _SuggestionTile(suggestion: s),

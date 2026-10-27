@@ -5,6 +5,7 @@ import 'package:talkacharya_live/talkacharya_live.dart';
 
 import '../../../../../core/l10n/l10n.dart';
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 class HostHeader extends StatelessWidget {
   const HostHeader({
     required this.state,
@@ -48,9 +49,10 @@ class HostHeader extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -66,23 +68,27 @@ class HostHeader extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(Icons.visibility_rounded, size: 16, color: Colors.white70),
-          const SizedBox(width: 4),
+          const SizedBox(width: 6),
+          const Icon(Icons.visibility_rounded, size: 15, color: Colors.white70),
+          const SizedBox(width: 3),
           Text(
             '${state.viewerCount}',
-            style: const TextStyle(color: Colors.white70, fontSize: 13),
+            style: const TextStyle(color: Colors.white70, fontSize: 12.5),
           ),
           // Paying intent, sitting in the audience. Worth more than the view
           // count and the host could not see it at all.
           if (state.waitingCount > 0) ...[
-            const SizedBox(width: 10),
-            WaitingPill(count: state.waitingCount),
+            const SizedBox(width: 6),
+            Flexible(child: WaitingPill(count: state.waitingCount)),
           ],
-          const SizedBox(width: 6),
+          const SizedBox(width: 4),
           TextButton(
             onPressed: onEnd,
             style: TextButton.styleFrom(
               foregroundColor: const Color(0xFFFF8A8A),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
             child: Text(l.hostEnd),
           ),
@@ -150,7 +156,7 @@ class WaitingPill extends StatelessWidget {
     return Tooltip(
       message: l.liveWaitingTooltip,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
         decoration: BoxDecoration(
           gradient: const LinearGradient(colors: BrandColors.goldGradient),
           borderRadius: BorderRadius.circular(999),
@@ -163,13 +169,17 @@ class WaitingPill extends StatelessWidget {
               size: 13,
               color: Colors.black87,
             ),
-            const SizedBox(width: 4),
-            Text(
-              l.liveWaitingCount(count),
-              style: const TextStyle(
-                color: Colors.black87,
-                fontSize: 11.5,
-                fontWeight: FontWeight.w800,
+            const SizedBox(width: 3),
+            Flexible(
+              child: Text(
+                l.liveWaitingCount(count),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
           ],

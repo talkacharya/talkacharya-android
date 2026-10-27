@@ -87,6 +87,10 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 }
@@ -97,4 +101,15 @@ dependencies {
 
 flutter {
     source = "../.."
+}
+
+// `make appbundle NO_MAPPING_UPLOAD=1` (gradle -PnoMappingUpload): build without
+// sending the R8 mapping file to Crashlytics — for a flaky or absent network,
+// where the upload otherwise fails the whole release build at the very end.
+// Java/Kotlin frames in that build's crashes stay obfuscated; Dart frames are
+// unaffected (they use `make symbols-upload`).
+if (project.hasProperty("noMappingUpload")) {
+    tasks.matching { it.name.startsWith("uploadCrashlyticsMappingFile") }.configureEach {
+        enabled = false
+    }
 }

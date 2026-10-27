@@ -137,6 +137,57 @@ class ListingCategory {
 }
 
 /// `GET astro/store/catalog/options`.
+/// A category under Product or Service in the listing form, with the kinds
+/// it takes (more than one asks "which kind?") and what the platform keeps of a
+/// sale there.
+class KindCategory {
+  const KindCategory({
+    required this.slug,
+    required this.name,
+    this.icon = '',
+    this.types = const [],
+    this.commissionPercent,
+  });
+
+  factory KindCategory.fromJson(Map<String, dynamic> j) => KindCategory(
+    slug: _s(j['slug']),
+    name: _s(j['name']),
+    icon: _s(j['icon']),
+    types: [for (final t in j['types'] as List? ?? const []) _s(t)],
+    commissionPercent: _num(j['commission_percent']),
+  );
+
+  final String slug;
+  final String name;
+  final String icon;
+  final List<String> types;
+  final double? commissionPercent;
+}
+
+/// Product or Service, and the categories under it.
+class ListingKind {
+  const ListingKind({
+    required this.key,
+    required this.fulfilment,
+    this.categories = const [],
+  });
+
+  factory ListingKind.fromJson(Map<String, dynamic> j) => ListingKind(
+    key: _s(j['key']),
+    fulfilment: _s(j['fulfilment']),
+    categories: [
+      for (final c in _maps(j['categories'])) KindCategory.fromJson(c),
+    ],
+  );
+
+  /// product | service
+  final String key;
+  final String fulfilment;
+  final List<KindCategory> categories;
+
+  bool get isService => key == 'service';
+}
+
 class CatalogOptions {
   const CatalogOptions({
     this.enabled = true,
@@ -145,6 +196,9 @@ class CatalogOptions {
     this.states = const [],
     this.maxImages = 8,
     this.currency = 'INR',
+    this.kinds = const [],
+    this.commissionGstPercent = 18,
+    this.bannedClaims = const [],
   });
 
   factory CatalogOptions.fromJson(Map<String, dynamic> j) => CatalogOptions(
@@ -161,14 +215,55 @@ class CatalogOptions {
     states: [for (final s in j['states'] as List? ?? const []) _s(s)],
     maxImages: _int(j['max_images']) ?? 8,
     currency: _s(j['currency'], 'INR'),
+    kinds: [for (final k in _maps(j['kinds'])) ListingKind.fromJson(k)],
+    commissionGstPercent: _num(j['commission_gst_percent']) ?? 18,
+    bannedClaims: [
+      for (final w in j['banned_claims'] as List? ?? const [])
+        _s(w).toLowerCase(),
+    ],
   );
 
   final bool enabled;
+
+  /// Product / Service and the categories under each.
+  final List<ListingKind> kinds;
+
+  /// GST on the platform's commission, for the "you get ≈ ₹…" line.
+  final double commissionGstPercent;
+
+  /// Words a listing may not use (promised results, cures).
+  final List<String> bannedClaims;
   final List<ListingType> types;
   final List<ListingCategory> categories;
   final List<String> states;
   final int maxImages;
   final String currency;
+
+  ListingKind? kind(String key) {
+    for (final k in kinds) {
+      if (k.key == key) return k;
+    }
+    return null;
+  }
+
+  /// The category, wherever it sits.
+  KindCategory? kindCategory(String slug) {
+    for (final k in kinds) {
+      for (final c in k.categories) {
+        if (c.slug == slug) return c;
+      }
+    }
+    return null;
+  }
+
+  /// The banned words in [text], as typed.
+  List<String> claimsIn(String text) {
+    final t = text.toLowerCase();
+    return [
+      for (final w in bannedClaims)
+        if (w.isNotEmpty && t.contains(w)) w,
+    ];
+  }
 
   ListingType? typeOf(String slug) {
     for (final t in types) {
@@ -196,10 +291,43 @@ class ListingPhoto {
     required this.id,
     required this.url,
     required this.thumb,
+    this.clientKey = '',
   });
   final int id;
   final String url;
   final String thumb;
+
+  /// The app's id for the upload that made it ('' for older photos).
+  final String clientKey;
+}
+
+/// A service package: Single / Family / Grand…, each with its own price and
+/// how many names its sankalp takes.
+class ListingPackage {
+  const ListingPackage({
+    required this.id,
+    required this.name,
+    this.participants = 1,
+    this.includes = '',
+    this.price,
+    this.compareAt,
+  });
+
+  factory ListingPackage.fromJson(Map<String, dynamic> j) => ListingPackage(
+    id: _s(j['id']),
+    name: _s(j['name']),
+    participants: _int(j['participants']) ?? 1,
+    includes: _s(j['includes']),
+    price: _num(j['price']),
+    compareAt: _num(j['compare_at']),
+  );
+
+  final String id;
+  final String name;
+  final int participants;
+  final String includes;
+  final double? price;
+  final double? compareAt;
 }
 
 class ChecklistItem {
@@ -238,6 +366,7 @@ class MyListing {
     this.publishedAt,
     this.checklist = const [],
     this.sentBackToReview = false,
+    this.packages = const [],
   });
 
   factory MyListing.fromJson(Map<String, dynamic> j) {
@@ -264,6 +393,7 @@ class MyListing {
             id: _int(m['id']) ?? 0,
             url: _s(m['url']),
             thumb: _s(m['thumb'], _s(m['url'])),
+            clientKey: _s(m['client_key']),
           ),
       ],
       price: _num(j['price']),
@@ -281,6 +411,9 @@ class MyListing {
           ChecklistItem(_s(c['code']), _s(c['message'])),
       ],
       sentBackToReview: j['sent_back_to_review'] == true,
+      packages: [
+        for (final p in _maps(j['packages'])) ListingPackage.fromJson(p),
+      ],
     );
   }
 
@@ -317,6 +450,9 @@ class MyListing {
 
   /// This save took a live listing off sale until the team looks again.
   final bool sentBackToReview;
+
+  /// A service's packages (a product has the one [price]).
+  final List<ListingPackage> packages;
 
   bool get isDraft => status == 'draft';
   bool get inReview => status == 'in_review';

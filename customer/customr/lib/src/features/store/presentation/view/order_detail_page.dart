@@ -663,6 +663,14 @@ class _LineTile extends StatelessWidget {
                           color: brand.inkMuted,
                         ),
                       ),
+                      if (ln.recommendedBy.isNotEmpty)
+                        Text(
+                          l.storeRecommendedBy(ln.recommendedBy),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: AstroPalette.career.end,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                     ],
                   ),
                 ),

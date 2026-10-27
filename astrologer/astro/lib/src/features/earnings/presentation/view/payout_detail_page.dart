@@ -11,8 +11,10 @@ import '../../../../core/util/time_format.dart';
 import '../../data/earnings_api.dart';
 import '../../data/earnings_models.dart';
 import '../widgets/earnings_widgets.dart';
+import '../widgets/statement_widgets.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 class PayoutDetailPage extends StatefulWidget {
   const PayoutDetailPage({required this.payoutId, super.key});
   final String payoutId;
@@ -22,14 +24,24 @@ class PayoutDetailPage extends StatefulWidget {
 }
 
 class _PayoutDetailPageState extends State<PayoutDetailPage> {
-  late Future<Payout> _future = _fetch();
+  late Future<(Payout, EarningsStatement?)> _future = _fetch();
 
-  Future<Payout> _fetch() => getIt<EarningsApi>().payout(widget.payoutId);
+  /// The payout, and its statement (service by service, what came off). The
+  /// statement is best-effort: the payout page still opens without it.
+  Future<(Payout, EarningsStatement?)> _fetch() async {
+    final api = getIt<EarningsApi>();
+    final statement = api
+        .statement(payoutId: widget.payoutId)
+        .then<EarningsStatement?>((s) => s)
+        .catchError((Object _) => null);
+    final payout = await api.payout(widget.payoutId);
+    return (payout, await statement);
+  }
 
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    return FutureBuilder<Payout>(
+    return FutureBuilder<(Payout, EarningsStatement?)>(
       future: _future,
       builder: (context, snap) {
         if (snap.connectionState != ConnectionState.done) {
@@ -44,16 +56,21 @@ class _PayoutDetailPageState extends State<PayoutDetailPage> {
               const SizedBox(height: 40),
               ErrorView(
                 message: l.payoutLoadError,
-                onRetry: () => setState(() => _future = _fetch()),
+                onRetry: () => setState(() {
+                  _future = _fetch();
+                }),
               ),
             ],
           );
         }
         return _PayoutView(
-          payout: snap.data!,
+          payout: snap.data!.$1,
+          statement: snap.data!.$2,
           onRefresh: () async {
             final next = _fetch();
-            setState(() => _future = next);
+            setState(() {
+              _future = next;
+            });
             await next;
           },
         );
@@ -63,24 +80,40 @@ class _PayoutDetailPageState extends State<PayoutDetailPage> {
 }
 
 class _PayoutView extends StatelessWidget {
-  const _PayoutView({required this.payout, required this.onRefresh});
+  const _PayoutView({
+    required this.payout,
+    required this.statement,
+    required this.onRefresh,
+  });
 
   final Payout payout;
+  final EarningsStatement? statement;
   final Future<void> Function() onRefresh;
 
   @override
   Widget build(BuildContext context) {
     final p = payout;
+    final st = statement;
     final l = context.l10n;
     final sections = <Widget>[
       _Section(
         title: l.payoutTimeline,
         child: _Timeline(payout: p),
       ),
-      _Section(
-        title: l.payoutBreakdown,
-        child: _Breakdown(payout: p),
-      ),
+      if (st != null) ...[
+        _Section(
+          title: l.earnFromTitle,
+          child: StatementServicesCard(statement: st),
+        ),
+        _Section(
+          title: l.earnDeductionsTitle,
+          child: StatementDeductionsCard(statement: st),
+        ),
+      ] else
+        _Section(
+          title: l.payoutBreakdown,
+          child: _Breakdown(payout: p),
+        ),
       if (p.utr.isNotEmpty) _UtrCard(utr: p.utr),
       if (p.documents.isNotEmpty)
         _Section(
@@ -92,7 +125,7 @@ class _PayoutView extends StatelessWidget {
             ],
           ),
         ),
-      if (p.entries.isNotEmpty)
+      if (st == null && p.entries.isNotEmpty)
         _Section(
           title: '${l.payoutIncluded} · ${p.entries.length}',
           padded: false,

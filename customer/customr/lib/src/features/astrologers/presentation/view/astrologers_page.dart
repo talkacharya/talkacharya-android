@@ -232,13 +232,12 @@ class _Header extends StatelessWidget {
     final l = context.l10n;
     final theme = Theme.of(context);
     final brand = context.brand;
-    final online = state.items.where((a) => a.isAvailable).length;
 
     return SliverAppBar(
       pinned: true,
       stretch: true,
       automaticallyImplyLeading: false,
-      expandedHeight: 196,
+      expandedHeight: 155,
       toolbarHeight: 60,
       backgroundColor: brand.cosmicStart,
       surfaceTintColor: Colors.transparent,
@@ -269,45 +268,6 @@ class _Header extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Row(
-                          children: [
-                            const LiveDot(),
-                            const SizedBox(width: 8),
-                            Flexible(
-                              child: AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 300),
-                                transitionBuilder: (child, animation) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: const Offset(0, -0.35),
-                                      end: Offset.zero,
-                                    ).animate(CurvedAnimation(
-                                      parent: animation,
-                                      curve: Curves.easeOutCubic,
-                                    )),
-                                    child: FadeTransition(
-                                      opacity: animation,
-                                      child: child,
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  online > 0
-                                      ? l.homeOnlineCount(online)
-                                      : l.homeTalkToAstrologer,
-                                  key: ValueKey<int>(online),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: theme.textTheme.titleSmall?.copyWith(
-                                    color: Colors.white.withValues(alpha: 0.9),
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
                         Text(
                           l.homeGuidanceTagline,
                           maxLines: 1,
@@ -435,7 +395,10 @@ class _SearchFieldState extends State<_SearchField> {
                               cubit.clearRecentSearches();
                               _removeOverlay();
                             },
-                            child: const Text('Clear All', style: TextStyle(fontSize: 12)),
+                            child: const Text(
+                              'Clear All',
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ),
                         ],
                       ),
@@ -562,8 +525,9 @@ class _SearchFieldState extends State<_SearchField> {
               builder: (context, value, _) {
                 if (value.text.isEmpty) return const SizedBox.shrink();
                 return IconButton(
-                  tooltip:
-                      MaterialLocalizations.of(context).deleteButtonTooltip,
+                  tooltip: MaterialLocalizations.of(
+                    context,
+                  ).deleteButtonTooltip,
                   icon: Icon(Icons.close_rounded, color: brand.inkMuted),
                   onPressed: () {
                     widget.onClear();
@@ -624,7 +588,8 @@ class _FilterChipRail extends StatelessWidget {
       (null, 'All', Icons.auto_awesome_rounded),
       ('chat', 'Chat', Icons.chat_bubble_rounded),
       ('voice', 'Call', Icons.phone_in_talk_rounded),
-      ('video', 'Video call', Icons.videocam_rounded),
+      // VIDEO-OFF: video calls are switched off for now.
+      // ('video', 'Video call', Icons.videocam_rounded),
     ];
 
     return Container(

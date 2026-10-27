@@ -13711,6 +13711,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Filled from the map — check it and add your house or flat number.'**
   String get addrFilledFromMap;
+
+  /// No description provided for @liveCallAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get liveCallAction;
+
+  /// No description provided for @liveCallSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Call {name} live'**
+  String liveCallSheetTitle(String name);
+
+  /// No description provided for @liveCallSheetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You stay in the stream. One call at a time — if someone is on a call, you join the line and come on when it\'s your turn.'**
+  String get liveCallSheetBody;
+
+  /// No description provided for @liveCallPublic.
+  ///
+  /// In en, this message translates to:
+  /// **'Public call'**
+  String get liveCallPublic;
+
+  /// No description provided for @liveCallPublicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone watching hears you both'**
+  String get liveCallPublicHint;
+
+  /// No description provided for @liveCallPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Private call'**
+  String get liveCallPrivate;
+
+  /// No description provided for @liveCallPrivateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Only you and the astrologer hear each other'**
+  String get liveCallPrivateHint;
+
+  /// No description provided for @liveCallPerMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'{price}/min'**
+  String liveCallPerMinute(String price);
+
+  /// No description provided for @liveCallNotOffered.
+  ///
+  /// In en, this message translates to:
+  /// **'Not offered'**
+  String get liveCallNotOffered;
+
+  /// No description provided for @liveCallWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re in line — {count} ahead of you'**
+  String liveCallWaiting(int count);
+
+  /// No description provided for @liveCallWaitingNext.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re next in line'**
+  String get liveCallWaitingNext;
+
+  /// No description provided for @liveCallConnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Your turn — coming on air…'**
+  String get liveCallConnecting;
+
+  /// No description provided for @liveCallOnAirPublic.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re on air · everyone can hear you'**
+  String get liveCallOnAirPublic;
+
+  /// No description provided for @liveCallOnAirPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Private call · only the astrologer hears you'**
+  String get liveCallOnAirPrivate;
+
+  /// No description provided for @liveCallMutedByHost.
+  ///
+  /// In en, this message translates to:
+  /// **'The astrologer muted you'**
+  String get liveCallMutedByHost;
+
+  /// No description provided for @liveCallLeaveLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave line'**
+  String get liveCallLeaveLine;
+
+  /// No description provided for @liveCallEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End call'**
+  String get liveCallEnd;
+
+  /// No description provided for @liveCallBannerPublic.
+  ///
+  /// In en, this message translates to:
+  /// **'On a live call with {name}'**
+  String liveCallBannerPublic(String name);
+
+  /// No description provided for @liveCallBannerPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'In a private call'**
+  String get liveCallBannerPrivate;
+
+  /// No description provided for @liveCallWaitingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} waiting to call'**
+  String liveCallWaitingCount(int count);
+
+  /// No description provided for @liveCallMicNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow the microphone to call in.'**
+  String get liveCallMicNeeded;
+
+  /// No description provided for @liveCallRateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How was your call?'**
+  String get liveCallRateTitle;
+
+  /// No description provided for @liveCallRateSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get liveCallRateSkip;
+
+  /// No description provided for @liveCallRateSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get liveCallRateSend;
+
+  /// No description provided for @liveCallRateThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for rating'**
+  String get liveCallRateThanks;
+
+  /// No description provided for @astroLiveNow.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is live!'**
+  String astroLiveNow(String name);
+
+  /// No description provided for @astroLiveJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Join now'**
+  String get astroLiveJoin;
+
+  /// No description provided for @astroWaitTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait ~{minutes} min'**
+  String astroWaitTime(int minutes);
+
+  /// No description provided for @storeRecommendedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended by {name}'**
+  String storeRecommendedBy(String name);
+
+  /// No description provided for @astroExpLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Exp: 1 yr} other{Exp: {count} yrs}}'**
+  String astroExpLine(int count);
 }
 
 class _AppLocalizationsDelegate

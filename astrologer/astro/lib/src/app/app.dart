@@ -322,6 +322,7 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
               // Says so when the Play Store has a newer version.
               child: AppUpdateWatcher(
                 child: LiveSessionBanner(
+                  onTapSession: (id) => _router.push(Routes.chatRoom(id)),
                   child: child ?? const SizedBox.shrink(),
                 ),
               ),

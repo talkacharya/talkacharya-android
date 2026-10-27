@@ -55,16 +55,7 @@ class _PerformanceView extends StatelessWidget {
         data: (p) => FadeSlideIn.list([
           if (focusTip(l, p.focus) case final tip?) _FocusCard(tip: tip),
           const _Legend(),
-          for (final m in p.metrics)
-            _MetricCard(
-              metric: m,
-              chart: m.key == PerfKeys.onlineTime && p.onlineByDay.isNotEmpty
-                  ? _OnlineChart(days: p.onlineByDay, goal: m.bands.first)
-                  : null,
-              footer: m.key == PerfKeys.missed && p.missed.total > 0
-                  ? _MissedBreakdown(missed: p.missed)
-                  : null,
-            ),
+          for (final m in p.metrics) MetricCard.of(p, m),
           LoyalCard(loyal: p.loyal, windowDays: p.windowDays),
           if (p.promo.sessions > 0) PromoCard(promo: p.promo),
           _RatingsCard(perf: p),
@@ -160,19 +151,57 @@ class _Legend extends StatelessWidget {
 
 /// One reading: value, verdict, meter, movement since the previous window,
 /// and an explanation that opens in place.
-class _MetricCard extends StatefulWidget {
-  const _MetricCard({required this.metric, this.chart, this.footer});
+/// One reading in full: verdict, value, the three-zone meter, how it moved,
+/// its chart or breakdown where it has one, and how it is calculated. Used
+/// here and, for the weakest readings, on Home.
+class MetricCard extends StatefulWidget {
+  const MetricCard({
+    required this.metric,
+    this.chart,
+    this.footer,
+    this.onTap,
+    super.key,
+  });
+
+  /// [metric] from [perf], with the online-hours chart or the missed-request
+  /// breakdown attached where it has one.
+  factory MetricCard.of(
+    Performance perf,
+    PerfMetric metric, {
+    VoidCallback? onTap,
+    Key? key,
+  }) => MetricCard(
+    key: key,
+    metric: metric,
+    onTap: onTap,
+    chart: metric.key == PerfKeys.onlineTime && perf.onlineByDay.isNotEmpty
+        ? _OnlineChart(days: perf.onlineByDay, goal: metric.bands.first)
+        : null,
+    footer: metric.key == PerfKeys.missed && perf.missed.total > 0
+        ? _MissedBreakdown(missed: perf.missed)
+        : null,
+  );
 
   final PerfMetric metric;
   final Widget? chart;
   final Widget? footer;
 
+  /// A tap on the card; by default it opens / closes "How it's calculated".
+  final VoidCallback? onTap;
+
   @override
-  State<_MetricCard> createState() => _MetricCardState();
+  State<MetricCard> createState() => _MetricCardState();
 }
 
-class _MetricCardState extends State<_MetricCard> {
+class _MetricCardState extends State<MetricCard> {
   bool _open = false;
+
+  /// Finger down: the shadow drops away and the card sinks a touch.
+  bool _down = false;
+
+  void _press(bool down) {
+    if (_down != down) setState(() => _down = down);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -182,115 +211,141 @@ class _MetricCardState extends State<_MetricCard> {
     final m = widget.metric;
     final judged = m.band != PerfBand.none;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(Radii.lg),
-        border: Border.all(color: brand.hairline),
-        boxShadow: brand.shadowWarm,
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        metricTitle(l, m.key),
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      VerdictChip(band: m.band),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  judged ? formatMetricValue(l, m) : '—',
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: judged ? BandColors.of(m.band, context) : null,
-                  ),
-                ),
-              ],
-            ),
+    return Listener(
+      onPointerDown: (_) => _press(true),
+      onPointerUp: (_) => _press(false),
+      onPointerCancel: (_) => _press(false),
+      child: AnimatedScale(
+        scale: _down ? 0.985 : 1,
+        duration: const Duration(milliseconds: 120),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 120),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(Radii.lg),
+            border: Border.all(color: brand.hairline),
+            boxShadow: _down
+                ? const []
+                : [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.06),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-            child: BandMeter(metric: m),
-          ),
-          if (judged)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-              child: _Movement(metric: m),
-            ),
-          if (widget.chart != null)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: widget.chart,
-            ),
-          if (widget.footer != null)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-              child: widget.footer,
-            ),
-          const SizedBox(height: 6),
-          InkWell(
-            onTap: () => setState(() => _open = !_open),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 12, 10),
-              child: Row(
+          clipBehavior: Clip.antiAlias,
+          child: Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              onTap: widget.onTap ?? () => setState(() => _open = !_open),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(
-                    child: Text(
-                      _open ? l.perfShowLess : l.perfHowCalculated,
-                      style: theme.textTheme.labelLarge?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.w700,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                metricTitle(l, m.key),
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              VerdictChip(band: m.band),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          judged ? formatMetricValue(l, m) : '—',
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: judged
+                                ? BandColors.of(m.band, context)
+                                : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+                    child: BandMeter(metric: m),
+                  ),
+                  if (judged)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+                      child: _Movement(metric: m),
+                    ),
+                  if (widget.chart != null)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      child: widget.chart,
+                    ),
+                  if (widget.footer != null)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+                      child: widget.footer,
+                    ),
+                  const SizedBox(height: 6),
+                  InkWell(
+                    onTap: () => setState(() => _open = !_open),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 10, 12, 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              _open ? l.perfShowLess : l.perfHowCalculated,
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                color: theme.colorScheme.primary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          AnimatedRotation(
+                            turns: _open ? 0.5 : 0,
+                            duration: const Duration(milliseconds: 200),
+                            child: Icon(
+                              Icons.expand_more_rounded,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  AnimatedRotation(
-                    turns: _open ? 0.5 : 0,
-                    duration: const Duration(milliseconds: 200),
-                    child: Icon(
-                      Icons.expand_more_rounded,
-                      color: theme.colorScheme.primary,
-                    ),
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 220),
+                    curve: Curves.easeOutCubic,
+                    alignment: Alignment.topCenter,
+                    child: _open
+                        ? Container(
+                            width: double.infinity,
+                            color: brand.tint,
+                            padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+                            child: Text(
+                              metricAbout(l, m.key),
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: brand.onTint,
+                                height: 1.4,
+                              ),
+                            ),
+                          )
+                        : const SizedBox(width: double.infinity),
                   ),
                 ],
               ),
             ),
           ),
-          AnimatedSize(
-            duration: const Duration(milliseconds: 220),
-            curve: Curves.easeOutCubic,
-            alignment: Alignment.topCenter,
-            child: _open
-                ? Container(
-                    width: double.infinity,
-                    color: brand.tint,
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
-                    child: Text(
-                      metricAbout(l, m.key),
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: brand.onTint,
-                        height: 1.4,
-                      ),
-                    ),
-                  )
-                : const SizedBox(width: double.infinity),
-          ),
-        ],
+        ),
       ),
     );
   }

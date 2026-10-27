@@ -228,16 +228,29 @@ class ConsultationApi {
     }
   }
 
+  /// Taking a request back. The server works out what that means by now
+  /// (cancelled while waiting, ended if it was answered in that moment). A
+  /// refusal is an error here — this Dio does not throw on 4xx, and a silent one
+  /// left the astrologer's phone ringing while the customer's screen said done.
   Future<Consultation> cancel(String id) async {
-    final res = await _dio.post<Map<String, dynamic>>(
-      ApiPaths.consultationCancel(id),
+    final res = _ok(
+      await _dio.post<Map<String, dynamic>>(ApiPaths.consultationCancel(id)),
     );
     return Consultation.fromMap(res.data ?? const {});
   }
 
+  Response<T> _ok<T>(Response<T> res) {
+    if ((res.statusCode ?? 0) >= 400) {
+      throw ApiException.fromDio(
+        DioException(requestOptions: res.requestOptions, response: res),
+      );
+    }
+    return res;
+  }
+
   Future<Consultation> end(String id) async {
-    final res = await _dio.post<Map<String, dynamic>>(
-      ApiPaths.consultationEnd(id),
+    final res = _ok(
+      await _dio.post<Map<String, dynamic>>(ApiPaths.consultationEnd(id)),
     );
     return Consultation.fromMap(res.data ?? const {});
   }

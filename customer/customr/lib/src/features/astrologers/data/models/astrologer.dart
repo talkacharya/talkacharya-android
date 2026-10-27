@@ -46,6 +46,13 @@ abstract class Astrologer with _$Astrologer {
 
     /// How many people are already in their waitlist.
     @JsonKey(name: 'queue_waiting') @Default(0) int queueWaiting,
+
+    /// `{id, title}` of the stream they are live in right now, or null.
+    @JsonKey(name: 'live_stream') Map<String, dynamic>? liveStream,
+
+    /// While busy (in a session, or live): about how long someone joining the
+    /// waitlist now would wait, in seconds. Null when free.
+    @JsonKey(name: 'wait_seconds') int? waitSeconds,
     // detail-only
     @Default('') String bio,
     @JsonKey(name: 'avg_response_seconds') int? avgResponseSeconds,
@@ -89,6 +96,12 @@ abstract class Astrologer with _$Astrologer {
     return t is String && t.isNotEmpty ? t : null;
   }
 
+  /// The stream they are live in right now, if any.
+  String? get liveStreamId {
+    final id = liveStream?['id'];
+    return id is String && id.isNotEmpty ? id : null;
+  }
+
   bool get isVerified =>
       verificationLevel.isNotEmpty && verificationLevel != 'none';
 
@@ -123,6 +136,15 @@ abstract class Astrologer with _$Astrologer {
 
   /// Whether [channel] is priced and being taken (says nothing of presence).
   bool takes(String channel) => stateOf(channel) == ChannelState.open;
+
+  /// Whether to say, beside [channel], that it is closed: online and not
+  /// taking it — or offline with a time it is back. The server sends those
+  /// times only while the astrologer's Online switch is on (every channel
+  /// waiting is what made them offline); switched off by hand there are none,
+  /// and they are simply offline.
+  bool showsClosed(String channel) => isAvailable
+      ? !takes(channel)
+      : stateOf(channel) == ChannelState.backLater;
 
   /// Chat, voice, video — those being taken, in that order.
   /// VIDEO-OFF: video calls are switched off for now; chat and voice only.

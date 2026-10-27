@@ -36,6 +36,16 @@ class DioLiveHostBackend implements LiveHostBackend {
     bool pin = true,
     bool hide = false,
   }) => _api.pinMessage(streamId, messageId, pin: pin, hide: hide);
+
+  @override
+  Future<LiveHostCalls> calls() => _api.calls(streamId);
+
+  @override
+  Future<void> endCall(String requestId) => _api.endCall(streamId, requestId);
+
+  @override
+  Future<void> muteCall(String requestId, {required bool muted}) =>
+      _api.muteCall(streamId, requestId, muted: muted);
 }
 
 /// [LiveSignaling] over the app's Centrifugo client — chat, viewer counts and

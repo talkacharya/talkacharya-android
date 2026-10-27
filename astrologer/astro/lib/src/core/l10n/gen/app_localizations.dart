@@ -194,6 +194,12 @@ abstract class AppLocalizations {
   /// **'Go online to start receiving requests'**
   String get presenceOfflineHint;
 
+  /// No description provided for @presenceAllWaitingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat and calls are off until their next-online time'**
+  String get presenceAllWaitingHint;
+
   /// No description provided for @presenceFollowersHint.
   ///
   /// In en, this message translates to:
@@ -8455,6 +8461,762 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'History'**
   String get dashActionHistory;
+
+  /// No description provided for @hostCallPublic.
+  ///
+  /// In en, this message translates to:
+  /// **'Public call with {name}'**
+  String hostCallPublic(String name);
+
+  /// No description provided for @hostCallPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Private call with {name}'**
+  String hostCallPrivate(String name);
+
+  /// No description provided for @hostCallConnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is coming on air…'**
+  String hostCallConnecting(String name);
+
+  /// No description provided for @hostCallPrivateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Viewers can\'t hear either of you'**
+  String get hostCallPrivateHint;
+
+  /// No description provided for @hostCallPublicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone watching hears you both'**
+  String get hostCallPublicHint;
+
+  /// No description provided for @hostCallMute.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute'**
+  String get hostCallMute;
+
+  /// No description provided for @hostCallUnmute.
+  ///
+  /// In en, this message translates to:
+  /// **'Unmute'**
+  String get hostCallUnmute;
+
+  /// No description provided for @hostCallEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get hostCallEnd;
+
+  /// No description provided for @hostCallSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get hostCallSkip;
+
+  /// No description provided for @hostCallWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} waiting'**
+  String hostCallWaiting(int count);
+
+  /// No description provided for @hostCallLineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Call line'**
+  String get hostCallLineTitle;
+
+  /// No description provided for @hostCallLineEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody is waiting'**
+  String get hostCallLineEmpty;
+
+  /// No description provided for @hostCallRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get hostCallRemove;
+
+  /// No description provided for @hostCallModePublic.
+  ///
+  /// In en, this message translates to:
+  /// **'Public'**
+  String get hostCallModePublic;
+
+  /// No description provided for @hostCallModePrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Private'**
+  String get hostCallModePrivate;
+
+  /// No description provided for @earnTabCycle.
+  ///
+  /// In en, this message translates to:
+  /// **'This cycle'**
+  String get earnTabCycle;
+
+  /// No description provided for @earnNextPayout.
+  ///
+  /// In en, this message translates to:
+  /// **'Next payout · {date}'**
+  String earnNextPayout(String date);
+
+  /// No description provided for @earnEstimated.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated — final on payout day'**
+  String get earnEstimated;
+
+  /// No description provided for @earnPaidEvery.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid every {days} days'**
+  String earnPaidEvery(int days);
+
+  /// No description provided for @earnFromTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where it came from'**
+  String get earnFromTitle;
+
+  /// No description provided for @earnDeductionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What came off'**
+  String get earnDeductionsTitle;
+
+  /// No description provided for @earnCustomersPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Customers paid'**
+  String get earnCustomersPaid;
+
+  /// No description provided for @earnPlatformFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Platform fee'**
+  String get earnPlatformFee;
+
+  /// No description provided for @earnGstOnFee.
+  ///
+  /// In en, this message translates to:
+  /// **'GST on platform fee'**
+  String get earnGstOnFee;
+
+  /// No description provided for @earnGateway.
+  ///
+  /// In en, this message translates to:
+  /// **'Gateway charge'**
+  String get earnGateway;
+
+  /// No description provided for @earnYourShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Your share'**
+  String get earnYourShare;
+
+  /// No description provided for @earnTds.
+  ///
+  /// In en, this message translates to:
+  /// **'TDS'**
+  String get earnTds;
+
+  /// No description provided for @earnPayoutLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Payout'**
+  String get earnPayoutLine;
+
+  /// No description provided for @earnClearingNote.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} still in the refund window — paid in a later cycle'**
+  String earnClearingNote(String amount);
+
+  /// No description provided for @earnOnHoldNote.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} on hold'**
+  String earnOnHoldNote(String amount);
+
+  /// No description provided for @earnNothingYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing earned in this cycle yet'**
+  String get earnNothingYet;
+
+  /// No description provided for @earnItemsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 item} other{{count} items}}'**
+  String earnItemsCount(int count);
+
+  /// No description provided for @earnSvcConsultation.
+  ///
+  /// In en, this message translates to:
+  /// **'Consultations'**
+  String get earnSvcConsultation;
+
+  /// No description provided for @earnSvcGift.
+  ///
+  /// In en, this message translates to:
+  /// **'Gifts'**
+  String get earnSvcGift;
+
+  /// No description provided for @earnSvcPrediction.
+  ///
+  /// In en, this message translates to:
+  /// **'Predictions'**
+  String get earnSvcPrediction;
+
+  /// No description provided for @earnSvcStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Store sales'**
+  String get earnSvcStore;
+
+  /// No description provided for @earnSvcRecommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'Store recommendations'**
+  String get earnSvcRecommendation;
+
+  /// No description provided for @earnSvcBonus.
+  ///
+  /// In en, this message translates to:
+  /// **'Bonuses'**
+  String get earnSvcBonus;
+
+  /// No description provided for @earnSvcRefund.
+  ///
+  /// In en, this message translates to:
+  /// **'Refunds'**
+  String get earnSvcRefund;
+
+  /// No description provided for @earnSvcFine.
+  ///
+  /// In en, this message translates to:
+  /// **'Fines'**
+  String get earnSvcFine;
+
+  /// No description provided for @earnLiveCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Live call'**
+  String get earnLiveCall;
+
+  /// No description provided for @earnStatusUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get earnStatusUpcoming;
+
+  /// No description provided for @earnStatusClearing.
+  ///
+  /// In en, this message translates to:
+  /// **'Clearing'**
+  String get earnStatusClearing;
+
+  /// No description provided for @earnStatusReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready'**
+  String get earnStatusReady;
+
+  /// No description provided for @earnStatusOnHold.
+  ///
+  /// In en, this message translates to:
+  /// **'On hold'**
+  String get earnStatusOnHold;
+
+  /// No description provided for @earnStatusProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing'**
+  String get earnStatusProcessing;
+
+  /// No description provided for @earnStatusCredited.
+  ///
+  /// In en, this message translates to:
+  /// **'Credited'**
+  String get earnStatusCredited;
+
+  /// No description provided for @earnStatusFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get earnStatusFailed;
+
+  /// No description provided for @earnClearsOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready on {date}'**
+  String earnClearsOn(String date);
+
+  /// No description provided for @earnMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String earnMinutes(int minutes);
+
+  /// No description provided for @earnViewItems.
+  ///
+  /// In en, this message translates to:
+  /// **'See every item'**
+  String get earnViewItems;
+
+  /// No description provided for @salesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales from your suggestions'**
+  String get salesTitle;
+
+  /// No description provided for @salesCardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} orders · {amount} earned'**
+  String salesCardBody(int count, String amount);
+
+  /// No description provided for @salesEarned.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned'**
+  String get salesEarned;
+
+  /// No description provided for @salesOnTheWay.
+  ///
+  /// In en, this message translates to:
+  /// **'On the way'**
+  String get salesOnTheWay;
+
+  /// No description provided for @salesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing sold through your suggestions yet'**
+  String get salesEmpty;
+
+  /// No description provided for @salesYourShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Your share {percent}%'**
+  String salesYourShare(String percent);
+
+  /// No description provided for @salesOwnProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Your own product — paid as a store sale'**
+  String get salesOwnProduct;
+
+  /// No description provided for @salesStatusOrdered.
+  ///
+  /// In en, this message translates to:
+  /// **'Ordered'**
+  String get salesStatusOrdered;
+
+  /// No description provided for @salesStatusOnTheWay.
+  ///
+  /// In en, this message translates to:
+  /// **'On the way'**
+  String get salesStatusOnTheWay;
+
+  /// No description provided for @salesStatusDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get salesStatusDelivered;
+
+  /// No description provided for @salesStatusBooked.
+  ///
+  /// In en, this message translates to:
+  /// **'Booked'**
+  String get salesStatusBooked;
+
+  /// No description provided for @salesStatusPerformed.
+  ///
+  /// In en, this message translates to:
+  /// **'Performed'**
+  String get salesStatusPerformed;
+
+  /// No description provided for @salesStatusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get salesStatusCancelled;
+
+  /// No description provided for @salesStatusReturned.
+  ///
+  /// In en, this message translates to:
+  /// **'Returned'**
+  String get salesStatusReturned;
+
+  /// No description provided for @lwStepKind.
+  ///
+  /// In en, this message translates to:
+  /// **'What'**
+  String get lwStepKind;
+
+  /// No description provided for @lwStepPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get lwStepPhotos;
+
+  /// No description provided for @lwStepDescribe.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe'**
+  String get lwStepDescribe;
+
+  /// No description provided for @lwStepDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get lwStepDetails;
+
+  /// No description provided for @lwStepPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get lwStepPrice;
+
+  /// No description provided for @lwStepPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get lwStepPreview;
+
+  /// No description provided for @lwStepOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {n} of {total}'**
+  String lwStepOf(int n, int total);
+
+  /// No description provided for @lwKindTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What are you listing?'**
+  String get lwKindTitle;
+
+  /// No description provided for @lwKindProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'A product'**
+  String get lwKindProduct;
+
+  /// No description provided for @lwKindProductHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Rudraksha, gemstones, yantras, samagri — shipped to the customer'**
+  String get lwKindProductHint;
+
+  /// No description provided for @lwKindService.
+  ///
+  /// In en, this message translates to:
+  /// **'A service'**
+  String get lwKindService;
+
+  /// No description provided for @lwKindServiceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Poojas, havan, chadhava — you perform it for them'**
+  String get lwKindServiceHint;
+
+  /// No description provided for @lwCategoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Which category?'**
+  String get lwCategoryTitle;
+
+  /// No description provided for @lwTypeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Which kind?'**
+  String get lwTypeTitle;
+
+  /// No description provided for @lwNoCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is open for this yet'**
+  String get lwNoCategories;
+
+  /// No description provided for @lwPhotosTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photos'**
+  String get lwPhotosTitle;
+
+  /// No description provided for @lwPhotosBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear, bright photos sell. Each one uploads as soon as you pick it. The first is the cover — hold and drag to reorder.'**
+  String get lwPhotosBody;
+
+  /// No description provided for @lwUploading.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}%'**
+  String lwUploading(int percent);
+
+  /// No description provided for @lwUploadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sent — tap to retry'**
+  String get lwUploadFailed;
+
+  /// No description provided for @lwDescribeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell customers about it'**
+  String get lwDescribeTitle;
+
+  /// No description provided for @lwVoiceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the mic to speak instead of typing'**
+  String get lwVoiceHint;
+
+  /// No description provided for @lwListening.
+  ///
+  /// In en, this message translates to:
+  /// **'Listening… tap to stop'**
+  String get lwListening;
+
+  /// No description provided for @lwVoiceUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Speaking isn\'t available on this phone'**
+  String get lwVoiceUnavailable;
+
+  /// No description provided for @lwClaimsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Take out promises like: {words}'**
+  String lwClaimsFound(String words);
+
+  /// No description provided for @lwDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A few details'**
+  String get lwDetailsTitle;
+
+  /// No description provided for @lwPriceTitleProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Price & stock'**
+  String get lwPriceTitleProduct;
+
+  /// No description provided for @lwPriceTitleService.
+  ///
+  /// In en, this message translates to:
+  /// **'Packages & price'**
+  String get lwPriceTitleService;
+
+  /// No description provided for @lwDiscount.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% off'**
+  String lwDiscount(int percent);
+
+  /// No description provided for @lwYouGet.
+  ///
+  /// In en, this message translates to:
+  /// **'You get ≈ {amount}'**
+  String lwYouGet(String amount);
+
+  /// No description provided for @lwYouGetHint.
+  ///
+  /// In en, this message translates to:
+  /// **'After the platform fee ({fee}%) and GST on it'**
+  String lwYouGetHint(String fee);
+
+  /// No description provided for @lwPackage.
+  ///
+  /// In en, this message translates to:
+  /// **'Package {n}'**
+  String lwPackage(int n);
+
+  /// No description provided for @lwPackageName.
+  ///
+  /// In en, this message translates to:
+  /// **'Package name'**
+  String get lwPackageName;
+
+  /// No description provided for @lwPackageNames.
+  ///
+  /// In en, this message translates to:
+  /// **'Names in the sankalp'**
+  String get lwPackageNames;
+
+  /// No description provided for @lwPackageIncludes.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s included'**
+  String get lwPackageIncludes;
+
+  /// No description provided for @lwPackageIncludesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pooja + video, prasad…'**
+  String get lwPackageIncludesHint;
+
+  /// No description provided for @lwPackageAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a package'**
+  String get lwPackageAdd;
+
+  /// No description provided for @lwPackageRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove package'**
+  String get lwPackageRemove;
+
+  /// No description provided for @lwPresetSingle.
+  ///
+  /// In en, this message translates to:
+  /// **'Single'**
+  String get lwPresetSingle;
+
+  /// No description provided for @lwPresetFamily.
+  ///
+  /// In en, this message translates to:
+  /// **'Family'**
+  String get lwPresetFamily;
+
+  /// No description provided for @lwPresetGrand.
+  ///
+  /// In en, this message translates to:
+  /// **'Grand'**
+  String get lwPresetGrand;
+
+  /// No description provided for @lwPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check it the way a customer will see it'**
+  String get lwPreviewTitle;
+
+  /// No description provided for @lwEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get lwEdit;
+
+  /// No description provided for @lwFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From {price}'**
+  String lwFrom(String price);
+
+  /// No description provided for @lwNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get lwNext;
+
+  /// No description provided for @lwBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get lwBack;
+
+  /// No description provided for @lwSaving.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving…'**
+  String get lwSaving;
+
+  /// No description provided for @lwSavedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved {time}'**
+  String lwSavedAt(String time);
+
+  /// No description provided for @lwOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline — kept on this phone'**
+  String get lwOffline;
+
+  /// No description provided for @lwSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save — trying again'**
+  String get lwSaveFailed;
+
+  /// No description provided for @lwSavedOnPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Kept on this phone'**
+  String get lwSavedOnPhone;
+
+  /// No description provided for @lwRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'We kept what you were typing'**
+  String get lwRestored;
+
+  /// No description provided for @lwNeedKind.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a product or a service'**
+  String get lwNeedKind;
+
+  /// No description provided for @lwNeedCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a category'**
+  String get lwNeedCategory;
+
+  /// No description provided for @lwNeedType.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose which kind'**
+  String get lwNeedType;
+
+  /// No description provided for @lwPhotosUploading.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait for the photos to finish uploading'**
+  String get lwPhotosUploading;
+
+  /// No description provided for @lwFixProblems.
+  ///
+  /// In en, this message translates to:
+  /// **'A few things to fix — they\'re marked'**
+  String get lwFixProblems;
+
+  /// No description provided for @earnPaidEveryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid every'**
+  String get earnPaidEveryLabel;
+
+  /// No description provided for @earnDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days'**
+  String earnDays(int days);
+
+  /// No description provided for @homeScorecard.
+  ///
+  /// In en, this message translates to:
+  /// **'Scorecard'**
+  String get homeScorecard;
+
+  /// No description provided for @homeTodayLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{sessions, plural, =1{1 session} other{{sessions} sessions}} · {talk} talk · {online} online'**
+  String homeTodayLine(int sessions, String talk, String online);
+
+  /// No description provided for @dashProfileLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 thing left to add} other{{count} things left to add}}'**
+  String dashProfileLeft(int count);
 }
 
 class _AppLocalizationsDelegate

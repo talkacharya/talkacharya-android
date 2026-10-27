@@ -5,14 +5,80 @@ import 'package:talkacharya_ui/talkacharya_ui.dart';
 export '../../../../consultations/presentation/widgets/consultation_style.dart'
     show channelStyle;
 
-/// Layout constants shared across dashboard sections (same values as the
-/// customer home feed).
+/// Layout constants shared across dashboard sections.
 class DashGaps {
   const DashGaps._();
 
-  static const double side = 20;
-  static const double section = 18;
+  static const double side = 16;
+  static const double section = 12;
   static const EdgeInsets sidePad = EdgeInsets.symmetric(horizontal: side);
+}
+
+/// Small section label for the compact home: a bold title, an optional muted
+/// line under it, and "See all" on the right.
+class DashLabel extends StatelessWidget {
+  const DashLabel({
+    required this.title,
+    this.subtitle,
+    this.onSeeAll,
+    super.key,
+  });
+
+  final String title;
+  final String? subtitle;
+  final VoidCallback? onSeeAll;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(DashGaps.side, 0, 4, 0),
+      child: SizedBox(
+        height: 36,
+        child: Row(
+          children: [
+            Expanded(
+              child: Text.rich(
+                TextSpan(
+                  text: title,
+                  children: [
+                    if (subtitle != null)
+                      TextSpan(
+                        text: '  ·  $subtitle',
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          color: context.brand.inkMuted,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                  ],
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+            if (onSeeAll != null)
+              TextButton(
+                onPressed: onSeeAll,
+                style: TextButton.styleFrom(
+                  visualDensity: VisualDensity.compact,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(context.l10n.commonSeeAll),
+                    const Icon(Icons.chevron_right_rounded, size: 18),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 /// Section title with a gradient accent bar and an optional "See all" pill.

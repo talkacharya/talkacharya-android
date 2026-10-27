@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../../core/constants/api_paths.dart';
 import '../../../core/network/api_exception.dart';
+import '../../../core/network/launch_seed.dart';
 import 'models/astrologer.dart';
 
 /// One page of discovery results.
@@ -107,7 +108,11 @@ class AstrologersApi {
     try {
       final res = await _dio.get<Map<String, dynamic>>(
         ApiPaths.astrologers,
-        queryParameters: {...query.toParams(), 'cursor': ?cursor},
+        queryParameters: {
+          ...query.toParams(),
+          'seed': launchSeed,
+          'cursor': ?cursor,
+        },
       );
       _raiseFor(res);
       final data = res.data ?? const {};

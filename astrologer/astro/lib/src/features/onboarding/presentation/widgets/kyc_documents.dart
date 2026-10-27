@@ -40,7 +40,9 @@ class _KycDocumentsSectionState extends State<KycDocumentsSection> {
   late Future<KycStatus> _future = getIt<OnboardingApi>().kycStatus();
 
   void _reload() {
-    setState(() => _future = getIt<OnboardingApi>().kycStatus());
+    setState(() {
+      _future = getIt<OnboardingApi>().kycStatus();
+    });
     widget.onChanged?.call();
   }
 
@@ -57,9 +59,9 @@ class _KycDocumentsSectionState extends State<KycDocumentsSection> {
             child: snap.hasError
                 ? ErrorView(
                     message: l.commonLoadFailed,
-                    onRetry: () => setState(
-                      () => _future = getIt<OnboardingApi>().kycStatus(),
-                    ),
+                    onRetry: () => setState(() {
+                      _future = getIt<OnboardingApi>().kycStatus();
+                    }),
                   )
                 : const Center(child: CircularProgressIndicator()),
           );

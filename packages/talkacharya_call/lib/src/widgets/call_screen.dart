@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../engine/call_controller.dart';
-import '../engine/call_pip.dart';
 import '../engine/call_telecom.dart';
 import '../ports/call_ports.dart';
 import '../models/call_state.dart';
@@ -210,125 +209,92 @@ class _CallScreenState extends State<CallScreen> {
           final canMinimize =
               minimize != null && state.phase != CallPhase.ended;
 
-          // In picture-in-picture (video calls only — see CallPip) the window is
-          // a thumbnail: just the other person's face.
-          return ValueListenableBuilder<bool>(
-            valueListenable: CallPip.inPip,
-            builder: (context, inPip, _) {
-              if (inPip) {
-                if (!state.video) {
-                  return const ColoredBox(
-                    color: _bgTop,
-                    child: Center(
-                      child: Icon(Icons.phone, color: Colors.white, size: 48),
-                    ),
-                  );
-                }
-                return Scaffold(
-                  backgroundColor: _bgTop,
-                  body: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      if (state.showRemoteVideo)
-                        CallVideoView(
-                          stream: state.remoteVideo,
-                          mirror: false,
-                          cover: true,
-                        )
-                      else
-                        const ColoredBox(color: _bgTop),
-                    ],
-                  ),
-                );
+          return PopScope(
+            canPop: !state.phase.isLive && !canMinimize,
+            onPopInvokedWithResult: (didPop, _) async {
+              if (didPop) return;
+              if (_minimizing) {
+                // The minimize asked to leave: leave.
+                Navigator.of(context).pop();
+                return;
               }
-              return PopScope(
-                canPop: !state.phase.isLive && !canMinimize,
-                onPopInvokedWithResult: (didPop, _) async {
-                  if (didPop) return;
-                  if (_minimizing) {
-                    // The minimize asked to leave: leave.
-                    Navigator.of(context).pop();
-                    return;
-                  }
-                  if (canMinimize) {
-                    minimize();
-                    return;
-                  }
-                  if (!state.phase.isLive) return;
-                  if (await _confirmEnd(context)) await controller.hangUp();
-                },
-                child: Scaffold(
-                  backgroundColor: _bgTop,
-                  body: DecoratedBox(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [_bgTop, _bgBottom],
-                      ),
-                    ),
-                    child: SafeArea(
-                      child: switch (state.phase) {
-                        CallPhase.permissionDenied => _PermissionView(
-                          strings: widget.strings,
-                          blocked: state.permanentlyDenied,
-                          onSettings: controller.openSettings,
-                          onRetry: controller.retry,
-                        ),
-                        CallPhase.failed => _FailedView(
-                          strings: widget.strings,
-                          message: state.error,
-                          onRetry: controller.retry,
-                        ),
-                        _ when state.video => _VideoView(
-                          state: state,
-                          peerName: state.peerName.isNotEmpty
-                              ? state.peerName
-                              : widget.peerName,
-                          avatarUrl: widget.peerAvatarUrl,
-                          strings: widget.strings,
-                          statusOverride: widget.statusOverride,
-                          top: widget.top,
-                          overlay: widget.overlay,
-                          halo: halo,
-                          onMute: controller.toggleMute,
-                          onCamera: controller.toggleCamera,
-                          onFlip: controller.switchCamera,
-                          onEnd: () => _end(context, state, controller),
-                          onMinimize: canMinimize ? minimize : null,
-                        ),
-                        _ => _LiveView(
-                          state: state,
-                          peerName: state.peerName.isNotEmpty
-                              ? state.peerName
-                              : widget.peerName,
-                          avatarUrl: widget.peerAvatarUrl,
-                          strings: widget.strings,
-                          statusOverride: widget.statusOverride,
-                          top: widget.top,
-                          overlay: widget.overlay,
-                          halo: halo,
-                          onMute: controller.toggleMute,
-                          // A toggle while the choice is phone-or-speaker; a
-                          // picker once a headset makes it a real choice.
-                          onSpeaker: () => state.canPickAudioRoute
-                              ? _pickAudioRoute(
-                                  context,
-                                  state,
-                                  controller,
-                                  widget.strings,
-                                )
-                              : controller.toggleSpeaker(),
-                          onEnd: () => _end(context, state, controller),
-                          onMinimize: canMinimize ? minimize : null,
-                        ),
-                      },
-                    ),
-                  ),
-                ), // closes Scaffold
-              ); // closes PopScope
+              if (canMinimize) {
+                minimize();
+                return;
+              }
+              if (!state.phase.isLive) return;
+              if (await _confirmEnd(context)) await controller.hangUp();
             },
-          );
+            child: Scaffold(
+              backgroundColor: _bgTop,
+              body: DecoratedBox(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [_bgTop, _bgBottom],
+                  ),
+                ),
+                child: SafeArea(
+                  child: switch (state.phase) {
+                    CallPhase.permissionDenied => _PermissionView(
+                      strings: widget.strings,
+                      blocked: state.permanentlyDenied,
+                      onSettings: controller.openSettings,
+                      onRetry: controller.retry,
+                    ),
+                    CallPhase.failed => _FailedView(
+                      strings: widget.strings,
+                      message: state.error,
+                      onRetry: controller.retry,
+                    ),
+                    _ when state.video => _VideoView(
+                      state: state,
+                      peerName: state.peerName.isNotEmpty
+                          ? state.peerName
+                          : widget.peerName,
+                      avatarUrl: widget.peerAvatarUrl,
+                      strings: widget.strings,
+                      statusOverride: widget.statusOverride,
+                      top: widget.top,
+                      overlay: widget.overlay,
+                      halo: halo,
+                      onMute: controller.toggleMute,
+                      onCamera: controller.toggleCamera,
+                      onFlip: controller.switchCamera,
+                      onEnd: () => _end(context, state, controller),
+                      onMinimize: canMinimize ? minimize : null,
+                    ),
+                    _ => _LiveView(
+                      state: state,
+                      peerName: state.peerName.isNotEmpty
+                          ? state.peerName
+                          : widget.peerName,
+                      avatarUrl: widget.peerAvatarUrl,
+                      strings: widget.strings,
+                      statusOverride: widget.statusOverride,
+                      top: widget.top,
+                      overlay: widget.overlay,
+                      halo: halo,
+                      onMute: controller.toggleMute,
+                      // A toggle while the choice is phone-or-speaker; a
+                      // picker once a headset makes it a real choice.
+                      onSpeaker: () => state.canPickAudioRoute
+                          ? _pickAudioRoute(
+                              context,
+                              state,
+                              controller,
+                              widget.strings,
+                            )
+                          : controller.toggleSpeaker(),
+                      onEnd: () => _end(context, state, controller),
+                      onMinimize: canMinimize ? minimize : null,
+                    ),
+                  },
+                ),
+              ),
+            ), // closes Scaffold
+          ); // closes PopScope
         },
       ),
     );

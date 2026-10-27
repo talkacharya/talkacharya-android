@@ -8,7 +8,9 @@ import '../utils/haptic_service.dart';
 class AppChatSounds implements ChatSounds {
   const AppChatSounds();
   @override
-  void incoming() => AppSounds.effect(SoundEffect.messageIn);
+  // No tone for a message in the open room — as in WhatsApp in a chat you are
+  // reading. A light tap says one came.
+  void incoming() => HapticService.light();
 
   // Sending is silent: the tick on the bubble already says it went.
   @override

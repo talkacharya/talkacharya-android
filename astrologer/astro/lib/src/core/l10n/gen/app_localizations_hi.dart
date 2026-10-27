@@ -57,6 +57,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get presenceOfflineHint => 'अनुरोध पाने के लिए ऑनलाइन हों';
 
   @override
+  String get presenceAllWaitingHint =>
+      'चैट और कॉल अपने अगले ऑनलाइन समय तक बंद हैं';
+
+  @override
   String presenceFollowersHint(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -4846,4 +4850,447 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get dashActionHistory => 'इतिहास';
+
+  @override
+  String hostCallPublic(String name) {
+    return '$name के साथ पब्लिक कॉल';
+  }
+
+  @override
+  String hostCallPrivate(String name) {
+    return '$name के साथ प्राइवेट कॉल';
+  }
+
+  @override
+  String hostCallConnecting(String name) {
+    return '$name जुड़ रहे हैं…';
+  }
+
+  @override
+  String get hostCallPrivateHint =>
+      'दर्शक आप दोनों में से किसी को नहीं सुन सकते';
+
+  @override
+  String get hostCallPublicHint => 'देखने वाले सभी आप दोनों को सुन रहे हैं';
+
+  @override
+  String get hostCallMute => 'म्यूट';
+
+  @override
+  String get hostCallUnmute => 'अनम्यूट';
+
+  @override
+  String get hostCallEnd => 'ख़त्म करें';
+
+  @override
+  String get hostCallSkip => 'छोड़ें';
+
+  @override
+  String hostCallWaiting(int count) {
+    return '$count इंतज़ार में';
+  }
+
+  @override
+  String get hostCallLineTitle => 'कॉल लाइन';
+
+  @override
+  String get hostCallLineEmpty => 'कोई इंतज़ार में नहीं है';
+
+  @override
+  String get hostCallRemove => 'हटाएँ';
+
+  @override
+  String get hostCallModePublic => 'पब्लिक';
+
+  @override
+  String get hostCallModePrivate => 'प्राइवेट';
+
+  @override
+  String get earnTabCycle => 'इस साइकिल';
+
+  @override
+  String earnNextPayout(String date) {
+    return 'अगला पेआउट · $date';
+  }
+
+  @override
+  String get earnEstimated => 'अनुमान — पेआउट वाले दिन पक्का होगा';
+
+  @override
+  String earnPaidEvery(int days) {
+    return 'हर $days दिन में भुगतान';
+  }
+
+  @override
+  String get earnFromTitle => 'कहाँ से आया';
+
+  @override
+  String get earnDeductionsTitle => 'कटौती का हिसाब';
+
+  @override
+  String get earnCustomersPaid => 'ग्राहकों ने दिया';
+
+  @override
+  String get earnPlatformFee => 'प्लेटफ़ॉर्म शुल्क';
+
+  @override
+  String get earnGstOnFee => 'प्लेटफ़ॉर्म शुल्क पर GST';
+
+  @override
+  String get earnGateway => 'गेटवे शुल्क';
+
+  @override
+  String get earnYourShare => 'आपका हिस्सा';
+
+  @override
+  String get earnTds => 'TDS';
+
+  @override
+  String get earnPayoutLine => 'पेआउट';
+
+  @override
+  String earnClearingNote(String amount) {
+    return '$amount अभी रिफ़ंड अवधि में — अगली साइकिल में मिलेगा';
+  }
+
+  @override
+  String earnOnHoldNote(String amount) {
+    return '$amount रोका गया है';
+  }
+
+  @override
+  String get earnNothingYet => 'इस साइकिल में अभी कोई कमाई नहीं';
+
+  @override
+  String earnItemsCount(int count) {
+    return '$count आइटम';
+  }
+
+  @override
+  String get earnSvcConsultation => 'कंसल्टेशन';
+
+  @override
+  String get earnSvcGift => 'गिफ़्ट';
+
+  @override
+  String get earnSvcPrediction => 'प्रेडिक्शन';
+
+  @override
+  String get earnSvcStore => 'स्टोर बिक्री';
+
+  @override
+  String get earnSvcRecommendation => 'स्टोर सुझाव कमीशन';
+
+  @override
+  String get earnSvcBonus => 'बोनस';
+
+  @override
+  String get earnSvcRefund => 'रिफ़ंड';
+
+  @override
+  String get earnSvcFine => 'जुर्माना';
+
+  @override
+  String get earnLiveCall => 'लाइव कॉल';
+
+  @override
+  String get earnStatusUpcoming => 'आने वाला';
+
+  @override
+  String get earnStatusClearing => 'रिफ़ंड अवधि में';
+
+  @override
+  String get earnStatusReady => 'तैयार';
+
+  @override
+  String get earnStatusOnHold => 'रोका गया';
+
+  @override
+  String get earnStatusProcessing => 'प्रोसेस हो रहा';
+
+  @override
+  String get earnStatusCredited => 'खाते में आ गया';
+
+  @override
+  String get earnStatusFailed => 'विफल';
+
+  @override
+  String earnClearsOn(String date) {
+    return '$date को तैयार';
+  }
+
+  @override
+  String earnMinutes(int minutes) {
+    return '$minutes मिनट';
+  }
+
+  @override
+  String get earnViewItems => 'सभी आइटम देखें';
+
+  @override
+  String get salesTitle => 'आपके सुझाव से बिक्री';
+
+  @override
+  String salesCardBody(int count, String amount) {
+    return '$count ऑर्डर · $amount कमाई';
+  }
+
+  @override
+  String get salesEarned => 'कमाया';
+
+  @override
+  String get salesOnTheWay => 'आने वाला';
+
+  @override
+  String get salesEmpty => 'आपके सुझाव से अभी कोई बिक्री नहीं';
+
+  @override
+  String salesYourShare(String percent) {
+    return 'आपका हिस्सा $percent%';
+  }
+
+  @override
+  String get salesOwnProduct => 'आपका अपना प्रोडक्ट — स्टोर बिक्री में मिलेगा';
+
+  @override
+  String get salesStatusOrdered => 'ऑर्डर हुआ';
+
+  @override
+  String get salesStatusOnTheWay => 'रास्ते में';
+
+  @override
+  String get salesStatusDelivered => 'डिलीवर हुआ';
+
+  @override
+  String get salesStatusBooked => 'बुक हुआ';
+
+  @override
+  String get salesStatusPerformed => 'संपन्न हुआ';
+
+  @override
+  String get salesStatusCancelled => 'रद्द';
+
+  @override
+  String get salesStatusReturned => 'लौटाया गया';
+
+  @override
+  String get lwStepKind => 'क्या';
+
+  @override
+  String get lwStepPhotos => 'फ़ोटो';
+
+  @override
+  String get lwStepDescribe => 'विवरण';
+
+  @override
+  String get lwStepDetails => 'जानकारी';
+
+  @override
+  String get lwStepPrice => 'दाम';
+
+  @override
+  String get lwStepPreview => 'जाँचें';
+
+  @override
+  String lwStepOf(int n, int total) {
+    return 'चरण $n / $total';
+  }
+
+  @override
+  String get lwKindTitle => 'आप क्या लिस्ट कर रहे हैं?';
+
+  @override
+  String get lwKindProduct => 'प्रोडक्ट';
+
+  @override
+  String get lwKindProductHint =>
+      'रुद्राक्ष, रत्न, यंत्र, सामग्री — ग्राहक को भेजा जाता है';
+
+  @override
+  String get lwKindService => 'सेवा';
+
+  @override
+  String get lwKindServiceHint => 'पूजा, हवन, चढ़ावा — आप उनके लिए करते हैं';
+
+  @override
+  String get lwCategoryTitle => 'कौन सी कैटेगरी?';
+
+  @override
+  String get lwTypeTitle => 'किस तरह का?';
+
+  @override
+  String get lwNoCategories => 'इसके लिए अभी कुछ उपलब्ध नहीं';
+
+  @override
+  String get lwPhotosTitle => 'फ़ोटो जोड़ें';
+
+  @override
+  String get lwPhotosBody =>
+      'साफ़, रोशनी वाली फ़ोटो से बिक्री होती है। हर फ़ोटो चुनते ही अपलोड होती है। पहली फ़ोटो कवर है — क्रम बदलने के लिए दबाकर खींचें।';
+
+  @override
+  String lwUploading(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String get lwUploadFailed => 'नहीं गई — फिर से भेजने के लिए टैप करें';
+
+  @override
+  String get lwDescribeTitle => 'ग्राहकों को इसके बारे में बताएँ';
+
+  @override
+  String get lwVoiceHint => 'टाइप करने की जगह बोलने के लिए माइक दबाएँ';
+
+  @override
+  String get lwListening => 'सुन रहे हैं… रोकने के लिए टैप करें';
+
+  @override
+  String get lwVoiceUnavailable => 'इस फ़ोन पर बोलकर लिखना उपलब्ध नहीं';
+
+  @override
+  String lwClaimsFound(String words) {
+    return 'ऐसे वादे हटाएँ: $words';
+  }
+
+  @override
+  String get lwDetailsTitle => 'कुछ जानकारी';
+
+  @override
+  String get lwPriceTitleProduct => 'दाम और स्टॉक';
+
+  @override
+  String get lwPriceTitleService => 'पैकेज और दाम';
+
+  @override
+  String lwDiscount(int percent) {
+    return '$percent% छूट';
+  }
+
+  @override
+  String lwYouGet(String amount) {
+    return 'आपको मिलेगा ≈ $amount';
+  }
+
+  @override
+  String lwYouGetHint(String fee) {
+    return 'प्लेटफ़ॉर्म शुल्क ($fee%) और उस पर GST के बाद';
+  }
+
+  @override
+  String lwPackage(int n) {
+    return 'पैकेज $n';
+  }
+
+  @override
+  String get lwPackageName => 'पैकेज का नाम';
+
+  @override
+  String get lwPackageNames => 'संकल्प में नाम';
+
+  @override
+  String get lwPackageIncludes => 'क्या शामिल है';
+
+  @override
+  String get lwPackageIncludesHint => 'पूजा + वीडियो, प्रसाद…';
+
+  @override
+  String get lwPackageAdd => 'पैकेज जोड़ें';
+
+  @override
+  String get lwPackageRemove => 'पैकेज हटाएँ';
+
+  @override
+  String get lwPresetSingle => 'सिंगल';
+
+  @override
+  String get lwPresetFamily => 'फ़ैमिली';
+
+  @override
+  String get lwPresetGrand => 'ग्रैंड';
+
+  @override
+  String get lwPreviewTitle => 'ग्राहक को जैसा दिखेगा, वैसा जाँचें';
+
+  @override
+  String get lwEdit => 'बदलें';
+
+  @override
+  String lwFrom(String price) {
+    return '$price से';
+  }
+
+  @override
+  String get lwNext => 'आगे';
+
+  @override
+  String get lwBack => 'पीछे';
+
+  @override
+  String get lwSaving => 'सेव हो रहा…';
+
+  @override
+  String lwSavedAt(String time) {
+    return 'सेव हुआ $time';
+  }
+
+  @override
+  String get lwOffline => 'ऑफ़लाइन — इस फ़ोन पर रखा है';
+
+  @override
+  String get lwSaveFailed => 'सेव नहीं हुआ — फिर कोशिश करेंगे';
+
+  @override
+  String get lwSavedOnPhone => 'इस फ़ोन पर रखा है';
+
+  @override
+  String get lwRestored => 'आप जो लिख रहे थे, वह हमने रख लिया';
+
+  @override
+  String get lwNeedKind => 'प्रोडक्ट या सेवा चुनें';
+
+  @override
+  String get lwNeedCategory => 'कैटेगरी चुनें';
+
+  @override
+  String get lwNeedType => 'किस तरह का, चुनें';
+
+  @override
+  String get lwPhotosUploading => 'फ़ोटो अपलोड होने तक रुकें';
+
+  @override
+  String get lwFixProblems => 'कुछ चीज़ें ठीक करनी हैं — निशान लगा है';
+
+  @override
+  String get earnPaidEveryLabel => 'भुगतान हर';
+
+  @override
+  String earnDays(int days) {
+    return '$days दिन';
+  }
+
+  @override
+  String get homeScorecard => 'स्कोरकार्ड';
+
+  @override
+  String homeTodayLine(int sessions, String talk, String online) {
+    String _temp0 = intl.Intl.pluralLogic(
+      sessions,
+      locale: localeName,
+      other: '$sessions सेशन',
+      one: '1 सेशन',
+    );
+    return '$_temp0 · $talk बातचीत · $online ऑनलाइन';
+  }
+
+  @override
+  String dashProfileLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count चीज़ें जोड़नी बाकी',
+      one: '1 चीज़ जोड़नी बाकी',
+    );
+    return '$_temp0';
+  }
 }

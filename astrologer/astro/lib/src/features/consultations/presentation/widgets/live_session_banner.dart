@@ -9,12 +9,14 @@ import '../../../requests/presentation/cubit/requests_cubit.dart';
 import '../room_presence.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Strip above every screen while a session is live and its room isn't on top,
 /// so the astrologer can always get back to it in one tap.
 class LiveSessionBanner extends StatelessWidget {
-  const LiveSessionBanner({required this.child, super.key});
+  const LiveSessionBanner({required this.child, this.onTapSession, super.key});
 
   final Widget child;
+  final void Function(String consultationId)? onTapSession;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,18 @@ class LiveSessionBanner extends StatelessWidget {
           return Column(
             children: [
               if (live.isNotEmpty)
-                _Bar(name: live.first.customerName, id: live.first.id),
+                _Bar(
+                  name: live.first.customerName,
+                  id: live.first.id,
+                  onTap: () {
+                    final callback = onTapSession;
+                    if (callback != null) {
+                      callback(live.first.id);
+                    } else {
+                      context.push(Routes.chatRoom(live.first.id));
+                    }
+                  },
+                ),
               Expanded(child: child),
             ],
           );
@@ -41,10 +54,11 @@ class LiveSessionBanner extends StatelessWidget {
 }
 
 class _Bar extends StatelessWidget {
-  const _Bar({required this.name, required this.id});
+  const _Bar({required this.name, required this.id, required this.onTap});
 
   final String name;
   final String id;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +68,7 @@ class _Bar extends StatelessWidget {
       child: SafeArea(
         bottom: false,
         child: InkWell(
-          onTap: () => context.push(Routes.chatRoom(id)),
+          onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
             child: Row(

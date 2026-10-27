@@ -53,6 +53,13 @@ class ForegroundServiceCallKeepAlive implements CallKeepAlive {
   }) async {
     if (!_supported) return;
     try {
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        final notificationPermission =
+            await FlutterForegroundTask.checkNotificationPermission();
+        if (notificationPermission != NotificationPermission.granted) {
+          await FlutterForegroundTask.requestNotificationPermission();
+        }
+      }
       FlutterForegroundTask.init(
         androidNotificationOptions: AndroidNotificationOptions(
           channelId: channelId,
@@ -77,11 +84,9 @@ class ForegroundServiceCallKeepAlive implements CallKeepAlive {
       }
       await FlutterForegroundTask.startService(
         serviceId: 4711,
-        // Microphone only, on a video call too: the camera is meant to work
-        // while the app is open, and the picture pauses when the call is
-        // backgrounded (the voice carries on). Claiming `camera` here needs
-        // FOREGROUND_SERVICE_CAMERA in the manifest — without it the whole
-        // start throws on Android 14+ and the microphone is lost as well.
+        // Microphone only, with video too: there is no picture-in-picture, so
+        // the camera is only needed while the app is open. In the background
+        // the voice carries on and the picture pauses.
         serviceTypes: const [ForegroundServiceTypes.microphone],
         notificationTitle: title,
         notificationText: text,

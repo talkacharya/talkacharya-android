@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import '../engine/call_controller.dart';
-import '../engine/call_pip.dart';
 import '../models/call_state.dart';
 import 'call_screen.dart';
 import 'call_overlay.dart';
@@ -68,9 +67,6 @@ class CallHub extends ChangeNotifier {
     // go on claiming the consultation is "in progress" — until someone opened
     // the room again.
     _watch = controller.stream.listen((state) {
-      // A live video call follows the user out of the app as a picture-in-picture
-      // window; anything else (voice, or a call that is over) must not.
-      unawaited(CallPip.setActive(active: info.video && state.phase.isLive));
       // Expanded, the call screen is showing the ending and its room releases
       // the call when it closes; only a minimized call has nobody to do it.
       if (state.phase == CallPhase.ended && !_expanded) unawaited(release());
@@ -97,7 +93,6 @@ class CallHub extends ChangeNotifier {
   Future<void> release() async {
     final c = _controller;
     if (c == null) return;
-    unawaited(CallPip.setActive(active: false));
     unawaited(_watch?.cancel());
     _watch = null;
     _controller = null;

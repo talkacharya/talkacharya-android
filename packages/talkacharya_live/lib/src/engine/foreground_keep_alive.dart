@@ -36,6 +36,13 @@ class ForegroundServiceLiveKeepAlive {
   }) async {
     if (!_supported) return;
     try {
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        final notificationPermission =
+            await FlutterForegroundTask.checkNotificationPermission();
+        if (notificationPermission != NotificationPermission.granted) {
+          await FlutterForegroundTask.requestNotificationPermission();
+        }
+      }
       FlutterForegroundTask.init(
         androidNotificationOptions: AndroidNotificationOptions(
           channelId: channelId,
@@ -60,10 +67,9 @@ class ForegroundServiceLiveKeepAlive {
       }
       await FlutterForegroundTask.startService(
         serviceId: 4712,
-        // Microphone only: the camera works while the app is open and the
-        // picture pauses when the host backgrounds it (the voice carries on).
-        // Claiming `camera` needs FOREGROUND_SERVICE_CAMERA in the manifest —
-        // without it the whole start throws on Android 14+.
+        // Microphone only, with video too: there is no picture-in-picture, so
+        // the camera is only needed while the app is open. In the background
+        // the voice carries on and the picture pauses.
         serviceTypes: const [ForegroundServiceTypes.microphone],
         notificationTitle: title,
         notificationText: text,

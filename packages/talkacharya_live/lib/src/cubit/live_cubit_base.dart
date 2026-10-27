@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 
 import '../engine/live_room.dart';
+import '../models/live_call.dart';
 import '../models/live_chat_message.dart';
 import '../models/live_state.dart';
 import '../ports/live_ports.dart';
@@ -119,6 +120,17 @@ abstract class LiveCubitBase extends Cubit<LiveState> {
                 (data['waiting'] as num?)?.toInt() ?? state.waitingCount + 1,
           ),
         );
+      case 'live.call':
+        // The stream's call line moved: what is on air and how many wait.
+        final onAir = LiveOnAir.fromJson(data['on_air']);
+        emitIfOpen(
+          state.copyWith(
+            onAir: onAir,
+            clearOnAir: onAir == null,
+            callsWaiting: (data['waiting'] as num?)?.toInt() ?? 0,
+          ),
+        );
+        onCallsChanged();
       case 'viewer.count':
         emitIfOpen(
           state.copyWith(viewerCount: (data['count'] as num?)?.toInt() ?? 0),
@@ -141,6 +153,10 @@ abstract class LiveCubitBase extends Cubit<LiveState> {
         onStreamEnded();
     }
   }
+
+  /// The call line moved. A caller and the host look up what it means for them
+  /// (their own media never rides this channel, which everyone hears).
+  void onCallsChanged() {}
 
   void addMessage(LiveChatMessage message) {
     if (state.messages.any((m) => m.id == message.id)) return;

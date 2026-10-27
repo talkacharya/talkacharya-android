@@ -54,6 +54,14 @@ String? channelClosedLine(BuildContext context, Astrologer a, String channel) {
   };
 }
 
+/// "Wait ~17 min" while [a] is busy (in a session, or live) — how long joining
+/// their waitlist now would take, roughly. Null when they are free.
+String? waitLine(BuildContext context, Astrologer a) {
+  final seconds = a.waitSeconds;
+  if (seconds == null || !a.isBusy) return null;
+  return context.l10n.astroWaitTime((seconds / 60).ceil().clamp(1, 999));
+}
+
 /// Tells the customer why [channel] is closed and what is open instead.
 /// Returns true when it had something to say.
 bool explainClosedChannel(BuildContext context, Astrologer a, String channel) {

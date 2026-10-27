@@ -73,14 +73,14 @@ class IncomingRequestCard extends StatelessWidget {
                     onExpired: onExpired,
                   ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+                  padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Row(
                         children: [
-                          CustomerAvatar(consultation: c, size: 50),
-                          const SizedBox(width: 12),
+                          CustomerAvatar(consultation: c, size: 42),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +89,7 @@ class IncomingRequestCard extends StatelessWidget {
                                   c.customerName,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: theme.textTheme.titleMedium?.copyWith(
+                                  style: theme.textTheme.titleSmall?.copyWith(
                                     fontWeight: FontWeight.w800,
                                   ),
                                 ),
@@ -126,9 +126,9 @@ class IncomingRequestCard extends StatelessWidget {
                         ],
                       ),
                       if (c.question.isNotEmpty) ...[
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 10),
                         Container(
-                          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                          padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
                           decoration: BoxDecoration(
                             color: brand.sectionBg,
                             borderRadius: const BorderRadius.only(
@@ -140,21 +140,21 @@ class IncomingRequestCard extends StatelessWidget {
                           ),
                           child: Text(
                             c.question,
-                            maxLines: 3,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.bodyMedium?.copyWith(
+                            style: theme.textTheme.bodySmall?.copyWith(
                               height: 1.3,
                             ),
                           ),
                         ),
                       ],
-                      const SizedBox(height: 14),
+                      const SizedBox(height: 10),
                       Row(
                         children: [
                           Expanded(
                             child: OutlinedButton(
                               style: OutlinedButton.styleFrom(
-                                minimumSize: const Size.fromHeight(46),
+                                minimumSize: const Size.fromHeight(40),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(14),
                                 ),
@@ -168,7 +168,7 @@ class IncomingRequestCard extends StatelessWidget {
                             flex: 2,
                             child: FilledButton.icon(
                               style: FilledButton.styleFrom(
-                                minimumSize: const Size.fromHeight(46),
+                                minimumSize: const Size.fromHeight(40),
                                 backgroundColor: brand.online,
                               ),
                               onPressed: busy ? null : onAccept,
@@ -301,7 +301,7 @@ class _ExpiryBarState extends State<_ExpiryBar> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+          padding: const EdgeInsets.fromLTRB(14, 6, 14, 0),
           child: Row(
             children: [
               Icon(Icons.timer_outlined, size: 14, color: color),

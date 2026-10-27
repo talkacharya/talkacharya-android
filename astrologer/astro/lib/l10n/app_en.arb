@@ -16,6 +16,7 @@
   "presenceOffline": "You're offline",
   "presenceOnlineHint": "Customers can reach you now",
   "presenceOfflineHint": "Go online to start receiving requests",
+  "presenceAllWaitingHint": "Chat and calls are off until their next-online time",
   "presenceFollowersHint": "{count, plural, =1{1 follower is notified when you go online} other{{count} followers are notified when you go online}}",
   "@presenceFollowersHint": {
     "placeholders": {
@@ -3007,7 +3008,13 @@
   "histSave": "Save",
   "histFirstSession": "First session",
   "histSessionNumber": "Session {n}",
-  "@histSessionNumber": {"placeholders": {"n": {"type": "int"}}},
+  "@histSessionNumber": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "histRepeatClient": "Repeat client",
   "histFavourite": "Favourite",
   "histCustomer": "Customer",
@@ -3037,5 +3044,318 @@
   "histSendRemedy": "Send remedy",
   "histChatAssistant": "Chat assistant",
   "histOpenChat": "Open chat",
-  "dashActionHistory": "History"
+  "dashActionHistory": "History",
+  "hostCallPublic": "Public call with {name}",
+  "@hostCallPublic": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "hostCallPrivate": "Private call with {name}",
+  "@hostCallPrivate": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "hostCallConnecting": "{name} is coming on air…",
+  "@hostCallConnecting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "hostCallPrivateHint": "Viewers can't hear either of you",
+  "hostCallPublicHint": "Everyone watching hears you both",
+  "hostCallMute": "Mute",
+  "hostCallUnmute": "Unmute",
+  "hostCallEnd": "End",
+  "hostCallSkip": "Skip",
+  "hostCallWaiting": "{count} waiting",
+  "@hostCallWaiting": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hostCallLineTitle": "Call line",
+  "hostCallLineEmpty": "Nobody is waiting",
+  "hostCallRemove": "Remove",
+  "hostCallModePublic": "Public",
+  "hostCallModePrivate": "Private",
+  "earnTabCycle": "This cycle",
+  "earnNextPayout": "Next payout · {date}",
+  "@earnNextPayout": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "earnEstimated": "Estimated — final on payout day",
+  "earnPaidEvery": "Paid every {days} days",
+  "@earnPaidEvery": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "earnFromTitle": "Where it came from",
+  "earnDeductionsTitle": "What came off",
+  "earnCustomersPaid": "Customers paid",
+  "earnPlatformFee": "Platform fee",
+  "earnGstOnFee": "GST on platform fee",
+  "earnGateway": "Gateway charge",
+  "earnYourShare": "Your share",
+  "earnTds": "TDS",
+  "earnPayoutLine": "Payout",
+  "earnClearingNote": "{amount} still in the refund window — paid in a later cycle",
+  "@earnClearingNote": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "earnOnHoldNote": "{amount} on hold",
+  "@earnOnHoldNote": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "earnNothingYet": "Nothing earned in this cycle yet",
+  "earnItemsCount": "{count, plural, =1{1 item} other{{count} items}}",
+  "@earnItemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "earnSvcConsultation": "Consultations",
+  "earnSvcGift": "Gifts",
+  "earnSvcPrediction": "Predictions",
+  "earnSvcStore": "Store sales",
+  "earnSvcRecommendation": "Store recommendations",
+  "earnSvcBonus": "Bonuses",
+  "earnSvcRefund": "Refunds",
+  "earnSvcFine": "Fines",
+  "earnLiveCall": "Live call",
+  "earnStatusUpcoming": "Upcoming",
+  "earnStatusClearing": "Clearing",
+  "earnStatusReady": "Ready",
+  "earnStatusOnHold": "On hold",
+  "earnStatusProcessing": "Processing",
+  "earnStatusCredited": "Credited",
+  "earnStatusFailed": "Failed",
+  "earnClearsOn": "Ready on {date}",
+  "@earnClearsOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "earnMinutes": "{minutes} min",
+  "@earnMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "earnViewItems": "See every item",
+  "salesTitle": "Sales from your suggestions",
+  "salesCardBody": "{count} orders · {amount} earned",
+  "@salesCardBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "salesEarned": "Earned",
+  "salesOnTheWay": "On the way",
+  "salesEmpty": "Nothing sold through your suggestions yet",
+  "salesYourShare": "Your share {percent}%",
+  "@salesYourShare": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "salesOwnProduct": "Your own product — paid as a store sale",
+  "salesStatusOrdered": "Ordered",
+  "salesStatusOnTheWay": "On the way",
+  "salesStatusDelivered": "Delivered",
+  "salesStatusBooked": "Booked",
+  "salesStatusPerformed": "Performed",
+  "salesStatusCancelled": "Cancelled",
+  "salesStatusReturned": "Returned",
+  "lwStepKind": "What",
+  "lwStepPhotos": "Photos",
+  "lwStepDescribe": "Describe",
+  "lwStepDetails": "Details",
+  "lwStepPrice": "Price",
+  "lwStepPreview": "Review",
+  "lwStepOf": "Step {n} of {total}",
+  "@lwStepOf": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "lwKindTitle": "What are you listing?",
+  "lwKindProduct": "A product",
+  "lwKindProductHint": "Rudraksha, gemstones, yantras, samagri — shipped to the customer",
+  "lwKindService": "A service",
+  "lwKindServiceHint": "Poojas, havan, chadhava — you perform it for them",
+  "lwCategoryTitle": "Which category?",
+  "lwTypeTitle": "Which kind?",
+  "lwNoCategories": "Nothing is open for this yet",
+  "lwPhotosTitle": "Add photos",
+  "lwPhotosBody": "Clear, bright photos sell. Each one uploads as soon as you pick it. The first is the cover — hold and drag to reorder.",
+  "lwUploading": "{percent}%",
+  "@lwUploading": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "lwUploadFailed": "Not sent — tap to retry",
+  "lwDescribeTitle": "Tell customers about it",
+  "lwVoiceHint": "Tap the mic to speak instead of typing",
+  "lwListening": "Listening… tap to stop",
+  "lwVoiceUnavailable": "Speaking isn't available on this phone",
+  "lwClaimsFound": "Take out promises like: {words}",
+  "@lwClaimsFound": {
+    "placeholders": {
+      "words": {
+        "type": "String"
+      }
+    }
+  },
+  "lwDetailsTitle": "A few details",
+  "lwPriceTitleProduct": "Price & stock",
+  "lwPriceTitleService": "Packages & price",
+  "lwDiscount": "{percent}% off",
+  "@lwDiscount": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "lwYouGet": "You get ≈ {amount}",
+  "@lwYouGet": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lwYouGetHint": "After the platform fee ({fee}%) and GST on it",
+  "@lwYouGetHint": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "lwPackage": "Package {n}",
+  "@lwPackage": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "lwPackageName": "Package name",
+  "lwPackageNames": "Names in the sankalp",
+  "lwPackageIncludes": "What's included",
+  "lwPackageIncludesHint": "Pooja + video, prasad…",
+  "lwPackageAdd": "Add a package",
+  "lwPackageRemove": "Remove package",
+  "lwPresetSingle": "Single",
+  "lwPresetFamily": "Family",
+  "lwPresetGrand": "Grand",
+  "lwPreviewTitle": "Check it the way a customer will see it",
+  "lwEdit": "Edit",
+  "lwFrom": "From {price}",
+  "@lwFrom": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "lwNext": "Next",
+  "lwBack": "Back",
+  "lwSaving": "Saving…",
+  "lwSavedAt": "Saved {time}",
+  "@lwSavedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lwOffline": "Offline — kept on this phone",
+  "lwSaveFailed": "Couldn't save — trying again",
+  "lwSavedOnPhone": "Kept on this phone",
+  "lwRestored": "We kept what you were typing",
+  "lwNeedKind": "Choose a product or a service",
+  "lwNeedCategory": "Choose a category",
+  "lwNeedType": "Choose which kind",
+  "lwPhotosUploading": "Wait for the photos to finish uploading",
+  "lwFixProblems": "A few things to fix — they're marked",
+  "earnPaidEveryLabel": "Paid every",
+  "earnDays": "{days} days",
+  "@earnDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "homeScorecard": "Scorecard",
+  "homeTodayLine": "{sessions, plural, =1{1 session} other{{sessions} sessions}} · {talk} talk · {online} online",
+  "@homeTodayLine": {
+    "placeholders": {
+      "sessions": {
+        "type": "int"
+      },
+      "talk": {
+        "type": "String"
+      },
+      "online": {
+        "type": "String"
+      }
+    }
+  },
+  "dashProfileLeft": "{count, plural, =1{1 thing left to add} other{{count} things left to add}}",
+  "@dashProfileLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

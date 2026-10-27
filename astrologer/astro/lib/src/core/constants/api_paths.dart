@@ -43,6 +43,7 @@ class ApiPaths {
   // availability
   static const astroAvailability = '/astro/availability';
   static const astroHeartbeat = '/astro/availability/heartbeat';
+  static const astroOnline = '/astro/availability/online';
   static const astroOffline = '/astro/availability/offline';
   static const astroBreak = '/astro/availability/break';
   static const astroNextOnline = '/astro/availability/next-online';
@@ -92,6 +93,7 @@ class ApiPaths {
   static const astroStoreProducts = '/astro/store/products';
   static const astroPoojaCalendar = '/astro/store/pooja-calendar';
   static const astroPoojaBookings = '/astro/store/pooja-bookings';
+  static const astroRecommendedSales = '/astro/store/recommended-sales';
 
   // the astrologer's own store: setup, listings (seller/* for orders)
   static const astroStoreSeller = '/astro/store/seller';
@@ -148,6 +150,11 @@ class ApiPaths {
   static String astroLiveSlowMode(String id) =>
       '/astro/livestreams/$id/slow-mode';
   static String astroLivePin(String id) => '/astro/livestreams/$id/chat/pin';
+  static String astroLiveCalls(String id) => '/astro/livestreams/$id/calls';
+  static String astroLiveCallEnd(String id, String request) =>
+      '/astro/livestreams/$id/calls/$request/end';
+  static String astroLiveCallMute(String id, String request) =>
+      '/astro/livestreams/$id/calls/$request/mute';
 
   // predictions work queue
   static const predictionsQueue = '/astro/predictions/queue';
@@ -196,6 +203,8 @@ class ApiPaths {
   // earnings & payouts
   static const astroEarnings = '/astro/earnings';
   static const astroEarningEntries = '/astro/earnings/entries';
+  static const astroEarningsStatement = '/astro/earnings/statement';
+  static const astroEarningsStatementItems = '/astro/earnings/statement/items';
   static const astroPayouts = '/astro/payouts';
   static String astroPayout(String id) => '/astro/payouts/$id';
   static const astroTaxDocuments = '/astro/tax-documents';

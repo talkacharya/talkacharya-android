@@ -67,7 +67,9 @@ class _MatchReportPageState extends State<MatchReportPage> {
             appBar: AppBar(title: Text(l.matchReportTitle)),
             body: ErrorView(
               message: l.matchLoadError,
-              onRetry: () => setState(() => _future = _load()),
+              onRetry: () => setState(() {
+                _future = _load();
+              }),
             ),
           );
         }

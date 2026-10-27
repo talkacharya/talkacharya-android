@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_theme.dart';
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Chrome for a pushed settings / editor page: a large collapsing title,
 /// optional subtitle, scrolling [children], and an optional sticky
 /// [bottomBar] (see [StickyActionBar]).
@@ -168,7 +169,8 @@ class GroupLabel extends StatelessWidget {
   );
 }
 
-/// Tappable settings row: hue icon, title + subtitle, optional value, chevron.
+/// Tappable settings row: a flat tinted icon, title + subtitle, optional
+/// value, chevron.
 class MenuRow extends StatelessWidget {
   const MenuRow({
     required this.icon,
@@ -214,7 +216,15 @@ class MenuRow extends StatelessWidget {
                   child: Icon(icon, size: 18, color: brand.live),
                 )
               else
-                HueIcon(hue: hue, icon: icon, size: 36, iconSize: 18),
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: hue.tint(0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(icon, size: 18, color: hue.end),
+                ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(

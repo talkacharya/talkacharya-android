@@ -142,6 +142,45 @@ class LiveApi {
     }
   }
 
+  /// The stream's call line, and a private call's room.
+  Future<LiveHostCalls> calls(String id) async {
+    try {
+      final res = (await _dio.get<Map<String, dynamic>>(
+        ApiPaths.astroLiveCalls(id),
+      )).ensureOk();
+      return LiveHostCalls.fromJson(res.data);
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// End the call on air, or take someone off the line.
+  Future<void> endCall(String id, String requestId) async {
+    try {
+      (await _dio.post<Map<String, dynamic>>(
+        ApiPaths.astroLiveCallEnd(id, requestId),
+      )).ensureOk();
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// Take a public caller's microphone away, or give it back.
+  Future<void> muteCall(
+    String id,
+    String requestId, {
+    required bool muted,
+  }) async {
+    try {
+      (await _dio.post<Map<String, dynamic>>(
+        ApiPaths.astroLiveCallMute(id, requestId),
+        data: {'muted': muted},
+      )).ensureOk();
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
   Future<void> pinMessage(
     String id,
     String messageId, {

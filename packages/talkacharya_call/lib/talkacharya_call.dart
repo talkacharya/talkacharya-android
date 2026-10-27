@@ -6,7 +6,6 @@
 library;
 
 export 'src/engine/call_controller.dart';
-export 'src/engine/call_pip.dart';
 export 'src/engine/call_proximity.dart';
 export 'src/engine/call_readiness.dart';
 export 'src/engine/call_telecom.dart';

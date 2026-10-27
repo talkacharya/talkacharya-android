@@ -4,8 +4,9 @@ import 'package:flutter/material.dart' show TimeOfDay;
 import '../../../core/util/json.dart';
 
 /// Consultation channels an astrologer can price and enable (backend
-/// `common.enums.CONSULTATION_CHANNELS`).
-const kChannels = ['chat', 'voice', 'video'];
+/// `availability.models.OFFERED_CHANNELS`).
+/// VIDEO-OFF: video calls are switched off for now; chat and voice only.
+const kChannels = ['chat', 'voice' /*, 'video' */];
 
 /// Platform-set allowed per-minute range (`GET /astro/rates/bands`).
 class RateBand extends Equatable {

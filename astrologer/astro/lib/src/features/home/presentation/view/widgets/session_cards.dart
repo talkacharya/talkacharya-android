@@ -10,8 +10,8 @@ import 'dash_shared.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
-/// Urgent card for requests waiting on the astrologer. Only placed in the
-/// feed when [requests] is non-empty.
+/// Requests waiting on the astrologer, in one urgent row with Review. Only
+/// placed in the feed when [requests] is non-empty.
 class IncomingRequestsCard extends StatelessWidget {
   const IncomingRequestsCard({required this.requests, super.key});
 
@@ -22,70 +22,62 @@ class IncomingRequestsCard extends StatelessWidget {
     final l = context.l10n;
     final brand = context.brand;
     final theme = Theme.of(context);
-    final shown = requests.take(3).toList();
     return Padding(
       padding: DashGaps.sidePad,
-      child: Container(
-        decoration: BoxDecoration(
+      child: Material(
+        color: Color.alphaBlend(
+          brand.live.withValues(alpha: 0.08),
+          theme.colorScheme.surface,
+        ),
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Radii.lg),
-          color: theme.colorScheme.surface,
-          border: Border.all(color: brand.live.withValues(alpha: 0.35)),
-          boxShadow: [
-            BoxShadow(
-              color: brand.live.withValues(alpha: 0.14),
-              blurRadius: 18,
-              offset: const Offset(0, 8),
-            ),
-          ],
+          side: BorderSide(color: brand.live.withValues(alpha: 0.35)),
         ),
         clipBehavior: Clip.antiAlias,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(16, 12, 8, 12),
-              color: brand.live.withValues(alpha: 0.08),
-              child: Row(
-                children: [
-                  _Pulse(color: brand.live),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l.dashRequestsWaiting(requests.length),
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w800,
-                          ),
+        child: InkWell(
+          onTap: () => context.go(Routes.requests),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 10, 10, 10),
+            child: Row(
+              children: [
+                _Pulse(color: brand.live),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l.dashRequestsWaiting(requests.length),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w800,
                         ),
-                        Text(
-                          l.dashRequestsHint,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: brand.inkMuted,
-                          ),
+                      ),
+                      Text(
+                        l.dashRequestsHint,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: brand.inkMuted,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  FilledButton(
-                    style: FilledButton.styleFrom(
-                      backgroundColor: brand.live,
-                      minimumSize: const Size(0, 38),
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                    ),
-                    onPressed: () => context.go(Routes.requests),
-                    child: Text(l.dashReview),
+                ),
+                const SizedBox(width: 8),
+                FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: brand.live,
+                    minimumSize: const Size(0, 36),
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
                   ),
-                ],
-              ),
+                  onPressed: () => context.go(Routes.requests),
+                  child: Text(l.dashReview),
+                ),
+              ],
             ),
-            for (final c in shown)
-              _SessionRow(
-                consultation: c,
-                onTap: () => context.push(Routes.requestDetail(c.id)),
-              ),
-          ],
+          ),
         ),
       ),
     );
@@ -104,8 +96,8 @@ class ActiveSessionsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SectionHeader(title: l.dashActiveTitle),
-        const SizedBox(height: 10),
+        DashLabel(title: l.dashActiveTitle),
+        const SizedBox(height: 4),
         Padding(
           padding: DashGaps.sidePad,
           child: Card(
@@ -156,11 +148,11 @@ class _SessionRow extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+          padding: const EdgeInsets.fromLTRB(14, 10, 10, 10),
           child: Row(
             children: [
-              HueIcon(hue: ch.hue, icon: ch.icon, size: 40, iconSize: 20),
-              const SizedBox(width: 12),
+              HueIcon(hue: ch.hue, icon: ch.icon, size: 34, iconSize: 17),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

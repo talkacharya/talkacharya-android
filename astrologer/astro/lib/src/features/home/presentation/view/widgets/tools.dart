@@ -282,9 +282,12 @@ List<ToolGroup> buildToolGroups(BuildContext context) {
 
 /// A four-across grid of tool tiles.
 class ToolGrid extends StatelessWidget {
-  const ToolGrid({required this.actions, super.key});
+  const ToolGrid({required this.actions, this.aspect = 0.74, super.key});
 
   final List<ToolAction> actions;
+
+  /// Tile width over height.
+  final double aspect;
 
   @override
   Widget build(BuildContext context) {
@@ -295,7 +298,7 @@ class ToolGrid extends StatelessWidget {
       padding: EdgeInsets.zero,
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
-      childAspectRatio: 0.74,
+      childAspectRatio: aspect,
       children: [for (final a in actions) _Tile(action: a)],
     );
   }
@@ -309,31 +312,54 @@ class _Tile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final a = action;
+    final theme = Theme.of(context);
+    // Plain and light: a white tile, a hairline, and the tool's colour only
+    // as a soft flat disc behind its icon.
     return Pressable(
-      child: HueTile(
-        hue: a.hue,
-        onTap: a.onTap,
-        padding: const EdgeInsets.fromLTRB(4, 10, 4, 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Badge.count(
-              count: a.badge,
-              isLabelVisible: a.badge > 0,
-              child: HueIcon(hue: a.hue, icon: a.icon, size: 40, iconSize: 20),
+      child: Material(
+        color: theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: context.brand.hairline),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: a.onTap,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(4, 10, 4, 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Badge.count(
+                  count: a.badge,
+                  isLabelVisible: a.badge > 0,
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: a.hue.tint(0.12),
+                    ),
+                    child: Icon(a.icon, size: 20, color: a.hue.end),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                // Gives way (ellipsis) rather than overflow at large text sizes.
+                Flexible(
+                  child: Text(
+                    a.label,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      height: 1.15,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 6),
-            Text(
-              a.label,
-              maxLines: 2,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-                height: 1.15,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

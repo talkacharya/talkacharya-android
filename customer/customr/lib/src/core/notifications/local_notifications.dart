@@ -23,7 +23,19 @@ class LocalNotifications {
   /// shows the call rather than a line in the shade. Android freezes a
   /// channel's sound and importance at creation, which is why this can never be
   /// the same channel as everything else.
-  static const callChannelId = 'talkacharya_incoming_call_v2';
+  ///
+  /// Bumped when the channel itself changes (the call-like vibration); the old
+  /// ones are deleted at start so Settings shows one.
+  static const callChannelId = 'talkacharya_incoming_call_v3';
+  static const _oldCallChannelIds = [
+    'talkacharya_incoming_call',
+    'talkacharya_incoming_call_v2',
+  ];
+
+  /// Chat messages from a closed app: the system's own notification tone, on a
+  /// channel of their own so they can be silenced without silencing the rest.
+  /// The server names it on every chat push.
+  static const chatChannelId = 'talkacharya_chat';
 
   /// One id, so a second push for the same call replaces the first and
   /// opening or the call ending can take it away again.
@@ -66,6 +78,21 @@ class LocalNotifications {
             AndroidFlutterLocalNotificationsPlugin
           >()
           ?.createNotificationChannel(incomingCallChannel);
+      final android = _plugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
+      await android?.createNotificationChannel(
+        const AndroidNotificationChannel(
+          chatChannelId,
+          'Chat messages',
+          description: 'New messages in your chats',
+          importance: Importance.high,
+        ),
+      );
+      for (final old in _oldCallChannelIds) {
+        await android?.deleteNotificationChannel(old);
+      }
       _ready = true;
     } catch (e) {
       debugPrint('LocalNotifications: init failed ($e)');
@@ -138,17 +165,24 @@ class LocalNotifications {
 }
 
 /// The channel a ringing call arrives on.
-const incomingCallChannel = AndroidNotificationChannel(
+final incomingCallChannel = AndroidNotificationChannel(
   LocalNotifications.callChannelId,
   'Incoming calls',
   description: 'Rings when your astrologer accepts a voice/video call',
   importance: Importance.max,
   // The phone's own ringtone, so it sounds like the call it is.
-  sound: UriAndroidNotificationSound('content://settings/system/ringtone'),
+  sound: const UriAndroidNotificationSound(
+    'content://settings/system/ringtone',
+  ),
   audioAttributesUsage: AudioAttributesUsage.notificationRingtone,
   enableVibration: true,
-  vibrationPattern: null,
+  // A phone call's rhythm — a second on, a second off — repeated for as long as
+  // it rings, rather than the single buzz of a notification.
+  vibrationPattern: callVibration,
 );
+
+/// Off/on milliseconds, as Android takes them; FLAG_INSISTENT repeats it.
+final callVibration = Int64List.fromList(<int>[0, 1000, 1000, 1000, 1000]);
 
 extension IncomingCallNotification on LocalNotifications {
   /// Ring for a call the app could not show in person.
@@ -171,6 +205,8 @@ extension IncomingCallNotification on LocalNotifications {
         'Incoming calls',
         importance: Importance.max,
         priority: Priority.max,
+        enableVibration: true,
+        vibrationPattern: callVibration,
         category: AndroidNotificationCategory.call,
         // Shows over the lock screen instead of waiting in the shade.
         fullScreenIntent: true,

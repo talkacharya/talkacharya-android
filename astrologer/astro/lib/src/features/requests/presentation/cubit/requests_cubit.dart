@@ -2,6 +2,7 @@ import 'package:talkacharya_call/talkacharya_call.dart';
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart' show AppLifecycleListener;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/realtime/realtime_client.dart';
@@ -59,14 +60,47 @@ class RequestsCubit extends Cubit<RequestsState> {
   RequestsCubit({
     required ConsultationRepository repo,
     required RealtimeClient realtime,
+    bool watchApp = true,
   }) : _repo = repo,
+       _realtime = realtime,
        super(const RequestsState()) {
     _sub = realtime.events.listen(_onEvent);
+    // A frame sent while the socket was down is gone for good — a customer who
+    // withdrew in that moment left the request ringing here until someone
+    // pulled to refresh. So the list is re-read whenever the socket comes back
+    // and whenever the app comes back to the front.
+    _wasConnected = realtime.connected.value;
+    realtime.connected.addListener(_onConnection);
+    if (watchApp) _lifecycle = AppLifecycleListener(onResume: _reloadSoon);
   }
 
   final ConsultationRepository _repo;
+  final RealtimeClient _realtime;
   StreamSubscription<RealtimeEvent>? _sub;
   Timer? _coalesce;
+  AppLifecycleListener? _lifecycle;
+  bool _wasConnected = false;
+
+  /// While a request is waiting, the list is also re-read every so often: the
+  /// belt to the socket's braces, for the request that ends unseen.
+  Timer? _watch;
+  static const watchEvery = Duration(seconds: 12);
+
+  final _gone = StreamController<String>.broadcast();
+
+  /// Requests that left the waiting list without this phone acting on them —
+  /// withdrawn, timed out, answered on another phone — however that was learnt
+  /// (a frame, or a re-read). The ringing sheet and the tray ring stop on it.
+  Stream<String> get gone => _gone.stream;
+
+  void _onConnection() {
+    final now = _realtime.connected.value;
+    if (now && !_wasConnected) _reloadSoon();
+    _wasConnected = now;
+  }
+
+  /// Our own accept / decline: not "gone" in the sense above.
+  final _handledHere = <String>{};
 
   Future<void> load() async {
     // Keep the current lists on screen during a refresh.
@@ -78,6 +112,12 @@ class RequestsCubit extends Cubit<RequestsState> {
         _repo.api.list(status: 'ended'),
       ]);
       if (isClosed) return;
+      final fresh = {for (final c in results[0]) c.id};
+      for (final c in state.incoming) {
+        if (!fresh.contains(c.id) && !_handledHere.contains(c.id)) {
+          _gone.add(c.id);
+        }
+      }
       emit(
         state.copyWith(
           loading: false,
@@ -86,6 +126,7 @@ class RequestsCubit extends Cubit<RequestsState> {
           history: results[2],
         ),
       );
+      _syncWatch();
     } catch (e) {
       if (!isClosed) {
         emit(state.copyWith(loading: false, error: friendlyError(e)));
@@ -94,6 +135,7 @@ class RequestsCubit extends Cubit<RequestsState> {
   }
 
   Future<Consultation?> accept(String id) async {
+    _handledHere.add(id);
     _setBusy(id, true);
     try {
       final c = await _repo.api.accept(id);
@@ -114,6 +156,7 @@ class RequestsCubit extends Cubit<RequestsState> {
   }
 
   Future<bool> reject(String id, String reason) async {
+    _handledHere.add(id);
     _setBusy(id, true);
     try {
       await _repo.api.reject(id, reason);
@@ -130,7 +173,10 @@ class RequestsCubit extends Cubit<RequestsState> {
 
   /// Drops a request whose accept window has run out locally; the server's
   /// `consultation.expired` frame usually arrives first anyway.
-  void expireLocally(String id) => _removeIncoming(id);
+  void expireLocally(String id) {
+    _handledHere.add(id);
+    _removeIncoming(id);
+  }
 
   void clearError() => emit(state.copyWith(error: null));
 
@@ -141,13 +187,29 @@ class RequestsCubit extends Cubit<RequestsState> {
     emit(state.copyWith(busy: next));
   }
 
-  void _removeIncoming(String id) => emit(
-    state.copyWith(incoming: state.incoming.where((c) => c.id != id).toList()),
-  );
+  void _removeIncoming(String id) {
+    emit(
+      state.copyWith(
+        incoming: state.incoming.where((c) => c.id != id).toList(),
+      ),
+    );
+    _syncWatch();
+  }
+
+  void _syncWatch() {
+    if (isClosed) return;
+    if (state.incoming.isEmpty) {
+      _watch?.cancel();
+      _watch = null;
+    } else {
+      _watch ??= Timer.periodic(watchEvery, (_) => load());
+    }
+  }
 
   void _onEvent(RealtimeEvent e) {
     switch (e) {
       case RequestRemoved(:final consultationId):
+        if (!_handledHere.contains(consultationId)) _gone.add(consultationId);
         _removeIncoming(consultationId);
       case ConsultationRequested():
       case ConsultationEvent():
@@ -167,7 +229,11 @@ class RequestsCubit extends Cubit<RequestsState> {
   @override
   Future<void> close() async {
     _coalesce?.cancel();
+    _watch?.cancel();
+    _lifecycle?.dispose();
+    _realtime.connected.removeListener(_onConnection);
     await _sub?.cancel();
+    await _gone.close();
     return super.close();
   }
 }

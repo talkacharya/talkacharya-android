@@ -8000,4 +8000,114 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get addrFilledFromMap =>
       'नक्शे से भरा गया — जाँच लें और अपना मकान या फ़्लैट नंबर जोड़ें।';
+
+  @override
+  String get liveCallAction => 'कॉल';
+
+  @override
+  String liveCallSheetTitle(String name) {
+    return '$name को लाइव कॉल करें';
+  }
+
+  @override
+  String get liveCallSheetBody =>
+      'आप स्ट्रीम में ही रहेंगे। एक बार में एक कॉल — अगर कोई कॉल पर है, तो आप लाइन में लगेंगे और अपनी बारी आने पर जुड़ेंगे।';
+
+  @override
+  String get liveCallPublic => 'पब्लिक कॉल';
+
+  @override
+  String get liveCallPublicHint => 'देखने वाले सभी आप दोनों को सुनेंगे';
+
+  @override
+  String get liveCallPrivate => 'प्राइवेट कॉल';
+
+  @override
+  String get liveCallPrivateHint => 'सिर्फ़ आप और ज्योतिषी एक-दूसरे को सुनेंगे';
+
+  @override
+  String liveCallPerMinute(String price) {
+    return '$price/मिनट';
+  }
+
+  @override
+  String get liveCallNotOffered => 'उपलब्ध नहीं';
+
+  @override
+  String liveCallWaiting(int count) {
+    return 'आप लाइन में हैं — आपसे पहले $count';
+  }
+
+  @override
+  String get liveCallWaitingNext => 'अगली बारी आपकी है';
+
+  @override
+  String get liveCallConnecting => 'आपकी बारी — जुड़ रहे हैं…';
+
+  @override
+  String get liveCallOnAirPublic => 'आप लाइव हैं · सभी आपको सुन सकते हैं';
+
+  @override
+  String get liveCallOnAirPrivate =>
+      'प्राइवेट कॉल · सिर्फ़ ज्योतिषी आपको सुन रहे हैं';
+
+  @override
+  String get liveCallMutedByHost => 'ज्योतिषी ने आपको म्यूट किया है';
+
+  @override
+  String get liveCallLeaveLine => 'लाइन छोड़ें';
+
+  @override
+  String get liveCallEnd => 'कॉल ख़त्म करें';
+
+  @override
+  String liveCallBannerPublic(String name) {
+    return '$name के साथ लाइव कॉल पर';
+  }
+
+  @override
+  String get liveCallBannerPrivate => 'प्राइवेट कॉल चल रही है';
+
+  @override
+  String liveCallWaitingCount(int count) {
+    return '$count कॉल के इंतज़ार में';
+  }
+
+  @override
+  String get liveCallMicNeeded => 'कॉल करने के लिए माइक्रोफ़ोन की अनुमति दें।';
+
+  @override
+  String get liveCallRateTitle => 'आपकी कॉल कैसी रही?';
+
+  @override
+  String get liveCallRateSkip => 'अभी नहीं';
+
+  @override
+  String get liveCallRateSend => 'भेजें';
+
+  @override
+  String get liveCallRateThanks => 'रेटिंग के लिए धन्यवाद';
+
+  @override
+  String astroLiveNow(String name) {
+    return '$name लाइव हैं!';
+  }
+
+  @override
+  String get astroLiveJoin => 'अभी जुड़ें';
+
+  @override
+  String astroWaitTime(int minutes) {
+    return 'इंतज़ार ~$minutes मिनट';
+  }
+
+  @override
+  String storeRecommendedBy(String name) {
+    return '$name ने सुझाया';
+  }
+
+  @override
+  String astroExpLine(int count) {
+    return 'अनुभव: $count वर्ष';
+  }
 }

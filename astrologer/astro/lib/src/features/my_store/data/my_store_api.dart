@@ -87,15 +87,28 @@ class MyStoreApi {
   Future<void> remove(String id) async =>
       (await _dio.delete<dynamic>(ApiPaths.astroListing(id))).ensureOk();
 
-  Future<MyListing> addPhoto(String id, String filePath) async {
+  /// One photo, on its own. [clientKey] is this upload's id: a retry after a
+  /// dropped connection gets back the photo already saved, not a second copy.
+  Future<MyListing> addPhoto(
+    String id,
+    String filePath, {
+    String clientKey = '',
+    void Function(double progress)? onProgress,
+  }) async {
     final form = FormData.fromMap({
       'image': await MultipartFile.fromFile(filePath),
+      if (clientKey.isNotEmpty) 'client_key': clientKey,
     });
     return MyListing.fromJson(
       _map(
         (await _dio.post<dynamic>(
           ApiPaths.astroListingMedia(id),
           data: form,
+          onSendProgress: onProgress == null
+              ? null
+              : (sent, total) {
+                  if (total > 0) onProgress(sent / total);
+                },
         )).ensureOk().data,
       ),
     );

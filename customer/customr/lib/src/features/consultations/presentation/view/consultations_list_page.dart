@@ -6,6 +6,7 @@ import '../../data/consultation_repository.dart';
 import '../../data/models/consultation.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 class ConsultationsListPage extends StatefulWidget {
   const ConsultationsListPage({super.key});
 
@@ -24,7 +25,9 @@ class _ConsultationsListPageState extends State<ConsultationsListPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('Consultations')),
       body: RefreshIndicator(
-        onRefresh: () async => setState(() => _future = _load()),
+        onRefresh: () async => setState(() {
+          _future = _load();
+        }),
         child: FutureBuilder<List<Consultation>>(
           future: _future,
           builder: (context, snap) {
@@ -34,7 +37,9 @@ class _ConsultationsListPageState extends State<ConsultationsListPage> {
             if (snap.hasError) {
               return ErrorView(
                 message: 'Could not load your consultations.',
-                onRetry: () => setState(() => _future = _load()),
+                onRetry: () => setState(() {
+                  _future = _load();
+                }),
               );
             }
             final all = snap.data ?? const <Consultation>[];

@@ -9,6 +9,7 @@ import '../../data/referrals_api.dart';
 import '../../../../core/utils/haptic_service.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Deep-link target for `talkacharya://referrals`. Backed by `GET /app/referrals`.
 class ReferralsPage extends StatefulWidget {
   const ReferralsPage({super.key});
@@ -20,7 +21,9 @@ class ReferralsPage extends StatefulWidget {
 class _ReferralsPageState extends State<ReferralsPage> {
   late Future<ReferralOverview> _future = getIt<ReferralsApi>().overview();
 
-  void _reload() => setState(() => _future = getIt<ReferralsApi>().overview());
+  void _reload() => setState(() {
+    _future = getIt<ReferralsApi>().overview();
+  });
 
   @override
   Widget build(BuildContext context) {

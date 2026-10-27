@@ -111,7 +111,9 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
             return snap.hasError
                 ? ErrorView(
                     message: l.commonSomethingWentWrong,
-                    onRetry: () => setState(() => _future = _load()),
+                    onRetry: () => setState(() {
+                      _future = _load();
+                    }),
                   )
                 : const Center(child: CircularProgressIndicator());
           }

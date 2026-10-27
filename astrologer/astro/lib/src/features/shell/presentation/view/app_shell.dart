@@ -11,6 +11,7 @@ import 'package:talkacharya_sounds/talkacharya_sounds.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/notifications/chat_delivery.dart';
+import '../../../../core/utils/haptic_service.dart';
 import '../../../../core/notifications/local_notifications.dart';
 import '../../../../core/notifications/push_service.dart';
 import '../../../../core/l10n/l10n.dart';
@@ -44,6 +45,7 @@ class AppShell extends StatefulWidget {
 
 class _AppShellState extends State<AppShell> {
   StreamSubscription<RealtimeEvent>? _sub;
+  StreamSubscription<String>? _gone;
 
   @override
   void initState() {
@@ -54,6 +56,13 @@ class _AppShellState extends State<AppShell> {
     context.read<WaitlistCubit>().load();
     context.read<ToolCountsCubit>().load();
     _sub = getIt<RealtimeClient>().events.listen(_onRealtime);
+    // A request that left the list however it was learnt — a frame, or the
+    // re-read after the socket or the app came back: the tray ring, the
+    // lock-screen page and Android's ringing call stop with it.
+    _gone = getIt<RequestsCubit>().gone.listen((id) {
+      unawaited(stopRingFor(getIt<LocalNotifications>(), id));
+      _settleCall(id, ended: false);
+    });
     // Everything a consultation needs, asked for once and up front: a
     // microphone prompt in the middle of a customer's first call costs it.
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -64,6 +73,7 @@ class _AppShellState extends State<AppShell> {
   @override
   void dispose() {
     _sub?.cancel();
+    _gone?.cancel();
     super.dispose();
   }
 
@@ -114,7 +124,9 @@ class _AppShellState extends State<AppShell> {
         if (!here) {
           // On this phone, outside the room: the sender's second tick.
           unawaited(reportChatDelivered(getIt<Dio>(), consultationId, seq));
-          AppSounds.notify();
+          // No tone: in-app chat is silent (the tray rings only when the app is
+          // not in front). A light tap says a message came.
+          HapticService.light();
         }
       case RequestRemoved(:final consultationId):
         // Withdrawn, timed out or a no-show: the tray, the lock-screen ringing

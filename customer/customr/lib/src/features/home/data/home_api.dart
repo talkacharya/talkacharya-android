@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../../../core/constants/api_paths.dart';
 import '../../../core/network/api_exception.dart';
+import '../../../core/network/launch_seed.dart';
 import 'models/home_feed.dart';
 import 'models/horoscope.dart';
 import 'models/home_consultation.dart';
@@ -23,7 +24,9 @@ class HomeApi {
   /// `GET /app/home` — the curated feed (featured / online / live / resume /
   /// categories / promos) in one round-trip.
   Future<HomeFeed> feed() async {
-    return HomeFeed.fromJson(await _getMap(ApiPaths.home));
+    return HomeFeed.fromJson(
+      await _getMap(ApiPaths.home, query: {'seed': launchSeed}),
+    );
   }
 
   /// `GET /app/wallet/packs` — recharge suggestions + live offers.

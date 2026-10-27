@@ -103,12 +103,18 @@ class _IncomingRequestSheetState extends State<_IncomingRequestSheet>
   bool _busy = false;
   Consultation? _detail;
   StreamSubscription<RealtimeEvent>? _gone;
+  StreamSubscription<String>? _goneFromList;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _gone = getIt<RealtimeClient>().events.listen(_onRealtime);
+    // Also when the list re-read (socket back, app back, the periodic check)
+    // shows it gone — the frame that said so may never have arrived.
+    _goneFromList = getIt<RequestsCubit>().gone.listen((id) {
+      if (id == widget.consultationId) _closeGone();
+    });
     _alert();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) => _tick());
     _loadDetail();
@@ -143,6 +149,11 @@ class _IncomingRequestSheetState extends State<_IncomingRequestSheet>
       _ => null,
     };
     if (id != widget.consultationId) return;
+    _closeGone();
+  }
+
+  void _closeGone() {
+    if (!mounted || _busy) return;
     _timer?.cancel();
     _stopAlert();
     context.read<RequestsCubit>().expireLocally(widget.consultationId);
@@ -224,6 +235,7 @@ class _IncomingRequestSheetState extends State<_IncomingRequestSheet>
   @override
   void dispose() {
     unawaited(_gone?.cancel());
+    unawaited(_goneFromList?.cancel());
     WidgetsBinding.instance.removeObserver(this);
     _timer?.cancel();
     _stopAlert();

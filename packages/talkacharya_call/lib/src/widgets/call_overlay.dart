@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../engine/call_controller.dart';
-import '../engine/call_pip.dart';
 import '../models/call_state.dart';
 import 'call_hub.dart';
 import 'call_status.dart';
@@ -53,17 +52,13 @@ class _CallOverlayHostState extends State<CallOverlayHost> {
       initialEntries: [
         OverlayEntry(
           builder: (context) => ListenableBuilder(
-            listenable: Listenable.merge([hub, CallPip.inPip]),
+            listenable: hub,
             builder: (context, _) {
               final c = hub.controller;
               final info = hub.info;
               final minimized = c != null && info != null && !hub.expanded;
-              // In the system's picture-in-picture window there is room for one
-              // thing, and it is the other person — not the app screen behind them,
-              // scaled down to the size of a stamp.
-              final pip = CallPip.inPip.value;
               return _PhaseGate(
-                controller: minimized || pip ? c : null,
+                controller: minimized ? c : null,
                 builder: (context, state) {
                   final showBar =
                       minimized &&
@@ -77,65 +72,47 @@ class _CallOverlayHostState extends State<CallOverlayHost> {
                       _visible(state);
 
                   return SizedBox.expand(
-                    child: Stack(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Offstage(
-                          offstage: pip,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                        if (showBar)
+                          CallMiniBar(
+                            info: info,
+                            state: state,
+                            strings: strings,
+                            color: widget.barColor,
+                            onOpen: () => widget.onOpen(info),
+                            onMute: c.toggleMute,
+                            onEnd: c.hangUp,
+                          ),
+                        Expanded(
+                          key: const ValueKey('call-overlay-body'),
+                          child: Stack(
                             children: [
-                              if (showBar)
-                                CallMiniBar(
+                              Positioned.fill(
+                                child: MediaQuery.removePadding(
+                                  context: context,
+                                  removeTop: showBar,
+                                  child: KeyedSubtree(
+                                    key: _appKey,
+                                    child: widget.child,
+                                  ),
+                                ),
+                              ),
+                              if (showFloat)
+                                CallFloatingWindow(
                                   info: info,
                                   state: state,
                                   strings: strings,
-                                  color: widget.barColor,
-                                  onOpen: () => widget.onOpen(info),
+                                  onExpand: () => widget.onOpen(info),
                                   onMute: c.toggleMute,
+                                  onCamera: c.toggleCamera,
+                                  onFlip: c.switchCamera,
                                   onEnd: c.hangUp,
                                 ),
-                              Expanded(
-                                key: const ValueKey('call-overlay-body'),
-                                child: Stack(
-                                  children: [
-                                    Positioned.fill(
-                                      child: MediaQuery.removePadding(
-                                        context: context,
-                                        removeTop: showBar,
-                                        child: KeyedSubtree(
-                                          key: _appKey,
-                                          child: widget.child,
-                                        ),
-                                      ),
-                                    ),
-                                    if (showFloat)
-                                      CallFloatingWindow(
-                                        info: info,
-                                        state: state,
-                                        strings: strings,
-                                        onExpand: () => widget.onOpen(info),
-                                        onMute: c.toggleMute,
-                                        onCamera: c.toggleCamera,
-                                        onFlip: c.switchCamera,
-                                        onEnd: c.hangUp,
-                                      ),
-                                  ],
-                                ),
-                              ),
                             ],
                           ),
                         ),
-                        // Only a call takes the window over. With none (the
-                        // astrologer's live stream is what went to a corner)
-                        // the page underneath draws itself — covering it here
-                        // left a blank window with a hang-up icon.
-                        if (pip && state != null && info != null)
-                          Positioned.fill(
-                            child: _PipView(
-                              state: state,
-                              peerName: info.peerName,
-                            ),
-                          ),
                       ],
                     ),
                   );
@@ -149,39 +126,6 @@ class _CallOverlayHostState extends State<CallOverlayHost> {
   }
 
   static bool _visible(CallState s) => s.phase != CallPhase.ended;
-}
-
-/// What the picture-in-picture window shows: the peer's video, or their name on
-/// the call's own background while their camera is off.
-class _PipView extends StatelessWidget {
-  const _PipView({required this.state, required this.peerName});
-
-  final CallState state;
-  final String peerName;
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: const Color(0xFF140B2E),
-      child: state.showRemoteVideo
-          ? CallVideoView(stream: state.remoteVideo)
-          : Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  peerName,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-    );
-  }
 }
 
 /// Rebuilds with the controller's state (or `null` without a controller),

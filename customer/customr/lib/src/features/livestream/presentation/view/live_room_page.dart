@@ -8,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:talkacharya_live/talkacharya_live.dart';
 
 import '../../../../core/di/service_locator.dart';
-import '../../../../core/network/friendly_error.dart';
 import '../../../../core/l10n/api_error_l10n.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/realtime/realtime_client.dart';
@@ -19,6 +18,7 @@ import '../../../gifting/presentation/widgets/gift_art.dart';
 import '../../data/live_adapters.dart';
 import '../../data/livestream_api.dart';
 import '../../data/models/live_stream_summary.dart';
+import 'widgets/live_call_widgets.dart';
 import 'widgets/live_chat_image.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
@@ -50,6 +50,8 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
       engine: LiveKitRoomEngine(),
       signaling: RealtimeLiveSignaling(getIt<RealtimeClient>()),
       userId: context.read<AuthBloc>().state.user?.id ?? '',
+      // Only asked when they call in.
+      permissions: const PermissionHandlerLivePermissions(),
     );
     unawaited(_cubit.start());
     unawaited(_loadDetail(api));
@@ -105,42 +107,45 @@ class _LiveRoomBodyState extends State<LiveRoomBody> {
       builder: (context, state) {
         // No picture-in-picture for a viewer: only a video call shrinks to a
         // corner when the app is left.
-        return PopScope(
-          canPop: !state.phase.isOn,
-          onPopInvokedWithResult: (didPop, _) async {
-            if (didPop) return;
-            await cubit.leave();
-            if (context.mounted) context.pop();
-          },
-          child: Scaffold(
-            backgroundColor: const Color(0xFF120A26),
-            body: Stack(
-              fit: StackFit.expand,
-              children: [
-                _Stage(state: state, hostName: hostName),
-                SafeArea(
-                  child: switch (state.phase) {
-                    LivePhase.ended => _EndedOverlay(
-                      state: state,
-                      hostName: hostName,
-                      onClose: () => context.pop(),
-                    ),
-                    LivePhase.failed => _FailedOverlay(
-                      error: state.error,
-                      onClose: () => context.pop(),
-                    ),
-                    _ => _WatchingOverlay(
-                      state: state,
-                      stream: widget.stream,
-                      hostName: hostName,
-                      onLeave: () async {
-                        await cubit.leave();
-                        if (context.mounted) context.pop();
-                      },
-                    ),
-                  },
-                ),
-              ],
+        return LiveCallListener(
+          cubit: cubit,
+          child: PopScope(
+            canPop: !state.phase.isOn,
+            onPopInvokedWithResult: (didPop, _) async {
+              if (didPop) return;
+              await cubit.leave();
+              if (context.mounted) context.pop();
+            },
+            child: Scaffold(
+              backgroundColor: const Color(0xFF120A26),
+              body: Stack(
+                fit: StackFit.expand,
+                children: [
+                  _Stage(state: state, hostName: hostName),
+                  SafeArea(
+                    child: switch (state.phase) {
+                      LivePhase.ended => _EndedOverlay(
+                        state: state,
+                        hostName: hostName,
+                        onClose: () => context.pop(),
+                      ),
+                      LivePhase.failed => _FailedOverlay(
+                        error: state.error,
+                        onClose: () => context.pop(),
+                      ),
+                      _ => _WatchingOverlay(
+                        state: state,
+                        stream: widget.stream,
+                        hostName: hostName,
+                        onLeave: () async {
+                          await cubit.leave();
+                          if (context.mounted) context.pop();
+                        },
+                      ),
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -231,6 +236,8 @@ class _WatchingOverlay extends StatelessWidget {
     return Column(
       children: [
         _Header(state: state, hostName: hostName, onLeave: onLeave),
+        // A call on air: everyone sees who (public) or that one is private.
+        LiveOnAirBanner(state: state),
         if (state.pinned != null)
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
@@ -243,6 +250,7 @@ class _WatchingOverlay extends StatelessWidget {
             child: _GiftBanners(gifts: state.gifts),
           ),
         _ChatFeed(messages: state.messages),
+        LiveMyCallBar(state: state, cubit: context.read<LiveViewerCubit>()),
         _Composer(state: state, stream: stream, hostName: hostName),
       ],
     );
@@ -539,73 +547,16 @@ class _ComposerState extends State<_Composer> {
     }
   }
 
-  Future<void> _consultPrivately() async {
-    final stream = widget.stream;
-    if (stream == null) return;
-    final l = context.l10n;
-    final messenger = ScaffoldMessenger.of(context);
-
-    final channel = await showModalBottomSheet<String>(
-      context: context,
-      showDragHandle: true,
-      builder: (sheetContext) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
-              child: Text(
-                l.liveConsultBody(stream.hostName),
-                style: Theme.of(sheetContext).textTheme.bodyMedium,
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.chat_bubble_outline_rounded),
-              title: Text(l.roomSwitchToChat),
-              onTap: () => Navigator.pop(sheetContext, 'chat'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.call_rounded),
-              title: Text(l.roomSwitchVoice),
-              onTap: () => Navigator.pop(sheetContext, 'voice'),
-            ),
-            // VIDEO-OFF: video calls are switched off for now.
-            // ListTile(
-            //   leading: const Icon(Icons.videocam_rounded),
-            //   title: Text(l.roomSwitchVideo),
-            //   onTap: () => Navigator.pop(sheetContext, 'video'),
-            // ),
-            const SizedBox(height: 8),
-          ],
-        ),
-      ),
+  /// Public or private: both prices, then a place in the stream's line.
+  Future<void> _call() async {
+    final cubit = context.read<LiveViewerCubit>();
+    final mode = await showLiveCallSheet(
+      context,
+      quote: widget.state.callQuote,
+      hostName: widget.hostName,
     );
-    if (channel == null) return;
-
-    try {
-      final position = await getIt<LivestreamApi>().consultPrivately(
-        stream.id,
-        channel,
-      );
-      messenger
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(
-            content: Text(l.liveConsultQueued(position)),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-    } catch (e) {
-      messenger
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(
-            content: Text(friendlyError(e)),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-    }
+    if (mode == null || !mounted) return;
+    await cubit.requestCall(mode);
   }
 
   void _gift() {
@@ -651,12 +602,19 @@ class _ComposerState extends State<_Composer> {
               ),
               const SizedBox(width: 8),
               // Ten minutes of watching someone is the strongest buying signal
-              // in the product, and there was nowhere to act on it.
+              // in the product: call them, right here, without leaving.
               _CircleButton(
-                icon: Icons.record_voice_over_rounded,
-                tooltip: l.liveConsultPrivately,
-                background: Colors.white.withValues(alpha: 0.18),
-                onTap: state.phase.isOn ? _consultPrivately : null,
+                icon: Icons.call_rounded,
+                tooltip: l.liveCallAction,
+                background: const Color(0xFF22C55E),
+                onTap:
+                    state.phase.isOn &&
+                        state.myCall == null &&
+                        !state.callBusy &&
+                        (state.callQuote.public != null ||
+                            state.callQuote.private != null)
+                    ? _call
+                    : null,
               ),
               const SizedBox(width: 8),
               Expanded(

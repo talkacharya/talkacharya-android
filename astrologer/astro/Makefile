@@ -111,7 +111,7 @@ apk-release: ## Release APK for $(FLAVOR)
 
 .PHONY: appbundle
 appbundle: ## Release AAB for prod (Play upload)
-	$(FLUTTER) build appbundle --release --flavor prod -t lib/main_prod.dart
+	$(FLUTTER) build appbundle $(if $(NO_MAPPING_UPLOAD),-PnoMappingUpload=true,) --release --flavor prod -t lib/main_prod.dart
 
 # --- housekeeping -------------------------------------------------
 

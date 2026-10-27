@@ -7,15 +7,14 @@ import 'package:talkacharya_ui/talkacharya_ui.dart';
 import '../../../../../core/availability/availability_coordinator.dart';
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/l10n/l10n.dart';
-import '../../../../../core/theme/app_theme.dart';
 import '../../../../../shared/widgets/settings_widgets.dart';
 import '../../../../performance/data/performance_models.dart';
 import '../../../../performance/presentation/cubit/performance_cubit.dart';
-import 'dash_shared.dart';
 
-/// Step away for a few minutes without going offline for the day. Offline,
-/// there is nothing to take a break from, so the card leaves itself out; on a
-/// break it turns into a countdown with a way back.
+/// Step away for a few minutes without going offline for the day — a row at
+/// the foot of the presence strip. Offline, there is nothing to take a break
+/// from, so it leaves itself out; on a break it turns into a countdown with a
+/// way back.
 class BreakCard extends StatelessWidget {
   const BreakCard({super.key});
 
@@ -30,11 +29,12 @@ class BreakCard extends StatelessWidget {
         if (status == null || (!coord.enabled && !status.onBreak)) {
           return const SizedBox.shrink();
         }
-        return Padding(
-          padding: const EdgeInsets.only(bottom: DashGaps.section),
-          child: Padding(
-            padding: DashGaps.sidePad,
-            child: AnimatedSwitcher(
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Divider(height: 1, color: context.brand.hairline),
+            AnimatedSwitcher(
               duration: const Duration(milliseconds: 260),
               child: status.onBreak
                   ? _OnBreak(
@@ -48,7 +48,7 @@ class BreakCard extends StatelessWidget {
                       busy: busy,
                     ),
             ),
-          ),
+          ],
         );
       },
     );
@@ -80,42 +80,21 @@ class _Offer extends StatelessWidget {
     final brand = context.brand;
     final theme = Theme.of(context);
     final none = status.left <= 0;
-    return Container(
-      padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(Radii.lg),
-        border: Border.all(color: brand.hairline),
-      ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(14, 2, 6, 2),
       child: Row(
         children: [
-          const HueIcon(hue: AstroPalette.money, icon: Icons.coffee_rounded),
-          const SizedBox(width: 12),
+          Icon(Icons.coffee_rounded, size: 18, color: AstroPalette.money.end),
+          const SizedBox(width: 10),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l.breakTitle,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Text(
-                  none ? l.breakNoneLeft : l.breakLeft(status.left),
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: brand.inkMuted,
-                  ),
-                ),
-              ],
+            child: Text(
+              none ? l.breakNoneLeft : l.breakLeft(status.left),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.bodySmall?.copyWith(color: brand.inkMuted),
             ),
           ),
-          const SizedBox(width: 8),
-          FilledButton.tonal(
-            style: FilledButton.styleFrom(
-              minimumSize: const Size(0, 44),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-            ),
+          TextButton(
             onPressed: none || busy ? null : () => _pick(context),
             child: Text(l.breakButton),
           ),
@@ -220,39 +199,35 @@ class _OnBreakState extends State<_OnBreak> {
         '${(secs % 60).toString().padLeft(2, '0')}';
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
-      decoration: BoxDecoration(
-        color: hue.tint(0.12),
-        borderRadius: BorderRadius.circular(Radii.lg),
-        border: Border.all(color: hue.tint(0.4)),
-      ),
+      color: hue.tint(0.10),
+      padding: const EdgeInsets.fromLTRB(14, 8, 10, 8),
       child: Row(
         children: [
           SizedBox.square(
-            dimension: 44,
+            dimension: 30,
             child: Stack(
               alignment: Alignment.center,
               children: [
                 CircularProgressIndicator(
                   value: total <= 0 ? 0 : (secs / total).clamp(0.0, 1.0),
-                  strokeWidth: 4,
+                  strokeWidth: 3,
                   strokeCap: StrokeCap.round,
                   color: hue.end,
                   backgroundColor: hue.tint(0.25),
                 ),
-                Icon(Icons.coffee_rounded, size: 20, color: hue.end),
+                Icon(Icons.coffee_rounded, size: 14, color: hue.end),
               ],
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   l.breakOnTitle,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
                 Text(
@@ -268,8 +243,8 @@ class _OnBreakState extends State<_OnBreak> {
           const SizedBox(width: 8),
           FilledButton(
             style: FilledButton.styleFrom(
-              minimumSize: const Size(0, 44),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              minimumSize: const Size(0, 36),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
             ),
             onPressed: widget.busy
                 ? null

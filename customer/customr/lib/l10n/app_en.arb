@@ -2945,7 +2945,9 @@
   "followingFilterEmpty": "Tap the heart on an astrologer to follow them — they'll show up here.",
   "astroStatFollowers": "Followers",
   "astroStatMinutes": "Minutes of consultation",
-  "@astroStatMinutes": {"description": "Astrologer profile stat: total minutes of finished consultations."},
+  "@astroStatMinutes": {
+    "description": "Astrologer profile stat: total minutes of finished consultations."
+  },
   "prefsFollowAlerts": "Astrologers you follow",
   "prefsFollowAlertsDesc": "When they come online or go live",
   "storeTitle": "Remedy Store",
@@ -4329,30 +4331,90 @@
   "appUpdateReady": "The update is downloaded. Restart to finish.",
   "appUpdateRestart": "Restart",
   "astroNextOnlineToday": "today, {time}",
-  "@astroNextOnlineToday": {"placeholders": {"time": {"type": "String"}}},
+  "@astroNextOnlineToday": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "astroNextOnlineTomorrow": "tomorrow, {time}",
-  "@astroNextOnlineTomorrow": {"placeholders": {"time": {"type": "String"}}},
+  "@astroNextOnlineTomorrow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "astroNextOnlineDate": "{date}, {time}",
-  "@astroNextOnlineDate": {"placeholders": {"date": {"type": "String"}, "time": {"type": "String"}}},
+  "@astroNextOnlineDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "astroChannelBack": "{channel} back {when}",
-  "@astroChannelBack": {"placeholders": {"channel": {"type": "String"}, "when": {"type": "String"}}},
+  "@astroChannelBack": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      },
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "channelVideoShort": "Video",
   "astroChannelOffNow": "Not taking {channel} right now",
-  "@astroChannelOffNow": {"placeholders": {"channel": {"type": "String"}}},
+  "@astroChannelOffNow": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
   "astroOffNow": "Not available right now",
   "astroBackWhen": "Back {when}",
-  "@astroBackWhen": {"placeholders": {"when": {"type": "String"}}},
+  "@astroBackWhen": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "astroAvailableOn": "Available on {channels}",
-  "@astroAvailableOn": {"placeholders": {"channels": {"type": "String"}}},
+  "@astroAvailableOn": {
+    "placeholders": {
+      "channels": {
+        "type": "String"
+      }
+    }
+  },
   "astroNoChannelNow": "Not taking consultations right now",
   "astroOffline": "Offline",
   "astroInSession": "In a session",
   "astroOnlineShort": "Online",
   "astroBusyShort": "Busy",
   "waitlistWaitingCount": "{count} waiting",
-  "@waitlistWaitingCount": {"placeholders": {"count": {"type": "int"}}},
+  "@waitlistWaitingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "waitlistJoinedTitle": "You're number {position} in line",
-  "@waitlistJoinedTitle": {"placeholders": {"position": {"type": "int"}}},
+  "@waitlistJoinedTitle": {
+    "placeholders": {
+      "position": {
+        "type": "int"
+      }
+    }
+  },
   "waitlistJoinedBody": "We'll notify you the moment it's your turn. You have two minutes to start once it is.",
   "waitlistAhead": "in line now",
   "waitlistEstimate": "likely wait",
@@ -4361,14 +4423,35 @@
   "waitlistQueueFor": "Wait for a",
   "waitlistGotIt": "Got it",
   "waitlistTurnWith": "{name} is free for your {channel}.",
-  "@waitlistTurnWith": {"placeholders": {"name": {"type": "String"}, "channel": {"type": "String"}}},
+  "@waitlistTurnWith": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
   "delAccTitle": "Delete account",
   "delAccHeroTitle": "Delete your account",
   "delAccStepNow": "You are signed out on every phone right away.",
   "delAccStepWait": "Your account is erased after {days} days.",
-  "@delAccStepWait": {"placeholders": {"days": {"type": "int"}}},
+  "@delAccStepWait": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "delAccStepCancel": "Changed your mind? Sign in again within {days} days and the deletion is cancelled.",
-  "@delAccStepCancel": {"placeholders": {"days": {"type": "int"}}},
+  "@delAccStepCancel": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "delAccRemovedTitle": "What is removed",
   "delAccRemoved1": "Your name, phone number, photo and other profile details",
   "delAccRemoved3": "Your devices and notifications",
@@ -4379,7 +4462,13 @@
   "delAccReasonTitle": "Why are you leaving?",
   "delAccReasonHint": "Optional. It helps us do better.",
   "delAccUnderstand": "I understand this cannot be undone after {days} days",
-  "@delAccUnderstand": {"placeholders": {"days": {"type": "int"}}},
+  "@delAccUnderstand": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "delAccButton": "Delete my account",
   "delAccSheetTitle": "Delete your account?",
   "delAccSheetBody": "You will be signed out on every phone right now.",
@@ -4387,7 +4476,13 @@
   "delAccDone": "Your account is scheduled for deletion",
   "delAccRemovedCustomer": "Saved birth details and kundalis, yours and your family's",
   "delAccWallet": "{amount} is left in your wallet. It is not refunded automatically: use it, or ask support for a refund, before you delete.",
-  "@delAccWallet": {"placeholders": {"amount": {"type": "String"}}},
+  "@delAccWallet": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "primerAllow": "Allow all",
   "primerLater": "Not now",
   "primerDone": "Continue",
@@ -4405,7 +4500,13 @@
   "assistantTitle": "Assistant chats",
   "assistantInboxSubtitle": "Free messages with astrologers",
   "assistantRepliesCount": "{count, plural, =1{1 new reply} other{{count} new replies}}",
-  "@assistantRepliesCount": {"placeholders": {"count": {"type": "int"}}},
+  "@assistantRepliesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "assistantInboxEmptyTitle": "No messages yet",
   "assistantInboxEmptyBody": "Open an astrologer's profile and tap “Ask a quick question” to send them a free message.",
   "assistantYouPrefix": "You: ",
@@ -4426,27 +4527,63 @@
   "assistantCardTitle": "Ask a quick question",
   "assistantFree": "FREE",
   "assistantCardBody": "Message {name} for free. For a full reading, start a consultation.",
-  "@assistantCardBody": {"placeholders": {"name": {"type": "String"}}},
+  "@assistantCardBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "astroReviewsNone": "No reviews yet. Reviews appear here after customers rate their consultation.",
   "assistantLockedTitle": "Free chat after your first consultation",
   "assistantLockedBody": "Have one consultation with {name} and you can message them for free afterwards.",
-  "@assistantLockedBody": {"placeholders": {"name": {"type": "String"}}},
+  "@assistantLockedBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "assistantLockedSnack": "Free messages with {name} open once your first consultation with them ends.",
-  "@assistantLockedSnack": {"placeholders": {"name": {"type": "String"}}},
+  "@assistantLockedSnack": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "storeTopPicks": "Top picks",
   "storeTopCategories": "Top categories for you",
   "storeShopByType": "Shop by type",
   "storePopularIn": "Popular in {name}",
-  "@storePopularIn": {"placeholders": {"name": {"type": "String"}}},
+  "@storePopularIn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "storeViewAll": "View all",
   "storeViewAllCount": "{count, plural, =1{View 1 item} other{View all {count} items}}",
-  "@storeViewAllCount": {"placeholders": {"count": {"type": "int"}}},
+  "@storeViewAllCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "storeCategoryEmpty": "Nothing here yet — check back soon.",
   "storeMyPoojas": "Pooja bookings",
   "storeMyAdviceShort": "Astrologer advice",
   "storeMrp": "M.R.P.",
   "storeYouSave": "You save {amount}",
-  "@storeYouSave": {"placeholders": {"amount": {"type": "String"}}},
+  "@storeYouSave": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "storeSimilar": "You may also like",
   "storeSellerAstrologerProfile": "See the astrologer's profile",
   "supTitle": "Write to us",
@@ -4494,5 +4631,98 @@
   "addrPickContact": "Pick from contacts",
   "addrReceiver": "Who receives it",
   "addrDetailsTitle": "Address details",
-  "addrFilledFromMap": "Filled from the map — check it and add your house or flat number."
+  "addrFilledFromMap": "Filled from the map — check it and add your house or flat number.",
+  "liveCallAction": "Call",
+  "liveCallSheetTitle": "Call {name} live",
+  "@liveCallSheetTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "liveCallSheetBody": "You stay in the stream. One call at a time — if someone is on a call, you join the line and come on when it's your turn.",
+  "liveCallPublic": "Public call",
+  "liveCallPublicHint": "Everyone watching hears you both",
+  "liveCallPrivate": "Private call",
+  "liveCallPrivateHint": "Only you and the astrologer hear each other",
+  "liveCallPerMinute": "{price}/min",
+  "@liveCallPerMinute": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "liveCallNotOffered": "Not offered",
+  "liveCallWaiting": "You're in line — {count} ahead of you",
+  "@liveCallWaiting": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "liveCallWaitingNext": "You're next in line",
+  "liveCallConnecting": "Your turn — coming on air…",
+  "liveCallOnAirPublic": "You're on air · everyone can hear you",
+  "liveCallOnAirPrivate": "Private call · only the astrologer hears you",
+  "liveCallMutedByHost": "The astrologer muted you",
+  "liveCallLeaveLine": "Leave line",
+  "liveCallEnd": "End call",
+  "liveCallBannerPublic": "On a live call with {name}",
+  "@liveCallBannerPublic": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "liveCallBannerPrivate": "In a private call",
+  "liveCallWaitingCount": "{count} waiting to call",
+  "@liveCallWaitingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "liveCallMicNeeded": "Allow the microphone to call in.",
+  "liveCallRateTitle": "How was your call?",
+  "liveCallRateSkip": "Not now",
+  "liveCallRateSend": "Send",
+  "liveCallRateThanks": "Thanks for rating",
+  "astroLiveNow": "{name} is live!",
+  "@astroLiveNow": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "astroLiveJoin": "Join now",
+  "astroWaitTime": "Wait ~{minutes} min",
+  "@astroWaitTime": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "storeRecommendedBy": "Recommended by {name}",
+  "@storeRecommendedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "astroExpLine": "{count, plural, =1{Exp: 1 yr} other{Exp: {count} yrs}}",
+  "@astroExpLine": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -7899,4 +7899,121 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get addrFilledFromMap =>
       'Filled from the map — check it and add your house or flat number.';
+
+  @override
+  String get liveCallAction => 'Call';
+
+  @override
+  String liveCallSheetTitle(String name) {
+    return 'Call $name live';
+  }
+
+  @override
+  String get liveCallSheetBody =>
+      'You stay in the stream. One call at a time — if someone is on a call, you join the line and come on when it\'s your turn.';
+
+  @override
+  String get liveCallPublic => 'Public call';
+
+  @override
+  String get liveCallPublicHint => 'Everyone watching hears you both';
+
+  @override
+  String get liveCallPrivate => 'Private call';
+
+  @override
+  String get liveCallPrivateHint =>
+      'Only you and the astrologer hear each other';
+
+  @override
+  String liveCallPerMinute(String price) {
+    return '$price/min';
+  }
+
+  @override
+  String get liveCallNotOffered => 'Not offered';
+
+  @override
+  String liveCallWaiting(int count) {
+    return 'You\'re in line — $count ahead of you';
+  }
+
+  @override
+  String get liveCallWaitingNext => 'You\'re next in line';
+
+  @override
+  String get liveCallConnecting => 'Your turn — coming on air…';
+
+  @override
+  String get liveCallOnAirPublic => 'You\'re on air · everyone can hear you';
+
+  @override
+  String get liveCallOnAirPrivate =>
+      'Private call · only the astrologer hears you';
+
+  @override
+  String get liveCallMutedByHost => 'The astrologer muted you';
+
+  @override
+  String get liveCallLeaveLine => 'Leave line';
+
+  @override
+  String get liveCallEnd => 'End call';
+
+  @override
+  String liveCallBannerPublic(String name) {
+    return 'On a live call with $name';
+  }
+
+  @override
+  String get liveCallBannerPrivate => 'In a private call';
+
+  @override
+  String liveCallWaitingCount(int count) {
+    return '$count waiting to call';
+  }
+
+  @override
+  String get liveCallMicNeeded => 'Allow the microphone to call in.';
+
+  @override
+  String get liveCallRateTitle => 'How was your call?';
+
+  @override
+  String get liveCallRateSkip => 'Not now';
+
+  @override
+  String get liveCallRateSend => 'Send';
+
+  @override
+  String get liveCallRateThanks => 'Thanks for rating';
+
+  @override
+  String astroLiveNow(String name) {
+    return '$name is live!';
+  }
+
+  @override
+  String get astroLiveJoin => 'Join now';
+
+  @override
+  String astroWaitTime(int minutes) {
+    return 'Wait ~$minutes min';
+  }
+
+  @override
+  String storeRecommendedBy(String name) {
+    return 'Recommended by $name';
+  }
+
+  @override
+  String astroExpLine(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Exp: $count yrs',
+      one: 'Exp: 1 yr',
+    );
+    return '$_temp0';
+  }
 }

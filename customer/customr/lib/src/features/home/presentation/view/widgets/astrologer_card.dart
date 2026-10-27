@@ -207,17 +207,23 @@ class AstrologerCard extends StatelessWidget {
                       _CardCta(
                         hue: hue,
                         available: lead != null,
-                        icon: !available
+                        // Offline with a time it is back: that time, not
+                        // "notify me".
+                        icon: !available && back != null
+                            ? Icons.schedule_rounded
+                            : !available
                             ? Icons.notifications_active_outlined
                             : a.isQueueable
                             ? Icons.hourglass_top_rounded
                             : lead != null
                             ? channelIcon(lead)
                             : Icons.schedule_rounded,
-                        label: !available
+                        label: !available && back != null
+                            ? l.astroBackWhen(nextOnlineWhen(context, back))
+                            : !available
                             ? l.homeNotifyMeBtn
                             : a.isQueueable
-                            ? l.waitlistJoin
+                            ? waitLine(context, a) ?? l.waitlistJoin
                             : lead != null
                             ? channelVerb(l, lead)
                             : back != null

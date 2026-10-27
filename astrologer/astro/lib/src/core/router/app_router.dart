@@ -58,7 +58,7 @@ import '../../features/profile/presentation/view/call_setup_page.dart';
 import '../../features/profile/presentation/view/delete_account_page.dart';
 import '../../features/profile/presentation/view/public_profile_page.dart';
 import '../../features/assistant/presentation/assistant_pages.dart';
-import '../../features/my_store/presentation/listing_editor_page.dart';
+import '../../features/my_store/presentation/listing/listing_wizard_page.dart';
 import '../../features/my_store/presentation/my_store_page.dart';
 import '../../features/my_store/presentation/seller_order_page.dart';
 import '../../features/my_store/presentation/store_setup_page.dart';
@@ -228,13 +228,13 @@ GoRouter buildRouter(
           GoRoute(
             path: 'listings/new',
             parentNavigatorKey: _rootKey,
-            builder: (_, _) => const ListingEditorPage(),
+            builder: (_, _) => const ListingWizardPage(),
           ),
           GoRoute(
             path: 'listings/:id',
             parentNavigatorKey: _rootKey,
             builder: (_, s) =>
-                ListingEditorPage(listingId: s.pathParameters['id']),
+                ListingWizardPage(listingId: s.pathParameters['id']),
           ),
           GoRoute(
             path: 'orders/:id',

@@ -23,8 +23,6 @@ import '../../cubit/chat_cubit.dart';
 import 'share_details_sheet.dart';
 import 'thread_session_card.dart';
 
-import 'chat_room_skeleton.dart';
-
 /// The chat room, whatever state the session in it is in. The thread is the
 /// whole surface: its own lines say what happened (asked, joined, ended,
 /// declined), and [ThreadSessionCard] as its last row says what is happening
@@ -789,7 +787,11 @@ class _TranscriptButtonState extends State<TranscriptButton> {
     return TextButton.icon(
       onPressed: _busy ? null : _download,
       icon: _busy
-          ? const SizedBox(width: 16, height: 16, child: ChatRoomSkeleton())
+          ? const SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            )
           : const Icon(Icons.download_rounded, size: 18),
       label: Text(context.l10n.roomDownloadTranscript),
     );

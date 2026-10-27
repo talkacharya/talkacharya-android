@@ -7,22 +7,21 @@ import 'package:astro/src/core/realtime/realtime_client.dart';
 import 'package:astro/src/core/realtime/realtime_event.dart';
 import 'package:astro/src/core/router/routes.dart';
 import 'package:astro/src/core/util/amount_privacy.dart';
-import 'package:astro/src/core/util/async_value.dart';
 import 'package:astro/src/features/consultations/data/consultation_api.dart';
 import 'package:astro/src/features/consultations/data/models/consultation.dart';
 import 'package:astro/src/features/home/data/dashboard_api.dart';
 import 'package:astro/src/features/home/data/dashboard_models.dart';
 import 'package:astro/src/features/home/presentation/cubit/dashboard_cubit.dart';
-import 'package:astro/src/features/home/presentation/view/widgets/earnings_card.dart';
+import 'package:astro/src/features/earnings/presentation/widgets/earnings_trend_card.dart';
 import 'package:astro/src/features/home/presentation/view/widgets/profile_strength_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 class _MockApi extends Mock implements DashboardApi {}
 
 class _MockConsultations extends Mock implements ConsultationApi {}
@@ -227,8 +226,11 @@ void main() {
     });
   });
 
-  group('EarningsCard', () {
+  group('EarningsTrendCard', () {
+    late _MockApi api;
+
     setUp(() {
+      api = _MockApi();
       final storage = _MockStorage();
       when(
         () => storage.read(key: any(named: 'key')),
@@ -238,59 +240,45 @@ void main() {
 
     tearDown(GetIt.I.reset);
 
-    Future<void> pump(WidgetTester tester, DashboardState state) async {
-      final cubit = _FixedCubit(state);
+    Future<void> pump(WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(extensions: const [BrandColors.light]),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
-            body: BlocProvider<DashboardCubit>.value(
-              value: cubit,
-              child: const SingleChildScrollView(child: EarningsCard()),
+            body: SingleChildScrollView(
+              child: EarningsTrendCard(currency: 'INR', api: api),
             ),
           ),
         ),
       );
-      // Skeleton shimmer never settles; the count-up/sparkline finish in <1s.
+      // Skeleton shimmer never settles; the line draws in under a second.
       await tester.pump(const Duration(seconds: 1));
     }
 
-    testWidgets('shows net earnings, fee split and payout balance', (
+    testWidgets('shows net earnings, the fee split and the line', (
       tester,
     ) async {
-      await pump(
-        tester,
-        DashboardState(
-          stats: AsyncValue.data(_stats()),
-          payouts: const AsyncValue.data(
-            PayoutSummary(
-              currency: 'INR',
-              available: 812,
-              pending: 0,
-              lifetime: 0,
-            ),
-          ),
-        ),
-      );
+      when(
+        () => api.stats(days: any(named: 'days')),
+      ).thenAnswer((i) async => _stats(i.namedArguments[#days] as int));
+      await pump(tester);
       expect(find.text('₹1,200'), findsOneWidget);
       expect(find.textContaining('Platform fee ₹300'), findsOneWidget);
-      expect(find.text('₹812'), findsOneWidget);
       expect(find.byType(CustomPaint), findsWidgets);
+
+      await tester.tap(find.text('30D'));
+      await tester.pump(const Duration(seconds: 1));
+      verify(() => api.stats(days: 30)).called(1);
     });
 
     testWidgets('shows a retry row when stats fail', (tester) async {
-      await pump(tester, const DashboardState(stats: AsyncValue.error('nope')));
+      when(
+        () => api.stats(days: any(named: 'days')),
+      ).thenThrow(Exception('nope'));
+      await pump(tester);
       expect(find.text('Retry'), findsOneWidget);
     });
   });
-}
-
-/// A cubit frozen at one state, for widget tests.
-class _FixedCubit extends Cubit<DashboardState> implements DashboardCubit {
-  _FixedCubit(super.initial);
-
-  @override
-  dynamic noSuchMethod(Invocation invocation) => Future<void>.value();
 }

@@ -106,6 +106,8 @@ class _LiveFeedPageState extends State<LiveFeedPage> {
       engine: LiveKitRoomEngine(),
       signaling: RealtimeLiveSignaling(getIt<RealtimeClient>()),
       userId: context.read<AuthBloc>().state.user?.id ?? '',
+      // Only asked when they call in.
+      permissions: const PermissionHandlerLivePermissions(),
     );
     setState(() {
       _current = next;
@@ -229,10 +231,7 @@ class _Empty extends StatelessWidget {
           const SizedBox(height: 12),
           Text(message, style: const TextStyle(color: Colors.white70)),
           const SizedBox(height: 12),
-          TextButton(
-            onPressed: onRetry,
-            child: Text(context.l10n.commonRetry),
-          ),
+          TextButton(onPressed: onRetry, child: Text(context.l10n.commonRetry)),
         ],
       ),
     );

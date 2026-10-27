@@ -19,7 +19,7 @@ import 'call_room.dart';
 import 'chat_shell.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
-import 'chat_room_skeleton.dart';
+
 class RoomScope extends StatelessWidget {
   const RoomScope({required this.threadId, super.key});
 
@@ -34,8 +34,7 @@ class RoomScope extends StatelessWidget {
         BlocProvider(
           create: (_) => ChatCubit(
             repo: getIt<ConsultationRepository>(),
-            realtime: getIt<
-                RealtimeClient>(),
+            realtime: getIt<RealtimeClient>(),
             consultationId: consultationId,
           )..init(),
         ),
@@ -71,7 +70,11 @@ class RoomScope extends StatelessWidget {
 /// Tells [RoomPresence] this room is on screen, so the app-wide "live
 /// consultation" banner hides and deep links don't tear a call down.
 class PresenceScope extends StatefulWidget {
-  const PresenceScope({required this.consultationId, required this.child, super.key});
+  const PresenceScope({
+    required this.consultationId,
+    required this.child,
+    super.key,
+  });
 
   final String consultationId;
   final Widget child;
@@ -115,9 +118,7 @@ class _PresenceScopeState extends State<PresenceScope> {
   @override
   Widget build(BuildContext context) {
     final session = context.select((ChatCubit c) => c.state.consultation);
-    final live = context
-        .select((ChatCubit c) => c.state.window)
-        .consultationId;
+    final live = context.select((ChatCubit c) => c.state.window).consultationId;
     final isCall = session != null && session.channel != 'chat';
     final liveId = live ?? session?.id;
 
@@ -174,9 +175,7 @@ class RoomView extends StatelessWidget {
         // Loading covers both requests now — the thread and the session in
         // it — so the room never renders its failure while one is in flight.
         if (state.loading && state.consultation == null) {
-          return const Scaffold(
-            body: Center(child: ChatRoomSkeleton()),
-          );
+          return const ChatSkeleton.page();
         }
         final c = state.consultation;
         if (c == null) {

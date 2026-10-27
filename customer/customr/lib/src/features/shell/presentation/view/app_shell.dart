@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:talkacharya_call/talkacharya_call.dart';
 import 'package:talkacharya_sounds/talkacharya_sounds.dart';
@@ -94,7 +95,8 @@ class _AppShellState extends State<AppShell> {
         if (!here) {
           // On this phone, outside the room: the sender's second tick.
           unawaited(reportChatDelivered(getIt<Dio>(), consultationId, seq));
-          AppSounds.notify();
+          // A toast, no tone: in-app chat is silent (the tray rings only when
+          // the app is not in front).
           _toast(
             preview.isEmpty ? 'New message' : preview,
             actionLabel: 'View',
@@ -268,8 +270,9 @@ class _AppShellState extends State<AppShell> {
               label: l.navAstrologers,
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.auto_awesome_outlined),
-              activeIcon: const Icon(Icons.auto_awesome_rounded),
+              // Folded hands 🙏 — Material has no such icon, so it is ours.
+              icon: const _PrayIcon(),
+              activeIcon: const _PrayIcon(filled: true),
               label: l.remediesTitle,
             ),
             BottomNavigationBarItem(
@@ -333,6 +336,31 @@ class _OfflineBanner extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+/// Folded hands for the Remedies tab, tinted like the bar's other icons
+/// (it reads the selected / unselected colour and size from [IconTheme]).
+class _PrayIcon extends StatelessWidget {
+  const _PrayIcon({this.filled = false});
+
+  final bool filled;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = IconTheme.of(context);
+    final size = theme.size ?? 24;
+    return SvgPicture.asset(
+      filled
+          ? 'assets/svg/pray_outline.svg'
+          : 'assets/svg/pray_outline.svg',
+      width: size,
+      height: size,
+      colorFilter: ColorFilter.mode(
+        theme.color ?? Theme.of(context).colorScheme.onSurface,
+        BlendMode.srcIn,
+      ),
     );
   }
 }

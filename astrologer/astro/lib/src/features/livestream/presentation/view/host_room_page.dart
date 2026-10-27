@@ -3,18 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:talkacharya_call/talkacharya_call.dart';
 import 'package:talkacharya_live/talkacharya_live.dart';
 
 import 'go_live_page.dart';
-import 'widgets/host_header.dart';
-import 'widgets/host_chat.dart';
-import 'widgets/host_controls.dart';
 import 'widgets/host_system_views.dart';
 import 'widgets/on_air_view.dart';
 import 'widgets/confirm_end_dialog.dart';
-
-import '../../../../core/l10n/l10n.dart';
 
 /// The broadcast screen: our own camera full-bleed, the chat and viewer count
 /// over it, and the controls that matter while on air.
@@ -43,8 +37,6 @@ class _HostRoomPageState extends State<HostRoomPage> {
 
   @override
   void dispose() {
-    // Leaving the room: the app no longer follows the user out as a window.
-    unawaited(CallPip.setActive(active: false));
     _cubit.close();
     super.dispose();
   }
@@ -58,9 +50,6 @@ class _HostRoomPageState extends State<HostRoomPage> {
         child: BlocConsumer<LiveHostCubit, LiveState>(
           listenWhen: (a, b) => a.phase != b.phase,
           listener: (context, state) {
-            // Picture-in-picture only while on air (the camera is live): going
-            // home mid-stream keeps the host's video in a corner.
-            unawaited(CallPip.setActive(active: state.phase.isOn));
             if (state.phase == LivePhase.ended &&
                 state.endReason == LiveEndReason.hostEnded &&
                 Navigator.of(context).canPop()) {
@@ -68,76 +57,60 @@ class _HostRoomPageState extends State<HostRoomPage> {
             }
           },
           builder: (context, state) {
-            return ValueListenableBuilder<bool>(
-              valueListenable: CallPip.inPip,
-              builder: (context, inPip, _) {
-                if (inPip) {
-                  // A thumbnail: just the camera.
-                  return Scaffold(
-                    backgroundColor: const Color(0xFF12102A),
-                    body: state.showLocalVideo
-                        ? LiveVideoView(
-                            track: state.localVideo,
-                            mirror: state.frontCamera,
-                          )
-                        : const ColoredBox(color: Color(0xFF12102A)),
-                  );
+            return PopScope(
+              canPop: !state.phase.isOn,
+              onPopInvokedWithResult: (didPop, _) async {
+                if (didPop || !state.phase.isOn) return;
+                if (await confirmHostEnd(context)) {
+                  await _cubit.endStream();
                 }
-                return PopScope(
-                  canPop: !state.phase.isOn,
-                  onPopInvokedWithResult: (didPop, _) async {
-                    if (didPop || !state.phase.isOn) return;
-                    if (await confirmHostEnd(context)) {
-                      await _cubit.endStream();
-                    }
-                  },
-                  child: Scaffold(
-                    backgroundColor: const Color(0xFF12102A),
-                    body: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        if (state.showLocalVideo)
-                          LiveVideoView(
-                            track: state.localVideo,
-                            mirror: state.frontCamera,
-                          )
-                        else
-                          const ColoredBox(color: Color(0xFF12102A)),
-                        SafeArea(
-                          child: switch (state.phase) {
-                            LivePhase.permissionDenied => PermissionView(
-                              blocked: state.permanentlyDenied,
-                              onSettings: _cubit.openSettings,
-                              onRetry: _cubit.retry,
-                              onClose: () => Navigator.of(context).pop(),
-                            ),
-                            LivePhase.failed => FailedView(
-                              message: state.error,
-                              onRetry: _cubit.retry,
-                              onClose: () => Navigator.of(context).pop(),
-                            ),
-                            LivePhase.ended => EndedView(
-                              state: state,
-                              onClose: () => Navigator.of(context).pop(),
-                            ),
-                            LivePhase.preparing ||
-                            LivePhase.joining => const ConnectingView(),
-                            _ => OnAirView(
-                              state: state,
-                              title: widget.title,
-                              onEnd: () async {
-                                if (await confirmHostEnd(context)) {
-                                  await _cubit.endStream();
-                                }
-                              },
-                            ),
+              },
+              child: Scaffold(
+                backgroundColor: const Color(0xFF12102A),
+                body: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    if (state.showLocalVideo)
+                      LiveVideoView(
+                        key: const ValueKey('host_live_video'),
+                        track: state.localVideo,
+                        mirror: state.frontCamera,
+                      )
+                    else
+                      const ColoredBox(color: Color(0xFF12102A)),
+                    SafeArea(
+                      child: switch (state.phase) {
+                        LivePhase.permissionDenied => PermissionView(
+                          blocked: state.permanentlyDenied,
+                          onSettings: _cubit.openSettings,
+                          onRetry: _cubit.retry,
+                          onClose: () => Navigator.of(context).pop(),
+                        ),
+                        LivePhase.failed => FailedView(
+                          message: state.error,
+                          onRetry: _cubit.retry,
+                          onClose: () => Navigator.of(context).pop(),
+                        ),
+                        LivePhase.ended => EndedView(
+                          state: state,
+                          onClose: () => Navigator.of(context).pop(),
+                        ),
+                        LivePhase.preparing ||
+                        LivePhase.joining => const ConnectingView(),
+                        _ => OnAirView(
+                          state: state,
+                          title: widget.title,
+                          onEnd: () async {
+                            if (await confirmHostEnd(context)) {
+                              await _cubit.endStream();
+                            }
                           },
                         ),
-                      ],
+                      },
                     ),
-                  ),
-                );
-              },
+                  ],
+                ),
+              ),
             );
           },
         ),

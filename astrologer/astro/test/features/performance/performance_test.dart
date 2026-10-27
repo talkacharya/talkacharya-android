@@ -3,8 +3,9 @@ import 'package:astro/src/core/l10n/l10n.dart';
 import 'package:astro/src/core/util/amount_privacy.dart';
 import 'package:astro/src/core/util/async_value.dart';
 import 'package:astro/src/features/home/presentation/view/widgets/break_card.dart';
-import 'package:astro/src/features/home/presentation/view/widgets/earning_club_banner.dart';
-import 'package:astro/src/features/home/presentation/view/widgets/today_pulse_card.dart';
+import 'package:astro/src/features/home/data/dashboard_models.dart';
+import 'package:astro/src/features/home/presentation/view/widgets/score_row.dart';
+import 'package:astro/src/features/home/presentation/view/widgets/today_card.dart';
 import 'package:astro/src/features/performance/data/performance_api.dart';
 import 'package:astro/src/features/performance/data/performance_models.dart';
 import 'package:astro/src/features/performance/presentation/cubit/performance_cubit.dart';
@@ -289,19 +290,61 @@ void main() {
 
     tearDown(GetIt.I.reset);
 
-    testWidgets('club banner names the club and what today needs', (
+    testWidgets('today card names the club and what today needs', (
       tester,
     ) async {
       final cubit = _FixedCubit(
         PerformanceState(performance: AsyncValue.data(_perf())),
       );
-      await tester.pumpWidget(_app(const EarningClubBanner(), cubit));
+      await tester.pumpWidget(_app(const TodayCard(), cubit));
       await tester.pump(const Duration(seconds: 1));
 
       expect(find.text("You're in the ₹75K club"), findsOneWidget);
       expect(find.textContaining('Earn ₹57 more today'), findsOneWidget);
       expect(find.textContaining('₹1L club'), findsOneWidget);
-      expect(find.text('On pace for ₹77,000 this month'), findsOneWidget);
+    });
+
+    testWidgets('today card shows the payout balance under the day', (
+      tester,
+    ) async {
+      final cubit = _FixedCubit(
+        PerformanceState(performance: AsyncValue.data(_perf())),
+      );
+      await tester.pumpWidget(
+        _app(
+          const TodayCard(
+            payout: PayoutSummary(
+              currency: 'INR',
+              available: 812,
+              pending: 0,
+              lifetime: 0,
+            ),
+          ),
+          cubit,
+        ),
+      );
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.text('₹812'), findsOneWidget);
+      expect(find.textContaining('4 sessions'), findsOneWidget);
+    });
+
+    testWidgets('score row shows the four headline readings', (tester) async {
+      final cubit = _FixedCubit(
+        PerformanceState(performance: AsyncValue.data(_perf())),
+      );
+      await tester.pumpWidget(_app(const ScoreRow(), cubit));
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.text('11h'), findsOneWidget); // online per day
+      expect(find.text('27%'), findsOneWidget); // first-time repeat
+
+      // The three weakest readings get meters: both lows, then the first mid.
+      expect(find.byType(BandMeter), findsNWidgets(3));
+      expect(find.text(metricTitle(l, 'total_repeat')), findsOneWidget);
+      expect(find.text(metricTitle(l, 'avg_session')), findsOneWidget);
+      expect(find.text(metricTitle(l, 'first_repeat')), findsOneWidget);
+      expect(find.text(metricTitle(l, 'online_time')), findsNothing);
     });
 
     testWidgets('today card masks the amount on the eye toggle', (
@@ -310,12 +353,10 @@ void main() {
       final cubit = _FixedCubit(
         PerformanceState(performance: AsyncValue.data(_perf())),
       );
-      await tester.pumpWidget(_app(const TodayPulseCard(), cubit));
+      await tester.pumpWidget(_app(const TodayCard(), cubit));
       await tester.pump(const Duration(seconds: 1));
 
       expect(find.text('₹1,240'), findsOneWidget);
-      expect(find.text('11h'), findsOneWidget); // online per day
-      expect(find.text('27%'), findsOneWidget); // first-time repeat
 
       await tester.tap(find.byTooltip('Hide amounts'));
       // One frame to start the cross-fade, one to finish it.

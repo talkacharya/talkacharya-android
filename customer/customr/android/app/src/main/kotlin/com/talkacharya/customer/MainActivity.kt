@@ -1,32 +1,22 @@
 package com.talkacharya.customer
 
-import android.app.PictureInPictureParams
 import android.content.Context
-import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
-import android.util.Rational
 import android.view.WindowManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 /**
- * Native call bits Dart can't do for itself: picture-in-picture for video
- * consultations, the proximity screen-off every dialer has on a voice call, and
- * (The Telecom bridge lives in the talkacharya_call plugin now, so it also
- * reaches the FCM background isolate.)
- *
- * Entering PiP is an Activity call and the moment that matters — the user
- * pressing home or swiping up mid-call — only exists here, in
- * `onUserLeaveHint`. Dart says whether a video call is live; this decides
- * whether the window follows the user out of the app.
+ * Native call bits Dart can't do for itself: the proximity screen-off every
+ * dialer has on a voice call. (The Telecom bridge lives in the talkacharya_call
+ * plugin, so it also reaches the FCM background isolate.) There is no
+ * picture-in-picture: only a voice call carries on in the background.
  */
 class MainActivity : FlutterActivity() {
 
-    private var channel: MethodChannel? = null
     private var proximityChannel: MethodChannel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,27 +35,10 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    /** Set from Dart while a video call is up. */
-    private var videoCallActive = false
-
     private var proximityLock: PowerManager.WakeLock? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).apply {
-            setMethodCallHandler { call, result ->
-                when (call.method) {
-                    "setActive" -> {
-                        videoCallActive = call.argument<Boolean>("active") ?: false
-                        updateAutoEnter()
-                        result.success(null)
-                    }
-                    "enter" -> result.success(enterPip())
-                    "isSupported" -> result.success(pipSupported())
-                    else -> result.notImplemented()
-                }
-            }
-        }
         proximityChannel = MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             PROXIMITY_CHANNEL,
@@ -120,82 +93,14 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    override fun onUserLeaveHint() {
-        super.onUserLeaveHint()
-        // Leaving the app while the camera is live (a video call, or the
-        // astrologer's own live stream) shrinks it to a corner. Anything else —
-        // a voice call included — just goes to the background as usual.
-        if (videoCallActive) enterPip()
-    }
-
-    override fun onPictureInPictureModeChanged(
-        isInPictureInPictureMode: Boolean,
-        newConfig: Configuration,
-    ) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        channel?.invokeMethod("pipChanged", isInPictureInPictureMode)
-    }
-
     override fun onDestroy() {
-        channel?.setMethodCallHandler(null)
-        channel = null
         proximityChannel?.setMethodCallHandler(null)
         proximityChannel = null
         releaseProximity()
         super.onDestroy()
     }
 
-    /**
-     * Android 12+: let the system shrink the window by itself on the home
-     * gesture — but only while [videoCallActive]. Switched off again the moment
-     * the camera session ends, so nothing else ever opens as a window (and any
-     * auto-enter left behind by an older build is cleared on the next call).
-     */
-    private fun updateAutoEnter() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || !pipSupported()) return
-        try {
-            setPictureInPictureParams(
-                PictureInPictureParams.Builder()
-                    .setAspectRatio(Rational(9, 16))
-                    .setAutoEnterEnabled(videoCallActive)
-                    .build()
-            )
-        } catch (e: IllegalStateException) {
-            // Activity going away — nothing to update.
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Back in the app: make sure a stale auto-enter can't outlive its session.
-        updateAutoEnter()
-    }
-
-    private fun pipSupported(): Boolean =
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-            packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
-
-    private fun enterPip(): Boolean {
-        // The version check is repeated here so the compiler can see it guards
-        // the API 26 call below.
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false
-        if (!pipSupported() || isInPictureInPictureMode) return false
-        return try {
-            enterPictureInPictureMode(
-                PictureInPictureParams.Builder()
-                    // Portrait, like the call screen it comes from.
-                    .setAspectRatio(Rational(9, 16))
-                    .build()
-            )
-        } catch (e: IllegalStateException) {
-            // Some devices refuse while finishing or locked; plain backgrounding
-            // is the fallback and the call keeps running either way.
-            false
-        }
-    }
-
     private companion object {
-        const val CHANNEL = "talkacharya/pip"
         const val PROXIMITY_CHANNEL = "talkacharya/proximity"
         const val PROXIMITY_TAG = "talkacharya:call-proximity"
 

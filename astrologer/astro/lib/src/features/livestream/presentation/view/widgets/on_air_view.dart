@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talkacharya_live/talkacharya_live.dart';
 
+import 'host_call_panel.dart';
 import 'host_header.dart';
 import 'host_chat.dart';
 import 'host_controls.dart';
@@ -32,6 +33,8 @@ class OnAirView extends StatelessWidget {
             child: GiftStrip(gifts: state.gifts),
           ),
         HostChat(messages: state.messages),
+        // Calls during the stream: the one on air, and the line.
+        HostCallPanel(state: state, cubit: cubit),
         HostControls(
           state: state,
           onCamera: cubit.toggleCamera,

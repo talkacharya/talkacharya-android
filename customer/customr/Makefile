@@ -121,7 +121,7 @@ apk-release: ## Release APK for $(FLAVOR) (obfuscated; APP_CHECK_PROVIDER=debug 
 
 .PHONY: appbundle
 appbundle: release-check ## Release AAB for prod (Play upload) — signed, obfuscated
-	$(FLUTTER) build appbundle --release --obfuscate --split-debug-info=build/symbols/prod $(VERSION_ARGS) --flavor prod -t lib/main_prod.dart
+	$(FLUTTER) build appbundle $(if $(NO_MAPPING_UPLOAD),-PnoMappingUpload=true,) --release --obfuscate --split-debug-info=build/symbols/prod $(VERSION_ARGS) --flavor prod -t lib/main_prod.dart
 	@echo "AAB: build/app/outputs/bundle/prodRelease/app-prod-release.aab"
 	@echo "Next: make symbols-upload FLAVOR=prod"
 

@@ -36,7 +36,9 @@ class _RequestDetailPageState extends State<RequestDetailPage> {
   Future<Consultation> _fetch() =>
       getIt<ConsultationApi>().detail(widget.consultationId);
 
-  void _reload() => setState(() => _future = _fetch());
+  void _reload() => setState(() {
+    _future = _fetch();
+  });
 
   Future<void> _accept() async {
     setState(() => _busy = true);

@@ -10,6 +10,7 @@ import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// One level of the dasha tree, in full.
 ///
 /// Four levels do not nest on a phone — by the third indent there is no room
@@ -80,10 +81,14 @@ class _DashaLevelPageState extends State<DashaLevelPage> {
               ? null
               : KHeroGlyph(
                   hue: hue,
-                  text: KundaliStrings.of(context).planetToken(widget.path.last),
+                  text: KundaliStrings.of(
+                    context,
+                  ).planetToken(widget.path.last),
                   size: 64,
                 ),
-          onRefresh: () async => setState(() => _future = _load()),
+          onRefresh: () async => setState(() {
+            _future = _load();
+          }),
           children: [
             if (snap.connectionState != ConnectionState.done)
               const Padding(
@@ -104,11 +109,7 @@ class _DashaLevelPageState extends State<DashaLevelPage> {
                 ),
               )
             else
-              _Rail(
-                profileId: widget.profileId,
-                path: widget.path,
-                data: data,
-              ),
+              _Rail(profileId: widget.profileId, path: widget.path, data: data),
           ],
         );
       },
@@ -124,7 +125,11 @@ String _range(BuildContext context, DateTime from, DateTime to) {
 }
 
 class _Rail extends StatelessWidget {
-  const _Rail({required this.profileId, required this.path, required this.data});
+  const _Rail({
+    required this.profileId,
+    required this.path,
+    required this.data,
+  });
 
   final String profileId;
   final List<String> path;

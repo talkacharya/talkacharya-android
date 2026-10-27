@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import '../engine/live_call_audio.dart';
+import '../models/live_call.dart';
 import '../models/live_join.dart';
 import '../models/live_state.dart';
 import '../models/live_chat_message.dart';
@@ -21,14 +23,24 @@ class LiveHostCubit extends LiveCubitBase {
     required super.engine,
     required super.signaling,
     required this.userId,
+    LiveCallAudio Function()? callAudio,
   }) : _backend = backend,
        _permissions = permissions,
+       _callAudio = callAudio ?? LiveKitCallAudio.new,
        super(isHost: true);
 
   final LiveHostBackend _backend;
   final LivePermissions _permissions;
   final String userId;
   final _keepAlive = ForegroundServiceLiveKeepAlive();
+  final LiveCallAudio Function() _callAudio;
+
+  /// A private call's room, while one is on: the host's microphone is there and
+  /// muted in the stream, so the viewers hear neither of them.
+  LiveCallAudio? _audio;
+  String? _privateFor;
+  bool _refreshing = false;
+  bool _refreshAgain = false;
 
   @override
   String get selfId => userId;
@@ -69,6 +81,7 @@ class LiveHostCubit extends LiveCubitBase {
         waitingCount: join.waitingCount,
       ),
     );
+    final hostCalls = join.hostCalls;
 
     listenToRoom();
     listenToChannel(join.chatChannel);
@@ -103,6 +116,96 @@ class LiveHostCubit extends LiveCubitBase {
       ),
     );
     unawaited(_loadHistory());
+    // Reopened mid-call: back into the call (a private one's room included).
+    if (hostCalls != null) await _apply(hostCalls);
+  }
+
+  // --- calls during the stream ---------------------------------------------
+
+  @override
+  void onCallsChanged() => unawaited(refreshCalls());
+
+  Future<void> refreshCalls() async {
+    if (closed) return;
+    if (_refreshing) {
+      _refreshAgain = true;
+      return;
+    }
+    _refreshing = true;
+    try {
+      do {
+        _refreshAgain = false;
+        try {
+          await _apply(await _backend.calls());
+        } catch (_) {}
+      } while (_refreshAgain && !closed);
+    } finally {
+      _refreshing = false;
+    }
+  }
+
+  Future<void> _apply(LiveHostCalls c) async {
+    if (closed) return;
+    final current = c.current;
+    emitIfOpen(state.copyWith(callLine: c.line, callsWaiting: c.waiting));
+    final media = c.media;
+    final private = current != null && current.mode == LiveCallMode.private;
+    if (private && media != null && _privateFor != current.id) {
+      await _enterPrivate(current.id, media);
+    } else if (!private && _privateFor != null) {
+      await _leavePrivate();
+    }
+  }
+
+  Future<void> _enterPrivate(String id, LiveCallMedia media) async {
+    if (_privateFor != null) await _leavePrivate();
+    _privateFor = id;
+    try {
+      // Off the stream's audio first: not a word of a private call on air.
+      await engine.setMicrophoneEnabled(false);
+      final audio = _callAudio();
+      _audio = audio;
+      await audio.connect(url: media.url, token: media.token ?? '');
+      if (!state.micOn) await audio.setMicrophoneEnabled(false);
+    } catch (e) {
+      emitIfOpen(state.copyWith(error: '$e'));
+    }
+  }
+
+  Future<void> _leavePrivate() async {
+    _privateFor = null;
+    final audio = _audio;
+    _audio = null;
+    if (audio != null) {
+      try {
+        await audio.disconnect();
+      } catch (_) {}
+    }
+    try {
+      await engine.setMicrophoneEnabled(state.micOn);
+    } catch (_) {}
+  }
+
+  /// Ends the call on air, or takes someone off the line.
+  Future<void> endCall(String requestId) async {
+    emitIfOpen(state.copyWith(callBusy: true));
+    try {
+      await _backend.endCall(requestId);
+    } catch (e) {
+      emitIfOpen(state.copyWith(error: '$e'));
+    }
+    emitIfOpen(state.copyWith(callBusy: false));
+    await refreshCalls();
+  }
+
+  /// Takes a public caller's microphone away, or gives it back.
+  Future<void> muteCaller(String requestId, {required bool muted}) async {
+    try {
+      await _backend.muteCall(requestId, muted: muted);
+    } catch (e) {
+      emitIfOpen(state.copyWith(error: '$e'));
+    }
+    await refreshCalls();
   }
 
   Future<void> retry() async {
@@ -138,7 +241,13 @@ class LiveHostCubit extends LiveCubitBase {
   Future<void> toggleMic() async {
     final on = !state.micOn;
     try {
-      await engine.setMicrophoneEnabled(on);
+      // In a private call the microphone is in its room, not the stream.
+      final audio = _audio;
+      if (audio != null) {
+        await audio.setMicrophoneEnabled(on);
+      } else {
+        await engine.setMicrophoneEnabled(on);
+      }
       emitIfOpen(state.copyWith(micOn: on));
     } catch (_) {}
   }
@@ -233,6 +342,14 @@ class LiveHostCubit extends LiveCubitBase {
 
   @override
   Future<void> finish(LiveEndReason reason) async {
+    final audio = _audio;
+    _audio = null;
+    _privateFor = null;
+    if (audio != null) {
+      try {
+        await audio.disconnect();
+      } catch (_) {}
+    }
     try {
       await WakelockPlus.disable();
     } catch (_) {}

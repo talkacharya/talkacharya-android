@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 /// Screen-off-at-the-ear for a voice call, the way every dialer behaves.
 ///
-/// Android only, and thin for the same reason as [CallPip]: the proximity
+/// Android only, and thin: the proximity
 /// wake lock belongs to the host app's `MainActivity`, which owns the
 /// `talkacharya/proximity` channel. Without it a voice call keeps a bright
 /// screen against the caller's cheek — muting themselves, hanging up, and

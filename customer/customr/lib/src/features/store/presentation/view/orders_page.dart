@@ -12,6 +12,7 @@ import '../widgets/order_widgets.dart';
 import '../widgets/store_ui.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// `/store/orders` (`?tab=poojas` opens the bookings tab).
 class OrdersPage extends StatefulWidget {
   const OrdersPage({this.initialTab = 0, super.key});
@@ -319,6 +320,20 @@ class BookingCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    // Who performs it, and whose suggestion it was booked on.
+                    if (b.sellerName.isNotEmpty || b.recommendedBy.isNotEmpty)
+                      Text(
+                        [
+                          if (b.sellerName.isNotEmpty) b.sellerName,
+                          if (b.recommendedBy.isNotEmpty)
+                            l.storeRecommendedBy(b.recommendedBy),
+                        ].join(' · '),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: brand.inkMuted,
                         ),
                       ),
                     if (b.event?.venue.isNotEmpty ?? false)

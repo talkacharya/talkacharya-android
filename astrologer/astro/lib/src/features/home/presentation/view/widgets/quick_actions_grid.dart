@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 import '../../../../../core/l10n/l10n.dart';
 import '../../../../../core/router/routes.dart';
 import 'dash_shared.dart';
 import 'tools.dart';
 
-/// The twelve tools an astrologer reaches for most, with "See all" opening the
-/// full, grouped list. Counts show only where something is waiting.
+/// The twelve tools an astrologer reaches for most, three rows of four, with
+/// "See all"
+/// opening the full, grouped list. Counts show only where something is
+/// waiting.
 class QuickActionsGrid extends StatelessWidget {
   const QuickActionsGrid({super.key});
 
@@ -22,16 +23,16 @@ class QuickActionsGrid extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SectionHeader(
+        DashLabel(
           title: l.dashTools,
-          hue: AstroPalette.money,
           onSeeAll: () => context.push(Routes.tools),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 4),
         Padding(
           padding: DashGaps.sidePad,
           child: ToolGrid(
             actions: groups.first.actions.take(featured).toList(),
+            aspect: 0.78,
           ),
         ),
       ],

@@ -138,11 +138,24 @@ class ServiceBooking extends Equatable {
     this.performedAt,
     this.proofUploadedAt,
     this.proofs = const [],
+    this.package = '',
+    this.recommendedBy = '',
+    this.sellerName = '',
+    this.sellerKind = '',
   });
 
   final String id;
   final String orderId;
   final String productTitle;
+  final String package;
+
+  /// The astrologer whose suggestion it was booked on ('' when none).
+  final String recommendedBy;
+
+  /// Who performs it, and what kind of seller they are (temple / vendor /
+  /// astrologer / platform).
+  final String sellerName;
+  final String sellerKind;
 
   /// pending | confirmed | performed | proof_uploaded | completed | cancelled
   final String status;
@@ -169,6 +182,10 @@ class ServiceBooking extends Equatable {
     performedAt: jDate(j['performed_at']),
     proofUploadedAt: jDate(j['proof_uploaded_at']),
     proofs: jList(j['proofs'], ServiceProof.fromJson),
+    package: jStr(j['package']),
+    recommendedBy: jStr(jMap(j['recommended_by'])['name']),
+    sellerName: jStr(jMap(j['seller'])['name']),
+    sellerKind: jStr(jMap(j['seller'])['kind']),
   );
 
   @override
@@ -197,10 +214,14 @@ class OrderLine extends Equatable {
     this.canReturn = false,
     this.booking,
     this.downloads = const [],
+    this.recommendedBy = '',
   });
 
   final String id;
   final String productTitle;
+
+  /// The astrologer whose suggestion it was bought on ('' when none).
+  final String recommendedBy;
   final String variantId;
   final String productSlug;
   final String variantName;
@@ -243,6 +264,7 @@ class OrderLine extends Equatable {
     refundedAmount: jNum(j['refunded_amount']),
     returnableUntil: jDate(j['returnable_until']),
     canReturn: jBool(j['can_return']),
+    recommendedBy: jStr(jMap(j['recommended_by'])['name']),
     booking: jMapOrNull(j['booking']) == null
         ? null
         : ServiceBooking.fromJson(jMap(j['booking'])),

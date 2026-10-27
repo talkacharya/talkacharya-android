@@ -17,6 +17,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 class _MockApi extends Mock implements ConsultationApi {}
 
 class _MockRealtime extends Mock implements RealtimeClient {}
@@ -53,19 +54,61 @@ void main() {
   late _MockApi api;
   late StreamController<RealtimeEvent> events;
   late _MockRealtime realtime;
+  late ValueNotifier<bool> connected;
 
   setUp(() {
     api = _MockApi();
     events = StreamController<RealtimeEvent>.broadcast();
     realtime = _MockRealtime();
+    connected = ValueNotifier<bool>(true);
     when(() => realtime.events).thenAnswer((_) => events.stream);
+    when(() => realtime.connected).thenReturn(connected);
   });
 
   tearDown(() => events.close());
 
   group('RequestsCubit', () {
-    RequestsCubit build() =>
-        RequestsCubit(repo: ConsultationRepository(api), realtime: realtime);
+    RequestsCubit build() => RequestsCubit(
+      repo: ConsultationRepository(api),
+      realtime: realtime,
+      watchApp: false,
+    );
+
+    test(
+      'the socket coming back re-reads the list, and says what left',
+      () async {
+        final cubit = build();
+        await cubit.load();
+        final gone = <String>[];
+        final sub = cubit.gone.listen(gone.add);
+        // r1 was withdrawn while the socket was down: its frame never came
+        when(() => api.incoming()).thenAnswer((_) async => [_c('r2')]);
+        connected.value = false;
+        connected.value = true;
+        await Future<void>.delayed(const Duration(milliseconds: 650));
+        expect(cubit.state.incoming.map((c) => c.id), ['r2']);
+        expect(gone, ['r1']);
+        await sub.cancel();
+        await cubit.close();
+      },
+    );
+
+    test('our own decline is not reported as gone', () async {
+      when(
+        () => api.reject('r1', 'declined'),
+      ).thenAnswer((_) async => _c('r1'));
+      final cubit = build();
+      await cubit.load();
+      final gone = <String>[];
+      final sub = cubit.gone.listen(gone.add);
+      await cubit.reject('r1', 'declined');
+      when(() => api.incoming()).thenAnswer((_) async => [_c('r2')]);
+      await cubit.load();
+      await Future<void>.delayed(Duration.zero);
+      expect(gone, isEmpty);
+      await sub.cancel();
+      await cubit.close();
+    });
 
     setUp(() {
       when(() => api.incoming()).thenAnswer((_) async => [_c('r1'), _c('r2')]);

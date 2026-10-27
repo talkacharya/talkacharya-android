@@ -11,6 +11,7 @@ import '../../data/models/invoice.dart';
 import '../../data/wallet_api.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 class InvoicesPage extends StatefulWidget {
   const InvoicesPage({super.key});
 
@@ -59,8 +60,9 @@ class _InvoicesPageState extends State<InvoicesPage> {
           if (snap.hasError) {
             return ErrorView(
               message: l.commonSomethingWentWrong,
-              onRetry: () =>
-                  setState(() => _future = getIt<WalletApi>().invoices()),
+              onRetry: () => setState(() {
+                _future = getIt<WalletApi>().invoices();
+              }),
             );
           }
           final items = snap.data ?? const [];

@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'dart:async';
 
+import 'package:flutter/material.dart';
+
+import '../../../../core/availability/availability_coordinator.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/network/api_exception.dart';
@@ -12,11 +14,9 @@ import 'next_online_sheet.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
-const _defaultStart = TimeOfDay(hour: 9, minute: 0);
-const _defaultEnd = TimeOfDay(hour: 21, minute: 0);
-
-/// Which consultation types are accepted, how many chats at once, and the
-/// weekly schedule (one window per day).
+/// Which consultation types are accepted, and when a type switched off is
+/// back. Online itself is the Home toggle; there is no weekly schedule — with
+/// every type waiting for its next-online time the astrologer is offline.
 class WorkingHoursPage extends StatefulWidget {
   const WorkingHoursPage({super.key});
   @override
@@ -30,7 +30,6 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
   // Types switched off until a time the astrologer gave; saved at once
   // from the sheet, not with the rest of the page.
   Map<String, DateTime> _nextOnline = {};
-  final Map<int, WorkingWindow> _week = {};
 
   // Snapshot of the saved state, for dirty-checking.
   String _savedKey = '';
@@ -45,11 +44,7 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
     _load();
   }
 
-  String get _key => [
-    (_channels.toList()..sort()).join(','),
-    for (var d = 0; d < 7; d++)
-      _week[d] == null ? '-' : _week[d]!.toJson().values.join('/'),
-  ].join('|');
+  String get _key => (_channels.toList()..sort()).join(',');
 
   bool get _dirty => !_loading && _key != _savedKey;
 
@@ -59,20 +54,11 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
       _failed = false;
     });
     try {
-      final results = await Future.wait([
-        _api.availability(),
-        _api.workingHours(),
-      ]);
+      final av = await _api.availability();
       if (!mounted) return;
-      final av = results[0] as AvailabilitySettings;
-      final hours = results[1] as List<WorkingWindow>;
       setState(() {
         _channels = {...av.channels};
         _nextOnline = {...av.nextOnline};
-        _week
-          ..clear()
-          // One window per day in this editor; keep the first if several.
-          ..addAll({for (final w in hours.reversed) w.weekday: w});
         _loading = false;
         _savedKey = _key;
       });
@@ -88,17 +74,14 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
 
   Future<void> _save() async {
     final l = context.l10n;
-    if (_week.values.any((w) => !w.isValid)) {
-      showToast(context, l.hoursInvalid);
-      return;
-    }
     setState(() => _saving = true);
     try {
       await _api.setAvailability(
         channels: kChannels.where(_channels.contains).toList(),
       );
-      await _api.setWorkingHours([for (var d = 0; d < 7; d++) ?_week[d]]);
       _savedKey = _key;
+      // Every type off is offline: the Home panel says so now.
+      unawaited(getIt<AvailabilityCoordinator>().refresh());
       if (mounted) showToast(context, l.commonSaved);
     } on ApiException catch (e) {
       if (mounted) {
@@ -128,8 +111,6 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
       context,
       channel: ch,
       current: _nextOnline[ch],
-      // DateTime counts Monday as 1, the schedule as 0.
-      dayStart: (day) => _week[day.weekday - 1]?.start,
     );
     if (choice == null || !mounted) return;
     final l = context.l10n;
@@ -140,6 +121,7 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
       final av = at == null
           ? await _api.clearNextOnline(ch)
           : await _api.setNextOnline(ch, at);
+      unawaited(getIt<AvailabilityCoordinator>().refresh());
       if (!mounted) return;
       setState(() {
         _nextOnline = {...av.nextOnline};
@@ -158,29 +140,6 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
         showToast(context, e.isNetwork ? l.commonSaveFailed : e.message);
       }
     }
-  }
-
-  Future<void> _pickTime(int day, {required bool start}) async {
-    final w = _week[day]!;
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: start ? w.start : w.end,
-    );
-    if (picked == null || !mounted) return;
-    setState(
-      () => _week[day] = start
-          ? w.copyWith(start: picked)
-          : w.copyWith(end: picked),
-    );
-  }
-
-  void _copyToAll(int day) {
-    final w = _week[day]!;
-    setState(() {
-      for (var d = 0; d < 7; d++) {
-        _week[d] = w.copyWith(weekday: d);
-      }
-    });
   }
 
   @override
@@ -208,7 +167,7 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
           )
         else if (_failed)
           ErrorView(message: l.commonLoadFailed, onRetry: _load)
-        else ...[
+        else
           SettingsCard(
             title: l.hoursChannels,
             subtitle: l.hoursChannelsHint,
@@ -227,38 +186,6 @@ class _WorkingHoursPageState extends State<WorkingHoursPage> {
               ],
             ),
           ),
-          SettingsCard(
-            title: l.hoursSchedule,
-            subtitle: l.hoursScheduleHint,
-            icon: Icons.calendar_month_rounded,
-            hue: AstroPalette.air,
-            padding: const EdgeInsets.only(bottom: 6),
-            child: Column(
-              children: [
-                for (var d = 0; d < 7; d++)
-                  _DayRow(
-                    weekday: d,
-                    window: _week[d],
-                    onToggle: (on) => setState(() {
-                      if (on) {
-                        _week[d] = WorkingWindow(
-                          weekday: d,
-                          start:
-                              _week.values.firstOrNull?.start ?? _defaultStart,
-                          end: _week.values.firstOrNull?.end ?? _defaultEnd,
-                        );
-                      } else {
-                        _week.remove(d);
-                      }
-                    }),
-                    onStart: () => _pickTime(d, start: true),
-                    onEnd: () => _pickTime(d, start: false),
-                    onCopyToAll: () => _copyToAll(d),
-                  ),
-              ],
-            ),
-          ),
-        ],
       ],
     );
   }
@@ -346,111 +273,6 @@ class _ChannelSwitch extends StatelessWidget {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _DayRow extends StatelessWidget {
-  const _DayRow({
-    required this.weekday,
-    required this.window,
-    required this.onToggle,
-    required this.onStart,
-    required this.onEnd,
-    required this.onCopyToAll,
-  });
-
-  final int weekday;
-  final WorkingWindow? window;
-  final ValueChanged<bool> onToggle;
-  final VoidCallback onStart;
-  final VoidCallback onEnd;
-  final VoidCallback onCopyToAll;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = context.l10n;
-    final brand = context.brand;
-    final theme = Theme.of(context);
-    // 2024-01-01 was a Monday, matching the backend's 0 = Monday.
-    final dayName = DateFormat.EEEE(
-      l.localeName,
-    ).format(DateTime(2024, 1, 1 + weekday));
-    final w = window;
-    final invalid = w != null && !w.isValid;
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 4, 8, 4),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 96,
-            child: Text(
-              dayName,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: w == null ? brand.inkMuted : null,
-              ),
-            ),
-          ),
-          Expanded(
-            child: w == null
-                ? Text(l.hoursOff, style: TextStyle(color: brand.inkMuted))
-                : Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 4,
-                    children: [
-                      _TimeChip(time: w.start, error: invalid, onTap: onStart),
-                      Text('–', style: TextStyle(color: brand.inkMuted)),
-                      _TimeChip(time: w.end, error: invalid, onTap: onEnd),
-                    ],
-                  ),
-          ),
-          if (w != null)
-            PopupMenuButton<void>(
-              icon: Icon(Icons.more_vert_rounded, color: brand.inkMuted),
-              itemBuilder: (_) => [
-                PopupMenuItem(
-                  onTap: onCopyToAll,
-                  child: Text(l.hoursCopyToAll),
-                ),
-              ],
-            ),
-          Switch(value: w != null, onChanged: onToggle),
-        ],
-      ),
-    );
-  }
-}
-
-class _TimeChip extends StatelessWidget {
-  const _TimeChip({
-    required this.time,
-    required this.onTap,
-    this.error = false,
-  });
-
-  final TimeOfDay time;
-  final VoidCallback onTap;
-  final bool error;
-
-  @override
-  Widget build(BuildContext context) {
-    final brand = context.brand;
-    final color = error ? brand.live : Theme.of(context).colorScheme.primary;
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(10),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.10),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Text(
-          time.format(context),
-          style: TextStyle(color: color, fontWeight: FontWeight.w800),
         ),
       ),
     );

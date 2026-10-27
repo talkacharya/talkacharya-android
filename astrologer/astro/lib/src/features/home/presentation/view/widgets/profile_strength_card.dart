@@ -24,8 +24,8 @@ List<ProfileTip> profileTips(AstroProfile p) => [
   (done: p.skills.length >= 3, route: Routes.profileEdit),
 ];
 
-/// "Profile strength" meter with the outstanding fixes. Removes itself once
-/// every check passes.
+/// "Profile strength" in one row: a ring, how many things are left, and a tap
+/// to the first of them. Removes itself once every check passes.
 class ProfileStrengthCard extends StatelessWidget {
   const ProfileStrengthCard({super.key});
 
@@ -42,40 +42,57 @@ class ProfileStrengthCard extends StatelessWidget {
         if (done == tips.length) return const SizedBox.shrink();
 
         final l = context.l10n;
-        final labels = [
-          l.dashTipHeadline,
-          l.dashTipBio,
-          l.dashTipBanner,
-          l.dashTipRates,
-          l.dashTipLanguages,
-          l.dashTipSkills,
-        ];
         final theme = Theme.of(context);
         final brand = context.brand;
         const hue = AstroPalette.career;
         final ratio = done / tips.length;
+        final left = tips.length - done;
+        final first = tips.firstWhere((t) => !t.done);
 
         return Padding(
           padding: const EdgeInsets.only(bottom: DashGaps.section),
           child: Padding(
             padding: DashGaps.sidePad,
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
+            child: Material(
+              color: theme.colorScheme.surface,
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(Radii.lg),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [hue.tint(0.16), theme.colorScheme.surface],
-                ),
-                border: Border.all(color: hue.tint(0.25)),
+                side: BorderSide(color: brand.hairline),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: () => context.go(first.route),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
+                  child: Row(
                     children: [
-                      const HueIcon(hue: hue, icon: Icons.verified_rounded),
+                      SizedBox.square(
+                        dimension: 34,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            TweenAnimationBuilder<double>(
+                              tween: Tween(end: ratio),
+                              duration: const Duration(milliseconds: 700),
+                              curve: Curves.easeOutCubic,
+                              builder: (_, v, _) => CircularProgressIndicator(
+                                value: v,
+                                strokeWidth: 3,
+                                strokeCap: StrokeCap.round,
+                                color: hue.end,
+                                backgroundColor: hue.tint(0.18),
+                              ),
+                            ),
+                            Text(
+                              '${(ratio * 100).round()}',
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: hue.end,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
@@ -83,12 +100,12 @@ class ProfileStrengthCard extends StatelessWidget {
                           children: [
                             Text(
                               l.dashProfileTitle,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w700,
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                fontWeight: FontWeight.w800,
                               ),
                             ),
                             Text(
-                              l.dashProfileHint,
+                              l.dashProfileLeft(left),
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: brand.inkMuted,
                               ),
@@ -96,55 +113,10 @@ class ProfileStrengthCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Text(
-                        '${(ratio * 100).round()}%',
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          color: hue.end,
-                        ),
-                      ),
+                      Icon(Icons.chevron_right_rounded, color: brand.inkMuted),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(999),
-                    child: TweenAnimationBuilder<double>(
-                      tween: Tween(end: ratio),
-                      duration: const Duration(milliseconds: 700),
-                      curve: Curves.easeOutCubic,
-                      builder: (_, v, _) => LinearProgressIndicator(
-                        value: v,
-                        minHeight: 8,
-                        backgroundColor: hue.tint(0.15),
-                        color: hue.end,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  for (var i = 0; i < tips.length; i++)
-                    if (!tips[i].done)
-                      InkWell(
-                        borderRadius: BorderRadius.circular(10),
-                        onTap: () => context.go(tips[i].route),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.add_circle_outline_rounded,
-                                size: 20,
-                                color: hue.end,
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(child: Text(labels[i])),
-                              Icon(
-                                Icons.chevron_right_rounded,
-                                color: brand.inkMuted,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                ],
+                ),
               ),
             ),
           ),

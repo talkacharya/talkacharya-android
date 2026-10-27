@@ -1,3 +1,4 @@
+import 'package:talkacharya_chat/talkacharya_chat.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import '../../data/models/conversation.dart';
 import 'widgets/room_scope.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
-import 'widgets/chat_room_skeleton.dart';
 
 /// One route (`/consultations/:id`) for a thread and whatever session is in it:
 /// a call gets the full-screen call surface while it runs; everything else is
@@ -51,7 +51,7 @@ class _ConsultationRoomPageState extends State<ConsultationRoomPage> {
       future: _thread,
       builder: (context, snap) {
         if (snap.connectionState != ConnectionState.done) {
-          return const Scaffold(body: Center(child: ChatRoomSkeleton()));
+          return const ChatSkeleton.page();
         }
         final thread = snap.data;
         if (thread == null) {

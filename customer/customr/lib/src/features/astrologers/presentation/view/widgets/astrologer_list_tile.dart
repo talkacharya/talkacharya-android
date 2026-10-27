@@ -9,12 +9,14 @@ import '../../../../../core/util/money.dart';
 import '../../../../follows/presentation/widgets/follow_widgets.dart';
 import '../../../data/models/astrologer.dart';
 import '../../channel_availability.dart';
+import '../../next_online_label.dart';
 import '../astrologer_detail_page.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
 /// Discovery row: rounded-rect photo with a bottom scrim carrying rating and
-/// price, name + follow heart on the right. The whole card opens the profile.
+/// price, name + follow heart on the right, and under the heart a button that
+/// starts the consultation. The rest of the card opens the profile.
 class AstrologerListTile extends StatelessWidget {
   const AstrologerListTile({required this.astrologer, this.channel, super.key});
 
@@ -37,11 +39,17 @@ class AstrologerListTile extends StatelessWidget {
     // Online, but not taking the kind of consultation this list is for.
     final wanted = channel ?? 'chat';
     final closedLine = available ? channelClosedLine(context, a, wanted) : null;
+    // The button's channel: the one this list is for, else the first being
+    // taken, else chat — tapping a closed one says why and when it is back.
+    final lead = channel ?? a.openChannels.firstOrNull ?? 'chat';
+    // Full names — "English, Hindi" — not codes.
     final langs = a.languages
-        .take(3)
         .map(
-          (lang) => (lang.code.isEmpty ? lang.name : lang.code).toUpperCase(),
+          (lang) => lang.name.isNotEmpty
+              ? lang.name
+              : kLanguageEnglishNames[lang.code] ?? lang.code.toUpperCase(),
         )
+        .where((name) => name.isNotEmpty)
         .join(', ');
     final muted = theme.textTheme.labelMedium?.copyWith(color: brand.inkMuted);
 
@@ -183,7 +191,7 @@ class AstrologerListTile extends StatelessWidget {
                                 Text(
                                   [
                                     if (a.yearsExperience > 0)
-                                      '${a.yearsExperience} yrs',
+                                      l.astroExpLine(a.yearsExperience),
                                     if (langs.isNotEmpty) langs,
                                   ].join('  ·  '),
                                   maxLines: 1,
@@ -191,6 +199,11 @@ class AstrologerListTile extends StatelessWidget {
                                   style: muted,
                                 ),
                             ],
+                          ),
+                          const SizedBox(height: 8),
+                          Align(
+                            alignment: AlignmentDirectional.centerEnd,
+                            child: _ConsultButton(astrologer: a, channel: lead),
                           ),
                         ],
                       ),
@@ -206,8 +219,73 @@ class AstrologerListTile extends StatelessWidget {
   }
 }
 
-/// Rounded-rect photo (or tinted initial fallback) with a bottom gradient mask
-/// that carries the rating and price, plus the online dot at top-left.
+/// The row's way in: "Chat" / "Call" in the channel's colour when it can start
+/// now, "Join waitlist" while they are with someone, and quiet — with the time
+/// it is back, when there is one — when it cannot. Every tap goes through the
+/// profile's own [startConsultation], which books, queues or says why not.
+class _ConsultButton extends StatelessWidget {
+  const _ConsultButton({required this.astrologer, required this.channel});
+
+  final Astrologer astrologer;
+  final String channel;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    final a = astrologer;
+    final hue = channelHue(channel);
+    final open = a.isAvailable && a.takes(channel);
+    final queue = open && a.isBusy;
+    final back = a.nextOnlineFor(channel);
+    final live = open && !queue;
+    final fg = live ? Colors.white : hue.end;
+    final icon = queue
+        ? Icons.hourglass_top_rounded
+        : back != null
+        ? Icons.schedule_rounded
+        : channelIcon(channel);
+    final label = queue
+        ? waitLine(context, a) ?? l.waitlistJoin
+        : back != null
+        ? nextOnlineWhen(context, back)
+        : channelVerb(l, channel);
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(12),
+      clipBehavior: Clip.antiAlias,
+      child: Ink(
+        decoration: BoxDecoration(
+          gradient: live ? hue.linear() : null,
+          color: live ? null : hue.tint(0.1),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: InkWell(
+          onTap: () => startConsultation(context, a, channel),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 16, color: fg),
+                const SizedBox(width: 6),
+                Text(
+                  label,
+                  maxLines: 1,
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: fg,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// Rounded-rect photo (or tinted initial fallback) with a bottom gradient mask
 /// carrying rating and price on a single row, plus the online dot at top-left.
 class _PhotoBox extends StatelessWidget {

@@ -15,9 +15,8 @@ import 'widgets/decline_reason_sheet.dart';
 import 'widgets/request_card.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
-import '../../../../shared/widgets/cosmic_header.dart';
 
-/// Requests tab: Incoming / Active / History behind gold pill tabs. Backed by
+/// Requests tab: Incoming / Active / History under a plain app bar. Backed by
 /// the app-level [RequestsCubit] (which also feeds the nav badge).
 class RequestsPage extends StatefulWidget {
   const RequestsPage({super.key});
@@ -45,6 +44,7 @@ class _RequestsPageState extends State<RequestsPage>
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
+    final theme = Theme.of(context);
     final brand = context.brand;
     return BlocConsumer<RequestsCubit, RequestsState>(
       listenWhen: (a, b) => b.error != null && a.error != b.error,
@@ -64,43 +64,84 @@ class _RequestsPageState extends State<RequestsPage>
       builder: (context, state) {
         final cubit = context.read<RequestsCubit>();
         return Scaffold(
-          body: Column(
-            children: [
-              CosmicTabHeader(
-                title: l.navRequests,
-                subtitle: l.requestsSubtitle,
-                actions: [NotificationBell(color: brand.onCosmic)],
-                bottom: PillTabBar(
-                  controller: _tabs,
-                  labels: [
-                    l.requestsTabIncoming,
-                    l.requestsTabActive,
-                    l.requestsTabHistory,
-                  ],
-                  counts: [state.incoming.length, state.active.length, 0],
-                ),
+          appBar: AppBar(
+            title: Text(
+              l.navRequests,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w800,
               ),
-              Expanded(
-                child: state.loading
-                    ? const Center(child: CircularProgressIndicator())
-                    : (state.isEmpty && state.error != null)
-                    ? ErrorView(
-                        message: l.requestsLoadError,
-                        onRetry: cubit.load,
-                      )
-                    : TabBarView(
-                        controller: _tabs,
-                        children: [
-                          _IncomingTab(state: state),
-                          _ActiveTab(items: state.active),
-                          _HistoryTab(items: state.history),
-                        ],
-                      ),
-              ),
+            ),
+            centerTitle: false,
+            actions: [
+              NotificationBell(color: theme.colorScheme.onSurface),
+              const SizedBox(width: 4),
             ],
+            bottom: TabBar(
+              controller: _tabs,
+              labelStyle: const TextStyle(fontWeight: FontWeight.w800),
+              unselectedLabelColor: brand.inkMuted,
+              dividerColor: brand.hairline,
+              tabs: [
+                _CountTab(l.requestsTabIncoming, state.incoming.length),
+                _CountTab(l.requestsTabActive, state.active.length),
+                Tab(text: l.requestsTabHistory),
+              ],
+            ),
           ),
+          body: state.loading
+              ? const Center(child: CircularProgressIndicator())
+              : (state.isEmpty && state.error != null)
+              ? ErrorView(message: l.requestsLoadError, onRetry: cubit.load)
+              : TabBarView(
+                  controller: _tabs,
+                  children: [
+                    _IncomingTab(state: state),
+                    _ActiveTab(items: state.active),
+                    _HistoryTab(items: state.history),
+                  ],
+                ),
         );
       },
+    );
+  }
+}
+
+/// A tab label with a small count bubble when there is something in it.
+class _CountTab extends StatelessWidget {
+  const _CountTab(this.label, this.count);
+
+  final String label;
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Tab(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(child: Text(label, overflow: TextOverflow.ellipsis)),
+          if (count > 0) ...[
+            const SizedBox(width: 6),
+            Container(
+              constraints: const BoxConstraints(minWidth: 18),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary,
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                '$count',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }
@@ -119,7 +160,7 @@ class _RefreshableList extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, box) => ListView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
+          padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),
           children: children.isEmpty && empty != null
               ? [SizedBox(height: box.maxHeight - 40, child: empty)]
               : children,
@@ -182,7 +223,7 @@ class _IncomingTab extends StatelessWidget {
       children: [
         for (var i = 0; i < state.incoming.length; i++)
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
             child: FadeSlideIn(
               key: ValueKey(state.incoming[i].id),
               delay: Duration(milliseconds: 50 * i),
@@ -293,7 +334,7 @@ class _DayHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 4, 24, 8),
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 6),
       child: Text(
         label.toUpperCase(),
         style: Theme.of(context).textTheme.labelSmall?.copyWith(

@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+// import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../config/flavor.dart';
 import '../storage/token_storage.dart';
@@ -47,16 +47,16 @@ class DioClientFactory {
       ),
     );
     dio.interceptors.add(const LanguageInterceptor());
-    if (!_config.isProd) {
-      dio.interceptors.add(
-        PrettyDioLogger(
-          requestHeader: true,
-          requestBody: true,
-          responseBody: true,
-          compact: true,
-        ),
-      );
-    }
+    // if (!_config.isProd) {
+    //   dio.interceptors.add(
+    //     PrettyDioLogger(
+    //       requestHeader: true,
+    //       requestBody: true,
+    //       responseBody: true,
+    //       compact: true,
+    //     ),
+    //   );
+    // }
     return dio;
   }
 }
