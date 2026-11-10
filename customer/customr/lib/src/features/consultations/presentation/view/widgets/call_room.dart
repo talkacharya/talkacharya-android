@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class CallRoom extends StatefulWidget {
   State<CallRoom> createState() => _CallRoomState();
 }
 
-class _CallRoomState extends State<CallRoom> {
+class _CallRoomState extends State<CallRoom> with WidgetsBindingObserver {
   late final CallController _call;
   StreamSubscription<CallState>? _callSub;
   CallPhase? _lastPhase;
@@ -70,6 +71,9 @@ class _CallRoomState extends State<CallRoom> {
     // answering, so stop it immediately — regardless of whether the controller
     // is new or being re-adopted from the hub.
     unawaited(getIt<LocalNotifications>().cancelIncomingCall());
+    // Back from another app with this call's room on screen: the push may
+    // have started the tray ringing meanwhile; the room is the answer to it.
+    WidgetsBinding.instance.addObserver(this);
     final cubit = context.read<ChatCubit>();
     final running = _hub.isFor(_id) ? _hub.controller : null;
     if (running != null) {
@@ -154,8 +158,21 @@ class _CallRoomState extends State<CallRoom> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      unawaited(getIt<LocalNotifications>().cancelIncomingCall());
+    }
+  }
+
+  @override
   void didUpdateWidget(covariant CallRoom old) {
     super.didUpdateWidget(old);
+    // Answered while the customer was on this screen: whatever the tray may
+    // be ringing for it is already happening here.
+    if (old.consultation.status != widget.consultation.status &&
+        widget.consultation.status == ConsultationStatus.accepted) {
+      unawaited(getIt<LocalNotifications>().cancelIncomingCall());
+    }
     if (widget.consultation.status.isTerminal) {
       if (_hub.isFor(_id)) unawaited(_hub.release());
     } else {
@@ -167,11 +184,17 @@ class _CallRoomState extends State<CallRoom> {
     final s = widget.consultation.status;
     final joinable =
         s == ConsultationStatus.accepted || s == ConsultationStatus.active;
-    if (joinable && _call.state.phase == CallPhase.idle) _call.start();
+    if (joinable && _call.state.phase == CallPhase.idle) {
+      if (kDebugMode) {
+        debugPrint('ROOM ${DateTime.now().toIso8601String()} call start ($s)');
+      }
+      _call.start();
+    }
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     unawaited(_callSub?.cancel());
     _hub.roomClosed(_id);
     // Made here but never handed to the hub (the room went away before its first

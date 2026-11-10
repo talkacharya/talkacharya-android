@@ -63,6 +63,32 @@ class StoreRepository {
 
   Future<StoreCollection> collection(String slug) => _api.collection(slug);
 
+  Future<List<StoreCollection>> collectionsForMe({String? profileId}) =>
+      _api.collectionsForMe(profileId: profileId);
+
+  static const _keysTtl = Duration(minutes: 10);
+  Map<String, CollectionLink>? _keys;
+  DateTime? _keysAt;
+  Future<Map<String, CollectionLink>>? _keysLoading;
+
+  /// The kundali's links, fetched once for a few minutes however many cards
+  /// ask at the same time.
+  Future<Map<String, CollectionLink>> collectionKeys() {
+    final cached = _keys;
+    final at = _keysAt;
+    if (cached != null && at != null && _clock().difference(at) < _keysTtl) {
+      return Future.value(cached);
+    }
+    return _keysLoading ??= _api
+        .collectionKeys()
+        .then((keys) {
+          _keys = keys;
+          _keysAt = _clock();
+          return keys;
+        })
+        .whenComplete(() => _keysLoading = null);
+  }
+
   // --- cart ------------------------------------------------------------------------
 
   Future<Cart> cart() => _api.cart();

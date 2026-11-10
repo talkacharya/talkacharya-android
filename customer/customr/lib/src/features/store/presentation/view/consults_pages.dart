@@ -50,7 +50,7 @@ class ConsultsPage extends StatelessWidget {
               title: l.storeAdviceEmptyTitle,
               message: l.storeAdviceEmptyBody,
               action: FilledButton.tonal(
-                onPressed: () => context.push(Routes.store),
+                onPressed: () => context.go(Routes.store),
                 child: Text(l.storeExplore),
               ),
             );

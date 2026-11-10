@@ -163,6 +163,24 @@ class _ModeTile extends StatelessWidget {
   }
 }
 
+final _letter = RegExp(r'\p{L}', unicode: true);
+
+/// "Er. Rock" → "ER", "Asha" → "A": the caller's initials — all the audience
+/// sees of who is on a public call.
+String callerInitials(String name) {
+  final out = <String>[];
+  for (final word in name.trim().split(RegExp(r'\s+'))) {
+    for (final c in word.characters) {
+      if (_letter.hasMatch(c)) {
+        out.add(c.toUpperCase());
+        break;
+      }
+    }
+    if (out.length == 2) break;
+  }
+  return out.join();
+}
+
 /// What every viewer sees while a call is on air: who (public), or that a
 /// private call is on — and how many wait to call.
 class LiveOnAirBanner extends StatelessWidget {
@@ -181,7 +199,7 @@ class LiveOnAirBanner extends StatelessWidget {
         ? l.liveCallWaitingCount(state.callsWaiting)
         : private
         ? l.liveCallBannerPrivate
-        : l.liveCallBannerPublic(onAir.callerName ?? '');
+        : l.liveCallBannerPublic(callerInitials(onAir.callerName ?? ''));
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
       child: Align(

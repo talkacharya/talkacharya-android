@@ -90,21 +90,37 @@ class GiftStrip extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (final gift in gifts)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFB02E).withValues(alpha: 0.85),
-                borderRadius: BorderRadius.circular(999),
+          TweenAnimationBuilder<double>(
+            key: ValueKey(gift.id),
+            tween: Tween(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 260),
+            curve: Curves.easeOutCubic,
+            builder: (_, t, child) => Opacity(
+              opacity: t,
+              child: Transform.translate(
+                offset: Offset(-24 * (1 - t), 0),
+                child: child,
               ),
-              child: Text(
-                '🎁  ${gift.senderName} sent ${gift.quantity > 1 ? '${gift.quantity}× ' : ''}'
-                '${gift.giftName.isEmpty ? 'a gift' : gift.giftName}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFB02E).withValues(alpha: 0.85),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  '🎁  ${gift.senderName} sent ${gift.quantity > 1 ? '${gift.quantity}× ' : ''}'
+                  '${gift.giftName.isEmpty ? 'a gift' : gift.giftName}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 12,
+                  ),
                 ),
               ),
             ),

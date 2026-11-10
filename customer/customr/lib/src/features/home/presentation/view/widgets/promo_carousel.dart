@@ -4,18 +4,21 @@ import 'dart:math' as math;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../data/models/home_promo.dart';
+import '../../../../../core/navigation/links.dart';
 import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
 
-/// Height of every slide, whatever its kind. Fixed so the [PageView] doesn't
-/// jump as slides of different content swipe past.
-const double _railHeight = 156;
+/// Height of every slide, whatever its kind: the admin panel's 1200×500
+/// banners (2.4:1) at the slide's width. Fixed per screen so the [PageView]
+/// doesn't jump as slides swipe past.
+double _railHeight(BuildContext context) =>
+    (MediaQuery.sizeOf(context).width * 0.9 / 2.4).clamp(120.0, 200.0);
 
 /// Auto-advancing promo rail. Renders whatever [PromoSlide] kind the feed sends
 /// — a styled text card, a full-bleed image, an inline video, or a custom
@@ -74,7 +77,7 @@ class _PromoCarouselState extends State<PromoCarousel> {
     return Column(
       children: [
         SizedBox(
-          height: _railHeight,
+          height: _railHeight(context),
           child: PageView.builder(
             controller: _controller,
             itemCount: list.length,
@@ -128,13 +131,20 @@ class _PromoCarouselState extends State<PromoCarousel> {
   }
 }
 
-/// Normalises a promo deeplink (`talkacharya://wallet` → `/wallet`) and routes.
+/// A promo's deeplink (`talkacharya://wallet` or `/wallet`), opened like any
+/// other link.
 void _openPromo(BuildContext context, String? deeplink) {
-  if (deeplink == null || deeplink.isEmpty) return;
-  var loc = deeplink;
-  const scheme = 'talkacharya://';
-  if (loc.startsWith(scheme)) loc = '/${loc.substring(scheme.length)}';
-  context.go(loc);
+  final link = deeplink?.trim() ?? '';
+  final uri = Uri.tryParse(link);
+  // A banner pointing at someone else's web page opens the browser; our own
+  // links (and in-app paths) go through the app's link engine.
+  if (uri != null &&
+      uri.scheme == 'https' &&
+      !uri.host.endsWith('talkacharya.com')) {
+    unawaited(launchUrl(uri, mode: LaunchMode.externalApplication));
+    return;
+  }
+  openLink(link);
 }
 
 /// Dispatches one slide to the widget for its kind.
@@ -236,66 +246,74 @@ class _MediaPromoCard extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             child,
+            // Banners keep their left side plain for this text, so the shade
+            // fades out before the picture on the right.
             if (hasOverlay)
               const DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
-                    colors: [Color(0xCC000000), Color(0x22000000)],
+                    colors: [Color(0x99000000), Color(0x00000000)],
+                    stops: [0, 0.7],
                   ),
                 ),
               ),
             if (hasOverlay)
-              Padding(
-                padding: const EdgeInsets.all(14),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (title?.isNotEmpty ?? false)
-                      Text(
-                        title!,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          height: 1.15,
-                        ),
-                      ),
-                    if (subtitle?.isNotEmpty ?? false) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        subtitle!,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: Colors.white.withValues(alpha: 0.85),
-                        ),
-                      ),
-                    ],
-                    if (cta?.isNotEmpty ?? false) ...[
-                      const SizedBox(height: 12),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                        child: Text(
-                          cta!,
-                          style: theme.textTheme.labelLarge?.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w800,
+              FractionallySizedBox(
+                alignment: Alignment.centerLeft,
+                widthFactor: 0.6,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(14, 10, 4, 10),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (title?.isNotEmpty ?? false)
+                        Text(
+                          title!,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            height: 1.15,
                           ),
                         ),
-                      ),
+                      if (subtitle?.isNotEmpty ?? false) ...[
+                        const SizedBox(height: 3),
+                        Text(
+                          subtitle!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: Colors.white.withValues(alpha: 0.85),
+                          ),
+                        ),
+                      ],
+                      if (cta?.isNotEmpty ?? false) ...[
+                        const SizedBox(height: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          child: Text(
+                            cta!,
+                            style: theme.textTheme.labelLarge?.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
           ],
@@ -441,9 +459,9 @@ class _RichPromoCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: colors.last.withValues(alpha: 0.32),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            color: colors.last.withValues(alpha: 0.18),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
       ),

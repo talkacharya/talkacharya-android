@@ -10,6 +10,7 @@ import 'home_shared.dart';
 import 'package:customr/src/core/l10n/l10n.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Today's panchang. Needs a birth profile (for the location); prompts to add
 /// one when there is none.
 /// Redesigned with warm gradient cards and golden accents.
@@ -196,6 +197,49 @@ class _PanchangSkeleton extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Today's panchang as one quiet line ("☾ Shukla Dashami · Rohini · ☀ 6:12"),
+/// for the horoscope card. Nothing until the panchang has loaded; a tap opens
+/// the full panchang.
+class PanchangLine extends StatelessWidget {
+  const PanchangLine({required this.color, super.key});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.select((HomeCubit c) => c.state.panchang.value);
+    if (p == null || p.isEmpty) return const SizedBox.shrink();
+    final parts = [
+      ?p.tithi,
+      ?p.nakshatra,
+      if (p.sunrise != null) '☀ ${p.sunrise}',
+    ];
+    if (parts.isEmpty) return const SizedBox.shrink();
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: () => context.push(Routes.panchang),
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        child: Row(
+          children: [
+            Icon(Icons.dark_mode_rounded, size: 14, color: color),
+            const SizedBox(width: 6),
+            Expanded(
+              child: Text(
+                parts.join(' · '),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.labelMedium?.copyWith(color: color),
+              ),
+            ),
+          ],
         ),
       ),
     );

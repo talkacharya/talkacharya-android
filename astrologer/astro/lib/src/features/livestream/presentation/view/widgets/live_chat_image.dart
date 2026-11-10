@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import '../../../../../core/config/flavor.dart';
@@ -18,7 +16,13 @@ String resolveMediaUrl(String url) {
   ).toString();
 }
 
-/// A picture sent in the live chat: a rounded thumbnail that opens full-screen.
+/// Opens [url] full-screen, pinch to zoom.
+void openLiveImage(BuildContext context, String url) => Navigator.of(
+  context,
+).push(MaterialPageRoute<void>(builder: (_) => _FullScreenImage(url: url)));
+
+/// A picture in the live chat (older streams carried them; the chat is text
+/// now): a rounded thumbnail that opens full-screen.
 class LiveChatImage extends StatelessWidget {
   const LiveChatImage({required this.url, this.width = 150, super.key});
 
@@ -31,11 +35,7 @@ class LiveChatImage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 4, bottom: 2),
       child: GestureDetector(
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (_) => _FullScreenImage(url: resolved),
-          ),
-        ),
+        onTap: () => openLiveImage(context, resolved),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: Image.network(
@@ -100,54 +100,4 @@ class _FullScreenImage extends StatelessWidget {
       child: InteractiveViewer(maxScale: 5, child: Image.network(url)),
     ),
   );
-}
-
-/// The picked-but-not-yet-sent picture sitting above the composer.
-class LiveChatImagePreview extends StatelessWidget {
-  const LiveChatImagePreview({
-    required this.path,
-    required this.onRemove,
-    super.key,
-  });
-
-  final String path;
-  final VoidCallback onRemove;
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 6),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.file(
-                File(path),
-                width: 64,
-                height: 64,
-                fit: BoxFit.cover,
-              ),
-            ),
-            Positioned(
-              top: -8,
-              right: -8,
-              child: IconButton(
-                iconSize: 18,
-                visualDensity: VisualDensity.compact,
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.black54,
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: onRemove,
-                icon: const Icon(Icons.close_rounded),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

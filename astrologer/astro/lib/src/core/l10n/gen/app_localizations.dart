@@ -9217,6 +9217,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 thing left to add} other{{count} things left to add}}'**
   String dashProfileLeft(int count);
+
+  /// No description provided for @liveCallPhotosTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos · only you and {name} see them'**
+  String liveCallPhotosTitle(String name);
+
+  /// No description provided for @liveCallPhotoCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get liveCallPhotoCamera;
+
+  /// No description provided for @liveCallPhotoGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get liveCallPhotoGallery;
+
+  /// No description provided for @linkUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This link is no longer available'**
+  String get linkUnavailable;
+
+  /// No description provided for @remedySourceStore.
+  ///
+  /// In en, this message translates to:
+  /// **'From our store'**
+  String get remedySourceStore;
+
+  /// No description provided for @remedySourceMine.
+  ///
+  /// In en, this message translates to:
+  /// **'My listings'**
+  String get remedySourceMine;
+
+  /// No description provided for @remedyNewListing.
+  ///
+  /// In en, this message translates to:
+  /// **'New listing'**
+  String get remedyNewListing;
+
+  /// No description provided for @remedyEditForClient.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit for this client'**
+  String get remedyEditForClient;
+
+  /// No description provided for @remedyPickCustomerFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the client first'**
+  String get remedyPickCustomerFirst;
+
+  /// No description provided for @remedyAfterApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Your client gets this once our team approves it.'**
+  String get remedyAfterApproval;
+
+  /// No description provided for @remedyQueued.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved — it goes to your client once approved'**
+  String get remedyQueued;
+
+  /// No description provided for @remedyStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting approval'**
+  String get remedyStatusPending;
+
+  /// No description provided for @remedyForClient.
+  ///
+  /// In en, this message translates to:
+  /// **'For {name}'**
+  String remedyForClient(String name);
+
+  /// No description provided for @remedySetUpStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up your store to suggest your own remedies.'**
+  String get remedySetUpStore;
+
+  /// No description provided for @remedyStoreSetUpAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up store'**
+  String get remedyStoreSetUpAction;
+
+  /// No description provided for @remedyNoListings.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no listings yet.'**
+  String get remedyNoListings;
 }
 
 class _AppLocalizationsDelegate

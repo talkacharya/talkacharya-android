@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:talkacharya_call/talkacharya_call.dart';
 import 'dart:async';
 
@@ -137,8 +138,13 @@ class RequestsCubit extends Cubit<RequestsState> {
   Future<Consultation?> accept(String id) async {
     _handledHere.add(id);
     _setBusy(id, true);
+    if (kDebugMode)
+      debugPrint('ACCEPT ${DateTime.now().toIso8601String()} sent');
     try {
       final c = await _repo.api.accept(id);
+      if (kDebugMode) {
+        debugPrint('ACCEPT ${DateTime.now().toIso8601String()} answered');
+      }
       // If Android was told this request is ringing, the ring becomes the
       // call — the room adopts it instead of placing a second one.
       unawaited(CallTelecom.answerIncoming(id));

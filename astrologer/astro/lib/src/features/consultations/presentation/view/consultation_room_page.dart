@@ -21,6 +21,7 @@ import '../../../../core/sounds/app_sound_adapters.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../auth/presentation/bloc/auth/auth_bloc.dart';
 import '../widgets/astro_thread_card.dart';
+import '../../data/accepted_calls.dart';
 import '../../data/call_adapters.dart';
 import '../../data/chat_adapters.dart';
 import '../../data/consultation_api.dart';
@@ -59,6 +60,14 @@ class _ConsultationRoomPageState extends State<ConsultationRoomPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Just accepted: the answer named the thread, so open it without asking.
+    final acceptedThread = AcceptedCalls.threadFor(widget.consultationId);
+    if (acceptedThread != null) {
+      return _RoomScope(
+        threadId: acceptedThread,
+        accepted: AcceptedCalls.consultationFor(widget.consultationId),
+      );
+    }
     return FutureBuilder<Conversation>(
       future: _thread,
       builder: (context, snap) {
@@ -84,9 +93,12 @@ class _ConsultationRoomPageState extends State<ConsultationRoomPage> {
 /// Everything below is keyed on the thread: the chat engine, its realtime
 /// channel and the outbox all outlive the session running inside it.
 class _RoomScope extends StatelessWidget {
-  const _RoomScope({required this.threadId});
+  const _RoomScope({required this.threadId, this.accepted});
 
   final String threadId;
+
+  /// The session as Accept answered (see [AcceptedCalls]).
+  final Consultation? accepted;
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +111,7 @@ class _RoomScope extends StatelessWidget {
             realtime: getIt<RealtimeClient>(),
             threadId: threadId,
             snapshots: RoomSnapshots(getIt()),
+            accepted: accepted,
           )..init(),
         ),
         BlocProvider(

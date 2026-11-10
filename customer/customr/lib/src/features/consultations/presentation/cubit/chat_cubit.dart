@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
@@ -202,6 +203,9 @@ class ChatCubit extends Cubit<ChatState> {
 
   void _onFrame(Map<String, dynamic> frame) {
     final type = frame['type'] as String? ?? '';
+    if (kDebugMode) {
+      debugPrint('ROOM ${DateTime.now().toIso8601String()} frame $type');
+    }
     final data = (frame['data'] as Map?)?.cast<String, dynamic>() ?? const {};
     switch (type) {
       case 'billing.tick':
@@ -301,13 +305,26 @@ class ChatCubit extends Cubit<ChatState> {
   /// Re-read the consultation (e.g. after the call ended on the other side).
   Future<void> refresh() => _refreshDetail();
 
+  /// The server refused a message because the thread is closed: whatever this
+  /// room believed about its window was out of date, so read it again.
+  void threadClosed() {
+    if (!isClosed) unawaited(_reloadThread());
+  }
+
   /// Re-read the thread (its window may have moved from live to follow-up to
   /// closed) and whatever session is in it.
   Future<void> _refreshThread() async {
     try {
-      final conversation = await _repo.conversation(consultationId);
+      // Fresh from the server, never the cached copy: a refresh happens
+      // because something just changed (a session started, ended, was
+      // answered). The repository's cached read returns the old copy and
+      // updates only its cache, so the room redrew the thread as it was —
+      // the composer stayed off after a chat started, and a call waited for
+      // the next refresh to start.
+      final conversation = await _repo.freshConversation(consultationId);
+      if (isClosed) return;
       emit(state.copyWith(conversation: conversation));
-      await _loadLiveConsultation(conversation);
+      await _loadLiveConsultation(conversation, fresh: true);
       // Nothing left to poll for once the thread stops taking messages and
       // nothing is waiting to be answered; a new consultation re-opens the room
       // through its own realtime frame.
@@ -410,9 +427,10 @@ class ChatCubit extends Cubit<ChatState> {
 
   Future<void> _reloadThread() async {
     try {
-      final fresh = await _repo.conversation(consultationId);
+      final fresh = await _repo.freshConversation(consultationId);
+      if (isClosed) return;
       emit(state.copyWith(conversation: fresh));
-      await _loadLiveConsultation(fresh);
+      await _loadLiveConsultation(fresh, fresh: true);
     } catch (_) {
       // The room is still readable on what it already has.
     }

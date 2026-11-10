@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/deeplink/deep_link_parser.dart';
+import '../../../../core/navigation/links.dart';
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Renders an article's markdown on the app's own type scale and colours.
 ///
 /// Parsed with `package:markdown` (GitHub-flavoured) and mapped to plain
@@ -75,7 +76,7 @@ class _MarkdownViewState extends State<MarkdownView> {
         uri != null &&
         (uri.scheme == 'talkacharya' || uri.host.endsWith('talkacharya.com'));
     if (inApp != null && ours) {
-      if (mounted) await context.push(inApp);
+      openLink(href);
       return;
     }
     if (uri != null) {

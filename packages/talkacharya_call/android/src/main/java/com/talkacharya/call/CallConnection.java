@@ -53,8 +53,14 @@ public class CallConnection extends Connection {
     @Override
     public void onDisconnect() {
         if (CallTelecom.ringing == this) {
-            // Hung up before it was ever answered: a decline, not a dropped call.
-            onReject();
+            // Not a decline. A person declining goes through onReject (the
+            // app's button, a headset, a watch); a disconnect while ringing is
+            // the system — Android ends a self-managed call left ringing for a
+            // minute (STATE_TIMEOUT). Turning that into "declined" threw away
+            // requests the astrologer still had time to answer. Let Android's
+            // call go and leave the request to its own expiry.
+            CallTelecom.ringing = null;
+            finish(DisconnectCause.MISSED);
             return;
         }
         // The headset's hang-up button, or Telecom making room for a cellular

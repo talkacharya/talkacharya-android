@@ -141,6 +141,21 @@ class MyStoreApi {
     ),
   );
 
+  /// A draft copy of listing [id] that only the client of [consultationId]
+  /// sees — to change it for them before suggesting it. Asking again returns
+  /// the copy already open.
+  Future<MyListing> copyForClient(
+    String id, {
+    required String consultationId,
+  }) async => MyListing.fromJson(
+    _map(
+      (await _dio.post<dynamic>(
+        ApiPaths.astroListingCopyForClient(id),
+        data: {'consultation_id': consultationId},
+      )).ensureOk().data,
+    ),
+  );
+
   Future<MyListing> withdraw(String id) async => MyListing.fromJson(
     _map(
       (await _dio.post<dynamic>(

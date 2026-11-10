@@ -319,7 +319,7 @@ class _Sounds implements CallSounds {
 
 void main() {
   test(
-    'sounds: caller rings back until connected, then connect + end tones',
+    'sounds: caller rings back until answered, then connect + end tones',
     () async {
       final hub = _Hub();
       final custSounds = _Sounds();
@@ -329,10 +329,12 @@ void main() {
 
       // ringback starts as soon as the room exists (still waiting for accept)
       expect(custSounds.played, ['ring']);
+      // The call starts because it was answered: the ringback stops there,
+      // not when the audio arrives — connecting is not ringing.
       await cust.c.start();
       await astro.c.start();
       await _settle();
-      expect(custSounds.played, ['ring']); // no gap through joining/connecting
+      expect(custSounds.played, ['ring', 'stop']);
 
       cust.engine.last.ice.add(RtcIceState.connected);
       astro.engine.last.ice.add(RtcIceState.connected);

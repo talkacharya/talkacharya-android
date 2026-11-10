@@ -110,6 +110,42 @@ class LivestreamApi {
     }
   }
 
+  /// `GET .../calls/{request}/photos` — photos shared on this viewer's call.
+  Future<List<LiveCallPhoto>> callPhotos(String id, String requestId) async {
+    try {
+      final res = await _dio.get<dynamic>(
+        '${ApiPaths.livestream(id)}/calls/$requestId/photos',
+      );
+      final data = res.data;
+      return [
+        if (data is List)
+          for (final e in data)
+            LiveCallPhoto.fromJson((e as Map).cast<String, dynamic>()),
+      ];
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// `POST .../calls/{request}/photos` — share a photo with the host.
+  Future<LiveCallPhoto> sendCallPhoto(
+    String id,
+    String requestId,
+    String imagePath,
+  ) async {
+    try {
+      final res = await _dio.post<Map<String, dynamic>>(
+        '${ApiPaths.livestream(id)}/calls/$requestId/photos',
+        data: FormData.fromMap({
+          'image': await MultipartFile.fromFile(imagePath),
+        }),
+      );
+      return LiveCallPhoto.fromJson(res.data ?? const {});
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
   Future<void> leave(String id) async {
     try {
       await _dio.post<void>('${ApiPaths.livestream(id)}/leave');
@@ -143,20 +179,12 @@ class LivestreamApi {
     }
   }
 
-  /// Sends a chat line: text, a picture, or both. A picture goes as multipart.
-  Future<void> sendChat(String id, String text, {String? imagePath}) async {
+  /// Sends a chat line — text only; pictures go on a call ([sendCallPhoto]).
+  Future<void> sendChat(String id, String text) async {
     try {
-      final path = '${ApiPaths.livestream(id)}/chat';
-      if (imagePath == null || imagePath.isEmpty) {
-        await _dio.post<Map<String, dynamic>>(path, data: {'text': text});
-        return;
-      }
       await _dio.post<Map<String, dynamic>>(
-        path,
-        data: FormData.fromMap({
-          'text': text,
-          'image': await MultipartFile.fromFile(imagePath),
-        }),
+        '${ApiPaths.livestream(id)}/chat',
+        data: {'text': text},
       );
     } on DioException catch (e) {
       throw _translate(e);

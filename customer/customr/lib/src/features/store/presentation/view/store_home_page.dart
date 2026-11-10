@@ -133,7 +133,12 @@ class _StoreHeader extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      BackButton(color: brand.onCosmic),
+                      // A tab root has nothing behind it; the arrow shows
+                      // only when the store was pushed over another page.
+                      if (Navigator.of(context).canPop())
+                        BackButton(color: brand.onCosmic)
+                      else
+                        const SizedBox(width: 14),
                       Expanded(
                         child: Text(
                           l.storeTitle,
@@ -902,6 +907,50 @@ class _CollectionBanner extends StatelessWidget {
                     ),
                   ),
                 ),
+                // Why this one is near the top for them.
+                if (c.reason.isNotEmpty)
+                  Positioned(
+                    top: 10,
+                    left: 10,
+                    right: 10,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.4),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (c.personal) ...[
+                              const Icon(
+                                Icons.auto_awesome_rounded,
+                                size: 12,
+                                color: Color(0xFFFFD27A),
+                              ),
+                              const SizedBox(width: 4),
+                            ],
+                            Flexible(
+                              child: Text(
+                                c.reason,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 Padding(
                   padding: const EdgeInsets.all(12),
                   child: Column(

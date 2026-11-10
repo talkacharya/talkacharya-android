@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../../core/deeplink/deep_link_parser.dart';
+import '../../../../core/navigation/links.dart';
 import '../../../../core/l10n/l10n.dart';
-import '../../../../core/router/routes.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/util/time_format.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
@@ -12,6 +10,7 @@ import '../../data/models/app_notification.dart';
 import '../bloc/notifications_cubit.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Icon + hue for a notification, inferred from where it links to (the inbox
 /// payload carries no type).
 ({IconData icon, AstroHue hue}) notificationStyle(String deeplink) {
@@ -69,10 +68,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   void _open(AppNotification n) {
     context.read<NotificationsCubit>().markRead(n.id);
-    final loc = locationForRaw(n.deeplink);
-    if (loc == null) return;
     // Tab roots switch tabs; anything deeper stacks on top of the inbox.
-    Routes.branchRoots.contains(loc) ? context.go(loc) : context.push(loc);
+    openLink(n.deeplink);
   }
 
   @override

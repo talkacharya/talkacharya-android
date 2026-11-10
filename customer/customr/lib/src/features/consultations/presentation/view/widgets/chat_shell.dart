@@ -163,8 +163,13 @@ class _ChatShellState extends State<ChatShell> {
     final active = c.status == ConsultationStatus.active;
     // The thread decides whether the composer is live, not the session: it
     // stays open, unbilled, through the free follow-up window after one ends.
-    final window = context.select((ChatCubit cubit) => cubit.state.window);
-    final canChat = window.canSend;
+    // A stale "live" copy of the window counts as closed for the card too.
+    final window = context.select(
+      (ChatCubit cubit) => cubit.state.windowIsStale
+          ? const SendingWindow()
+          : cubit.state.window,
+    );
+    final canChat = context.select((ChatCubit cubit) => cubit.state.canSend);
     final awaitingPaymentUntil = context.select(
       (ChatCubit cubit) => cubit.state.awaitingPaymentUntil,
     );

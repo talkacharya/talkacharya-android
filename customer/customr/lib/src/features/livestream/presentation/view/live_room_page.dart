@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -19,6 +18,7 @@ import '../../data/live_adapters.dart';
 import '../../data/livestream_api.dart';
 import '../../data/models/live_stream_summary.dart';
 import 'widgets/live_call_widgets.dart';
+import 'widgets/call_photo_strip.dart';
 import 'widgets/live_chat_image.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
@@ -250,6 +250,14 @@ class _WatchingOverlay extends StatelessWidget {
             child: _GiftBanners(gifts: state.gifts),
           ),
         _ChatFeed(messages: state.messages),
+        // On air with the astrologer: photos only the two of them see.
+        if (state.onAirMyself)
+          CallPhotoStrip(
+            photos: state.callPhotos,
+            sending: state.sendingPhoto,
+            peerName: hostName,
+            onSend: context.read<LiveViewerCubit>().sendCallPhoto,
+          ),
         LiveMyCallBar(state: state, cubit: context.read<LiveViewerCubit>()),
         _Composer(state: state, stream: stream, hostName: hostName),
       ],
@@ -273,11 +281,12 @@ class _Header extends StatelessWidget {
     final l = context.l10n;
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
+      // A light shade so the white text reads, not a dark band over the video.
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0xCC000000), Color(0x00000000)],
+          colors: [Color(0x59000000), Color(0x00000000)],
         ),
       ),
       child: Row(
@@ -456,36 +465,39 @@ class _GiftBanners extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (final gift in gifts)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(8, 6, 14, 6),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    const Color(0xFFFFB02E).withValues(alpha: 0.9),
-                    const Color(0xFFF07B16).withValues(alpha: 0.7),
+          _SlideIn(
+            key: ValueKey(gift.id),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(8, 6, 14, 6),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFFFFB02E).withValues(alpha: 0.9),
+                      const Color(0xFFF07B16).withValues(alpha: 0.7),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GiftArt(slug: gift.giftSlug, size: 30),
+                    const SizedBox(width: 10),
+                    Text(
+                      context.l10n.liveGiftSent(
+                        gift.senderName,
+                        _giftLabel(gift),
+                      ),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12,
+                      ),
+                    ),
                   ],
                 ),
-                borderRadius: BorderRadius.circular(999),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  GiftArt(slug: gift.giftSlug, size: 30),
-                  const SizedBox(width: 10),
-                  Text(
-                    context.l10n.liveGiftSent(
-                      gift.senderName,
-                      _giftLabel(gift),
-                    ),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
               ),
             ),
           ),
@@ -494,7 +506,30 @@ class _GiftBanners extends StatelessWidget {
   }
 }
 
-/// Say something, or send a gift.
+/// A gift banner comes in from the left; the cubit takes each away after a
+/// couple of seconds, oldest first.
+class _SlideIn extends StatelessWidget {
+  const _SlideIn({required this.child, super.key});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => TweenAnimationBuilder<double>(
+    tween: Tween(begin: 0, end: 1),
+    duration: const Duration(milliseconds: 260),
+    curve: Curves.easeOutCubic,
+    builder: (_, t, child) => Opacity(
+      opacity: t,
+      child: Transform.translate(
+        offset: Offset(-24 * (1 - t), 0),
+        child: child,
+      ),
+    ),
+    child: child,
+  );
+}
+
+/// Say something (text only — everyone reads it), call in, or send a gift.
 class _Composer extends StatefulWidget {
   const _Composer({
     required this.state,
@@ -513,9 +548,6 @@ class _Composer extends StatefulWidget {
 class _ComposerState extends State<_Composer> {
   final _controller = TextEditingController();
 
-  /// Picked but not yet sent.
-  String? _imagePath;
-
   @override
   void dispose() {
     _controller.dispose();
@@ -524,27 +556,9 @@ class _ComposerState extends State<_Composer> {
 
   Future<void> _send() async {
     final text = _controller.text.trim();
-    final image = _imagePath;
-    if (text.isEmpty && image == null) return;
+    if (text.isEmpty) return;
     _controller.clear();
-    setState(() => _imagePath = null);
-    await context.read<LiveViewerCubit>().sendChat(text, imagePath: image);
-  }
-
-  Future<void> _pickImage() async {
-    try {
-      final picked = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 1600,
-        imageQuality: 85,
-      );
-      if (picked != null && mounted) setState(() => _imagePath = picked.path);
-    } on Object {
-      if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(context.l10n.livePhotoFailed)));
-    }
+    await context.read<LiveViewerCubit>().sendChat(text);
   }
 
   /// Public or private: both prices, then a place in the stream's line.
@@ -587,20 +601,8 @@ class _ComposerState extends State<_Composer> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (_imagePath != null)
-            LiveChatImagePreview(
-              path: _imagePath!,
-              onRemove: () => setState(() => _imagePath = null),
-            ),
           Row(
             children: [
-              _CircleButton(
-                icon: Icons.image_rounded,
-                tooltip: l.liveSendPhoto,
-                background: Colors.white.withValues(alpha: 0.18),
-                onTap: state.phase.isOn ? _pickImage : null,
-              ),
-              const SizedBox(width: 8),
               // Ten minutes of watching someone is the strongest buying signal
               // in the product: call them, right here, without leaving.
               _CircleButton(

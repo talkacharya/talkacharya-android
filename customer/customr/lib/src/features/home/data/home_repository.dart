@@ -7,7 +7,6 @@ import '../../astrologers/data/models/astrologer.dart';
 import 'home_api.dart';
 import 'models/home_consultation.dart';
 import 'models/home_feed.dart';
-import 'models/home_promo.dart';
 import 'models/horoscope.dart';
 import 'models/live_stream_card.dart';
 import 'models/panchang.dart';
@@ -102,39 +101,5 @@ class HomeRepository {
       minRecharge: min,
       currency: currency ?? _config.value.minRecharge.currency,
     );
-  }
-
-  /// Static fallback for the promo carousel when `/app/home` is unavailable or
-  /// returns no promos. The rail also accepts [ImagePromo] / [VideoPromo] /
-  /// [WidgetPromo] slides — the feed just isn't sending them yet.
-  List<PromoSlide> promos({String? referralReward}) {
-    return [
-      const RichPromo(
-        id: 'first-free',
-        title: 'Your first call is on us',
-        subtitle: '3 minutes free with any astrologer for new users',
-        cta: 'Claim',
-        deeplink: '/astrologers?channel=voice',
-        tone: PromoTone.night,
-      ),
-      const RichPromo(
-        id: 'recharge-bonus',
-        title: 'Add ₹1000, get ₹120 extra',
-        subtitle: 'Bonus credited instantly to your wallet',
-        cta: 'Recharge',
-        deeplink: '/wallet',
-        tone: PromoTone.saffron,
-      ),
-      RichPromo(
-        id: 'refer',
-        title: referralReward != null
-            ? 'Gift $referralReward, get $referralReward'
-            : 'Refer a friend, both earn',
-        subtitle: 'Share your code — you both get wallet credit',
-        cta: 'Invite',
-        deeplink: '/profile/referrals',
-        tone: PromoTone.calm,
-      ),
-    ];
   }
 }

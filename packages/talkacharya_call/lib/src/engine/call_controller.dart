@@ -303,6 +303,12 @@ class CallController extends Cubit<CallState> {
   /// Ask for the mic, fetch join info, open signaling and start announcing.
   Future<void> start() async {
     if (state.phase.isLive || _closed) return;
+    // A call is only started once it has been answered, so the ringback has
+    // done its job: what follows is connecting, not ringing. Playing it on
+    // until the audio arrived told the caller nobody had picked up, for as
+    // long as the connection took.
+    _silenceRingback();
+    _diagnostics.log('start');
     emit(state.copyWith(phase: CallPhase.preparing, clearError: true));
 
     // The join is a network round-trip and the permission check is local, so
@@ -374,6 +380,7 @@ class CallController extends Cubit<CallState> {
 
     try {
       await _engine.openMedia(video: video);
+      _diagnostics.log('media open');
     } catch (e) {
       emit(state.copyWith(phase: CallPhase.failed, error: 'microphone: $e'));
       return;
@@ -631,6 +638,7 @@ class CallController extends Cubit<CallState> {
   }
 
   Future<void> _onHello(String remoteSid, {required bool broadcast}) async {
+    _diagnostics.log('hello from peer');
     if (_initiator) {
       final newPeer = _peer == null || _remoteSid != remoteSid;
       if (newPeer) {
@@ -667,10 +675,12 @@ class CallController extends Cubit<CallState> {
     try {
       final sdp = await peer.createOffer(iceRestart: iceRestart);
       await _publish({'t': 'offer', 'to': to, 'sdp': sdp});
+      _diagnostics.log('offer sent');
     } catch (_) {}
   }
 
   Future<void> _onOffer(String remoteSid, String sdp) async {
+    _diagnostics.log('offer received');
     if (_peer == null || _remoteSid != remoteSid) {
       await _newPeer(remoteSid);
     }
@@ -678,6 +688,7 @@ class CallController extends Cubit<CallState> {
       final answer = await _peer!.acceptOffer(sdp);
       await _flushCandidates();
       await _publish({'t': 'answer', 'to': remoteSid, 'sdp': answer});
+      _diagnostics.log('answer sent');
       if (state.phase == CallPhase.waitingPeer) {
         emit(state.copyWith(phase: CallPhase.connecting));
       }
@@ -685,6 +696,7 @@ class CallController extends Cubit<CallState> {
   }
 
   Future<void> _onAnswer(String sdp) async {
+    _diagnostics.log('answer received');
     try {
       await _peer?.acceptAnswer(sdp);
       await _flushCandidates();

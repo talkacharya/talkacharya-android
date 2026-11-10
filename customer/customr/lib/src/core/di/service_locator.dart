@@ -74,7 +74,6 @@ import '../notifications/push_device_registrar.dart';
 import '../notifications/push_service.dart';
 import '../realtime/realtime_client.dart';
 import '../realtime/realtime_coordinator.dart';
-import '../router/pending_deep_link.dart';
 import '../storage/token_storage.dart';
 import '../deeplink/pending_referral.dart';
 import 'package:talkacharya_call/talkacharya_call.dart';
@@ -129,7 +128,6 @@ Future<void> configureDependencies(AppConfig config) async {
 
   // --- config / connectivity -------------------------------------------------
   getIt
-    ..registerSingleton<PendingDeepLink>(PendingDeepLink())
     ..registerSingleton<ConnectivityService>(ConnectivityService())
     ..registerSingleton<ActiveProfileStore>(ActiveProfileStore(getIt()))
     ..registerSingleton<ConfigRepository>(

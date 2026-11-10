@@ -19,6 +19,7 @@ abstract class LiveCubitBase extends Cubit<LiveState> {
     required LiveSignaling signaling,
     required bool isHost,
     this.giftsKept = 3,
+    this.giftShownFor = const Duration(seconds: 2),
     this.messagesKept = 200,
   }) : _engine = engine,
        _signaling = signaling,
@@ -27,8 +28,16 @@ abstract class LiveCubitBase extends Cubit<LiveState> {
   final LiveRoomEngine _engine;
   final LiveSignaling _signaling;
 
-  /// How many gift banners stay on screen.
+  /// How many gift banners are on screen at once.
   final int giftsKept;
+
+  /// How long each gift banner stays. They leave one at a time, oldest first,
+  /// so ten gifts sent together are each seen, not swept away together.
+  final Duration giftShownFor;
+
+  /// Gifts still to show, oldest first, while the screen is full.
+  final List<LiveGiftEvent> _giftQueue = [];
+  Timer? _giftTimer;
 
   /// Chat is capped so a long stream cannot grow the list forever.
   final int messagesKept;
@@ -140,19 +149,45 @@ abstract class LiveCubitBase extends Cubit<LiveState> {
           onRemoved();
         }
       case 'gift.received':
-        final gift = LiveGiftEvent.fromJson(data);
-        final gifts = [...state.gifts, gift];
-        emitIfOpen(
-          state.copyWith(
-            gifts: gifts.length > giftsKept
-                ? gifts.sublist(gifts.length - giftsKept)
-                : gifts,
-          ),
-        );
+        addGift(LiveGiftEvent.fromJson(data));
+      case 'live.call.photo':
+        onCallPhoto('${data['request'] ?? ''}');
       case 'stream.ended':
         onStreamEnded();
     }
   }
+
+  /// A gift arrived: on screen if there is room, otherwise in line behind the
+  /// ones showing.
+  void addGift(LiveGiftEvent gift) {
+    if (state.gifts.any((g) => g.id == gift.id) ||
+        _giftQueue.any((g) => g.id == gift.id)) {
+      return;
+    }
+    if (state.gifts.length < giftsKept) {
+      emitIfOpen(state.copyWith(gifts: [...state.gifts, gift]));
+    } else {
+      _giftQueue.add(gift);
+    }
+    _giftTimer ??= Timer.periodic(giftShownFor, (_) => _nextGift());
+  }
+
+  /// The oldest banner leaves; the next waiting gift comes on.
+  void _nextGift() {
+    if (closed) return;
+    final showing = [...state.gifts];
+    if (showing.isNotEmpty) showing.removeAt(0);
+    if (_giftQueue.isNotEmpty) showing.add(_giftQueue.removeAt(0));
+    emitIfOpen(state.copyWith(gifts: showing));
+    if (showing.isEmpty) {
+      _giftTimer?.cancel();
+      _giftTimer = null;
+    }
+  }
+
+  /// A photo was shared on call [requestId]. Only the caller and the host can
+  /// fetch it, so the frame carries no picture — each side checks it is theirs.
+  void onCallPhoto(String requestId) {}
 
   /// The call line moved. A caller and the host look up what it means for them
   /// (their own media never rides this channel, which everyone hears).
@@ -195,6 +230,9 @@ abstract class LiveCubitBase extends Cubit<LiveState> {
   Future<void> finish(LiveEndReason reason) async {
     if (closed) return;
     closed = true;
+    _giftTimer?.cancel();
+    _giftTimer = null;
+    _giftQueue.clear();
     await _frameSub?.cancel();
     await _remoteSub?.cancel();
     await _localSub?.cancel();

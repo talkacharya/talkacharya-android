@@ -11,10 +11,10 @@ class HomeGaps {
   const HomeGaps._();
 
   /// Horizontal inset for section content.
-  static const double side = 20;
+  static const double side = 16;
 
   /// Vertical space between sections.
-  static const double section = 18;
+  static const double section = 16;
 
   static const EdgeInsets sidePad = EdgeInsets.symmetric(horizontal: side);
 }
@@ -29,7 +29,7 @@ class HomeHues {
   static AstroHue forId(String id) => AstroPalette.forId(id);
 }
 
-/// Section title with a gradient accent bar and an optional tinted "See all" pill.
+/// Section title (and an optional muted line) with a quiet "See all ›".
 class SectionHeader extends StatelessWidget {
   const SectionHeader({
     required this.title,
@@ -58,18 +58,6 @@ class SectionHeader extends StatelessWidget {
       padding: HomeGaps.sidePad,
       child: Row(
         children: [
-          Container(
-            width: 4,
-            height: subtitle == null ? 18 : 32,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              gradient: hue.linear(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,8 +67,8 @@ class SectionHeader extends StatelessWidget {
                   title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontSize: 17,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontSize: 16,
                     fontWeight: FontWeight.w700,
                     height: 1.15,
                   ),
@@ -129,15 +117,15 @@ class _SeeAllPill extends StatelessWidget {
       button: true,
       label: label,
       child: Material(
-        color: hue.tint(0.12),
+        color: Colors.transparent,
         shape: const StadiumBorder(),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onTap,
           child: ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: 34, minWidth: 44),
+            constraints: const BoxConstraints(minHeight: 36, minWidth: 44),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 6, 6, 6),
+              padding: const EdgeInsets.fromLTRB(8, 6, 0, 6),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -145,7 +133,7 @@ class _SeeAllPill extends StatelessWidget {
                     label,
                     style: theme.textTheme.labelLarge?.copyWith(
                       color: hue.end,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   Icon(Icons.chevron_right_rounded, size: 18, color: hue.end),

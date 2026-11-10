@@ -165,6 +165,26 @@ class StoreApi {
     (d) => StoreCollection.fromJson(jMap(d)),
   );
 
+  /// Home's "Remedies for you": what [profileId]'s chart calls for, then the
+  /// collections in season, then the team's picks.
+  Future<List<StoreCollection>> collectionsForMe({String? profileId}) => _get(
+    ApiPaths.storeCollectionsForMe,
+    (d) => jList(d, StoreCollection.fromJson),
+    query: {'profile': ?profileId},
+  );
+
+  /// `remedy key → collection` for the kundali's "see the remedies" links.
+  Future<Map<String, CollectionLink>> collectionKeys() => _get(
+    ApiPaths.storeCollectionKeys,
+    (d) => {
+      for (final e in jMap(d).entries)
+        if (e.value is Map)
+          e.key: CollectionLink.fromJson(
+            (e.value as Map).cast<String, dynamic>(),
+          ),
+    },
+  );
+
   // --- cart ----------------------------------------------------------------------
 
   Future<Cart> cart() =>

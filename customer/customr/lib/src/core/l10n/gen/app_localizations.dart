@@ -13891,6 +13891,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{Exp: 1 yr} other{Exp: {count} yrs}}'**
   String astroExpLine(int count);
+
+  /// No description provided for @liveCallPhotosTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos · only you and {name} see them'**
+  String liveCallPhotosTitle(String name);
+
+  /// No description provided for @liveCallPhotoCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get liveCallPhotoCamera;
+
+  /// No description provided for @liveCallPhotoGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get liveCallPhotoGallery;
+
+  /// No description provided for @linkUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This link is no longer available'**
+  String get linkUnavailable;
+
+  /// No description provided for @remediesForYouTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remedies for you'**
+  String get remediesForYouTitle;
+
+  /// No description provided for @remediesForYouSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Picked from your chart and the season'**
+  String get remediesForYouSub;
+
+  /// No description provided for @collectionItems.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 item} other{{count} items}}'**
+  String collectionItems(int count);
+
+  /// No description provided for @remedyLinkFor.
+  ///
+  /// In en, this message translates to:
+  /// **'See remedies · {title}'**
+  String remedyLinkFor(String title);
+
+  /// No description provided for @pressBackAgainToExit.
+  ///
+  /// In en, this message translates to:
+  /// **'Press back again to exit'**
+  String get pressBackAgainToExit;
 }
 
 class _AppLocalizationsDelegate

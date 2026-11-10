@@ -121,18 +121,7 @@ class HomeFloatingCtaBar extends StatelessWidget {
     final l = context.l10n;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-      decoration: BoxDecoration(
-        // color: const Color(0xFF1E1335).withValues(alpha: 0.94),
-        // borderRadius: BorderRadius.circular(22),
-        // border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF0F081D).withValues(alpha: 0.4),
-            blurRadius: 18,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
+      decoration: const BoxDecoration(),
       child: Row(
         children: [
           Expanded(
@@ -210,9 +199,9 @@ class _HeroCta extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: colors.last.withValues(alpha: 0.45),
-              blurRadius: 18,
-              offset: const Offset(0, 6),
+              color: colors.last.withValues(alpha: 0.28),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
             ),
           ],
         ),

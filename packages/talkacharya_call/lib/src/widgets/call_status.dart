@@ -16,8 +16,12 @@ String callStatusText(
   CallStrings strings, {
   DateTime? now,
 }) => switch (s.phase) {
-  CallPhase.idle || CallPhase.preparing || CallPhase.joining => strings.calling,
-  CallPhase.waitingPeer => strings.ringing,
+  // Before the call starts it is still being asked for; once it starts it has
+  // been answered, so everything up to the audio is connecting.
+  CallPhase.idle => strings.calling,
+  CallPhase.preparing ||
+  CallPhase.joining ||
+  CallPhase.waitingPeer ||
   CallPhase.connecting => strings.connecting,
   CallPhase.connected =>
     s.connectedAt == null

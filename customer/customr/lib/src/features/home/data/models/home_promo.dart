@@ -20,7 +20,10 @@ sealed class PromoSlide extends Equatable {
   /// is inferred from whichever media URL is present, else a rich card.
   factory PromoSlide.fromJson(Map<String, dynamic> json, {int index = 0}) {
     final id = '${json['code'] ?? json['id'] ?? 'promo-$index'}';
-    final deeplink = (json['deeplink'] as String?) ?? '/wallet';
+    // A web page wins over an in-app link; neither means the slide only shows.
+    final web = '${json['web_url'] ?? ''}'.trim();
+    final app = '${json['deeplink'] ?? ''}'.trim();
+    final deeplink = web.isNotEmpty ? web : (app.isEmpty ? null : app);
     final title = '${json['title'] ?? ''}'.trim();
     final subtitle = '${json['subtitle'] ?? json['description'] ?? ''}'.trim();
     final cta = '${json['cta'] ?? ''}'.trim();

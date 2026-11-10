@@ -1,4 +1,5 @@
 import '../models/live_call.dart';
+import '../models/live_call_photo.dart';
 import '../models/live_chat_message.dart';
 import '../models/live_join.dart';
 
@@ -19,8 +20,8 @@ abstract class LiveViewerBackend {
   /// `GET .../chat` — the recent messages a late joiner should see.
   Future<List<LiveChatMessage>> chatHistory();
 
-  /// `POST .../chat` — `text`, an `imagePath` (multipart), or both.
-  Future<void> sendChat(String text, {String? imagePath});
+  /// `POST .../chat` — text only; pictures go on a call ([sendCallPhoto]).
+  Future<void> sendChat(String text);
 
   /// `GET .../calls` — prices, the call on air, this viewer's place and, on
   /// their turn, how to come on air.
@@ -34,6 +35,12 @@ abstract class LiveViewerBackend {
 
   /// `POST .../calls/{id}/end` — leave the line, or hang up.
   Future<void> endCall(String requestId);
+
+  /// `GET .../calls/{id}/photos` — photos shared on this caller's call.
+  Future<List<LiveCallPhoto>> callPhotos(String requestId);
+
+  /// `POST .../calls/{id}/photos` — share a photo on the call on air.
+  Future<LiveCallPhoto> sendCallPhoto(String requestId, String imagePath);
 }
 
 abstract class LiveHostBackend {
@@ -44,7 +51,9 @@ abstract class LiveHostBackend {
   Future<void> end();
 
   Future<List<LiveChatMessage>> chatHistory();
-  Future<void> sendChat(String text, {String? imagePath});
+
+  /// Text only; pictures go on a call ([sendCallPhoto]).
+  Future<void> sendChat(String text);
 
   /// `POST .../viewers/remove` — ban + eject someone.
   Future<void> removeViewer(String userId, {String reason});
@@ -63,6 +72,12 @@ abstract class LiveHostBackend {
 
   /// `POST .../calls/{id}/mute` — take a public caller's microphone away / back.
   Future<void> muteCall(String requestId, {required bool muted});
+
+  /// `GET .../calls/{id}/photos` — photos shared on the call on air.
+  Future<List<LiveCallPhoto>> callPhotos(String requestId);
+
+  /// `POST .../calls/{id}/photos` — share a photo with the caller.
+  Future<LiveCallPhoto> sendCallPhoto(String requestId, String imagePath);
 }
 
 /// Realtime transport — the app's Centrifugo client, for chat / viewer counts /

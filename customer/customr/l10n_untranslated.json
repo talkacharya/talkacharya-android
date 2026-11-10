@@ -566,7 +566,16 @@
     "astroLiveJoin",
     "astroWaitTime",
     "storeRecommendedBy",
-    "astroExpLine"
+    "astroExpLine",
+    "liveCallPhotosTitle",
+    "liveCallPhotoCamera",
+    "liveCallPhotoGallery",
+    "linkUnavailable",
+    "remediesForYouTitle",
+    "remediesForYouSub",
+    "collectionItems",
+    "remedyLinkFor",
+    "pressBackAgainToExit"
   ],
 
   "gu": [
@@ -1136,7 +1145,16 @@
     "astroLiveJoin",
     "astroWaitTime",
     "storeRecommendedBy",
-    "astroExpLine"
+    "astroExpLine",
+    "liveCallPhotosTitle",
+    "liveCallPhotoCamera",
+    "liveCallPhotoGallery",
+    "linkUnavailable",
+    "remediesForYouTitle",
+    "remediesForYouSub",
+    "collectionItems",
+    "remedyLinkFor",
+    "pressBackAgainToExit"
   ],
 
   "kn": [
@@ -1706,7 +1724,16 @@
     "astroLiveJoin",
     "astroWaitTime",
     "storeRecommendedBy",
-    "astroExpLine"
+    "astroExpLine",
+    "liveCallPhotosTitle",
+    "liveCallPhotoCamera",
+    "liveCallPhotoGallery",
+    "linkUnavailable",
+    "remediesForYouTitle",
+    "remediesForYouSub",
+    "collectionItems",
+    "remedyLinkFor",
+    "pressBackAgainToExit"
   ],
 
   "mr": [
@@ -2276,7 +2303,16 @@
     "astroLiveJoin",
     "astroWaitTime",
     "storeRecommendedBy",
-    "astroExpLine"
+    "astroExpLine",
+    "liveCallPhotosTitle",
+    "liveCallPhotoCamera",
+    "liveCallPhotoGallery",
+    "linkUnavailable",
+    "remediesForYouTitle",
+    "remediesForYouSub",
+    "collectionItems",
+    "remedyLinkFor",
+    "pressBackAgainToExit"
   ],
 
   "ta": [
@@ -2846,7 +2882,16 @@
     "astroLiveJoin",
     "astroWaitTime",
     "storeRecommendedBy",
-    "astroExpLine"
+    "astroExpLine",
+    "liveCallPhotosTitle",
+    "liveCallPhotoCamera",
+    "liveCallPhotoGallery",
+    "linkUnavailable",
+    "remediesForYouTitle",
+    "remediesForYouSub",
+    "collectionItems",
+    "remedyLinkFor",
+    "pressBackAgainToExit"
   ],
 
   "te": [
@@ -3416,6 +3461,15 @@
     "astroLiveJoin",
     "astroWaitTime",
     "storeRecommendedBy",
-    "astroExpLine"
+    "astroExpLine",
+    "liveCallPhotosTitle",
+    "liveCallPhotoCamera",
+    "liveCallPhotoGallery",
+    "linkUnavailable",
+    "remediesForYouTitle",
+    "remediesForYouSub",
+    "collectionItems",
+    "remedyLinkFor",
+    "pressBackAgainToExit"
   ]
 }

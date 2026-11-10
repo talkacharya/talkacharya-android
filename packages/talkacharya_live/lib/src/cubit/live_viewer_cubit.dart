@@ -4,6 +4,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../engine/live_call_audio.dart';
 import '../models/live_call.dart';
+import '../models/live_call_photo.dart';
 import '../models/live_join.dart';
 import '../models/live_state.dart';
 import '../ports/live_ports.dart';
@@ -145,6 +146,47 @@ class LiveViewerCubit extends LiveCubitBase {
     } catch (_) {}
   }
 
+  // --- photos on the call ------------------------------------------------------
+
+  /// Shares a photo with the host. Only while this viewer's call is on air —
+  /// the stream's chat is text.
+  Future<void> sendCallPhoto(String imagePath) async {
+    final mine = state.myCall;
+    if (mine == null ||
+        mine.status != LiveCallStatus.active ||
+        state.sendingPhoto ||
+        imagePath.isEmpty) {
+      return;
+    }
+    emitIfOpen(state.copyWith(sendingPhoto: true, clearError: true));
+    try {
+      _addPhoto(await _backend.sendCallPhoto(mine.id, imagePath));
+    } catch (e) {
+      emitIfOpen(state.copyWith(error: '$e'));
+    } finally {
+      emitIfOpen(state.copyWith(sendingPhoto: false));
+    }
+  }
+
+  @override
+  void onCallPhoto(String requestId) {
+    final mine = state.myCall;
+    if (mine != null && mine.id == requestId) unawaited(_loadPhotos(mine.id));
+  }
+
+  Future<void> _loadPhotos(String requestId) async {
+    try {
+      final photos = await _backend.callPhotos(requestId);
+      if (closed || state.myCall?.id != requestId) return;
+      emitIfOpen(state.copyWith(callPhotos: photos));
+    } catch (_) {}
+  }
+
+  void _addPhoto(LiveCallPhoto photo) {
+    if (state.callPhotos.any((p) => p.id == photo.id)) return;
+    emitIfOpen(state.copyWith(callPhotos: [...state.callPhotos, photo]));
+  }
+
   /// The screen has asked for the rating of the call that ended.
   void clearEndedCall() => emitIfOpen(state.copyWith(clearEndedCall: true));
 
@@ -204,7 +246,9 @@ class LiveViewerCubit extends LiveCubitBase {
     } else if (!open && _onAir != null) {
       await _goOffAir();
     } else if (open && mine.status == LiveCallStatus.active) {
+      final wasOff = _onAir?.id != mine.id;
       _onAir = mine;
+      if (wasOff) unawaited(_loadPhotos(mine.id));
     }
   }
 
@@ -222,6 +266,7 @@ class LiveViewerCubit extends LiveCubitBase {
       emitIfOpen(state.copyWith(callMicOn: true));
       await _backend.callConnected(mine.id);
       await refreshCalls();
+      unawaited(_loadPhotos(mine.id));
     } catch (e) {
       // Could not get on air: give the turn back rather than hold the line.
       emitIfOpen(state.copyWith(error: '$e'));
@@ -264,6 +309,7 @@ class LiveViewerCubit extends LiveCubitBase {
     emitIfOpen(
       state.copyWith(
         callMicOn: true,
+        callPhotos: const [],
         endedCall: rate && was?.consultationId != null ? was : null,
       ),
     );
@@ -287,16 +333,14 @@ class LiveViewerCubit extends LiveCubitBase {
     } catch (_) {}
   }
 
-  /// Sends a chat line: text, a picture ([imagePath]), or both.
-  Future<void> sendChat(String text, {String? imagePath}) async {
+  /// Sends a chat line. Text only: everyone reads it — pictures go on a call
+  /// ([sendCallPhoto]).
+  Future<void> sendChat(String text) async {
     final body = text.trim();
-    final hasImage = (imagePath ?? '').isNotEmpty;
-    if ((body.isEmpty && !hasImage) || state.sending || !state.phase.isOn) {
-      return;
-    }
+    if (body.isEmpty || state.sending || !state.phase.isOn) return;
     emitIfOpen(state.copyWith(sending: true, clearError: true));
     try {
-      await _backend.sendChat(body, imagePath: imagePath);
+      await _backend.sendChat(body);
     } catch (e) {
       emitIfOpen(state.copyWith(error: '$e'));
     } finally {

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/l10n/l10n.dart';
+import '../../../store/presentation/widgets/remedy_collection_link.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// The nine grahas: where each sits, how strong it is there, and what that
 /// means — the Moon opens by default.
 class PlanetsPage extends StatefulWidget {
@@ -267,6 +269,9 @@ class _PlanetCard extends StatelessWidget {
                 ),
               ),
             ],
+            // A weak planet: its remedies are one tap away.
+            if (tone == KTone.bad || tone == KTone.caution || planet.combust)
+              RemedyCollectionLink(keys: [planet.name], hue: hue),
           ],
         ),
       ),

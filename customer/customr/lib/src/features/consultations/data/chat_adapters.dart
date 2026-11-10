@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:talkacharya_chat/talkacharya_chat.dart';
 
 import '../../../core/constants/api_paths.dart';
+import '../../../core/network/api_exception.dart';
 import '../../../core/realtime/realtime_client.dart';
 
 /// Customer-side wiring for the shared chat engine.
@@ -50,9 +51,31 @@ class SecureStorageChatOutbox extends ChatOutbox {
 }
 
 class DioChatTransport implements ChatTransport {
-  DioChatTransport(this._dio, this.consultationId);
+  DioChatTransport(this._dio, this.consultationId, {this.onThreadClosed});
   final Dio _dio;
   final String consultationId;
+
+  /// The server said the thread no longer takes messages (the session ended).
+  final void Function()? onThreadClosed;
+
+  /// The app's Dio hands 4xx back as a response instead of throwing, so a
+  /// refused write would otherwise be read as an empty message and shown as
+  /// sent. Writes go through this so they fail like failures.
+  Response<T> _ok<T>(Response<T> res) {
+    final code = res.statusCode ?? 0;
+    if (code >= 200 && code < 300) return res;
+    final error = ApiException.fromDio(
+      DioException(
+        requestOptions: res.requestOptions,
+        response: res,
+        type: DioExceptionType.badResponse,
+      ),
+    );
+    if (code == 409 || error.code == 'message.conversation_closed') {
+      onThreadClosed?.call();
+    }
+    throw error;
+  }
 
   @override
   Future<List<ChatMessage>> history({
@@ -90,14 +113,16 @@ class DioChatTransport implements ChatTransport {
     List<String> attachmentIds = const [],
     int? replyToSeq,
   }) async {
-    final res = await _dio.post<Map<String, dynamic>>(
-      ApiPaths.messages(consultationId),
-      data: {
-        'body': body,
-        'attachment_ids': attachmentIds,
-        'client_message_id': clientMessageId,
-        'reply_to_seq': ?replyToSeq,
-      },
+    final res = _ok(
+      await _dio.post<Map<String, dynamic>>(
+        ApiPaths.messages(consultationId),
+        data: {
+          'body': body,
+          'attachment_ids': attachmentIds,
+          'client_message_id': clientMessageId,
+          'reply_to_seq': ?replyToSeq,
+        },
+      ),
     );
     return ChatMessage.fromMap(res.data ?? const {});
   }
@@ -153,11 +178,13 @@ class DioChatTransport implements ChatTransport {
     final name = filePath.split(RegExp(r'[/\\]')).last;
     final form = FormData.fromMap({
       'file': await MultipartFile.fromFile(filePath, filename: name),
-          if (durationSeconds > 0) 'duration_seconds': durationSeconds,
+      if (durationSeconds > 0) 'duration_seconds': durationSeconds,
     });
-    final res = await _dio.post<Map<String, dynamic>>(
-      ApiPaths.attachments(consultationId),
-      data: form,
+    final res = _ok(
+      await _dio.post<Map<String, dynamic>>(
+        ApiPaths.attachments(consultationId),
+        data: form,
+      ),
     );
     return ChatAttachment.fromMap(res.data ?? const {});
   }
@@ -180,10 +207,8 @@ class DioChatTransport implements ChatTransport {
   }
 
   @override
-  Future<void> pin(int seq) => _dio.post<void>(
-    ApiPaths.messagePins(consultationId),
-    data: {'seq': seq},
-  );
+  Future<void> pin(int seq) =>
+      _dio.post<void>(ApiPaths.messagePins(consultationId), data: {'seq': seq});
 
   @override
   Future<void> unpin(int seq) => _dio.delete<void>(
@@ -254,7 +279,6 @@ class CustomerChatIdentity implements ChatIdentity {
   bool get canDictate => false;
 }
 
-
 /// Fetches chat media for the on-device store ([DeviceChatMediaStore]).
 ///
 /// Two kinds of URL come back from the server: a signed storage link (S3 and
@@ -277,7 +301,10 @@ MediaDownload chatMediaDownloader(Dio api) {
     if (!parsed.hasScheme) {
       // A bare path: ours, resolved against the API's host.
       target = origin
-          .replace(path: parsed.path, query: parsed.hasQuery ? parsed.query : null)
+          .replace(
+            path: parsed.path,
+            query: parsed.hasQuery ? parsed.query : null,
+          )
           .toString();
       client = api;
     } else if (parsed.host == origin.host && parsed.port == origin.port) {

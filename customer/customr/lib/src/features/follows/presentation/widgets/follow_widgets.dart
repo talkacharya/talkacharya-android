@@ -2,6 +2,8 @@ import 'package:customr/src/shared/widgets/app_snack.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/router/routes.dart';
+import '../../../../core/navigation/links.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/utils/haptic_service.dart';
 import '../../../astrologers/data/models/astrologer.dart';
@@ -9,6 +11,7 @@ import '../../data/follows_api.dart';
 import '../cubit/follow_cubit.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 Future<void> toggleFollow(
   BuildContext context, {
   required String astrologerId,
@@ -16,6 +19,7 @@ Future<void> toggleFollow(
   FollowSource source = FollowSource.profile,
   FollowEntry? fallback,
 }) async {
+  if (!ensureSignedIn(returnTo: Routes.astrologer(astrologerId))) return;
   final l = context.l10n;
   final messenger = ScaffoldMessenger.maybeOf(context);
   final cubit = context.read<FollowCubit>();

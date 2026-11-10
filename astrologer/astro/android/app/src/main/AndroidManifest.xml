@@ -58,12 +58,15 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
-            <!-- talkacharya:// custom scheme -->
+            <!-- talkacharya-astro:// custom scheme. Its own, so a phone with both
+                 apps never asks which one opens a link (talkacharya:// is the
+                 customer app's). Pushes carry their link as data, not as an
+                 intent, so they are unaffected by the scheme. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="talkacharya"/>
+                <data android:scheme="talkacharya-astro"/>
             </intent-filter>
 
             <!-- https App Links (verified). The website and the customer app share

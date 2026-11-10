@@ -90,9 +90,12 @@ class _IncomingCallPageState extends State<IncomingCallPage> {
       router.go(Routes.callSetupTested);
       return;
     }
+    // Silent the moment Accept is tapped. Waiting for the server first kept the
+    // phone ringing through the whole request — seconds on a slow network or a
+    // phone that has just woken up, with the astrologer already answering.
+    unawaited(_local.cancelIncomingCall());
     final cubit = getIt<RequestsCubit>();
     final accepted = await cubit.accept(_id);
-    unawaited(_local.cancelIncomingCall());
     if (!mounted) return;
     if (accepted == null) {
       // Withdrawn or expired while it rang.

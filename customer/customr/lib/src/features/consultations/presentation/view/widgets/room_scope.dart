@@ -39,9 +39,13 @@ class RoomScope extends StatelessWidget {
           )..init(),
         ),
         BlocProvider(
-          create: (_) => ChatController(
+          create: (ctx) => ChatController(
             threadId: consultationId,
-            transport: DioChatTransport(getIt(), consultationId),
+            transport: DioChatTransport(
+              getIt(),
+              consultationId,
+              onThreadClosed: ctx.read<ChatCubit>().threadClosed,
+            ),
             realtime: RealtimeChatAdapter(getIt<RealtimeClient>()),
             identity: CustomerChatIdentity(
               userId: user?.id ?? '',

@@ -181,6 +181,9 @@ class ChatController extends Cubit<ChatSessionState> {
       }
 
       unawaited(_remember(history));
+      // The room went away while the history was loading (a call accepted
+      // from the room swaps it out): nothing is left to show it in.
+      if (isClosed) return;
       final merged = joined ? [...state.messages] : <ChatMessage>[];
       for (final m in history) {
         _mergeInto(merged, m);

@@ -20,8 +20,7 @@ class DioLiveHostBackend implements LiveHostBackend {
   Future<List<LiveChatMessage>> chatHistory() => _api.chat(streamId);
 
   @override
-  Future<void> sendChat(String text, {String? imagePath}) =>
-      _api.sendChat(streamId, text, imagePath: imagePath);
+  Future<void> sendChat(String text) => _api.sendChat(streamId, text);
 
   @override
   Future<void> removeViewer(String userId, {String reason = ''}) =>
@@ -46,6 +45,14 @@ class DioLiveHostBackend implements LiveHostBackend {
   @override
   Future<void> muteCall(String requestId, {required bool muted}) =>
       _api.muteCall(streamId, requestId, muted: muted);
+
+  @override
+  Future<List<LiveCallPhoto>> callPhotos(String requestId) =>
+      _api.callPhotos(streamId, requestId);
+
+  @override
+  Future<LiveCallPhoto> sendCallPhoto(String requestId, String imagePath) =>
+      _api.sendCallPhoto(streamId, requestId, imagePath);
 }
 
 /// [LiveSignaling] over the app's Centrifugo client — chat, viewer counts and

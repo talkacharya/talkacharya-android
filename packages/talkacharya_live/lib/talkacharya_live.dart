@@ -16,6 +16,7 @@ export 'src/engine/live_room.dart';
 export 'src/engine/livekit_room.dart';
 export 'src/engine/permission_handler_live_permissions.dart';
 export 'src/models/live_call.dart';
+export 'src/models/live_call_photo.dart';
 export 'src/models/live_chat_message.dart';
 export 'src/models/live_join.dart';
 export 'src/models/live_state.dart';

@@ -92,23 +92,50 @@ class LiveApi {
     }
   }
 
-  /// Sends a chat line: text, a picture, or both. A picture goes as multipart.
-  Future<void> sendChat(String id, String text, {String? imagePath}) async {
+  /// Sends a chat line — text only; pictures go to the caller on air
+  /// ([sendCallPhoto]).
+  Future<void> sendChat(String id, String text) async {
     try {
-      if (imagePath == null || imagePath.isEmpty) {
-        (await _dio.post<Map<String, dynamic>>(
-          ApiPaths.astroLiveChat(id),
-          data: {'text': text},
-        )).ensureOk();
-        return;
-      }
       (await _dio.post<Map<String, dynamic>>(
         ApiPaths.astroLiveChat(id),
+        data: {'text': text},
+      )).ensureOk();
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// `GET .../calls/{request}/photos` — photos shared on the call on air.
+  Future<List<LiveCallPhoto>> callPhotos(String id, String requestId) async {
+    try {
+      final res = (await _dio.get<dynamic>(
+        ApiPaths.astroLiveCallPhotos(id, requestId),
+      )).ensureOk();
+      final data = res.data;
+      return [
+        if (data is List)
+          for (final e in data)
+            LiveCallPhoto.fromJson((e as Map).cast<String, dynamic>()),
+      ];
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
+  /// `POST .../calls/{request}/photos` — share a photo with the caller.
+  Future<LiveCallPhoto> sendCallPhoto(
+    String id,
+    String requestId,
+    String imagePath,
+  ) async {
+    try {
+      final res = (await _dio.post<Map<String, dynamic>>(
+        ApiPaths.astroLiveCallPhotos(id, requestId),
         data: FormData.fromMap({
-          'text': text,
           'image': await MultipartFile.fromFile(imagePath),
         }),
       )).ensureOk();
+      return LiveCallPhoto.fromJson(res.data ?? const {});
     } on DioException catch (e) {
       throw ApiException.fromDio(e);
     }

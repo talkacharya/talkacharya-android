@@ -15,6 +15,8 @@ String? locationForUri(Uri uri) {
     segments.removeAt(0);
     if (segments.isEmpty) return '/home';
   }
+  // `talkacharya://astro/…` — some pushes name the app first.
+  if (segments.isNotEmpty && segments.first == 'astro') segments.removeAt(0);
   if (segments.isEmpty) return null;
 
   final id = segments.length > 1 ? segments[1] : null;
@@ -29,6 +31,15 @@ String? locationForUri(Uri uri) {
       return '/earnings';
     case 'chats':
       return id == null ? '/chats' : '/chats/$id';
+    case 'seller':
+      // talkacharya://seller/orders/<id> — an order in their own store.
+      final order = segments.length > 2 ? segments[2] : null;
+      if (id == 'orders' && order != null) return '/my-store/orders/$order';
+      return '/my-store';
+    case 'store':
+      // talkacharya://astro/store/consults/<id> — a consult-before-buying
+      // call's verdict; it is decided in their store.
+      return '/my-store';
     case 'my-store':
       // talkacharya://my-store[/products/<id>|/orders/<id>] — their own store.
       final rest = segments.length > 2 ? segments[2] : null;
@@ -63,7 +74,7 @@ String? locationForUri(Uri uri) {
     case 'livestreams':
     case 'livestream':
     case 'live':
-      return '/profile/featured'; // host livestream entry lives under Profile for now
+      return '/go-live';
     default:
       return null;
   }

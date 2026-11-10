@@ -42,6 +42,41 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   StreamSubscription<RealtimeEvent>? _realtimeSub;
 
+  /// When back was last pressed on Home with nothing left to close.
+  DateTime? _exitArmedAt;
+  static const _exitWindow = Duration(seconds: 2);
+
+  /// System back, once nothing on screen can be closed: another tab goes to
+  /// Home first; on Home the first press warns and a second one within two
+  /// seconds leaves the app. Pages, sheets and dialogs above still close as
+  /// usual — while anything can pop, the router handles back, not this.
+  Future<bool> _onBack() async {
+    if (!mounted) return false;
+    if (GoRouter.of(context).canPop()) return false;
+    if (widget.navigationShell.currentIndex != 0) {
+      _exitArmedAt = null;
+      widget.navigationShell.goBranch(0);
+      return true;
+    }
+    final armed = _exitArmedAt;
+    final now = DateTime.now();
+    if (armed != null && now.difference(armed) < _exitWindow) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      return false; // the router has nothing to pop: the app closes
+    }
+    _exitArmedAt = now;
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.pressBackAgainToExit),
+          behavior: SnackBarBehavior.floating,
+          duration: _exitWindow,
+        ),
+      );
+    return true;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -217,6 +252,13 @@ class _AppShellState extends State<AppShell> {
   Widget build(BuildContext context) {
     final l = context.l10n;
     final brand = context.brand;
+    return BackButtonListener(
+      onBackButtonPressed: _onBack,
+      child: _scaffold(l, brand),
+    );
+  }
+
+  Widget _scaffold(AppLocalizations l, BrandColors brand) {
     return Scaffold(
       extendBody: false,
       body: Column(
@@ -352,9 +394,7 @@ class _PrayIcon extends StatelessWidget {
     final theme = IconTheme.of(context);
     final size = theme.size ?? 24;
     return SvgPicture.asset(
-      filled
-          ? 'assets/svg/pray_outline.svg'
-          : 'assets/svg/pray_outline.svg',
+      filled ? 'assets/svg/pray_outline.svg' : 'assets/svg/pray_outline.svg',
       width: size,
       height: size,
       colorFilter: ColorFilter.mode(

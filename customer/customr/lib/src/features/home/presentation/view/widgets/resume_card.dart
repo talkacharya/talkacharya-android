@@ -9,6 +9,7 @@ import 'home_shared.dart';
 import 'package:customr/src/core/l10n/l10n.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Only renders when a session is active / paused. Sits just under the header —
 /// nothing else matters while a paid consultation is open.
 class ResumeCard extends StatelessWidget {

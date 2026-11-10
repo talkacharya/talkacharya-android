@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:talkacharya_live/talkacharya_live.dart';
 
 import '../../../../../core/l10n/l10n.dart';
-import 'live_chat_image.dart';
 
 class HostControls extends StatefulWidget {
   const HostControls({
@@ -29,38 +27,19 @@ class HostControls extends StatefulWidget {
 class _HostControlsState extends State<HostControls> {
   final _controller = TextEditingController();
 
-  /// Picked but not yet sent.
-  String? _imagePath;
-
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
+  /// Text only: everyone watching reads the chat. Pictures go to the caller
+  /// on air, from the photo strip above the call panel.
   Future<void> _send() async {
     final text = _controller.text.trim();
-    final image = _imagePath;
-    if (text.isEmpty && image == null) return;
+    if (text.isEmpty) return;
     _controller.clear();
-    setState(() => _imagePath = null);
-    await context.read<LiveHostCubit>().sendChat(text, imagePath: image);
-  }
-
-  Future<void> _pickImage() async {
-    try {
-      final picked = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 1600,
-        imageQuality: 85,
-      );
-      if (picked != null && mounted) setState(() => _imagePath = picked.path);
-    } on Object {
-      if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(context.l10n.livePhotoFailed)));
-    }
+    await context.read<LiveHostCubit>().sendChat(text);
   }
 
   @override
@@ -76,19 +55,8 @@ class _HostControlsState extends State<HostControls> {
       ),
       child: Column(
         children: [
-          if (_imagePath != null)
-            LiveChatImagePreview(
-              path: _imagePath!,
-              onRemove: () => setState(() => _imagePath = null),
-            ),
           Row(
             children: [
-              IconButton.filledTonal(
-                tooltip: context.l10n.liveSendPhoto,
-                onPressed: _pickImage,
-                icon: const Icon(Icons.image_rounded),
-              ),
-              const SizedBox(width: 8),
               Expanded(
                 child: TextField(
                   controller: _controller,

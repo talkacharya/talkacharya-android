@@ -1,7 +1,7 @@
 name: astro
 description: "TalkAcharya — astrologer app (consultations, availability, earnings)."
 publish_to: 'none'
-version: 1.2.6+26
+version: 1.2.7+27
 
 environment:
   sdk: ^3.11.0
@@ -83,6 +83,8 @@ dependencies:
   share_plus: ^10.1.2
   talkacharya_ui:
     path: ../../packages/talkacharya_ui
+  talkacharya_nav:
+    path: ../../packages/talkacharya_nav
   in_app_update: ^4.2.5
   video_player: ^2.11.1
   shared_preferences: ^2.5.6

@@ -136,6 +136,9 @@ class HueAvatar extends StatelessWidget {
           ? Image.network(
               u,
               fit: BoxFit.cover,
+              // The initial until the photo arrives, and if it never does.
+              frameBuilder: (_, child, frame, sync) =>
+                  frame == null && !sync ? initial : child,
               errorBuilder: (_, _, _) => initial,
             )
           : initial,

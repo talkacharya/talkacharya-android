@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/l10n/l10n.dart';
+import '../../../store/presentation/widgets/remedy_collection_link.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
 import '../widgets/kundali_ui.dart';
 import '../widgets/sade_sati_card.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Dated Sade Sati / Dhaiya calendar (`/sade-sati`). A map of Saturn's transit
 /// windows over the lifetime — traditional themes and years, not events.
 class SadeSatiPage extends StatefulWidget {
@@ -97,12 +99,16 @@ class _SadeSatiPageState extends State<SadeSatiPage> {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  if (current != null)
+                  if (current != null) ...[
                     _NowCard(
                       phase: current,
                       label: phaseLabel(l, current.phase),
-                    )
-                  else if (cal.summary.isNotEmpty)
+                    ),
+                    const RemedyCollectionLink(
+                      keys: ['sade_sati', 'saturn'],
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 4),
+                    ),
+                  ] else if (cal.summary.isNotEmpty)
                     ReadingCard(body: cal.summary, hue: AstroPalette.health),
                   if (cal.sadeSatiPeriods.isNotEmpty)
                     KSection(

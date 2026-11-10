@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 import '../engine/live_room.dart';
 import 'live_call.dart';
+import 'live_call_photo.dart';
 import 'live_chat_message.dart';
 
 enum LivePhase {
@@ -64,6 +65,8 @@ class LiveState extends Equatable {
     this.callMicOn = true,
     this.callBusy = false,
     this.endedCall,
+    this.callPhotos = const [],
+    this.sendingPhoto = false,
   });
 
   final LivePhase phase;
@@ -78,7 +81,8 @@ class LiveState extends Equatable {
   /// Oldest first — the list a chat panel renders bottom-anchored.
   final List<LiveChatMessage> messages;
 
-  /// Recent gifts, for the floating banners. Trimmed by the cubit.
+  /// The gift banners on screen, oldest first. Each leaves after a couple of
+  /// seconds, one at a time, the next waiting gift taking its place.
   final List<LiveGiftEvent> gifts;
   final LiveChatMessage? pinned;
   final String? error;
@@ -131,6 +135,13 @@ class LiveState extends Equatable {
   /// asks for a rating, then clears it.
   final LiveCallRequest? endedCall;
 
+  /// Photos shared on the call on air — only the caller and the host have
+  /// them. Oldest first; emptied when the call ends.
+  final List<LiveCallPhoto> callPhotos;
+
+  /// A photo is on its way to the call.
+  final bool sendingPhoto;
+
   /// Viewer: on air right now.
   bool get onAirMyself => myCall?.status == LiveCallStatus.active;
 
@@ -174,6 +185,8 @@ class LiveState extends Equatable {
     bool? callBusy,
     LiveCallRequest? endedCall,
     bool clearEndedCall = false,
+    List<LiveCallPhoto>? callPhotos,
+    bool? sendingPhoto,
   }) => LiveState(
     phase: phase ?? this.phase,
     isHost: isHost ?? this.isHost,
@@ -203,6 +216,8 @@ class LiveState extends Equatable {
     callMicOn: callMicOn ?? this.callMicOn,
     callBusy: callBusy ?? this.callBusy,
     endedCall: clearEndedCall ? null : (endedCall ?? this.endedCall),
+    callPhotos: callPhotos ?? this.callPhotos,
+    sendingPhoto: sendingPhoto ?? this.sendingPhoto,
   );
 
   @override
@@ -235,5 +250,7 @@ class LiveState extends Equatable {
     callMicOn,
     callBusy,
     endedCall,
+    callPhotos,
+    sendingPhoto,
   ];
 }

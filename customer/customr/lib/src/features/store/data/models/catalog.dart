@@ -51,6 +51,10 @@ class StoreCollection extends Equatable {
     this.image,
     this.remedyKeys = const [],
     this.products = const [],
+    this.card,
+    this.items,
+    this.reason = '',
+    this.personal = false,
   });
 
   final String slug;
@@ -58,6 +62,19 @@ class StoreCollection extends Equatable {
   final String description;
   final String? image;
   final List<String> remedyKeys;
+
+  /// The 2:1 card cut of the banner — for small tiles.
+  final String? card;
+
+  /// How many products are in it, when the endpoint counted them.
+  final int? items;
+
+  /// Why it is shown to this customer ("Saturn's Sade Sati is running for
+  /// you"), already in their language. Empty when it is not about them.
+  final String reason;
+
+  /// Picked from their chart.
+  final bool personal;
 
   /// Filled only by the collection detail endpoint.
   final List<ProductCard> products;
@@ -69,10 +86,32 @@ class StoreCollection extends Equatable {
     image: jStrOrNull(j['image']),
     remedyKeys: jStrings(j['remedy_keys']),
     products: jList(j['products'], ProductCard.fromJson),
+    card: jStrOrNull(jMap(j['images'])['card']) ?? jStrOrNull(j['image']),
+    items: j['items'] is num ? (j['items'] as num).toInt() : null,
+    reason: jStr(j['reason']),
+    personal: j['personal'] == true,
   );
 
   @override
-  List<Object?> get props => [slug, title, products];
+  List<Object?> get props => [slug, title, products, reason, items];
+}
+
+/// Which collection a kundali page opens for a planet or a dosha.
+class CollectionLink extends Equatable {
+  const CollectionLink({required this.slug, required this.title, this.items});
+
+  final String slug;
+  final String title;
+  final int? items;
+
+  factory CollectionLink.fromJson(Json j) => CollectionLink(
+    slug: jStr(j['slug']),
+    title: jStr(j['title']),
+    items: j['items'] is num ? (j['items'] as num).toInt() : null,
+  );
+
+  @override
+  List<Object?> get props => [slug, title, items];
 }
 
 /// `GET /store/home`.

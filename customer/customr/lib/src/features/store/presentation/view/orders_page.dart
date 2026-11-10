@@ -102,7 +102,7 @@ class _OrdersTab extends StatelessWidget {
             title: l.storeNoOrdersTitle,
             message: l.storeNoOrdersBody,
             action: FilledButton.tonal(
-              onPressed: () => context.push(Routes.store),
+              onPressed: () => context.go(Routes.store),
               child: Text(l.storeExplore),
             ),
           );

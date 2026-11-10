@@ -71,14 +71,13 @@ class HomeCubit extends Cubit<HomeState> {
           online: AsyncValue.data(feed.astrologerRail),
           live: AsyncValue.data(feed.liveNow),
           resume: AsyncValue.data(feed.resume),
-          promos: AsyncValue.data(
-            feed.promos.isEmpty ? _repo.promos() : feed.promos,
-          ),
+          // Only the banners uploaded in the admin panel; none, no carousel.
+          promos: AsyncValue.data(feed.promos),
         ),
       );
     } catch (_) {
       if (isClosed) return;
-      emit(state.copyWith(promos: AsyncValue.data(_repo.promos())));
+      emit(state.copyWith(promos: const AsyncValue.data([])));
       await Future.wait([_loadOnline(), _loadLive(), _loadResume()]);
     }
   }

@@ -16,6 +16,7 @@ import '../cubit/matchmaking_cubit.dart';
 import 'widgets/match_widgets.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 class MatchmakingHomePage extends StatefulWidget {
   const MatchmakingHomePage({super.key});
 
@@ -80,10 +81,22 @@ class _MatchmakingHomePageState extends State<MatchmakingHomePage> {
               slivers: [
                 SliverAppBar(
                   pinned: true,
-                  expandedHeight: 250,
+                  expandedHeight: 196,
                   backgroundColor: AstroPalette.romance[1],
                   foregroundColor: Colors.white,
                   surfaceTintColor: Colors.transparent,
+                  // This page has its own nested navigator (one cubit for the
+                  // hub and the results), so the implied back button cannot
+                  // see Home behind it — ask the router instead.
+                  automaticallyImplyLeading: false,
+                  leading: (GoRouter.maybeOf(context)?.canPop() ?? false)
+                      ? BackButton(onPressed: () => context.pop())
+                      : null,
+                  titleTextStyle: Theme.of(context).textTheme.titleLarge
+                      ?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                      ),
                   title: Text(l.matchTitle),
                   flexibleSpace: const FlexibleSpaceBar(
                     collapseMode: CollapseMode.parallax,
@@ -171,30 +184,30 @@ class _Hero extends StatelessWidget {
           bottom: -16,
           child: Opacity(
             opacity: 0.9,
-            child: SvgPicture.asset('assets/svg/matching.svg', width: 150),
+            child: SvgPicture.asset('assets/svg/matching.svg', width: 120),
           ),
         ),
         const CustomPaint(painter: HeartsPainter()),
         SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, kToolbarHeight + 4, 118, 18),
+            padding: const EdgeInsets.fromLTRB(20, kToolbarHeight, 104, 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
                   l.matchHeroTitle,
-                  maxLines: 2,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.headlineSmall?.copyWith(
                     color: Colors.white,
-                    fontSize: 24,
+                    fontSize: 22,
                   ),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   l.matchHeroBody,
-                  maxLines: 3,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: Colors.white.withValues(alpha: 0.92),

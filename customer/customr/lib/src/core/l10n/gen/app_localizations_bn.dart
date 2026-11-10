@@ -8037,4 +8037,43 @@ class AppLocalizationsBn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String liveCallPhotosTitle(String name) {
+    return 'Photos · only you and $name see them';
+  }
+
+  @override
+  String get liveCallPhotoCamera => 'Take a photo';
+
+  @override
+  String get liveCallPhotoGallery => 'Choose from gallery';
+
+  @override
+  String get linkUnavailable => 'This link is no longer available';
+
+  @override
+  String get remediesForYouTitle => 'Remedies for you';
+
+  @override
+  String get remediesForYouSub => 'Picked from your chart and the season';
+
+  @override
+  String collectionItems(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items',
+      one: '1 item',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String remedyLinkFor(String title) {
+    return 'See remedies · $title';
+  }
+
+  @override
+  String get pressBackAgainToExit => 'Press back again to exit';
 }

@@ -3357,5 +3357,35 @@
         "type": "int"
       }
     }
-  }
+  },
+  "liveCallPhotosTitle": "Photos · only you and {name} see them",
+  "@liveCallPhotosTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "liveCallPhotoCamera": "Take a photo",
+  "liveCallPhotoGallery": "Choose from gallery",
+  "linkUnavailable": "This link is no longer available",
+  "remedySourceStore": "From our store",
+  "remedySourceMine": "My listings",
+  "remedyNewListing": "New listing",
+  "remedyEditForClient": "Edit for this client",
+  "remedyPickCustomerFirst": "Choose the client first",
+  "remedyAfterApproval": "Your client gets this once our team approves it.",
+  "remedyQueued": "Saved — it goes to your client once approved",
+  "remedyStatusPending": "Awaiting approval",
+  "remedyForClient": "For {name}",
+  "@remedyForClient": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "remedySetUpStore": "Set up your store to suggest your own remedies.",
+  "remedyStoreSetUpAction": "Set up store",
+  "remedyNoListings": "You have no listings yet."
 }

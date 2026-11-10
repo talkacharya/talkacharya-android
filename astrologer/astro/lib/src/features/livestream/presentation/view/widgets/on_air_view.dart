@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talkacharya_live/talkacharya_live.dart';
 
+import 'call_photo_strip.dart';
 import 'host_call_panel.dart';
 import 'host_header.dart';
 import 'host_chat.dart';
 import 'host_controls.dart';
-import 'host_system_views.dart';
+
+/// The call on air, if one is.
+LiveCallRequest? _onAir(LiveState state) {
+  for (final r in state.callLine) {
+    if (r.status == LiveCallStatus.active) return r;
+  }
+  return null;
+}
 
 class OnAirView extends StatelessWidget {
   const OnAirView({
@@ -33,6 +41,14 @@ class OnAirView extends StatelessWidget {
             child: GiftStrip(gifts: state.gifts),
           ),
         HostChat(messages: state.messages),
+        // A call on air: photos only the astrologer and the caller see.
+        if (_onAir(state) case final call?)
+          CallPhotoStrip(
+            photos: state.callPhotos,
+            sending: state.sendingPhoto,
+            peerName: call.customerName,
+            onSend: cubit.sendCallPhoto,
+          ),
         // Calls during the stream: the one on air, and the line.
         HostCallPanel(state: state, cubit: cubit),
         HostControls(

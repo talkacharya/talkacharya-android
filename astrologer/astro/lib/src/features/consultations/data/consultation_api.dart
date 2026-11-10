@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'accepted_calls.dart';
 import 'package:dio/dio.dart';
 
 import '../../../core/constants/api_paths.dart';
@@ -147,7 +148,27 @@ class ConsultationApi {
     return res.data ?? const {};
   }
 
-  Future<Consultation> accept(String id) => _act(ApiPaths.astroAccept(id));
+  /// Accept. The answer also carries the thread and, for a call, how to
+  /// join it — kept in [AcceptedCalls] for the room this opens.
+  Future<Consultation> accept(String id) async {
+    try {
+      final res = (await _dio.post<Map<String, dynamic>>(
+        ApiPaths.astroAccept(id),
+        data: const {},
+      )).ensureOk();
+      final body = res.data ?? const {};
+      final c = Consultation.fromJson(body);
+      final call = body['call'];
+      AcceptedCalls.put(
+        c,
+        conversationId: body['conversation'] as String?,
+        join: call is Map ? call.cast<String, dynamic>() : null,
+      );
+      return c;
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
 
   Future<Consultation> reject(String id, String reason) =>
       _act(ApiPaths.astroReject(id), body: {'reason': reason});

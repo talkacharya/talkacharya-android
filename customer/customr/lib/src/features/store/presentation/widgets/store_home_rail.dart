@@ -11,13 +11,20 @@ import '../../data/store_repository.dart';
 import 'store_ui.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Home feed section: featured remedies and poojas from the store home payload.
 /// Owns its data (the repository caches `/store/home` for a few minutes) and hides
 /// itself when the catalogue is empty or unreachable — never an empty rail.
 class StoreHomeRail extends StatefulWidget {
   const StoreHomeRail({super.key});
 
-  static const double _height = 290;
+  /// The store's compact tile: a square picture, two lines of title, rating
+  /// and price — about two-thirds the height of the full grid tile.
+  static const double _cardWidth = 128;
+
+  /// Picture + text, the text growing with the phone's font size.
+  static double _height(BuildContext context) =>
+      _cardWidth + MediaQuery.textScalerOf(context).scale(86) + 8;
 
   @override
   State<StoreHomeRail> createState() => _StoreHomeRailState();
@@ -53,15 +60,30 @@ class _StoreHomeRailState extends State<StoreHomeRail> {
               subtitle: l.storeHomeRailSub,
               hue: AstroPalette.money,
               seeAllLabel: l.storeSeeAll,
-              onSeeAll: () => context.push(Routes.store),
+              onSeeAll: () => context.go(Routes.store),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 10),
             SizedBox(
-              height: StoreHomeRail._height,
+              height: StoreHomeRail._height(context),
               child: home == null
-                  ? const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: HomeGaps.side),
-                      child: ProductGridSkeleton(count: 2),
+                  ? AppShimmer(
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.fromLTRB(
+                          HomeGaps.side,
+                          0,
+                          HomeGaps.side,
+                          8,
+                        ),
+                        itemCount: 3,
+                        separatorBuilder: (_, _) => const SizedBox(width: 10),
+                        itemBuilder: (_, _) => const SkeletonBox(
+                          width: StoreHomeRail._cardWidth,
+                          height: double.infinity,
+                          radius: 14,
+                        ),
+                      ),
                     )
                   : ListView.separated(
                       scrollDirection: Axis.horizontal,
@@ -69,11 +91,14 @@ class _StoreHomeRailState extends State<StoreHomeRail> {
                         HomeGaps.side,
                         0,
                         HomeGaps.side,
-                        12,
+                        8,
                       ),
                       itemCount: items.length,
-                      separatorBuilder: (_, _) => const SizedBox(width: 12),
-                      itemBuilder: (_, i) => ProductRailCard(product: items[i]),
+                      separatorBuilder: (_, _) => const SizedBox(width: 10),
+                      itemBuilder: (_, i) => SizedBox(
+                        width: StoreHomeRail._cardWidth,
+                        child: CompactProductTile(product: items[i]),
+                      ),
                     ),
             ),
           ],

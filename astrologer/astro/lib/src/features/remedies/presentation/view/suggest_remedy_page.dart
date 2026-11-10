@@ -12,7 +12,9 @@ import '../../../../core/util/time_format.dart';
 import '../../../../shared/widgets/settings_widgets.dart';
 import '../../../consultations/data/consultation_api.dart';
 import '../../../consultations/data/models/consultation.dart';
+import '../../../my_store/data/my_store_models.dart';
 import '../../data/remedies_api.dart';
+import 'own_listings_picker.dart';
 import 'remedies_page.dart';
 
 /// The latest session with each customer, newest first — who a remedy can be
@@ -27,7 +29,10 @@ List<Consultation> latestPerCustomer(List<Consultation> sessions) {
 }
 
 /// Pick a customer (unless the page was opened from their session), pick a
-/// product, add a line on how to use it, send. Pops `true` once sent.
+/// remedy — from the store, or from the astrologer's own listings (as it is,
+/// a copy edited for this client, or a new one) — add a line on how to use
+/// it, send. Their own listing not live yet reaches the client once the team
+/// approves it. Pops `true` once sent (or queued).
 class SuggestRemedyPage extends StatefulWidget {
   const SuggestRemedyPage({
     this.consultationId,
@@ -58,8 +63,15 @@ class _SuggestRemedyPageState extends State<SuggestRemedyPage> {
   String? _productsError;
 
   late String? _consultationId = widget.consultationId;
+  late String? _customerName = widget.customerName;
   late RemedyProduct? _product = widget.product;
   bool _sending = false;
+
+  /// Where the remedy comes from: the store, or their own listings.
+  bool _own = false;
+  MyListing? _listing;
+
+  String? get _selectedId => _own ? _listing?.id : _product?.id;
 
   @override
   void initState() {
@@ -116,18 +128,21 @@ class _SuggestRemedyPageState extends State<SuggestRemedyPage> {
 
   Future<void> _send() async {
     final consultation = _consultationId;
-    final product = _product;
-    if (consultation == null || product == null || _sending) return;
+    final productId = _selectedId;
+    if (consultation == null || productId == null || _sending) return;
     setState(() => _sending = true);
     final l = context.l10n;
     try {
-      await getIt<RemediesApi>().suggest(
+      final sent = await getIt<RemediesApi>().suggest(
         consultationId: consultation,
-        productId: product.id,
+        productId: productId,
         note: _note.text,
       );
       if (!mounted) return;
-      showToast(context, l.remedySent);
+      showToast(
+        context,
+        sent.status == 'pending' ? l.remedyQueued : l.remedySent,
+      );
       Navigator.of(context).pop(true);
     } catch (e) {
       if (!mounted) return;
@@ -154,7 +169,9 @@ class _SuggestRemedyPageState extends State<SuggestRemedyPage> {
           label: l.remedySend,
           icon: Icons.send_rounded,
           busy: _sending,
-          onPressed: _consultationId == null || _product == null ? null : _send,
+          onPressed: _consultationId == null || _selectedId == null
+              ? null
+              : _send,
         ),
       ),
       children: [
@@ -163,49 +180,106 @@ class _SuggestRemedyPageState extends State<SuggestRemedyPage> {
           _CustomerPicker(
             customers: _customers,
             selected: _consultationId,
-            onSelected: (id) => setState(() => _consultationId = id),
+            onSelected: (id) => setState(() {
+              _consultationId = id;
+              _customerName = _customers
+                  ?.where((c) => c.id == id)
+                  .map((c) => c.customerName)
+                  .firstOrNull;
+              // A copy made for the previous client is not theirs.
+              if (_listing?.privateForName.isNotEmpty ?? false) _listing = null;
+            }),
           ),
           const SizedBox(height: 18),
         ],
         _StepTitle(number: preset ? 1 : 2, text: l.remedyStepProduct),
-        TextField(
-          controller: _search,
-          onChanged: _onSearch,
-          textInputAction: TextInputAction.search,
-          decoration: InputDecoration(
-            hintText: l.remedySearchHint,
-            prefixIcon: const Icon(Icons.search_rounded),
-          ),
+        Wrap(
+          spacing: 8,
+          children: [
+            ChoiceChip(
+              avatar: const Icon(Icons.storefront_rounded, size: 18),
+              label: Text(l.remedySourceStore),
+              selected: !_own,
+              onSelected: (_) => setState(() => _own = false),
+            ),
+            ChoiceChip(
+              avatar: const Icon(Icons.inventory_2_rounded, size: 18),
+              label: Text(l.remedySourceMine),
+              selected: _own,
+              onSelected: (_) => setState(() => _own = true),
+            ),
+          ],
         ),
         const SizedBox(height: 10),
-        if (products == null && _productsError != null)
-          ErrorView(message: _productsError!, onRetry: _loadProducts)
-        else if (products == null)
-          const AppShimmer(
-            child: Column(
-              children: [
-                SkeletonBox(height: 68, radius: 14),
-                SizedBox(height: 8),
-                SkeletonBox(height: 68, radius: 14),
-              ],
+        if (_own) ...[
+          OwnListingsPicker(
+            selectedId: _listing?.id,
+            consultationId: _consultationId,
+            customerName: _customerName,
+            onSelected: (item) => setState(() => _listing = item),
+          ),
+          if (_listing != null && !_listing!.isLive)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.hourglass_top_rounded,
+                    size: 16,
+                    color: brand.inkMuted,
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      l.remedyAfterApproval,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: brand.inkMuted,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          )
-        else if (products.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24),
-            child: Text(
-              l.remedyNoProducts,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: brand.inkMuted),
+        ] else ...[
+          TextField(
+            controller: _search,
+            onChanged: _onSearch,
+            textInputAction: TextInputAction.search,
+            decoration: InputDecoration(
+              hintText: l.remedySearchHint,
+              prefixIcon: const Icon(Icons.search_rounded),
             ),
-          )
-        else
-          for (final p in products)
-            _ProductTile(
-              product: p,
-              selected: p.id == _product?.id,
-              onTap: () => setState(() => _product = p),
-            ),
+          ),
+          const SizedBox(height: 10),
+          if (products == null && _productsError != null)
+            ErrorView(message: _productsError!, onRetry: _loadProducts)
+          else if (products == null)
+            const AppShimmer(
+              child: Column(
+                children: [
+                  SkeletonBox(height: 68, radius: 14),
+                  SizedBox(height: 8),
+                  SkeletonBox(height: 68, radius: 14),
+                ],
+              ),
+            )
+          else if (products.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Text(
+                l.remedyNoProducts,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: brand.inkMuted),
+              ),
+            )
+          else
+            for (final p in products)
+              _ProductTile(
+                product: p,
+                selected: p.id == _product?.id,
+                onTap: () => setState(() => _product = p),
+              ),
+        ],
         const SizedBox(height: 18),
         _StepTitle(number: preset ? 2 : 3, text: l.remedyStepNote),
         TextField(

@@ -110,6 +110,8 @@ class ApiPaths {
       '/astro/store/catalog/products/$id/submit';
   static String astroListingWithdraw(String id) =>
       '/astro/store/catalog/products/$id/withdraw';
+  static String astroListingCopyForClient(String id) =>
+      '/astro/store/catalog/products/$id/copy-for-client';
   static const sellerOrders = '/seller/orders';
   static String sellerOrder(String id) => '/seller/orders/$id';
   static String sellerOrderAction(String id, String action) =>
@@ -155,6 +157,8 @@ class ApiPaths {
       '/astro/livestreams/$id/calls/$request/end';
   static String astroLiveCallMute(String id, String request) =>
       '/astro/livestreams/$id/calls/$request/mute';
+  static String astroLiveCallPhotos(String id, String request) =>
+      '/astro/livestreams/$id/calls/$request/photos';
 
   // predictions work queue
   static const predictionsQueue = '/astro/predictions/queue';

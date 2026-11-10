@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'dart:async';
+import 'accepted_calls.dart';
 import 'package:dio/dio.dart';
 import 'package:talkacharya_call/talkacharya_call.dart';
 
@@ -18,6 +20,9 @@ class DioCallBackend implements CallBackend {
 
   @override
   Future<CallJoin> join() async {
+    // Accept already answered with how to join: no second round trip.
+    final accepted = AcceptedCalls.takeJoin(consultationId);
+    if (accepted != null) return CallJoin.fromJson(accepted);
     try {
       final res = await _dio.post<Map<String, dynamic>>(
         '/consultations/$consultationId/call/join',
@@ -81,5 +86,11 @@ class CrashlyticsCallDiagnostics implements CallDiagnostics {
   const CrashlyticsCallDiagnostics();
 
   @override
-  void log(String message) => unawaited(FirebaseSetup.log('call: $message'));
+  void log(String message) {
+    // In a debug build every step also goes to the console, so a slow
+    // connect can be read off `adb logcat` second by second.
+    if (kDebugMode)
+      debugPrint('CALL ${DateTime.now().toIso8601String()} $message');
+    unawaited(FirebaseSetup.log('call: $message'));
+  }
 }

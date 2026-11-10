@@ -18,6 +18,15 @@ String? locationForUri(Uri uri) {
   switch (segments.first) {
     case 'home':
       return '/home';
+    case 'profile':
+      // talkacharya://profile[/referrals|/help|…] — the Profile tab or a page
+      // in it; an unknown sub-page is caught by the navigator (Home + a word).
+      return id == null ? '/profile' : '/profile/$id';
+    case 'remedies':
+      return '/store';
+    case 'chats':
+    case 'orders':
+      return '/chats';
     case 'r':
       // An invite link. The code is kept for the sign-up (see
       // [referralCodeFromUri]); someone already signed in lands on referrals.

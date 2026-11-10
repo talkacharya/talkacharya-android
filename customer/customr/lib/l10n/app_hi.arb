@@ -3197,5 +3197,14 @@
   "astroLiveJoin": "अभी जुड़ें",
   "astroWaitTime": "इंतज़ार ~{minutes} मिनट",
   "storeRecommendedBy": "{name} ने सुझाया",
-  "astroExpLine": "अनुभव: {count} वर्ष"
+  "astroExpLine": "अनुभव: {count} वर्ष",
+  "liveCallPhotosTitle": "फ़ोटो · सिर्फ़ आप और {name} देख सकते हैं",
+  "liveCallPhotoCamera": "फ़ोटो खींचें",
+  "liveCallPhotoGallery": "गैलरी से चुनें",
+  "linkUnavailable": "यह लिंक अब उपलब्ध नहीं है",
+  "remediesForYouTitle": "आपके लिए उपाय",
+  "remediesForYouSub": "आपकी कुंडली और समय के अनुसार",
+  "collectionItems": "{count, plural, =1{1 चीज़} other{{count} चीज़ें}}",
+  "remedyLinkFor": "उपाय देखें · {title}",
+  "pressBackAgainToExit": "ऐप बंद करने के लिए फिर से back दबाएँ"
 }

@@ -8110,4 +8110,43 @@ class AppLocalizationsHi extends AppLocalizations {
   String astroExpLine(int count) {
     return 'अनुभव: $count वर्ष';
   }
+
+  @override
+  String liveCallPhotosTitle(String name) {
+    return 'फ़ोटो · सिर्फ़ आप और $name देख सकते हैं';
+  }
+
+  @override
+  String get liveCallPhotoCamera => 'फ़ोटो खींचें';
+
+  @override
+  String get liveCallPhotoGallery => 'गैलरी से चुनें';
+
+  @override
+  String get linkUnavailable => 'यह लिंक अब उपलब्ध नहीं है';
+
+  @override
+  String get remediesForYouTitle => 'आपके लिए उपाय';
+
+  @override
+  String get remediesForYouSub => 'आपकी कुंडली और समय के अनुसार';
+
+  @override
+  String collectionItems(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count चीज़ें',
+      one: '1 चीज़',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String remedyLinkFor(String title) {
+    return 'उपाय देखें · $title';
+  }
+
+  @override
+  String get pressBackAgainToExit => 'ऐप बंद करने के लिए फिर से back दबाएँ';
 }

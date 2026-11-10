@@ -636,4 +636,52 @@ void main() {
     expect(cubit.state.loading, isFalse);
     await cubit.close();
   });
+  group('the composer after a session ends', () {
+    const live = Conversation(
+      id: 't1',
+      astrologerId: 'a1',
+      window: SendingWindow(
+        canSend: true,
+        reason: 'consultation',
+        consultationId: 'c1',
+      ),
+    );
+    const ended = Consultation(
+      id: 'c1',
+      status: ConsultationStatus.ended,
+      astrologerName: 'Ravi',
+      rateSnapshot: '20',
+      currency: 'INR',
+    );
+
+    test('an old "live" window for the session that ended is closed', () {
+      const s = ChatState(conversation: live, consultation: ended);
+      expect(s.windowIsStale, isTrue);
+      expect(s.canSend, isFalse);
+    });
+
+    test('a live window for the running session stays open', () {
+      final s = ChatState(conversation: live, consultation: _active());
+      expect(s.canSend, isTrue);
+    });
+
+    test(
+      'a new session live in the thread is not mistaken for the old one',
+      () {
+        const s = ChatState(
+          conversation: Conversation(
+            id: 't1',
+            astrologerId: 'a1',
+            window: SendingWindow(
+              canSend: true,
+              reason: 'consultation',
+              consultationId: 'c2',
+            ),
+          ),
+          consultation: ended,
+        );
+        expect(s.canSend, isTrue);
+      },
+    );
+  });
 }

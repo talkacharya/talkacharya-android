@@ -42,22 +42,12 @@ class AstrologerCard extends StatelessWidget {
     void open() => context.push(Routes.astrologer(a.id));
 
     return Pressable(
-      child: Container(
+      child: SizedBox(
         width: width,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: hue.start.withValues(alpha: 0.16),
-              blurRadius: 18,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
         child: Material(
           color: surface,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(18),
             side: BorderSide(color: brand.hairline),
           ),
           clipBehavior: Clip.antiAlias,

@@ -1522,5 +1522,21 @@
   "earnDays": "{days} दिन",
   "homeScorecard": "स्कोरकार्ड",
   "homeTodayLine": "{sessions, plural, =1{1 सेशन} other{{sessions} सेशन}} · {talk} बातचीत · {online} ऑनलाइन",
-  "dashProfileLeft": "{count, plural, =1{1 चीज़ जोड़नी बाकी} other{{count} चीज़ें जोड़नी बाकी}}"
+  "dashProfileLeft": "{count, plural, =1{1 चीज़ जोड़नी बाकी} other{{count} चीज़ें जोड़नी बाकी}}",
+  "liveCallPhotosTitle": "फ़ोटो · सिर्फ़ आप और {name} देख सकते हैं",
+  "liveCallPhotoCamera": "फ़ोटो खींचें",
+  "liveCallPhotoGallery": "गैलरी से चुनें",
+  "linkUnavailable": "यह लिंक अब उपलब्ध नहीं है",
+  "remedySourceStore": "हमारे स्टोर से",
+  "remedySourceMine": "मेरी लिस्टिंग",
+  "remedyNewListing": "नई लिस्टिंग",
+  "remedyEditForClient": "इस ग्राहक के लिए बदलें",
+  "remedyPickCustomerFirst": "पहले ग्राहक चुनें",
+  "remedyAfterApproval": "टीम की मंज़ूरी मिलते ही यह आपके ग्राहक तक पहुँच जाएगा।",
+  "remedyQueued": "सेव हो गया — मंज़ूरी मिलते ही ग्राहक को भेज दिया जाएगा",
+  "remedyStatusPending": "मंज़ूरी बाकी",
+  "remedyForClient": "{name} के लिए",
+  "remedySetUpStore": "अपनी रेमेडी सुझाने के लिए अपना स्टोर सेट करें।",
+  "remedyStoreSetUpAction": "स्टोर सेट करें",
+  "remedyNoListings": "अभी आपकी कोई लिस्टिंग नहीं है।"
 }

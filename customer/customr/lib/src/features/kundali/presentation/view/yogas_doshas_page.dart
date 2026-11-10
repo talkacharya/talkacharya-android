@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n/l10n.dart';
+import '../../../store/presentation/widgets/remedy_collection_link.dart';
 import '../cubit/kundali_cubit.dart';
 import '../kundali_terms.dart';
 import '../widgets/k_chart.dart';
@@ -11,6 +12,7 @@ import '../widgets/kundali_ui.dart';
 import 'kundali_routes.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Doshas (afflictions, each with severity, reasons and what reduces it) and
 /// yogas (beneficial combinations) — two faces switched from the hero.
 class YogasDoshasPage extends StatefulWidget {
@@ -326,6 +328,8 @@ class _DoshaCard extends StatelessWidget {
               doshaMeaning(l, dosha.key),
               style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
             ),
+            if (!cancelled && sev > 0)
+              RemedyCollectionLink(keys: [dosha.key], hue: hue),
             if (dosha.planets.isNotEmpty) ...[
               const SizedBox(height: 10),
               Wrap(

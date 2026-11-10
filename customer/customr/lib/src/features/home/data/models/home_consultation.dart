@@ -10,6 +10,7 @@ class HomeConsultation extends Equatable {
     required this.astrologerName,
     required this.channel,
     required this.status,
+    this.astrologerAvatar,
     this.startedAt,
     this.endedAt,
     this.rating,
@@ -20,6 +21,9 @@ class HomeConsultation extends Equatable {
   final String astrologerName;
   final String channel;
   final String status;
+
+  /// Their photo; the tile shows the initial without one.
+  final String? astrologerAvatar;
   final DateTime? startedAt;
   final DateTime? endedAt;
   final int? rating;
@@ -43,6 +47,10 @@ class HomeConsultation extends Equatable {
       astrologerName: '${json['astrologer_name'] ?? ''}',
       channel: '${json['channel'] ?? 'chat'}',
       status: '${json['status'] ?? ''}',
+      astrologerAvatar: switch (json['astrologer_avatar']) {
+        final String u when u.isNotEmpty => u,
+        _ => null,
+      },
       startedAt: DateTime.tryParse('${json['started_at'] ?? ''}'),
       endedAt: DateTime.tryParse('${json['ended_at'] ?? ''}'),
       rating: (json['rating'] as num?)?.toInt(),

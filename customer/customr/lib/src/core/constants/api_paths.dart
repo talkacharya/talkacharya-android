@@ -169,6 +169,8 @@ class ApiPaths {
   static String storeProductConsult(String slug) =>
       '/app/store/products/$slug/consult';
   static String storeCollection(String slug) => '/app/store/collections/$slug';
+  static const storeCollectionsForMe = '/app/store/collections/for-me';
+  static const storeCollectionKeys = '/app/store/collections/keys';
   static const storeCart = '/app/store/cart';
   static const storeCartItems = '/app/store/cart/items';
   static String storeCartItem(String id) => '/app/store/cart/items/$id';

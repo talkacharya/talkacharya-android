@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+import '../navigation/links.dart' show isPublicLocation;
 import 'package:astro_kundali/astro_kundali.dart';
 import 'package:talkacharya_predictions/talkacharya_predictions.dart';
 
@@ -126,13 +128,16 @@ import '../di/service_locator.dart';
 import '../realtime/realtime_client.dart';
 import '../profile/active_profile_store.dart';
 import 'go_router_refresh.dart';
-import 'pending_deep_link.dart';
 import 'routes.dart';
 import 'transitions.dart';
 import '../../features/assistant/presentation/assistant_pages.dart';
 import '../../features/support/presentation/view/support_messages_page.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
+
+/// The root navigator — for what must show above every page (a snack from
+/// the link navigator).
+GlobalKey<NavigatorState> get rootNavigatorKey => _rootKey;
 
 ZodiacSign _initialHoroscopeSign(String? fromQuery) {
   final explicit = ZodiacSign.fromSlug(fromQuery);
@@ -161,16 +166,12 @@ PanchangPlace? _profilePlace() {
 GoRoute _leaf(String path, Widget Function(GoRouterState) child) =>
     GoRoute(path: path, builder: (_, state) => child(state));
 
-/// Route table + auth gate + deferred deep-link replay.
+/// Route table + auth gate.
 ///
-/// `redirect` runs on every navigation and whenever [AuthBloc] emits. A location
-/// that arrives while unauthenticated is stashed in [pending] and replayed the
-/// moment the session becomes authenticated.
-GoRouter buildRouter(
-  AuthBloc authBloc,
-  PendingDeepLink pending,
-  ActiveProfileStore profileStore,
-) {
+/// `redirect` runs on every navigation and whenever [AuthBloc] emits. Links are
+/// not this router's business: `AppNavigator` (core/navigation/links.dart)
+/// holds one until the tabs are up and then opens it on top of them.
+GoRouter buildRouter(AuthBloc authBloc, ActiveProfileStore profileStore) {
   return GoRouter(
     navigatorKey: _rootKey,
     initialLocation: Routes.splash,
@@ -191,8 +192,9 @@ GoRouter buildRouter(
       final loggedIn = status == AuthStatus.authenticated;
 
       if (!loggedIn) {
-        // Remember a real destination so we can resume after login.
-        if (!goingToLogin && !goingToSplash) pending.set(state.uri.toString());
+        // An article, the horoscope or an astrologer's profile can be read
+        // without an account; signing in is asked for when they act on it.
+        if (isPublicLocation(state.uri.toString())) return null;
         return goingToLogin ? null : Routes.login;
       }
 
@@ -203,24 +205,10 @@ GoRouter buildRouter(
         return Routes.selectProfile;
       }
 
+      // Always the tabs first. A waiting link opens on top of them from the
+      // navigator, so back has somewhere to go.
       if (goingToLogin || goingToSplash) {
         if (profileStore.loginGatePending) return Routes.selectProfile;
-        final target = pending.take();
-        if (target != null && target.isNotEmpty) {
-          if (Routes.isShellRoute(target)) {
-            return target;
-          }
-          // For top-level detail routes (e.g., assistant, notifications,
-          // consultations), land on AppShell first so it sits beneath,
-          // then push the target onto the root navigator.
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            final ctx = _rootKey.currentContext;
-            if (ctx != null && ctx.mounted) {
-              ctx.push(target).ignore();
-            }
-          });
-          return Routes.home;
-        }
         return Routes.astrologers;
       }
       return null;
@@ -311,8 +299,6 @@ GoRouter buildRouter(
           child: const DisputeDetailPage(),
         ),
       ),
-
-
 
       // Wallet — full-screen, above the bottom nav. Reached from the home
       // header chip and the Profile page, not a tab.
@@ -745,7 +731,9 @@ GoRouter buildRouter(
                     path: 'collections/:slug',
                     parentNavigatorKey: _rootKey,
                     builder: (_, s) => BlocProvider(
-                      key: ValueKey('store-collection-${s.pathParameters['slug']}'),
+                      key: ValueKey(
+                        'store-collection-${s.pathParameters['slug']}',
+                      ),
                       create: (_) => CollectionCubit(
                         repo: getIt(),
                         slug: s.pathParameters['slug']!,
@@ -790,7 +778,9 @@ GoRouter buildRouter(
                         path: ':id/edit',
                         parentNavigatorKey: _rootKey,
                         builder: (_, s) => AddressFormPage(
-                          initial: s.extra is Address ? s.extra as Address : null,
+                          initial: s.extra is Address
+                              ? s.extra as Address
+                              : null,
                           addressId: s.pathParameters['id'],
                         ),
                       ),
@@ -805,7 +795,9 @@ GoRouter buildRouter(
                         realtime: getIt<RealtimeClient>().events,
                       ),
                       child: OrdersPage(
-                        initialTab: s.uri.queryParameters['tab'] == 'poojas' ? 1 : 0,
+                        initialTab: s.uri.queryParameters['tab'] == 'poojas'
+                            ? 1
+                            : 0,
                       ),
                     ),
                     routes: [
@@ -813,7 +805,9 @@ GoRouter buildRouter(
                         path: ':id',
                         parentNavigatorKey: _rootKey,
                         builder: (_, s) => BlocProvider(
-                          key: ValueKey('store-order-${s.pathParameters['id']}'),
+                          key: ValueKey(
+                            'store-order-${s.pathParameters['id']}',
+                          ),
                           create: (_) => OrderDetailCubit(
                             repo: getIt(),
                             payments: _storePayments(),
@@ -831,7 +825,9 @@ GoRouter buildRouter(
                             builder: (_, s) => ReturnRequestPage(
                               orderId: s.pathParameters['id']!,
                               lineId: s.pathParameters['lineId']!,
-                              line: s.extra is OrderLine ? s.extra as OrderLine : null,
+                              line: s.extra is OrderLine
+                                  ? s.extra as OrderLine
+                                  : null,
                             ),
                           ),
                         ],
@@ -850,7 +846,9 @@ GoRouter buildRouter(
                         path: ':id',
                         parentNavigatorKey: _rootKey,
                         builder: (_, s) => BlocProvider(
-                          key: ValueKey('store-consult-${s.pathParameters['id']}'),
+                          key: ValueKey(
+                            'store-consult-${s.pathParameters['id']}',
+                          ),
                           create: (_) => ConsultDetailCubit(
                             repo: getIt(),
                             id: s.pathParameters['id']!,

@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../../core/navigation/links.dart';
 import '../../../../core/l10n/l10n.dart';
 import '../../../../core/router/routes.dart';
 import '../../../../core/util/money.dart';
@@ -1288,6 +1289,7 @@ void startConsultation(
   String channel, {
   bool turn = false,
 }) {
+  if (!ensureSignedIn(returnTo: Routes.astrologer(a.id))) return;
   final l = context.l10n;
   final rate = a.rateFor(channel);
   if (rate == null || !a.isAvailable) {
@@ -1320,6 +1322,9 @@ Future<void> _joinWaitlist(
   Astrologer a, {
   String? channel,
 }) {
+  if (!ensureSignedIn(returnTo: Routes.astrologer(a.id))) {
+    return Future<void>.value();
+  }
   final l = context.l10n;
   final locale = Localizations.localeOf(context).toLanguageTag();
   return showJoinWaitlistSheet(
@@ -1346,6 +1351,7 @@ Future<void> _joinWaitlist(
 }
 
 void _sendGift(BuildContext context, Astrologer a) {
+  if (!ensureSignedIn(returnTo: Routes.astrologer(a.id))) return;
   showGiftSheet(
     context,
     target: ProfileGiftTarget(

@@ -10,6 +10,7 @@ import 'astrologer_card.dart';
 import 'home_shared.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 const _channels = <(String, String, IconData, AstroHue)>[
   ('', 'All', Icons.people_rounded, AstroPalette.money),
   ('chat', 'Chat', Icons.chat_bubble_rounded, AstroPalette.career),
@@ -126,15 +127,6 @@ class _FilterChip extends StatelessWidget {
             gradient: selected ? hue.linear() : null,
             color: selected ? null : hue.tint(0.08),
             border: selected ? null : Border.all(color: hue.tint(0.25)),
-            boxShadow: selected
-                ? [
-                    BoxShadow(
-                      color: hue.start.withValues(alpha: 0.35),
-                      blurRadius: 10,
-                      offset: const Offset(0, 3),
-                    ),
-                  ]
-                : null,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -168,7 +160,7 @@ class _Rail extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.fromLTRB(HomeGaps.side, 2, HomeGaps.side, 22),
         itemCount: items.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 14),
+        separatorBuilder: (_, _) => const SizedBox(width: 10),
         itemBuilder: (context, i) => AstrologerCard(astrologer: items[i]),
       ),
     );

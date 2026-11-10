@@ -4,6 +4,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../engine/live_call_audio.dart';
 import '../models/live_call.dart';
+import '../models/live_call_photo.dart';
 import '../models/live_join.dart';
 import '../models/live_state.dart';
 import '../models/live_chat_message.dart';
@@ -39,6 +40,9 @@ class LiveHostCubit extends LiveCubitBase {
   /// muted in the stream, so the viewers hear neither of them.
   LiveCallAudio? _audio;
   String? _privateFor;
+
+  /// The call on air whose photos are on screen.
+  String? _photosFor;
   bool _refreshing = false;
   bool _refreshAgain = false;
 
@@ -149,6 +153,14 @@ class LiveHostCubit extends LiveCubitBase {
     final current = c.current;
     emitIfOpen(state.copyWith(callLine: c.line, callsWaiting: c.waiting));
     final media = c.media;
+    final onAir = current != null && current.status == LiveCallStatus.active
+        ? current.id
+        : null;
+    if (onAir != _photosFor) {
+      _photosFor = onAir;
+      emitIfOpen(state.copyWith(callPhotos: const []));
+      if (onAir != null) unawaited(_loadPhotos(onAir));
+    }
     final private = current != null && current.mode == LiveCallMode.private;
     if (private && media != null && _privateFor != current.id) {
       await _enterPrivate(current.id, media);
@@ -183,6 +195,38 @@ class LiveHostCubit extends LiveCubitBase {
     }
     try {
       await engine.setMicrophoneEnabled(state.micOn);
+    } catch (_) {}
+  }
+
+  // --- photos on the call ------------------------------------------------------
+
+  /// Shares a photo with the caller on air — only the two of them see it.
+  Future<void> sendCallPhoto(String imagePath) async {
+    final id = _photosFor;
+    if (id == null || state.sendingPhoto || imagePath.isEmpty) return;
+    emitIfOpen(state.copyWith(sendingPhoto: true, clearError: true));
+    try {
+      final photo = await _backend.sendCallPhoto(id, imagePath);
+      if (!state.callPhotos.any((p) => p.id == photo.id)) {
+        emitIfOpen(state.copyWith(callPhotos: [...state.callPhotos, photo]));
+      }
+    } catch (e) {
+      emitIfOpen(state.copyWith(error: '$e'));
+    } finally {
+      emitIfOpen(state.copyWith(sendingPhoto: false));
+    }
+  }
+
+  @override
+  void onCallPhoto(String requestId) {
+    if (requestId == _photosFor) unawaited(_loadPhotos(requestId));
+  }
+
+  Future<void> _loadPhotos(String requestId) async {
+    try {
+      final List<LiveCallPhoto> photos = await _backend.callPhotos(requestId);
+      if (closed || _photosFor != requestId) return;
+      emitIfOpen(state.copyWith(callPhotos: photos));
     } catch (_) {}
   }
 
@@ -260,16 +304,14 @@ class LiveHostCubit extends LiveCubitBase {
     } catch (_) {}
   }
 
-  /// Sends a chat line: text, a picture ([imagePath]), or both.
-  Future<void> sendChat(String text, {String? imagePath}) async {
+  /// Sends a chat line. Text only: pictures go to the caller on air
+  /// ([sendCallPhoto]).
+  Future<void> sendChat(String text) async {
     final body = text.trim();
-    final hasImage = (imagePath ?? '').isNotEmpty;
-    if ((body.isEmpty && !hasImage) || state.sending || !state.phase.isOn) {
-      return;
-    }
+    if (body.isEmpty || state.sending || !state.phase.isOn) return;
     emitIfOpen(state.copyWith(sending: true, clearError: true));
     try {
-      await _backend.sendChat(body, imagePath: imagePath);
+      await _backend.sendChat(body);
     } catch (e) {
       emitIfOpen(state.copyWith(error: '$e'));
     } finally {
@@ -345,6 +387,7 @@ class LiveHostCubit extends LiveCubitBase {
     final audio = _audio;
     _audio = null;
     _privateFor = null;
+    _photosFor = null;
     if (audio != null) {
       try {
         await audio.disconnect();

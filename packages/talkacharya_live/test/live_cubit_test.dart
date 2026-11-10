@@ -82,7 +82,6 @@ const _join = LiveJoin(
 );
 
 class _ViewerBackend implements LiveViewerBackend {
-  final images = <String?>[];
   _ViewerBackend({this.history = const []});
   final List<LiveChatMessage> history;
   final sent = <String>[];
@@ -103,9 +102,20 @@ class _ViewerBackend implements LiveViewerBackend {
   @override
   Future<List<LiveChatMessage>> chatHistory() async => history;
   @override
-  Future<void> sendChat(String text, {String? imagePath}) async {
-    sent.add(text);
-    images.add(imagePath);
+  Future<void> sendChat(String text) async => sent.add(text);
+
+  final photos = <String, List<LiveCallPhoto>>{};
+  final photoPaths = <String>[];
+
+  @override
+  Future<List<LiveCallPhoto>> callPhotos(String requestId) async =>
+      photos[requestId] ?? const [];
+  @override
+  Future<LiveCallPhoto> sendCallPhoto(String requestId, String path) async {
+    photoPaths.add(path);
+    final photo = LiveCallPhoto(id: 'p${photoPaths.length}', imageUrl: path);
+    (photos[requestId] ??= []).add(photo);
+    return photo;
   }
 
   /// What `GET .../calls` answers next (and `POST .../calls`).
@@ -130,7 +140,6 @@ class _ViewerBackend implements LiveViewerBackend {
 }
 
 class _HostBackend implements LiveHostBackend {
-  final images = <String?>[];
   final sent = <String>[];
   final removed = <String>[];
   int started = 0;
@@ -160,9 +169,24 @@ class _HostBackend implements LiveHostBackend {
   @override
   Future<List<LiveChatMessage>> chatHistory() async => const [];
   @override
-  Future<void> sendChat(String text, {String? imagePath}) async {
-    sent.add(text);
-    images.add(imagePath);
+  Future<void> sendChat(String text) async => sent.add(text);
+
+  final photos = <String, List<LiveCallPhoto>>{};
+  final photoPaths = <String>[];
+
+  @override
+  Future<List<LiveCallPhoto>> callPhotos(String requestId) async =>
+      photos[requestId] ?? const [];
+  @override
+  Future<LiveCallPhoto> sendCallPhoto(String requestId, String path) async {
+    photoPaths.add(path);
+    final photo = LiveCallPhoto(
+      id: 'h${photoPaths.length}',
+      imageUrl: path,
+      fromHost: true,
+    );
+    (photos[requestId] ??= []).add(photo);
+    return photo;
   }
 
   @override
@@ -528,26 +552,48 @@ void main() {
 
   // --- chat pictures -------------------------------------------------------
 
-  test('a picture can be sent with or without text', () async {
-    final backend = _ViewerBackend();
-    final cubit = LiveViewerCubit(
-      backend: backend,
-      engine: _Engine(),
-      signaling: _Hub(),
-      userId: 'me',
-    );
-    await cubit.start();
-    await _settle();
+  test(
+    'gift banners leave one at a time, oldest first',
+    () async {
+      final hub = _Hub();
+      final cubit = LiveViewerCubit(
+        backend: _ViewerBackend(),
+        engine: _Engine(),
+        signaling: hub,
+        userId: 'me',
+      );
+      await cubit.start();
+      for (var i = 1; i <= 5; i++) {
+        cubit.addGift(
+          LiveGiftEvent(
+            id: 'g$i',
+            senderName: 'S$i',
+            giftSlug: 'rose',
+            giftName: 'Rose',
+          ),
+        );
+      }
+      List<String> shown() => [for (final g in cubit.state.gifts) g.id];
 
-    await cubit.sendChat('', imagePath: '/tmp/chart.png');
-    await cubit.sendChat('look', imagePath: '/tmp/chart.png');
+      expect(shown(), ['g1', 'g2', 'g3'], reason: 'three on screen, two wait');
+      await Future<void>.delayed(
+        cubit.giftShownFor + const Duration(milliseconds: 100),
+      );
+      expect(shown(), [
+        'g2',
+        'g3',
+        'g4',
+      ], reason: 'the oldest left, the next came on');
+      await Future<void>.delayed(cubit.giftShownFor);
+      expect(shown(), ['g3', 'g4', 'g5']);
+      await Future<void>.delayed(cubit.giftShownFor * 3);
+      expect(shown(), isEmpty, reason: 'each one leaves in turn');
+      await cubit.close();
+    },
+    timeout: const Timeout(Duration(seconds: 20)),
+  );
 
-    expect(backend.sent, ['', 'look']);
-    expect(backend.images, ['/tmp/chart.png', '/tmp/chart.png']);
-    await cubit.close();
-  });
-
-  test('an empty message with no picture is not sent', () async {
+  test('an empty message is not sent', () async {
     final backend = _ViewerBackend();
     final cubit = LiveViewerCubit(
       backend: backend,
@@ -797,6 +843,46 @@ void main() {
       await _settle();
       expect(audio.disconnected, isTrue);
       expect(engine.mic, isTrue, reason: 'back on the stream');
+      await cubit.close();
+    });
+
+    test('a caller on air shares photos only with the host', () async {
+      final hub = _Hub();
+      final backend = _ViewerBackend();
+      final cubit = viewer(backend, _Engine(), hub);
+      await cubit.start();
+
+      await cubit.sendCallPhoto('/tmp/palm.jpg');
+      expect(backend.photoPaths, isEmpty, reason: 'not on a call yet');
+
+      backend.callsReply = const LiveViewerCalls(
+        mine: LiveCallRequest(
+          id: 'r1',
+          mode: LiveCallMode.public,
+          status: LiveCallStatus.active,
+          consultationId: 'c1',
+        ),
+      );
+      await cubit.refreshCalls();
+      await cubit.sendCallPhoto('/tmp/palm.jpg');
+      expect(cubit.state.callPhotos.single.imageUrl, '/tmp/palm.jpg');
+
+      // the host shares one: the stream only says "a photo on r1"
+      backend.photos['r1']!.add(
+        const LiveCallPhoto(
+          id: 'h1',
+          imageUrl: '/tmp/chart.jpg',
+          fromHost: true,
+        ),
+      );
+      hub.push('live:1', 'live.call.photo', {'request': 'r1'});
+      await _settle();
+      expect(cubit.state.callPhotos.map((p) => p.id), ['p1', 'h1']);
+
+      // someone else's call: nothing to fetch
+      hub.push('live:1', 'live.call.photo', {'request': 'r9'});
+      await _settle();
+      expect(cubit.state.callPhotos, hasLength(2));
       await cubit.close();
     });
 

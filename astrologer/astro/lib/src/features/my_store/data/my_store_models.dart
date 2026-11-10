@@ -367,6 +367,8 @@ class MyListing {
     this.checklist = const [],
     this.sentBackToReview = false,
     this.packages = const [],
+    this.privateForName = '',
+    this.copiedFrom,
   });
 
   factory MyListing.fromJson(Map<String, dynamic> j) {
@@ -414,6 +416,8 @@ class MyListing {
       packages: [
         for (final p in _maps(j['packages'])) ListingPackage.fromJson(p),
       ],
+      privateForName: _s(_map(j['private_for'])['name']),
+      copiedFrom: j['copied_from'] == null ? null : _s(j['copied_from']),
     );
   }
 
@@ -453,6 +457,12 @@ class MyListing {
 
   /// A service's packages (a product has the one [price]).
   final List<ListingPackage> packages;
+
+  /// A copy made for one client: their name. Empty for a listing everyone sees.
+  final String privateForName;
+
+  /// The listing this copy was made from.
+  final String? copiedFrom;
 
   bool get isDraft => status == 'draft';
   bool get inReview => status == 'in_review';

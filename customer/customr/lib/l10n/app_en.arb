@@ -4724,5 +4724,35 @@
         "type": "int"
       }
     }
-  }
+  },
+  "liveCallPhotosTitle": "Photos · only you and {name} see them",
+  "@liveCallPhotosTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "liveCallPhotoCamera": "Take a photo",
+  "liveCallPhotoGallery": "Choose from gallery",
+  "linkUnavailable": "This link is no longer available",
+  "remediesForYouTitle": "Remedies for you",
+  "remediesForYouSub": "Picked from your chart and the season",
+  "collectionItems": "{count, plural, =1{1 item} other{{count} items}}",
+  "@collectionItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "remedyLinkFor": "See remedies · {title}",
+  "@remedyLinkFor": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "pressBackAgainToExit": "Press back again to exit"
 }

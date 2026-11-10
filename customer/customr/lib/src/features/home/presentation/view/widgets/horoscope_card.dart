@@ -11,9 +11,11 @@ import '../../../data/models/horoscope.dart';
 import '../../../data/models/zodiac.dart';
 import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
+import 'panchang_strip.dart';
 import 'package:customr/src/core/l10n/l10n.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Today's reading. The sign follows the active birth profile's sun sign by
 /// default; the chip opens a picker to override it (persisted).
 class HoroscopeCard extends StatelessWidget {
@@ -49,9 +51,8 @@ class HoroscopeCard extends StatelessWidget {
                 end: Alignment.bottomRight,
                 colors: [brand.cosmicStart, brand.cosmicEnd],
               ),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(18),
               border: Border.all(color: Colors.white.withValues(alpha: 0.07)),
-              boxShadow: brand.shadowCosmic,
             ),
             child: Stack(
               children: [
@@ -82,7 +83,7 @@ class HoroscopeCard extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(18),
+                  padding: const EdgeInsets.fromLTRB(16, 14, 8, 6),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -95,23 +96,38 @@ class HoroscopeCard extends StatelessWidget {
                           data: (h) => _HoroscopeBody(horoscope: h),
                         ),
                       ),
-                      const SizedBox(height: 14),
-                      OutlinedButton.icon(
-                        onPressed: () =>
-                            context.push(Routes.horoscopeFor(sign: sign.slug)),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: brand.gold,
-                          side: BorderSide(
-                            color: brand.gold.withValues(alpha: 0.6),
+                      const SizedBox(height: 6),
+                      // Today's panchang as a line, then the full reading.
+                      Row(
+                        children: [
+                          Expanded(
+                            child: PanchangLine(color: brand.onCosmicMuted),
                           ),
-                          shape: const StadiumBorder(),
-                          minimumSize: const Size.fromHeight(44),
-                        ),
-                        icon: const Icon(Icons.auto_awesome_rounded, size: 18),
-                        label: Text(
-                          context.l10n.horoReadFull,
-                          style: const TextStyle(fontWeight: FontWeight.w700),
-                        ),
+                          TextButton(
+                            onPressed: () => context.push(
+                              Routes.horoscopeFor(sign: sign.slug),
+                            ),
+                            style: TextButton.styleFrom(
+                              foregroundColor: brand.gold,
+                              visualDensity: VisualDensity.compact,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  context.l10n.horoReadFull,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.chevron_right_rounded,
+                                  size: 18,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -290,7 +306,7 @@ class _HoroscopeBodyState extends State<_HoroscopeBody> {
           sizeCurve: Curves.easeOutCubic,
           firstChild: Text(
             h.general,
-            maxLines: 3,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: theme.textTheme.bodyMedium?.copyWith(
               height: 1.5,
@@ -305,7 +321,7 @@ class _HoroscopeBodyState extends State<_HoroscopeBody> {
             ),
           ),
         ),
-        if (h.general.length > 120)
+        if (h.general.length > 80 || aspects.isNotEmpty)
           GestureDetector(
             onTap: () => setState(() => _expanded = !_expanded),
             child: Padding(
@@ -319,8 +335,8 @@ class _HoroscopeBodyState extends State<_HoroscopeBody> {
               ),
             ),
           ),
-        if (aspects.isNotEmpty) ...[
-          const SizedBox(height: 14),
+        if (_expanded && aspects.isNotEmpty) ...[
+          const SizedBox(height: 12),
           for (final (label, icon, text) in aspects)
             Padding(
               padding: const EdgeInsets.only(bottom: 8),

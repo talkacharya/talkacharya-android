@@ -5293,4 +5293,59 @@ class AppLocalizationsHi extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String liveCallPhotosTitle(String name) {
+    return 'फ़ोटो · सिर्फ़ आप और $name देख सकते हैं';
+  }
+
+  @override
+  String get liveCallPhotoCamera => 'फ़ोटो खींचें';
+
+  @override
+  String get liveCallPhotoGallery => 'गैलरी से चुनें';
+
+  @override
+  String get linkUnavailable => 'यह लिंक अब उपलब्ध नहीं है';
+
+  @override
+  String get remedySourceStore => 'हमारे स्टोर से';
+
+  @override
+  String get remedySourceMine => 'मेरी लिस्टिंग';
+
+  @override
+  String get remedyNewListing => 'नई लिस्टिंग';
+
+  @override
+  String get remedyEditForClient => 'इस ग्राहक के लिए बदलें';
+
+  @override
+  String get remedyPickCustomerFirst => 'पहले ग्राहक चुनें';
+
+  @override
+  String get remedyAfterApproval =>
+      'टीम की मंज़ूरी मिलते ही यह आपके ग्राहक तक पहुँच जाएगा।';
+
+  @override
+  String get remedyQueued =>
+      'सेव हो गया — मंज़ूरी मिलते ही ग्राहक को भेज दिया जाएगा';
+
+  @override
+  String get remedyStatusPending => 'मंज़ूरी बाकी';
+
+  @override
+  String remedyForClient(String name) {
+    return '$name के लिए';
+  }
+
+  @override
+  String get remedySetUpStore =>
+      'अपनी रेमेडी सुझाने के लिए अपना स्टोर सेट करें।';
+
+  @override
+  String get remedyStoreSetUpAction => 'स्टोर सेट करें';
+
+  @override
+  String get remedyNoListings => 'अभी आपकी कोई लिस्टिंग नहीं है।';
 }

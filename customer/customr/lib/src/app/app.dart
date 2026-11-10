@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
-import '../features/consultations/presentation/room_presence.dart';
 import '../features/consultations/presentation/view/widgets/call_room.dart';
 import '../features/consultations/presentation/view/widgets/live_session_banner.dart';
 import '../core/config/flavor.dart';
 import '../core/deeplink/deep_link_parser.dart';
+import '../core/navigation/links.dart';
 import '../core/deeplink/pending_referral.dart';
 import '../core/deeplink/deep_link_service.dart';
 import '../core/di/service_locator.dart';
@@ -19,7 +19,6 @@ import '../core/notifications/push_device_registrar.dart';
 import '../core/profile/active_profile_store.dart';
 import '../core/realtime/realtime_coordinator.dart';
 import '../core/router/app_router.dart';
-import '../core/router/pending_deep_link.dart';
 import '../core/theme/app_theme.dart';
 import '../features/auth/presentation/bloc/auth/auth_bloc.dart';
 import '../features/birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
@@ -48,8 +47,18 @@ class TalkAcharyaApp extends StatefulWidget {
 class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
   late final GoRouter _router = buildRouter(
     getIt<AuthBloc>(),
-    getIt<PendingDeepLink>(),
     getIt<ActiveProfileStore>(),
+  );
+
+  /// Every link — deep link, App Link, notification tap, in-app — opens
+  /// through this (see `talkacharya_nav`): the tabs first, the page on top.
+  late final AppNavigator _links = AppNavigator(
+    router: _router,
+    host: CustomerLinkHost(
+      auth: getIt<AuthBloc>(),
+      profiles: getIt<ActiveProfileStore>(),
+      navigatorKey: rootNavigatorKey,
+    ),
   );
 
   final _subs = <StreamSubscription<dynamic>>[];
@@ -59,15 +68,17 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
   void initState() {
     super.initState();
     getIt<AuthBloc>().add(const AuthStarted());
+    if (getIt.isRegistered<AppNavigator>()) getIt.unregister<AppNavigator>();
+    getIt.registerSingleton<AppNavigator>(_links..start());
     _wireBackgroundServices();
   }
 
   /// A link opened the app or arrived while it runs. An invite link's code is
   /// kept first, so it survives until the person signs up.
-  void _onLink(Uri uri) {
+  void _onLink(Uri uri, {LinkSource source = LinkSource.link}) {
     final code = referralCodeFromUri(uri);
     if (code != null) unawaited(getIt<PendingReferral>().save(code));
-    _handleLocation(locationForUri(uri));
+    _links.open(locationForUri(uri), source: source, raw: uri.toString());
   }
 
   void _wireBackgroundServices() {
@@ -80,7 +91,9 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
     final notifRouter = getIt<NotificationRouter>()..start();
 
     _subs.add(deepLinks.uris.listen(_onLink));
-    _subs.add(notifRouter.locations.listen(_handleLocation));
+    _subs.add(
+      notifRouter.links.listen((raw) => openLink(raw, source: LinkSource.push)),
+    );
     _subs.add(CallTelecom.events.listen(_onTelecom));
 
     // If the astrologer disconnects while the incoming-call notification is
@@ -98,8 +111,9 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
 
     // Cold-start entry points, resolved once after the first frame.
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _onLink(await deepLinks.initialLink() ?? Uri());
-      _handleLocation(await notifRouter.initialLocation());
+      final launchLink = await deepLinks.initialLink();
+      if (launchLink != null) _onLink(launchLink, source: LinkSource.launch);
+      openLink(await notifRouter.initialLink(), source: LinkSource.launch);
       // Answered from a headset or watch while the app was not running.
       final answered = await CallTelecom.takePendingAnswer();
       if (answered != null) _openCall(answered);
@@ -123,35 +137,12 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
   /// Into the call's room, whose controller adopts the answered Telecom call.
   void _openCall(String consultationId) {
     unawaited(getIt<LocalNotifications>().cancelIncomingCall());
-    _handleLocation(Routes.consultation(consultationId));
-  }
-
-  void _handleLocation(String? location) {
-    if (location == null || location.isEmpty) return;
-    if (getIt<AuthBloc>().state.status == AuthStatus.authenticated) {
-      // During a call, `go` would tear the room down and drop the call —
-      // stack the destination on top instead.
-      if (getIt<RoomPresence>().callOnScreen) {
-        _router.push(location).ignore();
-        return;
-      }
-      if (Routes.isShellRoute(location)) {
-        _router.go(location);
-      } else {
-        final currentLoc =
-            _router.routerDelegate.currentConfiguration.uri.toString();
-        if (!Routes.isShellRoute(currentLoc)) {
-          _router.go(Routes.home);
-        }
-        _router.push(location).ignore();
-      }
-    } else {
-      getIt<PendingDeepLink>().set(location);
-    }
+    _links.open(Routes.consultation(consultationId), source: LinkSource.push);
   }
 
   @override
   void dispose() {
+    _links.dispose();
     for (final s in _subs) {
       s.cancel();
     }

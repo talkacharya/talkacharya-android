@@ -33,9 +33,19 @@ class ChatState extends Equatable {
 
   SendingWindow get window => conversation?.window ?? const SendingWindow();
 
+  /// A "live" window naming a session this room already knows has ended is an
+  /// old copy (a snapshot, or a frame missed while away): the server closed the
+  /// thread with the session, and anything written now would be refused.
+  bool get windowIsStale {
+    final c = consultation;
+    if (!window.isLive || c == null || !c.status.isTerminal) return false;
+    final live = window.consultationId;
+    return live == null || live == c.id;
+  }
+
   /// Whether the composer is live: during a paid session, and through the
-  /// free follow-up window after one ends.
-  bool get canSend => window.canSend;
+  /// free follow-up window after one ends (off unless switched on site-wide).
+  bool get canSend => window.canSend && !windowIsStale;
 
   /// History only — the customer has to start a consultation to write again.
   bool get isClosed => conversation != null && window.isClosed;

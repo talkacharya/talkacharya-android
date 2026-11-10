@@ -6,6 +6,7 @@ import 'home_shared.dart';
 import 'package:customr/src/core/l10n/l10n.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Intent routing: tap a life area, land in discovery searched for it. Backend
 /// skills are disciplines (Vedic, Tarot…), so concerns route via the `q=` text
 /// search which matches astrologer headlines/bios.

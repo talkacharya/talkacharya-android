@@ -10,6 +10,7 @@ import '../../cubit/chats_list_cubit.dart';
 import '../../room_presence.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Green strip above every screen while a consultation is live and its room is
 /// not on top — one tap goes back to it, so a session is never "lost" behind
 /// other pages.
@@ -40,11 +41,20 @@ class LiveSessionBanner extends StatelessWidget {
                   !hub.isFor(c.id) &&
                   !(consultationId != null && hub.isFor(consultationId));
             }).toList();
+            if (live.isEmpty) return child;
+            // The bar takes the status bar's place, so the screen under it
+            // must not leave room for the status bar again — a full-screen
+            // page (a live stream) would show an empty band there.
             return Column(
               children: [
-                if (live.isNotEmpty)
-                  _Bar(name: live.first.peerName, id: live.first.id),
-                Expanded(child: child),
+                _Bar(name: live.first.peerName, id: live.first.id),
+                Expanded(
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeTop: true,
+                    child: child,
+                  ),
+                ),
               ],
             );
           },

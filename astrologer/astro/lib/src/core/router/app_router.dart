@@ -50,7 +50,6 @@ import '../../features/requests/presentation/view/requests_page.dart';
 import '../../features/shell/presentation/view/app_shell.dart';
 import '../astro/onboarding_store.dart';
 import 'go_router_refresh.dart';
-import 'pending_deep_link.dart';
 import 'transitions.dart';
 import 'routes.dart';
 import '../../features/profile/presentation/view/sound_settings_page.dart';
@@ -65,30 +64,15 @@ import '../../features/my_store/presentation/store_setup_page.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
 
-/// Whether [location] is inside the bottom-nav shell — a tab, or a page under
-/// one — rather than a full-screen page that sits above the tabs.
-bool isShellLocation(GoRouter router, String location) {
-  final uri = Uri.tryParse(location);
-  if (uri == null) return false;
-  final matches = router.configuration.findMatch(uri).matches;
-  return matches.isNotEmpty && matches.first is ShellRouteMatch;
-}
-
-/// Whether the tabs are at the bottom of what is on screen now.
-bool shellIsUp(GoRouter router) {
-  final matches = router.routerDelegate.currentConfiguration.matches;
-  return matches.isNotEmpty && matches.first is ShellRouteMatch;
-}
+/// The root navigator — for what must show above every page (a toast from
+/// the link navigator).
+GlobalKey<NavigatorState> get rootNavigatorKey => _rootKey;
 
 GoRoute _leaf(String path, Widget Function(GoRouterState) child) =>
     GoRoute(path: path, builder: (_, s) => child(s));
 
 /// Route table + auth gate + onboarding gate + deferred deep-link replay.
-GoRouter buildRouter(
-  AuthBloc authBloc,
-  PendingDeepLink pending,
-  OnboardingStore onboarding,
-) {
+GoRouter buildRouter(AuthBloc authBloc, OnboardingStore onboarding) {
   return GoRouter(
     navigatorKey: _rootKey,
     initialLocation: Routes.splash,
@@ -106,7 +90,6 @@ GoRouter buildRouter(
 
       final loggedIn = status == AuthStatus.authenticated;
       if (!loggedIn) {
-        if (!atLogin && !atSplash) pending.set(state.uri.toString());
         return atLogin ? null : Routes.login;
       }
 
@@ -126,9 +109,9 @@ GoRouter buildRouter(
         return atOnboarding || lessons ? null : Routes.onboarding;
       }
 
-      // Always Home first. A stashed link is opened from there by the app
-      // (`_open` in app.dart), so a full-screen page lands above the tabs
-      // with a way back, instead of replacing them.
+      // Always Home first. A waiting link is opened on top of it by the
+      // navigator (core/navigation/links.dart), so a full-screen page lands
+      // above the tabs with a way back, instead of replacing them.
       if (atLogin || atSplash || atOnboarding) return Routes.home;
       return null;
     },

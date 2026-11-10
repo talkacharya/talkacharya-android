@@ -82,10 +82,16 @@ class ChatCubit extends Cubit<ChatState> {
     required RealtimeClient realtime,
     required this.threadId,
     RoomSnapshots? snapshots,
+    Consultation? accepted,
   }) : _api = api,
        _realtime = realtime,
        _snapshots = snapshots,
+       _accepted = accepted,
        super(const ChatState());
+
+  /// The session as Accept answered a moment ago: the call starts from it
+  /// at once, while the thread and the session are read in the background.
+  final Consultation? _accepted;
 
   final ConsultationApi _api;
   final RealtimeClient _realtime;
@@ -106,6 +112,10 @@ class ChatCubit extends Cubit<ChatState> {
     _poll?.cancel();
     await _frames?.cancel();
     if (!state.loading) emit(state.copyWith(loading: true, error: null));
+    final accepted = _accepted;
+    if (state.consultation == null && accepted != null) {
+      emit(state.copyWith(consultation: accepted, loading: false));
+    }
     if (state.consultation == null) await _openOnSnapshot();
     try {
       // The API keeps each answer as the room's snapshot for next time.

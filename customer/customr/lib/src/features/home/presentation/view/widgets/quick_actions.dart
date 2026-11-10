@@ -22,24 +22,28 @@ class QuickActionsRow extends StatelessWidget {
         label: l.homeKundaliAction,
         hue: AstroPalette.money,
         image: 'assets/images/kundali.png',
+        art: 'assets/images/qa_kundali.png',
         onTap: () => context.push(Routes.birthProfiles),
       ),
       _QuickAction(
         label: l.homeMatchingAction,
         hue: AstroPalette.love,
         svg: 'assets/svg/matching.svg',
+        art: 'assets/images/qa_matching.png',
         onTap: () => context.push(Routes.matchmaking),
       ),
       _QuickAction(
         label: l.homeHoroscopeAction,
         hue: AstroPalette.career,
         icon: Icons.auto_awesome_rounded,
+        art: 'assets/images/qa_horoscope.png',
         onTap: () => context.push(Routes.horoscope),
       ),
       _QuickAction(
         label: l.homeVastuAction,
         hue: AstroPalette.health,
         icon: Icons.home_work_rounded,
+        art: 'assets/images/qa_vastu.png',
         onTap: () => context.go(Routes.astrologersWith(skill: 'vastu')),
       ),
     ];
@@ -52,13 +56,6 @@ class QuickActionsRow extends StatelessWidget {
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(22),
           border: Border.all(color: brand.hairline),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
         ),
         child: Row(
           children: [
@@ -99,7 +96,22 @@ class _QuickActionTile extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              HueIcon(hue: a.hue, size: 44, child: glyph),
+              // The illustrated tile when its picture is in the app, else
+              // the icon on its colour.
+              if (a.art != null)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: Image.asset(
+                    a.art!,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) =>
+                        HueIcon(hue: a.hue, size: 44, child: glyph),
+                  ),
+                )
+              else
+                HueIcon(hue: a.hue, size: 44, child: glyph),
               const SizedBox(height: 6),
               Text(
                 a.label,
@@ -126,6 +138,7 @@ class _QuickAction {
     this.icon,
     this.svg,
     this.image,
+    this.art,
   });
 
   final String label;
@@ -134,4 +147,8 @@ class _QuickAction {
   final IconData? icon;
   final String? svg;
   final String? image;
+
+  /// A square illustration (`assets/images/qa_*.png`, 256×256) shown instead
+  /// of the icon once it is in the app.
+  final String? art;
 }

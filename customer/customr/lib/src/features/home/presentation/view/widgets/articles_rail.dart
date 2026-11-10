@@ -10,6 +10,7 @@ import '../../cubit/home_cubit.dart';
 import 'home_shared.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// "Read & learn" — the newest editorial articles (`/content/articles`).
 /// Hidden when there's nothing published, so the feed never shows an empty rail.
 class ArticlesRail extends StatelessWidget {

@@ -1717,6 +1717,13 @@ packages:
       relative: true
     source: path
     version: "0.1.0"
+  talkacharya_nav:
+    dependency: "direct main"
+    description:
+      path: "../../packages/talkacharya_nav"
+      relative: true
+    source: path
+    version: "0.0.1"
   talkacharya_predictions:
     dependency: "direct main"
     description:

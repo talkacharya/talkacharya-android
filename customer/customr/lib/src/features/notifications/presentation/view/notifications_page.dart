@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../../core/deeplink/deep_link_parser.dart';
+import '../../../../core/navigation/links.dart';
 import '../bloc/notifications_cubit.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
 
@@ -106,8 +106,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       : Icon(Icons.circle, size: 10, color: scheme.primary),
                   onTap: () {
                     context.read<NotificationsCubit>().markRead(n.id);
-                    final loc = locationForRaw(n.deeplink);
-                    if (loc != null) context.go(loc);
+                    openLink(n.deeplink);
                   },
                 );
               },

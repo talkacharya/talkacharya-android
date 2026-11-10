@@ -23,6 +23,7 @@ import 'recommended_sales_page.dart';
     'purchased' => (label: l.remedyStatusPurchased, color: BandColors.good),
     'viewed' => (label: l.remedyStatusViewed, color: AstroPalette.career.end),
     'expired' => (label: l.remedyStatusExpired, color: context.brand.inkMuted),
+    'pending' => (label: l.remedyStatusPending, color: AstroPalette.career.end),
     _ => (label: l.remedyStatusSent, color: AstroPalette.money.end),
   };
 }

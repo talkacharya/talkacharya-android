@@ -197,8 +197,13 @@ class PushService {
     if (message.data['ring'] == '1') {
       // With the socket up, the room screen is already reacting to the
       // `call.ringing` realtime event; a notification on top would only
-      // double the sound.
-      if (!_realtimeOnline()) unawaited(ringForCall(_local, message.data));
+      // double the sound. Nor while this call's own room is on screen — the
+      // customer is already looking at it connecting, and a socket that is
+      // only reconnecting used to set the phone's ringtone off over it.
+      final id = '${message.data['consultation_id'] ?? ''}';
+      if (!_realtimeOnline() && !_roomOpen(id)) {
+        unawaited(ringForCall(_local, message.data));
+      }
       return;
     }
     // A chat message. The server pushes every one now — a live socket is no

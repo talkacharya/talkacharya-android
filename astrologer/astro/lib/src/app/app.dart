@@ -11,6 +11,7 @@ import '../core/availability/availability_coordinator.dart';
 import '../core/config/flavor.dart';
 import '../core/deeplink/deep_link_parser.dart';
 import '../core/deeplink/deep_link_service.dart';
+import '../core/navigation/links.dart';
 import '../core/di/service_locator.dart';
 import '../core/l10n/l10n.dart';
 import '../core/update/app_update_watcher.dart';
@@ -20,13 +21,11 @@ import '../core/realtime/realtime_client.dart';
 import '../core/realtime/realtime_coordinator.dart';
 import '../core/realtime/realtime_event.dart';
 import '../core/router/app_router.dart';
-import '../core/router/pending_deep_link.dart';
 import '../core/theme/app_theme.dart';
 import '../features/auth/presentation/bloc/auth/auth_bloc.dart';
 import '../features/chats/presentation/cubit/chats_cubit.dart';
 import '../features/home/presentation/cubit/tool_counts_cubit.dart';
 import '../features/waitlist/presentation/cubit/waitlist_cubit.dart';
-import '../features/consultations/presentation/room_presence.dart';
 import '../features/consultations/presentation/widgets/live_session_banner.dart';
 import '../features/notifications/presentation/bloc/notifications_cubit.dart';
 import '../features/requests/presentation/cubit/requests_cubit.dart';
@@ -56,8 +55,18 @@ class TalkAcharyaApp extends StatefulWidget {
 class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
   late final GoRouter _router = buildRouter(
     getIt<AuthBloc>(),
-    getIt<PendingDeepLink>(),
     getIt<OnboardingStore>(),
+  );
+
+  /// Every link — deep link, App Link, notification tap, in-app — opens
+  /// through this (see `talkacharya_nav`): the tabs first, the page on top.
+  late final AppNavigator _links = AppNavigator(
+    router: _router,
+    host: AstroLinkHost(
+      auth: getIt<AuthBloc>(),
+      onboarding: getIt<OnboardingStore>(),
+      navigatorKey: rootNavigatorKey,
+    ),
   );
 
   final _subs = <StreamSubscription<dynamic>>[];
@@ -68,7 +77,8 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
     super.initState();
     getIt<AuthBloc>().add(const AuthStarted());
     unawaited(getIt<OnboardingStore>().load());
-    _router.routerDelegate.addListener(_onRouteChanged);
+    if (getIt.isRegistered<AppNavigator>()) getIt.unregister<AppNavigator>();
+    getIt.registerSingleton<AppNavigator>(_links..start());
     _wireBackgroundServices();
   }
 
@@ -99,8 +109,18 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
     final deepLinks = getIt<DeepLinkService>()..start();
     final notifRouter = getIt<NotificationRouter>()..start();
 
-    _subs.add(deepLinks.uris.listen((u) => _handle(locationForUri(u))));
-    _subs.add(notifRouter.locations.listen(_handle));
+    _subs.add(
+      deepLinks.uris.listen(
+        (u) => _links.open(
+          locationForUri(u),
+          source: LinkSource.link,
+          raw: u.toString(),
+        ),
+      ),
+    );
+    _subs.add(
+      notifRouter.links.listen((raw) => openLink(raw, source: LinkSource.push)),
+    );
     _subs.add(getIt<LocalNotifications>().callActions.listen(_onCallAction));
     _subs.add(CallTelecom.events.listen(_onTelecom));
     // An approval opens the app the moment it is given, not at the next launch.
@@ -116,8 +136,15 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _handle(locationForUri(await deepLinks.initialLink() ?? Uri()));
-      _handle(await notifRouter.initialLocation());
+      final launchLink = await deepLinks.initialLink();
+      if (launchLink != null) {
+        _links.open(
+          locationForUri(launchLink),
+          source: LinkSource.launch,
+          raw: launchLink.toString(),
+        );
+      }
+      openLink(await notifRouter.initialLink(), source: LinkSource.launch);
       // Answered from a headset or watch while the app was not running.
       final answered = await CallTelecom.takePendingAnswer();
       if (answered != null) await _acceptFromSystem(answered);
@@ -163,14 +190,15 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
     if (data['test'] == '1') {
       unawaited(CallTelecom.declineIncoming(id));
       if (event.action == LocalNotifications.answerAction) {
-        _handle(Routes.callSetupTested);
+        openLocation(Routes.callSetupTested, source: LinkSource.push);
       }
       return;
     }
 
     if (event.action == LocalNotifications.answerAction) {
-      unawaited(CallTelecom.answerIncoming(id));
-      _handle(locationForRaw('${data['deeplink'] ?? ''}'));
+      // Accept means accept: straight into the call, not into the room to be
+      // asked a second time while the customer waits.
+      await _acceptFromSystem(id);
       return;
     }
     unawaited(CallTelecom.declineIncoming(id));
@@ -206,70 +234,18 @@ class _TalkAcharyaAppState extends State<TalkAcharyaApp> {
     unawaited(getIt<LocalNotifications>().cancelIncomingCall());
     if (id.startsWith('test-')) {
       unawaited(CallTelecom.declineIncoming(id));
-      _handle(Routes.callSetupTested);
+      openLocation(Routes.callSetupTested, source: LinkSource.push);
       return;
     }
     final accepted = await getIt<RequestsCubit>().accept(id);
-    if (accepted != null) _handle(Routes.chatRoom(id));
-  }
-
-  /// Signed in and past onboarding: the tabs can be shown.
-  bool get _ready =>
-      getIt<AuthBloc>().state.status == AuthStatus.authenticated &&
-      getIt<OnboardingStore>().stage == OnboardingStage.approved;
-
-  void _handle(String? location) {
-    if (location == null || location.isEmpty) return;
-    if (_ready) {
-      _open(location);
-    } else {
-      getIt<PendingDeepLink>().set(location);
+    if (accepted != null) {
+      openLocation(Routes.chatRoom(id), source: LinkSource.push);
     }
-  }
-
-  /// Where a link or a notification tap lands. A tab opens as itself; a
-  /// full-screen page (a room, a request) opens *above* the tabs, never in
-  /// place of them, so back always has somewhere to go.
-  void _open(String location) {
-    // During a call, `go` would tear the room down and drop the call —
-    // stack the destination on top instead.
-    if (getIt<RoomPresence>().callOnScreen) {
-      _router.push(location).ignore();
-      return;
-    }
-    if (isShellLocation(_router, location)) {
-      _router.go(location);
-      return;
-    }
-    if (!shellIsUp(_router)) {
-      // Nothing under it yet (a cold start, or a page opened on its own):
-      // bring Home up first. `_onRouteChanged` pushes this once it is there —
-      // a `go` and a `push` issued together race, and the push can win.
-      getIt<PendingDeepLink>().set(location);
-      _router.go(Routes.home);
-      return;
-    }
-    final stack = _router.routerDelegate.currentConfiguration.matches;
-    // Already looking at it: don't stack a second copy.
-    if (stack.last.matchedLocation == Uri.tryParse(location)?.path) return;
-    _router.push(location).ignore();
-  }
-
-  /// Opens a stashed link once the tabs are on screen to open it from.
-  void _onRouteChanged() {
-    final pending = getIt<PendingDeepLink>();
-    if (!pending.hasPending || !_ready || !shellIsUp(_router)) return;
-    // Not from inside the router's own notification.
-    scheduleMicrotask(() {
-      if (!mounted || !_ready || !shellIsUp(_router)) return;
-      final location = pending.take();
-      if (location != null) _open(location);
-    });
   }
 
   @override
   void dispose() {
-    _router.routerDelegate.removeListener(_onRouteChanged);
+    _links.dispose();
     for (final s in _subs) {
       s.cancel();
     }

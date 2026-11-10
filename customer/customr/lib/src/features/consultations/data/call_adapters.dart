@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:talkacharya_call/talkacharya_call.dart';
@@ -81,5 +82,11 @@ class CrashlyticsCallDiagnostics implements CallDiagnostics {
   const CrashlyticsCallDiagnostics();
 
   @override
-  void log(String message) => unawaited(FirebaseSetup.log('call: $message'));
+  void log(String message) {
+    // In a debug build every step also goes to the console, so a slow
+    // connect can be read off `adb logcat` second by second.
+    if (kDebugMode)
+      debugPrint('CALL ${DateTime.now().toIso8601String()} $message');
+    unawaited(FirebaseSetup.log('call: $message'));
+  }
 }

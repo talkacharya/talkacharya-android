@@ -62,7 +62,6 @@ void main() {
       (_) async =>
           RechargePack.suggestionsFor(minRecharge: 100, currency: 'INR'),
     );
-    when(() => repo.promos()).thenReturn(const []);
     when(() => repo.resumable()).thenAnswer((_) async => null);
     when(() => repo.latestArticles()).thenAnswer((_) async => const []);
     when(

@@ -27,7 +27,7 @@ void main() {
       'talkacharya://profile/kyc': '/profile/kyc',
       'talkacharya://profile/reviews': '/profile/reviews',
       'talkacharya://reviews': '/profile/reviews',
-      'talkacharya://live': '/profile/featured',
+      'talkacharya://live': '/go-live',
       'talkacharya://unknown-thing': null,
       'talkacharya://': null,
     };
@@ -68,5 +68,22 @@ void main() {
     test('valid string parses', () {
       expect(locationForRaw('talkacharya://requests'), '/requests');
     });
+  });
+
+  test('its own scheme opens the same pages as the shared one', () {
+    expect(locationForRaw('talkacharya-astro://requests/r1'), '/requests/r1');
+    expect(locationForRaw('talkacharya-astro://earnings'), '/earnings');
+  });
+
+  test('links from the store open their pages', () {
+    expect(
+      locationForRaw('talkacharya://seller/orders/so1'),
+      '/my-store/orders/so1',
+    );
+    expect(locationForRaw('talkacharya://seller'), '/my-store');
+    expect(
+      locationForRaw('talkacharya://astro/store/consults/c1'),
+      '/my-store',
+    );
   });
 }

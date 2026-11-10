@@ -9,6 +9,7 @@ import '../../../../../features/kundali/presentation/view/kundali_routes.dart';
 import 'home_shared.dart';
 
 import 'package:talkacharya_ui/talkacharya_ui.dart';
+
 /// Lead-magnet grid. Kundli tools open the active birth profile's kundali (or
 /// the birth-profile flow when there isn't one); discipline tiles drop into
 /// discovery filtered by that skill.
@@ -58,7 +59,7 @@ class FreeToolsGrid extends StatelessWidget {
         'Kundli Matching',
         Icons.join_inner_rounded,
         AstroPalette.love,
-        () => context.push(Routes.birthProfiles),
+        () => context.push(Routes.matchmaking),
       ),
       _Tool(
         'Predictions',
@@ -106,35 +107,34 @@ class FreeToolsGrid extends StatelessWidget {
           title: context.l10n.homeFreeToolsTitle,
           hue: AstroPalette.air,
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 8),
+        // Flat: an icon badge and a name on the page itself, no tile behind.
         Padding(
           padding: HomeGaps.sidePad,
           child: GridView.count(
             crossAxisCount: 3,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: 0.9,
+            mainAxisSpacing: 4,
+            crossAxisSpacing: 8,
+            childAspectRatio: 1.3,
             padding: EdgeInsets.zero,
             children: [
               for (final t in tools)
                 Pressable(
-                  child: HueTile(
-                    hue: t.hue,
-                    radius: 22,
-                    padding: const EdgeInsets.fromLTRB(4, 8, 4, 6),
+                  child: InkWell(
                     onTap: t.onTap,
+                    borderRadius: BorderRadius.circular(16),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         HueIcon(
                           hue: t.hue,
                           icon: t.icon,
-                          size: 42,
-                          iconSize: 21,
+                          size: 40,
+                          iconSize: 20,
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 6),
                         Text(
                           t.label,
                           maxLines: 2,

@@ -5,20 +5,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/config/config_repository.dart';
 import '../../../birthprofiles/presentation/bloc/birth_profiles_cubit.dart';
+import '../../../store/presentation/widgets/remedies_for_you_rail.dart';
 import '../../../store/presentation/widgets/store_home_rail.dart';
 import '../cubit/home_cubit.dart';
 import 'widgets/articles_rail.dart';
-import 'widgets/concern_chips.dart';
 import 'widgets/free_tools_grid.dart';
 import 'widgets/home_header.dart';
+import 'widgets/home_shared.dart';
 import 'widgets/horoscope_card.dart';
 import 'widgets/live_now_rail.dart';
 import 'widgets/online_astrologers_rail.dart';
-import 'widgets/online_now_strip.dart';
-import 'widgets/panchang_strip.dart';
 import 'widgets/promo_carousel.dart';
 import 'widgets/quick_actions.dart';
-import 'widgets/recharge_packs_strip.dart';
 import 'widgets/refer_earn_banner.dart';
 import 'widgets/resume_card.dart';
 import 'widgets/talk_again_rail.dart';
@@ -95,7 +93,8 @@ class _HomeViewState extends State<_HomeView> {
                               (a.online.value?.isNotEmpty ?? false)) !=
                           (b.online.isLoading ||
                               (b.online.value?.isNotEmpty ?? false)) ||
-                      (a.live.isLoading || (a.live.value?.isNotEmpty ?? false)) !=
+                      (a.live.isLoading ||
+                              (a.live.value?.isNotEmpty ?? false)) !=
                           (b.live.isLoading ||
                               (b.live.value?.isNotEmpty ?? false)) ||
                       (a.talkAgain.value?.isNotEmpty ?? false) !=
@@ -136,31 +135,30 @@ class _HomeViewState extends State<_HomeView> {
     final hasTalkAgain = state.talkAgain.value?.isNotEmpty ?? false;
     final hasArticles =
         state.articles.isLoading || (state.articles.value?.isNotEmpty ?? false);
-    final hasOnline =
-        state.online.isLoading || (state.online.value?.isNotEmpty ?? false);
 
+    final store = getIt<ConfigRepository>().value.features.store;
+    // Light by design: one section per idea, nothing repeated. Who is online
+    // lives in the astrologers rail; the panchang is a line in the horoscope
+    // card; recharge packs live in the wallet (a banner can point there).
     final sections = <Widget>[
       const QuickActionsRow(),
       if (hasResume) const ResumeCard(),
-      if (hasOnline) const OnlineNowStrip(),
       const PromoCarousel(),
       if (liveVisible) const LiveNowRail(),
       const OnlineAstrologersRail(),
-      const ConcernChips(),
       const HoroscopeCard(),
-      const PanchangStrip(),
+      if (store) const RemediesForYouRail(),
       const FreeToolsGrid(),
-      if (getIt<ConfigRepository>().value.features.store) const StoreHomeRail(),
       if (hasTalkAgain) const TalkAgainRail(),
+      if (store) const StoreHomeRail(),
       if (hasArticles) const ArticlesRail(),
-      const RechargePacksStrip(),
       const ReferEarnBanner(),
       const TrustFooter(),
     ];
 
     final children = <Widget>[];
     for (var i = 0; i < sections.length; i++) {
-      if (i > 0) children.add(const SizedBox(height: 20));
+      if (i > 0) children.add(const SizedBox(height: HomeGaps.section));
       children.add(sections[i]);
     }
     return children;

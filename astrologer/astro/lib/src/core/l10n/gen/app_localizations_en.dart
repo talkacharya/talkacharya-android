@@ -5311,4 +5311,58 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String liveCallPhotosTitle(String name) {
+    return 'Photos · only you and $name see them';
+  }
+
+  @override
+  String get liveCallPhotoCamera => 'Take a photo';
+
+  @override
+  String get liveCallPhotoGallery => 'Choose from gallery';
+
+  @override
+  String get linkUnavailable => 'This link is no longer available';
+
+  @override
+  String get remedySourceStore => 'From our store';
+
+  @override
+  String get remedySourceMine => 'My listings';
+
+  @override
+  String get remedyNewListing => 'New listing';
+
+  @override
+  String get remedyEditForClient => 'Edit for this client';
+
+  @override
+  String get remedyPickCustomerFirst => 'Choose the client first';
+
+  @override
+  String get remedyAfterApproval =>
+      'Your client gets this once our team approves it.';
+
+  @override
+  String get remedyQueued => 'Saved — it goes to your client once approved';
+
+  @override
+  String get remedyStatusPending => 'Awaiting approval';
+
+  @override
+  String remedyForClient(String name) {
+    return 'For $name';
+  }
+
+  @override
+  String get remedySetUpStore =>
+      'Set up your store to suggest your own remedies.';
+
+  @override
+  String get remedyStoreSetUpAction => 'Set up store';
+
+  @override
+  String get remedyNoListings => 'You have no listings yet.';
 }
